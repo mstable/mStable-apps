@@ -1,0 +1,93 @@
+version: 2.1
+
+executors:
+  node:
+    docker:
+      - image: circleci/node:14.9.0
+    resource_class: medium+
+  gcp:
+    docker:
+      - image: alsco77/node-gcp-dockerfile:njs12
+    resource_class: large
+
+jobs:
+  Build:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install
+          command: yarn
+      - run:
+          name: Codegen (TypeChain)
+          command: yarn codegen:typechain
+      - run:
+          name: TypeScript
+          command: yarn tsc --noEmit
+      - run:
+          name: Lint
+          command: yarn lint
+      - run:
+          name: Test
+          command: yarn test --passWithNoTests
+      - run:
+          name: Build
+          command: yarn build
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/build
+            - project/public
+            - project/package.json
+            - project/*
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+
+  Deploy:
+    executor: gcp
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: 'Deploy'
+          command: |
+            echo "Deploy to target GAE instance with project ID $GCP_PROJECT_ID"
+            echo $GCP_KEY > /tmp/$CI_PIPELINE_ID.json
+            gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
+            gcloud config set project $GCP_PROJECT_ID
+            gcloud --quiet app deploy app.yml
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/build
+            - project/public
+            - project/package.json
+            - project/*
+
+workflows:
+  version: 2.1
+
+  Production:
+    jobs:
+      - Approve build:
+          type: approval
+      - Build:
+          context:
+            - mstable-shared
+            - mstable-mainnet
+          requires:
+            - Approve build
+      - Approve deploy:
+          type: approval
+          requires:
+            - Approve build
+      - Deploy:
+          context:
+            - mstable-app
+          requires:
+            - Build
+            - Approve deploy

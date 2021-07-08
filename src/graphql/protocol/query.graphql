@@ -1,0 +1,166 @@
+# import './fragments.graphql'
+
+query Massets($account: String!, $hasAccount: Boolean!) @api(name: protocol) {
+  massets {
+    id
+    token {
+      ...TokenAll
+    }
+    feeRate
+    redemptionFeeRate
+    invariantStartTime
+    invariantStartingCap
+    invariantCapFactor
+    basket {
+      failed
+      collateralisationRatio
+      undergoingRecol
+      bassets: bassets(where: { removed: false }) {
+        ...BassetAll
+      }
+      removedBassets: bassets(where: { removed: true }) {
+        id
+        token {
+          ...TokenAll
+        }
+      }
+    }
+    currentSavingsContract {
+      id
+    }
+    savingsContractsV1: savingsContracts(where: { version: 1 }) {
+      ...SavingsContractAll
+      totalCredits {
+        ...MetricFields
+      }
+      creditBalances(where: { account: $account }) @include(if: $hasAccount) {
+        amount
+      }
+    }
+    savingsContractsV2: savingsContracts(where: { version: 2 }) {
+      ...SavingsContractAll
+      token {
+        ...TokenAll
+      }
+    }
+  }
+}
+
+query V1SavingsBalance($id: ID!, $account: String!, $include: Boolean!)
+  @api(name: protocol) {
+  savingsContract(id: $id) @include(if: $include) {
+    creditBalances(where: { account: $account }) {
+      amount
+    }
+  }
+}
+
+query AllTokens @api(name: protocol) {
+  # @deprecated
+  savingsContracts(where: { version: 1 }) {
+    address: id
+    id
+  }
+  tokens {
+    ...TokenAll
+  }
+}
+
+query Token($id: ID!) @api(name: protocol) {
+  token(id: $id) {
+    ...TokenAll
+  }
+}
+
+query HistoricTransactions($account: Bytes) @api(name: protocol) {
+  transactions(
+    where: { sender: $account }
+    orderBy: timestamp
+    orderDirection: desc
+  ) {
+    id
+    hash
+    block
+    timestamp
+    sender
+    __typename
+    ... on RedeemTransaction {
+      masset {
+        id
+      }
+      massetUnits
+      bassets {
+        id
+      }
+      bassetsUnits
+      recipient
+    }
+    ... on RedeemMassetTransaction {
+      masset {
+        id
+      }
+      massetUnits
+      recipient
+    }
+    ... on MintMultiTransaction {
+      masset {
+        id
+      }
+      massetUnits
+      bassets {
+        id
+      }
+      bassetsUnits
+    }
+    ... on MintSingleTransaction {
+      bassetUnits
+      masset {
+        id
+      }
+      basset {
+        id
+      }
+      massetUnits
+    }
+    ... on PaidFeeTransaction {
+      basset {
+        id
+      }
+      bassetUnits
+      masset {
+        id
+      }
+      massetUnits
+    }
+    ... on SavingsContractDepositTransaction {
+      amount
+      savingsContract {
+        id
+        masset {
+          id
+        }
+      }
+    }
+    ... on SavingsContractWithdrawTransaction {
+      amount
+      savingsContract {
+        id
+        masset {
+          id
+        }
+      }
+    }
+    ... on SwapTransaction {
+      masset {
+        id
+      }
+      inputBasset {
+        id
+      }
+      outputBasset {
+        id
+      }
+      massetUnits
+    }
+  }
+}

@@ -1,0 +1,84 @@
+# import './fragments.graphql'
+
+query FeederPools($account: String!, $accountId: ID!, $hasAccount: Boolean!) @api(name: feeders) {
+  feederPools {
+    id
+    swapFeeRate
+    redemptionFeeRate
+    governanceFeeRate
+    dailyAPY
+    price
+    invariantK
+    basket {
+      bassets {
+        ...BassetAll
+      }
+      undergoingRecol
+      failed
+    }
+    token {
+      ...TokenAll
+    }
+    fasset {
+      ...TokenAll
+    }
+    masset {
+      id
+    }
+    vault {
+      ...BoostedSavingsVaultAll
+    }
+    accounts(where: { account: $account }) @include(if: $hasAccount) {
+      balance
+      price
+      lastUpdate
+      balanceVault
+      priceVault
+      lastUpdateVault
+      cumulativeEarned {
+        exact
+        decimals
+      }
+      cumulativeEarnedVault {
+        exact
+        decimals
+      }
+    }
+  }
+  saveVaults: boostedSavingsVaults(where: { feederPool: null }) {
+    ...BoostedSavingsVaultAll
+  }
+  userVaults: accounts(where: { id: $accountId }) {
+    id
+    boostDirection {
+      directorVaultId
+    }
+  }
+  boostDirectors {
+    id
+  }
+  vaultIds: boostedSavingsVaults {
+    directorVaultId
+    id
+  }
+}
+
+query FeederTokens @api(name: feeders) {
+  feederPools {
+    token {
+      ...TokenAll
+    }
+    fasset {
+      ...TokenAll
+    }
+  }
+}
+
+query FeederPoolMetrics($feederPool: ID!, $block: Block_height!) @api(name: feeders) {
+  current: feederPool(id: $feederPool) {
+    ...FPMetrics
+  }
+  historic: feederPool(id: $feederPool, block: $block) {
+    ...FPMetrics
+  }
+}

@@ -1,0 +1,52 @@
+fragment TokenAll on Token {
+  id
+  address
+  decimals
+  symbol
+  totalSupply {
+    ...MetricFields
+  }
+}
+
+fragment SavingsContractAll on SavingsContract {
+  id
+  totalSavings {
+    ...MetricFields
+  }
+  latestExchangeRate {
+    rate
+    timestamp
+  }
+  dailyAPY
+  version
+  active
+}
+
+fragment TransactionFields on Transaction {
+  id
+  hash
+  timestamp
+  block
+  sender
+}
+
+fragment MetricFields on Metric {
+  id
+  exact
+  decimals
+  simple
+}
+
+fragment BassetAll on Basset {
+  id
+  vaultBalance {
+    ...MetricFields
+  }
+  isTransferFeeCharged
+  ratio
+  status
+  maxWeight
+  token {
+    ...TokenAll
+  }
+}

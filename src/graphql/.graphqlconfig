@@ -1,0 +1,52 @@
+{
+  "name": "mStable",
+  "projects": {
+    "protocol": {
+      "includes": ["./shared/*", "./protocol/*"],
+      "schemaPath": "remote-schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "ropsten": {
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-protocol-ropsten",
+            "introspect": false
+          }
+        }
+      }
+    },
+    "feeders": {
+      "includes": ["./shared/*", "./feeders/*"],
+      "schemaPath": "remote-schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "ropsten": {
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-feeders-ropsten",
+            "introspect": false
+          }
+        }
+      }
+    },
+    "staking-rewards": {
+      "includes": ["./shared/*", "./staking-rewards/*"],
+      "schemaPath": "remote-schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "polygon": {
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-rewards-polygon",
+            "introspect": false
+          }
+        }
+      }
+    },
+    "blocks": {
+      "includes": ["./shared/*", "./blocks/*"],
+      "extensions": {
+        "endpoints": {
+          "mainnet": {
+            "url": "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
+            "introspect": false
+          }
+        }
+      }
+    }
+  }
+}
