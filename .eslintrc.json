@@ -1,0 +1,49 @@
+{
+  "root": true,
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nrwl/nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nrwl/nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true, "allowTypedFunctionExpressions": true }],
+        "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "_" }],
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "arrow-body-style": "off",
+        "radix": "off",
+        "no-underscore-dangle": "off",
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "react/no-unescaped-entities": "off",
+        "import/prefer-default-export": "off",
+        "import/no-default-export": "error",
+        "react/prop-types": "off",
+        "consistent-return": "off",
+        "no-nested-ternary": "off"
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
+    }
+  ]
+}

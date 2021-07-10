@@ -1,0 +1,181 @@
+import React, { FC, useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components'
+
+import { FeederPool__factory, Masset__factory } from '@apps/artifacts/typechain'
+
+import { usePropose } from '@apps/base/context/transactions'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
+import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
+import { useTokenSubscription } from '@apps/base/context/tokens'
+import { useChainIdCtx } from '@apps/base/context/network'
+
+import { useBigDecimalInput, useSlippage, BigDecimalInputValue, useEstimatedOutput, useMinimumOutput } from '@apps/hooks'
+import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
+
+import { AssetInput, SendButton } from '@apps/components/forms'
+import { Arrow, ExchangeRate, TransactionInfo } from '@apps/components/core'
+
+const formId = 'MintMasset'
+
+const Container = styled.div`
+  > * {
+    margin: 0.5rem 0;
+    &:first-child {
+      margin-top: 0;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`
+
+export const MintMasset: FC = () => {
+  const propose = usePropose()
+  const walletAddress = useWalletAddress()
+  const signer = useSigner()
+  const massetState = useSelectedMassetState() as MassetState
+  const { address: massetAddress, bAssets, fAssets, feederPools } = massetState
+
+  const defaultInputAddress = useMemo(() => Object.keys(bAssets)[0], [bAssets])
+  const [inputAddress, handleSetAddress] = useState<string | undefined>(defaultInputAddress)
+  const massetToken = useTokenSubscription(massetAddress)
+  const inputToken = useTokenSubscription(inputAddress)
+  const inputDecimals = inputToken?.decimals
+
+  const [inputAmount, inputFormValue, handleSetMassetFormValue] = useBigDecimalInput('0', { decimals: inputDecimals })
+
+  const [slippageSimple, slippageFormValue, handleSetSlippage] = useSlippage()
+
+  const currentFeederAddress = Object.keys(feederPools).find(address => feederPools[address].fasset.address === inputAddress)
+
+  const feederOptions = Object.keys(feederPools).map(address => ({
+    address: feederPools[address].fasset.address,
+  }))
+
+  const masset = useMemo(() => (signer ? Masset__factory.connect(massetAddress, signer) : undefined), [massetAddress, signer])
+
+  const fasset = useMemo(
+    () => (signer && currentFeederAddress ? FeederPool__factory.connect(currentFeederAddress, signer) : undefined),
+    [currentFeederAddress, signer],
+  )
+
+  const { estimatedOutputAmount, exchangeRate, feeRate, priceImpact } = useEstimatedOutput(
+    { ...inputToken, amount: inputAmount } as BigDecimalInputValue,
+    { ...massetToken } as BigDecimalInputValue,
+  )
+
+  const { impactWarning } = priceImpact?.value ?? {}
+
+  const addressOptions = useMemo(() => [...Object.keys(bAssets).map(address => ({ address })), ...feederOptions], [bAssets, feederOptions])
+
+  const error = useMemo(() => {
+    if (!inputAmount?.simple) return 'Enter an amount'
+
+    if (inputAmount) {
+      if (!inputAddress) {
+        return 'Must select an asset to receive'
+      }
+
+      if (inputAmount.exact.eq(0)) {
+        return 'Amount must be greater than zero'
+      }
+
+      if (estimatedOutputAmount.error) return estimatedOutputAmount.error
+
+      if (inputToken?.balance.exact && inputAmount.exact.gt(inputToken.balance.exact)) {
+        return 'Insufficient balance'
+      }
+    }
+
+    if (estimatedOutputAmount.fetching) return 'Validating…'
+
+    return estimatedOutputAmount.error
+  }, [inputAmount, estimatedOutputAmount.fetching, estimatedOutputAmount.error, inputToken, inputAddress])
+
+  const { minOutputAmount } = useMinimumOutput(slippageSimple, inputAmount, estimatedOutputAmount.value)
+
+  const isFasset = Object.values(fAssets).find(f => f.address === inputAddress)
+
+  const approve = useMemo(
+    () =>
+      (inputAddress && {
+        spender: isFasset && currentFeederAddress ? currentFeederAddress : massetAddress,
+        address: inputAddress,
+        amount: inputAmount,
+      }) ||
+      undefined,
+    [inputAddress, isFasset, currentFeederAddress, massetAddress, inputAmount],
+  )
+
+  // Reset input on chain change
+  const [chainId] = useChainIdCtx()
+  useEffect(() => {
+    handleSetAddress(defaultInputAddress)
+  }, [chainId, defaultInputAddress])
+
+  const valid = !error
+
+  return (
+    <Container>
+      <AssetInput
+        address={inputAddress}
+        addressOptions={addressOptions}
+        formValue={inputFormValue}
+        handleSetAddress={handleSetAddress}
+        handleSetAmount={handleSetMassetFormValue}
+        handleSetMax={() => handleSetMassetFormValue(inputToken?.balance.string)}
+        decimals={inputDecimals}
+      />
+      <div>
+        <Arrow />
+        <ExchangeRate inputToken={inputToken} outputToken={massetToken} exchangeRate={exchangeRate} />
+      </div>
+      <AssetInput
+        address={massetAddress}
+        amountDisabled
+        formValue={estimatedOutputAmount.value?.string}
+        handleSetAddress={handleSetAddress}
+        addressDisabled
+        isFetching={estimatedOutputAmount.fetching}
+      />
+      <SendButton
+        valid={valid}
+        title={error ?? 'Mint'}
+        approve={approve}
+        warning={!error && impactWarning}
+        handleSend={() => {
+          if (masset && walletAddress && inputAddress && inputAmount && minOutputAmount) {
+            if (isFasset && fasset) {
+              return propose<Interfaces.FeederPool, 'swap'>(
+                new TransactionManifest(
+                  fasset,
+                  'swap',
+                  [inputAddress, massetAddress, inputAmount.exact, minOutputAmount.exact, walletAddress],
+                  { present: 'Swapping', past: 'Swapped' },
+                  formId,
+                ),
+              )
+            }
+
+            return propose<Interfaces.Masset, 'mint'>(
+              new TransactionManifest(
+                masset,
+                'mint',
+                [inputAddress, inputAmount.exact, minOutputAmount.exact, walletAddress],
+                { past: 'Minted', present: 'Minting' },
+                formId,
+              ),
+            )
+          }
+        }}
+      />
+      <TransactionInfo
+        minOutputAmount={minOutputAmount}
+        onSetSlippage={handleSetSlippage}
+        slippageFormValue={slippageFormValue}
+        feeAmount={feeRate?.value}
+        priceImpact={priceImpact?.value}
+      />
+    </Container>
+  )
+}

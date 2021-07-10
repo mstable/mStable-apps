@@ -1,0 +1,71 @@
+{
+  "npmScope": "apps",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "ODJmYzk3YWEtNGU2MS00MjU1LWExY2UtNWE4NThiOTgwMzA0fHJlYWQtd3JpdGU=",
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "projects": {
+    "artifacts": {
+      "tags": []
+    },
+    "base": {
+      "tags": []
+    },
+    "bigdecimal": {
+      "tags": []
+    },
+    "components": {
+      "tags": []
+    },
+    "formatters": {
+      "tags": []
+    },
+    "hooks": {
+      "tags": []
+    },
+    "protocol": {
+      "tags": []
+    },
+    "protocol-e2e": {
+      "tags": [],
+      "implicitDependencies": ["protocol"]
+    },
+    "quick-maths": {
+      "tags": []
+    },
+    "react-utils": {
+      "tags": []
+    },
+    "transaction-manifest": {
+      "tags": []
+    },
+    "types": {
+      "tags": []
+    }
+  }
+}

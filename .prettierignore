@@ -1,2 +1,2 @@
-src/graphql/generated.tsx
-src/react-app-env.d.ts
+/libs/artifacts/**
+/apps/protocol/src/graphql/**

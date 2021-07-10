@@ -87,7 +87,7 @@ workflows:
             - Approve build
       - Deploy:
           context:
-            - mstable-app
+            - protocol
           requires:
             - Build
             - Approve deploy

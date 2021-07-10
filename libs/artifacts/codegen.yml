@@ -1,0 +1,84 @@
+config:
+  skipTypename: true
+  withComponent: false
+  withHOC: false
+  withHooks: true
+  scalars:
+    BigDecimal: string
+    BigInt: string
+    Bytes: string
+    Address: string
+    ID: string
+
+generates:
+  ./libs/artifacts/src/graphql/protocol/schema.graphql:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-protocol-staging
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+
+  ./libs/artifacts/src/graphql/feeders/schema.graphql:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-feeder-pools
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+
+  ./libs/artifacts/src/graphql/staking-rewards/schema.graphql:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-rewards-polygon
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+
+  ./libs/artifacts/src/graphql/blocks/schema.graphql:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+
+  ./libs/artifacts/src/graphql/protocol.tsx:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-protocol-staging
+    documents: 'libs/artifacts/src/graphql/protocol/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+
+  ./libs/artifacts/src/graphql/feeders.tsx:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-feeder-pools
+    documents: 'libs/artifacts/src/graphql/feeders/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+
+  ./libs/artifacts/src/graphql/staking-rewards.tsx:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-rewards-polygon
+    documents: 'libs/artifacts/src/graphql/staking-rewards/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+
+  ./libs/artifacts/src/graphql/blocks.tsx:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks
+    documents: 'libs/artifacts/src/graphql/blocks/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
