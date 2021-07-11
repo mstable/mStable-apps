@@ -55,6 +55,9 @@
       "tags": [],
       "implicitDependencies": ["protocol"]
     },
+    "example": {
+      "tags": []
+    },
     "quick-maths": {
       "tags": []
     },

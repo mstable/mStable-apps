@@ -1,11 +1,11 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import { NavigationDropdown, NavItem } from '@apps/components/core'
+import { useBaseCtx } from '../../Base'
 
 import { useSelectedMassetName } from '../../context/MassetProvider'
 import { useThemeMode } from '../../context/AppProvider'
-import { useSelectedMassetState } from '../../context/DataProvider'
 import { colorTheme, ViewportWidth } from '@apps/base/theme'
 
 const List = styled.div`
@@ -37,27 +37,17 @@ const StyledNavLink = styled(NavLink)`
   white-space: nowrap;
 `
 
-// FIXME this is app-specific; needs props or ctx
+// FIXME don't add massetName here
 export const Navigation: FC = () => {
   const massetName = useSelectedMassetName()
   const themeMode = useThemeMode()
-  const massetState = useSelectedMassetState()
-  const hasFeederPools = massetState?.hasFeederPools
-
-  const navItems = useMemo<NavItem[]>(() => {
-    return [
-      { title: 'Save', path: '/save' },
-      ...(hasFeederPools ? [{ title: 'Pools', path: '/pools' }] : []),
-      { title: 'Forge', path: '/forge/mint' },
-      { title: 'Stats', path: '/stats' },
-    ]
-  }, [hasFeederPools])
+  const baseCtx = useBaseCtx()
 
   return (
     <nav>
       <List>
-        <NavigationDropdown massetName={massetName} items={navItems} />
-        {navItems.map(({ title, path }) => (
+        <NavigationDropdown massetName={massetName} items={baseCtx[0].navItems} />
+        {baseCtx[0].navItems.map(({ title, path }) => (
           <StyledNavLink activeStyle={{ color: colorTheme(themeMode).primary }} key={title} to={`/${massetName}${path}`}>
             {title}
           </StyledNavLink>

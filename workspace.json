@@ -228,6 +228,81 @@
         }
       }
     },
+    "example": {
+      "root": "apps/example",
+      "sourceRoot": "apps/example/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/example",
+            "index": "apps/example/src/index.html",
+            "main": "apps/example/src/main.tsx",
+            "polyfills": "apps/example/src/polyfills.ts",
+            "tsConfig": "apps/example/tsconfig.app.json",
+            "progress": true,
+            "assets": ["apps/example/src/assets", "apps/example/src/favicon.ico", "apps/example/src/manifest.json"],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "./webpack-config.js"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/example/src/environments/environment.ts",
+                  "with": "apps/example/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1mb",
+                  "maximumError": "10mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "example:build",
+            "port": 3100,
+            "hmr": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "example:build:production",
+              "hmr": false
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/example/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/example"],
+          "options": {
+            "jestConfig": "apps/example/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "quick-maths": {
       "root": "libs/quick-maths",
       "sourceRoot": "libs/quick-maths/src",

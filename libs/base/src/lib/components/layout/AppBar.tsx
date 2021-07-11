@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { ReactComponent as LogoSvg } from '../../../../../components/src/lib/icons/mstable-small.svg'
 
 import { useTransactionsState } from '@apps/base/context/transactions'
-import { UnstyledButton, ActivitySpinner } from '@apps/components/core'
+import { UnstyledButton, ActivitySpinner, NavItem } from '@apps/components/core'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { TokenIcon } from '@apps/components/icons'
 import { useNetwork } from '@apps/base/context/network'

@@ -2,11 +2,11 @@ import * as ReactDOM from 'react-dom'
 
 import { Base } from '@apps/base'
 
-import { ProtocolApp } from './app'
+import { ExampleApp } from './app'
 
 ReactDOM.render(
   <Base>
-    <ProtocolApp />
+    <ExampleApp />
   </Base>,
   document.getElementById('root'),
 )

@@ -1,9 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
-import { Base } from '@apps/base'
+
+import { useBaseCtx } from '@apps/base'
 import { useNetwork } from '@apps/base/context/network'
 import { useSelectedMasset } from '@apps/base/context/masset'
+import { useSelectedMassetState } from '@apps/base/context/data'
+
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
 
@@ -15,7 +18,7 @@ import { Pools } from './pages/Pools'
 import { PoolDetail } from './pages/Pools/Detail'
 import { Forge } from './pages/Forge'
 
-const Routes: FC = () => {
+const ProtocolRoutes: FC = () => {
   const { supportedMassets } = useNetwork()
   const [massetName] = useSelectedMasset()
   const history = useHistory()
@@ -64,14 +67,28 @@ const Routes: FC = () => {
   )
 }
 
-export const App: FC = () => {
+export const ProtocolApp: FC = () => {
+  const massetState = useSelectedMassetState()
+  const hasFeederPools = massetState?.hasFeederPools
+
+  const [, setBaseCtx] = useBaseCtx()
+
+  useEffect(() => {
+    const navItems = [
+      { title: 'Save', path: '/save' },
+      ...(hasFeederPools ? [{ title: 'Pools', path: '/pools' }] : []),
+      { title: 'Forge', path: '/forge/mint' },
+      { title: 'Stats', path: '/stats' },
+    ]
+
+    setBaseCtx({ navItems })
+  }, [hasFeederPools, setBaseCtx])
+
   return (
-    <Base>
-      <SelectedSaveVersionProvider>
-        <RewardStreamsProvider>
-          <Routes />
-        </RewardStreamsProvider>
-      </SelectedSaveVersionProvider>
-    </Base>
+    <SelectedSaveVersionProvider>
+      <RewardStreamsProvider>
+        <ProtocolRoutes />
+      </RewardStreamsProvider>
+    </SelectedSaveVersionProvider>
   )
 }

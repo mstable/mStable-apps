@@ -11,10 +11,9 @@ import reset from 'styled-reset'
 import { useLocation } from 'react-router-dom'
 import { TransitionGroup } from 'react-transition-group'
 import { ModalProvider } from 'react-modal-hook'
-import { usePrevious } from 'react-use'
 
 import { Color, FontSize, Size, Spacing, ViewportWidth } from '@apps/base/theme'
-import { useChainIdCtx, useNetwork } from '@apps/base/context/network'
+import { useNetwork } from '@apps/base/context/network'
 import { useSelectedMassetConfig } from '@apps/base/context/masset'
 import { useSelectedMassetState } from '@apps/base/context/data'
 import { ReactTooltip, Tooltip } from '@apps/components/core'
@@ -244,8 +243,8 @@ const Container = styled.div`
 export const Layout: FC = ({ children }) => {
   const { pathname } = useLocation()
   const home = pathname === '/'
-  const [chainId] = useChainIdCtx()
-  const prevChainId = usePrevious(chainId)
+  // const [chainId] = useChainIdCtx()
+  // const prevChainId = usePrevious(chainId)
 
   // Message
   const [bannerMessage, setBannerMessage] = useBannerMessage()
@@ -271,7 +270,7 @@ export const Layout: FC = ({ children }) => {
       <Background home={home} />
       <HeaderGroup />
       <Container>
-        <Main marginTop={home}>{prevChainId === chainId ? children : null}</Main>
+        <Main marginTop={home}>{children}</Main>
       </Container>
       <Footer />
       <Toasts />
