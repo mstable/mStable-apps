@@ -33,6 +33,9 @@
     "artifacts": {
       "tags": []
     },
+    "assets": {
+      "tags": []
+    },
     "base": {
       "tags": []
     },
@@ -40,6 +43,9 @@
       "tags": []
     },
     "components": {
+      "tags": []
+    },
+    "example": {
       "tags": []
     },
     "formatters": {
@@ -54,9 +60,6 @@
     "protocol-e2e": {
       "tags": [],
       "implicitDependencies": ["protocol"]
-    },
-    "example": {
-      "tags": []
     },
     "quick-maths": {
       "tags": []

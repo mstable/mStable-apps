@@ -11,5 +11,6 @@ module.exports = {
     '<rootDir>/libs/types',
     '<rootDir>/libs/quick-maths',
     '<rootDir>/libs/components',
+    '<rootDir>/libs/assets',
   ],
 }
