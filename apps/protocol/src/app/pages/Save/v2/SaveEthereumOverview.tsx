@@ -1,10 +1,9 @@
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-
 import { useEffectOnce } from 'react-use'
-import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
+
+import { BoostedCombinedAPY } from '@apps/types'
 import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
-import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { useSelectedMassetPrice, FetchState, useCalculateUserBoost, useAvailableSaveApy } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import {
@@ -16,6 +15,9 @@ import {
   ThemedSkeleton,
   Tooltip,
 } from '@apps/components/core'
+
+import { useRewardStreams } from '../../../context/RewardStreamsProvider'
+import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 
 import { UserBoost } from '../../../components/rewards/UserBoost'
 import { PokeBoost } from '../../../components/PokeBoost'
@@ -68,12 +70,6 @@ const Container = styled.div`
   }
 `
 
-interface BoostedApy {
-  base: number
-  userBoost?: number
-  maxBoost: number
-}
-
 interface PoolsAPIResponse {
   pools: {
     name: string
@@ -99,10 +95,10 @@ interface PoolsAPIResponse {
 }
 
 // FIXME sir - change pattern
-let cachedAPY: FetchState<BoostedApy> = { fetching: true }
+let cachedAPY: FetchState<BoostedCombinedAPY> = { fetching: true }
 
 // TODO this can be done without API
-const useSaveVaultAPY = (symbol?: string, userBoost?: number): FetchState<BoostedApy> => {
+const useSaveVaultAPY = (symbol?: string, userBoost?: number): FetchState<BoostedCombinedAPY> => {
   useEffectOnce(() => {
     if (!symbol) return
 
@@ -113,10 +109,15 @@ const useSaveVaultAPY = (symbol?: string, userBoost?: number): FetchState<Booste
           if (!pool) return
           const base = parseFloat(pool?.apyDetails.rewardsOnlyBase)
           const maxBoost = parseFloat(pool?.apyDetails.rewardsOnlyMax)
+          const rewards = {
+            base,
+            maxBoost,
+            userBoost: base,
+          }
           cachedAPY = {
             value: {
-              base,
-              maxBoost,
+              rewards,
+              combined: rewards,
             },
           }
         }),
@@ -128,11 +129,15 @@ const useSaveVaultAPY = (symbol?: string, userBoost?: number): FetchState<Booste
 
   const apy = useMemo(() => {
     if (!cachedAPY?.value) return cachedAPY
+    const rewards = {
+      base: cachedAPY.value.rewards.base,
+      maxBoost: cachedAPY.value.rewards.maxBoost,
+      userBoost: (userBoost ?? 1) * cachedAPY.value.rewards.base,
+    }
     return {
       value: {
-        base: cachedAPY.value.base,
-        maxBoost: cachedAPY.value.maxBoost,
-        userBoost: (userBoost ?? 1) * cachedAPY.value.base,
+        rewards,
+        combined: rewards,
       },
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -191,9 +196,9 @@ export const SaveEthereumOverview: FC = () => {
   }, [boostedSavingsVault, saveToken, saveExchangeRate, selectedSaveVersion, saveV1Balance])
 
   const isSaveV1 = selectedSaveVersion === 1
-  const combinedBaseApy = (apy?.value?.base ?? 0) + (saveApy?.value ?? 0)
-  const combinedMaxApy = (apy?.value?.maxBoost ?? 0) + (saveApy?.value ?? 0)
-  const combinedUserApy = (apy?.value?.userBoost ?? 0) + (saveApy?.value ?? 0)
+  const combinedBaseApy = (apy.value?.rewards.base ?? 0) + (saveApy?.value ?? 0)
+  const combinedMaxApy = (apy.value?.rewards.maxBoost ?? 0) + (saveApy?.value ?? 0)
+  const combinedUserApy = (apy.value?.rewards.userBoost ?? 0) + (saveApy?.value ?? 0)
 
   const handleSelection = useCallback((newValue: Selection) => setSelection(selection === newValue ? undefined : newValue), [selection])
 
@@ -214,21 +219,21 @@ export const SaveEthereumOverview: FC = () => {
           {!isSaveV1 && !!boostedSavingsVault && (
             <Button active={selection === VaultAPY} onClick={() => handleSelection(VaultAPY)}>
               <h3>Rewards APY</h3>
-              {apy?.fetching ? (
+              {apy.fetching ? (
                 <ThemedSkeleton height={20} width={64} />
               ) : (
                 <div>
-                  {userBoost > 1 && apy?.value?.userBoost ? (
+                  {userBoost > 1 && apy.value?.rewards.userBoost ? (
                     <>
                       <Tooltip tip={`Combined APY: ${combinedUserApy.toFixed(2)}%`} hideIcon>
-                        <DifferentialCountup prev={apy.value?.base} end={apy.value.userBoost} suffix="%" />
+                        <DifferentialCountup prev={apy.value?.rewards.base} end={apy.value.rewards.userBoost} suffix="%" />
                       </Tooltip>
                     </>
                   ) : (
                     <>
-                      <CountUp end={apy?.value?.base ?? 0} />
+                      <CountUp end={apy.value?.rewards.base ?? 0} />
                       &nbsp;-&nbsp;
-                      <CountUp end={apy?.value?.maxBoost ?? 0} suffix="%" />
+                      <CountUp end={apy.value?.rewards.maxBoost ?? 0} suffix="%" />
                       <Tooltip
                         tip={`Deposits to the Vault earn interest in addition to MTA rewards. Combined APY: ${combinedBaseApy.toFixed(
                           2,

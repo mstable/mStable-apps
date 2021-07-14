@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { BoostedSavingsVault__factory } from '@apps/artifacts/typechain'
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedCombinedAPY } from '@apps/types'
 import { useRewardStreams } from '../context/RewardStreamsProvider'
 import { usePropose } from '@apps/base/context/transactions'
 import { useCalculateUserBoost } from '@apps/hooks'
@@ -12,10 +13,11 @@ import { FetchState } from '@apps/hooks'
 import { ViewportWidth } from '@apps/base/theme'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { Button } from '@apps/components/core'
+
 import { SelectBoost } from './SelectBoost'
 
 interface Props {
-  apy: FetchState<{ base: number; maxBoost: number; userBoost?: number }>
+  apy: FetchState<BoostedCombinedAPY>
   vault?: BoostedSavingsVaultState
 }
 
@@ -119,9 +121,9 @@ export const PokeBoost: FC<Props> = ({ apy, vault }) => {
     <Container>
       <APY>
         <h3>Boosted APY</h3>
-        <CurrentMultiplier end={(account?.boostMultiplier ?? 1) * (apy?.value?.base ?? 0)} decimals={2} suffix="%" />
+        <CurrentMultiplier end={(account?.boostMultiplier ?? 1) * (apy?.value?.rewards.base ?? 0)} decimals={2} suffix="%" />
         <span>&nbsp;⭢&nbsp;</span>
-        <UpdatedMultiplier end={(userBoost ?? 0) * (apy?.value?.base ?? 0)} decimals={2} suffix="%" />
+        <UpdatedMultiplier end={(userBoost ?? 0) * (apy?.value?.rewards.base ?? 0)} decimals={2} suffix="%" />
       </APY>
       <Info>
         <p>

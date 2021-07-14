@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ThemedSkeleton, CountUp, DifferentialCountup } from '@apps/components/core'
 import { BoostedSavingsVaultState } from '@apps/base/context/data'
 import { FetchState } from '@apps/hooks'
+import { BoostedCombinedAPY } from '@apps/types'
 
 import { Boost } from './Boost'
 
@@ -43,32 +44,40 @@ const Container = styled.div`
 
 export const UserBoost: FC<{
   vault: BoostedSavingsVaultState
-  apy: FetchState<{ base: number; maxBoost: number; userBoost?: number }>
+  apy: FetchState<BoostedCombinedAPY>
 }> = ({ vault, vault: { isImusd }, apy }) => (
   <Container>
-    <Boost vault={vault} apy={apy.value?.base}>
+    <Boost vault={vault} apy={apy.value?.rewards.base}>
       <div>
         <div>
           <div>
             <h4>Base APY</h4>
-            {apy.fetching ? <ThemedSkeleton height={20} width={64} /> : apy.value && <CountUp end={apy.value.base} suffix="%" />}
+            {apy.fetching ? <ThemedSkeleton height={20} width={64} /> : apy.value && <CountUp end={apy.value.rewards.base} suffix="%" />}
           </div>
           <div>
             <h4>Max APY</h4>
-            {apy.fetching ? <ThemedSkeleton height={20} width={64} /> : apy.value && <CountUp end={apy.value.maxBoost} suffix="%" />}
+            {apy.fetching ? (
+              <ThemedSkeleton height={20} width={64} />
+            ) : (
+              apy.value && <CountUp end={apy.value.rewards.maxBoost} suffix="%" />
+            )}
           </div>
           <div>
             <h4>My APY</h4>
             {apy.fetching ? (
               <ThemedSkeleton height={20} width={64} />
             ) : (
-              apy.value && <DifferentialCountup prev={apy.value.base} end={apy.value?.userBoost ?? apy.value.base} suffix="%" />
+              apy.value && (
+                <DifferentialCountup
+                  prev={apy.value.rewards.base}
+                  end={apy.value?.rewards.userBoost ?? apy.value.rewards.base}
+                  suffix="%"
+                />
+              )
             )}
           </div>
         </div>
-        <p>
-          {isImusd ? 20 : 33}% of earned MTA rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks
-        </p>
+        <p>{isImusd ? 20 : 33}% of earned rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks</p>
       </div>
     </Boost>
   </Container>
