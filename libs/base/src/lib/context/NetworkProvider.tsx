@@ -27,7 +27,7 @@ interface CoreAddresses {
 
 type GraphQLEndpoints<T extends string> = Record<T, [string] | [string, string]>
 
-type MstableGqlEndpoints = GraphQLEndpoints<'protocol' | 'feeders'>
+type MstableGqlEndpoints = GraphQLEndpoints<'protocol'>
 
 type CoreGqlEndpoints = MstableGqlEndpoints & GraphQLEndpoints<'blocks'>
 
@@ -90,7 +90,7 @@ export interface EthereumMainnet
       // TODO remove, just for testing
       ['FRAX/IQ']: { stakingContract: string; stakingToken: string; rewardsTokens: [string, string] }
     },
-    {}
+    { feeders: [string] }
   > {
   chainId: ChainIds.EthereumMainnet
 }
@@ -171,7 +171,8 @@ const ETH_MAINNET: EthereumMainnet = {
       graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0),
       graphHostedEndpoint('mstable', 'mstable-protocol-staging'),
     ],
-    feeders: [graphHostedEndpoint('mstable', 'mstable-feeder-pools')],
+    // TODO replace when published
+    feeders: ['https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.5'],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
   },
   addresses: {
@@ -204,7 +205,6 @@ const ETH_ROPSTEN: EthereumRopsten = {
   gasStationEndpoint: 'https://gasprice.poa.network/',
   gqlEndpoints: {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-ropsten')],
-    feeders: [graphHostedEndpoint('mstable', 'mstable-feeders-ropsten')],
     blocks: [graphHostedEndpoint('blocklytics', 'ropsten-blocks')],
   },
   addresses: {
@@ -230,7 +230,6 @@ const ETH_GOERLI: EthereumGoerli = {
   gasStationEndpoint: 'https://gasprice.poa.network/',
   gqlEndpoints: {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-goerli')],
-    feeders: [graphHostedEndpoint('mstable', 'mstable-feeders-goerli')],
     blocks: [graphHostedEndpoint('blocklytics', 'goerli-blocks')],
   },
   addresses: {
@@ -268,7 +267,6 @@ const MATIC_MAINNET: MaticMainnet = {
   gasStationEndpoint: 'https://gasstation-mainnet.matic.network',
   gqlEndpoints: {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-polygon')],
-    feeders: [graphHostedEndpoint('mstable', 'mstable-feeder-pools-polygon')],
     blocks: [graphHostedEndpoint('elkfinance', 'matic-blocks')],
     stakingRewards: [graphHostedEndpoint('mstable', 'mstable-staking-rewards-polygon')],
   },
@@ -297,7 +295,6 @@ const MATIC_MUMBAI: MaticMumbai = {
   gasStationEndpoint: 'https://gasstation-mumbai.matic.today',
   gqlEndpoints: {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-polygon-mumbai')],
-    feeders: [graphHostedEndpoint('mstable', 'mstable-feeder-pools-mumbai')],
     // This is for mainnet, no subgraph available for Mumbai
     blocks: [graphHostedEndpoint('elkfinance', 'matic-blocks')],
   },

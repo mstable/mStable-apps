@@ -3,6 +3,7 @@ import { QueryHookOptions } from '@apollo/client'
 import { AllTokensQuery, AllTokensQueryVariables, useAllTokensQuery as useAllTokensProtocolQuery } from '@apps/artifacts/graphql/protocol'
 import { useFeederTokensQuery, FeederTokensQuery, FeederTokensQueryVariables } from '@apps/artifacts/graphql/feeders'
 
+import { useNetwork } from '../context/NetworkProvider'
 import { useTokensDispatch } from '../context/TokensProvider'
 
 const options = {
@@ -13,10 +14,14 @@ const options = {
  * Updater to one-time fetch all ERC20 tokens from the subgraph.
  */
 export const TokenFetcher = (): null => {
+  const network = useNetwork()
   const { setFetched } = useTokensDispatch()
 
   const protocolQuery = useAllTokensProtocolQuery(options as QueryHookOptions<AllTokensQuery, AllTokensQueryVariables>)
-  const feedersQuery = useFeederTokensQuery(options as QueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>)
+  const feedersQuery = useFeederTokensQuery({
+    ...options,
+    skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders'),
+  } as QueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>)
 
   const protocolFetched = protocolQuery.data?.tokens ?? []
   const feedersFetched = feedersQuery.data?.feederPools ?? []
