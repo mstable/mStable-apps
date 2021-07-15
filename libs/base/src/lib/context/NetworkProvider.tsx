@@ -336,8 +336,9 @@ export const getNetwork = (chainId: ChainIds | 0): Extract<AllNetworks, { chainI
 
 // TODO could still use an env var to define the default chain ID
 // Or even domain matching (polygon.*)
+const maybeCachedChainId = parseInt(localStorage.getItem('mostRecentChainId') as unknown as string)
 const [useChainIdCtx, ChainIdProvider] = createStateContext<ChainIds | undefined>(
-  (parseInt(localStorage.getItem('mostRecentChainId') as unknown as string) as ChainIds) ?? ChainIds.EthereumMainnet,
+  Number.isFinite(maybeCachedChainId) ? (maybeCachedChainId as ChainIds) : ChainIds.EthereumMainnet,
 )
 export { useChainIdCtx }
 

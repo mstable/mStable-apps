@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy preview
 
 on:
   pull_request:
@@ -8,13 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: yarn
-      - run: yarn protocol:build
+      - uses: c-hive/gha-yarn-cache@v2
+      - run: yarn install
+      # TODO: test, typecheck etc
+      - run: yarn nx run protocol:build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MSTABLE_APPS_PROTOCOL }}"
           expires: 30d
           projectId: mstable-apps-protocol
-          entryPoint: apps/protocol/firebase.json
+          entryPoint: apps/protocol
           target: mstable-apps-protocol

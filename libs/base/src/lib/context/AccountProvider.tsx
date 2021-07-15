@@ -108,7 +108,7 @@ const OnboardProvider: FC<{
     () =>
       Onboard({
         hideBranding: true,
-        networkId: parseInt(chainId as unknown as string),
+        networkId: parseInt(isNaN(chainId) ? '1' : (chainId as unknown as string)),
         subscriptions: {
           address: account => {
             if (!account) {
@@ -304,7 +304,7 @@ const OnboardConnection: FC = ({ children }) => {
   const [, setSigners] = useSignerCtx()
 
   useEffect(() => {
-    localStorage.setItem('mostRecentChainId', chainId as unknown as string)
+    if (chainId) localStorage.setItem('mostRecentChainId', chainId as unknown as string)
   }, [chainId])
 
   const injectedMismatching = injectedChainId !== chainId
