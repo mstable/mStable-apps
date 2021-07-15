@@ -164,7 +164,7 @@ const ETH_MAINNET: EthereumMainnet = {
   isTestnet: false,
   blockTime: 15e3,
   coingeckoId: 'ethereum',
-  rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe', 'https://main-light.eth.linkpool.io'],
+  rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
   gasStationEndpoint: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:mstable',
   gqlEndpoints: {
     protocol: [
@@ -336,8 +336,9 @@ export const getNetwork = (chainId: ChainIds | 0): Extract<AllNetworks, { chainI
 
 // TODO could still use an env var to define the default chain ID
 // Or even domain matching (polygon.*)
+const maybeCachedChainId = parseInt(localStorage.getItem('mostRecentChainId') as unknown as string)
 const [useChainIdCtx, ChainIdProvider] = createStateContext<ChainIds | undefined>(
-  (parseInt(localStorage.getItem('mostRecentChainId') as unknown as string) as ChainIds) ?? ChainIds.EthereumMainnet,
+  Number.isFinite(maybeCachedChainId) ? (maybeCachedChainId as ChainIds) : ChainIds.EthereumMainnet,
 )
 export { useChainIdCtx }
 
