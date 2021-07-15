@@ -14,6 +14,7 @@ import {
 } from '@apps/artifacts/graphql/staking-rewards'
 import { useAccount } from '@apps/base/context/account'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
+import { useNetwork } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { useSelectedMassetState } from '@apps/base/context/data'
 import { BigDecimal } from '@apps/bigdecimal'
@@ -159,6 +160,7 @@ export const createStakingRewardsContext = (): Readonly<
   const context = createContext<StakingRewardsExtended>({})
 
   const StakingRewardsProvider: FC<{ address?: string; stakingTokenAddress?: string }> = ({ address, stakingTokenAddress, children }) => {
+    const network = useNetwork()
     const useFetchPrice = useFetchPriceCtx()
     const massetState = useSelectedMassetState()
     const account = useAccount()
@@ -167,7 +169,7 @@ export const createStakingRewardsContext = (): Readonly<
     const query = useQuery<StakingRewardsForStakingTokenQuery | StakingRewardsContractQuery>(
       stakingTokenAddress ? StakingRewardsForStakingTokenDocument : StakingRewardsContractDocument,
       {
-        skip: !address && !stakingTokenAddress,
+        skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'stakingRewards') || (!address && !stakingTokenAddress),
         pollInterval: 5e3, // 5s
         variables: {
           account: account || null,
