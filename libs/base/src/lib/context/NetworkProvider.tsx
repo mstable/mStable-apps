@@ -164,7 +164,7 @@ const ETH_MAINNET: EthereumMainnet = {
   isTestnet: false,
   blockTime: 15e3,
   coingeckoId: 'ethereum',
-  rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
+  rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe', 'https://main-light.eth.linkpool.io'],
   gasStationEndpoint: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:mstable',
   gqlEndpoints: {
     protocol: [
