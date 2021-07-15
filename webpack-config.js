@@ -15,7 +15,10 @@ module.exports = (config, context) => {
   }
 
   // Neuter the error overlay
-  config.plugins[config.plugins.findIndex(p => p.options && p.options.overlay)].options.overlay.entry = null
+  const overlayPluginIdx = config.plugins.findIndex(p => p.options && p.options.overlay)
+  if (overlayPluginIdx !== -1) {
+    config.plugins[overlayPluginIdx].options.overlay.entry = null
+  }
 
   return config
 }
