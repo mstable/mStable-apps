@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
 
 import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
-import { ViewportWidth } from '@apps/base/theme'
 import { Table, TableCell, TableRow, Button, SendAsset } from '@apps/components/core'
+
+import { ViewportWidth } from '../../theme'
 
 const Header = styled.div`
   padding: 0 1rem;

@@ -3,7 +3,7 @@ import { useModal } from 'react-modal-hook'
 
 import { Modal } from '@apps/components/core'
 
-import { ExploreAsset } from '../components/ExploreAsset'
+import { ExploreAsset } from '../components/wallet/ExploreAsset'
 
 export const useExploreAssetModal = (): [(symbol: string) => void, () => void] => {
   const [symbol, setSymbol] = useState<string | undefined>(undefined)

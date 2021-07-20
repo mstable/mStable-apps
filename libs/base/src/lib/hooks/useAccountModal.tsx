@@ -3,14 +3,11 @@ import styled from 'styled-components'
 import { useModal } from 'react-modal-hook'
 
 import { ViewportWidth } from '@apps/base/theme'
-import { Modal } from './Modal'
-import { useConnected, useReset, useWallet, useWalletAddress } from '@apps/base/context/account'
-import { Address } from './Address'
-import { Button } from './Button'
+import { Modal, Address, Button } from '@apps/components/core'
 
-// FIXME
-import { Balances } from '../../../../base/src/lib/components/wallet/Balances'
-import { useExploreAssetModal } from '../../../../../apps/protocol/src/app/hooks/useExploreAssetModal'
+import { useConnected, useReset, useWallet, useWalletAddress } from '../context/AccountProvider'
+import { Balances } from '../components/wallet/Balances'
+import { useExploreAssetModal } from './useExploreAssetModal'
 
 const DisconnectButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};

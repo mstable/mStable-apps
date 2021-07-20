@@ -1,14 +1,14 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import { truncateAddress } from '@apps/formatters'
-import { UnstyledButton, useAccountModal, UserIcon } from '@apps/components/core'
+import { UnstyledButton, UserIcon } from '@apps/components/core'
 import { Idle } from '@apps/components/icons'
 
 import { ChainIds, getNetwork, useChainIdCtx } from '../../context/NetworkProvider'
 import { useConnect, useWalletAddress, useConnected, useInjectedChainIdCtx } from '../../context/AccountProvider'
-
-import { ViewportWidth } from '@apps/base/theme'
-import { useTCModal } from '../TCModal'
+import { useTCModal } from '../../hooks/useTCModal'
+import { useAccountModal } from '../../hooks/useAccountModal'
+import { ViewportWidth } from '../../theme'
 
 const ConnectText = styled.span`
   padding: 0 0.5rem;
@@ -73,13 +73,7 @@ export const WalletButton: FC = () => {
   const [injectedChainId] = useInjectedChainIdCtx()
   const [chainId] = useChainIdCtx()
 
-  const injectedNetwork = useMemo(() => {
-    try {
-      return getNetwork(injectedChainId ?? ChainIds.EthereumMainnet)
-    } catch {
-      return undefined
-    }
-  }, [injectedChainId])
+  const injectedNetwork = getNetwork(injectedChainId ?? ChainIds.EthereumMainnet)
   const [showAccountModal] = useAccountModal()
 
   const connect = useConnect()
