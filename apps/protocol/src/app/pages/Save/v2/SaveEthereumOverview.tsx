@@ -1,11 +1,12 @@
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { useEffectOnce } from 'react-use'
 
 import { BoostedCombinedAPY } from '@apps/types'
 import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
+import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { useSelectedMassetPrice, FetchState, useCalculateUserBoost, useAvailableSaveApy } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
+import { calculateApy } from '@apps/quick-maths'
 import {
   TransitionCard,
   CardContainer as TransitionContainer,
@@ -94,67 +95,54 @@ interface PoolsAPIResponse {
   }[]
 }
 
-// FIXME sir - change pattern
-let cachedAPY: FetchState<BoostedCombinedAPY> = { fetching: true }
+const useSaveVaultAPY = (userBoost?: number): FetchState<BoostedCombinedAPY> => {
+  const {
+    savingsContracts: {
+      v2: { boostedSavingsVault, latestExchangeRate },
+    },
+  } = useSelectedMassetState() as MassetState
 
-// TODO this can be done without API
-const useSaveVaultAPY = (symbol?: string, userBoost?: number): FetchState<BoostedCombinedAPY> => {
-  useEffectOnce(() => {
-    if (!symbol) return
+  const useFetchPrice = useFetchPriceCtx()
+  const massetPrice = useSelectedMassetPrice()
+  const rewardsTokenPrice = useFetchPrice(boostedSavingsVault?.rewardsToken.address)
 
-    fetch('https://api.mstable.org/pools')
-      .then(res =>
-        res.json().then(({ pools }: PoolsAPIResponse) => {
-          const pool = pools.find(p => p.pair[0] === symbol)
-          if (!pool) return
-          const base = parseFloat(pool?.apyDetails.rewardsOnlyBase)
-          const maxBoost = parseFloat(pool?.apyDetails.rewardsOnlyMax)
-          const rewards = {
-            base,
-            maxBoost,
-            userBoost: base,
-          }
-          cachedAPY = {
-            value: {
-              rewards,
-              combined: rewards,
-            },
-          }
-        }),
-      )
-      .catch(error => {
-        cachedAPY = { error: error.message }
-      })
-  })
+  return useMemo(() => {
+    if (!boostedSavingsVault || !massetPrice || !rewardsTokenPrice.value) return { fetching: true }
 
-  const apy = useMemo(() => {
-    if (!cachedAPY?.value) return cachedAPY
+    const { totalSupply, rewardRate } = boostedSavingsVault
+
+    const stakingTokenPrice = latestExchangeRate.rate.simple * massetPrice
+
+    const rewardRateSimple = parseInt(rewardRate.toString()) / 1e18
+    const base = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, rewardRateSimple, totalSupply)
+    const maxBoost = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, rewardRateSimple * 3, totalSupply)
+
     const rewards = {
-      base: cachedAPY.value.rewards.base,
-      maxBoost: cachedAPY.value.rewards.maxBoost,
-      userBoost: (userBoost ?? 1) * cachedAPY.value.rewards.base,
+      base,
+      maxBoost,
+      userBoost: (userBoost ?? 1) * base,
     }
+
     return {
       value: {
         rewards,
         combined: rewards,
       },
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userBoost, symbol, cachedAPY])
-
-  return apy
+  }, [userBoost, rewardsTokenPrice, boostedSavingsVault, massetPrice, latestExchangeRate])
 }
 
 const UserSaveBoost: FC = () => {
   const {
     savingsContracts: {
-      v2: { token, boostedSavingsVault },
+      v2: { boostedSavingsVault },
     },
   } = useSelectedMassetState() as MassetState
 
   const userBoost = useCalculateUserBoost(boostedSavingsVault)
-  const apy = useSaveVaultAPY(token?.symbol, userBoost)
+
+  const apy = useSaveVaultAPY(userBoost)
+
   return boostedSavingsVault ? <UserBoost vault={boostedSavingsVault} apy={apy} /> : null
 }
 
@@ -180,7 +168,7 @@ export const SaveEthereumOverview: FC = () => {
   } = massetState as MassetState
 
   const userBoost = useCalculateUserBoost(boostedSavingsVault)
-  const apy = useSaveVaultAPY(saveToken?.symbol, userBoost)
+  const apy = useSaveVaultAPY(userBoost)
 
   const totalEarned =
     (rewardStreams?.amounts.earned.unlocked ?? 0) + (rewardStreams?.amounts.previewLocked ?? 0) + (rewardStreams?.amounts.locked ?? 0)
