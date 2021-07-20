@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { ReactComponent as LogoSvg } from '../../../../../components/src/lib/icons/mstable-small.svg'
 
 import { useTransactionsState } from '@apps/base/context/transactions'
-import { UnstyledButton, ActivitySpinner, NavItem } from '@apps/components/core'
+import { UnstyledButton, ActivitySpinner } from '@apps/components/core'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { TokenIcon } from '@apps/components/icons'
 import { useNetwork } from '@apps/base/context/network'
@@ -114,26 +114,35 @@ const TransactionsSpinner: FC = () => {
   return <ActivitySpinner pending={pending} />
 }
 
+const StickyHeader = styled.div`
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+`
+
 export const AppBar: FC = () => {
   const { protocolName } = useNetwork()
   return (
-    <Container>
-      <Inner>
-        <LogoAndMasset>
-          <Link to="/" title="Home">
-            <Logo />
-          </Link>
-        </LogoAndMasset>
-        <Navigation />
-        <WalletAndSpinner>
-          <TransactionsSpinner />
-          <WalletButton />
-          <NetworkButton>
-            <TokenIcon symbol={protocolName.toUpperCase()} hideNetwork />
-          </NetworkButton>
-          <SettingsButton />
-        </WalletAndSpinner>
-      </Inner>
-    </Container>
+    <StickyHeader>
+      <Container>
+        <Inner>
+          <LogoAndMasset>
+            <Link to="/" title="Home">
+              <Logo />
+            </Link>
+          </LogoAndMasset>
+          <Navigation />
+          <WalletAndSpinner>
+            <TransactionsSpinner />
+            <WalletButton />
+            <NetworkButton>
+              <TokenIcon symbol={protocolName.toUpperCase()} hideNetwork />
+            </NetworkButton>
+            <SettingsButton />
+          </WalletAndSpinner>
+        </Inner>
+      </Container>
+    </StickyHeader>
   )
 }

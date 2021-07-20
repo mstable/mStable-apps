@@ -8,7 +8,6 @@ import styled, {
   ThemedStyledProps,
 } from 'styled-components'
 import reset from 'styled-reset'
-import { useLocation } from 'react-router-dom'
 import { TransitionGroup } from 'react-transition-group'
 import { ModalProvider } from 'react-modal-hook'
 
@@ -20,7 +19,6 @@ import { ReactTooltip, Tooltip } from '@apps/components/core'
 import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
 
 import { Footer } from './Footer'
-import { Background } from './Background'
 import { AppBar } from './AppBar'
 import { Toasts } from './Toasts'
 import { MessageHandler } from './MessageHandler'
@@ -207,20 +205,17 @@ const GlobalStyle = (createGlobalStyle as <P extends object = {}>(
 
 `
 
-const StickyHeader = styled.div`
-  position: sticky;
+const Background = styled.div`
+  position: fixed;
   top: 0;
+  left: 0;
+  height: 100%;
   width: 100%;
-  z-index: 3;
+  pointer-events: none;
+  z-index: -1;
+  transition: background-color 0.3s ease;
+  background-color: ${({ theme }) => theme.color.background[0]};
 `
-
-const HeaderGroup: FC = () => (
-  <>
-    <StickyHeader>
-      <AppBar />
-    </StickyHeader>
-  </>
-)
 
 const Container = styled.div`
   display: grid;
@@ -241,11 +236,6 @@ const Container = styled.div`
 `
 
 export const Layout: FC = ({ children }) => {
-  const { pathname } = useLocation()
-  const home = pathname === '/'
-  // const [chainId] = useChainIdCtx()
-  // const prevChainId = usePrevious(chainId)
-
   // Message
   const [bannerMessage, setBannerMessage] = useBannerMessage()
   const massetConfig = useSelectedMassetConfig()
@@ -263,14 +253,14 @@ export const Layout: FC = ({ children }) => {
     if (bannerMessage?.title !== message?.title) {
       setBannerMessage(message)
     }
-  }, [bannerMessage, massetConfig, pathname, protocolName, setBannerMessage, undergoingRecol])
+  }, [bannerMessage, massetConfig, protocolName, setBannerMessage, undergoingRecol])
 
   return (
     <ModalProvider rootComponent={TransitionGroup}>
-      <Background home={home} />
-      <HeaderGroup />
+      <Background />
+      <AppBar />
       <Container>
-        <Main marginTop={home}>{children}</Main>
+        <Main>{children}</Main>
       </Container>
       <Footer />
       <Toasts />
