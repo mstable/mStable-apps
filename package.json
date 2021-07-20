@@ -1,7 +1,9 @@
 {
-  "name": "apps",
+  "name": "mstable-apps",
   "version": "0.0.0",
-  "license": "MIT",
+  "description": "mStable Apps",
+  "license": "LGPL-3.0-or-later",
+  "author": "Stability Labs Pty. Ltd. <hello@stabilitylabs.co>",
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
