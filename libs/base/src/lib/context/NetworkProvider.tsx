@@ -343,6 +343,12 @@ const [useChainIdCtx, ChainIdProvider] = createStateContext<ChainIds | undefined
 )
 export { useChainIdCtx }
 
+const capGasPrice = (gwei: number, chainId: number) => {
+  // High gas prices should not be necessary on Polygon; despite what the API says,
+  // looking at blocks shows that almost all are <10 gwei.
+  return chainId === ChainIds.MaticMainnet ? Math.min(10, gwei) : gwei
+}
+
 const networkCtx = createContext<Network<unknown, unknown>>(null as never)
 
 const networkPricesCtx = createContext<FetchState<NetworkPrices>>(null as never)
@@ -399,10 +405,10 @@ const NetworkPricesProvider: FC = ({ children }) => {
 
     const nativeToken = priceResult[network.coingeckoId].usd
     const gas = {
-      standard: standard ?? gasNow?.standard,
-      fast: fast ?? gasNow?.fast,
-      slow: slow ?? (safeLow as number) ?? gasNow?.slow,
-      instant: instant ?? (fastest as number) ?? gasNow?.rapid,
+      standard: capGasPrice(standard ?? gasNow?.standard, network.chainId),
+      fast: capGasPrice(fast ?? gasNow?.fast, network.chainId),
+      slow: capGasPrice(slow ?? (safeLow as number) ?? gasNow?.slow, network.chainId),
+      instant: capGasPrice(instant ?? (fastest as number) ?? gasNow?.rapid, network.chainId),
     }
 
     setNetworkPrices.value({ nativeToken, gas })
