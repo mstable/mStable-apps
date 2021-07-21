@@ -23,6 +23,13 @@ This project was generated using [Nx](https://nx.dev).
 ### Quickstart
 
 ```bash
+# Copy the default env vars so they can be overridden
+cp .env .env.local
+
+# Now edit the Subgraph API key env vars to add a local API key
+# e.g. `vim .env.local`
+
+# Then install and run the apps
 yarn
 yarn nx serve --parallel --all
 ```
