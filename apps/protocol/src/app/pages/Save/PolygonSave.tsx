@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import CountUp from 'react-countup'
 
@@ -12,6 +12,7 @@ import { SaveRedeem } from './v2/SaveRedeem'
 import { SaveDeposit } from './v2/SaveDeposit'
 import { SaveStake } from './v2/SaveStake'
 import { OnboardingProvider, useStakingRewards, StakingRewardsProvider } from './hooks'
+import { Link } from 'react-router-dom'
 
 enum Tabs {
   Deposit = 'Deposit',
@@ -142,12 +143,20 @@ const SaveBalance: FC = () => {
 
   const isNewUser = !stakingRewards.hasStakedBalance && !stakingRewards.hasUnstakedBalance
 
+  const balanceInfo = useMemo(() => {
+    if (stakingRewards.hasStakedBalance && !stakingRewards.hasUnstakedBalance) {
+      return [stakingRewards?.rewards?.find(v => v.id === 'yieldEntryWithRewards')]
+    }
+    return stakingRewards.rewards?.filter(rewards => rewards.priority) ?? []
+  }, [stakingRewards])
+
   return (
     <div>
       {isNewUser && <h2>The best passive savings account in DeFi.</h2>}
-      {stakingRewards.rewards
-        ?.filter(rewards => rewards.priority)
-        .map(({ balance, apy, apyTip, stakeLabel, name }) => (
+      {balanceInfo.map(info => {
+        if (!info) return undefined
+        const { balance, apy, apyTip, stakeLabel, name } = info
+        return (
           <InfoText key={name}>
             {balance.exact.gt(0) ? 'Earning ' : `${stakeLabel} to earn `}
             <Tooltip tip={apyTip}>
@@ -160,7 +169,8 @@ const SaveBalance: FC = () => {
               </>
             )}
           </InfoText>
-        ))}
+        )
+      })}
     </div>
   )
 }
@@ -180,9 +190,19 @@ export const PolygonSave: FC = () => {
             <Content>
               <Card>
                 <SaveBalance />
-                <Tooltip tip="30-day yield APY chart" hideIcon>
-                  <APYChart hideControls shimmerHeight={80} tick={false} aspect={3} color="#b880dd" strokeWidth={1} hoverEnabled={false} />
-                </Tooltip>
+                <Link to="/musd/stats">
+                  <Tooltip tip="30-day yield APY chart" hideIcon>
+                    <APYChart
+                      hideControls
+                      shimmerHeight={80}
+                      tick={false}
+                      aspect={3}
+                      color="#b880dd"
+                      strokeWidth={1}
+                      hoverEnabled={false}
+                    />
+                  </Tooltip>
+                </Link>
               </Card>
               <TabCard tabs={tabs} active={activeTab} onClick={setActiveTab} />
             </Content>
