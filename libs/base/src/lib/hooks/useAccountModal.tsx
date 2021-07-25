@@ -5,7 +5,7 @@ import { useModal } from 'react-modal-hook'
 import { ViewportWidth } from '@apps/base/theme'
 import { Modal, Address, Button } from '@apps/components/core'
 
-import { useConnected, useReset, useWallet, useWalletAddress } from '../context/AccountProvider'
+import { useConnected, useReset, useWallet, useWalletAddress } from '@apps/base/context/account'
 import { Balances } from '../components/wallet/Balances'
 import { useExploreAssetModal } from './useExploreAssetModal'
 
