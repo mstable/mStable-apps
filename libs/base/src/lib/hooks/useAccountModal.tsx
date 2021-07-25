@@ -69,16 +69,15 @@ const Container = styled.div`
   }
 `
 export const useAccountModal = (): [() => void, () => void] => {
-  const address = useWalletAddress()
-  const connected = useConnected()
-  const wallet = useWallet()
-
-  const [showExploreModal] = useExploreAssetModal()
-
   const [showModal, hideModal] = useModal(({ onExited, in: open }) => {
     // "Modals are also functional components and can use react hooks themselves"
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    /* eslint-disable react-hooks/rules-of-hooks */
+    const [showExploreModal] = useExploreAssetModal()
     const reset = useReset()
+    const address = useWalletAddress()
+    const connected = useConnected()
+    const wallet = useWallet()
+    /* eslint-enable react-hooks/rules-of-hooks */
 
     const handleClick = (): void => {
       if (reset) {
