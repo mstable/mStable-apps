@@ -137,6 +137,7 @@
             "{options.outputPath}"
           ],
           "options": {
+            "baseHref": "./",
             "outputPath": "dist/apps/example",
             "index": "apps/example/src/index.html",
             "main": "apps/example/src/main.tsx",
