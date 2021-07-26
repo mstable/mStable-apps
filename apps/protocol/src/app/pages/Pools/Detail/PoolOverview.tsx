@@ -113,8 +113,17 @@ export const PoolOverview: FC = () => {
             <Button active={false} disabled>
               <h3>Platform APY</h3>
               <div>
-                <CountUp end={apy.value.platformRewards.base} suffix="%" />
+                <CountUp end={apy.value.platformRewards} suffix="%" />
                 <Tooltip tip={`${vault.platformRewardsToken?.symbol} rewards are claimed immediately`} />
+              </div>
+            </Button>
+          )}
+          {apy.value.base && (
+            <Button active={false} disabled>
+              <h3>Base APY</h3>
+              <div>
+                <CountUp end={apy.value.base} suffix="%" />
+                <Tooltip tip="Base APY represents the increase in the value of the pool token over time" />
               </div>
             </Button>
           )}

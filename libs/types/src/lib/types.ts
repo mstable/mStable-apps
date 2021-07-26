@@ -84,7 +84,7 @@ export interface BoostedAPY {
 }
 
 export interface BoostedCombinedAPY {
-  combined: BoostedAPY
   rewards: BoostedAPY
-  platformRewards?: BoostedAPY
+  platformRewards?: number
+  base?: number
 }
