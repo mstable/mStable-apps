@@ -19,6 +19,7 @@ module.exports = (config, context) => {
   if (overlayPluginIdx !== -1) {
     config.plugins[overlayPluginIdx].options.overlay.entry = null
   }
+  config.output.publicPath = './'
 
   return config
 }
