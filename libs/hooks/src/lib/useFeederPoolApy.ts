@@ -46,16 +46,6 @@ export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombine
       const boostedRewardRate = rewardRateSimple * boost
 
       userBoost = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, boostedRewardRate, vault.totalSupply) as number
-
-      if (platformRewardRateSimple) {
-        const boostedPlatformRewardRate = platformRewardRateSimple * boost
-        userBoostPlatform = calculateApy(
-          stakingTokenPrice,
-          platformTokenPrice.value,
-          boostedPlatformRewardRate,
-          vault.totalSupply,
-        ) as number
-      }
     }
   }
 
@@ -64,10 +54,10 @@ export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombine
 
   let platformRewards
   if (basePlatform) {
-    platformRewards = { base: basePlatform, userBoost: userBoostPlatform as number, maxBoost: MAX_BOOST * basePlatform }
+    platformRewards = { base: basePlatform, userBoost: basePlatform, maxBoost: basePlatform }
     combined = {
-      userBoost: rewards.userBoost + platformRewards.userBoost,
-      maxBoost: rewards.maxBoost + platformRewards.maxBoost,
+      userBoost: rewards.userBoost + platformRewards.base,
+      maxBoost: rewards.maxBoost + platformRewards.base,
       base: rewards.base + platformRewards.base,
     }
   }
