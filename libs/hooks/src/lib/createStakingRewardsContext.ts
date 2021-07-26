@@ -270,7 +270,19 @@ export const createStakingRewardsContext = (): Readonly<
             }
           : undefined
 
-      const rewards = [yieldEntry, rewardsEntry, platformRewardsEntry, combinedRewardsEntry].filter(
+      const yieldEntryWithRewards = combinedRewardsEntry
+        ? {
+            ...combinedRewardsEntry,
+            id: 'yieldEntryWithRewards',
+            name: '',
+            apy: (rewardsApy ?? 0) + (platformApy ?? 0) + massetState.savingsContracts.v2.dailyAPY,
+            priority: false,
+            apyTip:
+              'This APY is derived from the native interest rate + current available staking rewards, and is not reflective of future rates.',
+          }
+        : undefined
+
+      const rewards = [yieldEntry, rewardsEntry, platformRewardsEntry, combinedRewardsEntry, yieldEntryWithRewards].filter(
         Boolean,
       ) as StakingRewardsExtended['rewards']
 
