@@ -283,7 +283,7 @@
           "options": {
             "outputPath": "apps/protocol/dist",
             "deployUrl": "./",
-            "baseHref": "",
+            "baseHref": "./",
             "index": "apps/protocol/src/index.html",
             "main": "apps/protocol/src/main.tsx",
             "polyfills": "apps/protocol/src/polyfills.ts",
