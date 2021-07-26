@@ -137,7 +137,6 @@
             "{options.outputPath}"
           ],
           "options": {
-            "baseHref": "./",
             "outputPath": "dist/apps/example",
             "index": "apps/example/src/index.html",
             "main": "apps/example/src/main.tsx",
@@ -283,6 +282,7 @@
           ],
           "options": {
             "outputPath": "apps/protocol/dist",
+            "deployUrl": "./",
             "index": "apps/protocol/src/index.html",
             "main": "apps/protocol/src/main.tsx",
             "polyfills": "apps/protocol/src/polyfills.ts",
