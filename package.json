@@ -4,6 +4,7 @@
   "description": "mStable Apps",
   "license": "LGPL-3.0-or-later",
   "author": "Stability Labs Pty. Ltd. <hello@stabilitylabs.co>",
+  "homepage": "./",
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
