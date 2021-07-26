@@ -13,7 +13,7 @@ import { useFeederPoolApy, useSelectedMassetPrice } from '@apps/hooks'
 import { ViewportWidth } from '@apps/base/theme'
 import { toK } from '@apps/formatters'
 import { CountUp, CountUpUSD, Tooltip } from '@apps/components/core'
-import { TokenPair } from '@apps/components/icons'
+import { TokenIcon, TokenPair } from '@apps/components/icons'
 
 import { assetColorMapping } from '../constants'
 import { Card } from './Card'
@@ -27,13 +27,15 @@ interface Props {
 }
 
 const RewardsAPY = styled.div<{ isLarge?: boolean }>`
+  img {
+    width: 2rem !important;
+    margin-left: 0.5rem;
+  }
+
   @media (min-width: ${ViewportWidth.s}) {
     > div {
-      ${({ isLarge }) =>
-        !isLarge && {
-          display: 'flex',
-          flexDirection: 'row',
-        }}
+      display: flex;
+      align-items: center;
     }
   }
 `
@@ -47,17 +49,18 @@ const StatsContainer = styled.div<{ isLarge?: boolean }>`
   flex-direction: column;
   flex: 1;
 
+  > div:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
   // hide amount on small card
   > div:first-child {
+    margin-bottom: 1rem;
     > div {
       > span:first-child {
         display: ${({ isLarge }) => (isLarge ? 'inherit' : 'none')};
       }
     }
-  }
-
-  > div:not(:last-child) {
-    margin-bottom: 0.5rem;
   }
 
   > div {
@@ -103,7 +106,7 @@ const StatsContainer = styled.div<{ isLarge?: boolean }>`
 `
 
 const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false, address }) => {
-  const { liquidity, price } = useFeederPool(address) as FeederPoolState
+  const { liquidity, price, vault } = useFeederPool(address) as FeederPoolState
   const massetPrice = useSelectedMassetPrice()
 
   const { block24h } = useBlockNumbers()
@@ -154,16 +157,31 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
           </Tooltip>
         </p>
         <div>
-          <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} />}%</div>
           <div>
-            &nbsp;→&nbsp;
-            <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
-              {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} />}%
-            </UnderlinedTip>
+            <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} />}%</div>
+            <div>
+              &nbsp;→&nbsp;
+              <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
+                {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} />}%
+              </UnderlinedTip>
+            </div>
           </div>
+          <TokenIcon symbol={vault.rewardsToken.symbol} />
         </div>
       </RewardsAPY>
-      {feederPoolApy.value && feederPoolApy.value.rewards.base > 1000 && <div>While liquidity is low, this APY is highly volatile</div>}
+      <div />
+      {feederPoolApy.value?.platformRewards && (
+        <RewardsAPY isLarge={isLarge}>
+          <p>
+            <Tooltip tip="Platform rewards are not boosted and 100% is claimable immediately.">Platform APY</Tooltip>
+          </p>
+          <div>
+            <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards.base} />}% </div>
+            <TokenIcon symbol={vault.platformRewardsToken?.symbol} />
+          </div>
+        </RewardsAPY>
+      )}
+      {feederPoolApy.value && feederPoolApy.value.combined.base > 1000 && <div>While liquidity is low, this APY is highly volatile</div>}
     </StatsContainer>
   )
 }

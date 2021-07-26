@@ -105,10 +105,19 @@ export const PoolOverview: FC = () => {
           <Button active={selection === Rewards} onClick={() => handleSelection(Rewards)}>
             <h3>Rewards</h3>
             <div>
-              <CountUp end={totalEarned} suffix=" MTA" />
-              <Tooltip tip="MTA rewards unlock over time" />
+              <CountUp end={totalEarned} suffix={` ${vault.rewardsToken.symbol}`} />
+              <Tooltip tip={`${vault.rewardsToken.symbol} rewards unlock over time`} />
             </div>
           </Button>
+          {apy.value?.platformRewards && (
+            <Button active={false} disabled>
+              <h3>Platform APY</h3>
+              <div>
+                <CountUp end={apy.value.platformRewards.base} suffix="%" />
+                <Tooltip tip={`${vault.platformRewardsToken?.symbol} rewards are claimed immediately`} />
+              </div>
+            </Button>
+          )}
         </Container>
       </TransitionCard>
       <PokeBoost apy={apy} vault={feederPool?.vault} />
