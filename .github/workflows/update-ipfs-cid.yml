@@ -1,0 +1,19 @@
+name: Update IPFS CID
+
+on:
+  workflow_run:
+    workflows: ["fleek-ci"]
+    types:
+      - completed
+
+jobs:
+  update_ipfs_cid:
+    runs-on: ubuntu-latest
+    needs: [fleek-ci]
+    steps:
+      - name: "Test Fleek output run.conclusion"
+        run: |
+          echo ${{github.event.workflow_run.conclusion}}
+      - name: "Test Fleek output run"
+        run: |
+          echo ${{github.event.workflow_run}}
