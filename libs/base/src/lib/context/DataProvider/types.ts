@@ -137,6 +137,7 @@ export interface BoostedSavingsVaultState {
   }
   totalStakingRewards: BigDecimal
   totalSupply: BigDecimal
+  totalRaw: BigDecimal
   unlockPercentage: BigNumber
   isImusd: boolean // FIXME replace
 }

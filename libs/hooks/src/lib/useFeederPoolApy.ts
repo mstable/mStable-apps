@@ -30,13 +30,12 @@ export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombine
 
   const stakingTokenPrice = pool.price.simple * massetPrice
 
-  const base = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, rewardRateSimple, vault.totalSupply) as number
-  const basePlatform = calculateApy(stakingTokenPrice, platformTokenPrice.value, platformRewardRateSimple, vault.totalSupply)
+  const baseRewards = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, rewardRateSimple, vault.totalSupply) as number
+  const platformRewards = calculateApy(stakingTokenPrice, platformTokenPrice.value, platformRewardRateSimple, vault.totalRaw)
 
-  const maxBoost = MAX_BOOST * base
+  const maxBoost = MAX_BOOST * baseRewards
 
-  let userBoost = base
-  let userBoostPlatform = basePlatform
+  let userBoost = baseRewards
 
   const coeffs = getCoeffs(vault)
   if (vault.account && vMta && coeffs) {
@@ -49,20 +48,9 @@ export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombine
     }
   }
 
-  const rewards = { base, userBoost, maxBoost }
-  let combined = rewards
-
-  let platformRewards
-  if (basePlatform) {
-    platformRewards = { base: basePlatform, userBoost: basePlatform, maxBoost: basePlatform }
-    combined = {
-      userBoost: rewards.userBoost + platformRewards.base,
-      maxBoost: rewards.maxBoost + platformRewards.base,
-      base: rewards.base + platformRewards.base,
-    }
-  }
+  const rewards = { base: baseRewards, userBoost, maxBoost }
 
   return {
-    value: { rewards, platformRewards, combined },
+    value: { rewards, platformRewards, base: pool.dailyApy },
   }
 }

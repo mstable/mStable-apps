@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
@@ -8,7 +9,7 @@ import { useSelectedMassetName } from '@apps/base/context/masset'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { FeederPoolState, useFeederPool } from '@apps/base/context/data'
 import { useBlockNumbers } from '@apps/base/context/block'
-import { BigDecimal } from '@apps/bigdecimal'
+import { BigDecimal, SCALE } from '@apps/bigdecimal'
 import { useFeederPoolApy, useSelectedMassetPrice } from '@apps/hooks'
 import { ViewportWidth } from '@apps/base/theme'
 import { toK } from '@apps/formatters'
@@ -119,15 +120,27 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
   const fpTokenPrice = massetPrice ? price.simple * massetPrice : undefined
   const feederPoolApy = useFeederPoolApy(address)
 
-  const volume = useMemo(() => {
+  const metrics = useMemo(() => {
+    let volume = BigDecimal.ZERO
+    let baseApy
+
     if (fpMetrics.data?.historic && fpMetrics.data.current) {
       const { current, historic } = fpMetrics.data
-      const swapped = BigDecimal.fromMetric(current.cumulativeSwapped).sub(BigDecimal.fromMetric(historic.cumulativeSwapped))
-      const minted = BigDecimal.fromMetric(current.cumulativeMinted).sub(BigDecimal.fromMetric(historic.cumulativeMinted))
-      const redeemed = BigDecimal.fromMetric(current.cumulativeRedeemed).sub(BigDecimal.fromMetric(historic.cumulativeRedeemed))
-      return swapped.add(minted).add(redeemed)
+      {
+        const swapped = BigDecimal.fromMetric(current.cumulativeSwapped).sub(BigDecimal.fromMetric(historic.cumulativeSwapped))
+        const minted = BigDecimal.fromMetric(current.cumulativeMinted).sub(BigDecimal.fromMetric(historic.cumulativeMinted))
+        const redeemed = BigDecimal.fromMetric(current.cumulativeRedeemed).sub(BigDecimal.fromMetric(historic.cumulativeRedeemed))
+        volume = swapped.add(minted).add(redeemed)
+      }
+      {
+        // This can go out of sync when the price hasn't updated for > 24h; we should
+        // track priceUpdatedAt on the subgraph
+        const rateDiff = parseFloat(current.price) / parseFloat(historic.price)
+        baseApy = (rateDiff ** 365 - 1) * 100
+      }
     }
-    return BigDecimal.ZERO
+
+    return { volume, baseApy }
   }, [fpMetrics])
 
   return (
@@ -146,7 +159,7 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
           </div>
           <div>
             <p>24h Volume</p>
-            <CountUpUSD end={volume.simple} decimals={10} price={massetPrice} formattingFn={toK} />
+            <CountUpUSD end={metrics.volume.simple} decimals={10} price={massetPrice} formattingFn={toK} />
           </div>
         </>
       )}
@@ -169,19 +182,36 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
           <TokenIcon symbol={vault.rewardsToken.symbol} />
         </div>
       </RewardsAPY>
-      <div />
       {feederPoolApy.value?.platformRewards && (
-        <RewardsAPY isLarge={isLarge}>
-          <p>
-            <Tooltip tip="Platform rewards are not boosted and 100% is claimable immediately.">Platform APY</Tooltip>
-          </p>
-          <div>
-            <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards.base} />}% </div>
-            <TokenIcon symbol={vault.platformRewardsToken?.symbol} />
-          </div>
-        </RewardsAPY>
+        <>
+          <div />
+          <RewardsAPY isLarge={isLarge}>
+            <p>
+              <Tooltip tip="Platform rewards are not boosted and 100% is claimable immediately.">Platform APY</Tooltip>
+            </p>
+            <div>
+              <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards} />}% </div>
+              <TokenIcon symbol={vault.platformRewardsToken?.symbol} />
+            </div>
+          </RewardsAPY>
+        </>
       )}
-      {feederPoolApy.value && feederPoolApy.value.combined.base > 1000 && <div>While liquidity is low, this APY is highly volatile</div>}
+      {metrics.baseApy && metrics.baseApy > 0 && (
+        <>
+          <div />
+          <RewardsAPY isLarge={isLarge}>
+            <p>
+              <Tooltip tip="Base APY represents the increase in the value of the pool token over time.">Base APY</Tooltip>
+            </p>
+            <div>
+              <div>
+                <CountUp end={metrics.baseApy} />%
+              </div>
+            </div>
+          </RewardsAPY>
+        </>
+      )}
+      {feederPoolApy.value && feederPoolApy.value.rewards.base > 1000 && <div>While liquidity is low, this APY is highly volatile</div>}
     </StatsContainer>
   )
 }
