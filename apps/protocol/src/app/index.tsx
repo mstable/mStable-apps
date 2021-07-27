@@ -57,6 +57,8 @@ const ProtocolRoutes: FC = () => {
       <Redirect exact path="/swap" to="/musd/exchange/swap" />
       <Redirect exact path="/musd" to="/musd/exchange/mint" />
       <Redirect exact path="/mbtc" to="/mbtc/exchange/mint" />
+      <Redirect exact path="/musd/forge/*" to="/musd/exchange/swap" />
+      <Redirect exact path="/mbtc/forge/*" to="/mbtc/exchange/swap" />
       <Redirect exact path="/musd/swap" to="/musd/exchange/swap" />
       <Redirect exact path="/musd/exchange" to="/musd/exchange/mint" />
       <Redirect exact path="/mbtc/exchange" to="/mbtc/exchange/mint" />
