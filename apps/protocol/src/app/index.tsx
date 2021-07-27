@@ -16,7 +16,7 @@ import { Stats } from './pages/Stats'
 import { EarnRedirect } from './pages/EarnRedirect'
 import { Pools } from './pages/Pools'
 import { PoolDetail } from './pages/Pools/Detail'
-import { Forge } from './pages/Forge'
+import { Exchange } from './pages/Exchange'
 
 const ProtocolRoutes: FC = () => {
   const { supportedMassets } = useNetwork()
@@ -46,20 +46,22 @@ const ProtocolRoutes: FC = () => {
       <Route exact path="/:massetName/stats" component={Stats} />
       <Route exact path="/:massetName/save" component={Save} />
       <Route exact path="/:massetName/pools" component={Pools} />
-      <Route exact path="/:massetName/forge/:action" component={Forge} />
+      <Route exact path="/:massetName/exchange/:action" component={Exchange} />
       <Route exact path="/:massetName/pools/:poolAddress" component={PoolDetail} />
       <Redirect exact path="/" to="/musd/save" />
       <Redirect exact path="/analytics" to="/musd/stats" />
       <Redirect exact path="/save" to="/musd/save" />
       <Redirect exact path="/earn" to="/musd/earn" />
-      <Redirect exact path="/mint" to="/musd/forge/mint" />
-      <Redirect exact path="/redeem" to="/musd/forge/redeem" />
-      <Redirect exact path="/swap" to="/musd/forge/swap" />
-      <Redirect exact path="/musd" to="/musd/forge/mint" />
-      <Redirect exact path="/mbtc" to="/mbtc/forge/mint" />
-      <Redirect exact path="/musd/swap" to="/musd/forge/swap" />
-      <Redirect exact path="/musd/forge" to="/musd/forge/mint" />
-      <Redirect exact path="/mbtc/forge" to="/mbtc/forge/mint" />
+      <Redirect exact path="/mint" to="/musd/exchange/mint" />
+      <Redirect exact path="/redeem" to="/musd/exchange/redeem" />
+      <Redirect exact path="/swap" to="/musd/exchange/swap" />
+      <Redirect exact path="/musd" to="/musd/exchange/mint" />
+      <Redirect exact path="/mbtc" to="/mbtc/exchange/mint" />
+      <Redirect exact path="/musd/forge/*" to="/musd/exchange/swap" />
+      <Redirect exact path="/mbtc/forge/*" to="/mbtc/exchange/swap" />
+      <Redirect exact path="/musd/swap" to="/musd/exchange/swap" />
+      <Redirect exact path="/musd/exchange" to="/musd/exchange/mint" />
+      <Redirect exact path="/mbtc/exchange" to="/mbtc/exchange/mint" />
       <Redirect exact path="/musd/analytics" to="/musd/stats" />
       <Redirect exact path="/mbtc/analytics" to="/mbtc/stats" />
       <Route component={NotFound} />
@@ -77,7 +79,7 @@ export const ProtocolApp: FC = () => {
     const navItems = [
       { title: 'Save', path: '/save' },
       ...(hasFeederPools ? [{ title: 'Pools', path: '/pools' }] : []),
-      { title: 'Forge', path: '/forge/mint' },
+      { title: 'Exchange', path: '/exchange/swap' },
       { title: 'Stats', path: '/stats' },
     ]
 

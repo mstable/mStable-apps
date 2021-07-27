@@ -33,11 +33,9 @@ const RewardsAPY = styled.div<{ isLarge?: boolean }>`
     margin-left: 0.5rem;
   }
 
-  @media (min-width: ${ViewportWidth.s}) {
-    > div {
-      display: flex;
-      align-items: center;
-    }
+  > div {
+    display: flex;
+    align-items: center;
   }
 `
 
@@ -171,11 +169,11 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
         </p>
         <div>
           <div>
-            <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} />}%</div>
+            <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
             <div>
               &nbsp;→&nbsp;
               <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
-                {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} />}%
+                {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
               </UnderlinedTip>
             </div>
           </div>
@@ -190,13 +188,13 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
               <Tooltip tip="Platform rewards are not boosted and 100% is claimable immediately.">Platform APY</Tooltip>
             </p>
             <div>
-              <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards} />}% </div>
+              <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards} suffix="%" />} </div>
               <TokenIcon symbol={vault.platformRewardsToken?.symbol} />
             </div>
           </RewardsAPY>
         </>
       )}
-      {metrics.baseApy && metrics.baseApy > 0 && (
+      {!!metrics.baseApy && metrics.baseApy > 0 && (
         <>
           <div />
           <RewardsAPY isLarge={isLarge}>
@@ -205,7 +203,7 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
             </p>
             <div>
               <div>
-                <CountUp end={metrics.baseApy} />%
+                <CountUp end={metrics.baseApy} suffix="%" />
               </div>
             </div>
           </RewardsAPY>

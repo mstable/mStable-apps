@@ -11,6 +11,11 @@ import { Redeem as RedeemPage } from './Redeem'
 import { Swap as SwapPage } from './Swap'
 
 const tabs = {
+  [PageAction.Swap]: {
+    title: 'Swap',
+    subtitle: `Convert `,
+    component: <SwapPage />,
+  },
   [PageAction.Mint]: {
     title: 'Mint',
     subtitle: 'Mint',
@@ -20,11 +25,6 @@ const tabs = {
     title: 'Redeem',
     subtitle: `Redeem to the underlying collateral`,
     component: <RedeemPage />,
-  },
-  [PageAction.Swap]: {
-    title: 'Swap',
-    subtitle: `Convert `,
-    component: <SwapPage />,
   },
 }
 
@@ -74,10 +74,10 @@ const Container = styled.div`
 
 const capitaliseStr = (str: string): string => str[0].toUpperCase() + str.substring(1)
 
-export const Forge: FC = () => {
+export const Exchange: FC = () => {
   const history = useHistory()
   const { action } = useParams<{ action: string }>()
-  const activeTab = PageAction[capitaliseStr(action) as PageAction] ?? PageAction.Mint
+  const activeTab = PageAction[capitaliseStr(action) as PageAction] ?? PageAction.Swap
   const { undergoingRecol } = useSelectedMassetState() ?? {}
 
   const handleTabClick = (key: string): void => history.push(key.toLowerCase())
