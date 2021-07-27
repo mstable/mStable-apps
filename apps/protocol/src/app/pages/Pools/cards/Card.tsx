@@ -81,6 +81,7 @@ const ContainerStyle = css`
 
 const ContainerButton = styled(UnstyledButton)`
   ${ContainerStyle};
+  position: relative;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border: 0;
 
