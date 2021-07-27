@@ -169,8 +169,9 @@ const ETH_MAINNET: EthereumMainnet = {
       graphHostedEndpoint('mstable', 'mstable-protocol-staging'),
     ],
     feeders: [
+      // TODO remove temporary URL once we have enough indexers
+      'https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.8',
       graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string),
-      'https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.5',
     ],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
   },
