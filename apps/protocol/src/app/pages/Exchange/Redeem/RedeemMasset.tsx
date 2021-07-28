@@ -7,11 +7,13 @@ import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 
-import { useBigDecimalInput, useSlippage, useMinimumOutput, BigDecimalInputValue, useEstimatedOutput } from '@apps/hooks'
+import { useBigDecimalInput, useSlippage, useMinimumOutput, BigDecimalInputValue } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 
 import { AssetInput, SendButton } from '@apps/components/forms'
 import { Arrow, ExchangeRate, TransactionInfo } from '@apps/components/core'
+
+import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 
 const formId = 'redeem'
 

@@ -1,7 +1,7 @@
 import React, { FC, ReactElement, useCallback, useState } from 'react'
 
 import { BoostedSavingsVaultState } from '@apps/base/context/data'
-import { useFeederPoolApy, useSelectedMassetPrice } from '@apps/hooks'
+import { useSelectedMassetPrice } from '@apps/hooks'
 import {
   CountUp,
   DifferentialCountup,
@@ -16,6 +16,7 @@ import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { UserBoost } from '../../../components/rewards/UserBoost'
 import { BoostCalculator } from '../../../components/rewards/BoostCalculator'
 
+import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { Position } from './Position'
 import { ProvideLiquidityMessage, ShowEarningPower, useShowEarningPower } from './ProvideLiquidityMessage'

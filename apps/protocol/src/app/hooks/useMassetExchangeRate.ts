@@ -3,12 +3,9 @@ import { useMemo } from 'react'
 import { useSelectedMassetState } from '@apps/base/context/data'
 import { BigDecimal } from '@apps/bigdecimal'
 import type { MassetState } from '@apps/base/context/data'
+import type { FetchState, BigDecimalInputValue, BigDecimalInputValues } from '@apps/hooks'
 
-// FIXME
-import { useSelectedFeederPoolState } from '../../../../apps/protocol/src/app/pages/Pools/FeederPoolProvider'
-
-import type { FetchState } from './useFetchState'
-import type { BigDecimalInputValue, BigDecimalInputValues } from './useBigDecimalInputs'
+import { useSelectedFeederPoolState } from '../pages/Pools/FeederPoolProvider'
 
 export const useExchangeRateForMassetInputs = (
   estimatedOutputAmount?: FetchState<BigDecimal>,

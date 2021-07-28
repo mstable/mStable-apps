@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { BoostedCombinedAPY } from '@apps/types'
 import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { useSelectedMassetPrice, FetchState, useCalculateUserBoost, useAvailableSaveApy } from '@apps/hooks'
+import { useSelectedMassetPrice, FetchState, useCalculateUserBoost } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { calculateApy } from '@apps/quick-maths'
 import {
@@ -19,6 +19,7 @@ import {
 
 import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
+import { useAvailableSaveApy } from '../../../hooks/useAvailableSaveApy'
 
 import { UserBoost } from '../../../components/rewards/UserBoost'
 import { PokeBoost } from '../../../components/PokeBoost'

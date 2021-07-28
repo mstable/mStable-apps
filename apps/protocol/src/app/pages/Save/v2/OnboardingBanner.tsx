@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { useAvailableSaveApy } from '@apps/hooks'
 import { ViewportWidth } from '@apps/base/theme'
 import { Button, Tooltip, CountUp } from '@apps/components/core'
 import { useSelectedMassetName } from '@apps/base/context/masset'
 
+import { useAvailableSaveApy } from '../../../hooks/useAvailableSaveApy'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 import { DailyApys } from '../../../components/stats/DailyApys'
 import { useOnboarding } from '../hooks'

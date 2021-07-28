@@ -8,8 +8,10 @@ import { SendButton } from '@apps/components/forms'
 import { AddressOption } from '@apps/types'
 import { OneToManyAssetExchange, useMultiAssetExchangeState } from '@apps/components/forms'
 import { BigDecimal } from '@apps/bigdecimal'
-import { Route, useEstimatedOutputMulti, useMaximumOutput, useExchangeRateForFPInputs, useSelectedMassetPrice } from '@apps/hooks'
+import { useMaximumOutput, useSelectedMassetPrice } from '@apps/hooks'
 
+import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
+import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import { useSelectedFeederPoolContract, useSelectedFeederPoolState } from '../FeederPoolProvider'
 
 const formId = 'RedeemExact'
