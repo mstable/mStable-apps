@@ -6,9 +6,10 @@ import { format } from 'date-fns'
 import { Color } from '@apps/base/theme'
 import { percentageFormat, periodFormatMapping } from '@apps/formatters'
 import { ThemedSkeleton } from '@apps/components/core'
-import { useBlockTimesForDates, useDailyApysForBlockTimes } from '@apps/hooks'
+import { useBlockTimesForDates } from '@apps/hooks'
 
 import { useSelectedSavingsContractState } from '../../context/SelectedSaveVersionProvider'
+import { useDailyApysForBlockTimes } from '../../hooks/useDailyApysForBlockTimes'
 
 import { DateRange, Metrics, useDateFilter, useMetrics } from './Metrics'
 import { RechartsContainer } from './RechartsContainer'

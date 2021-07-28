@@ -5,16 +5,11 @@ import { useWalletAddress } from '@apps/base/context/account'
 import { SubscribedToken } from '@apps/types'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import {
-  Route,
-  useEstimatedOutputMulti,
-  useMinimumOutput,
-  useExchangeRateForFPInputs,
-  BigDecimalInputValue,
-  useSelectedMassetPrice,
-} from '@apps/hooks'
+import { useMinimumOutput, BigDecimalInputValue, useSelectedMassetPrice } from '@apps/hooks'
 import { SendButton, ManyToOneAssetExchange, useMultiAssetExchangeDispatch, useMultiAssetExchangeState } from '@apps/components/forms'
 
+import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
+import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import {
   useSelectedFeederPoolContracts,
   useSelectedFeederPoolState,

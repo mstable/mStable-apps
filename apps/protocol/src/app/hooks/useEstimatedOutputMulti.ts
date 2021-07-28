@@ -7,8 +7,7 @@ import { useSelectedMassetConfig } from '@apps/base/context/masset'
 import { getPriceImpact, PriceImpact } from '@apps/quick-maths'
 import { sanitizeMassetError } from '@apps/formatters'
 import { BigDecimal } from '@apps/bigdecimal'
-import type { BigDecimalInputValues } from './useBigDecimalInputs'
-import { FetchState, useFetchState } from './useFetchState'
+import { BigDecimalInputValues, FetchState, useFetchState } from '@apps/hooks'
 
 type MintableContract = Masset | FeederPool
 

@@ -5,16 +5,11 @@ import { useWalletAddress } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetExchange, SendButton } from '@apps/components/forms'
 import { AddressOption } from '@apps/types'
-import {
-  useBigDecimalInput,
-  BigDecimalInputValue,
-  useSlippage,
-  useMinimumOutput,
-  useEstimatedOutput,
-  useSelectedMassetPrice,
-} from '@apps/hooks'
+import { useBigDecimalInput, BigDecimalInputValue, useSlippage, useMinimumOutput, useSelectedMassetPrice } from '@apps/hooks'
 
 import { TransactionInfo } from '@apps/components/core'
+
+import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 import {
   useFPAssetAddressOptions,
   useFPVaultAddressOptions,

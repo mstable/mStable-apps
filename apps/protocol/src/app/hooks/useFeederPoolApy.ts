@@ -4,9 +4,7 @@ import { useNetworkAddresses } from '@apps/base/context/network'
 import { calculateApy, calculateBoost, getCoeffs, MAX_BOOST } from '@apps/quick-maths'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { BoostedCombinedAPY } from '@apps/types'
-
-import { useSelectedMassetPrice } from './usePrice'
-import { FetchState } from './useFetchState'
+import { useSelectedMassetPrice, FetchState } from '@apps/hooks'
 
 export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
   const massetState = useSelectedMassetState()

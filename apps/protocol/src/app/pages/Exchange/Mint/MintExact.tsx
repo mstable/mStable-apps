@@ -16,7 +16,10 @@ import {
   SendButton,
 } from '@apps/components/forms'
 import { MassetState } from '@apps/base/context/data'
-import { Route, useEstimatedOutputMulti, useMinimumOutput, useSelectedMassetPrice, useExchangeRateForMassetInputs } from '@apps/hooks'
+import { useMinimumOutput, useSelectedMassetPrice } from '@apps/hooks'
+
+import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
+import { useExchangeRateForMassetInputs } from '../../../hooks/useMassetExchangeRate'
 
 const formId = 'mint'
 
