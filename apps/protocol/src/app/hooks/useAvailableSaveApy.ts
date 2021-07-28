@@ -1,11 +1,9 @@
 import { useMemo } from 'react'
 import { eachDayOfInterval, endOfDay, subDays } from 'date-fns'
 
-// FIXME
-import { useSelectedSavingsContractState } from '../../../../apps/protocol/src/app/context/SelectedSaveVersionProvider'
+import { useSelectedSavingsContractState } from '../context/SelectedSaveVersionProvider'
 
-import { useBlockTimesForDates } from './useBlockTimesForDates'
-import { useDailyApysForBlockTimes } from './useDailyApysForBlockTimes'
+import { useBlockTimesForDates, useDailyApysForBlockTimes } from '@apps/hooks'
 
 const now = new Date()
 const timestampsForMonth = eachDayOfInterval({
