@@ -14,5 +14,6 @@ module.exports = {
     '<rootDir>/libs/assets',
     '<rootDir>/libs/masset-provider',
     '<rootDir>/libs/data-provider',
+    '<rootDir>/apps/governance',
   ],
 }

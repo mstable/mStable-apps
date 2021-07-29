@@ -6,7 +6,7 @@ import { useBaseCtx } from '@apps/base'
 import { Home } from './pages'
 import { Foo } from './pages/foo'
 
-const ExampleRoutes: FC = () => {
+const GovernanceRoutes: FC = () => {
   return (
     <Switch>
       <Route exact path="/" component={Home} />
@@ -16,7 +16,7 @@ const ExampleRoutes: FC = () => {
   )
 }
 
-export const ExampleApp: FC = () => {
+export const GovernanceApp: FC = () => {
   const [, setBaseCtx] = useBaseCtx()
 
   useEffect(() => {
@@ -28,5 +28,5 @@ export const ExampleApp: FC = () => {
     setBaseCtx({ navItems })
   }, [setBaseCtx])
 
-  return <ExampleRoutes />
+  return <GovernanceRoutes />
 }

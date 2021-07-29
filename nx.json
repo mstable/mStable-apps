@@ -54,6 +54,13 @@
     "formatters": {
       "tags": []
     },
+    "governance": {
+      "tags": []
+    },
+    "governance-e2e": {
+      "tags": [],
+      "implicitDependencies": ["governance"]
+    },
     "hooks": {
       "tags": []
     },
