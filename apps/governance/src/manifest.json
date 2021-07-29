@@ -1,0 +1,6 @@
+{
+  "name": "mStable Example",
+  "iconPath": "icons/mstable-logo.svg",
+  "description": "mStable example app",
+  "providedBy": { "name": "mStable", "url": "https://example.mstable.app" }
+}

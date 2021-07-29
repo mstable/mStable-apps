@@ -26,12 +26,6 @@ const ProtocolRoutes: FC = () => {
   const history = useHistory()
 
   useEffectOnce(() => {
-    // Redirect for legacy links (without hash)
-    if (window.location.pathname !== '/' && !window.location.pathname.startsWith('/ipfs/')) {
-      window.location.hash = window.location.pathname
-      window.location.pathname = ''
-    }
-
     if (supportedMassets.includes(massetName)) return
 
     // Redirect if not supported masset

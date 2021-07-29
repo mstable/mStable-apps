@@ -7,12 +7,12 @@ Web frontends for interacting with the mStable contracts.
 
 This repository comprises multiple mStable apps, all built using common libraries and a common UI.
 
-| Status | Name               | Nx project | Port  | Public hosts |
-|--------|--------------------|------------|-------|--------------|
-| ✅      | (example app)      | `example`  | 3100 |              |
-| ✅      | mStable Protocol   | `protocol` | 3000 | [Fleek/IPFS 1](https://mstable.app) – [Fleek/IPFS 2](https://app.mstable.org) – [Google](https://mstable-apps-protocol.web.app/) |
-| 🏗      | mStable Governance | `// TODO`  |      | [Fleek/IPFS](https://governance.mstable.org) |
-| 🧠      | ...more            |            |      |             |
+| Status | Name               | Nx project    | Port  | Public hosts |
+|--------|--------------------|---------------|-------|--------------|
+| ✅      | (example app)      | `example`    | 3100 |              |
+| ✅      | mStable Protocol   | `protocol`   | 3000 | [Fleek/IPFS 1](https://mstable.app) – [Fleek/IPFS 2](https://app.mstable.org) – [Google](https://mstable-apps-protocol.web.app/) |
+| 🏗      | mStable Governance | `governance` | 3200 | [Fleek/IPFS](https://governance.mstable.org) |
+| 🧠      | ...more            |              |      |             |
 
 ---
 

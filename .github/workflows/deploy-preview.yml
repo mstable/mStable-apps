@@ -10,7 +10,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: c-hive/gha-yarn-cache@v2
       - run: yarn install
-      # TODO: test, typecheck etc
       - run: yarn nx run protocol:build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -20,3 +19,18 @@ jobs:
           projectId: mstable-apps-protocol
           entryPoint: apps/protocol
           target: mstable-apps-protocol
+  build_and_preview_governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: c-hive/gha-yarn-cache@v2
+      - run: yarn install
+      - run: yarn nx run governance:build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MSTABLE_APPS_GOVERNANCE }}"
+          expires: 30d
+          projectId: mstable-apps-governance
+          entryPoint: apps/governance
+          target: mstable-apps-governance
