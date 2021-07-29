@@ -1,11 +1,15 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useLayoutEffect } from 'react'
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 
 import { useBaseCtx } from '@apps/base'
 import { useNetwork } from '@apps/base/context/network'
-import { useSelectedMasset } from '@apps/base/context/masset'
+import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/base/context/masset'
 import { useSelectedMassetState } from '@apps/base/context/data'
+import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
+
+// FIXME not exported
+import { MessageHandler } from '../../../../libs/base/src/lib/components/layout/MessageHandler'
 
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
@@ -71,20 +75,37 @@ const ProtocolRoutes: FC = () => {
 
 export const ProtocolApp: FC = () => {
   const massetState = useSelectedMassetState()
+  const massetName = useSelectedMassetName()
+  const massetConfig = useSelectedMassetConfig()
   const hasFeederPools = massetState?.hasFeederPools
+  const [bannerMessage, setBannerMessage] = useBannerMessage()
+  const { undergoingRecol } = useSelectedMassetState() ?? {}
 
   const [, setBaseCtx] = useBaseCtx()
 
   useEffect(() => {
     const navItems = [
-      { title: 'Save', path: '/save' },
-      ...(hasFeederPools ? [{ title: 'Pools', path: '/pools' }] : []),
-      { title: 'Exchange', path: '/exchange/swap' },
-      { title: 'Stats', path: '/stats' },
+      { title: 'Save', path: `/${massetName}/save` },
+      ...(hasFeederPools ? [{ title: 'Pools', path: `/${massetName}/pools` }] : []),
+      { title: 'Exchange', path: `/${massetName}/exchange/swap` },
+      { title: 'Stats', path: `/${massetName}/stats` },
     ]
 
     setBaseCtx({ navItems })
-  }, [hasFeederPools, setBaseCtx])
+  }, [hasFeederPools, setBaseCtx, massetName])
+
+  // Handle message prioritisation:
+  useLayoutEffect(() => {
+    let message: BannerMessage | undefined
+
+    if (undergoingRecol) {
+      message = (undergoingRecol && MessageHandler.recollat(massetConfig)) || undefined
+    }
+
+    if (bannerMessage?.title !== message?.title) {
+      setBannerMessage(message)
+    }
+  }, [bannerMessage, massetConfig, setBannerMessage, undergoingRecol])
 
   return (
     <SelectedSaveVersionProvider>

@@ -35,7 +35,7 @@ export const NetworkDropdown: FC = () => {
     [setChainId],
   )
 
-  const options = useMemo(
+  const options = useMemo<Record<string, { icon: { symbol: string; hideNetwork: boolean }; subtext?: string }>>(
     () =>
       Object.fromEntries(
         NETWORKS.filter(({ isTestnet, chainId: _chainId }) => _chainId === chainId || !isTestnet || isAltPressed).map(
