@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect } from 'react'
+import React, { FC } from 'react'
 import styled, {
   createGlobalStyle,
   CSSObject,
@@ -12,16 +12,11 @@ import { TransitionGroup } from 'react-transition-group'
 import { ModalProvider } from 'react-modal-hook'
 
 import { Color, FontSize, Size, Spacing, ViewportWidth } from '@apps/base/theme'
-import { useNetwork } from '@apps/base/context/network'
-import { useSelectedMassetConfig } from '@apps/base/context/masset'
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { ReactTooltip, Tooltip } from '@apps/components/core'
-import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
 
 import { Footer } from './Footer'
 import { AppBar } from './AppBar'
 import { Toasts } from './Toasts'
-import { MessageHandler } from './MessageHandler'
 
 interface Theme {
   color: typeof Color & {
@@ -235,38 +230,17 @@ const Container = styled.div`
   }
 `
 
-export const Layout: FC = ({ children }) => {
-  // Message
-  const [bannerMessage, setBannerMessage] = useBannerMessage()
-  const massetConfig = useSelectedMassetConfig()
-  const { protocolName } = useNetwork()
-  const { undergoingRecol } = useSelectedMassetState() ?? {}
-
-  // Handle message prioritisation:
-  useLayoutEffect(() => {
-    let message: BannerMessage | undefined
-
-    if (undergoingRecol) {
-      message = (undergoingRecol && MessageHandler.recollat(massetConfig)) || undefined
-    }
-
-    if (bannerMessage?.title !== message?.title) {
-      setBannerMessage(message)
-    }
-  }, [bannerMessage, massetConfig, protocolName, setBannerMessage, undergoingRecol])
-
-  return (
-    <ModalProvider rootComponent={TransitionGroup}>
-      <Background />
-      <AppBar />
-      <Container>
-        <Main>{children}</Main>
-      </Container>
-      <Footer />
-      <Toasts />
-      <Tooltip tip="" hideIcon />
-      <ReactTooltip id="global" place="top" />
-      <GlobalStyle />
-    </ModalProvider>
-  )
-}
+export const Layout: FC = ({ children }) => (
+  <ModalProvider rootComponent={TransitionGroup}>
+    <Background />
+    <AppBar />
+    <Container>
+      <Main>{children}</Main>
+    </Container>
+    <Footer />
+    <Toasts />
+    <Tooltip tip="" hideIcon />
+    <ReactTooltip id="global" place="top" />
+    <GlobalStyle />
+  </ModalProvider>
+)

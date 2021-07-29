@@ -8,7 +8,7 @@ import { useSelectedMasset, useSelectedMassetName, useSetSelectedMassetName } fr
 import { MassetName } from '@apps/types'
 import { ViewportWidth } from '@apps/base/theme'
 
-import { Dropdown, DropdownOption } from './Dropdown'
+import { Dropdown, DropdownOptions } from './Dropdown'
 
 const StyledDropdown = styled(Dropdown)`
   > *:first-child {
@@ -54,7 +54,7 @@ export const MassetDropdown: FC<{ className?: string }> = ({ className }) => {
   const history = useHistory()
   const [selected, setMassetName] = useSelectedMasset()
 
-  const options = useMemo<Record<string, DropdownOption>>(
+  const options = useMemo<Record<string, { icon: { symbol: string; hideNetwork: boolean } }>>(
     () =>
       Object.fromEntries([
         ...Object.values(dataState).map(massetState => [

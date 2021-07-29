@@ -1,4 +1,5 @@
 import React, { FC, ReactNode, useMemo, useRef } from 'react'
+import { useLocation, useRouteMatch, NavLink } from 'react-router-dom'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 import useOnClickOutside from 'use-onclickoutside'
@@ -9,10 +10,10 @@ import { useTokenSubscription } from '@apps/base/context/tokens'
 import { UnstyledButton } from './Button'
 import { ThemedSkeleton } from './ThemedSkeleton'
 import { Chevron } from './Chevron'
-import { TokenIcon, TokenPair } from '../icons/TokenIcon'
+import { TokenIcon, TokenPair } from '../icons'
 import { Tooltip } from './ReactTooltip'
 
-export interface DropdownOption {
+export interface DropdownOptions {
   icon?: {
     symbol?: string
     hideNetwork?: boolean
@@ -24,7 +25,7 @@ export interface DropdownOption {
 interface Props {
   className?: string
   defaultOption?: string
-  options?: Record<string, DropdownOption>
+  options?: Record<string, DropdownOptions>
   onChange?(title?: string): void
   disabled?: boolean
 }
@@ -130,18 +131,19 @@ const Option: FC<{
   selected?: boolean
   active?: boolean
   onClick: () => void
-  option?: string
-  options?: Record<string, DropdownOption>
+  optionName?: string
+  option?: DropdownOptions
+  isDropdown: boolean
   disabled?: boolean
-}> = ({ onClick, option, options, selected = false, active = false, disabled }) => {
-  if (!option)
+}> = ({ onClick, optionName, option, isDropdown, selected = false, active = false, disabled }) => {
+  if (!optionName)
     return (
       <OptionContainer active disabled>
         <ThemedSkeleton height={24} width={84} />
       </OptionContainer>
     )
 
-  const { icon, subtext, asset } = options?.[option] ?? {}
+  const { icon, subtext, asset } = option ?? {}
   const { symbol, hideNetwork } = icon ?? {}
   const symbols = symbol?.split('/')
 
@@ -158,13 +160,13 @@ const Option: FC<{
         ) : (
           <>
             <div>
-              <span>{symbol ?? option}</span>
+              <span>{symbol ?? optionName}</span>
             </div>
             {!!subtext && subtext}
           </>
         )}
       </TokenDetails>
-      {Object.keys(options ?? {}).length > 1 && selected && <Chevron direction={active ? 'up' : 'down'} />}
+      {isDropdown && selected && <Chevron direction={active ? 'up' : 'down'} />}
     </OptionContainer>
   )
 }
@@ -188,7 +190,7 @@ export const Dropdown: FC<Props> = ({ defaultOption, options, onChange, disabled
     toggleShow(false)
   })
 
-  const isDropdown = options && Object.keys(options).length > 1
+  const isDropdown = !!(options && Object.keys(options).length > 1)
 
   return (
     <Container ref={container} className={className}>
@@ -196,8 +198,9 @@ export const Dropdown: FC<Props> = ({ defaultOption, options, onChange, disabled
         onClick={() => {
           if (isDropdown) toggleShow()
         }}
-        option={selected}
-        options={options}
+        optionName={selected}
+        option={options && selected ? options[selected] : undefined}
+        isDropdown={isDropdown}
         selected
         active={show}
         disabled={disabled}
@@ -205,12 +208,76 @@ export const Dropdown: FC<Props> = ({ defaultOption, options, onChange, disabled
       {options && (
         <OptionList hidden={!show}>
           {Object.keys(options)
-            .filter(m => m !== selected)
-            .map(option => (
-              <Option key={option} onClick={() => handleSelect(option)} option={option} options={options} />
+            .filter(optionName => optionName !== selected)
+            .map(optionName => (
+              <Option
+                key={optionName}
+                onClick={() => {
+                  handleSelect(optionName)
+                }}
+                optionName={optionName}
+                option={options[optionName]}
+                isDropdown={isDropdown}
+              />
             ))}
         </OptionList>
       )}
     </Container>
+  )
+}
+
+const NavigationOption: FC<{ title: string; path: string; onClick(): void }> = ({ title, path, onClick }) => {
+  const routeMatch = useRouteMatch(path)
+
+  return (
+    <NavLink to={path}>
+      <Option isDropdown={false} onClick={onClick} selected={routeMatch?.isExact} optionName={title}>
+        {title}
+      </Option>
+    </NavLink>
+  )
+}
+
+const NavContainer = styled(Container)`
+  min-width: 7rem;
+  ${OptionList} {
+    min-width: 7rem;
+  }
+`
+
+export const NavigationDropdown: FC<{ navItems: { title: string; path: string }[] }> = ({ navItems }) => {
+  const location = useLocation()
+  const [show, toggleShow] = useToggle(false)
+
+  const handleSelect = (): void => {
+    toggleShow(false)
+  }
+
+  const container = useRef(null)
+  useOnClickOutside(container, () => {
+    toggleShow(false)
+  })
+
+  const selected = navItems.find(item => location.pathname.startsWith(item.path))
+
+  return (
+    <NavContainer ref={container}>
+      <Option
+        onClick={() => {
+          toggleShow()
+        }}
+        optionName={selected?.title}
+        isDropdown
+        selected
+        active={show}
+      />
+      <OptionList hidden={!show}>
+        {navItems
+          .filter(item => item.path !== selected?.path)
+          .map(item => (
+            <NavigationOption title={item.title} path={item.path} onClick={handleSelect} key={item.path} />
+          ))}
+      </OptionList>
+    </NavContainer>
   )
 }
