@@ -98,7 +98,7 @@ export const Exchange: FC = () => {
             <RecolMessage>Currently undergoing recollateralisation</RecolMessage>
           </>
         )}
-        <Tabs tabs={tabs} active={activeTab} onClick={handleTabClick} />
+        <Tabs tabs={tabs} active={action} onClick={handleTabClick} />
       </div>
     </Container>
   )
