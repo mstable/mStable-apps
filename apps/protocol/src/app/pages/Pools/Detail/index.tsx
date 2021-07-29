@@ -10,10 +10,11 @@ import { useFeederPool } from '@apps/base/context/data'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { TabCard, Button, UnstyledButton, InfoBox } from '@apps/components/core'
+import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
-import { PageHeader, PageAction } from '../../PageHeader'
+import { PageHeader } from '../../PageHeader'
 import { AssetCard } from '../cards/AssetCard'
 import { assetColorMapping } from '../constants'
 import { FeederPoolProvider, useSelectedFeederPoolState } from '../FeederPoolProvider'
@@ -181,7 +182,7 @@ const PoolDetailContent: FC = () => {
   return (
     <RewardStreamsProvider vault={vault}>
       <Container>
-        <PageHeader action={PageAction.Pools} subtitle={title} />
+        <PageHeader title="Pools" subtitle={title} icon={<EarnIcon />} massetSwitcher />
         <HeaderContainer>
           <HeaderCard poolAddress={address} isLarge color={color} />
           <HeaderCharts color={color} />

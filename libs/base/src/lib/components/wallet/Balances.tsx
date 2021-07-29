@@ -65,7 +65,7 @@ export const Balances: FC<{ onRowClick?: (symbol: string) => void }> = ({ onRowC
   const [chainId] = useChainIdCtx()
 
   const MTA = chainId === ChainIds.EthereumMainnet && {
-    name: `MTA (mStable Governance)`,
+    name: `Meta (mStable Governance)`,
     symbol: `MTA`,
     address: networkAddresses.MTA,
     decimals: 18,

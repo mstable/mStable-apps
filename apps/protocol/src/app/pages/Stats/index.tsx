@@ -4,10 +4,11 @@ import Skeleton from 'react-loading-skeleton'
 
 import { useSelectedMassetState } from '@apps/base/context/data'
 import { H2, H3, CountUp, ThemedSkeleton } from '@apps/components/core'
+import { ReactComponent as StatsIcon } from '@apps/components/icons/circle/stats.svg'
 
 import { VolumeChart } from '../../components/stats/VolumeChart'
 import { AggregateChart } from '../../components/stats/AggregateChart'
-import { PageAction, PageHeader } from '../PageHeader'
+import { PageHeader } from '../PageHeader'
 import { DailyApys } from '../../components/stats/DailyApys'
 import { ToggleSave } from '../Save/ToggleSave'
 import { SimpleMassetStats } from '../../components/stats/SimpleMassetStats'
@@ -109,7 +110,7 @@ export const Stats: FC = () => {
 
   return (
     <div>
-      <PageHeader action={PageAction.Stats} subtitle="Explore activity across mStable" />
+      <PageHeader title="Stats" subtitle="Explore activity across mStable" icon={<StatsIcon />} massetSwitcher />
       {massetState ? <StatsContent /> : <Skeleton height={500} />}
     </div>
   )

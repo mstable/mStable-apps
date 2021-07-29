@@ -5,39 +5,12 @@ import { useBannerMessage } from '@apps/base/context/app'
 import { useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { MassetDropdown } from '@apps/components/core'
-import { ReactComponent as AccountIcon } from '@apps/components/icons/circle/account.svg'
-import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
-import { ReactComponent as MintIcon } from '@apps/components/icons/circle/mint.svg'
-import { ReactComponent as RedeemIcon } from '@apps/components/icons/circle/redeem.svg'
-import { ReactComponent as SaveIcon } from '@apps/components/icons/circle/save.svg'
-import { ReactComponent as StatsIcon } from '@apps/components/icons/circle/stats.svg'
-import { ReactComponent as SwapIcon } from '@apps/components/icons/circle/swap.svg'
-
-export enum PageAction {
-  Save = 'Save',
-  Mint = 'Mint',
-  Earn = 'Earn',
-  Swap = 'Swap',
-  Redeem = 'Redeem',
-  Stats = 'Stats',
-  Account = 'Account',
-  Pools = 'Pools',
-}
 
 interface Props {
-  action: PageAction
+  title: string
+  icon: JSX.Element
   subtitle?: string
-}
-
-const ActionIcons: { [action: string]: JSX.Element } = {
-  Save: <SaveIcon />,
-  Mint: <MintIcon />,
-  Earn: <EarnIcon />,
-  Pools: <EarnIcon />,
-  Swap: <SwapIcon />,
-  Redeem: <RedeemIcon />,
-  Stats: <StatsIcon />,
-  Account: <AccountIcon />,
+  massetSwitcher?: boolean
 }
 
 const StyledMassetDropdown = styled(MassetDropdown)`
@@ -108,9 +81,8 @@ const ChildrenRow = styled.div`
   }
 `
 
-export const PageHeader: FC<Props> = ({ children, action, subtitle }) => {
+export const PageHeader: FC<Props> = ({ children, title, subtitle, icon, massetSwitcher }) => {
   const [bannerMessage] = useBannerMessage()
-  const icon = ActionIcons[action]
   const { supportedMassets } = useNetwork()
 
   return (
@@ -118,8 +90,8 @@ export const PageHeader: FC<Props> = ({ children, action, subtitle }) => {
       <Container>
         <Row>
           <Icon inverted>{icon}</Icon>
-          <h2>{action}</h2>
-          {supportedMassets.length > 1 && <StyledMassetDropdown />}
+          <h2>{title}</h2>
+          {massetSwitcher && supportedMassets.length > 1 && <StyledMassetDropdown />}
         </Row>
         {subtitle && <p>{subtitle}</p>}
         {children && <ChildrenRow>{children}</ChildrenRow>}

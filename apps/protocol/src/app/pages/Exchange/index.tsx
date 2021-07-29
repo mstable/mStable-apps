@@ -4,27 +4,33 @@ import styled from 'styled-components'
 
 import { useSelectedMassetState } from '@apps/base/context/data'
 import { TabsV2 } from '@apps/components/core'
+import { ReactComponent as MintIcon } from '@apps/components/icons/circle/mint.svg'
+import { ReactComponent as RedeemIcon } from '@apps/components/icons/circle/redeem.svg'
+import { ReactComponent as SwapIcon } from '@apps/components/icons/circle/swap.svg'
 
-import { PageAction, PageHeader } from '../PageHeader'
+import { PageHeader } from '../PageHeader'
 import { Mint as MintPage } from './Mint'
 import { Redeem as RedeemPage } from './Redeem'
 import { Swap as SwapPage } from './Swap'
 
 const tabs = {
-  [PageAction.Swap]: {
+  swap: {
     title: 'Swap',
     subtitle: `Convert `,
     component: <SwapPage />,
+    icon: <SwapIcon />,
   },
-  [PageAction.Mint]: {
+  mint: {
     title: 'Mint',
     subtitle: 'Mint',
     component: <MintPage />,
+    icon: <MintIcon />,
   },
-  [PageAction.Redeem]: {
+  redeem: {
     title: 'Redeem',
     subtitle: `Redeem to the underlying collateral`,
     component: <RedeemPage />,
+    icon: <RedeemIcon />,
   },
 }
 
@@ -72,19 +78,19 @@ const Container = styled.div`
   }
 `
 
-const capitaliseStr = (str: string): string => str[0].toUpperCase() + str.substring(1)
-
 export const Exchange: FC = () => {
   const history = useHistory()
   const { action } = useParams<{ action: string }>()
-  const activeTab = PageAction[capitaliseStr(action) as PageAction] ?? PageAction.Swap
+  const activeTab = tabs[action]
   const { undergoingRecol } = useSelectedMassetState() ?? {}
 
-  const handleTabClick = (key: string): void => history.push(key.toLowerCase())
+  const handleTabClick = (path: string): void => {
+    history.push(path)
+  }
 
   return (
     <Container>
-      <PageHeader action={PageAction[activeTab]} />
+      <PageHeader title={activeTab.title} icon={activeTab.icon} subtitle={activeTab.subtitle} massetSwitcher />
       <div>
         {undergoingRecol && (
           <>
