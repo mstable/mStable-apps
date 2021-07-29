@@ -1,4 +1,4 @@
-import { BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedSavingsVaultState } from '@apps/data-provider'
 
 import { useSelectedMassetState } from './useSelectedMassetState'
 

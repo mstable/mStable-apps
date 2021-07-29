@@ -45,6 +45,9 @@
     "components": {
       "tags": []
     },
+    "data-provider": {
+      "tags": []
+    },
     "example": {
       "tags": []
     },
@@ -52,6 +55,9 @@
       "tags": []
     },
     "hooks": {
+      "tags": []
+    },
+    "masset-provider": {
       "tags": []
     },
     "protocol": {

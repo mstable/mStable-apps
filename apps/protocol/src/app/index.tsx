@@ -2,14 +2,11 @@ import React, { FC, useEffect, useLayoutEffect } from 'react'
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 
-import { useBaseCtx } from '@apps/base'
+import { useBaseCtx, MessageHandler } from '@apps/base'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
-import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/base/context/masset'
 import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
 import { useSelectedMassetState } from '@apps/hooks'
-
-// FIXME not exported
-import { MessageHandler } from '../../../../libs/base/src/lib/components/layout/MessageHandler'
+import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/masset-provider'
 
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'

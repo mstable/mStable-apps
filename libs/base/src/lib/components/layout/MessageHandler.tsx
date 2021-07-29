@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { ExternalLink } from '@apps/components/core'
+import { MassetConfig } from '@apps/masset-provider'
 
 import { BannerMessage } from '../../context/AppProvider'
-import { MassetConfig } from '../../context/MassetProvider'
 
 interface Props {
   recollat(massetConfig: MassetConfig): BannerMessage

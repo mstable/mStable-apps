@@ -2,7 +2,7 @@ import type { FC } from 'react'
 import React from 'react'
 import styled from 'styled-components'
 
-import { useSelectedMassetName } from '@apps/base/context/masset'
+import { useSelectedMassetName } from '@apps/masset-provider'
 import { ExternalLink } from '@apps/components/core'
 import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
 

@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useTokenSubscription } from '@apps/base/context/tokens'
-import { BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedSavingsVaultState } from '@apps/data-provider'
 import { useNetworkAddresses } from '@apps/base/context/network'
 
 import { useBigDecimalInput } from '@apps/hooks'

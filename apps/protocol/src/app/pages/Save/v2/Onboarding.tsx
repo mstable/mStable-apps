@@ -1,8 +1,9 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
+
 import { Networks, useNetwork } from '@apps/base/context/network'
-import { MassetState } from '@apps/base/context/data'
-import { useSelectedMassetName } from '@apps/base/context/masset'
+import { MassetState } from '@apps/data-provider'
+import { useSelectedMassetName } from '@apps/masset-provider'
 import { ViewportWidth } from '@apps/base/theme'
 import { ExternalLink, UnstyledButton, Tooltip, Arrow } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'

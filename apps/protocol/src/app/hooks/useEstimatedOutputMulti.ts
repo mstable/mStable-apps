@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { useDebounce } from 'react-use'
 import { BigNumber } from 'ethers'
 
-import { useSelectedMassetConfig } from '@apps/base/context/masset'
+import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { getPriceImpact, PriceImpact } from '@apps/quick-maths'
 import { sanitizeMassetError } from '@apps/formatters'
 import { BigDecimal } from '@apps/bigdecimal'

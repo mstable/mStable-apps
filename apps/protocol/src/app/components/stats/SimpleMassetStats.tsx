@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/data-provider'
 import { TokenIcon, TokenPair } from '@apps/components/icons'
 import { CountUp, CountUpUSD, ExplorerLink } from '@apps/components/core'
 import { toK } from '@apps/formatters'

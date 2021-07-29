@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useCallback, useState } from 'react'
 
-import { BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedSavingsVaultState } from '@apps/data-provider'
 import {
   CountUp,
   DifferentialCountup,

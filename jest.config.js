@@ -12,5 +12,7 @@ module.exports = {
     '<rootDir>/libs/quick-maths',
     '<rootDir>/libs/components',
     '<rootDir>/libs/assets',
+    '<rootDir>/libs/masset-provider',
+    '<rootDir>/libs/data-provider',
   ],
 }

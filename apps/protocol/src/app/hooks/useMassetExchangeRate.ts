@@ -2,7 +2,7 @@ import { useSelectedMassetState } from '@apps/hooks'
 import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import type { MassetState } from '@apps/base/context/data'
+import type { MassetState } from '@apps/data-provider'
 import type { FetchState, BigDecimalInputValue, BigDecimalInputValues } from '@apps/hooks'
 
 import { useSelectedFeederPoolState } from '../pages/Pools/FeederPoolProvider'

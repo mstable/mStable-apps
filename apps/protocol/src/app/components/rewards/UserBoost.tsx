@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { ThemedSkeleton, CountUp, DifferentialCountup } from '@apps/components/core'
-import { BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedSavingsVaultState } from '@apps/data-provider'
 import { FetchState } from '@apps/hooks'
 import { BoostedCombinedAPY } from '@apps/types'
 

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedSavingsVaultState } from '@apps/data-provider'
 import { useCalculateUserBoost, createToggleContext } from '@apps/hooks'
 import { Widget, Button, ProgressBar } from '@apps/components/core'
 import { ViewportWidth } from '@apps/base/theme'

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { BoostedSavingsVault__factory } from '@apps/artifacts/typechain'
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
-import { BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedSavingsVaultState } from '@apps/data-provider'
 import { BoostedCombinedAPY } from '@apps/types'
 import { useRewardStreams } from '../context/RewardStreamsProvider'
 import { usePropose } from '@apps/base/context/transactions'

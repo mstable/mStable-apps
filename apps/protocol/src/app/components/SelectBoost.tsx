@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { BoostDirector__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSigner } from '@apps/base/context/account'
-import { useDataState, BoostedSavingsVaultState } from '@apps/base/context/data'
+import { useDataState, BoostedSavingsVaultState } from '@apps/data-provider'
 import { usePropose } from '@apps/base/context/transactions'
 import { ViewportWidth } from '@apps/base/theme'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'

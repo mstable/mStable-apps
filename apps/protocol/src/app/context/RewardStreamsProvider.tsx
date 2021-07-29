@@ -3,7 +3,7 @@ import { useInterval } from 'react-use'
 import { getUnixTime } from 'date-fns'
 import { BigNumber } from 'ethers'
 
-import { BoostedSavingsVaultAccountState, BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedSavingsVaultAccountState, BoostedSavingsVaultState } from '@apps/data-provider'
 import { SCALE } from '@apps/types'
 
 type RewardEntry = BoostedSavingsVaultAccountState['rewardEntries'][number]

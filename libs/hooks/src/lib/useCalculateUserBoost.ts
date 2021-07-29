@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import type { BoostedSavingsVaultState } from '@apps/base/context/data'
+import type { BoostedSavingsVaultState } from '@apps/data-provider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { calculateBoost, calculateBoostImusd, getCoeffs } from '@apps/quick-maths'

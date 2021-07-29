@@ -14,7 +14,7 @@ import {
   useMultiAssetExchangeState,
   SendButton,
 } from '@apps/components/forms'
-import { MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/data-provider'
 import { useMinimumOutput, useSelectedMassetState } from '@apps/hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
