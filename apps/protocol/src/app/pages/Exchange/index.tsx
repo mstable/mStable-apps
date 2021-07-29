@@ -2,11 +2,11 @@ import React, { FC } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { TabsV2 } from '@apps/components/core'
 import { ReactComponent as MintIcon } from '@apps/components/icons/circle/mint.svg'
 import { ReactComponent as RedeemIcon } from '@apps/components/icons/circle/redeem.svg'
 import { ReactComponent as SwapIcon } from '@apps/components/icons/circle/swap.svg'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { PageHeader } from '../PageHeader'
 import { Mint as MintPage } from './Mint'

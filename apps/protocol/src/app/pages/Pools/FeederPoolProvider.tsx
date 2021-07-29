@@ -5,11 +5,10 @@ import { BoostedSavingsVault__factory, FeederPool__factory, FeederWrapper__facto
 
 import { AddressOption } from '@apps/types'
 import type { FeederPoolState, MassetState } from '@apps/base/context/data'
-import { useFeederPool, useSelectedMassetState } from '@apps/base/context/data'
 import { useSigner } from '@apps/base/context/account'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
-import { UseBigDecimalInputsArg } from '@apps/hooks'
+import { UseBigDecimalInputsArg, useFeederPool, useSelectedMassetState } from '@apps/hooks'
 
 interface PoolState {
   poolAddress: string

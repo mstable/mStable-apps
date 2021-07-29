@@ -2,9 +2,9 @@ import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { BoostedCombinedAPY } from '@apps/types'
-import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/base/context/data'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { FetchState, useCalculateUserBoost } from '@apps/hooks'
+import { FetchState, useCalculateUserBoost, useSelectedMassetState } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { calculateApy } from '@apps/quick-maths'
 import {

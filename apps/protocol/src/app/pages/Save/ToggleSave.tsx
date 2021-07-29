@@ -1,8 +1,9 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useSelectedMassetState, SavingsContractState } from '@apps/base/context/data'
+import { SavingsContractState } from '@apps/base/context/data'
 import { Toggle } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { SaveVersion, useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 

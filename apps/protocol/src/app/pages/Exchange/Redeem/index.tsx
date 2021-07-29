@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { useToggle } from 'react-use'
 
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { ThemedSkeleton } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { RedeemExactBassets } from './RedeemExactBassets'
 import { RedeemMasset } from './RedeemMasset'
