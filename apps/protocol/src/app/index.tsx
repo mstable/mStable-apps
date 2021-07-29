@@ -3,7 +3,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 
 import { useBaseCtx } from '@apps/base'
-import { useNetwork } from '@apps/base/context/network'
+import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/base/context/masset'
 import { useSelectedMassetState } from '@apps/base/context/data'
 import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
@@ -13,6 +13,7 @@ import { MessageHandler } from '../../../../libs/base/src/lib/components/layout/
 
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
+import { usePolygonModal } from './hooks/usePolygonModal'
 
 import { Save } from './pages/Save'
 import { NotFound } from './pages/NotFound'
@@ -80,6 +81,8 @@ export const ProtocolApp: FC = () => {
   const hasFeederPools = massetState?.hasFeederPools
   const [bannerMessage, setBannerMessage] = useBannerMessage()
   const { undergoingRecol } = useSelectedMassetState() ?? {}
+  const { chainId } = useNetwork()
+  const showPolygonModal = usePolygonModal()
 
   const [, setBaseCtx] = useBaseCtx()
 
@@ -106,6 +109,13 @@ export const ProtocolApp: FC = () => {
       setBannerMessage(message)
     }
   }, [bannerMessage, massetConfig, setBannerMessage, undergoingRecol])
+
+  useLayoutEffect(() => {
+    if (chainId === ChainIds.MaticMainnet && !localStorage.getItem('polygonViewed')) {
+      localStorage.setItem('polygonViewed', 'true')
+      showPolygonModal()
+    }
+  }, [chainId, showPolygonModal])
 
   return (
     <SelectedSaveVersionProvider>
