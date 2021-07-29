@@ -16,10 +16,10 @@ import { useAccount } from '@apps/base/context/account'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { useNetwork } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { BigDecimal } from '@apps/bigdecimal'
 import { Token } from '@apps/types'
 import { calculateApy } from '@apps/quick-maths'
+import { useSelectedMassetState } from './useSelectedMassetState'
 
 import { createUseContextFn, providerFactory } from './utils'
 

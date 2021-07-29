@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { H3, H2, CountUp } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { StatsLink } from '../../pages/Stats/StatsLink'
 import { BasketStats } from './BasketStats'

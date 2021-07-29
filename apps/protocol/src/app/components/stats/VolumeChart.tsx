@@ -4,9 +4,8 @@ import { format, getUnixTime } from 'date-fns'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { Color } from '@apps/base/theme'
-import { useBlockTimesForDates } from '@apps/hooks'
+import { useBlockTimesForDates, useSelectedMassetState } from '@apps/hooks'
 import { periodFormatMapping, toK } from '@apps/formatters'
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { ThemedSkeleton } from '@apps/components/core'
 
 import { getKeyTimestamp } from '@apps/formatters'

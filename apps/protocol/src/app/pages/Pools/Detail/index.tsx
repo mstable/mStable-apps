@@ -6,11 +6,11 @@ import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
 import type { FeederPoolState } from '@apps/base/context/data'
-import { useFeederPool } from '@apps/base/context/data'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { TabCard, Button, UnstyledButton, InfoBox } from '@apps/components/core'
 import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
+import { useFeederPool } from '@apps/hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'

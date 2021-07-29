@@ -5,8 +5,8 @@ import { useEffectOnce } from 'react-use'
 import { useBaseCtx } from '@apps/base'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/base/context/masset'
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
+import { useSelectedMassetState } from '@apps/hooks'
 
 // FIXME not exported
 import { MessageHandler } from '../../../../libs/base/src/lib/components/layout/MessageHandler'

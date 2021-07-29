@@ -8,12 +8,13 @@ import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 
 // @ts-ignore
 import DefaultTooltipContent from 'recharts/lib/component/DefaultTooltipContent'
 
-import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/base/context/data'
 import { TokenIconSvg } from '@apps/components/icons'
 import { BigDecimal } from '@apps/bigdecimal'
 import { Color } from '@apps/base/theme'
 import { toK } from '@apps/formatters'
 import { ThemedSkeleton } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { RechartsContainer } from './RechartsContainer'
 

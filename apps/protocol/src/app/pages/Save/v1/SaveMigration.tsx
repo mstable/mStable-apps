@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { useTransactionsState } from '@apps/base/context/transactions'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { ViewportWidth, gradientShift } from '@apps/base/theme'
 import { Steps } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { SaveMigrationProvider, useMigrationSteps } from './SaveMigrationProvider'
 

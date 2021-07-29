@@ -3,11 +3,12 @@ import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
-import { FeederPoolState, MassetState, useSelectedMassetState } from '@apps/base/context/data'
+import { FeederPoolState, MassetState } from '@apps/base/context/data'
 import { useSelectedMassetConfig, MassetConfig, MASSET_CONFIG } from '@apps/base/context/masset'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { PageHeader } from '../PageHeader'
 import { Card } from './cards/Card'

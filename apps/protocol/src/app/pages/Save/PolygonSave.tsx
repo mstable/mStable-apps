@@ -2,10 +2,10 @@ import React, { FC, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import CountUp from 'react-countup'
 
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { ViewportWidth } from '@apps/base/theme'
 import { ThemedSkeleton, Tooltip, TabCard } from '@apps/components/core'
 import { ReactComponent as SaveIcon } from '@apps/components/icons/circle/save.svg'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { DailyApys } from '../../components/stats/DailyApys'
 import { PageHeader } from '../PageHeader'

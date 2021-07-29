@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { MassetState } from '@apps/base/context/data'
 import { TokenIcon, TokenPair } from '@apps/components/icons'
 import { CountUp, CountUpUSD, ExplorerLink } from '@apps/components/core'
 import { toK } from '@apps/formatters'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 

@@ -4,12 +4,12 @@ import { usePrevious, useDebounce } from 'react-use'
 import type { BigNumber } from 'ethers'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/base/context/data'
 import { useSigner } from '@apps/base/context/account'
 import { sanitizeMassetError } from '@apps/formatters'
 import { useSelectedMassetConfig } from '@apps/base/context/masset'
 import { getPriceImpact, PriceImpact } from '@apps/quick-maths'
-import { BigDecimalInputValue, FetchState, useFetchState } from '@apps/hooks'
+import { BigDecimalInputValue, FetchState, useFetchState, useSelectedMassetState } from '@apps/hooks'
 
 type Contract = Masset | FeederPool
 

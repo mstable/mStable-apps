@@ -1,18 +1,18 @@
-import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { pipe } from 'ts-pipe-compose'
-import { Interface } from '@ethersproject/abi'
 import { FeederPoolsQueryResult, useFeederPoolsLazyQuery } from '@apps/artifacts/graphql/feeders'
 import { MassetsQueryResult, useMassetsLazyQuery } from '@apps/artifacts/graphql/protocol'
 import type { IMasset } from '@apps/artifacts/typechain'
+import { Interface } from '@ethersproject/abi'
+import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { pipe } from 'ts-pipe-compose'
 
-import type { BoostedSavingsVaultState, DataState, FeederPoolState, MassetState, SavingsContractState } from './types'
+import { useAccount, useSignerOrProvider } from '../AccountProvider'
 import { useNetwork } from '../NetworkProvider'
 import { Tokens, useTokensState } from '../TokensProvider'
 import { recalculateState } from './recalculateState'
-import { transformRawData } from './transformRawData'
 import { useBlockPollingSubscription } from './subscriptions'
-import { useAccount, useSignerOrProvider } from '../AccountProvider'
-import { useSelectedMassetName } from '../MassetProvider'
+import { transformRawData } from './transformRawData'
+
+import type { DataState } from './types'
 
 export interface RawData {
   massets: MassetsQueryResult['data']
@@ -53,25 +53,6 @@ const useRawData = (): Pick<RawData, 'massets' | 'feederPools'> => {
 }
 
 export const useDataState = (): DataState => useContext(dataStateCtx)
-
-// FIXME can be moved to protocol
-export const useSelectedMassetState = (): MassetState | undefined => {
-  const masset = useSelectedMassetName()
-  return useDataState()[masset]
-}
-
-export const useSelectedBoostedSavingsVault = (): BoostedSavingsVaultState | undefined => {
-  const masset = useSelectedMassetState()
-  return masset?.savingsContracts?.v2?.boostedSavingsVault
-}
-
-export const useV1SavingsBalance = (): Extract<SavingsContractState, { version: 1 }>['savingsBalance'] | undefined =>
-  useSelectedMassetState()?.savingsContracts?.v1?.savingsBalance
-
-export const useFeederPool = (address: string): FeederPoolState | undefined => {
-  const massetState = useSelectedMassetState()
-  return massetState?.feederPools[address]
-}
 
 const massetInterface = (() => {
   const abi = [

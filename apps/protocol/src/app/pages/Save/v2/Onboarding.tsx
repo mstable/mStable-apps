@@ -1,11 +1,12 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import { Networks, useNetwork } from '@apps/base/context/network'
-import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/base/context/data'
 import { useSelectedMassetName } from '@apps/base/context/masset'
 import { ViewportWidth } from '@apps/base/theme'
 import { ExternalLink, UnstyledButton, Tooltip, Arrow } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { useOnboarding } from '../hooks'
 

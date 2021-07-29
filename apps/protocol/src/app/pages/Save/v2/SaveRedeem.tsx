@@ -3,13 +3,13 @@ import { ISavingsContractV2__factory, BoostedSavingsVault__factory } from '@apps
 
 import { useSigner } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
-import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/base/context/data'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
 
 import { AddressOption, Interfaces } from '@apps/types'
 import { TransactionManifest } from '@apps/transaction-manifest'
-import { useBigDecimalInput } from '@apps/hooks'
+import { useBigDecimalInput, useSelectedMassetState } from '@apps/hooks'
 import { AssetExchange, SendButton } from '@apps/components/forms'
 
 import { SaveRoutesOut } from './types'

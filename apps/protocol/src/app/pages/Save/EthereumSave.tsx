@@ -2,10 +2,10 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { ViewportWidth } from '@apps/base/theme'
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { useSelectedMassetConfig } from '@apps/base/context/masset'
 import { InfoBox, InfoButton, ThemedSkeleton } from '@apps/components/core'
 import { ReactComponent as SaveIcon } from '@apps/components/icons/circle/save.svg'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'

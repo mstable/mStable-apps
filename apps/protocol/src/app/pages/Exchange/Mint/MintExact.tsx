@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { Masset__factory } from '@apps/artifacts/typechain'
 import { useTokens, useTokensState } from '@apps/base/context/tokens'
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
@@ -16,7 +15,7 @@ import {
   SendButton,
 } from '@apps/components/forms'
 import { MassetState } from '@apps/base/context/data'
-import { useMinimumOutput } from '@apps/hooks'
+import { useMinimumOutput, useSelectedMassetState } from '@apps/hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useToggle } from 'react-use'
 
 import { ThemedSkeleton } from '@apps/components/core'
-import { useSelectedMassetState } from '@apps/base/context/data'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { SwitchButton } from '../SwitchButton'
 import { MintMasset } from './MintMasset'

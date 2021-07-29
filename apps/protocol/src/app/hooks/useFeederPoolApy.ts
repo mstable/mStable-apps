@@ -1,10 +1,9 @@
-import { useSelectedMassetState } from '@apps/base/context/data'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { calculateApy, calculateBoost, getCoeffs, MAX_BOOST } from '@apps/quick-maths'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { BoostedCombinedAPY } from '@apps/types'
-import { FetchState } from '@apps/hooks'
+import { FetchState, useSelectedMassetState } from '@apps/hooks'
 
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'
 
