@@ -5,7 +5,7 @@ import { FeederPool__factory, Masset__factory } from '@apps/artifacts/typechain'
 
 import { usePropose } from '@apps/base/context/transactions'
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
-import { MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/data-provider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { useChainIdCtx } from '@apps/base/context/network'
 

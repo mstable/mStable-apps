@@ -1,10 +1,11 @@
 import React, { Fragment, FC, useMemo } from 'react'
 import styled from 'styled-components'
+
 import { ExplorerLink, CountUp, ThemedSkeleton, Table, TableCell, TableRow } from '@apps/components/core'
 import { TokenIcon as TokenIconBase } from '@apps/components/icons'
+import { MassetState, useDataState } from '@apps/data-provider'
 
 import { ChainIds, useChainIdCtx, useNetworkAddresses } from '../../context/NetworkProvider'
-import { MassetState, useDataState } from '../../context/DataProvider'
 import { useTokenSubscription } from '../../context/TokensProvider'
 
 const AssetCell = styled(TableCell)`
@@ -90,7 +91,7 @@ export const Balances: FC<{ onRowClick?: (symbol: string) => void }> = ({ onRowC
     [dataState],
   )
 
-  const bassetTokens = massetTokens.map(({ bassets }) => bassets).reduce((a, b) => [...a, ...b])
+  const bassetTokens = massetTokens.map(({ bassets }) => bassets).reduce((a, b) => [...a, ...b], [])
   const headerTitles = ['Asset', 'Balance'].map(t => ({ title: t }))
 
   return (

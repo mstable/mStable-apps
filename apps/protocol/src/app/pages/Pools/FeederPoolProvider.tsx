@@ -4,7 +4,7 @@ import type { BoostedSavingsVault, FeederPool, FeederWrapper } from '@apps/artif
 import { BoostedSavingsVault__factory, FeederPool__factory, FeederWrapper__factory } from '@apps/artifacts/typechain'
 
 import { AddressOption } from '@apps/types'
-import type { FeederPoolState, MassetState } from '@apps/base/context/data'
+import type { FeederPoolState, MassetState } from '@apps/data-provider'
 import { useSigner } from '@apps/base/context/account'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'

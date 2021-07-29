@@ -1,7 +1,7 @@
 import React, { createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useRef, useState } from 'react'
 
-import { SavingsContractState } from '@apps/base/context/data'
-import { useSelectedMassetName } from '@apps/base/context/masset'
+import { SavingsContractState } from '@apps/data-provider'
+import { useSelectedMassetName } from '@apps/masset-provider'
 import { useWalletAddress } from '@apps/base/context/account'
 import { useV1SavingsBalanceQuery } from '@apps/artifacts/graphql/protocol'
 import { useSelectedMassetState } from '@apps/hooks'

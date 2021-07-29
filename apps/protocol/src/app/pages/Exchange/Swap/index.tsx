@@ -9,7 +9,7 @@ import { useBigDecimalInput, useMinimumOutput, BigDecimalInputValue, useSlippage
 import { AddressOption } from '@apps/types'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetSwap, SendButton } from '@apps/components/forms'
-import { MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/data-provider'
 import { TransactionInfo, ThemedSkeleton } from '@apps/components/core'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'

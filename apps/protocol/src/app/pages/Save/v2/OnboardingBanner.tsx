@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { ViewportWidth } from '@apps/base/theme'
 import { Button, Tooltip, CountUp } from '@apps/components/core'
-import { useSelectedMassetName } from '@apps/base/context/masset'
+import { useSelectedMassetName } from '@apps/masset-provider'
 
 import { useAvailableSaveApy } from '../../../hooks/useAvailableSaveApy'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'

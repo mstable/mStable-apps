@@ -2,8 +2,8 @@ import { LazyQueryHookOptions, QueryTuple } from '@apollo/react-hooks'
 import { QueryResult } from '@apollo/react-common'
 import { useEffect } from 'react'
 
-import { useBlockNow } from '../BlockProvider'
-import { useNetwork } from '../NetworkProvider'
+import { useBlockNow } from '@apps/base/context/block'
+import { useNetwork } from '@apps/base/context/network'
 
 export const useBlockPollingSubscription = <TData, TVariables>(
   lazyQuery: (

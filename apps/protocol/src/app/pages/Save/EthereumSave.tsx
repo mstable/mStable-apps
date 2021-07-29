@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { ViewportWidth } from '@apps/base/theme'
-import { useSelectedMassetConfig } from '@apps/base/context/masset'
+import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { InfoBox, InfoButton, ThemedSkeleton } from '@apps/components/core'
 import { ReactComponent as SaveIcon } from '@apps/components/icons/circle/save.svg'
 import { useSelectedMassetState } from '@apps/hooks'

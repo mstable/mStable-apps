@@ -50,6 +50,6 @@ export const useSetSelectedMassetName = (): Dispatch<SetStateAction<MassetName>>
 export const useSelectedMassetConfig = (): MassetConfig => useContext(massetConfigCtx)
 
 export const MassetProvider = composedComponent(SelectedMassetNameProvider, ({ children }) => {
-  const massetName = useSelectedMassetName()
-  return <massetConfigCtx.Provider value={MASSET_CONFIG[massetName]}>{children}</massetConfigCtx.Provider>
+  // const massetName = useSelectedMassetName()
+  return <massetConfigCtx.Provider value={MASSET_CONFIG.musd}>{children}</massetConfigCtx.Provider>
 })

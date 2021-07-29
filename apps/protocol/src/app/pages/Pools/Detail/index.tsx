@@ -5,7 +5,7 @@ import { useToggle } from 'react-use'
 import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
-import type { FeederPoolState } from '@apps/base/context/data'
+import type { FeederPoolState } from '@apps/data-provider'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { TabCard, Button, UnstyledButton, InfoBox } from '@apps/components/core'

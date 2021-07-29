@@ -4,10 +4,10 @@ import { usePrevious, useDebounce } from 'react-use'
 import type { BigNumber } from 'ethers'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/data-provider'
 import { useSigner } from '@apps/base/context/account'
 import { sanitizeMassetError } from '@apps/formatters'
-import { useSelectedMassetConfig } from '@apps/base/context/masset'
+import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { getPriceImpact, PriceImpact } from '@apps/quick-maths'
 import { BigDecimalInputValue, FetchState, useFetchState, useSelectedMassetState } from '@apps/hooks'
 

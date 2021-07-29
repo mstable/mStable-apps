@@ -1,15 +1,16 @@
+import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { Interface } from '@ethersproject/abi'
+import { pipe } from 'ts-pipe-compose'
+
 import { FeederPoolsQueryResult, useFeederPoolsLazyQuery } from '@apps/artifacts/graphql/feeders'
 import { MassetsQueryResult, useMassetsLazyQuery } from '@apps/artifacts/graphql/protocol'
 import type { IMasset } from '@apps/artifacts/typechain'
-import { Interface } from '@ethersproject/abi'
-import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { pipe } from 'ts-pipe-compose'
+import { useBlockPollingSubscription } from '@apps/hooks'
+import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
+import { useNetwork } from '@apps/base/context/network'
+import { Tokens, useTokensState } from '@apps/base/context/tokens'
 
-import { useAccount, useSignerOrProvider } from '../AccountProvider'
-import { useNetwork } from '../NetworkProvider'
-import { Tokens, useTokensState } from '../TokensProvider'
 import { recalculateState } from './recalculateState'
-import { useBlockPollingSubscription } from './subscriptions'
 import { transformRawData } from './transformRawData'
 
 import type { DataState } from './types'

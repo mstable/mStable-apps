@@ -3,7 +3,7 @@ import { ISavingsContractV2__factory, BoostedSavingsVault__factory } from '@apps
 
 import { useSigner } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
-import { MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/data-provider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
 

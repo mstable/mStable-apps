@@ -1,5 +1,5 @@
 import { BigDecimal } from '@apps/bigdecimal'
-import { BoostedSavingsVaultState } from '@apps/base/context/data'
+import { BoostedSavingsVaultState } from '@apps/data-provider'
 
 // Boost params (imUSD Vault)
 export const MIN_BOOST_IMUSD = 0.5

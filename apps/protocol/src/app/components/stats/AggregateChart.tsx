@@ -3,7 +3,7 @@ import { DocumentNode, gql, useQuery } from '@apollo/client'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { format, getUnixTime } from 'date-fns'
 
-import { useSelectedMassetConfig } from '@apps/base/context/masset'
+import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { ThemedSkeleton } from '@apps/components/core'
 import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
 import { useBlockTimesForDates } from '@apps/hooks'

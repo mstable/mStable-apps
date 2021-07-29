@@ -4,7 +4,7 @@ import { BoostedSavingsVault__factory, ISavingsContractV2__factory, SaveWrapper_
 
 import { useSigner } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
-import { MassetState } from '@apps/base/context/data'
+import { MassetState } from '@apps/data-provider'
 import { useNetworkAddresses, useNetworkPrices } from '@apps/base/context/network'
 import { useNativeToken, useTokenSubscription } from '@apps/base/context/tokens'
 

@@ -1,4 +1,4 @@
-import { FeederPoolState } from '@apps/base/context/data'
+import { FeederPoolState } from '@apps/data-provider'
 
 import { useSelectedMassetState } from './useSelectedMassetState'
 

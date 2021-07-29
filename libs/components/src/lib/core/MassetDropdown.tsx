@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { useLocation } from 'react-use'
 
-import { useDataState } from '@apps/base/context/data'
-import { useSelectedMasset, useSelectedMassetName, useSetSelectedMassetName } from '@apps/base/context/masset'
+import { useDataState } from '@apps/data-provider'
+import { useSelectedMasset, useSelectedMassetName, useSetSelectedMassetName } from '@apps/masset-provider'
 import { MassetName } from '@apps/types'
 import { ViewportWidth } from '@apps/base/theme'
 
