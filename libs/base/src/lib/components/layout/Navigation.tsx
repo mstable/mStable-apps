@@ -45,7 +45,16 @@ export const Navigation: FC = () => {
       <ul>
         {navItems.map(({ title, path }) => (
           <li key={path}>
-            <StyledNavLink activeStyle={{ color: colorTheme(themeMode).primary }} to={path}>
+            <StyledNavLink
+              activeStyle={{ color: colorTheme(themeMode).primary }}
+              to={path}
+              isActive={(match, location) => {
+                if (match?.path) return true
+
+                // TODO assumption, may not work for future routes
+                return location.pathname.split('/')[2] === path.split('/')[2]
+              }}
+            >
               {title}
             </StyledNavLink>
           </li>
@@ -54,8 +63,3 @@ export const Navigation: FC = () => {
     </Container>
   )
 }
-// {navItems.map(({ title, path }) => (
-//   <StyledNavLink activeStyle={{ color: colorTheme(themeMode).primary }} key={title} to={path}>
-//     {title}
-//   </StyledNavLink>
-// ))}
