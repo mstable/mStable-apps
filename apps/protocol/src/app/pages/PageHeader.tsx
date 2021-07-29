@@ -1,20 +1,17 @@
-import React, { FC, useLayoutEffect } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
-
 import { BannerMessage } from '@apps/base'
 import { useBannerMessage } from '@apps/base/context/app'
-import { Networks, useNetwork } from '@apps/base/context/network'
+import { useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { MassetDropdown } from '@apps/components/core'
-
-import { usePolygonModal } from '../hooks/usePolygonModal'
-import { ReactComponent as SaveIcon } from '@apps/components/icons/circle/save.svg'
-import { ReactComponent as MintIcon } from '@apps/components/icons/circle/mint.svg'
-import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
-import { ReactComponent as SwapIcon } from '@apps/components/icons/circle/swap.svg'
-import { ReactComponent as RedeemIcon } from '@apps/components/icons/circle/redeem.svg'
-import { ReactComponent as StatsIcon } from '@apps/components/icons/circle/stats.svg'
 import { ReactComponent as AccountIcon } from '@apps/components/icons/circle/account.svg'
+import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
+import { ReactComponent as MintIcon } from '@apps/components/icons/circle/mint.svg'
+import { ReactComponent as RedeemIcon } from '@apps/components/icons/circle/redeem.svg'
+import { ReactComponent as SaveIcon } from '@apps/components/icons/circle/save.svg'
+import { ReactComponent as StatsIcon } from '@apps/components/icons/circle/stats.svg'
+import { ReactComponent as SwapIcon } from '@apps/components/icons/circle/swap.svg'
 
 export enum PageAction {
   Save = 'Save',
@@ -43,7 +40,7 @@ const ActionIcons: { [action: string]: JSX.Element } = {
   Account: <AccountIcon />,
 }
 
-const StyledMasset = styled(MassetDropdown)`
+const StyledMassetDropdown = styled(MassetDropdown)`
   margin-left: 0.75rem;
 `
 
@@ -114,15 +111,7 @@ const ChildrenRow = styled.div`
 export const PageHeader: FC<Props> = ({ children, action, subtitle }) => {
   const [bannerMessage] = useBannerMessage()
   const icon = ActionIcons[action]
-  const showPolygonModal = usePolygonModal()
-  const { protocolName } = useNetwork()
-
-  useLayoutEffect(() => {
-    if (protocolName === Networks.Polygon && !localStorage.getItem('polygonViewed')) {
-      localStorage.setItem('polygonViewed', 'true')
-      showPolygonModal()
-    }
-  }, [protocolName, showPolygonModal])
+  const { supportedMassets } = useNetwork()
 
   return (
     <div>
@@ -130,7 +119,7 @@ export const PageHeader: FC<Props> = ({ children, action, subtitle }) => {
         <Row>
           <Icon inverted>{icon}</Icon>
           <h2>{action}</h2>
-          {protocolName !== Networks.Polygon && <StyledMasset />}
+          {supportedMassets.length > 1 && <StyledMassetDropdown />}
         </Row>
         {subtitle && <p>{subtitle}</p>}
         {children && <ChildrenRow>{children}</ChildrenRow>}

@@ -2,11 +2,11 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
-import { useSelectedMassetPrice } from '@apps/hooks'
 import { ViewportWidth } from '@apps/base/theme'
 import { BigDecimal } from '@apps/bigdecimal'
 import { CountUp } from '@apps/components/core'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 
 const Container = styled.div`
@@ -61,7 +61,7 @@ const Container = styled.div`
 
 export const SavePosition: FC = () => {
   const massetState = useSelectedMassetState()
-  const massetPrice = useSelectedMassetPrice() ?? 1
+  const massetPrice = useSelectedMassetPrice()
   const [selectedSaveVersion] = useSelectedSaveVersion()
 
   const {
@@ -85,11 +85,11 @@ export const SavePosition: FC = () => {
       <div>
         <div>
           <h4>Save {selectedSaveVersion === 1 ? 'V2' : ''} Balance</h4>
-          <CountUp end={(saveBalance?.simple ?? 0) * massetPrice} prefix="$" decimals={2} />
+          <CountUp end={(saveBalance?.simple ?? 0) * massetPrice.value ?? 1} prefix="$" decimals={2} />
         </div>
         <div>
           <h4>Vault Balance</h4>
-          <CountUp end={(vaultBalance?.simple ?? 0) * massetPrice} prefix="$" decimals={2} />
+          <CountUp end={(vaultBalance?.simple ?? 0) * massetPrice.value ?? 1} prefix="$" decimals={2} />
         </div>
       </div>
     </Container>

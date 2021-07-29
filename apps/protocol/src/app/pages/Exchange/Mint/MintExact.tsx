@@ -16,8 +16,9 @@ import {
   SendButton,
 } from '@apps/components/forms'
 import { MassetState } from '@apps/base/context/data'
-import { useMinimumOutput, useSelectedMassetPrice } from '@apps/hooks'
+import { useMinimumOutput } from '@apps/hooks'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../../hooks/useMassetExchangeRate'
 
@@ -131,7 +132,7 @@ const MintExactLogic: FC = () => {
       setMaxCallbacks={setMaxCallbacks}
       spender={massetState.address}
       minOutputAmount={minOutputAmount}
-      price={massetPrice}
+      price={massetPrice.value}
       priceImpact={priceImpact?.value}
     >
       <SendButton

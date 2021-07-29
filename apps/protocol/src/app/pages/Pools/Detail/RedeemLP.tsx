@@ -5,10 +5,11 @@ import { useWalletAddress } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetExchange, SendButton } from '@apps/components/forms'
 import { AddressOption } from '@apps/types'
-import { useBigDecimalInput, BigDecimalInputValue, useSlippage, useMinimumOutput, useSelectedMassetPrice } from '@apps/hooks'
+import { useBigDecimalInput, BigDecimalInputValue, useSlippage, useMinimumOutput } from '@apps/hooks'
 
 import { TransactionInfo } from '@apps/components/core'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 import {
   useFPAssetAddressOptions,
@@ -26,7 +27,7 @@ export const RedeemLP: FC = () => {
   const walletAddress = useWalletAddress()
   const massetPrice = useSelectedMassetPrice()
 
-  const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice ?? 0) < 100000
+  const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice.value ?? 0) < 100000
 
   const vaultAddressOptions = useFPVaultAddressOptions()
 

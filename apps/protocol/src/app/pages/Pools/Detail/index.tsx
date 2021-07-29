@@ -10,8 +10,8 @@ import { useFeederPool } from '@apps/base/context/data'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { TabCard, Button, UnstyledButton, InfoBox } from '@apps/components/core'
-import { useSelectedMassetPrice } from '@apps/hooks'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
 import { PageHeader, PageAction } from '../../PageHeader'
 import { AssetCard } from '../cards/AssetCard'
@@ -160,7 +160,7 @@ const PoolDetailContent: FC = () => {
   const [readMore, setReadMore] = useToggle(false)
 
   const color = assetColorMapping[title]
-  const isLowLiquidity = massetPrice ? liquidity.simple * massetPrice < 100000 : false
+  const isLowLiquidity = massetPrice ? liquidity.simple * (massetPrice.value ?? 0) < 100000 : false
 
   const tabs = useMemo(
     () => ({

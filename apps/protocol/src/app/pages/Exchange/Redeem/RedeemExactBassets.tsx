@@ -8,8 +8,9 @@ import { useTokens, useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { SendButton, MultiAssetExchangeProvider, OneToManyAssetExchange, useMultiAssetExchangeState } from '@apps/components/forms'
-import { useMaximumOutput, useSelectedMassetPrice } from '@apps/hooks'
+import { useMaximumOutput } from '@apps/hooks'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../../hooks/useMassetExchangeRate'
 
@@ -85,7 +86,7 @@ const RedeemExactBassetsLogic: FC = () => {
       inputLabel={massetState?.token.symbol}
       outputLabel={outputLabel}
       maxOutputAmount={maxOutputAmount}
-      price={massetPrice}
+      price={massetPrice.value}
       inputAmount={estimatedOutputAmount}
       priceImpact={priceImpact?.value}
     >

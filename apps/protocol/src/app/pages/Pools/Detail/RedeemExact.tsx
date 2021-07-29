@@ -8,8 +8,9 @@ import { SendButton } from '@apps/components/forms'
 import { AddressOption } from '@apps/types'
 import { OneToManyAssetExchange, useMultiAssetExchangeState } from '@apps/components/forms'
 import { BigDecimal } from '@apps/bigdecimal'
-import { useMaximumOutput, useSelectedMassetPrice } from '@apps/hooks'
+import { useMaximumOutput } from '@apps/hooks'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import { useSelectedFeederPoolContract, useSelectedFeederPoolState } from '../FeederPoolProvider'
@@ -24,7 +25,7 @@ export const RedeemExact: FC = () => {
   const outputTokens = useMemo(() => [feederPool.masset.token, feederPool.fasset.token], [feederPool])
 
   const massetPrice = useSelectedMassetPrice()
-  const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice ?? 0) < 100000
+  const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice.value ?? 0) < 100000
 
   const [inputValues, slippage] = useMultiAssetExchangeState()
 

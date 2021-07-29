@@ -1,7 +1,6 @@
 import React, { FC, ReactElement, useCallback, useState } from 'react'
 
 import { BoostedSavingsVaultState } from '@apps/base/context/data'
-import { useSelectedMassetPrice } from '@apps/hooks'
 import {
   CountUp,
   DifferentialCountup,
@@ -16,6 +15,7 @@ import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { UserBoost } from '../../../components/rewards/UserBoost'
 import { BoostCalculator } from '../../../components/rewards/BoostCalculator'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { Position } from './Position'
@@ -67,10 +67,10 @@ export const PoolOverview: FC = () => {
   const rewardStreams = useRewardStreams()
   const feederPool = useSelectedFeederPoolState()
   const apy = useFeederPoolApy(feederPool.address)
-  const massetPrice = useSelectedMassetPrice() ?? 1
+  const massetPrice = useSelectedMassetPrice()
 
   const { vault, token, price } = feederPool
-  const fpTokenPrice = price.simple * massetPrice
+  const fpTokenPrice = price.simple * (massetPrice.value ?? 1)
   const userAmount = token.balance?.simple ?? 0
   const userStakedAmount = vault.account?.rawBalance.simple ?? 0
 

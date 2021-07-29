@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { BoostedCombinedAPY } from '@apps/types'
 import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { useSelectedMassetPrice, FetchState, useCalculateUserBoost } from '@apps/hooks'
+import { FetchState, useCalculateUserBoost } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { calculateApy } from '@apps/quick-maths'
 import {
@@ -20,6 +20,7 @@ import {
 import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 import { useAvailableSaveApy } from '../../../hooks/useAvailableSaveApy'
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 
 import { UserBoost } from '../../../components/rewards/UserBoost'
 import { PokeBoost } from '../../../components/PokeBoost'
@@ -108,11 +109,11 @@ const useSaveVaultAPY = (userBoost?: number): FetchState<BoostedCombinedAPY> => 
   const rewardsTokenPrice = useFetchPrice(boostedSavingsVault?.rewardsToken.address)
 
   return useMemo(() => {
-    if (!boostedSavingsVault || !massetPrice || !rewardsTokenPrice.value) return { fetching: true }
+    if (!boostedSavingsVault || !massetPrice.value || !rewardsTokenPrice.value) return { fetching: true }
 
     const { totalSupply, rewardRate } = boostedSavingsVault
 
-    const stakingTokenPrice = latestExchangeRate.rate.simple * massetPrice
+    const stakingTokenPrice = latestExchangeRate.rate.simple * massetPrice.value
 
     const rewardRateSimple = parseInt(rewardRate.toString()) / 1e18
     const base = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, rewardRateSimple, totalSupply)
@@ -203,7 +204,7 @@ export const SaveEthereumOverview: FC = () => {
                 {isSaveV1 && <StyledWarningBadge />}
               </div>
             </BalanceHeading>
-            <CountUp end={(userBalance?.simple ?? 0) * (massetPrice ?? 0)} prefix="$" />
+            <CountUp end={(userBalance?.simple ?? 0) * (massetPrice.value ?? 0)} prefix="$" />
           </Button>
           {!isSaveV1 && !!boostedSavingsVault && (
             <Button active={selection === VaultAPY} onClick={() => handleSelection(VaultAPY)}>

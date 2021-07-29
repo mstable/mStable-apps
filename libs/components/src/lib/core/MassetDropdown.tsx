@@ -8,7 +8,7 @@ import { useSelectedMasset, useSelectedMassetName, useSetSelectedMassetName } fr
 import { MassetName } from '@apps/types'
 import { ViewportWidth } from '@apps/base/theme'
 
-import { Dropdown, DropdownOptions } from './Dropdown'
+import { Dropdown } from './Dropdown'
 
 const StyledDropdown = styled(Dropdown)`
   > *:first-child {

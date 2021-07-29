@@ -4,9 +4,10 @@ import styled from 'styled-components'
 import { useSelectedMassetState } from '@apps/base/context/data'
 import { MassetState } from '@apps/base/context/data'
 import { TokenIcon, TokenPair } from '@apps/components/icons'
-import { useSelectedMassetPrice } from '@apps/hooks'
 import { CountUp, CountUpUSD, ExplorerLink } from '@apps/components/core'
 import { toK } from '@apps/formatters'
+
+import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 
 const Label = styled.div`
   font-weight: 600;
@@ -69,7 +70,7 @@ export const SimpleMassetStats: FC = () => {
           <TokenIcon symbol={masset.token.symbol} />
           <ExplorerLink data={masset.address}>mStable {masset.token.symbol}</ExplorerLink>
         </Label>
-        <CountUpUSD end={masset.token.totalSupply.simple} price={massetPrice} formattingFn={toK} />
+        <CountUpUSD end={masset.token.totalSupply.simple} price={massetPrice.value} formattingFn={toK} />
       </AssetRow>
       {Object.values(masset.bAssets).map(b => (
         <AssetRow key={b.token.address}>
@@ -97,7 +98,11 @@ export const SimpleMassetStats: FC = () => {
                   <TokenPair symbols={[fp.masset.token.symbol, fp.fasset.token.symbol]} />
                   {fp.token.symbol}
                 </Label>
-                <CountUpUSD end={fp.liquidity.simple} price={massetPrice ? massetPrice * fp.price.simple : undefined} formattingFn={toK} />
+                <CountUpUSD
+                  end={fp.liquidity.simple}
+                  price={massetPrice.value ? massetPrice.value * fp.price.simple : undefined}
+                  formattingFn={toK}
+                />
               </AssetRow>
             ))}
           </div>

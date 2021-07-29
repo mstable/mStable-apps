@@ -4,7 +4,9 @@ import { useNetworkAddresses } from '@apps/base/context/network'
 import { calculateApy, calculateBoost, getCoeffs, MAX_BOOST } from '@apps/quick-maths'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { BoostedCombinedAPY } from '@apps/types'
-import { useSelectedMassetPrice, FetchState } from '@apps/hooks'
+import { FetchState } from '@apps/hooks'
+
+import { useSelectedMassetPrice } from './useSelectedMassetPrice'
 
 export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
   const massetState = useSelectedMassetState()
@@ -18,7 +20,7 @@ export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombine
   const rewardsTokenPrice = useFetchPrice(vault?.rewardsToken.address)
   const platformTokenPrice = useFetchPrice(vault?.platformRewardsToken?.address)
 
-  if (!pool || !vault || !massetPrice || rewardsTokenPrice.fetching) return { fetching: true }
+  if (!pool || !vault || !massetPrice.value || rewardsTokenPrice.fetching) return { fetching: true }
 
   const rewardRateSimple = parseInt(vault.rewardRate.toString()) / 1e18
 
@@ -26,7 +28,7 @@ export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombine
 
   const platformRewardRateSimple = vault.platformRewardRate ? parseInt(vault.platformRewardRate.toString()) / 1e18 : undefined
 
-  const stakingTokenPrice = pool.price.simple * massetPrice
+  const stakingTokenPrice = pool.price.simple * massetPrice.value
 
   const baseRewards = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, rewardRateSimple, vault.totalSupply) as number
   const platformRewards = calculateApy(stakingTokenPrice, platformTokenPrice.value, platformRewardRateSimple, vault.totalRaw)
