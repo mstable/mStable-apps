@@ -11,8 +11,8 @@ import { useFetchState, FetchState } from '@apps/hooks'
 import { sanitizeMassetError } from '@apps/formatters'
 import { BigDecimal } from '@apps/bigdecimal'
 import { getPriceImpact } from '@apps/quick-maths'
-import { useSelectedMassetPrice } from '@apps/hooks'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { SaveOutput, SaveRoutes } from './types'
 
 const getOptimalBasset = async (
@@ -71,7 +71,7 @@ export const useSaveOutput = (route?: SaveRoutes, inputAddress?: string, inputAm
   const networkAddresses = useNetworkAddresses()
   const networkPrices = useNetworkPrices()
   const nativeTokenPriceSimple = networkPrices.value?.nativeToken
-  const massetPriceSimple = useSelectedMassetPrice()
+  const selectedMassetPrice = useSelectedMassetPrice()
 
   const signer = useSigner() as Signer
 
@@ -99,7 +99,7 @@ export const useSaveOutput = (route?: SaveRoutes, inputAddress?: string, inputAm
         !latestExchangeRate ||
         !networkAddresses ||
         !nativeTokenPriceSimple ||
-        !massetPriceSimple ||
+        !selectedMassetPrice.value ||
         ((route === SaveRoutes.SwapAndSave || route === SaveRoutes.SwapAndStake) && !feederPoolAddress)
       ) {
         return setSaveOutput.fetching()
@@ -124,7 +124,7 @@ export const useSaveOutput = (route?: SaveRoutes, inputAddress?: string, inputAm
             ])
 
             const nativeTokenPrice = BigDecimal.fromSimple(nativeTokenPriceSimple).exact
-            const massetPrice = BigDecimal.fromSimple(massetPriceSimple)
+            const massetPrice = BigDecimal.fromSimple(selectedMassetPrice.value)
 
             const buyLow = massetConfig.lowInputValue.mulTruncate(nativeTokenPrice).divPrecisely(massetPrice)
             const buyHigh = _inputAmount.scale().mulTruncate(nativeTokenPrice).divPrecisely(massetPrice)

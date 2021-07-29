@@ -6,13 +6,14 @@ import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { useSelectedMassetState } from '@apps/base/context/data'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
-import { useBigDecimalInput, useMinimumOutput, useSelectedMassetPrice, BigDecimalInputValue, useSlippage } from '@apps/hooks'
+import { useBigDecimalInput, useMinimumOutput, BigDecimalInputValue, useSlippage } from '@apps/hooks'
 import { AddressOption } from '@apps/types'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetSwap, SendButton } from '@apps/components/forms'
 import { MassetState } from '@apps/base/context/data'
 import { TransactionInfo, ThemedSkeleton } from '@apps/components/core'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 
 const formId = 'swap'
@@ -233,7 +234,7 @@ const SwapLogic: FC = () => {
         minOutputAmount={minOutputAmount}
         slippageFormValue={slippageFormValue}
         onSetSlippage={setSlippage}
-        price={massetPrice}
+        price={massetPrice.value}
         priceImpact={priceImpact?.value}
       />
     </Container>

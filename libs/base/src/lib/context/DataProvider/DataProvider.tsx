@@ -54,6 +54,7 @@ const useRawData = (): Pick<RawData, 'massets' | 'feederPools'> => {
 
 export const useDataState = (): DataState => useContext(dataStateCtx)
 
+// FIXME can be moved to protocol
 export const useSelectedMassetState = (): MassetState | undefined => {
   const masset = useSelectedMassetName()
   return useDataState()[masset]

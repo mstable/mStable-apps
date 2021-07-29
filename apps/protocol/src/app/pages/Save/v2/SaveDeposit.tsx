@@ -8,7 +8,7 @@ import { useSelectedMassetState, MassetState } from '@apps/base/context/data'
 import { useNetworkAddresses, useNetworkPrices } from '@apps/base/context/network'
 import { useNativeToken, useTokenSubscription } from '@apps/base/context/tokens'
 
-import { useSlippage, useBigDecimalInput, useSelectedMassetPrice } from '@apps/hooks'
+import { useSlippage, useBigDecimalInput } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { getPenaltyPercentage } from '@apps/quick-maths'
@@ -18,6 +18,7 @@ import { AddressOption, DEAD_ADDRESS } from '@apps/types'
 import { AssetExchange, SendButton } from '@apps/components/forms'
 import { TransactionInfo } from '@apps/components/core'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSaveOutput } from './useSaveOutput'
 import { SaveRoutes } from './types'
 
@@ -265,8 +266,8 @@ export const SaveDeposit: FC = () => {
     // If coming from ETH, convert to mAsset value
     const nativeTokenPriceExact = BigDecimal.fromSimple(nativeTokenPrice).exact
     const inputMassetValue =
-      withNativeToken.has(saveRoute) && massetPrice
-        ? inputAmount.mulTruncate(nativeTokenPriceExact).divPrecisely(BigDecimal.fromSimple(massetPrice))
+      withNativeToken.has(saveRoute) && massetPrice.value
+        ? inputAmount.mulTruncate(nativeTokenPriceExact).divPrecisely(BigDecimal.fromSimple(massetPrice.value))
         : inputMasset
 
     // Scale amounts to imAsset value

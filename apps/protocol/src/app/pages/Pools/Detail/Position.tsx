@@ -1,10 +1,10 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useSelectedMassetPrice } from '@apps/hooks'
 import { ViewportWidth } from '@apps/base/theme'
 import { CountUp, Tooltip } from '@apps/components/core'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'
 
 const Container = styled.div`
@@ -65,7 +65,7 @@ export const Position: FC = () => {
     account,
     price: currentPrice,
   } = useSelectedFeederPoolState() ?? {}
-  const massetPrice = useSelectedMassetPrice() ?? 1
+  const massetPrice = useSelectedMassetPrice()
 
   const userAmount = token.balance?.simple ?? 0
   const userStakedAmount = vault.account?.rawBalance.simple ?? 0
@@ -102,11 +102,11 @@ export const Position: FC = () => {
           <Tooltip tip={`${token.symbol} ${feesEarned[0].toFixed(10)}, ${token.symbol} Vault ${feesEarned[1].toFixed(10)}`}>
             <h4>Fees earned</h4>
           </Tooltip>
-          <CountUp end={(feesEarned[0] + feesEarned[1]) * massetPrice} decimals={2} prefix="$" />
+          <CountUp end={(feesEarned[0] + feesEarned[1]) * (massetPrice.value ?? 0)} decimals={2} prefix="$" />
         </div>
         <div>
           <h4>Unstaked Balance</h4>
-          <CountUp end={userAmount * massetPrice} prefix="$" decimals={2} />
+          <CountUp end={userAmount * (massetPrice.value ?? 0)} prefix="$" decimals={2} />
         </div>
       </div>
     </Container>

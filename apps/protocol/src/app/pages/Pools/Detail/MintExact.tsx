@@ -5,9 +5,10 @@ import { useWalletAddress } from '@apps/base/context/account'
 import { SubscribedToken } from '@apps/types'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { useMinimumOutput, BigDecimalInputValue, useSelectedMassetPrice } from '@apps/hooks'
+import { useMinimumOutput, BigDecimalInputValue } from '@apps/hooks'
 import { SendButton, ManyToOneAssetExchange, useMultiAssetExchangeDispatch, useMultiAssetExchangeState } from '@apps/components/forms'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import {
@@ -30,7 +31,7 @@ export const MintExact: FC = () => {
   const vaultAddressOptions = useFPVaultAddressOptions()
 
   const massetPrice = useSelectedMassetPrice()
-  const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice ?? 0) < 100000
+  const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice.value ?? 0) < 100000
 
   const [outputAddress, setOutputAddress] = useState<string | undefined>(vaultAddressOptions[0].address)
 

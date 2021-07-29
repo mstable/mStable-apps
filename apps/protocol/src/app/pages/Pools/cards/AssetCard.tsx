@@ -10,12 +10,12 @@ import { useTokenSubscription } from '@apps/base/context/tokens'
 import { FeederPoolState, useFeederPool } from '@apps/base/context/data'
 import { useBlockNumbers } from '@apps/base/context/block'
 import { BigDecimal } from '@apps/bigdecimal'
-import { useSelectedMassetPrice } from '@apps/hooks'
 import { ViewportWidth } from '@apps/base/theme'
 import { toK } from '@apps/formatters'
 import { CountUp, CountUpUSD, Tooltip } from '@apps/components/core'
 import { TokenIcon, TokenPair } from '@apps/components/icons'
 
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { assetColorMapping } from '../constants'
 import { Card } from './Card'
@@ -116,7 +116,7 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
     skip: !block24h,
   })
 
-  const fpTokenPrice = massetPrice ? price.simple * massetPrice : undefined
+  const fpTokenPrice = massetPrice ? price.simple * (massetPrice.value ?? 0) : undefined
   const feederPoolApy = useFeederPoolApy(address)
 
   const metrics = useMemo(() => {
@@ -153,12 +153,12 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
           <div>
             <p>Price</p>
             <div>
-              <CountUpUSD end={price.simple} decimals={10} price={massetPrice} />
+              <CountUpUSD end={price.simple} decimals={10} price={massetPrice.value} />
             </div>
           </div>
           <div>
             <p>24h Volume</p>
-            <CountUpUSD end={metrics.volume.simple} decimals={10} price={massetPrice} formattingFn={toK} />
+            <CountUpUSD end={metrics.volume.simple} decimals={10} price={massetPrice.value} formattingFn={toK} />
           </div>
         </>
       )}

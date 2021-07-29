@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useLayoutEffect } from 'react'
 import styled, {
   createGlobalStyle,
   CSSObject,
@@ -13,7 +13,9 @@ import { ModalProvider } from 'react-modal-hook'
 
 import { Color, FontSize, Size, Spacing, ViewportWidth } from '@apps/base/theme'
 import { ReactTooltip, Tooltip } from '@apps/components/core'
+import { usePolygonModal } from '@apps/hooks'
 
+import { ChainIds, useNetwork } from '../../context/NetworkProvider'
 import { Footer } from './Footer'
 import { AppBar } from './AppBar'
 import { Toasts } from './Toasts'
@@ -230,17 +232,29 @@ const Container = styled.div`
   }
 `
 
-export const Layout: FC = ({ children }) => (
-  <ModalProvider rootComponent={TransitionGroup}>
-    <Background />
-    <AppBar />
-    <Container>
-      <Main>{children}</Main>
-    </Container>
-    <Footer />
-    <Toasts />
-    <Tooltip tip="" hideIcon />
-    <ReactTooltip id="global" place="top" />
-    <GlobalStyle />
-  </ModalProvider>
-)
+export const Layout: FC = ({ children }) => {
+  const { chainId } = useNetwork()
+  const showPolygonModal = usePolygonModal()
+
+  useLayoutEffect(() => {
+    if (chainId === ChainIds.MaticMainnet && !localStorage.getItem('polygonViewed')) {
+      localStorage.setItem('polygonViewed', 'true')
+      showPolygonModal()
+    }
+  }, [chainId, showPolygonModal])
+
+  return (
+    <ModalProvider rootComponent={TransitionGroup}>
+      <Background />
+      <AppBar />
+      <Container>
+        <Main>{children}</Main>
+      </Container>
+      <Footer />
+      <Toasts />
+      <Tooltip tip="" hideIcon />
+      <ReactTooltip id="global" place="top" />
+      <GlobalStyle />
+    </ModalProvider>
+  )
+}
