@@ -5,13 +5,17 @@ import { createStateContext, useEffectOnce } from 'react-use'
 
 import { Providers } from './context'
 import { Updaters } from './updaters'
-import { Layout } from './components/layout/Layout'
 
 export { BannerMessage } from './components/layout/BannerMessage'
 
-export const [useBaseCtx, BaseCtxProvider, baseCtx] = createStateContext<{ navItems: { path: string; title: string }[] }>({ navItems: [] })
+interface BaseContext {
+  navItems: { path: string; title: string }[]
+  AccountModalContent?: FC<any>
+}
 
-export const Base: FC = ({ children }) => {
+export const [useBaseCtx, BaseCtxProvider, baseCtx] = createStateContext<BaseContext>({ navItems: [] })
+
+export const BaseProviders: FC = ({ children }) => {
   useEffectOnce(() => {
     // Redirect for legacy links (without hash)
     if (window.location.pathname !== '/' && !window.location.pathname.startsWith('/ipfs/')) {
@@ -25,7 +29,7 @@ export const Base: FC = ({ children }) => {
       <HashRouter>
         <Providers>
           <Updaters />
-          <Layout>{children}</Layout>
+          {children}
         </Providers>
       </HashRouter>
     </BaseCtxProvider>

@@ -1,18 +1,20 @@
 import * as ReactDOM from 'react-dom'
 
-import { Base } from '@apps/base'
+import { BaseLayout, BaseProviders } from '@apps/base'
 import { DataProvider } from '@apps/data-provider'
 import { MassetProvider } from '@apps/masset-provider'
 
 import { ProtocolApp } from './app'
 
 ReactDOM.render(
-  <Base>
+  <BaseProviders>
     <DataProvider>
       <MassetProvider>
-        <ProtocolApp />
+        <BaseLayout>
+          <ProtocolApp />
+        </BaseLayout>
       </MassetProvider>
     </DataProvider>
-  </Base>,
+  </BaseProviders>,
   document.getElementById('root'),
 )

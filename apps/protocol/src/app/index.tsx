@@ -12,6 +12,7 @@ import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
 import { usePolygonModal } from './hooks/usePolygonModal'
 
+import { Balances } from './components/Balances'
 import { Save } from './pages/Save'
 import { NotFound } from './pages/NotFound'
 import { Stats } from './pages/Stats'
@@ -85,7 +86,7 @@ export const ProtocolApp: FC = () => {
       { title: 'Stats', path: `/${massetName}/stats` },
     ]
 
-    setBaseCtx({ navItems })
+    setBaseCtx({ navItems, AccountModalContent: Balances })
   }, [hasFeederPools, setBaseCtx, massetName])
 
   // Handle message prioritisation:
