@@ -6,7 +6,7 @@ import { NavigationDropdown } from '@apps/components/core'
 import { useThemeMode } from '../../context/AppProvider'
 
 import { colorTheme, ViewportWidth } from '../../theme'
-import { useBaseCtx } from '../../Base'
+import { useBaseCtx } from '../../BaseProviders'
 
 const Container = styled.nav`
   > :first-child {

@@ -6,7 +6,7 @@ import { ViewportWidth } from '@apps/base/theme'
 import { Modal, Address, Button } from '@apps/components/core'
 
 import { useConnected, useReset, useWallet, useWalletAddress } from '@apps/base/context/account'
-import { Balances } from '../components/wallet/Balances'
+import { useBaseCtx } from '../BaseProviders'
 import { useExploreAssetModal } from './useExploreAssetModal'
 
 const DisconnectButton = styled(Button)`
@@ -77,6 +77,7 @@ export const useAccountModal = (): [() => void, () => void] => {
     const address = useWalletAddress()
     const connected = useConnected()
     const wallet = useWallet()
+    const [{ AccountModalContent }] = useBaseCtx()
     /* eslint-enable react-hooks/rules-of-hooks */
 
     const handleClick = (): void => {
@@ -105,9 +106,7 @@ export const useAccountModal = (): [() => void, () => void] => {
                 </DisconnectButton>
               </AddressGroup>
             </div>
-            <div>
-              <Balances onRowClick={handleRowClick} />
-            </div>
+            <div>{AccountModalContent && <AccountModalContent onRowClick={handleRowClick} />}</div>
           </Container>
         )}
       </Modal>

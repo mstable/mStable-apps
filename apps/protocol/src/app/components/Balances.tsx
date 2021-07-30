@@ -4,9 +4,8 @@ import styled from 'styled-components'
 import { ExplorerLink, CountUp, ThemedSkeleton, Table, TableCell, TableRow } from '@apps/components/core'
 import { TokenIcon as TokenIconBase } from '@apps/components/icons'
 import { MassetState, useDataState } from '@apps/data-provider'
-
-import { ChainIds, useChainIdCtx, useNetworkAddresses } from '../../context/NetworkProvider'
-import { useTokenSubscription } from '../../context/TokensProvider'
+import { ChainIds, useChainIdCtx, useNetworkAddresses } from '@apps/base/context/network'
+import { useTokenSubscription } from '@apps/base/context/tokens'
 
 const AssetCell = styled(TableCell)`
   height: 4rem;
@@ -56,10 +55,6 @@ const StyledTable = styled(Table)`
   }
 `
 
-/**
- * Component to track and display the balances of tokens for the currently
- * selected mAsset, the mAsset itself, and MTA.
- */
 export const Balances: FC<{ onRowClick?: (symbol: string) => void }> = ({ onRowClick }) => {
   const dataState = useDataState()
   const networkAddresses = useNetworkAddresses()
