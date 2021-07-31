@@ -52,13 +52,10 @@ export const TransactionGasProvider: FC<{ id: string }> = ({ children, id }) => 
 
   return (
     <ctx.Provider
-      value={useMemo(() => ({ estimationError, gasLimit, gasPrice, setGasPrice, insufficientBalance }), [
-        estimationError,
-        gasLimit,
-        gasPrice,
-        setGasPrice,
-        insufficientBalance,
-      ])}
+      value={useMemo(
+        () => ({ estimationError, gasLimit, gasPrice, setGasPrice, insufficientBalance }),
+        [estimationError, gasLimit, gasPrice, setGasPrice, insufficientBalance],
+      )}
     >
       {children}
     </ctx.Provider>
