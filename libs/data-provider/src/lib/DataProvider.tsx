@@ -118,11 +118,11 @@ const massetInterface = (() => {
 const useVaultBalances = (massets: MassetsQueryResult['data']): RawData['vaultBalances'] => {
   const provider = useSignerOrProvider()
   const massetAddressesStr = massets?.massets.map(m => m.id).join(',') ?? ''
-  const vaultBalances = useRef<Record<string, string>>()
+  const [vaultBalances, setVaultBalances] = useState<Record<string, string>>()
 
   useEffect(() => {
     // Only fetch once
-    if (!provider || vaultBalances.current) return
+    if (!provider || vaultBalances || massetAddressesStr.length === 0) return
 
     const promises = massetAddressesStr
       .split(',')
@@ -141,7 +141,7 @@ const useVaultBalances = (massets: MassetsQueryResult['data']): RawData['vaultBa
 
     Promise.all(promises)
       .then(result => {
-        vaultBalances.current = Object.fromEntries(result.flat())
+        setVaultBalances(Object.fromEntries(result.flat()))
       })
       .catch(console.error)
   }, [massetAddressesStr, provider])
@@ -150,16 +150,13 @@ const useVaultBalances = (massets: MassetsQueryResult['data']): RawData['vaultBa
     if (massets) {
       return Object.fromEntries(
         massets.massets.flatMap(({ basket: { bassets } }) =>
-          bassets.map(({ token: { address }, vaultBalance: { exact: fallback } }) => [
-            address,
-            vaultBalances.current?.[address] ?? fallback,
-          ]),
+          bassets.map(({ token: { address }, vaultBalance: { exact: fallback } }) => [address, vaultBalances?.[address] ?? fallback]),
         ),
       )
     }
 
     return {}
-  }, [massets])
+  }, [massets, vaultBalances])
 }
 
 export const DataProvider: FC = ({ children }) => {
