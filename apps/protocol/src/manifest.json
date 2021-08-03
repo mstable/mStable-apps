@@ -1,6 +1,6 @@
 {
   "name": "mStable",
-  "iconPath": "icons/mstable-logo.svg",
+  "iconPath": "assets/icons/mstable-logo.svg",
   "description": "mStable unites stablecoins, lending and swapping into one standard.",
   "providedBy": { "name": "mStable", "url": "https://mstable.app" }
 }
