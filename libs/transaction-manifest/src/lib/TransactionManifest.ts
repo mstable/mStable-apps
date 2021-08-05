@@ -12,6 +12,7 @@ import type {
   FeederWrapper,
   IUniswapV2Router02,
   StakingRewardsWithPlatformToken,
+  FraxCrossChainFarm,
 } from '@apps/artifacts/typechain'
 
 export interface Purpose {
@@ -30,7 +31,7 @@ export enum Interfaces {
   FeederWrapper,
   BoostedSavingsVault,
   BoostDirector,
-  FraxStakingRewardsDual,
+  FraxCrossChainFarm,
   StakingRewardsWithPlatformToken,
 }
 
@@ -44,7 +45,7 @@ export interface Instances {
   [Interfaces.FeederWrapper]: FeederWrapper
   [Interfaces.BoostedSavingsVault]: BoostedSavingsVault
   [Interfaces.BoostDirector]: BoostDirector
-  [Interfaces.FraxStakingRewardsDual]: Contract
+  [Interfaces.FraxCrossChainFarm]: FraxCrossChainFarm
   [Interfaces.StakingRewardsWithPlatformToken]: StakingRewardsWithPlatformToken
 }
 

@@ -12,7 +12,7 @@ import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvide
 
 import { PageHeader } from '../PageHeader'
 import { Save as SaveV2 } from './v2'
-import { SaveEthereumOverview } from './v2/SaveEthereumOverview'
+import { SaveOverview } from './v2/SaveOverview'
 import { ToggleSave } from './ToggleSave'
 import { SaveMigration } from './v1/SaveMigration'
 import { OnboardingProvider } from './hooks'
@@ -91,7 +91,7 @@ export const EthereumSave: FC = () => {
         <PageHeader title="Save" massetSwitcher icon={<SaveIcon />} />
         {massetState ? (
           <Container>
-            <SaveEthereumOverview />
+            <SaveOverview />
             <Content>
               {showMigrationView ? <SaveMigration /> : <SaveV2 />}
               <Sidebar>

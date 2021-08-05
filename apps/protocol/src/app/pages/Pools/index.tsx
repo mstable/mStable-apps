@@ -5,7 +5,7 @@ import Skeleton from 'react-loading-skeleton'
 
 import { FeederPoolState, MassetState } from '@apps/data-provider'
 import { useSelectedMassetConfig, MassetConfig, MASSET_CONFIG } from '@apps/masset-provider'
-import { ChainIds, useNetwork } from '@apps/base/context/network'
+import { useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
 import { useSelectedMassetState } from '@apps/hooks'
@@ -129,7 +129,7 @@ const customEarnCard = (massetConfig: MassetConfig): CustomAssetCardProps => ({
   title: 'Earn Pools',
   url: `https://earn.mstable.org/#/${massetConfig.massetName}/earn`,
   color: '#afa4db',
-  component: <CustomContent>Earn pools have moved and are now available here</CustomContent>,
+  component: <CustomContent>Earn pools are available here</CustomContent>,
 })
 
 const customPoolCard = (massetConfig: MassetConfig): CustomAssetCardProps => {
@@ -177,9 +177,7 @@ const PoolsContent: FC = () => {
         {
           user: [],
           active: hasFeederPools
-            ? network.chainId === ChainIds.EthereumMainnet
-              ? [customEarnCard(massetConfig), customPoolCard(massetConfig)]
-              : []
+            ? [customEarnCard(massetConfig), customPoolCard(massetConfig)]
             : [customNoPoolsCard(massetConfig, network.protocolName)],
           deprecated: [],
         },

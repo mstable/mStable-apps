@@ -154,7 +154,7 @@ const components: Record<string, ReactElement> = {
   [Rewards]: <UserRewards />,
 }
 
-export const SaveEthereumOverview: FC = () => {
+export const SaveOverview: FC = () => {
   const [selection, setSelection] = useState<Selection | undefined>()
   const massetState = useSelectedMassetState()
   const massetPrice = useSelectedMassetPrice()

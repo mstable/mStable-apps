@@ -140,6 +140,7 @@ export type { MusdEth } from "./MusdEth";
 export type { AaveStakedTokenV2 } from "./AaveStakedTokenV2";
 export type { Comptroller } from "./Comptroller";
 export type { CurveRegistryExchange } from "./CurveRegistryExchange";
+export type { FraxCrossChainFarm } from "./FraxCrossChainFarm";
 
 export { Ownable__factory } from "./factories/Ownable__factory";
 export { Proxy__factory } from "./factories/Proxy__factory";
@@ -280,3 +281,4 @@ export { MusdEth__factory } from "./factories/MusdEth__factory";
 export { AaveStakedTokenV2__factory } from "./factories/AaveStakedTokenV2__factory";
 export { Comptroller__factory } from "./factories/Comptroller__factory";
 export { CurveRegistryExchange__factory } from "./factories/CurveRegistryExchange__factory";
+export { FraxCrossChainFarm__factory } from "./factories/FraxCrossChainFarm__factory";
