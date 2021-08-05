@@ -143,6 +143,10 @@ const OnboardProvider: FC<{
           },
         },
         walletSelect: {
+          agreement: {
+            version: '0.1.0',
+            termsUrl: 'https://docs.mstable.org/appendix/app-usage-terms-and-conditions',
+          },
           wallets: [
             { walletName: 'coinbase', preferred: true },
             { walletName: 'trust', preferred: true, rpcUrl },
@@ -198,6 +202,7 @@ const OnboardProvider: FC<{
             { walletName: 'wallet.io', rpcUrl },
           ],
         },
+
         walletCheck: [{ checkName: 'derivationPath' }, { checkName: 'connect' }, { checkName: 'accounts' }, { checkName: 'network' }],
       }),
     [chainId, rpcUrl, setInjectedChainId, setInjectedProvider],
