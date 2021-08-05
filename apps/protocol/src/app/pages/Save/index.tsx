@@ -6,5 +6,5 @@ import { PolygonSave } from './PolygonSave'
 
 export const Save: FC = () => {
   const [chainId] = useChainIdCtx()
-  return chainId === ChainIds.EthereumMainnet ? <EthereumSave /> : <PolygonSave />
+  return chainId !== ChainIds.EthereumMainnet ? <EthereumSave /> : <PolygonSave />
 }
