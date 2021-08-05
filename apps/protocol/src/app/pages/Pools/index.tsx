@@ -21,7 +21,7 @@ interface CustomAssetCardProps {
   key: string
   title: string
   url: string
-  color: string
+  color?: string
   component: ReactElement
 }
 
@@ -140,7 +140,6 @@ const customPoolCard = (massetConfig: MassetConfig): CustomAssetCardProps => {
     key: 'mpool',
     title: `${formattedReverse} Pools`,
     url: `/${massetConfig.massetName === 'musd' ? 'mbtc' : 'musd'}/pools`,
-    color: '#eee',
     component: <CustomContent>More pools available for {formattedReverse}</CustomContent>,
   }
 }
@@ -149,7 +148,6 @@ const customNoPoolsCard = (massetConfig: MassetConfig, protocolName: string): Cu
   isCustomAssetCard: true,
   key: 'noPools',
   title: 'No Pools Available',
-  color: '#eee',
   url: '/',
   component: (
     <CustomContent>

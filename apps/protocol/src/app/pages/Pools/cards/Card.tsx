@@ -39,10 +39,8 @@ const Background = styled.div<{ gradientColor?: string }>`
   right: 0;
   bottom: 0;
   left: 0;
-  background: ${({ gradientColor, theme }) =>
-    gradientColor ? `linear-gradient(180deg, ${gradientColor} 0%, ${theme.color.background[0]} 100%);` : `none`};
   border-radius: 1rem;
-  opacity: 0.33;
+  opacity: 0.25;
 `
 
 const ContainerStyle = css`
@@ -82,8 +80,9 @@ const ContainerStyle = css`
 const ContainerButton = styled(UnstyledButton)`
   ${ContainerStyle};
   position: relative;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border: 0;
+  background: ${({ color, theme }) => (color ? `${color}11` : theme.color.background[1])};
+  border: 1px solid ${({ color, theme }) => (color ? `${color}22` : theme.color.background[2])};
 
   &:before {
     content: ' ';
@@ -93,7 +92,7 @@ const ContainerButton = styled(UnstyledButton)`
     right: 0;
     bottom: 0;
     left: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     opacity: 0;
     transition: opacity 250ms;
   }
@@ -103,8 +102,10 @@ const ContainerButton = styled(UnstyledButton)`
   }
 `
 
-const Container = styled.div`
+const Container = styled.div<{ color: string }>`
   ${ContainerStyle};
+  background: ${({ color, theme }) => (color ? `${color}11` : theme.color.background[1])};
+  border: 1px solid ${({ color, theme }) => (color ? `${color}22` : theme.color.background[2])};
 `
 
 const CardContent: FC<Props> = props => {
@@ -128,15 +129,13 @@ const CardContent: FC<Props> = props => {
 
 export const Card: FC<Props> = ({ className, onClick, children, title, iconType, gradientColor }) => {
   return onClick ? (
-    <ContainerButton className={className} onClick={onClick}>
-      {gradientColor && <Background gradientColor={gradientColor} />}
+    <ContainerButton className={className} onClick={onClick} color={gradientColor}>
       <CardContent title={title} iconType={iconType}>
         {children}
       </CardContent>
     </ContainerButton>
   ) : (
-    <Container className={className}>
-      {gradientColor && <Background gradientColor={gradientColor} />}
+    <Container className={className} color={gradientColor}>
       <CardContent title={title} iconType={iconType}>
         {children}
       </CardContent>

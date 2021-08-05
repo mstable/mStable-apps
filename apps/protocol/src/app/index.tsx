@@ -43,22 +43,24 @@ const ProtocolRoutes: FC = () => {
       <Route exact path="/:massetName/stats" component={Stats} />
       <Route exact path="/:massetName/save" component={Save} />
       <Route exact path="/:massetName/pools" component={Pools} />
-      <Route exact path="/:massetName/exchange/:action" component={Exchange} />
+      <Route exact path="/:massetName/swap/:action" component={Exchange} />
       <Route exact path="/:massetName/pools/:poolAddress" component={PoolDetail} />
       <Redirect exact path="/" to="/musd/save" />
       <Redirect exact path="/analytics" to="/musd/stats" />
       <Redirect exact path="/save" to="/musd/save" />
       <Redirect exact path="/earn" to="/musd/earn" />
-      <Redirect exact path="/mint" to="/musd/exchange/mint" />
-      <Redirect exact path="/redeem" to="/musd/exchange/redeem" />
-      <Redirect exact path="/swap" to="/musd/exchange/swap" />
-      <Redirect exact path="/musd" to="/musd/exchange/mint" />
-      <Redirect exact path="/mbtc" to="/mbtc/exchange/mint" />
-      <Redirect exact path="/musd/forge/*" to="/musd/exchange/swap" />
-      <Redirect exact path="/mbtc/forge/*" to="/mbtc/exchange/swap" />
-      <Redirect exact path="/musd/swap" to="/musd/exchange/swap" />
-      <Redirect exact path="/musd/exchange" to="/musd/exchange/mint" />
-      <Redirect exact path="/mbtc/exchange" to="/mbtc/exchange/mint" />
+      <Redirect exact path="/mint" to="/musd/swap/mint" />
+      <Redirect exact path="/redeem" to="/musd/swap/redeem" />
+      <Redirect exact path="/swap" to="/musd/swap/" />
+      <Redirect exact path="/musd" to="/musd/swap/mint" />
+      <Redirect exact path="/mbtc" to="/mbtc/swap/mint" />
+      <Redirect exact path="/musd/forge/*" to="/musd/swap/swap" />
+      <Redirect exact path="/mbtc/forge/*" to="/mbtc/swap/swap" />
+      <Redirect exact path="/musd/exchange/*" to="/musd/swap/swap" />
+      <Redirect exact path="/mbtc/exchange/*" to="/mbtc/swap/swap" />
+      <Redirect exact path="/musd/swap" to="/musd/swap/swap" />
+      <Redirect exact path="/musd/swap" to="/musd/swap/mint" />
+      <Redirect exact path="/mbtc/swap" to="/mbtc/swap/mint" />
       <Redirect exact path="/musd/analytics" to="/musd/stats" />
       <Redirect exact path="/mbtc/analytics" to="/mbtc/stats" />
       <Route component={NotFound} />
@@ -82,7 +84,7 @@ export const ProtocolApp: FC = () => {
     const navItems = [
       { title: 'Save', path: `/${massetName}/save` },
       ...(hasFeederPools ? [{ title: 'Pools', path: `/${massetName}/pools` }] : []),
-      { title: 'Exchange', path: `/${massetName}/exchange/swap` },
+      { title: 'Swap', path: `/${massetName}/swap/swap` },
       { title: 'Stats', path: `/${massetName}/stats` },
     ]
 
