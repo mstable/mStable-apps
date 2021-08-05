@@ -1,9 +1,9 @@
 import type { API, Wallet } from 'bnc-onboard/dist/src/interfaces'
 import type { FC } from 'react'
+import Onboard from 'bnc-onboard'
 import type { Provider, Web3Provider as EthersWeb3Provider } from '@ethersproject/providers'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-use'
-import Onboard from '@gnosis.pm/safe-apps-onboard'
 import { ethers, utils } from 'ethers'
 import { composedComponent } from '@apps/react-utils'
 
@@ -143,10 +143,15 @@ const OnboardProvider: FC<{
           },
         },
         walletSelect: {
+          agreement: {
+            version: '0.1.0',
+            termsUrl: 'https://docs.mstable.org/appendix/app-usage-terms-and-conditions',
+          },
           wallets: [
             { walletName: 'coinbase', preferred: true },
             { walletName: 'trust', preferred: true, rpcUrl },
             { walletName: 'metamask', preferred: true },
+            { walletName: 'gnosis' },
             { walletName: 'dapper' },
             {
               walletName: 'trezor',
@@ -197,6 +202,7 @@ const OnboardProvider: FC<{
             { walletName: 'wallet.io', rpcUrl },
           ],
         },
+
         walletCheck: [{ checkName: 'derivationPath' }, { checkName: 'connect' }, { checkName: 'accounts' }, { checkName: 'network' }],
       }),
     [chainId, rpcUrl, setInjectedChainId, setInjectedProvider],

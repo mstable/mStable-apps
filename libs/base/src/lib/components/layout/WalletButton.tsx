@@ -6,7 +6,6 @@ import { Idle } from '@apps/components/icons'
 
 import { ChainIds, getNetwork, useChainIdCtx } from '../../context/NetworkProvider'
 import { useConnect, useWalletAddress, useConnected, useInjectedChainIdCtx } from '../../context/AccountProvider'
-import { useTCModal } from '../../hooks/useTCModal'
 import { useAccountModal } from '../../hooks/useAccountModal'
 import { ViewportWidth } from '../../theme'
 
@@ -77,16 +76,10 @@ export const WalletButton: FC = () => {
   const [showAccountModal] = useAccountModal()
 
   const connect = useConnect()
-  const showTCModal = useTCModal()
-
-  const viewedTerms = localStorage.getItem('tcsViewed')
 
   const handleClick = (): void => {
     if (connected && account) {
       return showAccountModal()
-    }
-    if (!viewedTerms) {
-      return showTCModal()
     }
     connect()
   }
