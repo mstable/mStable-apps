@@ -7,19 +7,13 @@ import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import {
-  ManyToOneAssetExchange,
-  MultiAssetExchangeProvider,
-  useMultiAssetExchangeDispatch,
-  useMultiAssetExchangeState,
-  SendButton,
-} from '@apps/components/forms'
+import { ManyToOneAssetExchange, useMultiAssetExchangeDispatch, useMultiAssetExchangeState, SendButton } from '@apps/components/forms'
 import { MassetState } from '@apps/data-provider'
 import { useMinimumOutput, useSelectedMassetState } from '@apps/hooks'
 
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
-import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
-import { useExchangeRateForMassetInputs } from '../../../hooks/useMassetExchangeRate'
+import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
+import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
+import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
 
 const formId = 'mint'
 
@@ -35,7 +29,7 @@ const Container = styled(ManyToOneAssetExchange)`
   }
 `
 
-const MintExactLogic: FC = () => {
+export const MintExactLogic: FC = () => {
   const propose = usePropose()
   const walletAddress = useWalletAddress()
   const signer = useSigner()
@@ -169,29 +163,5 @@ const MintExactLogic: FC = () => {
         }}
       />
     </Container>
-  )
-}
-
-export const MintExact: React.FC = () => {
-  const massetState = useSelectedMassetState() as MassetState
-  const inputAssets = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(massetState.bAssets).map(
-          ([
-            address,
-            {
-              token: { decimals },
-            },
-          ]) => [address, { decimals }],
-        ),
-      ),
-    [massetState],
-  )
-
-  return (
-    <MultiAssetExchangeProvider assets={inputAssets}>
-      <MintExactLogic />
-    </MultiAssetExchangeProvider>
   )
 }
