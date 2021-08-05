@@ -16,19 +16,16 @@ import { Swap as SwapPage } from './Swap'
 const tabs = {
   swap: {
     title: 'Swap',
-    subtitle: `Convert `,
     component: <SwapPage />,
     icon: <SwapIcon />,
   },
   mint: {
     title: 'Mint',
-    subtitle: 'Mint',
     component: <MintPage />,
     icon: <MintIcon />,
   },
   redeem: {
     title: 'Redeem',
-    subtitle: `Redeem to the underlying collateral`,
     component: <RedeemPage />,
     icon: <RedeemIcon />,
   },
@@ -81,7 +78,6 @@ const Container = styled.div`
 export const Exchange: FC = () => {
   const history = useHistory()
   const { action } = useParams<{ action: string }>()
-  const activeTab = tabs[action]
   const { undergoingRecol } = useSelectedMassetState() ?? {}
 
   const handleTabClick = (path: string): void => {
@@ -90,7 +86,7 @@ export const Exchange: FC = () => {
 
   return (
     <Container>
-      <PageHeader title={activeTab.title} icon={activeTab.icon} subtitle={activeTab.subtitle} massetSwitcher />
+      <PageHeader title={tabs['swap'].title} icon={tabs['swap'].icon} massetSwitcher />
       <div>
         {undergoingRecol && (
           <>

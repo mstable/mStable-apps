@@ -30,6 +30,13 @@ interface Props {
 }
 
 const RewardsAPY = styled.div<{ isLarge?: boolean }>`
+  display: flex;
+    
+  ${({ isLarge }) =>
+    !isLarge && {
+      alignItems: 'center',
+    }}
+    
   img {
     width: 2rem !important;
     margin-left: 0.5rem;
@@ -38,6 +45,12 @@ const RewardsAPY = styled.div<{ isLarge?: boolean }>`
   > div {
     display: flex;
     align-items: center;
+
+    > div {
+    ${({ isLarge }) =>
+      !isLarge && {
+        display: 'flex',
+      }}
   }
 `
 
@@ -49,14 +62,10 @@ const StatsContainer = styled.div<{ isLarge?: boolean }>`
   display: flex;
   flex-direction: column;
   flex: 1;
-
-  > div:not(:last-child) {
-    margin-bottom: 0.5rem;
-  }
+  gap: 0.5rem;
 
   // hide amount on small card
   > div:first-child {
-    margin-bottom: 1rem;
     > div {
       > span:first-child {
         display: ${({ isLarge }) => (isLarge ? 'inherit' : 'none')};
@@ -145,12 +154,12 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
 
   return (
     <StatsContainer isLarge={isLarge}>
-      <div>
-        <p>Liquidity</p>
-        <CountUpUSD end={liquidity.simple} price={fpTokenPrice} formattingFn={toK} />
-      </div>
       {isLarge && (
         <>
+          <div>
+            <p>Liquidity</p>
+            <CountUpUSD end={liquidity.simple} price={fpTokenPrice} formattingFn={toK} />
+          </div>
           <div>
             <p>Price</p>
             <div>
