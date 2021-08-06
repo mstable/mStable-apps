@@ -154,6 +154,8 @@ export const SwapLogic: FC = () => {
   const isMassetRedeem = bAssets[outputAddress]?.address && inputAddress === massetAddress
   const isBassetSwap = [inputAddress, outputAddress].filter(address => bAssets[address]?.address).length === 2
 
+  const buttonTitle = isMassetMint ? 'Mint' : isMassetRedeem ? 'Redeem' : 'Swap'
+
   return (
     <AssetSwap
       inputAddressOptions={combinedAddressOptions.input}
@@ -174,7 +176,7 @@ export const SwapLogic: FC = () => {
     >
       <SendButton
         valid={valid}
-        title={error ?? 'Swap'}
+        title={error ?? buttonTitle}
         approve={approve}
         warning={!error && !!impactWarning}
         handleSend={() => {
