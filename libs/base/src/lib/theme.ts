@@ -165,9 +165,9 @@ export const mixins = {
     position: relative;
     flex-direction: column;
     border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-    padding: 1rem;
+    padding: 0.75rem;
     border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   `,
 }
 

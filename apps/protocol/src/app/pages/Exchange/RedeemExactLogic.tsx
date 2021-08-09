@@ -7,16 +7,16 @@ import { MassetState } from '@apps/data-provider'
 import { useTokens, useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { SendButton, MultiAssetExchangeProvider, OneToManyAssetExchange, useMultiAssetExchangeState } from '@apps/components/forms'
+import { SendButton, OneToManyAssetExchange, useMultiAssetExchangeState } from '@apps/components/forms'
 import { useMaximumOutput, useSelectedMassetState } from '@apps/hooks'
 
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
-import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
-import { useExchangeRateForMassetInputs } from '../../../hooks/useMassetExchangeRate'
+import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
+import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
+import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
 
 const formId = 'RedeemExactBassets'
 
-const RedeemExactBassetsLogic: FC = () => {
+export const RedeemExactLogic: FC = () => {
   const propose = usePropose()
   const walletAddress = useWalletAddress()
   const signer = useSigner()
@@ -114,29 +114,5 @@ const RedeemExactBassetsLogic: FC = () => {
         }}
       />
     </OneToManyAssetExchange>
-  )
-}
-
-export const RedeemExactBassets: FC = () => {
-  const massetState = useSelectedMassetState() as MassetState
-  const inputAssets = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(massetState.bAssets).map(
-          ([
-            address,
-            {
-              token: { decimals },
-            },
-          ]) => [address, { decimals }],
-        ),
-      ),
-    [massetState],
-  )
-
-  return (
-    <MultiAssetExchangeProvider assets={inputAssets}>
-      <RedeemExactBassetsLogic />
-    </MultiAssetExchangeProvider>
   )
 }

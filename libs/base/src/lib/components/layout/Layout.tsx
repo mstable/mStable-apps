@@ -91,6 +91,9 @@ const GlobalStyle = (createGlobalStyle as <P extends object = {}>(
     color: ${({ theme }) => theme.color.body};
     line-height: 1.3rem;
   }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 
   // Onboard.js
   aside.bn-onboard-custom {
@@ -187,7 +190,7 @@ const GlobalStyle = (createGlobalStyle as <P extends object = {}>(
         margin-bottom: 0.75rem;
       }
     }
-
+    
 
     @media (min-width: ${ViewportWidth.s}) {
       .bn-onboard-modal-content {

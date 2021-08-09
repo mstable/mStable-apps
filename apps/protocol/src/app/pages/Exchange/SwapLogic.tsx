@@ -5,15 +5,24 @@ import { FeederPool__factory, Masset__factory } from '@apps/artifacts/typechain'
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
-import { useBigDecimalInput, useMinimumOutput, BigDecimalInputValue, useSlippage, useSelectedMassetState } from '@apps/hooks'
+import {
+  useBigDecimalInput,
+  useMinimumOutput,
+  BigDecimalInputValue,
+  useSlippage,
+  useSelectedMassetState,
+  ExchangeAction,
+} from '@apps/hooks'
 import { AddressOption } from '@apps/types'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetSwap, SendButton } from '@apps/components/forms'
 import { MassetState } from '@apps/data-provider'
-import { TransactionInfo, ThemedSkeleton } from '@apps/components/core'
+import { TransactionInfo } from '@apps/components/core'
 
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
-import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
+import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
+import { useEstimatedOutput } from '../../hooks/useEstimatedOutput'
+import { SwitchButton } from './SwitchButton'
+import { useExchangeState } from '../Save/hooks'
 
 const formId = 'swap'
 
@@ -21,19 +30,9 @@ const Info = styled(TransactionInfo)`
   margin-top: 0.5rem;
 `
 
-const Container = styled(AssetSwap)`
-  ${({ theme }) => theme.mixins.card};
-
-  > * {
-    margin: 0;
-  }
-  > *:not(:first-child) {
-    margin: 0.25rem 0;
-  }
-`
-
-const SwapLogic: FC = () => {
+export const SwapLogic: FC = () => {
   const massetState = useSelectedMassetState() as MassetState
+  const [_, setExchangeState] = useExchangeState()
   const { address: massetAddress, bAssets, fAssets, feederPools } = massetState
 
   const signer = useSigner()
@@ -151,8 +150,14 @@ const SwapLogic: FC = () => {
     return { input, output }
   }, [massetAddress, bassetOptions, fassetOptions, fAssetAddress, outputAddress, inputAddress])
 
+  const isMassetMint = bAssets[inputAddress]?.address && outputAddress === massetAddress
+  const isMassetRedeem = bAssets[outputAddress]?.address && inputAddress === massetAddress
+  const isBassetSwap = [inputAddress, outputAddress].filter(address => bAssets[address]?.address).length === 2
+
+  const buttonTitle = isMassetMint ? 'Mint' : isMassetRedeem ? 'Redeem' : 'Swap'
+
   return (
-    <Container
+    <AssetSwap
       inputAddressOptions={combinedAddressOptions.input}
       outputAddressOptions={combinedAddressOptions.output}
       exchangeRate={exchangeRate}
@@ -171,17 +176,11 @@ const SwapLogic: FC = () => {
     >
       <SendButton
         valid={valid}
-        title={error ?? 'Swap'}
+        title={error ?? buttonTitle}
         approve={approve}
         warning={!error && !!impactWarning}
         handleSend={() => {
           if (massetContract && walletAddress && inputAmount && minOutputAmount && inputAddress && outputAddress) {
-            const isMassetMint = bAssets[inputAddress]?.address && outputAddress === massetAddress
-
-            const isMassetRedeem = bAssets[outputAddress]?.address && inputAddress === massetAddress
-
-            const isBassetSwap = [inputAddress, outputAddress].filter(address => bAssets[address]?.address).length === 2
-
             // mAsset mint
             if (isMassetMint) {
               return propose<Interfaces.Masset, 'mint'>(
@@ -236,11 +235,10 @@ const SwapLogic: FC = () => {
         price={massetPrice.value}
         priceImpact={priceImpact?.value}
       />
-    </Container>
+      {isMassetMint && <SwitchButton onClick={() => setExchangeState(ExchangeAction.MultiMint)}>Switch to multi-asset mint</SwitchButton>}
+      {isMassetRedeem && (
+        <SwitchButton onClick={() => setExchangeState(ExchangeAction.MultiRedeem)}>Switch to multi-asset redemption</SwitchButton>
+      )}
+    </AssetSwap>
   )
-}
-
-export const Swap: FC = () => {
-  const massetState = useSelectedMassetState()
-  return massetState ? <SwapLogic /> : <ThemedSkeleton height={420} />
 }
