@@ -191,6 +191,7 @@ const ETH_MAINNET: EthereumMainnet = {
     ERC20: {
       WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       WBTC: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+      FXS: '0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0',
     },
   },
   getExplorerUrl: etherscanUrl(),
