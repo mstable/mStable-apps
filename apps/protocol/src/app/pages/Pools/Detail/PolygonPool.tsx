@@ -23,6 +23,7 @@ import { FraxStakingProvider } from '../../../context/FraxStakingProvider'
 import { FraxStake } from './Frax/FraxStake'
 import { FraxRewardsOverview } from './FraxRewardsOverview'
 import { PoolDetailCard } from '../cards/PoolDetailCard'
+import { FraxPoolDetailCard } from './Frax/FraxPoolDetailCard'
 
 const Inner = styled.div`
   max-width: 36rem;
@@ -85,8 +86,7 @@ const PoolDetailContent: FC = () => {
       <Container>
         <PageHeader title="Pools" subtitle={title} icon={<EarnIcon />} massetSwitcher />
         <Inner>
-          <PoolDetailCard poolAddress={address} />
-          <FraxRewardsOverview />
+          <FraxPoolDetailCard poolAddress={address} />
           <Exchange>
             <TabCard tabs={tabs} active={activeTab} onClick={setActiveTab} />
           </Exchange>
