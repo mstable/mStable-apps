@@ -432,8 +432,6 @@ const transformMassetData = (
   const userVaults = Object.fromEntries(_userVaults.map(v => [v.id, v.boostDirection.map(b => b.directorVaultId as number)]))
   const vaultIds = Object.fromEntries(_vaultIds.map(v => [v.directorVaultId ?? 0, v.id]))
 
-  console.log(token.symbol.replace(/(\(pos\) mstable usd)|(mstable usd \(polygon pos\))/i, 'mUSD'))
-
   return {
     address,
     failed,

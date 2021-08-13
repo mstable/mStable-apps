@@ -30,8 +30,6 @@ export const MintExact: FC = () => {
   const assetAddressOptions = useFPAssetAddressOptions(true)
   const vaultAddressOptions = useFPVaultAddressOptions()
 
-  console.log('ALERT', vaultAddressOptions)
-
   const massetPrice = useSelectedMassetPrice()
   const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice.value ?? 0) < 100000
 

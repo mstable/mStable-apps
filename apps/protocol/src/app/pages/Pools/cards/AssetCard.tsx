@@ -307,7 +307,6 @@ const AssetCardContent: FC<Props> = ({ className, poolAddress, deprecated = fals
 
 export const AssetCard: FC<Props> = ({ poolAddress, className, deprecated, type, color }) => {
   const feederPool = useFeederPool(poolAddress)
-  console.log('FEEDER', feederPool)
   return feederPool ? (
     <AssetCardContent poolAddress={poolAddress} className={className} deprecated={deprecated} type={type} color={color} />
   ) : (

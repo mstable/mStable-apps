@@ -42,9 +42,6 @@ export const RedeemLP: FC = () => {
 
   const defaultOutputOptions = hasVaultOption ? fassetAddressOptions : vaultAddressOptions
 
-  console.log('INPUT OPTIONS', defaultInputOptions)
-  console.log('OUTPUT OPTIONS', defaultOutputOptions)
-
   const [inputOptions, setInputOptions] = useState<AddressOption[]>(
     hasVaultOption ? defaultInputOptions : defaultOutputOptions.filter(a => a.address === feederPool.address),
   )

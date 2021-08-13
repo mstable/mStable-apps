@@ -80,8 +80,6 @@ export const AssetExchange: FC<Props> = ({
       ? BigDecimal.maybeParse(inputFormValue)?.mulTruncate(exchangeRate.value.exact).string
       : undefined
 
-  console.log('TEST@@@', inputAddress)
-
   return (
     <Container className={className}>
       <AssetInput
