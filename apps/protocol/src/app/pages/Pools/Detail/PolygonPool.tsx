@@ -85,6 +85,7 @@ const PoolDetailContent: FC = () => {
         <PageHeader title="Pools" subtitle={title} icon={<EarnIcon />} massetSwitcher />
         <Inner>
           <AssetCard type={CardType.largeSimple} poolAddress={address} color={color} />
+          <PoolOverview />
           <Exchange>
             <TabCard tabs={tabs} active={activeTab} onClick={setActiveTab} />
           </Exchange>
@@ -94,7 +95,7 @@ const PoolDetailContent: FC = () => {
   )
 }
 
-export const PolygonPools: FC = () => {
+export const PolygonPool: FC = () => {
   const { poolAddress } = useParams<{
     poolAddress: string
   }>()

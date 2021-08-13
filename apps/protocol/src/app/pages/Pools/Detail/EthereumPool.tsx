@@ -224,7 +224,7 @@ const PoolDetailContent: FC = () => {
   )
 }
 
-export const EthereumPools: FC = () => {
+export const EthereumPool: FC = () => {
   const { poolAddress } = useParams<{
     poolAddress: string
   }>()
