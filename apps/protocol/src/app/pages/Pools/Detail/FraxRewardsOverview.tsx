@@ -38,7 +38,7 @@ export const FraxRewardsOverview: FC = () => {
     )
   }
 
-  const canClaimRewards = subscribedData.value?.accountData?.earned.some(e => e.amount.exact.gt(0))
+  const canClaimRewards = subscribedData.value?.accountData?.earned?.some(e => e.amount.exact.gt(0))
 
   return (
     <Container>
@@ -49,8 +49,8 @@ export const FraxRewardsOverview: FC = () => {
         <div>
           <div>Balance</div>
           <div>
-            {subscribedData.value ? (
-              <CountUp end={subscribedData.value.accountData?.poolBalance.simple} prefix="$" />
+            {subscribedData.value?.accountData ? (
+              <CountUp end={subscribedData.value.accountData.poolBalance.simple} prefix="$" />
             ) : (
               <Skeleton height={20} />
             )}
@@ -75,8 +75,8 @@ export const FraxRewardsOverview: FC = () => {
         <div>
           <div>Rewards</div>
           <div>
-            {subscribedData.value ? (
-              subscribedData.value.accountData.earned.map(({ symbol, amount }) => (
+            {subscribedData.value?.accountData ? (
+              subscribedData.value.accountData?.earned?.map(({ symbol, amount }) => (
                 <div key={symbol}>
                   <StyledTokenIcon symbol={symbol} />
                   <CountUp end={amount.simple} />

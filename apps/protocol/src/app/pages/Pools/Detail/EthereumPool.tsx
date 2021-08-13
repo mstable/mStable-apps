@@ -15,7 +15,6 @@ import { useFeederPool } from '@apps/hooks'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
 import { PageHeader } from '../../PageHeader'
-import { AssetCard, CardType } from '../cards/AssetCard'
 import { assetColorMapping } from '../constants'
 import { FeederPoolProvider, useSelectedFeederPoolState } from '../FeederPoolProvider'
 
@@ -26,6 +25,7 @@ import { Deposit } from './Deposit'
 import { Withdraw } from './Withdraw'
 import { UserLookup } from './UserLookup'
 import { PoolOverview } from './PoolOverview'
+import { PoolDetailCard } from '../cards/PoolDetailCard'
 
 const HeaderChartsContainer = styled.div`
   position: relative;
@@ -71,12 +71,6 @@ const HeaderCharts: FC<{ color: string }> = ({ color }) => {
     </HeaderChartsContainer>
   )
 }
-
-const HeaderCard = styled(AssetCard)`
-  h2 {
-    font-size: 1.75rem;
-  }
-`
 
 const HeaderContainer = styled.div`
   > div:last-child {
@@ -184,7 +178,7 @@ const PoolDetailContent: FC = () => {
       <Container>
         <PageHeader title="Pools" subtitle={title} icon={<EarnIcon />} massetSwitcher />
         <HeaderContainer>
-          <HeaderCard poolAddress={address} type={CardType.large} color={color} />
+          <PoolDetailCard poolAddress={address} />
           <HeaderCharts color={color} />
         </HeaderContainer>
         <AssetDetails />
