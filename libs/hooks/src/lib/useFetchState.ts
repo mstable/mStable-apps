@@ -21,6 +21,7 @@ export const useFetchState = <T>(initialState: FetchState<T> = {}): [FetchState<
         setFetchState({ value })
       },
       error: error => {
+        console.error(error)
         setFetchState({ error })
       },
       fetching: () => {
