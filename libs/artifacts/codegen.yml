@@ -27,14 +27,6 @@ generates:
     config:
       includeDirectives: true
       
-  ./libs/artifacts/src/graphql/feeders-polygon/schema.graphql:
-    overwrite: true
-    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-feeder-pools-polygon
-    plugins:
-      - 'schema-ast'
-    config:
-      includeDirectives: true
-
   ./libs/artifacts/src/graphql/staking-rewards/schema.graphql:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-rewards-polygon
@@ -71,16 +63,6 @@ generates:
       - 'typescript-operations'
       - 'typescript-react-apollo'
       
-  ./libs/artifacts/src/graphql/feeders-polygon.tsx:
-    overwrite: true
-    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-feeder-pools-polygon
-    documents: 'libs/artifacts/src/graphql/feeders-polygon/*.graphql'
-    plugins:
-      - 'fragment-matcher'
-      - 'typescript'
-      - 'typescript-operations'
-      - 'typescript-react-apollo'
-
   ./libs/artifacts/src/graphql/staking-rewards.tsx:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-rewards-polygon

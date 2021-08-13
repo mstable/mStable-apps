@@ -109,7 +109,7 @@ export interface MaticMainnet
       }
       FRAX: { stakingContract: string; stakingToken: string; rewardsTokens: [string, string] }
     },
-    GraphQLEndpoints<'stakingRewards'> & GraphQLEndpoints<'feedersPolygon'>
+    GraphQLEndpoints<'stakingRewards'> & GraphQLEndpoints<'feeders'>
   > {
   chainId: ChainIds.MaticMainnet
   parentChainId: ChainIds.EthereumMainnet
@@ -271,7 +271,7 @@ const MATIC_MAINNET: MaticMainnet = {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-polygon')],
     blocks: [graphHostedEndpoint('elkfinance', 'matic-blocks')],
     stakingRewards: [graphHostedEndpoint('mstable', 'mstable-staking-rewards-polygon')],
-    feedersPolygon: [graphHostedEndpoint('mstable', 'mstable-feeder-pools-polygon')],
+    feeders: [graphHostedEndpoint('mstable', 'mstable-feeder-pools-polygon')],
   },
   addresses: {
     MTA: '0xf501dd45a1198c2e1b5aef5314a68b9006d842e0',

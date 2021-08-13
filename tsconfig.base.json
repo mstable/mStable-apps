@@ -19,7 +19,6 @@
     "paths": {
       "@apps/artifacts/graphql/blocks": ["libs/artifacts/src/graphql/blocks.tsx"],
       "@apps/artifacts/graphql/feeders": ["libs/artifacts/src/graphql/feeders.tsx"],
-      "@apps/artifacts/graphql/feeders-polygon": ["libs/artifacts/src/graphql/feeders-polygon.tsx"],
       "@apps/artifacts/graphql/protocol": ["libs/artifacts/src/graphql/protocol.tsx"],
       "@apps/artifacts/graphql/shared": ["libs/artifacts/src/graphql/shared.tsx"],
       "@apps/artifacts/graphql/staking-rewards": ["libs/artifacts/src/graphql/staking-rewards.tsx"],

@@ -121,6 +121,7 @@ const StatsContainer = styled.div<{ isLarge?: boolean }>`
   }
 `
 
+// FIXME: - This is getting very messy - branch out into separate cards.
 const PoolStats: FC<{ type?: CardType; address: string }> = ({ type = CardType.small, address }) => {
   const { liquidity, price, vault, token } = useFeederPool(address) as FeederPoolState
   const massetPrice = useSelectedMassetPrice()

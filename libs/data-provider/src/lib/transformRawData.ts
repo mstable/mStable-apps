@@ -23,8 +23,6 @@ type NonNullableMasset = NonNullable<RawData['massets']>['massets'][number]
 
 type NonNullableFeederPools = NonNullable<RawData['feederPools']>['feederPools']
 
-type NonNullablePolygonFeederPools = NonNullable<RawData['feedersPolygon']>['feederPools']
-
 type SavingsContractV1QueryResult = NonNullableMasset['savingsContractsV1'][number]
 
 type SavingsContractV2QueryResult = NonNullableMasset['savingsContractsV2'][number]
@@ -330,58 +328,8 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
               .sort(s => (s === transformPolygonMUSD(masset.token.symbol) ? -1 : 1))
               .join('/'),
             undergoingRecol,
-            vault: transformBoostedSavingsVault(vault),
+            vault: vault && transformBoostedSavingsVault(vault),
             account: accounts?.length ? transformFeederPoolAccountData(accounts[0]) : undefined,
-          },
-        ]
-      },
-    ),
-  )
-}
-
-const transformPolygonFeederPoolsData = (feederPools: NonNullablePolygonFeederPools, tokens: Tokens): MassetState['feederPools'] => {
-  return Object.fromEntries(
-    feederPools.map<[string, FeederPoolState]>(
-      ({
-        id: address,
-        basket: { bassets, failed, undergoingRecol },
-        fasset: fassetToken,
-        masset: massetToken,
-        price,
-        token,
-        dailyAPY,
-        governanceFeeRate,
-        invariantK,
-        redemptionFeeRate,
-        swapFeeRate,
-        accounts,
-      }) => {
-        const masset = bassets.find(b => b.token.address === massetToken.id) as NonNullableMasset['basket']['bassets'][0]
-        const fasset = bassets.find(b => b.token.address === fassetToken.id) as NonNullableMasset['basket']['bassets'][0]
-        return [
-          address,
-          {
-            address,
-            masset: { ...transformBasset(masset, {}, tokens), feederPoolAddress: address },
-            fasset: { ...transformBasset(fasset, {}, tokens), feederPoolAddress: address },
-            token: { ...token, ...tokens[address] } as SubscribedToken,
-            totalSupply: BigDecimal.fromMetric(fassetToken.totalSupply),
-            governanceFeeRate: BigNumber.from(governanceFeeRate),
-            liquidity: new BigDecimal(invariantK).mulTruncate(price),
-            feeRate: BigNumber.from(swapFeeRate),
-            redemptionFeeRate: BigNumber.from(redemptionFeeRate),
-            invariantK: BigNumber.from(invariantK),
-            dailyApy: parseFloat(dailyAPY),
-            price: new BigDecimal(price ?? 0),
-            failed,
-            title: bassets
-              .map(b => b.token.symbol.replace(/(\(pos\) mstable usd)|(mstable usd \(polygon pos\))/i, 'mUSD'))
-              .sort(s => (s === transformPolygonMUSD(masset.token.symbol) ? -1 : 1))
-              .join('/'),
-            undergoingRecol,
-            vault: undefined,
-            account: undefined,
-            // account: accounts?.length ? transformFeederPoolAccountData(accounts[0]) : undefined,
           },
         ]
       },
@@ -408,22 +356,15 @@ const transformMassetData = (
     userVaults: _userVaults,
     vaultIds: _vaultIds,
   }: NonNullable<RawData['feederPools']>,
-  feedersPolygon: RawData['feedersPolygon'],
   vaultBalances: RawData['vaultBalances'],
   tokens: Tokens,
 ): MassetState => {
   const bAssets = transformBassets(_bassets, vaultBalances, tokens)
 
-  console.log(feedersPolygon)
-
-  // const feederPools = mockFeederPools
-
-  // const feederPools = transformFeederPoolsData(
-  //   allFeederPools.filter(fp => fp.masset.id === address),
-  //   tokens,
-  // )
-
-  const feederPools = transformPolygonFeederPoolsData(feedersPolygon!.feederPools, tokens)
+  const feederPools = transformFeederPoolsData(
+    allFeederPools.filter(fp => fp.masset.id === address),
+    tokens,
+  )
 
   // Vaults are on the feeder pools subgraph
   const boostedSavingsVaults = saveVaults.filter(v => v.stakingToken.address === savingsContractV2.id)
@@ -463,7 +404,7 @@ const transformMassetData = (
   }
 }
 
-export const transformRawData = ({ massets, feederPools, feedersPolygon, vaultBalances, tokens }: RawData): DataState => {
+export const transformRawData = ({ massets, feederPools, vaultBalances, tokens }: RawData): DataState => {
   if (!massets || !feederPools) return {}
 
   return Object.fromEntries(
@@ -471,7 +412,7 @@ export const transformRawData = ({ massets, feederPools, feedersPolygon, vaultBa
       const massetName = masset.token.symbol
         .toLowerCase()
         .replace(/(\(pos\) mstable usd)|(mstable usd \(polygon pos\))/, 'musd') as MassetName
-      return [massetName, transformMassetData(masset, feederPools, feedersPolygon, vaultBalances, tokens)]
+      return [massetName, transformMassetData(masset, feederPools, vaultBalances, tokens)]
     }),
   )
 }

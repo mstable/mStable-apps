@@ -2,7 +2,6 @@ enum PROJECTS {
   protocol
   stakingRewards
   feeders
-  feedersPolygon
   balancer
   uniswap
   sushi
