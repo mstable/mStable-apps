@@ -31,7 +31,10 @@ interface StaticData {
   lockTimeMin: number
   reward0ForDuration: BigDecimal
   reward1ForDuration: BigDecimal
+  rewardRate0: BigNumber
+  rewardRate1: BigNumber
   totalCombinedWeight: BigDecimal
+  totalStaked: BigDecimal
 }
 
 interface SubscribedData {
@@ -54,76 +57,82 @@ export const useFraxStakingState = (): State => useContext(stateCtx)
 
 export const FraxStakingProvider: FC = ({ children }) => {
   const addresses = useNetworkAddresses()
-  const frax = (addresses as MaticMainnet['addresses'])['FRAX']
+  const fraxAddresses = (addresses as MaticMainnet['addresses'])['FRAX']
 
   const signerOrProvider = useSignerOrProvider()
   const blockNumber = useBlockNow()
 
-  // TODO: - Change
   const account = useAccount()
-  const feederPool = '0xb30a907084ac8a0d25dddab4e364827406fd09f0'
-
-  const contract = useRef<FraxCrossChainFarm>()
-  const feederPoolContract = useRef<ERC20>()
+  const stakingContract = useRef<FraxCrossChainFarm>()
+  const stakingToken = useRef<ERC20>()
+  const feederPool = useRef<ERC20>()
   const [staticData, setStaticData] = useFetchState<StaticData>()
   const [subscribedData, setSubscribedData] = useFetchState<SubscribedData>()
 
   // Set/reset on network/signer change
   useEffect(() => {
-    if (frax) {
-      const { stakingContract } = frax
-      contract.current =
-        stakingContract && signerOrProvider ? FraxCrossChainFarm__factory.connect(stakingContract, signerOrProvider) : undefined
-      feederPoolContract.current = stakingContract && signerOrProvider ? ERC20__factory.connect(feederPool, signerOrProvider) : undefined
+    if (fraxAddresses && signerOrProvider) {
+      stakingContract.current = FraxCrossChainFarm__factory.connect(fraxAddresses.stakingContract, signerOrProvider)
+      feederPool.current = ERC20__factory.connect(fraxAddresses.feederPool, signerOrProvider)
+      stakingToken.current = ERC20__factory.connect(fraxAddresses.stakingToken, signerOrProvider)
     } else {
-      contract.current = undefined
-      feederPoolContract.current = undefined
+      stakingContract.current = undefined
+      feederPool.current = undefined
+      stakingToken.current = undefined
       setStaticData.value()
       setSubscribedData.value()
     }
-  }, [frax, signerOrProvider, setStaticData, setSubscribedData])
+  }, [fraxAddresses, signerOrProvider, setStaticData, setSubscribedData])
 
   // Initial contract calls (once only)
   useEffect(() => {
-    if (!contract.current || staticData.fetching || staticData.value) return
+    if (!stakingContract.current || !stakingToken.current || staticData.fetching || staticData.value) return
 
     setStaticData.fetching()
 
     Promise.all([
-      contract.current.lock_max_multiplier(),
-      contract.current.lock_time_for_max_multiplier(),
-      contract.current.lock_time_min(),
-      contract.current.getRewardForDuration(),
-      contract.current.totalCombinedWeight(),
+      stakingContract.current.lock_max_multiplier(),
+      stakingContract.current.lock_time_for_max_multiplier(),
+      stakingContract.current.lock_time_min(),
+      stakingContract.current.getRewardForDuration(),
+      stakingContract.current.totalCombinedWeight(),
+      stakingContract.current.rewardRate0(),
+      stakingContract.current.rewardRate1(),
+      stakingToken.current.balanceOf(stakingContract.current.address),
     ])
-      .then(([lockMaxMultiplier, lockTimeMax, lockTimeMin, rewardForDuration, totalCombinedWeight]) => {
-        if (!contract.current) return
-        setStaticData.value({
-          address: contract.current.address,
-          stakingToken: frax.stakingToken,
-          lockMaxMultiplier: parseFloat(lockMaxMultiplier.toString()) / 1e18,
-          lockTimeMax: parseInt(lockTimeMax.toString()),
-          lockTimeMin: parseInt(lockTimeMin.toString()),
-          reward0ForDuration: new BigDecimal(rewardForDuration[0]),
-          reward1ForDuration: new BigDecimal(rewardForDuration[1]),
-          totalCombinedWeight: new BigDecimal(totalCombinedWeight),
-        })
-      })
+      .then(
+        ([lockMaxMultiplier, lockTimeMax, lockTimeMin, rewardForDuration, totalCombinedWeight, rewardRate0, rewardRate1, totalStaked]) => {
+          if (!stakingContract.current) return
+          setStaticData.value({
+            address: stakingContract.current.address,
+            stakingToken: fraxAddresses.stakingToken,
+            lockMaxMultiplier: parseFloat(lockMaxMultiplier.toString()) / 1e18,
+            lockTimeMax: parseInt(lockTimeMax.toString()),
+            lockTimeMin: parseInt(lockTimeMin.toString()),
+            reward0ForDuration: new BigDecimal(rewardForDuration[0]),
+            reward1ForDuration: new BigDecimal(rewardForDuration[1]),
+            rewardRate0,
+            rewardRate1,
+            totalCombinedWeight: new BigDecimal(totalCombinedWeight),
+            totalStaked: new BigDecimal(totalStaked),
+          })
+        },
+      )
       .catch(setStaticData.error)
-  }, [setStaticData, staticData.fetching, staticData.value, frax])
+  }, [setStaticData, staticData.fetching, staticData.value, fraxAddresses])
 
   // Contract calls on every block
   useEffect(() => {
-    if (!frax || !contract.current || subscribedData.fetching) return
+    if (!fraxAddresses || !stakingContract.current || subscribedData.fetching) return
 
     Promise.all([
       account
         ? Promise.all([
-            contract.current.earned(account),
-            contract.current.combinedWeightOf(account),
-            contract.current.lockedStakesOf(account),
-            contract.current.lockedLiquidityOf(account),
-            feederPoolContract.current.balanceOf(account),
+            stakingContract.current.earned(account),
+            stakingContract.current.combinedWeightOf(account),
+            stakingContract.current.lockedStakesOf(account),
+            stakingContract.current.lockedLiquidityOf(account),
+            feederPool.current.balanceOf(account),
           ])
         : undefined,
     ])
@@ -132,10 +141,10 @@ export const FraxStakingProvider: FC = ({ children }) => {
         if (earned && combinedWeight && lockedStakes && lockedLiquidity) {
           accountData = {
             earned: earned.map((amount, index) => {
-              const address = index === 0 ? frax.rewardsTokens[0] : frax.rewardsTokens[1]
+              const address = index === 0 ? fraxAddresses.rewardsTokens[0] : fraxAddresses.rewardsTokens[1]
               return {
                 address,
-                symbol: address === frax.rewardsTokens[0] ? 'FXS' : 'MTA',
+                symbol: address === fraxAddresses.rewardsTokens[0] ? 'FXS' : 'MTA',
                 amount: new BigDecimal(amount), // Assumed 18 decimals (so far, we know it will be)
               }
             }),
@@ -154,18 +163,18 @@ export const FraxStakingProvider: FC = ({ children }) => {
         setSubscribedData.value({ accountData, lastUpdate: blockNumber })
       })
       .catch(setSubscribedData.error)
-  }, [blockNumber, account, setSubscribedData, frax, subscribedData.fetching])
+  }, [blockNumber, account, setSubscribedData, fraxAddresses, subscribedData.fetching])
 
   return (
-    <contractCtx.Provider value={contract.current}>
+    <contractCtx.Provider value={stakingContract.current}>
       <stateCtx.Provider
         value={useMemo(
           () => ({
-            addresses: frax,
+            addresses: fraxAddresses,
             static: staticData,
             subscribed: subscribedData,
           }),
-          [frax, staticData, subscribedData],
+          [fraxAddresses, staticData, subscribedData],
         )}
       >
         {children}

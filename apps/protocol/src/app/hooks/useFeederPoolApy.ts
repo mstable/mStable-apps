@@ -4,6 +4,7 @@ import { calculateApy, calculateBoost, getCoeffs, MAX_BOOST } from '@apps/quick-
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { BoostedCombinedAPY } from '@apps/types'
 import { FetchState, useSelectedMassetState } from '@apps/hooks'
+import { useFraxStakingState } from '../context/FraxStakingProvider'
 
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'
 
@@ -16,6 +17,7 @@ export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombine
 
   const pool = massetState?.feederPools[poolAddress]
   const vault = pool?.vault
+
   const rewardsTokenPrice = useFetchPrice(vault?.rewardsToken.address)
   const platformTokenPrice = useFetchPrice(vault?.platformRewardsToken?.address)
 

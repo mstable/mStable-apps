@@ -128,29 +128,30 @@ const Container = styled.div`
 `
 
 export const FraxStake: FC = () => {
-  const { subscribed: userData, static: staticData, addresses } = useFraxStakingState() ?? {}
+  const { subscribed: userData, static: staticData, addresses } = useFraxStakingState()
   const feederPool = useSelectedFeederPoolState()
   const contract = useFraxStakingContract()
   const useFetchPrice = useFetchPriceCtx()
   const propose = usePropose()
+  console.log(userData.value, staticData.value)
 
   const yieldAPY = feederPool?.dailyApy
 
-  const sliderStart = staticData?.value?.lockTimeMin
-  const sliderEnd = staticData?.value?.lockTimeMax
-  const maxMultiplier = staticData?.value?.lockMaxMultiplier ?? 1
-  const lockTimeMax = staticData?.value?.lockTimeMax
+  const sliderStart = staticData.value?.lockTimeMin
+  const sliderEnd = staticData.value?.lockTimeMax
+  const maxMultiplier = staticData.value?.lockMaxMultiplier ?? 1
+  const lockTimeMax = staticData.value?.lockTimeMax
 
-  const poolBalance = userData?.value?.accountData?.poolBalance?.simple ?? 0
-  const lockedStakes = userData?.value?.accountData?.lockedStakes
-  const earned = userData?.value?.accountData?.earned
+  const poolBalance = userData.value?.accountData.poolBalance?.simple ?? 0
+  const lockedStakes = userData.value?.accountData.lockedStakes
+  const earned = userData.value?.accountData.earned
   const [seconds, setValue] = useState(sliderStart ?? DAY)
   const [inputValue, inputFormValue, handleSetAmount] = useBigDecimalInput(poolBalance.toString())
 
-  const showDeposit = !!userData?.value?.accountData?.poolBalance?.simple
+  const showDeposit = !!userData.value?.accountData.poolBalance?.simple
   const showWithdraw = lockedStakes?.length
 
-  const allowance = useTokenAllowance(staticData?.value?.stakingToken, contract?.address)
+  const allowance = useTokenAllowance(staticData.value?.stakingToken, contract?.address)
   const needsApprove = !inputValue || !allowance || (inputValue && allowance?.exact.lt(inputValue.exact))
 
   const timeDifference = useMemo(() => {

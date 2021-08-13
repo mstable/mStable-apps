@@ -107,7 +107,7 @@ export interface MaticMainnet
       ERC20: {
         wMATIC: string
       }
-      FRAX: { stakingContract: string; stakingToken: string; rewardsTokens: [string, string] }
+      FRAX: { stakingContract: string; stakingToken: string; rewardsTokens: [string, string]; feederPool: string }
     },
     GraphQLEndpoints<'stakingRewards' | 'feeders'>
   > {
@@ -287,6 +287,7 @@ const MATIC_MAINNET: MaticMainnet = {
       stakingContract: '0xc425Fd9Ed3C892d849C9E1a971516da1C1B29696',
       rewardsTokens: ['0x3e121107f6f22da4911079845a470757af4e1a1b', '0xf501dd45a1198c2e1b5aef5314a68b9006d842e0'],
       stakingToken: '0xb30a907084ac8a0d25dddab4e364827406fd09f0',
+      feederPool: '0xb30a907084ac8a0d25dddab4e364827406fd09f0',
     },
   },
   getExplorerUrl: etherscanUrl(undefined, 'polygonscan.com'),
