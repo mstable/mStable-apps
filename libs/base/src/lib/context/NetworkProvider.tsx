@@ -109,7 +109,7 @@ export interface MaticMainnet
       }
       FRAX: { stakingContract: string; stakingToken: string; rewardsTokens: [string, string] }
     },
-    GraphQLEndpoints<'stakingRewards'> & GraphQLEndpoints<'feeders'>
+    GraphQLEndpoints<'stakingRewards' | 'feeders'>
   > {
   chainId: ChainIds.MaticMainnet
   parentChainId: ChainIds.EthereumMainnet
