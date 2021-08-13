@@ -1,7 +1,7 @@
+import { MaticMainnet, useNetwork } from '@apps/base/context/network'
 import React, { FC, useMemo, useState } from 'react'
 import { intervalToDuration, formatDuration } from 'date-fns'
 import styled from 'styled-components'
-import { useFraxStakingContract, useFraxStakingState } from '../../../../context/FraxStakingProvider'
 import { AssetInput } from '@apps/components/forms'
 import { Button, CountdownBar, CountUp, Slider, Table, TableCell, TableRow } from '@apps/components/core'
 import { usePropose } from '@apps/base/context/transactions'
@@ -10,11 +10,11 @@ import { Interfaces } from '@apps/types'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import { BigDecimal } from '@apps/bigdecimal'
 import { StakingRewards } from 'apps/protocol/src/app/components/rewards/StakingRewards'
+import { useTokenAllowance } from '@apps/base/context/tokens'
+
+import { useFraxStakingContract, useFraxStakingState } from '../../../../context/FraxStakingProvider'
 import { useSelectedFeederPoolState } from '../../FeederPoolProvider'
-import { useTokenAllowance, useTokenSubscription } from '@apps/base/context/tokens'
 import { MultiRewards } from '../MultiRewards'
-import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { calculateApy } from '@apps/quick-maths'
 
 const TABLE_CELL_WIDTHS = [35, 15, 30]
 const DAY = 86400
@@ -128,12 +128,11 @@ const Container = styled.div`
 `
 
 export const FraxStake: FC = () => {
-  const { subscribed: userData, static: staticData, addresses } = useFraxStakingState()
+  const network = useNetwork() as MaticMainnet
+  const { subscribedData: userData, staticData: staticData } = useFraxStakingState()
   const feederPool = useSelectedFeederPoolState()
   const contract = useFraxStakingContract()
-  const useFetchPrice = useFetchPriceCtx()
   const propose = usePropose()
-  console.log(userData.value, staticData.value)
 
   const yieldAPY = feederPool?.dailyApy
 
@@ -151,7 +150,7 @@ export const FraxStake: FC = () => {
   const showDeposit = !!userData.value?.accountData.poolBalance?.simple
   const showWithdraw = lockedStakes?.length
 
-  const allowance = useTokenAllowance(staticData.value?.stakingToken, contract?.address)
+  const allowance = useTokenAllowance(network.addresses.FRAX.stakingToken, contract?.address)
   const needsApprove = !inputValue || !allowance || (inputValue && allowance?.exact.lt(inputValue.exact))
 
   const timeDifference = useMemo(() => {
@@ -267,8 +266,8 @@ export const FraxStake: FC = () => {
                 handleSetAmount={handleSetAmount}
                 handleSetMax={handleSetMax}
                 formValue={inputFormValue}
-                address={addresses.stakingToken}
-                spender={addresses.stakingContract}
+                address={network.addresses.FRAX.stakingToken}
+                spender={network.addresses.FRAX.stakingContract}
                 hideToken
               />
             </TableCell>

@@ -1,5 +1,4 @@
 import React, { FC, createContext, useEffect, useRef, useMemo, useContext } from 'react'
-import { BigNumber } from 'ethers'
 
 import { ERC20, ERC20__factory, FraxCrossChainFarm, FraxCrossChainFarm__factory } from '@apps/artifacts/typechain'
 import { FetchState, useFetchState } from '@apps/hooks'
@@ -24,17 +23,9 @@ export interface StakeData {
 }
 
 interface StaticData {
-  address: string
-  stakingToken: string
   lockMaxMultiplier: number
   lockTimeMax: number
   lockTimeMin: number
-  reward0ForDuration: BigDecimal
-  reward1ForDuration: BigDecimal
-  rewardRate0: BigNumber
-  rewardRate1: BigNumber
-  totalCombinedWeight: BigDecimal
-  totalStaked: BigDecimal
 }
 
 interface SubscribedData {
@@ -44,13 +35,13 @@ interface SubscribedData {
 }
 
 interface State {
-  addresses: MaticMainnet['addresses']['FRAX']
-  static: FetchState<StaticData>
-  subscribed: FetchState<SubscribedData>
+  addresses?: MaticMainnet['addresses']['FRAX']
+  staticData: FetchState<StaticData>
+  subscribedData: FetchState<SubscribedData>
 }
 
 const contractCtx = createContext<FraxCrossChainFarm | undefined>(null as never)
-const stateCtx = createContext<State>(null as never)
+const stateCtx = createContext<State>({ staticData: {}, subscribedData: {} })
 
 export const useFraxStakingContract = (): FraxCrossChainFarm | undefined => useContext(contractCtx)
 export const useFraxStakingState = (): State => useContext(stateCtx)
@@ -64,7 +55,7 @@ export const FraxStakingProvider: FC = ({ children }) => {
 
   const account = useAccount()
   const stakingContract = useRef<FraxCrossChainFarm>()
-  const stakingToken = useRef<ERC20>()
+  // const stakingToken = useRef<ERC20>()
   const feederPool = useRef<ERC20>()
   const [staticData, setStaticData] = useFetchState<StaticData>()
   const [subscribedData, setSubscribedData] = useFetchState<SubscribedData>()
@@ -74,11 +65,11 @@ export const FraxStakingProvider: FC = ({ children }) => {
     if (fraxAddresses && signerOrProvider) {
       stakingContract.current = FraxCrossChainFarm__factory.connect(fraxAddresses.stakingContract, signerOrProvider)
       feederPool.current = ERC20__factory.connect(fraxAddresses.feederPool, signerOrProvider)
-      stakingToken.current = ERC20__factory.connect(fraxAddresses.stakingToken, signerOrProvider)
+      // stakingToken.current = ERC20__factory.connect(fraxAddresses.stakingToken, signerOrProvider)
     } else {
       stakingContract.current = undefined
       feederPool.current = undefined
-      stakingToken.current = undefined
+      // stakingToken.current = undefined
       setStaticData.value()
       setSubscribedData.value()
     }
@@ -86,7 +77,7 @@ export const FraxStakingProvider: FC = ({ children }) => {
 
   // Initial contract calls (once only)
   useEffect(() => {
-    if (!stakingContract.current || !stakingToken.current || staticData.fetching || staticData.value) return
+    if (!stakingContract.current || staticData.fetching || staticData.value) return
 
     setStaticData.fetching()
 
@@ -94,30 +85,15 @@ export const FraxStakingProvider: FC = ({ children }) => {
       stakingContract.current.lock_max_multiplier(),
       stakingContract.current.lock_time_for_max_multiplier(),
       stakingContract.current.lock_time_min(),
-      stakingContract.current.getRewardForDuration(),
-      stakingContract.current.totalCombinedWeight(),
-      stakingContract.current.rewardRate0(),
-      stakingContract.current.rewardRate1(),
-      stakingToken.current.balanceOf(stakingContract.current.address),
     ])
-      .then(
-        ([lockMaxMultiplier, lockTimeMax, lockTimeMin, rewardForDuration, totalCombinedWeight, rewardRate0, rewardRate1, totalStaked]) => {
-          if (!stakingContract.current) return
-          setStaticData.value({
-            address: stakingContract.current.address,
-            stakingToken: fraxAddresses.stakingToken,
-            lockMaxMultiplier: parseFloat(lockMaxMultiplier.toString()) / 1e18,
-            lockTimeMax: parseInt(lockTimeMax.toString()),
-            lockTimeMin: parseInt(lockTimeMin.toString()),
-            reward0ForDuration: new BigDecimal(rewardForDuration[0]),
-            reward1ForDuration: new BigDecimal(rewardForDuration[1]),
-            rewardRate0,
-            rewardRate1,
-            totalCombinedWeight: new BigDecimal(totalCombinedWeight),
-            totalStaked: new BigDecimal(totalStaked),
-          })
-        },
-      )
+      .then(([lockMaxMultiplier, lockTimeMax, lockTimeMin]) => {
+        if (!stakingContract.current) return
+        setStaticData.value({
+          lockMaxMultiplier: parseFloat(lockMaxMultiplier.toString()) / 1e18,
+          lockTimeMax: parseInt(lockTimeMax.toString()),
+          lockTimeMin: parseInt(lockTimeMin.toString()),
+        })
+      })
       .catch(setStaticData.error)
   }, [setStaticData, staticData.fetching, staticData.value, fraxAddresses])
 
@@ -171,8 +147,8 @@ export const FraxStakingProvider: FC = ({ children }) => {
         value={useMemo(
           () => ({
             addresses: fraxAddresses,
-            static: staticData,
-            subscribed: subscribedData,
+            staticData: staticData,
+            subscribedData: subscribedData,
           }),
           [fraxAddresses, staticData, subscribedData],
         )}
