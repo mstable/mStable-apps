@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
 import type { FeederPoolState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/base/theme'
 import { TabCard } from '@apps/components/core'
 import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
 import { useFeederPool } from '@apps/hooks'
@@ -13,16 +12,12 @@ import { useFeederPool } from '@apps/hooks'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
 import { PageHeader } from '../../PageHeader'
-import { AssetCard, CardType } from '../cards/AssetCard'
-import { assetColorMapping } from '../constants'
 import { FeederPoolProvider, useSelectedFeederPoolState } from '../FeederPoolProvider'
 
 import { Deposit } from './Deposit'
 import { Withdraw } from './Withdraw'
 import { FraxStakingProvider } from '../../../context/FraxStakingProvider'
 import { FraxStake } from './Frax/FraxStake'
-import { FraxRewardsOverview } from './FraxRewardsOverview'
-import { PoolDetailCard } from '../cards/PoolDetailCard'
 import { FraxPoolDetailCard } from './Frax/FraxPoolDetailCard'
 
 const Inner = styled.div`
@@ -58,7 +53,6 @@ const PoolDetailContent: FC = () => {
   const { address, title, liquidity, vault } = useSelectedFeederPoolState() as FeederPoolState
   const massetPrice = useSelectedMassetPrice()
 
-  const color = assetColorMapping[title]
   const isLowLiquidity = massetPrice ? liquidity.simple * (massetPrice.value ?? 0) < 100000 : false
 
   const tabs = useMemo(

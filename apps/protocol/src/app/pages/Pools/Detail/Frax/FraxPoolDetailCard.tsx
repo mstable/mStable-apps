@@ -4,7 +4,7 @@ import Skeleton from 'react-loading-skeleton'
 
 import { FeederPoolState } from '@apps/data-provider'
 import { ViewportWidth } from '@apps/base/theme'
-import { Button, CountUp, ExternalLink } from '@apps/components/core'
+import { Button, CountUp, ExternalLink, Tooltip } from '@apps/components/core'
 import { TokenIcon, TokenPair } from '@apps/components/icons'
 import { useFeederPool } from '@apps/hooks'
 import { assetColorMapping } from '../../constants'
@@ -146,7 +146,9 @@ export const FraxPoolDetailCard: FC<Props> = ({ poolAddress, className }) => {
             </div>
           </div>
           <div>
-            <p>Rewards APY</p>
+            <Tooltip tip="Boost your rewards on Frax to get the maximum APY">
+              <p>Rewards APY</p>
+            </Tooltip>
             <div>
               {rewards.value ? (
                 <>
@@ -158,8 +160,12 @@ export const FraxPoolDetailCard: FC<Props> = ({ poolAddress, className }) => {
             </div>
           </div>
           <div>
-            <p>Base APY</p>
-            <div>{feederPool ? <CountUp end={feederPool.dailyApy} suffix="%" /> : <Skeleton height={20} />}</div>
+            <Tooltip tip="The base APY is derived from swap fees">
+              <p>Base APY</p>
+            </Tooltip>
+            <div>
+              <CountUp end={feederPool.dailyApy} suffix="%" />
+            </div>
           </div>
           <div>
             <p>Rewards</p>
