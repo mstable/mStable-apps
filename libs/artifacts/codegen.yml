@@ -21,12 +21,12 @@ generates:
 
   ./libs/artifacts/src/graphql/feeders/schema.graphql:
     overwrite: true
-    schema: https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.5
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-feeder-pools-polygon
     plugins:
       - 'schema-ast'
     config:
       includeDirectives: true
-      
+
   ./libs/artifacts/src/graphql/staking-rewards/schema.graphql:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-rewards-polygon
@@ -55,14 +55,14 @@ generates:
 
   ./libs/artifacts/src/graphql/feeders.tsx:
     overwrite: true
-    schema: https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.5
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-feeder-pools-polygon
     documents: 'libs/artifacts/src/graphql/feeders/*.graphql'
     plugins:
       - 'fragment-matcher'
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
-      
+
   ./libs/artifacts/src/graphql/staking-rewards.tsx:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-rewards-polygon
