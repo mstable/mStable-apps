@@ -192,27 +192,29 @@ const PoolStats: FC<{ type?: CardType; address: string }> = ({ type = CardType.s
           </div>
         </>
       )}
-      {isDefault && vault && (
+      {isDefault && (
         <>
-          <RewardsAPY isLarge={isLarge}>
-            <p>
-              <Tooltip tip="33% of earned MTA rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks">
-                Rewards APY
-              </Tooltip>
-            </p>
-            <div>
+          {!!vault && (
+            <RewardsAPY isLarge={isLarge}>
+              <p>
+                <Tooltip tip="33% of earned MTA rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks">
+                  Rewards APY
+                </Tooltip>
+              </p>
               <div>
-                <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
                 <div>
-                  &nbsp;→&nbsp;
-                  <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
-                    {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
-                  </UnderlinedTip>
+                  <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
+                  <div>
+                    &nbsp;→&nbsp;
+                    <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
+                      {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
+                    </UnderlinedTip>
+                  </div>
                 </div>
+                <TokenIcon symbol={vault?.rewardsToken.symbol} />
               </div>
-              <TokenIcon symbol={vault.rewardsToken.symbol} />
-            </div>
-          </RewardsAPY>
+            </RewardsAPY>
+          )}
           {feederPoolApy.value?.platformRewards && (
             <>
               <div />
@@ -222,7 +224,7 @@ const PoolStats: FC<{ type?: CardType; address: string }> = ({ type = CardType.s
                 </p>
                 <div>
                   <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards} suffix="%" />} </div>
-                  <TokenIcon symbol={vault.platformRewardsToken?.symbol} />
+                  <TokenIcon symbol={vault?.platformRewardsToken?.symbol} />
                 </div>
               </RewardsAPY>
             </>

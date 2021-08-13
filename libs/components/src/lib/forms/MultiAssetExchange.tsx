@@ -110,7 +110,6 @@ export const ManyToOneAssetExchange: FC<
     <Container className={className}>
       {Object.keys(inputValues).map(
         address =>
-          spender &&
           inputValues && (
             <AssetInput
               key={address}

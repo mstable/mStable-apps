@@ -212,9 +212,11 @@ const PoolsContent: FC = () => {
         type =>
           showPoolSection(type) && (
             <Section key={type}>
-              <Row>
-                <h2>{Title[type]}</h2>
-              </Row>
+              {(type !== PoolType.Active || (type === PoolType.Active && !!pools[type].length)) && (
+                <Row>
+                  <h2>{Title[type]}</h2>
+                </Row>
+              )}
               <Cards>
                 <OnboardingCard type={type} />
                 {pools[type]
