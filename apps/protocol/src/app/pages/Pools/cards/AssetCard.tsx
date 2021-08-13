@@ -37,12 +37,12 @@ interface Props {
 
 const RewardsAPY = styled.div<{ isLarge?: boolean }>`
   display: flex;
-    
+
   ${({ isLarge }) =>
     !isLarge && {
       alignItems: 'center',
     }}
-    
+
   img {
     width: 2rem !important;
     margin-left: 0.5rem;
