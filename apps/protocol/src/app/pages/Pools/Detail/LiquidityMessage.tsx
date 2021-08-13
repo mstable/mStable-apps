@@ -76,7 +76,7 @@ const LiquidityMessageContent: FC<{
     >
       <Container>
         <div>
-          <h3>Need {vault.stakingToken.symbol} tokens to stake?</h3>
+          <h3>Need {vault?.stakingToken.symbol} tokens to stake?</h3>
           <p>Provide liquidity by depositing below, and stake to earn rewards and trade fees</p>
         </div>
         <div>

@@ -2,7 +2,8 @@ import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useSt
 import { Interface } from '@ethersproject/abi'
 import { pipe } from 'ts-pipe-compose'
 
-import { FeederPoolsQueryResult, useFeederPoolsLazyQuery } from '@apps/artifacts/graphql/feeders'
+import { FeederPoolsQuery, FeederPoolsQueryResult, useFeederPoolsLazyQuery } from '@apps/artifacts/graphql/feeders'
+import { FeederPoolsPolygonQueryResult, useFeederPoolsPolygonLazyQuery } from '@apps/artifacts/graphql/feeders-polygon'
 import { MassetsQueryResult, useMassetsLazyQuery } from '@apps/artifacts/graphql/protocol'
 import type { IMasset } from '@apps/artifacts/typechain'
 import { useBlockPollingSubscription } from '@apps/hooks'
@@ -18,6 +19,7 @@ import type { DataState } from './types'
 export interface RawData {
   massets: MassetsQueryResult['data']
   feederPools: FeederPoolsQueryResult['data']
+  feedersPolygon: FeederPoolsPolygonQueryResult['data']
   tokens: Tokens
   vaultBalances: { [address: string]: string }
 }
@@ -32,7 +34,7 @@ const EMPTY_FEEDER_POOLS: RawData['feederPools'] = Object.freeze({
 
 const dataStateCtx = createContext<DataState>({})
 
-const useRawData = (): Pick<RawData, 'massets' | 'feederPools'> => {
+const useRawData = (): Pick<RawData, 'massets' | 'feederPools' | 'feedersPolygon'> => {
   const network = useNetwork()
   const account = useAccount()
   const baseOptions = useMemo(
@@ -50,7 +52,19 @@ const useRawData = (): Pick<RawData, 'massets' | 'feederPools'> => {
     !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders'),
   )
 
-  return { massets: massetsSub.data, feederPools: feedersSub.data ?? EMPTY_FEEDER_POOLS }
+  const feedersPolygonSub = useBlockPollingSubscription(
+    useFeederPoolsPolygonLazyQuery,
+    {
+      variables: { account: account ?? '', hasAccount: !!account },
+    },
+    !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feedersPolygon'),
+  )
+
+  return {
+    massets: massetsSub.data,
+    feederPools: feedersSub.data ?? EMPTY_FEEDER_POOLS,
+    feedersPolygon: feedersPolygonSub.data ?? EMPTY_FEEDER_POOLS,
+  }
 }
 
 export const useDataState = (): DataState => useContext(dataStateCtx)
@@ -160,7 +174,7 @@ const useVaultBalances = (massets: MassetsQueryResult['data']): RawData['vaultBa
 }
 
 export const DataProvider: FC = ({ children }) => {
-  const { massets, feederPools } = useRawData()
+  const { massets, feederPools, feedersPolygon } = useRawData()
   const { tokens } = useTokensState()
   const vaultBalances = useVaultBalances(massets)
 
@@ -169,7 +183,7 @@ export const DataProvider: FC = ({ children }) => {
   const nextDataState = useMemo<DataState | undefined>(() => {
     if (massets && feederPools) {
       const result = pipe<RawData, DataState, DataState>(
-        { massets, feederPools, tokens, vaultBalances },
+        { massets, feederPools, feedersPolygon, tokens, vaultBalances },
         transformRawData,
         recalculateState,
       )

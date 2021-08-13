@@ -7,11 +7,11 @@ import { BigDecimal } from '@apps/bigdecimal'
 
 import { MaticMainnet, useNetworkAddresses } from '@apps/base/context/network'
 import { useBlockNow } from '@apps/base/context/block'
-import { useSignerOrProvider } from '@apps/base/context/account'
+import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
 
 export interface StakeData {
-  earned: { address: string; amount: BigDecimal }[]
-  combinedWeight: BigNumber
+  earned: { address: string; amount: BigDecimal; symbol: string }[]
+  combinedWeight: BigDecimal
   lockedLiquidity: BigDecimal
   lockedStakes: {
     kekId: string
@@ -25,9 +25,13 @@ export interface StakeData {
 
 interface StaticData {
   address: string
+  stakingToken: string
   lockMaxMultiplier: number
   lockTimeMax: number
   lockTimeMin: number
+  reward0ForDuration: BigDecimal
+  reward1ForDuration: BigDecimal
+  totalCombinedWeight: BigDecimal
 }
 
 interface SubscribedData {
@@ -56,7 +60,7 @@ export const FraxStakingProvider: FC = ({ children }) => {
   const blockNumber = useBlockNow()
 
   // TODO: - Change
-  const account = '0x36a87d1e3200225f881488e4aeedf25303febcae' // useAccount()
+  const account = useAccount()
   const feederPool = '0xb30a907084ac8a0d25dddab4e364827406fd09f0'
 
   const contract = useRef<FraxCrossChainFarm>()
@@ -85,14 +89,24 @@ export const FraxStakingProvider: FC = ({ children }) => {
 
     setStaticData.fetching()
 
-    Promise.all([contract.current.lock_max_multiplier(), contract.current.lock_time_for_max_multiplier(), contract.current.lock_time_min()])
-      .then(([lockMaxMultiplier, lockTimeMax, lockTimeMin]) => {
+    Promise.all([
+      contract.current.lock_max_multiplier(),
+      contract.current.lock_time_for_max_multiplier(),
+      contract.current.lock_time_min(),
+      contract.current.getRewardForDuration(),
+      contract.current.totalCombinedWeight(),
+    ])
+      .then(([lockMaxMultiplier, lockTimeMax, lockTimeMin, rewardForDuration, totalCombinedWeight]) => {
         if (!contract.current) return
         setStaticData.value({
           address: contract.current.address,
+          stakingToken: frax.stakingToken,
           lockMaxMultiplier: parseFloat(lockMaxMultiplier.toString()) / 1e18,
           lockTimeMax: parseInt(lockTimeMax.toString()),
           lockTimeMin: parseInt(lockTimeMin.toString()),
+          reward0ForDuration: new BigDecimal(rewardForDuration[0]),
+          reward1ForDuration: new BigDecimal(rewardForDuration[1]),
+          totalCombinedWeight: new BigDecimal(totalCombinedWeight),
         })
       })
       .catch(setStaticData.error)
@@ -121,10 +135,11 @@ export const FraxStakingProvider: FC = ({ children }) => {
               const address = index === 0 ? frax.rewardsTokens[0] : frax.rewardsTokens[1]
               return {
                 address,
+                symbol: address === frax.rewardsTokens[0] ? 'FXS' : 'MTA',
                 amount: new BigDecimal(amount), // Assumed 18 decimals (so far, we know it will be)
               }
             }),
-            combinedWeight: BigNumber.from(combinedWeight),
+            combinedWeight: new BigDecimal(combinedWeight),
             lockedLiquidity: new BigDecimal(lockedLiquidity),
             lockedStakes: lockedStakes.map(({ kek_id, start_timestamp, ending_timestamp, liquidity, lock_multiplier }) => ({
               kekId: kek_id,

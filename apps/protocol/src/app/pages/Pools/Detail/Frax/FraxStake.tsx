@@ -5,18 +5,24 @@ import { useFraxStakingContract, useFraxStakingState } from '../../../../context
 import { AssetInput } from '@apps/components/forms'
 import { Button, CountdownBar, CountUp, Slider, Table, TableCell, TableRow } from '@apps/components/core'
 import { usePropose } from '@apps/base/context/transactions'
-import { useBigDecimalInput } from '@apps/hooks'
+import { StakingRewardsExtended, useBigDecimalInput } from '@apps/hooks'
 import { Interfaces } from '@apps/types'
 import { TransactionManifest } from '@apps/transaction-manifest'
-import { FraxRewards } from './FraxRewards'
-import { StakingTokenWrapper } from '@apps/artifacts/typechain'
+import { BigDecimal } from '@apps/bigdecimal'
+import { StakingRewards } from 'apps/protocol/src/app/components/rewards/StakingRewards'
+import { useSelectedFeederPoolState } from '../../FeederPoolProvider'
+import { useTokenAllowance, useTokenSubscription } from '@apps/base/context/tokens'
+import { MultiRewards } from '../MultiRewards'
+import { useFetchPriceCtx } from '@apps/base/context/prices'
+import { calculateApy } from '@apps/quick-maths'
 
-const TABLE_CELL_WIDTHS = [40, 30, 30]
+const TABLE_CELL_WIDTHS = [35, 15, 30]
 const DAY = 86400
 
 // TODO: - replace with subscribedtoken when available
-const MOCK_BALANCE: { balance?: number } = {
+const MOCK_BALANCE: { balance?: number; allowance?: BigDecimal } = {
   balance: 200,
+  allowance: BigDecimal.ZERO,
 }
 
 const Input = styled(AssetInput)`
@@ -24,6 +30,7 @@ const Input = styled(AssetInput)`
   border-radius: 0.5rem;
   padding: 0;
   border: none;
+  max-width: 16rem;
 
   button {
     padding: 0.25rem 0.5rem;
@@ -56,31 +63,39 @@ const StyledRow = styled(TableRow)`
 const LockupRow = styled(TableRow)`
   display: flex;
   width: 100%;
-  padding: 2rem 1rem;
+  padding: 1rem 0.25rem;
   justify-content: flex-start;
   flex-direction: column;
   background: ${({ theme }) => theme.color.background[0]};
 
-  > div {
+  p {
+    line-height: 2em;
+  }
+
+  > td {
     display: flex;
+    flex: 1;
     align-items: center;
     justify-content: space-between;
+
+    > * {
+      width: 100%;
+    }
   }
 
-  > div span {
-    ${({ theme }) => theme.mixins.numeric};
-    color: ${({ theme }) => theme.color.blue};
+  > td > div > div:not(:last-child) {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+
+    span {
+      ${({ theme }) => theme.mixins.numeric};
+      color: ${({ theme }) => theme.color.blue};
+    }
   }
 
-  > div > span {
-    border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-    padding: 0.25rem 0.75rem;
-    margin-left: 1rem;
-    border-radius: 0.5rem;
-  }
-
-  > div:first-child {
-    margin-bottom: 1rem;
+  > td > div > div:last-child {
+    margin-top: 1rem;
   }
 `
 
@@ -97,6 +112,7 @@ const StyledTable = styled(Table)`
   border-radius: 1rem;
 
   td h3 {
+    margin: 0;
     color: ${({ theme }) => theme.color.bodyAccent};
 
     span {
@@ -111,24 +127,31 @@ const Container = styled.div`
   }
 `
 
-export const FraxTimelock: FC = () => {
+export const FraxStake: FC = () => {
   const { subscribed: userData, static: staticData, addresses } = useFraxStakingState() ?? {}
+  const feederPool = useSelectedFeederPoolState()
   const contract = useFraxStakingContract()
+  const useFetchPrice = useFetchPriceCtx()
   const propose = usePropose()
+
+  const yieldAPY = feederPool?.dailyApy
 
   const sliderStart = staticData?.value?.lockTimeMin
   const sliderEnd = staticData?.value?.lockTimeMax
   const maxMultiplier = staticData?.value?.lockMaxMultiplier ?? 1
   const lockTimeMax = staticData?.value?.lockTimeMax
-  const poolBalance = userData?.value?.accountData?.poolBalance?.simple ?? 0
 
+  const poolBalance = userData?.value?.accountData?.poolBalance?.simple ?? 0
+  const lockedStakes = userData?.value?.accountData?.lockedStakes
+  const earned = userData?.value?.accountData?.earned
   const [seconds, setValue] = useState(sliderStart ?? DAY)
   const [inputValue, inputFormValue, handleSetAmount] = useBigDecimalInput(poolBalance.toString())
 
-  const lockedStakes = userData?.value?.accountData?.lockedStakes
-
-  const showDeposit = !!MOCK_BALANCE?.balance
+  const showDeposit = !!userData?.value?.accountData?.poolBalance?.simple
   const showWithdraw = lockedStakes?.length
+
+  const allowance = useTokenAllowance(staticData?.value?.stakingToken, contract?.address)
+  const needsApprove = !inputValue || !allowance || (inputValue && allowance?.exact.lt(inputValue.exact))
 
   const timeDifference = useMemo(() => {
     const start = Date.now()
@@ -174,24 +197,71 @@ export const FraxTimelock: FC = () => {
     }
   }
 
-  // TODO: - Subscribe to LP token balance
-  const handleSetMax = (): void => {
-    handleSetAmount(poolBalance.toString())
+  const handleClaim = (): void => {
+    if (!contract) return
+    propose<Interfaces.FraxCrossChainFarm, 'getReward'>(
+      new TransactionManifest(contract, 'getReward', [], {
+        present: 'Claiming rewards',
+        past: 'Claimed rewards',
+      }),
+    )
   }
 
-  if (!showDeposit && !showWithdraw) return null
+  const handleSetMax = (): void => handleSetAmount(poolBalance.toString())
 
   const depositHeaderTitles = ['Wallet', ''].map((t, i) =>
-    i === 1 ? { title: t, tooltip: 'Lock up your tokens for a period of time to earn a boosted reward multiplier' } : { title: t },
+    i === 1 ? { title: t, tooltip: 'Lock your tokens for a period of time to earn a boosted reward multiplier' } : { title: t },
   )
-  const withdrawHeaderTitles = ['Vault', 'Rewards Multiplier', 'Time Remaining'].map(t => ({ title: t }))
+  const withdrawHeaderTitles = ['Vault', 'Multiplier', 'Time Remaining'].map(t => ({ title: t }))
+
+  const stakingRewards: StakingRewardsExtended = {
+    stakingRewardsContract: undefined,
+    rewards: [
+      {
+        id: 'yield',
+        name: 'Yield',
+        apy: yieldAPY,
+        apyTip:
+          'This APY is derived from the native interest rate + current available staking rewards, and is not reflective of future rates.',
+        tokens: ['yield'],
+        priority: true,
+      },
+      {
+        id: 'MTA',
+        name: 'FRAX',
+        apy: 0,
+        apyTip: 'This APY is derived from currently available staking rewards, and is not reflective of future rates.',
+        tokens: ['FXS'],
+        priority: false,
+      },
+      {
+        id: 'FRAX',
+        name: 'FRAX',
+        apy: 0,
+        apyTip: 'This APY is derived from currently available staking rewards, and is not reflective of future rates.',
+        tokens: ['MTA'],
+        priority: false,
+      },
+    ].map(v => ({ ...v, stakeLabel: undefined, balance: undefined, amounts: undefined })),
+    earned: undefined,
+    stakedBalance: undefined,
+    unstakedBalance: undefined,
+    hasStakedBalance: false,
+    hasUnstakedBalance: false,
+  }
+
+  const rewardsEarned = {
+    canClaim: earned?.reduce((a, b) => a.add(b.amount), BigDecimal.ZERO).exact.gt(0) ?? false,
+    rewards: earned?.map(({ symbol, amount }) => ({ token: symbol, earned: amount })) ?? [],
+  }
 
   return (
     <Container>
-      {showDeposit && (
+      <StakingRewards stakingRewards={stakingRewards} />
+      {!!showDeposit && (
         <StyledTable headerTitles={depositHeaderTitles}>
           <StyledRow buttonTitle="Stake">
-            <TableCell width={TABLE_CELL_WIDTHS[0]}>
+            <TableCell width={60}>
               <Input
                 handleSetAmount={handleSetAmount}
                 handleSetMax={handleSetMax}
@@ -201,27 +271,35 @@ export const FraxTimelock: FC = () => {
                 hideToken
               />
             </TableCell>
-            <TableCell width={TABLE_CELL_WIDTHS[2]}>
-              <Button highlighted onClick={handleDeposit}>
+            <TableCell width={40}>
+              <Button disabled={needsApprove} highlighted={!needsApprove} onClick={handleDeposit}>
                 Stake
               </Button>
             </TableCell>
           </StyledRow>
           {!!sliderStart && !!sliderEnd && (
             <LockupRow>
-              <div>
-                <p>
-                  You will lock <span>{inputFormValue}</span> mUSD/FRAX for <span>{timeDifference}</span> and receive a boost of:
-                </p>
-                <span>{boostMultiplier.toFixed(3)}x</span>
-              </div>
-              <Slider min={sliderStart} max={sliderEnd} step={DAY} value={seconds} onChange={setValue} />
+              <TableCell>
+                <div>
+                  <h4>Amount:</h4>
+                  <span>{inputFormValue} mUSD/FRAX</span>
+                </div>
+                <div>
+                  <h4>Lock time: </h4>
+                  <span>{timeDifference}</span>
+                </div>
+                <div>
+                  <h4>Boost:</h4>
+                  <span>{boostMultiplier.toFixed(3)}x</span>
+                </div>
+                <Slider min={sliderStart} max={sliderEnd} step={DAY} value={seconds} onChange={setValue} />
+              </TableCell>
             </LockupRow>
           )}
         </StyledTable>
       )}
-      {showWithdraw && (
-        <StyledTable headerTitles={withdrawHeaderTitles} widths={TABLE_CELL_WIDTHS} width={48}>
+      {!!showWithdraw && (
+        <StyledTable headerTitles={withdrawHeaderTitles} widths={TABLE_CELL_WIDTHS} width={31}>
           {lockedStakes?.map(({ liquidity, lockMultiplier, endTime, startTime, kekId }) => {
             const dateRange = endTime - startTime
             const unlocked = endTime < Date.now()
@@ -246,7 +324,7 @@ export const FraxTimelock: FC = () => {
           })}
         </StyledTable>
       )}
-      <FraxRewards />
+      <MultiRewards rewardsEarned={rewardsEarned} onClaimRewards={handleClaim} />
     </Container>
   )
 }

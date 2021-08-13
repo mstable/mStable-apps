@@ -1,0 +1,56 @@
+# import './fragments.graphql'
+
+query FeederPoolsPolygon($account: String!, $hasAccount: Boolean!) @api(name: feedersPolygon) {
+  feederPools {
+    id
+    swapFeeRate
+    redemptionFeeRate
+    governanceFeeRate
+    dailyAPY
+    price
+    invariantK
+    basket {
+      bassets {
+        ...BassetAll
+      }
+      undergoingRecol
+      failed
+    }
+    token {
+      ...TokenAll
+    }
+    fasset {
+      ...TokenAll
+    }
+    masset {
+      id
+    }
+    accounts(where: { account: $account }) @include(if: $hasAccount) {
+      balance
+      price
+      lastUpdate
+      balanceVault
+      priceVault
+      lastUpdateVault
+      cumulativeEarned {
+        exact
+        decimals
+      }
+      cumulativeEarnedVault {
+        exact
+        decimals
+      }
+    }
+  }
+}
+
+query FeederTokensPolygon @api(name: feedersPolygon) {
+  feederPools {
+    token {
+      ...TokenAll
+    }
+    fasset {
+      ...TokenAll
+    }
+  }
+}

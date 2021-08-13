@@ -50,5 +50,9 @@ export const SubscribedTokenInput: FC<Props> = ({ value, options: _options = [],
 
   const prefixRemovedOptions = options.map(option => ({ ...option, symbol: option.symbol?.replace(/POS-/gi, '') }))
 
+  if (value === '0x104592a158490a9228070e0a8e5343b499e125d0') {
+    console.log('TOKENS', subscribedToken)
+  }
+
   return <StyledDropdown onChange={onChange} addressOptions={prefixRemovedOptions} defaultAddress={value} disabled={disabled} />
 }

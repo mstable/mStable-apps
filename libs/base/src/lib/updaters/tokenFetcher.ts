@@ -5,6 +5,7 @@ import { useFeederTokensQuery, FeederTokensQuery, FeederTokensQueryVariables } f
 
 import { useNetwork } from '../context/NetworkProvider'
 import { useTokensDispatch } from '../context/TokensProvider'
+import { useFeederTokensPolygonQuery } from '@apps/artifacts/graphql/feeders-polygon'
 
 const options = {
   fetchPolicy: 'network-only',
@@ -18,9 +19,13 @@ export const TokenFetcher = (): null => {
   const { setFetched } = useTokensDispatch()
 
   const protocolQuery = useAllTokensProtocolQuery(options as QueryHookOptions<AllTokensQuery, AllTokensQueryVariables>)
-  const feedersQuery = useFeederTokensQuery({
+  // const feedersQuery = useFeederTokensQuery({
+  //   ...options,
+  //   skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders'),
+  // } as QueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>)
+  const feedersQuery = useFeederTokensPolygonQuery({
     ...options,
-    skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders'),
+    skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feedersPolygon'),
   } as QueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>)
 
   const protocolFetched = protocolQuery.data?.tokens ?? []

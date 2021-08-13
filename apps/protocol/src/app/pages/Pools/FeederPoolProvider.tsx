@@ -68,24 +68,25 @@ export const useFPAssetAddressOptions = (includeFpToken?: boolean): AddressOptio
 export const useFPVaultAddressOptions = (): AddressOption[] => {
   const { token, vault } = useSelectedFeederPoolState()
   return useMemo(
-    () => [
-      {
-        custom: true,
-        label: `Vault`,
-        address: vault.address,
-        symbol: `vault`,
-        balance: vault.account?.rawBalance,
-        tip: `${token.symbol} Pool Vault`,
-      },
-      {
-        address: token.address,
-        label: `Pool`,
-        custom: true,
-        symbol: token.symbol,
-        balance: token?.balance,
-        tip: `${token.symbol} Pool`,
-      },
-    ],
+    () =>
+      [
+        {
+          custom: true,
+          label: `Vault`,
+          address: vault?.address,
+          symbol: `vault`,
+          balance: vault?.account?.rawBalance,
+          tip: `${token.symbol} Pool Vault`,
+        },
+        {
+          address: token.address,
+          label: `Pool`,
+          custom: true,
+          symbol: token.symbol,
+          balance: token?.balance,
+          tip: `${token.symbol} Pool`,
+        },
+      ].filter(v => !!v.address),
     [vault, token],
   )
 }
@@ -101,7 +102,7 @@ export const useSelectedFeederPoolAssets = (): UseBigDecimalInputsArg => {
 export const FeederPoolProvider: FC<{ poolAddress: string }> = ({ poolAddress, children }) => {
   // Should be mounted below a check for this state
   const feederPool = useFeederPool(poolAddress) as FeederPoolState
-  const vaultAddress = feederPool.vault.address
+  const vaultAddress = feederPool.vault?.address
 
   // Subscribe at provider level so we can rely on the data being there
   // in child components
@@ -121,7 +122,7 @@ export const FeederPoolProvider: FC<{ poolAddress: string }> = ({ poolAddress, c
           ? {
               feederPool: FeederPool__factory.connect(poolAddress, signer),
               feederWrapper: FeederWrapper__factory.connect(networkAddresses.FeederWrapper, signer),
-              vault: BoostedSavingsVault__factory.connect(vaultAddress, signer),
+              vault: vaultAddress && BoostedSavingsVault__factory.connect(vaultAddress, signer),
             }
           : undefined,
     }),

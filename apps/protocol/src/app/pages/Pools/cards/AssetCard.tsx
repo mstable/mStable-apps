@@ -21,11 +21,17 @@ import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { assetColorMapping } from '../constants'
 import { Card } from './Card'
 
+export enum CardType {
+  small,
+  large,
+  largeSimple,
+}
+
 interface Props {
   className?: string
   poolAddress: string
   deprecated?: boolean
-  isLarge?: boolean
+  type?: CardType
   color?: string
 }
 
@@ -115,8 +121,8 @@ const StatsContainer = styled.div<{ isLarge?: boolean }>`
   }
 `
 
-const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false, address }) => {
-  const { liquidity, price, vault } = useFeederPool(address) as FeederPoolState
+const PoolStats: FC<{ type?: CardType; address: string }> = ({ type = CardType.small, address }) => {
+  const { liquidity, price, vault, token } = useFeederPool(address) as FeederPoolState
   const massetPrice = useSelectedMassetPrice()
 
   const { block24h } = useBlockNumbers()
@@ -128,6 +134,9 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
 
   const fpTokenPrice = massetPrice ? price.simple * (massetPrice.value ?? 0) : undefined
   const feederPoolApy = useFeederPoolApy(address)
+
+  const userBalance = token.balance?.simple ?? 0
+  const userBalancePrice = userBalance * fpTokenPrice
 
   const metrics = useMemo(() => {
     let volume = BigDecimal.ZERO
@@ -152,14 +161,25 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
     return { volume, baseApy }
   }, [fpMetrics])
 
+  const isLarge = [CardType.large, CardType.largeSimple].includes(type)
+  const isDefault = [CardType.large, CardType.small].includes(type)
+
   return (
     <StatsContainer isLarge={isLarge}>
+      {type === CardType.largeSimple && (
+        <div>
+          <p>Balance</p>
+          <CountUpUSD end={userBalance} price={userBalancePrice} formattingFn={toK} suffix={` ${token.symbol?.replace('fP', '')}`} />
+        </div>
+      )}
       {isLarge && (
+        <div>
+          <p>Liquidity</p>
+          <CountUpUSD end={liquidity.simple} price={fpTokenPrice} formattingFn={toK} />
+        </div>
+      )}
+      {type === CardType.large && (
         <>
-          <div>
-            <p>Liquidity</p>
-            <CountUpUSD end={liquidity.simple} price={fpTokenPrice} formattingFn={toK} />
-          </div>
           <div>
             <p>Price</p>
             <div>
@@ -172,55 +192,59 @@ const PoolStats: FC<{ isLarge?: boolean; address: string }> = ({ isLarge = false
           </div>
         </>
       )}
-      <RewardsAPY isLarge={isLarge}>
-        <p>
-          <Tooltip tip="33% of earned MTA rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks">
-            Rewards APY
-          </Tooltip>
-        </p>
-        <div>
-          <div>
-            <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
-            <div>
-              &nbsp;→&nbsp;
-              <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
-                {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
-              </UnderlinedTip>
-            </div>
-          </div>
-          <TokenIcon symbol={vault.rewardsToken.symbol} />
-        </div>
-      </RewardsAPY>
-      {feederPoolApy.value?.platformRewards && (
+      {isDefault && vault && (
         <>
-          <div />
           <RewardsAPY isLarge={isLarge}>
             <p>
-              <Tooltip tip="Platform rewards are not boosted and 100% is claimable immediately.">Platform APY</Tooltip>
-            </p>
-            <div>
-              <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards} suffix="%" />} </div>
-              <TokenIcon symbol={vault.platformRewardsToken?.symbol} />
-            </div>
-          </RewardsAPY>
-        </>
-      )}
-      {!!metrics.baseApy && metrics.baseApy > 0 && (
-        <>
-          <div />
-          <RewardsAPY isLarge={isLarge}>
-            <p>
-              <Tooltip tip="Base APY represents the increase in the value of the pool token over time.">Base APY</Tooltip>
+              <Tooltip tip="33% of earned MTA rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks">
+                Rewards APY
+              </Tooltip>
             </p>
             <div>
               <div>
-                <CountUp end={metrics.baseApy} suffix="%" />
+                <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
+                <div>
+                  &nbsp;→&nbsp;
+                  <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
+                    {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
+                  </UnderlinedTip>
+                </div>
               </div>
+              <TokenIcon symbol={vault.rewardsToken.symbol} />
             </div>
           </RewardsAPY>
+          {feederPoolApy.value?.platformRewards && (
+            <>
+              <div />
+              <RewardsAPY isLarge={isLarge}>
+                <p>
+                  <Tooltip tip="Platform rewards are not boosted and 100% is claimable immediately.">Platform APY</Tooltip>
+                </p>
+                <div>
+                  <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards} suffix="%" />} </div>
+                  <TokenIcon symbol={vault.platformRewardsToken?.symbol} />
+                </div>
+              </RewardsAPY>
+            </>
+          )}
+          {!!metrics.baseApy && metrics.baseApy > 0 && (
+            <>
+              <div />
+              <RewardsAPY isLarge={isLarge}>
+                <p>
+                  <Tooltip tip="Base APY represents the increase in the value of the pool token over time.">Base APY</Tooltip>
+                </p>
+                <div>
+                  <div>
+                    <CountUp end={metrics.baseApy} suffix="%" />
+                  </div>
+                </div>
+              </RewardsAPY>
+            </>
+          )}
+          {feederPoolApy.value && feederPoolApy.value.rewards.base > 1000 && <div>While liquidity is low, this APY is highly volatile</div>}
         </>
       )}
-      {feederPoolApy.value && feederPoolApy.value.rewards.base > 1000 && <div>While liquidity is low, this APY is highly volatile</div>}
     </StatsContainer>
   )
 }
@@ -247,7 +271,7 @@ const Container = styled(Card)`
   }
 `
 
-const AssetCardContent: FC<Props> = ({ className, poolAddress, deprecated = false, isLarge = false, color }) => {
+const AssetCardContent: FC<Props> = ({ className, poolAddress, deprecated = false, type = CardType.small, color }) => {
   const feederPool = useFeederPool(poolAddress) as FeederPoolState
 
   useTokenSubscription(feederPool.address)
@@ -257,6 +281,7 @@ const AssetCardContent: FC<Props> = ({ className, poolAddress, deprecated = fals
   const history = useHistory()
 
   const gradientColor = color ?? assetColorMapping[feederPool.title]
+  const isLarge = [CardType.large, CardType.largeSimple].includes(type)
 
   const handleClick = (): void => {
     history.push(`/${massetName}/pools/${poolAddress}`)
@@ -275,15 +300,16 @@ const AssetCardContent: FC<Props> = ({ className, poolAddress, deprecated = fals
       iconType={(!isLarge && 'chevron') || undefined}
       onClick={(!isLarge && handleClick) || undefined}
     >
-      {!deprecated && <PoolStats address={poolAddress} isLarge={isLarge} />}
+      {!deprecated && <PoolStats address={poolAddress} type={type} />}
     </Container>
   )
 }
 
-export const AssetCard: FC<Props> = ({ poolAddress, className, deprecated, isLarge, color }) => {
+export const AssetCard: FC<Props> = ({ poolAddress, className, deprecated, type, color }) => {
   const feederPool = useFeederPool(poolAddress)
+  console.log('FEEDER', feederPool)
   return feederPool ? (
-    <AssetCardContent poolAddress={poolAddress} className={className} deprecated={deprecated} isLarge={isLarge} color={color} />
+    <AssetCardContent poolAddress={poolAddress} className={className} deprecated={deprecated} type={type} color={color} />
   ) : (
     <Skeleton height={200} />
   )

@@ -5,7 +5,7 @@ import Skeleton from 'react-loading-skeleton'
 
 import { FeederPoolState, MassetState } from '@apps/data-provider'
 import { useSelectedMassetConfig, MassetConfig, MASSET_CONFIG } from '@apps/masset-provider'
-import { useNetwork } from '@apps/base/context/network'
+import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
 import { useSelectedMassetState } from '@apps/hooks'
@@ -160,6 +160,7 @@ const PoolsContent: FC = () => {
   const { feederPools, hasFeederPools } = useSelectedMassetState() as MassetState
   const network = useNetwork()
   const massetConfig = useSelectedMassetConfig()
+  const isEthereum = network.chainId === ChainIds.EthereumMainnet
   const pools = useMemo(
     () =>
       Object.values(feederPools).reduce<{
@@ -168,7 +169,7 @@ const PoolsContent: FC = () => {
         deprecated: FeederPoolState[]
       }>(
         (prev, current) => {
-          if (current.token.balance?.exact.gt(0) || current.vault.account?.rawBalance.exact.gt(0)) {
+          if (current.token.balance?.exact.gt(0) || current.vault?.account?.rawBalance.exact.gt(0)) {
             return { ...prev, user: [...prev.user, current] }
           }
           // TODO determine deprecated somehow
@@ -177,7 +178,9 @@ const PoolsContent: FC = () => {
         {
           user: [],
           active: hasFeederPools
-            ? [customEarnCard(massetConfig), customPoolCard(massetConfig)]
+            ? isEthereum
+              ? [customEarnCard(massetConfig), customPoolCard(massetConfig)]
+              : []
             : [customNoPoolsCard(massetConfig, network.protocolName)],
           deprecated: [],
         },

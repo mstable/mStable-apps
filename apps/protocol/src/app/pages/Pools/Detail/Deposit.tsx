@@ -43,6 +43,8 @@ export const Deposit: FC<{ isLowLiquidity?: boolean }> = ({ isLowLiquidity = fal
   const feederPool = useSelectedFeederPoolState()
   const assets = useSelectedFeederPoolAssets()
 
+  console.log('ASSETS', assets)
+
   return (
     <MultiAssetExchangeProvider assets={assets}>
       {isMintExact ? <MintExact /> : <MintLP />}

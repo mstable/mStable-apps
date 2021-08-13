@@ -39,7 +39,7 @@ export const useApprove = (): [Approve, HandleApprove] => [useContext(approveCtx
 
 export const ApproveProvider: FC<{
   address: string
-  spender: string
+  spender?: string
   amount?: BigDecimal
 }> = ({ address, spender, amount, children }) => {
   const signer = useSigner()

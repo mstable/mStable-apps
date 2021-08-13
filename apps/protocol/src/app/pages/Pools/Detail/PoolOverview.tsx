@@ -50,7 +50,7 @@ export const PoolOverview: FC = () => {
 
   const fpTokenPrice = price.simple * (massetPrice.value ?? 1)
   const userAmount = token.balance?.simple ?? 0
-  const userStakedAmount = vault.account?.rawBalance.simple ?? 0
+  const userStakedAmount = vault?.account?.rawBalance.simple ?? 0
   const totalUserBalance = (userStakedAmount + userAmount) * fpTokenPrice
   const totalLocked = rewardStreams?.amounts.locked ?? 0
   const totalEarned =
@@ -60,7 +60,7 @@ export const PoolOverview: FC = () => {
 
   const handleSelection = useCallback((newValue?: Selection) => setSelection(selection === newValue ? undefined : newValue), [selection])
 
-  return showLiquidityMessage ? (
+  return !showLiquidityMessage ? (
     <LiquidityMessage />
   ) : (
     <TransitionCard components={components} selection={selection}>
@@ -80,8 +80,8 @@ export const PoolOverview: FC = () => {
         <Button active={selection === Rewards} onClick={() => handleSelection(Rewards)}>
           <h3>Rewards</h3>
           <div>
-            <CountUp end={totalEarned} suffix={` ${vault.rewardsToken.symbol}`} />
-            <Tooltip tip={`${vault.rewardsToken.symbol} rewards unlock over time`} />
+            <CountUp end={totalEarned} suffix={` ${vault?.rewardsToken.symbol}`} />
+            <Tooltip tip={`${vault?.rewardsToken.symbol} rewards unlock over time`} />
           </div>
         </Button>
         {apy.value?.platformRewards && (
@@ -89,7 +89,7 @@ export const PoolOverview: FC = () => {
             <h3>Platform APY</h3>
             <div>
               <CountUp end={apy.value.platformRewards} suffix="%" />
-              <Tooltip tip={`${vault.platformRewardsToken?.symbol} rewards are claimed immediately`} />
+              <Tooltip tip={`${vault?.platformRewardsToken?.symbol} rewards are claimed immediately`} />
             </div>
           </Button>
         )}

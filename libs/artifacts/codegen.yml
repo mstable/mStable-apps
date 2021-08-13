@@ -26,6 +26,14 @@ generates:
       - 'schema-ast'
     config:
       includeDirectives: true
+      
+  ./libs/artifacts/src/graphql/feeders-polygon/schema.graphql:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-feeder-pools-polygon
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
 
   ./libs/artifacts/src/graphql/staking-rewards/schema.graphql:
     overwrite: true
@@ -57,6 +65,16 @@ generates:
     overwrite: true
     schema: https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.5
     documents: 'libs/artifacts/src/graphql/feeders/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+      
+  ./libs/artifacts/src/graphql/feeders-polygon.tsx:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-feeder-pools-polygon
+    documents: 'libs/artifacts/src/graphql/feeders-polygon/*.graphql'
     plugins:
       - 'fragment-matcher'
       - 'typescript'

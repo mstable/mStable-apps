@@ -15,7 +15,7 @@ import { useFeederPool } from '@apps/hooks'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
 import { PageHeader } from '../../PageHeader'
-import { AssetCard } from '../cards/AssetCard'
+import { AssetCard, CardType } from '../cards/AssetCard'
 import { assetColorMapping } from '../constants'
 import { FeederPoolProvider, useSelectedFeederPoolState } from '../FeederPoolProvider'
 
@@ -184,7 +184,7 @@ const PoolDetailContent: FC = () => {
       <Container>
         <PageHeader title="Pools" subtitle={title} icon={<EarnIcon />} massetSwitcher />
         <HeaderContainer>
-          <HeaderCard poolAddress={address} isLarge color={color} />
+          <HeaderCard poolAddress={address} type={CardType.large} color={color} />
           <HeaderCharts color={color} />
         </HeaderContainer>
         <AssetDetails />

@@ -30,10 +30,12 @@ export const MintExact: FC = () => {
   const assetAddressOptions = useFPAssetAddressOptions(true)
   const vaultAddressOptions = useFPVaultAddressOptions()
 
+  console.log('ALERT', vaultAddressOptions)
+
   const massetPrice = useSelectedMassetPrice()
   const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice.value ?? 0) < 100000
 
-  const [outputAddress, setOutputAddress] = useState<string | undefined>(vaultAddressOptions[0].address)
+  const [outputAddress, setOutputAddress] = useState<string | undefined>(vaultAddressOptions[0]?.address)
 
   const [inputValues, slippage] = useMultiAssetExchangeState()
   const [inputCallbacks] = useMultiAssetExchangeDispatch()
@@ -91,7 +93,7 @@ export const MintExact: FC = () => {
     [assetAddressOptions, touched],
   )
 
-  const isMintingAndStakingLP = outputAddress === feederPool.vault.address
+  const isMintingAndStakingLP = outputAddress === feederPool.vault?.address
 
   const contractAddress = isMintingAndStakingLP ? contracts?.feederWrapper.address : contracts?.feederPool.address
 
