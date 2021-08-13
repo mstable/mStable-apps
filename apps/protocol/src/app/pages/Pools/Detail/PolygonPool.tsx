@@ -21,7 +21,7 @@ import { Deposit } from './Deposit'
 import { Withdraw } from './Withdraw'
 import { FraxStakingProvider } from '../../../context/FraxStakingProvider'
 import { FraxStake } from './Frax/FraxStake'
-import { PoolOverview } from './PoolOverview'
+import { FraxRewardsOverview } from './FraxRewardsOverview'
 
 const Inner = styled.div`
   max-width: 36rem;
@@ -85,7 +85,7 @@ const PoolDetailContent: FC = () => {
         <PageHeader title="Pools" subtitle={title} icon={<EarnIcon />} massetSwitcher />
         <Inner>
           <AssetCard type={CardType.largeSimple} poolAddress={address} color={color} />
-          <PoolOverview />
+          <FraxRewardsOverview />
           <Exchange>
             <TabCard tabs={tabs} active={activeTab} onClick={setActiveTab} />
           </Exchange>

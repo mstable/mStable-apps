@@ -1,4 +1,6 @@
+import { BoostedAPY } from '@apps/types'
 import React, { FC, createContext, useEffect, useRef, useMemo, useContext } from 'react'
+import { useEffectOnce } from 'react-use'
 
 import { ERC20, ERC20__factory, FraxCrossChainFarm, FraxCrossChainFarm__factory } from '@apps/artifacts/typechain'
 import { FetchState, useFetchState } from '@apps/hooks'
@@ -35,13 +37,13 @@ interface SubscribedData {
 }
 
 interface State {
-  addresses?: MaticMainnet['addresses']['FRAX']
   staticData: FetchState<StaticData>
   subscribedData: FetchState<SubscribedData>
+  rewards: FetchState<BoostedAPY>
 }
 
 const contractCtx = createContext<FraxCrossChainFarm | undefined>(null as never)
-const stateCtx = createContext<State>({ staticData: {}, subscribedData: {} })
+const stateCtx = createContext<State>({ staticData: {}, subscribedData: {}, rewards: {} })
 
 export const useFraxStakingContract = (): FraxCrossChainFarm | undefined => useContext(contractCtx)
 export const useFraxStakingState = (): State => useContext(stateCtx)
@@ -55,25 +57,45 @@ export const FraxStakingProvider: FC = ({ children }) => {
 
   const account = useAccount()
   const stakingContract = useRef<FraxCrossChainFarm>()
-  // const stakingToken = useRef<ERC20>()
   const feederPool = useRef<ERC20>()
   const [staticData, setStaticData] = useFetchState<StaticData>()
   const [subscribedData, setSubscribedData] = useFetchState<SubscribedData>()
+  const [rewards, setRewards] = useFetchState<BoostedAPY>()
 
   // Set/reset on network/signer change
   useEffect(() => {
     if (fraxAddresses && signerOrProvider) {
       stakingContract.current = FraxCrossChainFarm__factory.connect(fraxAddresses.stakingContract, signerOrProvider)
       feederPool.current = ERC20__factory.connect(fraxAddresses.feederPool, signerOrProvider)
-      // stakingToken.current = ERC20__factory.connect(fraxAddresses.stakingToken, signerOrProvider)
     } else {
       stakingContract.current = undefined
       feederPool.current = undefined
-      // stakingToken.current = undefined
       setStaticData.value()
       setSubscribedData.value()
     }
   }, [fraxAddresses, signerOrProvider, setStaticData, setSubscribedData])
+
+  // Frax API call for rewards APYs
+  useEffectOnce(() => {
+    setRewards.fetching()
+    fetch('https://api.frax.finance/pools')
+      .then(res => {
+        res
+          .json()
+          .then((json: { identifier: string; pairLink: string; apy?: string; apy_max?: string }[]) => {
+            const poolData = json.find(p => p.identifier === 'mStable FRAX/mUSD')
+            if (poolData) {
+              setRewards.value({
+                base: parseFloat(poolData.apy ?? '0'),
+                maxBoost: parseFloat(poolData.apy_max ?? '0'),
+                userBoost: 0,
+              })
+            }
+          })
+          .catch(setRewards.error)
+      })
+      .catch(setRewards.error)
+  })
 
   // Initial contract calls (once only)
   useEffect(() => {
@@ -146,11 +168,11 @@ export const FraxStakingProvider: FC = ({ children }) => {
       <stateCtx.Provider
         value={useMemo(
           () => ({
-            addresses: fraxAddresses,
-            staticData: staticData,
-            subscribedData: subscribedData,
+            staticData,
+            subscribedData,
+            rewards,
           }),
-          [fraxAddresses, staticData, subscribedData],
+          [rewards, staticData, subscribedData],
         )}
       >
         {children}
