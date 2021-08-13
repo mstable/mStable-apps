@@ -29,8 +29,9 @@ cp .env .env.local
 # Now edit the Subgraph API key env vars to add a local API key
 # e.g. `vim .env.local`
 
-# Then install and run the apps
+# Then install, codegen, and run the apps
 yarn
+yarn codegen:typechain
 yarn nx serve --parallel --all
 ```
 

@@ -28,8 +28,9 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "codegen:graphql": "yarn run graphql-codegen --config ./libs/artifacts/codegen.yml",
-    "codegen:typechain": "yarn typechain --target ethers-v5 --out-dir ./libs/artifacts/src/typechain './libs/artifacts/src/abi/*.json'",
-    "postinstall": "cp -r ./node_modules/@mstable/protocol/dist/types/generated/* ./libs/artifacts/src/typechain"
+    "codegen:typechain:prepare": "cp ./node_modules/@mstable/protocol/abis/*.json ./libs/artifacts/src/abi/external",
+    "codegen:typechain:generate": "yarn typechain --target ethers-v5 --out-dir ./libs/artifacts/src/typechain './libs/artifacts/src/abi/**/*.json'",
+    "codegen:typechain": "yarn codegen:typechain:prepare && yarn codegen:typechain:generate"
   },
   "private": true,
   "dependencies": {
@@ -124,12 +125,6 @@
     "@testing-library/react-hooks": "^3.2.1",
     "@testing-library/user-event": "^13.1.9",
     "@typechain/ethers-v5": "7.0.1",
-    "@types/jest": "26.0.8",
-    "@types/react": "17.0.3",
-    "@types/react-dom": "17.0.3",
-    "@types/react-is": "17.0.0",
-    "@types/react-router-dom": "5.1.7",
-    "@types/styled-components": "5.1.9",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "babel-jest": "26.2.2",
