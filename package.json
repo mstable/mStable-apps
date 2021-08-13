@@ -27,7 +27,7 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "codegen:graphql": "npm run graphql-codegen --config ./libs/artifacts/codegen.yml",
+    "codegen:graphql": "yarn run graphql-codegen --config ./libs/artifacts/codegen.yml",
     "codegen:typechain": "yarn typechain --target ethers-v5 --out-dir ./libs/artifacts/src/typechain './libs/artifacts/src/abi/*.json'",
     "postinstall": "cp -r ./node_modules/@mstable/protocol/dist/types/generated/* ./libs/artifacts/src/typechain"
   },
