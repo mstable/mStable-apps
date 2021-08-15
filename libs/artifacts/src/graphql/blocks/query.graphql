@@ -1,4 +1,4 @@
-query BlockTimestamp($start: BigInt!, $end: BigInt!) @api(name: blocks) {
+query BlockTimestamp($start: BigInt!, $end: BigInt!) {
   blocks(
     first: 1
     orderBy: timestamp
@@ -10,7 +10,7 @@ query BlockTimestamp($start: BigInt!, $end: BigInt!) @api(name: blocks) {
   }
 }
 
-query Block($number: BigInt!) @api(name: blocks) {
+query Block($number: BigInt!) {
   blocks(where: { number: $number }) {
     number
     timestamp

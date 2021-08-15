@@ -2,6 +2,7 @@ import React, { createContext, FC, useContext, useEffect, useMemo, useState } fr
 import { Interface } from '@ethersproject/abi'
 import { pipe } from 'ts-pipe-compose'
 
+import { useApolloClients } from '@apps/base/context/apollo'
 import { FeederPoolsQueryResult, useFeederPoolsLazyQuery } from '@apps/artifacts/graphql/feeders'
 import { MassetsQueryResult, useMassetsLazyQuery } from '@apps/artifacts/graphql/protocol'
 import type { IMasset } from '@apps/artifacts/typechain'
@@ -35,18 +36,22 @@ const dataStateCtx = createContext<DataState>({})
 const useRawData = (): Pick<RawData, 'massets' | 'feederPools'> => {
   const network = useNetwork()
   const account = useAccount()
-  const baseOptions = useMemo(
-    () => ({
+  const clients = useApolloClients()
+  const options = useMemo(() => {
+    const baseOptions = {
       variables: { account: account ?? '', accountId: account ?? '', hasAccount: !!account },
-    }),
-    [account],
-  )
+    }
+    return {
+      feeders: { ...baseOptions, client: clients.feeders },
+      protocol: { ...baseOptions, client: clients.protocol },
+    }
+  }, [account, clients])
 
-  const massetsSub = useBlockPollingSubscription(useMassetsLazyQuery, baseOptions)
+  const massetsSub = useBlockPollingSubscription(useMassetsLazyQuery, options.protocol)
 
   const feedersSub = useBlockPollingSubscription(
     useFeederPoolsLazyQuery,
-    baseOptions,
+    options.feeders,
     !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders'),
   )
 

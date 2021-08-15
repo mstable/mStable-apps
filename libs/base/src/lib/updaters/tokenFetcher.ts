@@ -1,27 +1,35 @@
-import { useEffect } from 'react'
-import { QueryHookOptions } from '@apollo/client'
-import { AllTokensQuery, AllTokensQueryVariables, useAllTokensQuery as useAllTokensProtocolQuery } from '@apps/artifacts/graphql/protocol'
-import { useFeederTokensQuery, FeederTokensQuery, FeederTokensQueryVariables } from '@apps/artifacts/graphql/feeders'
+import { useEffect, useMemo } from 'react'
+import { useAllTokensQuery as useAllTokensProtocolQuery } from '@apps/artifacts/graphql/protocol'
+import { useFeederTokensQuery } from '@apps/artifacts/graphql/feeders'
 
+import { useApolloClients } from '@apps/base/context/apollo'
 import { useNetwork } from '../context/NetworkProvider'
 import { useTokensDispatch } from '../context/TokensProvider'
 
-const options = {
-  fetchPolicy: 'network-only',
-} as QueryHookOptions
-
-/**
- * Updater to one-time fetch all ERC20 tokens from the subgraph.
- */
 export const TokenFetcher = (): null => {
+  const clients = useApolloClients()
   const network = useNetwork()
   const { setFetched } = useTokensDispatch()
 
-  const protocolQuery = useAllTokensProtocolQuery(options as QueryHookOptions<AllTokensQuery, AllTokensQueryVariables>)
-  const feedersQuery = useFeederTokensQuery({
-    ...options,
-    skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders'),
-  } as QueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>)
+  const options = useMemo(() => {
+    return {
+      protocol: {
+        client: clients.protocol,
+      },
+      feeders: {
+        client: clients.feeders,
+      },
+      // staking: {
+      //   client: clients.staking,
+      // },
+      // stakingRewards: {
+      //   client: clients.stakingRewards,
+      // },
+    }
+  }, [clients, network])
+
+  const protocolQuery = useAllTokensProtocolQuery(options.protocol)
+  const feedersQuery = useFeederTokensQuery(options.feeders)
 
   const protocolFetched = protocolQuery.data?.tokens ?? []
   const feedersFetched = feedersQuery.data?.feederPools ?? []

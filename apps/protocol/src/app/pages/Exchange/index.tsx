@@ -2,6 +2,7 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ThemedSkeleton } from '@apps/components/core'
+// @ts-ignore
 import { ReactComponent as SwapIcon } from '@apps/components/icons/circle/swap.svg'
 import { ExchangeAction, useSelectedMassetState } from '@apps/hooks'
 import { MultiAssetExchangeProvider } from '@apps/components/forms'

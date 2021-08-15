@@ -17,7 +17,7 @@ const ButtonCss = css<Props>`
     highlighted ? theme.color.primary : transparent ? 'transparent' : disabled ? theme.color.disabledButton : theme.color.background[2]};
   color: ${({ theme, highlighted, disabled }) => (highlighted ? theme.color.white : disabled ? theme.color.disabled : theme.color.body)};
   z-index: ${({ highlighted }) => (highlighted ? 1 : 0)};
-  font-weight: 600;
+  font-weight: 500;
   position: relative;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   transition: 0.2s ease all;
