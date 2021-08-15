@@ -19,12 +19,6 @@ import { MultiRewards } from '../MultiRewards'
 const TABLE_CELL_WIDTHS = [35, 15, 30]
 const DAY = 86400
 
-// TODO: - replace with subscribedtoken when available
-const MOCK_BALANCE: { balance?: number; allowance?: BigDecimal } = {
-  balance: 200,
-  allowance: BigDecimal.ZERO,
-}
-
 const Input = styled(AssetInput)`
   height: 2.5rem;
   border-radius: 0.5rem;
@@ -127,6 +121,11 @@ const Container = styled.div`
   }
 `
 
+const depositHeaderTitles = ['Wallet', ''].map((t, i) =>
+  i === 1 ? { title: t, tooltip: 'Lock your tokens for a period of time to earn a boosted reward multiplier' } : { title: t },
+)
+const withdrawHeaderTitles = ['Vault', 'Multiplier', 'Time Remaining'].map(t => ({ title: t }))
+
 export const FraxStake: FC = () => {
   const network = useNetwork() as MaticMainnet
   const { subscribedData: userData, staticData: staticData } = useFraxStakingState()
@@ -210,55 +209,53 @@ export const FraxStake: FC = () => {
 
   const handleSetMax = (): void => handleSetAmount(poolBalance.toString())
 
-  const depositHeaderTitles = ['Wallet', ''].map((t, i) =>
-    i === 1 ? { title: t, tooltip: 'Lock your tokens for a period of time to earn a boosted reward multiplier' } : { title: t },
-  )
-  const withdrawHeaderTitles = ['Vault', 'Multiplier', 'Time Remaining'].map(t => ({ title: t }))
+  const rewards = useMemo(() => {
+    const stakingRewards: StakingRewardsExtended = {
+      stakingRewardsContract: undefined,
+      rewards: [
+        {
+          id: 'yield',
+          name: 'Yield',
+          apy: yieldAPY,
+          apyTip:
+            'This APY is derived from the native interest rate + current available staking rewards, and is not reflective of future rates.',
+          tokens: ['yield'],
+          priority: true,
+        },
+        {
+          id: 'MTA',
+          name: 'FRAX',
+          apy: 0,
+          apyTip: 'This APY is derived from currently available staking rewards, and is not reflective of future rates.',
+          tokens: ['FXS'],
+          priority: false,
+        },
+        {
+          id: 'FRAX',
+          name: 'FRAX',
+          apy: 0,
+          apyTip: 'This APY is derived from currently available staking rewards, and is not reflective of future rates.',
+          tokens: ['MTA'],
+          priority: false,
+        },
+      ].map(v => ({ ...v, stakeLabel: undefined, balance: undefined, amounts: undefined })),
+      earned: undefined,
+      stakedBalance: undefined,
+      unstakedBalance: undefined,
+      hasStakedBalance: false,
+      hasUnstakedBalance: false,
+    }
 
-  const stakingRewards: StakingRewardsExtended = {
-    stakingRewardsContract: undefined,
-    rewards: [
-      {
-        id: 'yield',
-        name: 'Yield',
-        apy: yieldAPY,
-        apyTip:
-          'This APY is derived from the native interest rate + current available staking rewards, and is not reflective of future rates.',
-        tokens: ['yield'],
-        priority: true,
-      },
-      {
-        id: 'MTA',
-        name: 'FRAX',
-        apy: 0,
-        apyTip: 'This APY is derived from currently available staking rewards, and is not reflective of future rates.',
-        tokens: ['FXS'],
-        priority: false,
-      },
-      {
-        id: 'FRAX',
-        name: 'FRAX',
-        apy: 0,
-        apyTip: 'This APY is derived from currently available staking rewards, and is not reflective of future rates.',
-        tokens: ['MTA'],
-        priority: false,
-      },
-    ].map(v => ({ ...v, stakeLabel: undefined, balance: undefined, amounts: undefined })),
-    earned: undefined,
-    stakedBalance: undefined,
-    unstakedBalance: undefined,
-    hasStakedBalance: false,
-    hasUnstakedBalance: false,
-  }
-
-  const rewardsEarned = {
-    canClaim: earned?.reduce((a, b) => a.add(b.amount), BigDecimal.ZERO).exact.gt(0) ?? false,
-    rewards: earned?.map(({ symbol, amount }) => ({ token: symbol, earned: amount })) ?? [],
-  }
+    const rewardsEarned = {
+      canClaim: earned?.reduce((a, b) => a.add(b.amount), BigDecimal.ZERO).exact.gt(0) ?? false,
+      rewards: earned?.map(({ symbol, amount }) => ({ token: symbol, earned: amount })) ?? [],
+    }
+    return { rewardsEarned, stakingRewards }
+  }, [earned, yieldAPY])
 
   return (
     <Container>
-      <StakingRewards stakingRewards={stakingRewards} />
+      <StakingRewards stakingRewards={rewards.stakingRewards} />
       {!!showDeposit && (
         <StyledTable headerTitles={depositHeaderTitles}>
           <StyledRow buttonTitle="Stake">
@@ -325,7 +322,7 @@ export const FraxStake: FC = () => {
           })}
         </StyledTable>
       )}
-      <MultiRewards rewardsEarned={rewardsEarned} onClaimRewards={handleClaim} />
+      <MultiRewards rewardsEarned={rewards.rewardsEarned} onClaimRewards={handleClaim} />
     </Container>
   )
 }
