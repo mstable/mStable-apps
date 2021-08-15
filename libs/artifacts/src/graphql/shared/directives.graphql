@@ -5,6 +5,7 @@ enum PROJECTS {
   balancer
   uniswap
   sushi
+  staking
   blocks
 }
 

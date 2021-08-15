@@ -1,0 +1,16 @@
+fragment MetricFields on Metric {
+  id
+  exact
+  decimals
+  simple
+}
+
+fragment TokenAll on Token {
+  id
+  address
+  decimals
+  symbol
+  totalSupply {
+    ...MetricFields
+  }
+}
