@@ -1,6 +1,6 @@
 {
-  "name": "mStable Example",
+  "name": "mStable Governance",
   "iconPath": "icons/mstable-logo.svg",
-  "description": "mStable example app",
-  "providedBy": { "name": "mStable", "url": "https://example.mstable.app" }
+  "description": "mStable Governance App",
+  "providedBy": { "name": "mStable", "url": "https://governance.mstable.app" }
 }
