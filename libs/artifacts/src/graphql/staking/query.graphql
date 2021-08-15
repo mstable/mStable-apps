@@ -1,0 +1,67 @@
+# import './fragments.graphql'
+
+query Staking($account: ID!, $hasAccount: Boolean!) @api(name: staking) {
+  stakedToken(id: "StakedToken") {
+    address
+    token {
+      ...TokenAll
+    }
+    stakingToken {
+      ...TokenAll
+    }
+    stakingRewards {
+      DURATION
+      periodFinish
+      lastUpdateTime
+      rewardRate
+      rewardPerTokenStored
+      rewardsToken {
+        ...TokenAll
+      }
+      rewardsTokenVendor
+      rewardsDistributor
+      pendingAdditionalReward
+    }
+    questSigner
+    UNSTAKE_WINDOW
+    COOLDOWN_SECONDS
+    COOLDOWN_PERCENTAGE_SCALE
+    collateralisationRatio
+    slashingPercentage
+    season {
+      id
+      endedAt
+      startedAt
+      seasonNumber
+    }
+  }
+  accounts(where: { id: $account }) @include(if: $hasAccount) {
+    id
+    delegatee {
+      id
+    }
+    rewardPerTokenPaid
+    rewards
+    delegators {
+      id
+    }
+    completedQuests {
+      id
+    }
+    cooldownTimestamp
+    cooldownTimestamp
+    balance {
+      lastAction
+      permMultiplier
+      timeMultiplier
+      seasonMultiplier
+      cooldownMultiplier
+      raw
+      votes
+      weightedTimestamp
+    }
+  }
+  quests {
+    id
+  }
+}

@@ -43,6 +43,14 @@ generates:
     config:
       includeDirectives: true
 
+  ./libs/artifacts/src/graphql/staking/schema.graphql:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+
   ./libs/artifacts/src/graphql/protocol.tsx:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-protocol-staging
@@ -77,6 +85,16 @@ generates:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks
     documents: 'libs/artifacts/src/graphql/blocks/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+
+  ./libs/artifacts/src/graphql/staking.tsx:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
+    documents: 'libs/artifacts/src/graphql/staking/*.graphql'
     plugins:
       - 'fragment-matcher'
       - 'typescript'

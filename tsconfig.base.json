@@ -22,6 +22,7 @@
       "@apps/artifacts/graphql/protocol": ["libs/artifacts/src/graphql/protocol.tsx"],
       "@apps/artifacts/graphql/shared": ["libs/artifacts/src/graphql/shared.tsx"],
       "@apps/artifacts/graphql/staking-rewards": ["libs/artifacts/src/graphql/staking-rewards.tsx"],
+      "@apps/artifacts/graphql/staking": ["libs/artifacts/src/graphql/staking.tsx"],
       "@apps/artifacts/typechain": ["libs/artifacts/src/typechain/index.ts"],
       "@apps/assets": ["libs/assets/src/index.ts"],
       "@apps/base": ["libs/base/src/index.ts"],
