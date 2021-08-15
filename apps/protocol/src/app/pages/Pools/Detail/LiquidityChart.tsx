@@ -4,6 +4,7 @@ import { DocumentNode, gql, useQuery } from '@apollo/client'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { format, getUnixTime } from 'date-fns'
 
+import { useApolloClients } from '@apps/base/context/apollo'
 import { useBlockTimesForDates } from '@apps/hooks'
 import { Color } from '@apps/base/theme'
 import { getKeyTimestamp, periodFormatMapping, toK } from '@apps/formatters'
@@ -36,6 +37,7 @@ const useTotalLiquidity = (
   timestamp: number
   totalLiquidity: number
 }[] => {
+  const clients = useApolloClients()
   const dateFilter = useDateFilter()
   const blockTimes = useBlockTimesForDates(dateFilter.dates)
 
@@ -48,7 +50,7 @@ const useTotalLiquidity = (
       .join('\n')
 
     return gql`
-      query AggregateMetrics @api(name: feeders) {
+      query AggregateMetrics  {
         ${current}
         ${blockMetrics}
       }
@@ -57,6 +59,7 @@ const useTotalLiquidity = (
 
   const query = useQuery<AggregateMetricsQueryResult>(metricsDoc, {
     fetchPolicy: 'no-cache',
+    client: clients.feeders,
   })
 
   return useMemo(() => {

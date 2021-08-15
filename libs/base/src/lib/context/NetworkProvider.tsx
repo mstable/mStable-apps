@@ -90,12 +90,12 @@ export interface EthereumMainnet
         stkBPT: string
       }
     },
-    { feeders: string[] }
+    GraphQLEndpoints<'feeders' | 'snapshot'>
   > {
   chainId: ChainIds.EthereumMainnet
 }
 
-export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, {}> {
+export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking' | 'questbook' | 'snapshot'>> {
   chainId: ChainIds.EthereumRopsten
 }
 
@@ -122,7 +122,7 @@ export interface MaticMainnet
   }
 }
 
-export interface MaticMumbai extends Network<{ ERC20: { wMATIC: string } }, {}> {
+export interface MaticMumbai extends Network<{ ERC20: { wMATIC: string } }, CoreGqlEndpoints> {
   chainId: ChainIds.MaticMumbai
   parentChainId: ChainIds.EthereumGoerli
   nativeToken: {
@@ -133,6 +133,12 @@ export interface MaticMumbai extends Network<{ ERC20: { wMATIC: string } }, {}> 
 }
 
 export type AllNetworks = EthereumMainnet | EthereumRopsten | EthereumGoerli | MaticMainnet | MaticMumbai
+
+export type AllGqlEndpoints = keyof (EthereumMainnet['gqlEndpoints'] &
+  EthereumGoerli['gqlEndpoints'] &
+  EthereumRopsten['gqlEndpoints'] &
+  MaticMainnet['gqlEndpoints'] &
+  MaticMumbai['gqlEndpoints'])
 
 const etherscanUrl =
   (network?: string, domain = 'etherscan.io') =>
@@ -177,6 +183,7 @@ const ETH_MAINNET: EthereumMainnet = {
       graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0, process.env.NX_PROTOCOL_SUBGRAPH_API_KEY as string),
       graphHostedEndpoint('mstable', 'mstable-protocol-staging'),
     ],
+    snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
       // TODO remove temporary URL once we have enough indexers
       'https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.8',
@@ -205,14 +212,16 @@ const ETH_MAINNET: EthereumMainnet = {
 const ETH_ROPSTEN: EthereumRopsten = {
   ...ETH_MAINNET,
   isTestnet: true,
-  parentChainId: ChainIds.EthereumMainnet,
   chainId: ChainIds.EthereumRopsten,
   chainName: 'Ropsten',
-  rpcEndpoints: ['https://ropsten.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
+  rpcEndpoints: ['https://ropsten.infura.io/v3/62bdcedba8ba449d9a795ef6310e713c'],
   gasStationEndpoint: 'https://gasprice.poa.network/',
   gqlEndpoints: {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-ropsten')],
+    staking: [graphHostedEndpoint('mstable', 'mstable-staking-ropsten')],
     blocks: [graphHostedEndpoint('blocklytics', 'ropsten-blocks')],
+    snapshot: ['https://hub.snapshot.org/graphql'],
+    questbook: ['https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook'],
   },
   addresses: {
     MTA: '0x273bc479e5c21caa15aa8538decbf310981d14c0',
@@ -230,7 +239,6 @@ const ETH_ROPSTEN: EthereumRopsten = {
 const ETH_GOERLI: EthereumGoerli = {
   ...ETH_MAINNET,
   isTestnet: true,
-  parentChainId: ChainIds.EthereumMainnet,
   chainId: ChainIds.EthereumGoerli,
   chainName: 'Görli',
   rpcEndpoints: ['https://goerli.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],

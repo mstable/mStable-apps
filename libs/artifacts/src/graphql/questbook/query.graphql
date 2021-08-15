@@ -1,0 +1,19 @@
+mutation QueueOptIn($account: ID!, $signature: String!) {
+  queueOptIn(account: $account, signature: $signature)
+}
+
+query Quests($account: ID!, $hasAccount: Boolean!) {
+  quests {
+    id
+    metadata {
+      title
+      description
+      imageUrl
+    }
+    submission(account: $account) @include(if: $hasAccount) {
+      signature
+      complete
+      progress
+    }
+  }
+}

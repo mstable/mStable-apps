@@ -1,3 +1,4 @@
+import { useApolloClients } from '@apps/base/context/apollo'
 import { createContext, useMemo, FC, Context } from 'react'
 import { BigNumber } from 'ethers'
 import { useQuery } from '@apollo/client'
@@ -160,15 +161,14 @@ export const createStakingRewardsContext = (): Readonly<
   const context = createContext<StakingRewardsExtended>({})
 
   const StakingRewardsProvider: FC<{ address?: string; stakingTokenAddress?: string }> = ({ address, stakingTokenAddress, children }) => {
+    const clients = useApolloClients()
     const network = useNetwork()
     const useFetchPrice = useFetchPriceCtx()
     const massetState = useSelectedMassetState()
     const account = useAccount()
 
-    // 1. Subgraph query
-    const query = useQuery<StakingRewardsForStakingTokenQuery | StakingRewardsContractQuery>(
-      stakingTokenAddress ? StakingRewardsForStakingTokenDocument : StakingRewardsContractDocument,
-      {
+    const options = useMemo(
+      () => ({
         skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'stakingRewards') || (!address && !stakingTokenAddress),
         pollInterval: 5e3, // 5s
         variables: {
@@ -177,7 +177,15 @@ export const createStakingRewardsContext = (): Readonly<
             ? ({ stakingToken: stakingTokenAddress as string } as StakingRewardsForStakingTokenQueryVariables)
             : ({ id: address as string } as StakingRewardsContractQueryVariables)),
         },
-      },
+        client: clients.stakingRewards,
+      }),
+      [clients, account, network, stakingTokenAddress, address],
+    )
+
+    // 1. Subgraph query
+    const query = useQuery<StakingRewardsForStakingTokenQuery | StakingRewardsContractQuery>(
+      stakingTokenAddress ? StakingRewardsForStakingTokenDocument : StakingRewardsContractDocument,
+      options,
     )
 
     // 2. Transform query result into StakingRewards

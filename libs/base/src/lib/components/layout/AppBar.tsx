@@ -137,7 +137,7 @@ export const AppBar: FC = () => {
             <TransactionsSpinner />
             <WalletButton />
             <NetworkButton>
-              <TokenIcon symbol={protocolName.toUpperCase()} hideNetwork />
+              <TokenIcon symbol={protocolName.toUpperCase()} />
             </NetworkButton>
             <SettingsButton />
           </WalletAndSpinner>

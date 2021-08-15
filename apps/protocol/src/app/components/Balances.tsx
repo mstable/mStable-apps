@@ -55,6 +55,8 @@ const StyledTable = styled(Table)`
   }
 `
 
+const headerTitles = ['Asset', 'Balance'].map(t => ({ title: t }))
+
 export const Balances: FC<{ onRowClick?: (symbol: string) => void }> = ({ onRowClick }) => {
   const dataState = useDataState()
   const networkAddresses = useNetworkAddresses()
@@ -87,7 +89,6 @@ export const Balances: FC<{ onRowClick?: (symbol: string) => void }> = ({ onRowC
   )
 
   const bassetTokens = massetTokens.map(({ bassets }) => bassets).reduce((a, b) => [...a, ...b], [])
-  const headerTitles = ['Asset', 'Balance'].map(t => ({ title: t }))
 
   return (
     <StyledTable headerTitles={headerTitles}>

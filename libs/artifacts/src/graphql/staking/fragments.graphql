@@ -1,0 +1,17 @@
+fragment MetricFields on Metric {
+  id
+  exact
+  decimals
+  simple
+  bigDecimal @client
+}
+
+fragment TokenAll on Token {
+  id
+  address
+  decimals
+  symbol
+  totalSupply {
+    ...MetricFields
+  }
+}

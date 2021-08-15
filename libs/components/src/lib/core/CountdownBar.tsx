@@ -5,8 +5,10 @@ import { useInterval } from 'react-use'
 import styled from 'styled-components'
 
 interface Props {
+  className?: string
   width?: number
   percentage?: number
+  color?: string
   end: number
 }
 
@@ -16,13 +18,13 @@ const Time = styled.span`
   color: ${({ theme }) => theme.color.bodyAccent};
 `
 
-const Progress = styled.div`
+const Progress = styled.div<{ color?: string }>`
   background: ${({ theme }) => theme.color.background[2]};
   border-radius: 0.5rem;
   margin-bottom: 0.25rem;
 
   > div {
-    background-color: rgb(62, 122, 235);
+    background-color: ${({ color }) => color ?? `rgb(62, 122, 235)`};
     height: 10px;
     border-radius: 1rem;
   }
@@ -34,7 +36,7 @@ const Container = styled.div`
   align-items: flex-start;
 `
 
-export const CountdownBar: FC<Props> = ({ width = 150, percentage = 0, end }) => {
+export const CountdownBar: FC<Props> = ({ className, width = 150, percentage = 0, end, color }) => {
   const [value, setValue] = useState((percentage / 100) * width)
   const endDate = new Date(end)
   const dateDifference = differenceInSeconds(endDate, new Date())
@@ -58,8 +60,8 @@ export const CountdownBar: FC<Props> = ({ width = 150, percentage = 0, end }) =>
   }, 1000 * timeMultiplier)
 
   return (
-    <Container>
-      <Progress style={{ width: `${width}px` }}>
+    <Container className={className}>
+      <Progress style={{ width: `${width}px` }} color={color}>
         <div style={{ width: `${value}px` }} />
       </Progress>
       <Countdown date={end} renderer={renderer} />

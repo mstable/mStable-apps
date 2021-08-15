@@ -77,9 +77,9 @@ export const colorTheme = (theme: 'light' | 'dark'): ColorTheme & typeof Color =
     body: isLight ? Color.offBlack : Color.white,
     bodyTransparent: isLight ? Color.blackTransparent : Color.whiteTransparent,
     bodyTransparenter: isLight ? Color.blackTransparenter : Color.whiteTransparenter,
-    bodyAccent: isLight ? Color.grey : ColorNew.white[4],
+    bodyAccent: Color.grey,
     disabledInput: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
-    disabledButton: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[2],
+    disabledButton: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[1],
     defaultBorder: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[4],
     defaultToggle: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[3],
     onboardBackground: isLight ? ColorNew.white[0] : ColorNew.spaceBlue[1],
@@ -93,7 +93,7 @@ export const colorTheme = (theme: 'light' | 'dark'): ColorTheme & typeof Color =
         }
       : {
           0: ColorNew.spaceBlue[0],
-          1: ColorNew.spaceBlue[3],
+          1: ColorNew.spaceBlue[2],
           2: ColorNew.spaceBlue[3],
           3: ColorNew.spaceBlue[4],
         },
@@ -159,6 +159,9 @@ export const mixins = {
   `,
   numeric: css`
     font-family: 'DM Mono', monospace !important;
+  `,
+  pixel: css`
+    font-family: 'Press Start 2P';
   `,
   card: css`
     display: flex;
