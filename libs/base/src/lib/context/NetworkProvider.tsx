@@ -93,7 +93,7 @@ export interface EthereumMainnet
   chainId: ChainIds.EthereumMainnet
 }
 
-export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, {}> {
+export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking'>> {
   chainId: ChainIds.EthereumRopsten
 }
 
@@ -201,13 +201,13 @@ const ETH_MAINNET: EthereumMainnet = {
 const ETH_ROPSTEN: EthereumRopsten = {
   ...ETH_MAINNET,
   isTestnet: true,
-  parentChainId: ChainIds.EthereumMainnet,
   chainId: ChainIds.EthereumRopsten,
   chainName: 'Ropsten',
-  rpcEndpoints: ['https://ropsten.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
+  rpcEndpoints: ['https://ropsten.infura.io/v3/62bdcedba8ba449d9a795ef6310e713c'],
   gasStationEndpoint: 'https://gasprice.poa.network/',
   gqlEndpoints: {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-ropsten')],
+    staking: [graphHostedEndpoint('mstable', 'mstable-staking-ropsten')],
     blocks: [graphHostedEndpoint('blocklytics', 'ropsten-blocks')],
   },
   addresses: {
@@ -226,7 +226,6 @@ const ETH_ROPSTEN: EthereumRopsten = {
 const ETH_GOERLI: EthereumGoerli = {
   ...ETH_MAINNET,
   isTestnet: true,
-  parentChainId: ChainIds.EthereumMainnet,
   chainId: ChainIds.EthereumGoerli,
   chainName: 'Görli',
   rpcEndpoints: ['https://goerli.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
