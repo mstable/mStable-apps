@@ -1,6 +1,6 @@
 # import './fragments.graphql'
 
-query Massets($account: String!, $hasAccount: Boolean!) @api(name: protocol) {
+query Massets($account: String!, $hasAccount: Boolean!) {
   massets {
     id
     token {
@@ -47,7 +47,7 @@ query Massets($account: String!, $hasAccount: Boolean!) @api(name: protocol) {
 }
 
 query V1SavingsBalance($id: ID!, $account: String!, $include: Boolean!)
-  @api(name: protocol) {
+  {
   savingsContract(id: $id) @include(if: $include) {
     creditBalances(where: { account: $account }) {
       amount
@@ -55,7 +55,7 @@ query V1SavingsBalance($id: ID!, $account: String!, $include: Boolean!)
   }
 }
 
-query AllTokens @api(name: protocol) {
+query AllTokens {
   # @deprecated
   savingsContracts(where: { version: 1 }) {
     address: id
@@ -66,13 +66,13 @@ query AllTokens @api(name: protocol) {
   }
 }
 
-query Token($id: ID!) @api(name: protocol) {
+query Token($id: ID!) {
   token(id: $id) {
     ...TokenAll
   }
 }
 
-query HistoricTransactions($account: Bytes) @api(name: protocol) {
+query HistoricTransactions($account: Bytes) {
   transactions(
     where: { sender: $account }
     orderBy: timestamp

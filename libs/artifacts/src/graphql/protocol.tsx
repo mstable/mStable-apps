@@ -1,64 +1,33 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { BigNumber } from 'ethers';
+import { BigDecimal } from '@apps/bigdecimal';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 
-      export interface IntrospectionResultData {
-        __schema: {
-          types: {
-            kind: string;
-            name: string;
-            possibleTypes: {
-              name: string;
-            }[];
-          }[];
-        };
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
       }
-      const result: IntrospectionResultData = {
-  "__schema": {
-    "types": [
-      {
-        "kind": "INTERFACE",
-        "name": "Transaction",
-        "possibleTypes": [
-          {
-            "name": "BoostedSavingsVaultRewardAddedTransaction"
-          },
-          {
-            "name": "BoostedSavingsVaultRewardPaidTransaction"
-          },
-          {
-            "name": "BoostedSavingsVaultStakeTransaction"
-          },
-          {
-            "name": "BoostedSavingsVaultWithdrawTransaction"
-          },
-          {
-            "name": "MintMultiTransaction"
-          },
-          {
-            "name": "MintSingleTransaction"
-          },
-          {
-            "name": "PaidFeeTransaction"
-          },
-          {
-            "name": "RedeemMassetTransaction"
-          },
-          {
-            "name": "RedeemTransaction"
-          },
-          {
-            "name": "SavingsContractDepositTransaction"
-          },
-          {
-            "name": "SavingsContractWithdrawTransaction"
-          },
-          {
-            "name": "SwapTransaction"
-          }
-        ]
-      }
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "Transaction": [
+      "BoostedSavingsVaultRewardAddedTransaction",
+      "BoostedSavingsVaultRewardPaidTransaction",
+      "BoostedSavingsVaultStakeTransaction",
+      "BoostedSavingsVaultWithdrawTransaction",
+      "MintMultiTransaction",
+      "MintSingleTransaction",
+      "PaidFeeTransaction",
+      "RedeemMassetTransaction",
+      "RedeemTransaction",
+      "SavingsContractDepositTransaction",
+      "SavingsContractWithdrawTransaction",
+      "SwapTransaction"
     ]
   }
 };
@@ -73,8 +42,13 @@ export type Scalars = {
   Float: number;
   BigDecimal: string;
   BigInt: string;
+  BigNumber: BigNumber;
   Bytes: string;
+  MstableBigDecimal: BigDecimal;
 };
+
+
+
 
 /**
  * An Ethereum account that has interacted with Save v1
@@ -522,6 +496,7 @@ export enum Basset_OrderBy {
   CumulativeRedeemed = 'cumulativeRedeemed',
   CumulativeFeesPaid = 'cumulativeFeesPaid'
 }
+
 
 
 
@@ -2389,6 +2364,7 @@ export enum MintSingleTransaction_OrderBy {
   Basset = 'basset',
   BassetUnits = 'bassetUnits'
 }
+
 
 export enum OrderDirection {
   Asc = 'asc',
@@ -4670,152 +4646,75 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type TokenAllFragment = (
-  Pick<Token, 'id' | 'address' | 'decimals' | 'symbol'>
-  & { totalSupply: MetricFieldsFragment }
-);
+export type TokenAllFragment = { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } };
 
-export type SavingsContractAllFragment = (
-  Pick<SavingsContract, 'id' | 'dailyAPY' | 'version' | 'active'>
-  & { totalSavings: MetricFieldsFragment, latestExchangeRate?: Maybe<Pick<ExchangeRate, 'rate' | 'timestamp'>> }
-);
+export type SavingsContractAllFragment = { id: string, dailyAPY: string, version: number, active: boolean, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: Maybe<{ rate: string, timestamp: number }> };
 
-type TransactionFields_BoostedSavingsVaultRewardAddedTransaction_Fragment = Pick<BoostedSavingsVaultRewardAddedTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_BoostedSavingsVaultRewardAddedTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_BoostedSavingsVaultRewardPaidTransaction_Fragment = Pick<BoostedSavingsVaultRewardPaidTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_BoostedSavingsVaultRewardPaidTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_BoostedSavingsVaultStakeTransaction_Fragment = Pick<BoostedSavingsVaultStakeTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_BoostedSavingsVaultStakeTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_BoostedSavingsVaultWithdrawTransaction_Fragment = Pick<BoostedSavingsVaultWithdrawTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_BoostedSavingsVaultWithdrawTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_MintMultiTransaction_Fragment = Pick<MintMultiTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_MintMultiTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_MintSingleTransaction_Fragment = Pick<MintSingleTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_MintSingleTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_PaidFeeTransaction_Fragment = Pick<PaidFeeTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_PaidFeeTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_RedeemMassetTransaction_Fragment = Pick<RedeemMassetTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_RedeemMassetTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_RedeemTransaction_Fragment = Pick<RedeemTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_RedeemTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_SavingsContractDepositTransaction_Fragment = Pick<SavingsContractDepositTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_SavingsContractDepositTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_SavingsContractWithdrawTransaction_Fragment = Pick<SavingsContractWithdrawTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_SavingsContractWithdrawTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_SwapTransaction_Fragment = Pick<SwapTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_SwapTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
 export type TransactionFieldsFragment = TransactionFields_BoostedSavingsVaultRewardAddedTransaction_Fragment | TransactionFields_BoostedSavingsVaultRewardPaidTransaction_Fragment | TransactionFields_BoostedSavingsVaultStakeTransaction_Fragment | TransactionFields_BoostedSavingsVaultWithdrawTransaction_Fragment | TransactionFields_MintMultiTransaction_Fragment | TransactionFields_MintSingleTransaction_Fragment | TransactionFields_PaidFeeTransaction_Fragment | TransactionFields_RedeemMassetTransaction_Fragment | TransactionFields_RedeemTransaction_Fragment | TransactionFields_SavingsContractDepositTransaction_Fragment | TransactionFields_SavingsContractWithdrawTransaction_Fragment | TransactionFields_SwapTransaction_Fragment;
 
-export type MetricFieldsFragment = Pick<Metric, 'id' | 'exact' | 'decimals' | 'simple'>;
+export type MetricFieldsFragment = { id: string, exact: string, decimals: number, simple: string };
 
-export type BassetAllFragment = (
-  Pick<Basset, 'id' | 'isTransferFeeCharged' | 'ratio' | 'status' | 'maxWeight'>
-  & { vaultBalance: MetricFieldsFragment, token: TokenAllFragment }
-);
+export type BassetAllFragment = { id: string, isTransferFeeCharged: boolean, ratio: string, status: string, maxWeight?: Maybe<string>, vaultBalance: { id: string, exact: string, decimals: number, simple: string }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } };
 
-export type MassetsQueryVariables = {
+export type MassetsQueryVariables = Exact<{
   account: Scalars['String'];
   hasAccount: Scalars['Boolean'];
-};
+}>;
 
 
-export type MassetsQuery = { massets: Array<(
-    Pick<Masset, 'id' | 'feeRate' | 'redemptionFeeRate' | 'invariantStartTime' | 'invariantStartingCap' | 'invariantCapFactor'>
-    & { token: TokenAllFragment, basket: (
-      Pick<Basket, 'failed' | 'collateralisationRatio' | 'undergoingRecol'>
-      & { bassets: Array<BassetAllFragment>, removedBassets: Array<(
-        Pick<Basset, 'id'>
-        & { token: TokenAllFragment }
-      )> }
-    ), currentSavingsContract?: Maybe<Pick<SavingsContract, 'id'>>, savingsContractsV1: Array<(
-      { totalCredits?: Maybe<MetricFieldsFragment>, creditBalances: Array<Pick<CreditBalance, 'amount'>> }
-      & SavingsContractAllFragment
-    )>, savingsContractsV2: Array<(
-      { token?: Maybe<TokenAllFragment> }
-      & SavingsContractAllFragment
-    )> }
-  )> };
+export type MassetsQuery = { massets: Array<{ id: string, feeRate: string, redemptionFeeRate: string, invariantStartTime?: Maybe<number>, invariantStartingCap?: Maybe<string>, invariantCapFactor?: Maybe<string>, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }, basket: { failed: boolean, collateralisationRatio?: Maybe<string>, undergoingRecol: boolean, bassets: Array<{ id: string, isTransferFeeCharged: boolean, ratio: string, status: string, maxWeight?: Maybe<string>, vaultBalance: { id: string, exact: string, decimals: number, simple: string }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } }>, removedBassets: Array<{ id: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } }> }, currentSavingsContract?: Maybe<{ id: string }>, savingsContractsV1: Array<{ id: string, dailyAPY: string, version: number, active: boolean, totalCredits?: Maybe<{ id: string, exact: string, decimals: number, simple: string }>, creditBalances?: Maybe<Array<{ amount: string }>>, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: Maybe<{ rate: string, timestamp: number }> }>, savingsContractsV2: Array<{ id: string, dailyAPY: string, version: number, active: boolean, token?: Maybe<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }>, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: Maybe<{ rate: string, timestamp: number }> }> }> };
 
-export type V1SavingsBalanceQueryVariables = {
+export type V1SavingsBalanceQueryVariables = Exact<{
   id: Scalars['ID'];
   account: Scalars['String'];
   include: Scalars['Boolean'];
-};
+}>;
 
 
-export type V1SavingsBalanceQuery = { savingsContract?: Maybe<{ creditBalances: Array<Pick<CreditBalance, 'amount'>> }> };
+export type V1SavingsBalanceQuery = { savingsContract?: Maybe<{ creditBalances: Array<{ amount: string }> }> };
 
-export type AllTokensQueryVariables = {};
+export type AllTokensQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllTokensQuery = { savingsContracts: Array<(
-    Pick<SavingsContract, 'id'>
-    & { address: SavingsContract['id'] }
-  )>, tokens: Array<TokenAllFragment> };
+export type AllTokensQuery = { savingsContracts: Array<{ id: string, address: string }>, tokens: Array<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }> };
 
-export type TokenQueryVariables = {
+export type TokenQueryVariables = Exact<{
   id: Scalars['ID'];
-};
+}>;
 
 
-export type TokenQuery = { token?: Maybe<TokenAllFragment> };
+export type TokenQuery = { token?: Maybe<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }> };
 
-export type HistoricTransactionsQueryVariables = {
+export type HistoricTransactionsQueryVariables = Exact<{
   account?: Maybe<Scalars['Bytes']>;
-};
+}>;
 
 
-export type HistoricTransactionsQuery = { transactions: Array<(
-    { __typename: 'BoostedSavingsVaultRewardAddedTransaction' }
-    & Pick<BoostedSavingsVaultRewardAddedTransaction, 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-  ) | (
-    { __typename: 'BoostedSavingsVaultRewardPaidTransaction' }
-    & Pick<BoostedSavingsVaultRewardPaidTransaction, 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-  ) | (
-    { __typename: 'BoostedSavingsVaultStakeTransaction' }
-    & Pick<BoostedSavingsVaultStakeTransaction, 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-  ) | (
-    { __typename: 'BoostedSavingsVaultWithdrawTransaction' }
-    & Pick<BoostedSavingsVaultWithdrawTransaction, 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-  ) | (
-    { __typename: 'MintMultiTransaction' }
-    & Pick<MintMultiTransaction, 'massetUnits' | 'bassetsUnits' | 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-    & { masset: Pick<Masset, 'id'>, bassets: Array<Pick<Basset, 'id'>> }
-  ) | (
-    { __typename: 'MintSingleTransaction' }
-    & Pick<MintSingleTransaction, 'bassetUnits' | 'massetUnits' | 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-    & { masset: Pick<Masset, 'id'>, basset: Pick<Basset, 'id'> }
-  ) | (
-    { __typename: 'PaidFeeTransaction' }
-    & Pick<PaidFeeTransaction, 'bassetUnits' | 'massetUnits' | 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-    & { basset: Pick<Basset, 'id'>, masset: Pick<Masset, 'id'> }
-  ) | (
-    { __typename: 'RedeemMassetTransaction' }
-    & Pick<RedeemMassetTransaction, 'massetUnits' | 'recipient' | 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-    & { masset: Pick<Masset, 'id'> }
-  ) | (
-    { __typename: 'RedeemTransaction' }
-    & Pick<RedeemTransaction, 'massetUnits' | 'bassetsUnits' | 'recipient' | 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-    & { masset: Pick<Masset, 'id'>, bassets: Array<Pick<Basset, 'id'>> }
-  ) | (
-    { __typename: 'SavingsContractDepositTransaction' }
-    & Pick<SavingsContractDepositTransaction, 'amount' | 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-    & { savingsContract: (
-      Pick<SavingsContract, 'id'>
-      & { masset: Pick<Masset, 'id'> }
-    ) }
-  ) | (
-    { __typename: 'SavingsContractWithdrawTransaction' }
-    & Pick<SavingsContractWithdrawTransaction, 'amount' | 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-    & { savingsContract: (
-      Pick<SavingsContract, 'id'>
-      & { masset: Pick<Masset, 'id'> }
-    ) }
-  ) | (
-    { __typename: 'SwapTransaction' }
-    & Pick<SwapTransaction, 'massetUnits' | 'id' | 'hash' | 'block' | 'timestamp' | 'sender'>
-    & { masset: Pick<Masset, 'id'>, inputBasset: Pick<Basset, 'id'>, outputBasset: Pick<Basset, 'id'> }
-  )> };
+export type HistoricTransactionsQuery = { transactions: Array<{ __typename: 'BoostedSavingsVaultRewardAddedTransaction', id: string, hash: string, block: number, timestamp: string, sender: string } | { __typename: 'BoostedSavingsVaultRewardPaidTransaction', id: string, hash: string, block: number, timestamp: string, sender: string } | { __typename: 'BoostedSavingsVaultStakeTransaction', id: string, hash: string, block: number, timestamp: string, sender: string } | { __typename: 'BoostedSavingsVaultWithdrawTransaction', id: string, hash: string, block: number, timestamp: string, sender: string } | { __typename: 'MintMultiTransaction', massetUnits: string, bassetsUnits: Array<string>, id: string, hash: string, block: number, timestamp: string, sender: string, masset: { id: string }, bassets: Array<{ id: string }> } | { __typename: 'MintSingleTransaction', bassetUnits: string, massetUnits: string, id: string, hash: string, block: number, timestamp: string, sender: string, masset: { id: string }, basset: { id: string } } | { __typename: 'PaidFeeTransaction', bassetUnits: string, massetUnits: string, id: string, hash: string, block: number, timestamp: string, sender: string, basset: { id: string }, masset: { id: string } } | { __typename: 'RedeemMassetTransaction', massetUnits: string, recipient: string, id: string, hash: string, block: number, timestamp: string, sender: string, masset: { id: string } } | { __typename: 'RedeemTransaction', massetUnits: string, bassetsUnits: Array<string>, recipient: string, id: string, hash: string, block: number, timestamp: string, sender: string, masset: { id: string }, bassets: Array<{ id: string }> } | { __typename: 'SavingsContractDepositTransaction', amount: string, id: string, hash: string, block: number, timestamp: string, sender: string, savingsContract: { id: string, masset: { id: string } } } | { __typename: 'SavingsContractWithdrawTransaction', amount: string, id: string, hash: string, block: number, timestamp: string, sender: string, savingsContract: { id: string, masset: { id: string } } } | { __typename: 'SwapTransaction', massetUnits: string, id: string, hash: string, block: number, timestamp: string, sender: string, masset: { id: string }, inputBasset: { id: string }, outputBasset: { id: string } }> };
 
 export const MetricFieldsFragmentDoc = gql`
     fragment MetricFields on Metric {
@@ -4877,7 +4776,7 @@ export const BassetAllFragmentDoc = gql`
     ${MetricFieldsFragmentDoc}
 ${TokenAllFragmentDoc}`;
 export const MassetsDocument = gql`
-    query Massets($account: String!, $hasAccount: Boolean!) @api(name: protocol) {
+    query Massets($account: String!, $hasAccount: Boolean!) {
   massets {
     id
     token {
@@ -4944,17 +4843,19 @@ ${MetricFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useMassetsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MassetsQuery, MassetsQueryVariables>) {
-        return ApolloReactHooks.useQuery<MassetsQuery, MassetsQueryVariables>(MassetsDocument, baseOptions);
+export function useMassetsQuery(baseOptions: Apollo.QueryHookOptions<MassetsQuery, MassetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MassetsQuery, MassetsQueryVariables>(MassetsDocument, options);
       }
-export function useMassetsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MassetsQuery, MassetsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<MassetsQuery, MassetsQueryVariables>(MassetsDocument, baseOptions);
+export function useMassetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MassetsQuery, MassetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MassetsQuery, MassetsQueryVariables>(MassetsDocument, options);
         }
 export type MassetsQueryHookResult = ReturnType<typeof useMassetsQuery>;
 export type MassetsLazyQueryHookResult = ReturnType<typeof useMassetsLazyQuery>;
-export type MassetsQueryResult = ApolloReactCommon.QueryResult<MassetsQuery, MassetsQueryVariables>;
+export type MassetsQueryResult = Apollo.QueryResult<MassetsQuery, MassetsQueryVariables>;
 export const V1SavingsBalanceDocument = gql`
-    query V1SavingsBalance($id: ID!, $account: String!, $include: Boolean!) @api(name: protocol) {
+    query V1SavingsBalance($id: ID!, $account: String!, $include: Boolean!) {
   savingsContract(id: $id) @include(if: $include) {
     creditBalances(where: {account: $account}) {
       amount
@@ -4981,17 +4882,19 @@ export const V1SavingsBalanceDocument = gql`
  *   },
  * });
  */
-export function useV1SavingsBalanceQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>) {
-        return ApolloReactHooks.useQuery<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>(V1SavingsBalanceDocument, baseOptions);
+export function useV1SavingsBalanceQuery(baseOptions: Apollo.QueryHookOptions<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>(V1SavingsBalanceDocument, options);
       }
-export function useV1SavingsBalanceLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>(V1SavingsBalanceDocument, baseOptions);
+export function useV1SavingsBalanceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>(V1SavingsBalanceDocument, options);
         }
 export type V1SavingsBalanceQueryHookResult = ReturnType<typeof useV1SavingsBalanceQuery>;
 export type V1SavingsBalanceLazyQueryHookResult = ReturnType<typeof useV1SavingsBalanceLazyQuery>;
-export type V1SavingsBalanceQueryResult = ApolloReactCommon.QueryResult<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>;
+export type V1SavingsBalanceQueryResult = Apollo.QueryResult<V1SavingsBalanceQuery, V1SavingsBalanceQueryVariables>;
 export const AllTokensDocument = gql`
-    query AllTokens @api(name: protocol) {
+    query AllTokens {
   savingsContracts(where: {version: 1}) {
     address: id
     id
@@ -5017,17 +4920,19 @@ export const AllTokensDocument = gql`
  *   },
  * });
  */
-export function useAllTokensQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AllTokensQuery, AllTokensQueryVariables>) {
-        return ApolloReactHooks.useQuery<AllTokensQuery, AllTokensQueryVariables>(AllTokensDocument, baseOptions);
+export function useAllTokensQuery(baseOptions?: Apollo.QueryHookOptions<AllTokensQuery, AllTokensQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllTokensQuery, AllTokensQueryVariables>(AllTokensDocument, options);
       }
-export function useAllTokensLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AllTokensQuery, AllTokensQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AllTokensQuery, AllTokensQueryVariables>(AllTokensDocument, baseOptions);
+export function useAllTokensLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllTokensQuery, AllTokensQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllTokensQuery, AllTokensQueryVariables>(AllTokensDocument, options);
         }
 export type AllTokensQueryHookResult = ReturnType<typeof useAllTokensQuery>;
 export type AllTokensLazyQueryHookResult = ReturnType<typeof useAllTokensLazyQuery>;
-export type AllTokensQueryResult = ApolloReactCommon.QueryResult<AllTokensQuery, AllTokensQueryVariables>;
+export type AllTokensQueryResult = Apollo.QueryResult<AllTokensQuery, AllTokensQueryVariables>;
 export const TokenDocument = gql`
-    query Token($id: ID!) @api(name: protocol) {
+    query Token($id: ID!) {
   token(id: $id) {
     ...TokenAll
   }
@@ -5050,17 +4955,19 @@ export const TokenDocument = gql`
  *   },
  * });
  */
-export function useTokenQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TokenQuery, TokenQueryVariables>) {
-        return ApolloReactHooks.useQuery<TokenQuery, TokenQueryVariables>(TokenDocument, baseOptions);
+export function useTokenQuery(baseOptions: Apollo.QueryHookOptions<TokenQuery, TokenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TokenQuery, TokenQueryVariables>(TokenDocument, options);
       }
-export function useTokenLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TokenQuery, TokenQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<TokenQuery, TokenQueryVariables>(TokenDocument, baseOptions);
+export function useTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TokenQuery, TokenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TokenQuery, TokenQueryVariables>(TokenDocument, options);
         }
 export type TokenQueryHookResult = ReturnType<typeof useTokenQuery>;
 export type TokenLazyQueryHookResult = ReturnType<typeof useTokenLazyQuery>;
-export type TokenQueryResult = ApolloReactCommon.QueryResult<TokenQuery, TokenQueryVariables>;
+export type TokenQueryResult = Apollo.QueryResult<TokenQuery, TokenQueryVariables>;
 export const HistoricTransactionsDocument = gql`
-    query HistoricTransactions($account: Bytes) @api(name: protocol) {
+    query HistoricTransactions($account: Bytes) {
   transactions(
     where: {sender: $account}
     orderBy: timestamp
@@ -5170,12 +5077,14 @@ export const HistoricTransactionsDocument = gql`
  *   },
  * });
  */
-export function useHistoricTransactionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>) {
-        return ApolloReactHooks.useQuery<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>(HistoricTransactionsDocument, baseOptions);
+export function useHistoricTransactionsQuery(baseOptions?: Apollo.QueryHookOptions<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>(HistoricTransactionsDocument, options);
       }
-export function useHistoricTransactionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>(HistoricTransactionsDocument, baseOptions);
+export function useHistoricTransactionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>(HistoricTransactionsDocument, options);
         }
 export type HistoricTransactionsQueryHookResult = ReturnType<typeof useHistoricTransactionsQuery>;
 export type HistoricTransactionsLazyQueryHookResult = ReturnType<typeof useHistoricTransactionsLazyQuery>;
-export type HistoricTransactionsQueryResult = ApolloReactCommon.QueryResult<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>;
+export type HistoricTransactionsQueryResult = Apollo.QueryResult<HistoricTransactionsQuery, HistoricTransactionsQueryVariables>;

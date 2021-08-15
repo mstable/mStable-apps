@@ -1,0 +1,1565 @@
+schema {
+  query: Query
+  subscription: Subscription
+}
+
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+directive @entity on OBJECT
+
+directive @subgraphId(id: String) on OBJECT
+
+type Account {
+  id: ID!
+  totalVotes: BigInt!
+  lastAction: Int!
+  permMultiplier: Int!
+  seasonMultiplier: Int!
+  completedQuests(skip: Int = 0, first: Int = 100, orderBy: CompletedQuest_orderBy, orderDirection: OrderDirection, where: CompletedQuest_filter): [CompletedQuest!]!
+  stakedTokenAccounts(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
+  delegators(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
+}
+
+input Account_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  totalVotes: BigInt
+  totalVotes_not: BigInt
+  totalVotes_gt: BigInt
+  totalVotes_lt: BigInt
+  totalVotes_gte: BigInt
+  totalVotes_lte: BigInt
+  totalVotes_in: [BigInt!]
+  totalVotes_not_in: [BigInt!]
+  lastAction: Int
+  lastAction_not: Int
+  lastAction_gt: Int
+  lastAction_lt: Int
+  lastAction_gte: Int
+  lastAction_lte: Int
+  lastAction_in: [Int!]
+  lastAction_not_in: [Int!]
+  permMultiplier: Int
+  permMultiplier_not: Int
+  permMultiplier_gt: Int
+  permMultiplier_lt: Int
+  permMultiplier_gte: Int
+  permMultiplier_lte: Int
+  permMultiplier_in: [Int!]
+  permMultiplier_not_in: [Int!]
+  seasonMultiplier: Int
+  seasonMultiplier_not: Int
+  seasonMultiplier_gt: Int
+  seasonMultiplier_lt: Int
+  seasonMultiplier_gte: Int
+  seasonMultiplier_lte: Int
+  seasonMultiplier_in: [Int!]
+  seasonMultiplier_not_in: [Int!]
+}
+
+enum Account_orderBy {
+  id
+  totalVotes
+  lastAction
+  permMultiplier
+  seasonMultiplier
+  completedQuests
+  stakedTokenAccounts
+  delegators
+}
+
+scalar BigDecimal
+
+scalar BigInt
+
+scalar BigNumber
+
+input Block_height {
+  hash: Bytes
+  number: Int
+}
+
+scalar Bytes
+
+type CompletedQuest {
+  id: ID!
+  account: Account!
+  quest: Quest!
+  completedAt: Int!
+}
+
+input CompletedQuest_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  account: String
+  account_not: String
+  account_gt: String
+  account_lt: String
+  account_gte: String
+  account_lte: String
+  account_in: [String!]
+  account_not_in: [String!]
+  account_contains: String
+  account_not_contains: String
+  account_starts_with: String
+  account_not_starts_with: String
+  account_ends_with: String
+  account_not_ends_with: String
+  quest: String
+  quest_not: String
+  quest_gt: String
+  quest_lt: String
+  quest_gte: String
+  quest_lte: String
+  quest_in: [String!]
+  quest_not_in: [String!]
+  quest_contains: String
+  quest_not_contains: String
+  quest_starts_with: String
+  quest_not_starts_with: String
+  quest_ends_with: String
+  quest_not_ends_with: String
+  completedAt: Int
+  completedAt_not: Int
+  completedAt_gt: Int
+  completedAt_lt: Int
+  completedAt_gte: Int
+  completedAt_lte: Int
+  completedAt_in: [Int!]
+  completedAt_not_in: [Int!]
+}
+
+enum CompletedQuest_orderBy {
+  id
+  account
+  quest
+  completedAt
+}
+
+type Counter {
+  id: ID!
+  """
+  Value of the counter; should be positive
+  
+  """
+  value: BigInt!
+}
+
+input Counter_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  value: BigInt
+  value_not: BigInt
+  value_gt: BigInt
+  value_lt: BigInt
+  value_gte: BigInt
+  value_lte: BigInt
+  value_in: [BigInt!]
+  value_not_in: [BigInt!]
+}
+
+enum Counter_orderBy {
+  id
+  value
+}
+
+type Metric {
+  id: ID!
+  """
+  Exact value of the metric, i.e. in base units as an integer
+  
+  """
+  exact: BigInt!
+  """
+  Decimals used for the exact value (default: 18)
+  
+  """
+  decimals: Int!
+  """
+  Simple value of the metric, i.e. the exact value represented as a decimal
+  
+  """
+  simple: BigDecimal!
+}
+
+input Metric_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  exact: BigInt
+  exact_not: BigInt
+  exact_gt: BigInt
+  exact_lt: BigInt
+  exact_gte: BigInt
+  exact_lte: BigInt
+  exact_in: [BigInt!]
+  exact_not_in: [BigInt!]
+  decimals: Int
+  decimals_not: Int
+  decimals_gt: Int
+  decimals_lt: Int
+  decimals_gte: Int
+  decimals_lte: Int
+  decimals_in: [Int!]
+  decimals_not_in: [Int!]
+  simple: BigDecimal
+  simple_not: BigDecimal
+  simple_gt: BigDecimal
+  simple_lt: BigDecimal
+  simple_gte: BigDecimal
+  simple_lte: BigDecimal
+  simple_in: [BigDecimal!]
+  simple_not_in: [BigDecimal!]
+}
+
+enum Metric_orderBy {
+  id
+  exact
+  decimals
+  simple
+}
+
+scalar MstableBigDecimal
+
+enum OrderDirection {
+  asc
+  desc
+}
+
+type Query {
+  token(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Token
+  tokens(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Token_orderBy
+    orderDirection: OrderDirection
+    where: Token_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Token!]!
+  metric(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Metric
+  metrics(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Metric_orderBy
+    orderDirection: OrderDirection
+    where: Metric_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Metric!]!
+  counter(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Counter
+  counters(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Counter_orderBy
+    orderDirection: OrderDirection
+    where: Counter_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Counter!]!
+  stakedTokenBalance(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): StakedTokenBalance
+  stakedTokenBalances(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: StakedTokenBalance_orderBy
+    orderDirection: OrderDirection
+    where: StakedTokenBalance_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [StakedTokenBalance!]!
+  quest(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Quest
+  quests(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Quest_orderBy
+    orderDirection: OrderDirection
+    where: Quest_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Quest!]!
+  season(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Season
+  seasons(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Season_orderBy
+    orderDirection: OrderDirection
+    where: Season_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Season!]!
+  completedQuest(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): CompletedQuest
+  completedQuests(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: CompletedQuest_orderBy
+    orderDirection: OrderDirection
+    where: CompletedQuest_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [CompletedQuest!]!
+  stakedToken(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): StakedToken
+  stakedTokens(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: StakedToken_orderBy
+    orderDirection: OrderDirection
+    where: StakedToken_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [StakedToken!]!
+  stakingRewards(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: StakingRewards_orderBy
+    orderDirection: OrderDirection
+    where: StakingRewards_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [StakingRewards!]!
+  account(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Account
+  accounts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Account_orderBy
+    orderDirection: OrderDirection
+    where: Account_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Account!]!
+  stakedTokenAccount(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): StakedTokenAccount
+  stakedTokenAccounts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: StakedTokenAccount_orderBy
+    orderDirection: OrderDirection
+    where: StakedTokenAccount_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [StakedTokenAccount!]!
+  questManager(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): QuestManager
+  questManagers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: QuestManager_orderBy
+    orderDirection: OrderDirection
+    where: QuestManager_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [QuestManager!]!
+  transaction(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Transaction
+  transactions(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Transaction_orderBy
+    orderDirection: OrderDirection
+    where: Transaction_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Transaction!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+type Quest {
+  id: ID!
+  type: QuestType!
+  multiplier: Int!
+  status: QuestStatus!
+  expiry: Int!
+  season: Season
+  completions(skip: Int = 0, first: Int = 100, orderBy: CompletedQuest_orderBy, orderDirection: OrderDirection, where: CompletedQuest_filter): [CompletedQuest!]!
+}
+
+type QuestManager {
+  id: ID!
+  season: Season!
+  questMaster: Bytes!
+  questSigner: Bytes
+}
+
+input QuestManager_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  season: String
+  season_not: String
+  season_gt: String
+  season_lt: String
+  season_gte: String
+  season_lte: String
+  season_in: [String!]
+  season_not_in: [String!]
+  season_contains: String
+  season_not_contains: String
+  season_starts_with: String
+  season_not_starts_with: String
+  season_ends_with: String
+  season_not_ends_with: String
+  questMaster: Bytes
+  questMaster_not: Bytes
+  questMaster_in: [Bytes!]
+  questMaster_not_in: [Bytes!]
+  questMaster_contains: Bytes
+  questMaster_not_contains: Bytes
+  questSigner: Bytes
+  questSigner_not: Bytes
+  questSigner_in: [Bytes!]
+  questSigner_not_in: [Bytes!]
+  questSigner_contains: Bytes
+  questSigner_not_contains: Bytes
+}
+
+enum QuestManager_orderBy {
+  id
+  season
+  questMaster
+  questSigner
+}
+
+enum QuestStatus {
+  ACTIVE
+  EXPIRED
+}
+
+enum QuestType {
+  PERMANENT
+  SEASONAL
+}
+
+input Quest_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  type: QuestType
+  type_not: QuestType
+  multiplier: Int
+  multiplier_not: Int
+  multiplier_gt: Int
+  multiplier_lt: Int
+  multiplier_gte: Int
+  multiplier_lte: Int
+  multiplier_in: [Int!]
+  multiplier_not_in: [Int!]
+  status: QuestStatus
+  status_not: QuestStatus
+  expiry: Int
+  expiry_not: Int
+  expiry_gt: Int
+  expiry_lt: Int
+  expiry_gte: Int
+  expiry_lte: Int
+  expiry_in: [Int!]
+  expiry_not_in: [Int!]
+  season: String
+  season_not: String
+  season_gt: String
+  season_lt: String
+  season_gte: String
+  season_lte: String
+  season_in: [String!]
+  season_not_in: [String!]
+  season_contains: String
+  season_not_contains: String
+  season_starts_with: String
+  season_not_starts_with: String
+  season_ends_with: String
+  season_not_ends_with: String
+}
+
+enum Quest_orderBy {
+  id
+  type
+  multiplier
+  status
+  expiry
+  season
+  completions
+}
+
+type Season {
+  id: ID!
+  seasonNumber: Int!
+  startedAt: Int!
+  endedAt: Int
+  quests(skip: Int = 0, first: Int = 100, orderBy: Quest_orderBy, orderDirection: OrderDirection, where: Quest_filter): [Quest!]!
+}
+
+input Season_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  seasonNumber: Int
+  seasonNumber_not: Int
+  seasonNumber_gt: Int
+  seasonNumber_lt: Int
+  seasonNumber_gte: Int
+  seasonNumber_lte: Int
+  seasonNumber_in: [Int!]
+  seasonNumber_not_in: [Int!]
+  startedAt: Int
+  startedAt_not: Int
+  startedAt_gt: Int
+  startedAt_lt: Int
+  startedAt_gte: Int
+  startedAt_lte: Int
+  startedAt_in: [Int!]
+  startedAt_not_in: [Int!]
+  endedAt: Int
+  endedAt_not: Int
+  endedAt_gt: Int
+  endedAt_lt: Int
+  endedAt_gte: Int
+  endedAt_lte: Int
+  endedAt_in: [Int!]
+  endedAt_not_in: [Int!]
+}
+
+enum Season_orderBy {
+  id
+  seasonNumber
+  startedAt
+  endedAt
+  quests
+}
+
+type StakedToken {
+  id: ID!
+  token: Token!
+  stakingToken: Token!
+  stakingRewards: StakingRewards!
+  questManager: QuestManager!
+  COOLDOWN_SECONDS: BigInt!
+  UNSTAKE_WINDOW: BigInt!
+  collateralisationRatio: BigInt!
+  slashingPercentage: BigInt!
+  accounts(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
+}
+
+type StakedTokenAccount {
+  id: ID!
+  account: Account!
+  stakedToken: StakedToken!
+  balance: StakedTokenBalance!
+  delegatee: Account
+  rewardPerTokenPaid: BigInt
+  rewards: BigInt
+}
+
+input StakedTokenAccount_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  account: String
+  account_not: String
+  account_gt: String
+  account_lt: String
+  account_gte: String
+  account_lte: String
+  account_in: [String!]
+  account_not_in: [String!]
+  account_contains: String
+  account_not_contains: String
+  account_starts_with: String
+  account_not_starts_with: String
+  account_ends_with: String
+  account_not_ends_with: String
+  stakedToken: String
+  stakedToken_not: String
+  stakedToken_gt: String
+  stakedToken_lt: String
+  stakedToken_gte: String
+  stakedToken_lte: String
+  stakedToken_in: [String!]
+  stakedToken_not_in: [String!]
+  stakedToken_contains: String
+  stakedToken_not_contains: String
+  stakedToken_starts_with: String
+  stakedToken_not_starts_with: String
+  stakedToken_ends_with: String
+  stakedToken_not_ends_with: String
+  balance: String
+  balance_not: String
+  balance_gt: String
+  balance_lt: String
+  balance_gte: String
+  balance_lte: String
+  balance_in: [String!]
+  balance_not_in: [String!]
+  balance_contains: String
+  balance_not_contains: String
+  balance_starts_with: String
+  balance_not_starts_with: String
+  balance_ends_with: String
+  balance_not_ends_with: String
+  delegatee: String
+  delegatee_not: String
+  delegatee_gt: String
+  delegatee_lt: String
+  delegatee_gte: String
+  delegatee_lte: String
+  delegatee_in: [String!]
+  delegatee_not_in: [String!]
+  delegatee_contains: String
+  delegatee_not_contains: String
+  delegatee_starts_with: String
+  delegatee_not_starts_with: String
+  delegatee_ends_with: String
+  delegatee_not_ends_with: String
+  rewardPerTokenPaid: BigInt
+  rewardPerTokenPaid_not: BigInt
+  rewardPerTokenPaid_gt: BigInt
+  rewardPerTokenPaid_lt: BigInt
+  rewardPerTokenPaid_gte: BigInt
+  rewardPerTokenPaid_lte: BigInt
+  rewardPerTokenPaid_in: [BigInt!]
+  rewardPerTokenPaid_not_in: [BigInt!]
+  rewards: BigInt
+  rewards_not: BigInt
+  rewards_gt: BigInt
+  rewards_lt: BigInt
+  rewards_gte: BigInt
+  rewards_lte: BigInt
+  rewards_in: [BigInt!]
+  rewards_not_in: [BigInt!]
+}
+
+enum StakedTokenAccount_orderBy {
+  id
+  account
+  stakedToken
+  balance
+  delegatee
+  rewardPerTokenPaid
+  rewards
+}
+
+type StakedTokenBalance {
+  id: ID!
+  account: StakedTokenAccount!
+  stakedToken: StakedToken!
+  raw: BigInt!
+  weightedTimestamp: Int!
+  questMultiplier: Int!
+  timeMultiplier: Int!
+  cooldownTimestamp: Int!
+  cooldownUnits: Int!
+  votes: BigInt!
+}
+
+input StakedTokenBalance_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  account: String
+  account_not: String
+  account_gt: String
+  account_lt: String
+  account_gte: String
+  account_lte: String
+  account_in: [String!]
+  account_not_in: [String!]
+  account_contains: String
+  account_not_contains: String
+  account_starts_with: String
+  account_not_starts_with: String
+  account_ends_with: String
+  account_not_ends_with: String
+  stakedToken: String
+  stakedToken_not: String
+  stakedToken_gt: String
+  stakedToken_lt: String
+  stakedToken_gte: String
+  stakedToken_lte: String
+  stakedToken_in: [String!]
+  stakedToken_not_in: [String!]
+  stakedToken_contains: String
+  stakedToken_not_contains: String
+  stakedToken_starts_with: String
+  stakedToken_not_starts_with: String
+  stakedToken_ends_with: String
+  stakedToken_not_ends_with: String
+  raw: BigInt
+  raw_not: BigInt
+  raw_gt: BigInt
+  raw_lt: BigInt
+  raw_gte: BigInt
+  raw_lte: BigInt
+  raw_in: [BigInt!]
+  raw_not_in: [BigInt!]
+  weightedTimestamp: Int
+  weightedTimestamp_not: Int
+  weightedTimestamp_gt: Int
+  weightedTimestamp_lt: Int
+  weightedTimestamp_gte: Int
+  weightedTimestamp_lte: Int
+  weightedTimestamp_in: [Int!]
+  weightedTimestamp_not_in: [Int!]
+  questMultiplier: Int
+  questMultiplier_not: Int
+  questMultiplier_gt: Int
+  questMultiplier_lt: Int
+  questMultiplier_gte: Int
+  questMultiplier_lte: Int
+  questMultiplier_in: [Int!]
+  questMultiplier_not_in: [Int!]
+  timeMultiplier: Int
+  timeMultiplier_not: Int
+  timeMultiplier_gt: Int
+  timeMultiplier_lt: Int
+  timeMultiplier_gte: Int
+  timeMultiplier_lte: Int
+  timeMultiplier_in: [Int!]
+  timeMultiplier_not_in: [Int!]
+  cooldownTimestamp: Int
+  cooldownTimestamp_not: Int
+  cooldownTimestamp_gt: Int
+  cooldownTimestamp_lt: Int
+  cooldownTimestamp_gte: Int
+  cooldownTimestamp_lte: Int
+  cooldownTimestamp_in: [Int!]
+  cooldownTimestamp_not_in: [Int!]
+  cooldownUnits: Int
+  cooldownUnits_not: Int
+  cooldownUnits_gt: Int
+  cooldownUnits_lt: Int
+  cooldownUnits_gte: Int
+  cooldownUnits_lte: Int
+  cooldownUnits_in: [Int!]
+  cooldownUnits_not_in: [Int!]
+  votes: BigInt
+  votes_not: BigInt
+  votes_gt: BigInt
+  votes_lt: BigInt
+  votes_gte: BigInt
+  votes_lte: BigInt
+  votes_in: [BigInt!]
+  votes_not_in: [BigInt!]
+}
+
+enum StakedTokenBalance_orderBy {
+  id
+  account
+  stakedToken
+  raw
+  weightedTimestamp
+  questMultiplier
+  timeMultiplier
+  cooldownTimestamp
+  cooldownUnits
+  votes
+}
+
+input StakedToken_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  token: String
+  token_not: String
+  token_gt: String
+  token_lt: String
+  token_gte: String
+  token_lte: String
+  token_in: [String!]
+  token_not_in: [String!]
+  token_contains: String
+  token_not_contains: String
+  token_starts_with: String
+  token_not_starts_with: String
+  token_ends_with: String
+  token_not_ends_with: String
+  stakingToken: String
+  stakingToken_not: String
+  stakingToken_gt: String
+  stakingToken_lt: String
+  stakingToken_gte: String
+  stakingToken_lte: String
+  stakingToken_in: [String!]
+  stakingToken_not_in: [String!]
+  stakingToken_contains: String
+  stakingToken_not_contains: String
+  stakingToken_starts_with: String
+  stakingToken_not_starts_with: String
+  stakingToken_ends_with: String
+  stakingToken_not_ends_with: String
+  stakingRewards: String
+  stakingRewards_not: String
+  stakingRewards_gt: String
+  stakingRewards_lt: String
+  stakingRewards_gte: String
+  stakingRewards_lte: String
+  stakingRewards_in: [String!]
+  stakingRewards_not_in: [String!]
+  stakingRewards_contains: String
+  stakingRewards_not_contains: String
+  stakingRewards_starts_with: String
+  stakingRewards_not_starts_with: String
+  stakingRewards_ends_with: String
+  stakingRewards_not_ends_with: String
+  questManager: String
+  questManager_not: String
+  questManager_gt: String
+  questManager_lt: String
+  questManager_gte: String
+  questManager_lte: String
+  questManager_in: [String!]
+  questManager_not_in: [String!]
+  questManager_contains: String
+  questManager_not_contains: String
+  questManager_starts_with: String
+  questManager_not_starts_with: String
+  questManager_ends_with: String
+  questManager_not_ends_with: String
+  COOLDOWN_SECONDS: BigInt
+  COOLDOWN_SECONDS_not: BigInt
+  COOLDOWN_SECONDS_gt: BigInt
+  COOLDOWN_SECONDS_lt: BigInt
+  COOLDOWN_SECONDS_gte: BigInt
+  COOLDOWN_SECONDS_lte: BigInt
+  COOLDOWN_SECONDS_in: [BigInt!]
+  COOLDOWN_SECONDS_not_in: [BigInt!]
+  UNSTAKE_WINDOW: BigInt
+  UNSTAKE_WINDOW_not: BigInt
+  UNSTAKE_WINDOW_gt: BigInt
+  UNSTAKE_WINDOW_lt: BigInt
+  UNSTAKE_WINDOW_gte: BigInt
+  UNSTAKE_WINDOW_lte: BigInt
+  UNSTAKE_WINDOW_in: [BigInt!]
+  UNSTAKE_WINDOW_not_in: [BigInt!]
+  collateralisationRatio: BigInt
+  collateralisationRatio_not: BigInt
+  collateralisationRatio_gt: BigInt
+  collateralisationRatio_lt: BigInt
+  collateralisationRatio_gte: BigInt
+  collateralisationRatio_lte: BigInt
+  collateralisationRatio_in: [BigInt!]
+  collateralisationRatio_not_in: [BigInt!]
+  slashingPercentage: BigInt
+  slashingPercentage_not: BigInt
+  slashingPercentage_gt: BigInt
+  slashingPercentage_lt: BigInt
+  slashingPercentage_gte: BigInt
+  slashingPercentage_lte: BigInt
+  slashingPercentage_in: [BigInt!]
+  slashingPercentage_not_in: [BigInt!]
+}
+
+enum StakedToken_orderBy {
+  id
+  token
+  stakingToken
+  stakingRewards
+  questManager
+  COOLDOWN_SECONDS
+  UNSTAKE_WINDOW
+  collateralisationRatio
+  slashingPercentage
+  accounts
+}
+
+type StakingRewards {
+  id: ID!
+  periodFinish: Int!
+  lastUpdateTime: Int!
+  rewardRate: BigInt!
+  rewardPerTokenStored: BigInt!
+  rewardsToken: Token!
+  rewardsTokenVendor: Bytes!
+  rewardsDistributor: Bytes!
+  pendingAdditionalReward: BigInt!
+  DURATION: Int
+}
+
+input StakingRewards_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  periodFinish: Int
+  periodFinish_not: Int
+  periodFinish_gt: Int
+  periodFinish_lt: Int
+  periodFinish_gte: Int
+  periodFinish_lte: Int
+  periodFinish_in: [Int!]
+  periodFinish_not_in: [Int!]
+  lastUpdateTime: Int
+  lastUpdateTime_not: Int
+  lastUpdateTime_gt: Int
+  lastUpdateTime_lt: Int
+  lastUpdateTime_gte: Int
+  lastUpdateTime_lte: Int
+  lastUpdateTime_in: [Int!]
+  lastUpdateTime_not_in: [Int!]
+  rewardRate: BigInt
+  rewardRate_not: BigInt
+  rewardRate_gt: BigInt
+  rewardRate_lt: BigInt
+  rewardRate_gte: BigInt
+  rewardRate_lte: BigInt
+  rewardRate_in: [BigInt!]
+  rewardRate_not_in: [BigInt!]
+  rewardPerTokenStored: BigInt
+  rewardPerTokenStored_not: BigInt
+  rewardPerTokenStored_gt: BigInt
+  rewardPerTokenStored_lt: BigInt
+  rewardPerTokenStored_gte: BigInt
+  rewardPerTokenStored_lte: BigInt
+  rewardPerTokenStored_in: [BigInt!]
+  rewardPerTokenStored_not_in: [BigInt!]
+  rewardsToken: String
+  rewardsToken_not: String
+  rewardsToken_gt: String
+  rewardsToken_lt: String
+  rewardsToken_gte: String
+  rewardsToken_lte: String
+  rewardsToken_in: [String!]
+  rewardsToken_not_in: [String!]
+  rewardsToken_contains: String
+  rewardsToken_not_contains: String
+  rewardsToken_starts_with: String
+  rewardsToken_not_starts_with: String
+  rewardsToken_ends_with: String
+  rewardsToken_not_ends_with: String
+  rewardsTokenVendor: Bytes
+  rewardsTokenVendor_not: Bytes
+  rewardsTokenVendor_in: [Bytes!]
+  rewardsTokenVendor_not_in: [Bytes!]
+  rewardsTokenVendor_contains: Bytes
+  rewardsTokenVendor_not_contains: Bytes
+  rewardsDistributor: Bytes
+  rewardsDistributor_not: Bytes
+  rewardsDistributor_in: [Bytes!]
+  rewardsDistributor_not_in: [Bytes!]
+  rewardsDistributor_contains: Bytes
+  rewardsDistributor_not_contains: Bytes
+  pendingAdditionalReward: BigInt
+  pendingAdditionalReward_not: BigInt
+  pendingAdditionalReward_gt: BigInt
+  pendingAdditionalReward_lt: BigInt
+  pendingAdditionalReward_gte: BigInt
+  pendingAdditionalReward_lte: BigInt
+  pendingAdditionalReward_in: [BigInt!]
+  pendingAdditionalReward_not_in: [BigInt!]
+  DURATION: Int
+  DURATION_not: Int
+  DURATION_gt: Int
+  DURATION_lt: Int
+  DURATION_gte: Int
+  DURATION_lte: Int
+  DURATION_in: [Int!]
+  DURATION_not_in: [Int!]
+}
+
+enum StakingRewards_orderBy {
+  id
+  periodFinish
+  lastUpdateTime
+  rewardRate
+  rewardPerTokenStored
+  rewardsToken
+  rewardsTokenVendor
+  rewardsDistributor
+  pendingAdditionalReward
+  DURATION
+}
+
+type Subscription {
+  token(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Token
+  tokens(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Token_orderBy
+    orderDirection: OrderDirection
+    where: Token_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Token!]!
+  metric(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Metric
+  metrics(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Metric_orderBy
+    orderDirection: OrderDirection
+    where: Metric_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Metric!]!
+  counter(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Counter
+  counters(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Counter_orderBy
+    orderDirection: OrderDirection
+    where: Counter_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Counter!]!
+  stakedTokenBalance(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): StakedTokenBalance
+  stakedTokenBalances(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: StakedTokenBalance_orderBy
+    orderDirection: OrderDirection
+    where: StakedTokenBalance_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [StakedTokenBalance!]!
+  quest(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Quest
+  quests(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Quest_orderBy
+    orderDirection: OrderDirection
+    where: Quest_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Quest!]!
+  season(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Season
+  seasons(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Season_orderBy
+    orderDirection: OrderDirection
+    where: Season_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Season!]!
+  completedQuest(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): CompletedQuest
+  completedQuests(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: CompletedQuest_orderBy
+    orderDirection: OrderDirection
+    where: CompletedQuest_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [CompletedQuest!]!
+  stakedToken(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): StakedToken
+  stakedTokens(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: StakedToken_orderBy
+    orderDirection: OrderDirection
+    where: StakedToken_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [StakedToken!]!
+  stakingRewards(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: StakingRewards_orderBy
+    orderDirection: OrderDirection
+    where: StakingRewards_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [StakingRewards!]!
+  account(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Account
+  accounts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Account_orderBy
+    orderDirection: OrderDirection
+    where: Account_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Account!]!
+  stakedTokenAccount(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): StakedTokenAccount
+  stakedTokenAccounts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: StakedTokenAccount_orderBy
+    orderDirection: OrderDirection
+    where: StakedTokenAccount_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [StakedTokenAccount!]!
+  questManager(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): QuestManager
+  questManagers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: QuestManager_orderBy
+    orderDirection: OrderDirection
+    where: QuestManager_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [QuestManager!]!
+  transaction(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Transaction
+  transactions(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Transaction_orderBy
+    orderDirection: OrderDirection
+    where: Transaction_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Transaction!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+"""
+An ERC20-compatible token
+
+"""
+type Token {
+  id: ID!
+  """
+  Token address
+  
+  """
+  address: Bytes!
+  """
+  Token decimals
+  
+  """
+  decimals: Int!
+  """
+  Token name
+  
+  """
+  name: String!
+  """
+  Token symbol
+  
+  """
+  symbol: String!
+  """
+  Total supply of the token
+  
+  """
+  totalSupply: Metric!
+  """
+  Total quantity of tokens burned
+  
+  """
+  totalBurned: Metric!
+  """
+  Total quantity of tokens minted
+  
+  """
+  totalMinted: Metric!
+  """
+  Count of transfer transactions
+  
+  """
+  totalTransfers: Counter!
+  """
+  Count of transfer transactions that minted the token
+  
+  """
+  totalMints: Counter!
+  """
+  Count of transfer transactions that burned the token
+  
+  """
+  totalBurns: Counter!
+}
+
+input Token_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  decimals: Int
+  decimals_not: Int
+  decimals_gt: Int
+  decimals_lt: Int
+  decimals_gte: Int
+  decimals_lte: Int
+  decimals_in: [Int!]
+  decimals_not_in: [Int!]
+  name: String
+  name_not: String
+  name_gt: String
+  name_lt: String
+  name_gte: String
+  name_lte: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  symbol: String
+  symbol_not: String
+  symbol_gt: String
+  symbol_lt: String
+  symbol_gte: String
+  symbol_lte: String
+  symbol_in: [String!]
+  symbol_not_in: [String!]
+  symbol_contains: String
+  symbol_not_contains: String
+  symbol_starts_with: String
+  symbol_not_starts_with: String
+  symbol_ends_with: String
+  symbol_not_ends_with: String
+  totalSupply: String
+  totalSupply_not: String
+  totalSupply_gt: String
+  totalSupply_lt: String
+  totalSupply_gte: String
+  totalSupply_lte: String
+  totalSupply_in: [String!]
+  totalSupply_not_in: [String!]
+  totalSupply_contains: String
+  totalSupply_not_contains: String
+  totalSupply_starts_with: String
+  totalSupply_not_starts_with: String
+  totalSupply_ends_with: String
+  totalSupply_not_ends_with: String
+  totalBurned: String
+  totalBurned_not: String
+  totalBurned_gt: String
+  totalBurned_lt: String
+  totalBurned_gte: String
+  totalBurned_lte: String
+  totalBurned_in: [String!]
+  totalBurned_not_in: [String!]
+  totalBurned_contains: String
+  totalBurned_not_contains: String
+  totalBurned_starts_with: String
+  totalBurned_not_starts_with: String
+  totalBurned_ends_with: String
+  totalBurned_not_ends_with: String
+  totalMinted: String
+  totalMinted_not: String
+  totalMinted_gt: String
+  totalMinted_lt: String
+  totalMinted_gte: String
+  totalMinted_lte: String
+  totalMinted_in: [String!]
+  totalMinted_not_in: [String!]
+  totalMinted_contains: String
+  totalMinted_not_contains: String
+  totalMinted_starts_with: String
+  totalMinted_not_starts_with: String
+  totalMinted_ends_with: String
+  totalMinted_not_ends_with: String
+  totalTransfers: String
+  totalTransfers_not: String
+  totalTransfers_gt: String
+  totalTransfers_lt: String
+  totalTransfers_gte: String
+  totalTransfers_lte: String
+  totalTransfers_in: [String!]
+  totalTransfers_not_in: [String!]
+  totalTransfers_contains: String
+  totalTransfers_not_contains: String
+  totalTransfers_starts_with: String
+  totalTransfers_not_starts_with: String
+  totalTransfers_ends_with: String
+  totalTransfers_not_ends_with: String
+  totalMints: String
+  totalMints_not: String
+  totalMints_gt: String
+  totalMints_lt: String
+  totalMints_gte: String
+  totalMints_lte: String
+  totalMints_in: [String!]
+  totalMints_not_in: [String!]
+  totalMints_contains: String
+  totalMints_not_contains: String
+  totalMints_starts_with: String
+  totalMints_not_starts_with: String
+  totalMints_ends_with: String
+  totalMints_not_ends_with: String
+  totalBurns: String
+  totalBurns_not: String
+  totalBurns_gt: String
+  totalBurns_lt: String
+  totalBurns_gte: String
+  totalBurns_lte: String
+  totalBurns_in: [String!]
+  totalBurns_not_in: [String!]
+  totalBurns_contains: String
+  totalBurns_not_contains: String
+  totalBurns_starts_with: String
+  totalBurns_not_starts_with: String
+  totalBurns_ends_with: String
+  totalBurns_not_ends_with: String
+}
+
+enum Token_orderBy {
+  id
+  address
+  decimals
+  name
+  symbol
+  totalSupply
+  totalBurned
+  totalMinted
+  totalTransfers
+  totalMints
+  totalBurns
+}
+
+interface Transaction {
+  """
+  Transaction hash + log index
+  
+  """
+  id: ID!
+  """
+  Transaction hash
+  
+  """
+  hash: Bytes!
+  """
+  Block number the transaction is in
+  
+  """
+  block: Int!
+  """
+  Timestamp of the block the transaction is in
+  
+  """
+  timestamp: BigInt!
+  """
+  Address of the sender of the transaction
+  
+  """
+  sender: Bytes!
+}
+
+input Transaction_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  hash: Bytes
+  hash_not: Bytes
+  hash_in: [Bytes!]
+  hash_not_in: [Bytes!]
+  hash_contains: Bytes
+  hash_not_contains: Bytes
+  block: Int
+  block_not: Int
+  block_gt: Int
+  block_lt: Int
+  block_gte: Int
+  block_lte: Int
+  block_in: [Int!]
+  block_not_in: [Int!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  sender: Bytes
+  sender_not: Bytes
+  sender_in: [Bytes!]
+  sender_not_in: [Bytes!]
+  sender_contains: Bytes
+  sender_not_contains: Bytes
+}
+
+enum Transaction_orderBy {
+  id
+  hash
+  block
+  timestamp
+  sender
+}
+
+type _Block_ {
+  """The hash of the block"""
+  hash: Bytes
+  """The block number"""
+  number: Int!
+}
+
+"""The type for the top-level _meta field"""
+type _Meta_ {
+  """
+  Information about a specific subgraph block. The hash of the block
+  will be null if the _meta field has a block constraint that asks for
+  a block number. It will be filled if the _meta field has no block constraint
+  and therefore asks for the latest  block
+  
+  """
+  block: _Block_!
+  """The deployment ID"""
+  deployment: String!
+  """If `true`, the subgraph encountered indexing errors at some past block"""
+  hasIndexingErrors: Boolean!
+}
+
+enum _SubgraphErrorPolicy_ {
+  """Data will be returned even if the subgraph has indexing errors"""
+  allow
+  """If the subgraph has indexing errors, data will be omitted. The default."""
+  deny
+}

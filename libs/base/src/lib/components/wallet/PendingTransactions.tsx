@@ -82,7 +82,7 @@ const NativeTokenBalance: FC = () => {
   return (
     <NativeTokenBalanceContainer insufficientBalance={insufficientBalance}>
       <div>
-        <TokenIcon symbol={nativeToken.symbol} hideNetwork />
+        <TokenIcon symbol={nativeToken.symbol} />
         <Amount amount={nativeToken.balance} price={BigDecimal.maybeParse(networkPrices.value?.nativeToken?.toFixed(4))} />
       </div>
     </NativeTokenBalanceContainer>

@@ -1,15 +1,18 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { RewardsEarned } from '@apps/hooks'
-
 import { Table, TableCell, TableRow, Button, CountUp, ThemedSkeleton } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
+import { BigDecimal } from '@apps/bigdecimal'
 
 const TABLE_CELL_WIDTHS = [60, 40]
 
 interface Props {
-  rewardsEarned: RewardsEarned
+  className?: string
+  rewardsEarned: {
+    canClaim?: boolean
+    rewards: { earned: BigDecimal; token: string }[]
+  }
   onClaimRewards?: () => void
 }
 
@@ -47,17 +50,17 @@ const Container = styled.div``
 
 const headerTitles = ['Token', 'Earned'].map(t => ({ title: t }))
 
-export const MultiRewards: FC<Props> = ({ rewardsEarned, onClaimRewards }) => {
+export const MultiRewards: FC<Props> = ({ className, rewardsEarned, onClaimRewards }) => {
   return (
-    <Container>
+    <Container className={className}>
       <Rewards>
         <Table headerTitles={headerTitles} widths={TABLE_CELL_WIDTHS}>
           {rewardsEarned.rewards.length ? (
-            rewardsEarned.rewards.map(({ token, earned }) => (
-              <TableRow key={token}>
+            rewardsEarned.rewards.map(({ token, earned }, i) => (
+              <TableRow key={token + '-' + i}>
                 <TableCell width={TABLE_CELL_WIDTHS[0]}>
                   <Token>
-                    <TokenIcon symbol={token} hideNetwork />
+                    <TokenIcon symbol={token} />
                     <h3>{token}</h3>
                   </Token>
                 </TableCell>

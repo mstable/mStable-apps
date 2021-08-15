@@ -1,0 +1,121 @@
+# import './fragments.graphql'
+
+query Staking {
+  stakedTokens {
+    id
+    stakingToken {
+      ...TokenAll
+    }
+  }
+  # TODO consider quests moving to another query
+  quests {
+    id
+  }
+}
+
+query Leaderboard($count: Int!, $skip: Int!) {
+  stakedTokens {
+    token {
+      totalSupply {
+        ...MetricFields
+      }
+    }
+  }
+  accounts(first: $count, skip: $skip, orderBy: totalVotes, orderDirection: desc) {
+    id
+    totalVotes
+    totalVotesBD @client
+  }
+}
+
+query Account($id: ID!) {
+  account(id: $id) {
+    id
+    totalVotesBD @client
+    lastAction
+    seasonMultiplier
+    permMultiplier
+    completedQuests {
+      id
+      completedAt
+      quest {
+        id
+        season {
+          id
+        }
+        status
+        multiplier
+      }
+    }
+    delegators {
+      id
+    }
+    stakedTokenAccounts {
+      id
+      stakedToken {
+        id
+        stakingToken {
+          symbol
+        }
+      }
+      balance {
+        raw
+        votes
+        timeMultiplier
+        questMultiplier
+        cooldownTimestamp
+        weightedTimestamp
+        rawBD @client
+        votesBD @client
+      }
+    }
+  }
+}
+
+query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
+  stakedToken(id: $id) {
+    id
+    token {
+      ...TokenAll
+    }
+    stakingToken {
+      ...TokenAll
+    }
+    stakingRewards {
+      DURATION
+      periodFinish
+      lastUpdateTime
+      rewardRate
+      rewardPerTokenStored
+      rewardsToken {
+        ...TokenAll
+      }
+      rewardsTokenVendor
+      rewardsDistributor
+      pendingAdditionalReward
+    }
+    UNSTAKE_WINDOW
+    COOLDOWN_SECONDS
+    collateralisationRatio
+    slashingPercentage
+    accounts(where: { account: $account }) @include(if: $hasAccount) {
+      id
+      delegatee {
+        id
+      }
+      rewardPerTokenPaid
+      rewards
+      balance {
+        timeMultiplier
+        cooldownTimestamp
+        cooldownUnits
+        questMultiplier
+        raw
+        votes
+        weightedTimestamp
+        rawBD @client
+        votesBD @client
+      }
+    }
+  }
+}

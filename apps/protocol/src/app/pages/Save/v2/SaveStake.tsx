@@ -8,9 +8,8 @@ import { useSigner } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { useBigDecimalInput } from '@apps/hooks'
 
-import { Table, TableRow, TableCell, Button, Tooltip } from '@apps/components/core'
+import { Table, TableRow, TableCell, Button, Tooltip, MultiRewards } from '@apps/components/core'
 import { AssetInput } from '@apps/components/forms'
-import { MultiRewards } from '../../Pools/Detail/MultiRewards'
 
 import { useRewardsEarned, useStakingRewards, RewardsEarnedProvider } from '../hooks'
 import { StakingRewards } from '../../../components/rewards/StakingRewards'

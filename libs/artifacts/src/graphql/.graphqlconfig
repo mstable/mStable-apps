@@ -26,7 +26,7 @@
       }
     },
     "staking-rewards": {
-      "includes": ["./shared/*", "./staking-rewards/*"],
+      "includes": ["./staking-rewards/*"],
       "schemaPath": "remote-schema.graphql",
       "extensions": {
         "endpoints": {
@@ -43,6 +43,39 @@
         "endpoints": {
           "mainnet": {
             "url": "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
+            "introspect": false
+          }
+        }
+      }
+    },
+    "snapshot": {
+      "includes": ["./shared/*", "./snapshot/*"],
+      "extensions": {
+        "endpoints": {
+          "mainnet": {
+            "url": "https://hub.snapshot.org/graphql",
+            "introspect": false
+          }
+        }
+      }
+    },
+    "staking": {
+      "includes": ["./shared/*", "./staking/*"],
+      "extensions": {
+        "endpoints": {
+          "mainnet": {
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten",
+            "introspect": false
+          }
+        }
+      }
+    },
+    "questbook": {
+      "includes": ["./shared/*", "./questbook/*"],
+      "extensions": {
+        "endpoints": {
+          "ropsten": {
+            "url": "https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook",
             "introspect": false
           }
         }

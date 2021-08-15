@@ -17,6 +17,7 @@ import Curve3Pool, { ReactComponent as Curve3PoolSvg } from './tokens/3pool.svg'
 import MTA, { ReactComponent as MtaSvg } from './tokens/MTA.svg'
 import Uniswap, { ReactComponent as UniswapSvg } from './tokens/Uniswap.svg'
 import Balancer, { ReactComponent as BalancerSvg } from './tokens/Balancer.svg'
+import BPTMTAETH, { ReactComponent as BptMtaEthSvg } from './tokens/BPT-MTA-ETH.svg'
 import ETH, { ReactComponent as EtherSvg } from './tokens/Ether.svg'
 import IMUSD, { ReactComponent as ImusdSvg } from './tokens/imUSD.svg'
 import IMBTC, { ReactComponent as ImbtcSvg } from './tokens/imBTC.svg'
@@ -67,7 +68,7 @@ export const TOKEN_ICONS: Record<string, string> = {
   MUSD3CRV,
   'UNI-V2': Uniswap,
   BAL: Balancer,
-  BPT: Balancer,
+  BPT: BPTMTAETH,
   'MK-MTA': MTA,
   'MK-BAL': Balancer,
   IMUSD,
@@ -119,7 +120,7 @@ const SVG_ICONS: Record<string, SvgComponent> = {
   MTA: MtaSvg as SvgComponent,
   'UNI-V2': UniswapSvg as SvgComponent,
   BAL: BalancerSvg as SvgComponent,
-  BPT: BalancerSvg as SvgComponent,
+  BPT: BptMtaEthSvg as SvgComponent,
   'MK-MTA': MtaSvg as SvgComponent,
   'MK-BAL': BalancerSvg as SvgComponent,
   IMUSD: ImusdSvg as SvgComponent,
@@ -155,7 +156,6 @@ const IconContainer = styled.div<{ isLarge: boolean }>`
   img {
     height: ${({ isLarge }) => (isLarge ? `2.5rem` : `2rem`)};
     width: ${({ isLarge }) => (isLarge ? `2.5rem` : `2rem`)};
-    border-radius: ${({ isLarge }) => (isLarge ? `1.25rem` : `1rem`)};
     background: ${({ theme }) => theme.color.white};
   }
 
@@ -236,8 +236,8 @@ export const TokenPair: FC<{
   if (!symbols || (symbols?.length ?? 0) < 2) return null
   return (
     <IconContainer isLarge={isLarge} className={className}>
-      <TokenIcon symbol={symbols[0]} hideNetwork />
-      <TokenIcon symbol={symbols[1]} hideNetwork />
+      <TokenIcon symbol={symbols[0]} />
+      <TokenIcon symbol={symbols[1]} />
     </IconContainer>
   )
 }

@@ -1,7 +1,7 @@
 import type { API, Wallet } from 'bnc-onboard/dist/src/interfaces'
 import type { FC } from 'react'
 import Onboard from 'bnc-onboard'
-import type { Provider, Web3Provider as EthersWeb3Provider } from '@ethersproject/providers'
+import type { Web3Provider as EthersWeb3Provider, BaseProvider as Provider } from '@ethersproject/providers'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-use'
 import { ethers, utils } from 'ethers'
@@ -349,14 +349,12 @@ const OnboardConnection: FC = ({ children }) => {
 
     if (injectedMismatching) {
       return setSigners({
-        provider: jsonRpcProviders.provider,
-        parentChainProvider: jsonRpcProviders.parentChainProvider,
+        provider: jsonRpcProviders.provider as never,
       })
     }
 
     setSigners({
-      provider: injectedProvider ?? jsonRpcProviders.provider,
-      parentChainProvider: jsonRpcProviders.parentChainProvider,
+      provider: injectedProvider ?? (jsonRpcProviders.provider as never),
       signer: injectedProvider?.getSigner() as never,
     })
   }, [injectedMismatching, injectedProvider, jsonRpcProviders, setSigners])

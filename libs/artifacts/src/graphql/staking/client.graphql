@@ -1,0 +1,12 @@
+type Metric {
+  bigDecimal: MstableBigDecimal!
+}
+
+type StakedTokenBalance {
+  rawBD: MstableBigDecimal!
+  votesBD: MstableBigDecimal!
+}
+
+type Account {
+  totalVotesBD: MstableBigDecimal!
+}

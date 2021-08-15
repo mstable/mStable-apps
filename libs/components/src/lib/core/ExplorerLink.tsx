@@ -10,10 +10,11 @@ export const ExplorerLink: FC<{
   type?: 'transaction' | 'account' | 'address' | 'token'
   truncate?: boolean
   showData?: boolean
-}> = ({ children, type = 'address', data, showData, truncate = true }) => {
+  className?: string
+}> = ({ children, type = 'address', data, showData, truncate = true, className }) => {
   const getExplorerUrl = useGetExplorerUrl()
   return (
-    <ExternalLink href={getExplorerUrl(data, type)} title={`View ${type} on Etherscan`}>
+    <ExternalLink href={getExplorerUrl(data, type)} title={`View ${type} on Etherscan`} className={className}>
       {children || (showData ? (truncate ? truncateAddress(data) : data) : null)}
     </ExternalLink>
   )

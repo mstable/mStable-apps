@@ -131,7 +131,9 @@ export const ClaimGraph: FC = () => {
     }
   }, [rewardStreams])
 
-  return rewardStreams ? (
+  if (!rewardStreams) return null
+
+  return (
     <ChartContainer key={chart.groups.length}>
       {chart.groups.map(({ data, types, range }) => (
         <ResponsiveContainer maxHeight={200} aspect={3} key={range[0]}>
@@ -215,5 +217,5 @@ export const ClaimGraph: FC = () => {
         </ResponsiveContainer>
       ))}
     </ChartContainer>
-  ) : null
+  )
 }

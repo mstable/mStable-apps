@@ -8,7 +8,7 @@ import { usePropose } from '@apps/base/context/transactions'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { useBigDecimalInput } from '@apps/hooks'
 
-import { InputV2 as Input } from '../forms/AmountInputV2'
+import { Input } from '../forms/Input'
 import { Button } from './Button'
 
 interface Props {

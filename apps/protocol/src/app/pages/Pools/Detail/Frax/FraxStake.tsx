@@ -3,7 +3,7 @@ import React, { FC, useMemo, useState } from 'react'
 import { intervalToDuration, formatDuration } from 'date-fns'
 import styled from 'styled-components'
 import { AssetInput } from '@apps/components/forms'
-import { Button, CountdownBar, CountUp, Slider, Table, TableCell, TableRow } from '@apps/components/core'
+import { Button, CountdownBar, CountUp, MultiRewards, Slider, Table, TableCell, TableRow } from '@apps/components/core'
 import { usePropose } from '@apps/base/context/transactions'
 import { StakingRewardsExtended, useBigDecimalInput } from '@apps/hooks'
 import { Interfaces } from '@apps/types'
@@ -14,7 +14,6 @@ import { useTokenAllowance } from '@apps/base/context/tokens'
 
 import { useFraxStakingContract, useFraxStakingState } from '../../../../context/FraxStakingProvider'
 import { useSelectedFeederPoolState } from '../../FeederPoolProvider'
-import { MultiRewards } from '../MultiRewards'
 
 const TABLE_CELL_WIDTHS = [35, 15, 30]
 const DAY = 86400
