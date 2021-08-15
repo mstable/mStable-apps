@@ -47,6 +47,17 @@
           }
         }
       }
+    },
+    "staking": {
+      "includes": ["./shared/*", "./staking/*"],
+      "extensions": {
+        "endpoints": {
+          "mainnet": {
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten",
+            "introspect": false
+          }
+        }
+      }
     }
   }
 }

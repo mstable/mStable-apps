@@ -2170,10 +2170,8 @@ export type FeederPool = {
   mintSingleTransactions: Array<FpMintSingleTransaction>;
   redeemTransactions: Array<FpRedeemTransaction>;
   swapTransactions: Array<FpSwapTransaction>;
-  vault?: Maybe<BoostedSavingsVault>;
+  vault: BoostedSavingsVault;
   accounts: Array<FeederPoolAccount>;
-  lastPrice?: Maybe<FeederPoolPrice>;
-  price24hAgo?: Maybe<FeederPoolPrice>;
 };
 
 
@@ -2362,81 +2360,6 @@ export enum FeederPoolAccount_OrderBy {
   BalanceVault = 'balanceVault',
   PriceVault = 'priceVault',
   LastUpdateVault = 'lastUpdateVault'
-}
-
-export type FeederPoolPrice = {
-  id: Scalars['ID'];
-  /** The feeder pool this price refers to. */
-  feederPool: FeederPool;
-  /** The price of one feeder pool token in mAsset terms. */
-  price: Scalars['BigDecimal'];
-  /** The timestamp at which the price was created. */
-  timestamp: Scalars['Int'];
-  /** The next price for the pool (by timestamp); used for calculating APY. */
-  next?: Maybe<FeederPoolPrice>;
-};
-
-export type FeederPoolPrice_Filter = {
-  id?: Maybe<Scalars['ID']>;
-  id_not?: Maybe<Scalars['ID']>;
-  id_gt?: Maybe<Scalars['ID']>;
-  id_lt?: Maybe<Scalars['ID']>;
-  id_gte?: Maybe<Scalars['ID']>;
-  id_lte?: Maybe<Scalars['ID']>;
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
-  feederPool?: Maybe<Scalars['String']>;
-  feederPool_not?: Maybe<Scalars['String']>;
-  feederPool_gt?: Maybe<Scalars['String']>;
-  feederPool_lt?: Maybe<Scalars['String']>;
-  feederPool_gte?: Maybe<Scalars['String']>;
-  feederPool_lte?: Maybe<Scalars['String']>;
-  feederPool_in?: Maybe<Array<Scalars['String']>>;
-  feederPool_not_in?: Maybe<Array<Scalars['String']>>;
-  feederPool_contains?: Maybe<Scalars['String']>;
-  feederPool_not_contains?: Maybe<Scalars['String']>;
-  feederPool_starts_with?: Maybe<Scalars['String']>;
-  feederPool_not_starts_with?: Maybe<Scalars['String']>;
-  feederPool_ends_with?: Maybe<Scalars['String']>;
-  feederPool_not_ends_with?: Maybe<Scalars['String']>;
-  price?: Maybe<Scalars['BigDecimal']>;
-  price_not?: Maybe<Scalars['BigDecimal']>;
-  price_gt?: Maybe<Scalars['BigDecimal']>;
-  price_lt?: Maybe<Scalars['BigDecimal']>;
-  price_gte?: Maybe<Scalars['BigDecimal']>;
-  price_lte?: Maybe<Scalars['BigDecimal']>;
-  price_in?: Maybe<Array<Scalars['BigDecimal']>>;
-  price_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
-  timestamp?: Maybe<Scalars['Int']>;
-  timestamp_not?: Maybe<Scalars['Int']>;
-  timestamp_gt?: Maybe<Scalars['Int']>;
-  timestamp_lt?: Maybe<Scalars['Int']>;
-  timestamp_gte?: Maybe<Scalars['Int']>;
-  timestamp_lte?: Maybe<Scalars['Int']>;
-  timestamp_in?: Maybe<Array<Scalars['Int']>>;
-  timestamp_not_in?: Maybe<Array<Scalars['Int']>>;
-  next?: Maybe<Scalars['String']>;
-  next_not?: Maybe<Scalars['String']>;
-  next_gt?: Maybe<Scalars['String']>;
-  next_lt?: Maybe<Scalars['String']>;
-  next_gte?: Maybe<Scalars['String']>;
-  next_lte?: Maybe<Scalars['String']>;
-  next_in?: Maybe<Array<Scalars['String']>>;
-  next_not_in?: Maybe<Array<Scalars['String']>>;
-  next_contains?: Maybe<Scalars['String']>;
-  next_not_contains?: Maybe<Scalars['String']>;
-  next_starts_with?: Maybe<Scalars['String']>;
-  next_not_starts_with?: Maybe<Scalars['String']>;
-  next_ends_with?: Maybe<Scalars['String']>;
-  next_not_ends_with?: Maybe<Scalars['String']>;
-};
-
-export enum FeederPoolPrice_OrderBy {
-  Id = 'id',
-  FeederPool = 'feederPool',
-  Price = 'price',
-  Timestamp = 'timestamp',
-  Next = 'next'
 }
 
 export type FeederPool_Filter = {
@@ -2766,34 +2689,6 @@ export type FeederPool_Filter = {
   totalSwaps_not_starts_with?: Maybe<Scalars['String']>;
   totalSwaps_ends_with?: Maybe<Scalars['String']>;
   totalSwaps_not_ends_with?: Maybe<Scalars['String']>;
-  lastPrice?: Maybe<Scalars['String']>;
-  lastPrice_not?: Maybe<Scalars['String']>;
-  lastPrice_gt?: Maybe<Scalars['String']>;
-  lastPrice_lt?: Maybe<Scalars['String']>;
-  lastPrice_gte?: Maybe<Scalars['String']>;
-  lastPrice_lte?: Maybe<Scalars['String']>;
-  lastPrice_in?: Maybe<Array<Scalars['String']>>;
-  lastPrice_not_in?: Maybe<Array<Scalars['String']>>;
-  lastPrice_contains?: Maybe<Scalars['String']>;
-  lastPrice_not_contains?: Maybe<Scalars['String']>;
-  lastPrice_starts_with?: Maybe<Scalars['String']>;
-  lastPrice_not_starts_with?: Maybe<Scalars['String']>;
-  lastPrice_ends_with?: Maybe<Scalars['String']>;
-  lastPrice_not_ends_with?: Maybe<Scalars['String']>;
-  price24hAgo?: Maybe<Scalars['String']>;
-  price24hAgo_not?: Maybe<Scalars['String']>;
-  price24hAgo_gt?: Maybe<Scalars['String']>;
-  price24hAgo_lt?: Maybe<Scalars['String']>;
-  price24hAgo_gte?: Maybe<Scalars['String']>;
-  price24hAgo_lte?: Maybe<Scalars['String']>;
-  price24hAgo_in?: Maybe<Array<Scalars['String']>>;
-  price24hAgo_not_in?: Maybe<Array<Scalars['String']>>;
-  price24hAgo_contains?: Maybe<Scalars['String']>;
-  price24hAgo_not_contains?: Maybe<Scalars['String']>;
-  price24hAgo_starts_with?: Maybe<Scalars['String']>;
-  price24hAgo_not_starts_with?: Maybe<Scalars['String']>;
-  price24hAgo_ends_with?: Maybe<Scalars['String']>;
-  price24hAgo_not_ends_with?: Maybe<Scalars['String']>;
 };
 
 export enum FeederPool_OrderBy {
@@ -2830,9 +2725,7 @@ export enum FeederPool_OrderBy {
   RedeemTransactions = 'redeemTransactions',
   SwapTransactions = 'swapTransactions',
   Vault = 'vault',
-  Accounts = 'accounts',
-  LastPrice = 'lastPrice',
-  Price24hAgo = 'price24hAgo'
+  Accounts = 'accounts'
 }
 
 export type Metric = {
@@ -2923,8 +2816,6 @@ export type Query = {
   boostedSavingsVaultWithdrawTransactions: Array<BoostedSavingsVaultWithdrawTransaction>;
   feederPool?: Maybe<FeederPool>;
   feederPools: Array<FeederPool>;
-  feederPoolPrice?: Maybe<FeederPoolPrice>;
-  feederPoolPrices: Array<FeederPoolPrice>;
   feederPoolAccount?: Maybe<FeederPoolAccount>;
   feederPoolAccounts: Array<FeederPoolAccount>;
   fpswapTransaction?: Maybe<FpSwapTransaction>;
@@ -3184,22 +3075,6 @@ export type QueryFeederPoolsArgs = {
 };
 
 
-export type QueryFeederPoolPriceArgs = {
-  id: Scalars['ID'];
-  block?: Maybe<Block_Height>;
-};
-
-
-export type QueryFeederPoolPricesArgs = {
-  skip?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<FeederPoolPrice_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<FeederPoolPrice_Filter>;
-  block?: Maybe<Block_Height>;
-};
-
-
 export type QueryFeederPoolAccountArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
@@ -3347,8 +3222,6 @@ export type Subscription = {
   boostedSavingsVaultWithdrawTransactions: Array<BoostedSavingsVaultWithdrawTransaction>;
   feederPool?: Maybe<FeederPool>;
   feederPools: Array<FeederPool>;
-  feederPoolPrice?: Maybe<FeederPoolPrice>;
-  feederPoolPrices: Array<FeederPoolPrice>;
   feederPoolAccount?: Maybe<FeederPoolAccount>;
   feederPoolAccounts: Array<FeederPoolAccount>;
   fpswapTransaction?: Maybe<FpSwapTransaction>;
@@ -3604,22 +3477,6 @@ export type SubscriptionFeederPoolsArgs = {
   orderBy?: Maybe<FeederPool_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<FeederPool_Filter>;
-  block?: Maybe<Block_Height>;
-};
-
-
-export type SubscriptionFeederPoolPriceArgs = {
-  id: Scalars['ID'];
-  block?: Maybe<Block_Height>;
-};
-
-
-export type SubscriptionFeederPoolPricesArgs = {
-  skip?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<FeederPoolPrice_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<FeederPoolPrice_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -4060,7 +3917,7 @@ export type FeederPoolsQuery = { feederPools: Array<(
     & { basket: (
       Pick<Basket, 'undergoingRecol' | 'failed'>
       & { bassets: Array<BassetAllFragment> }
-    ), token: TokenAllFragment, fasset: TokenAllFragment, masset: Pick<Token, 'id'>, vault?: Maybe<BoostedSavingsVaultAllFragment>, accounts: Array<(
+    ), token: TokenAllFragment, fasset: TokenAllFragment, masset: Pick<Token, 'id'>, vault: BoostedSavingsVaultAllFragment, accounts: Array<(
       Pick<FeederPoolAccount, 'balance' | 'price' | 'lastUpdate' | 'balanceVault' | 'priceVault' | 'lastUpdateVault'>
       & { cumulativeEarned: Pick<Metric, 'exact' | 'decimals'>, cumulativeEarnedVault: Pick<Metric, 'exact' | 'decimals'> }
     )> }
