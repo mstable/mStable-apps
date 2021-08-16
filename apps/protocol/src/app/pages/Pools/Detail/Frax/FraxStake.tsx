@@ -302,22 +302,23 @@ export const FraxStake: FC = () => {
             const dateRange = endTime - startTime
             const unlocked = endTime < Date.now()
             const percentage = 100 * ((endTime - Date.now()) / dateRange)
-            const token = 'FRAX/mUSD' // TODO: - Pull out to provider
             return (
-              <StyledRow key={kekId} onClick={unlocked ? () => handleWithdraw(kekId) : undefined} buttonTitle="Withdraw">
-                <TableCell width={TABLE_CELL_WIDTHS[0]}>
-                  <h3>
-                    <CountUp end={liquidity?.simple} decimals={2} />
-                    {` ${token}`}
-                  </h3>
-                </TableCell>
-                <MultiplierCell width={TABLE_CELL_WIDTHS[1]}>
-                  <span>{lockMultiplier?.simple.toFixed(3)}x</span>
-                </MultiplierCell>
-                <TableCell width={TABLE_CELL_WIDTHS[2]}>
-                  {unlocked ? <span>Unlocked</span> : <CountdownBar percentage={percentage} end={endTime} />}
-                </TableCell>
-              </StyledRow>
+              !!liquidity?.simple && (
+                <StyledRow key={kekId} onClick={unlocked ? () => handleWithdraw(kekId) : undefined} buttonTitle="Withdraw">
+                  <TableCell width={TABLE_CELL_WIDTHS[0]}>
+                    <h3>
+                      <CountUp end={liquidity?.simple} decimals={2} />
+                      {` mUSD/FRAX`}
+                    </h3>
+                  </TableCell>
+                  <MultiplierCell width={TABLE_CELL_WIDTHS[1]}>
+                    <span>{lockMultiplier?.simple.toFixed(3)}x</span>
+                  </MultiplierCell>
+                  <TableCell width={TABLE_CELL_WIDTHS[2]}>
+                    {unlocked ? <span>Unlocked</span> : <CountdownBar percentage={percentage} end={endTime} />}
+                  </TableCell>
+                </StyledRow>
+              )
             )
           })}
         </StyledTable>

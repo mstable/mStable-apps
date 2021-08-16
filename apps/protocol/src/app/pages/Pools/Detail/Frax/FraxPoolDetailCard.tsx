@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
@@ -64,6 +64,7 @@ const StatsContainer = styled.div`
     @media (min-width: ${ViewportWidth.m}) {
       flex-direction: row;
       flex: 0;
+      align-items: flex-start;
       justify-content: space-between;
       flex-basis: calc(50% - 5%);
     }
@@ -107,16 +108,21 @@ const Container = styled(Card)`
 export const FraxPoolDetailCard: FC<Props> = ({ poolAddress, className }) => {
   const feederPool = useFeederPool(poolAddress) as FeederPoolState
   const stakingContract = useFraxStakingContract()
-  const propose = usePropose()
   const { subscribedData, rewards } = useFraxStakingState()
+  const propose = usePropose()
 
   const claimRewards = () => {
     if (!stakingContract) return
-
     propose<Interfaces.FraxCrossChainFarm, 'getReward'>(
       new TransactionManifest(stakingContract, 'getReward', [], { present: 'Claiming rewards', past: 'Claimed rewards' }),
     )
   }
+
+  const balance = useMemo(() => {
+    const poolBalance = subscribedData.value?.accountData?.poolBalance.simple
+    const stakedBalance = subscribedData.value?.accountData?.lockedLiquidity.simple
+    return poolBalance + stakedBalance
+  }, [subscribedData])
 
   const canClaimRewards = subscribedData.value?.accountData?.earned?.some(e => e.amount.exact.gt(0))
 
@@ -137,13 +143,7 @@ export const FraxPoolDetailCard: FC<Props> = ({ poolAddress, className }) => {
         <StatsContainer>
           <div>
             <p>Balance</p>
-            <div>
-              {subscribedData.value?.accountData ? (
-                <CountUp end={subscribedData.value.accountData.poolBalance.simple} prefix="$" />
-              ) : (
-                <Skeleton height={20} />
-              )}
-            </div>
+            <div>{subscribedData.value?.accountData ? <CountUp end={balance} prefix="$" /> : <Skeleton height={20} />}</div>
           </div>
           <div>
             <Tooltip tip="Boost your rewards on Frax to get the maximum APY">
