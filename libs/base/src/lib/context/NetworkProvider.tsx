@@ -87,8 +87,6 @@ export interface EthereumMainnet
         WETH: string
         WBTC: string
       }
-      // TODO remove, just for testing
-      ['FRAX/IQ']: { stakingContract: string; stakingToken: string; rewardsTokens: [string, string] }
     },
     { feeders: string[] }
   > {
@@ -103,7 +101,16 @@ export interface EthereumGoerli extends Network<{ ERC20: { WETH: string } }, {}>
   chainId: ChainIds.EthereumGoerli
 }
 
-export interface MaticMainnet extends Network<{ ERC20: { wMATIC: string } }, GraphQLEndpoints<'stakingRewards'>> {
+export interface MaticMainnet
+  extends Network<
+    {
+      ERC20: {
+        wMATIC: string
+      }
+      FRAX: { stakingContract: string; stakingToken: string; rewardsTokens: [string, string]; feederPool: string }
+    },
+    GraphQLEndpoints<'stakingRewards' | 'feeders'>
+  > {
   chainId: ChainIds.MaticMainnet
   parentChainId: ChainIds.EthereumMainnet
   nativeToken: {
@@ -184,11 +191,7 @@ const ETH_MAINNET: EthereumMainnet = {
     ERC20: {
       WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       WBTC: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
-    },
-    'FRAX/IQ': {
-      stakingContract: '0xf37057823910653a554d996b49e3399dc87fae1b',
-      rewardsTokens: ['0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0', '0x579cea1889991f68acc35ff5c3dd0621ff29b0c9'],
-      stakingToken: '0x853d955acef822db058eb8505911ed77f175b99e',
+      FXS: '0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0',
     },
   },
   getExplorerUrl: etherscanUrl(),
@@ -269,6 +272,7 @@ const MATIC_MAINNET: MaticMainnet = {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-polygon')],
     blocks: [graphHostedEndpoint('elkfinance', 'matic-blocks')],
     stakingRewards: [graphHostedEndpoint('mstable', 'mstable-staking-rewards-polygon')],
+    feeders: [graphHostedEndpoint('mstable', 'mstable-feeder-pools-polygon')],
   },
   addresses: {
     MTA: '0xf501dd45a1198c2e1b5aef5314a68b9006d842e0',
@@ -279,6 +283,12 @@ const MATIC_MAINNET: MaticMainnet = {
     ERC20: {
       wMATIC: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
       FXS: '0x3e121107F6F22DA4911079845a470757aF4e1A1b',
+    },
+    FRAX: {
+      stakingContract: '0xc425Fd9Ed3C892d849C9E1a971516da1C1B29696',
+      rewardsTokens: ['0x3e121107f6f22da4911079845a470757af4e1a1b', '0xf501dd45a1198c2e1b5aef5314a68b9006d842e0'],
+      stakingToken: '0xb30a907084ac8a0d25dddab4e364827406fd09f0',
+      feederPool: '0xb30a907084ac8a0d25dddab4e364827406fd09f0',
     },
   },
   getExplorerUrl: etherscanUrl(undefined, 'polygonscan.com'),

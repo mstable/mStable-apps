@@ -181,8 +181,9 @@ export const useOrderedCurrentTransactions = (): Transaction[] => {
   }, [state])
 }
 
-export const useHasPendingApproval = (address: string, spender: string): boolean => {
+export const useHasPendingApproval = (address: string, spender?: string): boolean => {
   const state = useTransactionsState()
+  if (!spender) return false
   return Object.values(state).some(
     tx =>
       tx.status !== TransactionStatus.Confirmed &&

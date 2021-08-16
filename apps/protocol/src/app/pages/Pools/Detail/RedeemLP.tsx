@@ -30,26 +30,37 @@ export const RedeemLP: FC = () => {
   const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice.value ?? 0) < 100000
 
   const vaultAddressOptions = useFPVaultAddressOptions()
+  const fassetAddressOptions = useFPAssetAddressOptions(true)
 
-  const defaultInputOptions = isLowLiquidity
-    ? [vaultAddressOptions.find(v => v.address === feederPool.vault.address) as AddressOption]
-    : vaultAddressOptions
+  const hasVaultOption = !!feederPool.vault?.address
 
-  const defaultOutputOptions = useFPAssetAddressOptions(true)
+  const defaultInputOptions = hasVaultOption
+    ? isLowLiquidity
+      ? [vaultAddressOptions.find(v => v.address === feederPool.vault?.address) as AddressOption]
+      : vaultAddressOptions
+    : fassetAddressOptions
 
-  const [inputOptions, setInputOptions] = useState<AddressOption[]>(defaultInputOptions)
-  const [outputOptions, setOutputOptions] = useState<AddressOption[]>(defaultOutputOptions.filter(a => a.address === feederPool.address))
+  const defaultOutputOptions = hasVaultOption ? fassetAddressOptions : vaultAddressOptions
 
-  const [inputAddress, setInputAddress] = useState<string | undefined>(feederPool.vault.address)
-  const [outputAddress, setOutputAddress] = useState<string | undefined>(feederPool.address)
+  const [inputOptions, setInputOptions] = useState<AddressOption[]>(
+    hasVaultOption ? defaultInputOptions : defaultOutputOptions.filter(a => a.address === feederPool.address),
+  )
+  const [outputOptions, setOutputOptions] = useState<AddressOption[]>(
+    hasVaultOption
+      ? defaultOutputOptions.filter(a => a.address === feederPool.address)
+      : defaultInputOptions.filter(a => a.address !== feederPool.address),
+  )
+
+  const [inputAddress, setInputAddress] = useState<string | undefined>(feederPool.vault?.address ?? feederPool.address)
+  const [outputAddress, setOutputAddress] = useState<string | undefined>(hasVaultOption ? feederPool.address : feederPool.masset.address)
 
   const [inputAmount, inputFormValue, setInputFormValue] = useBigDecimalInput()
 
   const handleSetInputAddress = (address: string): void => {
     if (address === feederPool.address) {
-      setOutputOptions(defaultOutputOptions.filter(v => v.address !== feederPool.vault.address || v.address !== feederPool.address))
+      setOutputOptions(defaultOutputOptions.filter(v => v.address !== feederPool.vault?.address || v.address !== feederPool.address))
       setOutputAddress(feederPool.fasset.address)
-    } else if (address === feederPool.vault.address) {
+    } else if (address === feederPool.vault?.address) {
       setOutputOptions(defaultOutputOptions.filter(v => v.address === feederPool.address))
       setOutputAddress(feederPool.address)
     } else {
@@ -60,9 +71,9 @@ export const RedeemLP: FC = () => {
 
   const handleSetOutputAddress = (address: string): void => {
     if (address === feederPool.address) {
-      setInputOptions(defaultInputOptions.filter(v => v.address !== feederPool.vault.address || v.address !== feederPool.address))
+      setInputOptions(defaultInputOptions.filter(v => v.address !== feederPool.vault?.address || v.address !== feederPool.address))
       setOutputOptions(outputOptions.filter(v => v.address === feederPool.address))
-      setInputAddress(feederPool.vault.address)
+      setInputAddress(feederPool.vault?.address)
     } else {
       setOutputAddress(feederPool.address)
     }
@@ -72,11 +83,11 @@ export const RedeemLP: FC = () => {
   const [slippageSimple, slippageFormValue, setSlippage] = useSlippage()
 
   // Can't use useTokenSubscription because the input might be e.g. vault
-  const inputToken = inputOptions.find(t => t.address === inputAddress)
+  const inputToken = inputOptions.find(t => t?.address === inputAddress)
 
   const outputToken = useMemo(() => outputOptions.find(t => t.address === outputAddress), [outputAddress, outputOptions])
 
-  const isUnstakingFromVault = inputAddress === feederPool.vault.address && outputAddress === feederPool.address
+  const isUnstakingFromVault = inputAddress === feederPool.vault?.address && outputAddress === feederPool.address
 
   const shouldSkipEstimation = isUnstakingFromVault
 

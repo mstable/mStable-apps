@@ -1,21 +1,23 @@
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { useNetworkAddresses } from '@apps/base/context/network'
-import { calculateApy, calculateBoost, getCoeffs, MAX_BOOST } from '@apps/quick-maths'
+import { MaticMainnet, useNetworkAddresses } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { BoostedCombinedAPY } from '@apps/types'
+import { useTokenSubscription } from '@apps/base/context/tokens'
 import { FetchState, useSelectedMassetState } from '@apps/hooks'
+import { calculateApy, calculateBoost, getCoeffs, MAX_BOOST } from '@apps/quick-maths'
+import { BoostedCombinedAPY } from '@apps/types'
 
+import { useFraxStakingState } from '../context/FraxStakingProvider'
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'
 
-export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
+const useFeederPoolApyVault = (poolAddress: string) => {
+  const networkAddresses = useNetworkAddresses()
   const massetState = useSelectedMassetState()
   const massetPrice = useSelectedMassetPrice()
   const useFetchPrice = useFetchPriceCtx()
-  const networkAddresses = useNetworkAddresses()
   const vMta = useTokenSubscription(networkAddresses?.vMTA)
 
   const pool = massetState?.feederPools[poolAddress]
   const vault = pool?.vault
+
   const rewardsTokenPrice = useFetchPrice(vault?.rewardsToken.address)
   const platformTokenPrice = useFetchPrice(vault?.platformRewardsToken?.address)
 
@@ -52,4 +54,26 @@ export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombine
   return {
     value: { rewards, platformRewards, base: pool.dailyApy },
   }
+}
+
+const useFeederPoolApyFrax = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
+  const massetState = useSelectedMassetState()
+  const feederPool = massetState?.feederPools[poolAddress]
+
+  const { rewards } = useFraxStakingState()
+
+  if (!feederPool || !rewards.value) return { fetching: true }
+
+  return {
+    value: { rewards: rewards.value, base: feederPool.dailyApy },
+  }
+}
+
+export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
+  const networkAddresses = useNetworkAddresses()
+  if (poolAddress && (networkAddresses as MaticMainnet['addresses']).FRAX?.feederPool === poolAddress) {
+    return useFeederPoolApyFrax(poolAddress)
+  }
+
+  return useFeederPoolApyVault(poolAddress)
 }

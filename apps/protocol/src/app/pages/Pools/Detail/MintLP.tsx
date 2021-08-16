@@ -31,7 +31,11 @@ export const MintLP: FC = () => {
   const defaultInputOptions = useFPAssetAddressOptions(true)
   const defaultOutputOptions = useFPVaultAddressOptions()
 
-  const [inputOptions, setInputOptions] = useState<AddressOption[]>(defaultInputOptions)
+  const hasVaultOption = !!feederPool.vault?.address
+
+  const [inputOptions, setInputOptions] = useState<AddressOption[]>(
+    hasVaultOption ? defaultInputOptions : defaultInputOptions.filter(v => v.address !== feederPool.address),
+  )
   const [outputOptions, setOutputOptions] = useState<AddressOption[]>(defaultOutputOptions)
 
   const [inputAddress, setInputAddress] = useState<string | undefined>(feederPool.fasset.address)

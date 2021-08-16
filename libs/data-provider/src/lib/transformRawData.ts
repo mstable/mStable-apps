@@ -54,7 +54,7 @@ const transformBasset = (
       totalSupply: BigDecimal.fromMetric(totalSupply),
       address,
       decimals,
-      symbol: symbol.replace(/^PoS-/, ''),
+      symbol: transformTokenSymbol(symbol),
     },
 
     // Initial values
@@ -247,6 +247,13 @@ const transformSavingsContractV2 = (
   }
 }
 
+const transformTokenSymbol = (symbol: string): string => {
+  const match = symbol.match(/^(\w+\/)?(?:(?:\(pos\) mstable (\w+))|(?:mstable (\w+) \(polygon pos\)))$/i)
+  if (match) return `${match[1] ?? ''}m${match[2] ?? match[3]}`
+
+  return symbol
+}
+
 const transformTokenData = ({ address, totalSupply, symbol, decimals }: TokenAllFragment, tokens: Tokens): SubscribedToken => ({
   balance: new BigDecimal(0, decimals),
   allowances: {},
@@ -254,7 +261,7 @@ const transformTokenData = ({ address, totalSupply, symbol, decimals }: TokenAll
   totalSupply: BigDecimal.fromMetric(totalSupply),
   address,
   decimals,
-  symbol,
+  symbol: transformTokenSymbol(symbol),
 })
 
 const transformFeederPoolAccountData = ({
@@ -295,14 +302,22 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
         vault,
         accounts,
       }) => {
-        const masset = bassets.find(b => b.token.address === massetToken.id) as NonNullableMasset['basket']['bassets'][0]
-        const fasset = bassets.find(b => b.token.address === fassetToken.id) as NonNullableMasset['basket']['bassets'][0]
+        const masset = transformBasset(
+          bassets.find(b => b.token.address === massetToken.id) as NonNullableMasset['basket']['bassets'][0],
+          {},
+          tokens,
+        )
+        const fasset = transformBasset(
+          bassets.find(b => b.token.address === fassetToken.id) as NonNullableMasset['basket']['bassets'][0],
+          {},
+          tokens,
+        )
         return [
           address,
           {
             address,
-            masset: { ...transformBasset(masset, {}, tokens), feederPoolAddress: address },
-            fasset: { ...transformBasset(fasset, {}, tokens), feederPoolAddress: address },
+            masset: { ...masset, feederPoolAddress: address },
+            fasset: { ...fasset, feederPoolAddress: address },
             token: { ...token, ...tokens[address] } as SubscribedToken,
             totalSupply: BigDecimal.fromMetric(fassetToken.totalSupply),
             governanceFeeRate: BigNumber.from(governanceFeeRate),
@@ -314,11 +329,11 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
             price: new BigDecimal(price ?? 0),
             failed,
             title: bassets
-              .map(b => b.token.symbol)
-              .sort(s => (s === masset.token.symbol ? -1 : 1))
+              .map(b => transformTokenSymbol(b.token.symbol))
+              .sort(s => (s === 'mUSD' || s === 'mBTC' ? -1 : 1))
               .join('/'),
             undergoingRecol,
-            vault: transformBoostedSavingsVault(vault),
+            vault: vault ? transformBoostedSavingsVault(vault) : undefined,
             account: accounts?.length ? transformFeederPoolAccountData(accounts[0]) : undefined,
           },
         ]
@@ -370,10 +385,7 @@ const transformMassetData = (
     invariantStartingCap: invariantStartingCap ? BigNumber.from(invariantStartingCap) : undefined,
     invariantCapFactor: invariantCapFactor ? BigNumber.from(invariantCapFactor) : undefined,
     undergoingRecol,
-    token: transformTokenData(
-      { ...token, symbol: token.symbol.replace(/(\(pos\) mstable usd)|(mstable usd \(polygon pos\))/i, 'mUSD') },
-      tokens,
-    ),
+    token: transformTokenData(token, tokens),
     bAssets,
     removedBassets: Object.fromEntries(removedBassets.map(b => [b.token.address, transformTokenData(b.token, tokens)])),
     collateralisationRatio: collateralisationRatio ? BigNumber.from(collateralisationRatio) : undefined,
@@ -399,9 +411,7 @@ export const transformRawData = ({ massets, feederPools, vaultBalances, tokens }
 
   return Object.fromEntries(
     massets.massets.map(masset => {
-      const massetName = masset.token.symbol
-        .toLowerCase()
-        .replace(/(\(pos\) mstable usd)|(mstable usd \(polygon pos\))/, 'musd') as MassetName
+      const massetName = transformTokenSymbol(masset.token.symbol).toLowerCase() as MassetName
       return [massetName, transformMassetData(masset, feederPools, vaultBalances, tokens)]
     }),
   )

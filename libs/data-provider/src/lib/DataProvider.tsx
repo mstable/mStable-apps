@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { createContext, FC, useContext, useEffect, useMemo, useState } from 'react'
 import { Interface } from '@ethersproject/abi'
 import { pipe } from 'ts-pipe-compose'
 
@@ -50,7 +50,10 @@ const useRawData = (): Pick<RawData, 'massets' | 'feederPools'> => {
     !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders'),
   )
 
-  return { massets: massetsSub.data, feederPools: feedersSub.data ?? EMPTY_FEEDER_POOLS }
+  return {
+    massets: massetsSub.data,
+    feederPools: feedersSub.data ?? EMPTY_FEEDER_POOLS,
+  }
 }
 
 export const useDataState = (): DataState => useContext(dataStateCtx)

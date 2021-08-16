@@ -33,16 +33,6 @@ const Icon = styled.div<{ isChevron?: boolean }>`
   }
 `
 
-const Background = styled.div<{ gradientColor?: string }>`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-radius: 1rem;
-  opacity: 0.25;
-`
-
 const ContainerStyle = css`
   display: flex;
   flex-direction: column;

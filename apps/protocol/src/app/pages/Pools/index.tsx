@@ -13,8 +13,9 @@ import { useSelectedMassetState } from '@apps/hooks'
 import { PageHeader } from '../PageHeader'
 import { Card } from './cards/Card'
 import { OnboardingCard } from './cards/OnboardingCard'
-import { AssetCard, CustomAssetCard } from './cards/AssetCard'
 import { PoolType } from './types'
+import { PoolCard } from './cards/PoolCard'
+import { useHistory } from 'react-router-dom'
 
 interface CustomAssetCardProps {
   isCustomAssetCard: boolean
@@ -123,13 +124,20 @@ const CustomContent = styled.div`
   line-height: 1.5rem;
 `
 
+const CustomCard = styled(Card)`
+  > div {
+    width: 100%;
+    z-index: 1;
+  }
+`
+
 const customEarnCard = (massetConfig: MassetConfig): CustomAssetCardProps => ({
   isCustomAssetCard: true,
   key: 'earn',
   title: 'Earn Pools',
   url: `https://earn.mstable.org/#/${massetConfig.massetName}/earn`,
   color: '#afa4db',
-  component: <CustomContent>Earn pools have moved and are now available here</CustomContent>,
+  component: <CustomContent>Earn pools are available here</CustomContent>,
 })
 
 const customPoolCard = (massetConfig: MassetConfig): CustomAssetCardProps => {
@@ -158,8 +166,10 @@ const customNoPoolsCard = (massetConfig: MassetConfig, protocolName: string): Cu
 
 const PoolsContent: FC = () => {
   const { feederPools, hasFeederPools } = useSelectedMassetState() as MassetState
+  const history = useHistory()
   const network = useNetwork()
   const massetConfig = useSelectedMassetConfig()
+  const isEthereum = network.chainId === ChainIds.EthereumMainnet
   const pools = useMemo(
     () =>
       Object.values(feederPools).reduce<{
@@ -168,7 +178,7 @@ const PoolsContent: FC = () => {
         deprecated: FeederPoolState[]
       }>(
         (prev, current) => {
-          if (current.token.balance?.exact.gt(0) || current.vault.account?.rawBalance.exact.gt(0)) {
+          if (current.token.balance?.exact.gt(0) || current.vault?.account?.rawBalance.exact.gt(0)) {
             return { ...prev, user: [...prev.user, current] }
           }
           // TODO determine deprecated somehow
@@ -177,7 +187,7 @@ const PoolsContent: FC = () => {
         {
           user: [],
           active: hasFeederPools
-            ? network.chainId === ChainIds.EthereumMainnet
+            ? isEthereum
               ? [customEarnCard(massetConfig), customPoolCard(massetConfig)]
               : []
             : [customNoPoolsCard(massetConfig, network.protocolName)],
@@ -193,7 +203,7 @@ const PoolsContent: FC = () => {
     [PoolType.Deprecated]: DEFAULT_ITEM_COUNT,
   })
 
-  const showMorePools = useCallback(
+  const handleLoadMoreClick = useCallback(
     (type: PoolType) =>
       setNumPoolsVisible({
         ...numPoolsVisible,
@@ -202,51 +212,56 @@ const PoolsContent: FC = () => {
     [numPoolsVisible],
   )
 
-  const showPoolSection = (type: PoolType): boolean =>
+  const handleCustomCardClick = (url: string) => (url.startsWith('/') ? history.push(url) : window.open(url, '_blank'))
+
+  // Temp fix to make this a bit easier to read.
+  const isPoolSectionVisible = (type: PoolType): boolean =>
     (type === PoolType.Deprecated && pools[type]?.length > 0) || type !== PoolType.Deprecated
+  const isPoolHeadingVisible = (type: PoolType): boolean => type !== PoolType.Active || (type === PoolType.Active && !!pools[type].length)
+  const isEmptyStateVisible = (type: PoolType): boolean => type === PoolType.User && pools[type]?.length === 0
+  const isLoadMoreVisible = (type: PoolType): boolean => pools[type].length > numPoolsVisible[type]
 
   return (
     <>
       {sections.map(
         type =>
-          showPoolSection(type) && (
+          isPoolSectionVisible(type) && (
             <Section key={type}>
-              <Row>
-                <h2>{Title[type]}</h2>
-              </Row>
+              {isPoolHeadingVisible(type) && (
+                <Row>
+                  <h2>{Title[type]}</h2>
+                </Row>
+              )}
               <Cards>
                 <OnboardingCard type={type} />
                 {pools[type]
                   .filter((_, i) => i < numPoolsVisible[type])
                   .map(poolOrCard =>
                     (poolOrCard as CustomAssetCardProps).isCustomAssetCard ? (
-                      <CustomAssetCard
+                      <CustomCard
                         key={(poolOrCard as CustomAssetCardProps).key}
                         title={poolOrCard.title}
-                        url={(poolOrCard as CustomAssetCardProps).url}
-                        color={(poolOrCard as CustomAssetCardProps).color}
+                        onClick={() => handleCustomCardClick((poolOrCard as CustomAssetCardProps).url)}
+                        gradientColor={(poolOrCard as CustomAssetCardProps).color}
+                        iconType={(poolOrCard as CustomAssetCardProps).url.startsWith('/') ? 'chevron' : 'external'}
                       >
                         {(poolOrCard as CustomAssetCardProps).component}
-                      </CustomAssetCard>
+                      </CustomCard>
                     ) : (
-                      <AssetCard
+                      <PoolCard
                         key={(poolOrCard as FeederPoolState).address}
                         poolAddress={(poolOrCard as FeederPoolState).address}
                         deprecated={type === PoolType.Deprecated}
                       />
                     ),
                   )}
-                {type === PoolType.User && pools[type]?.length === 0 && (
+                {isEmptyStateVisible(type) && (
                   <EmptyCard>
                     <p>No user pools found</p>
                   </EmptyCard>
                 )}
-                {pools[type].length > numPoolsVisible[type] && (
-                  <LoadCard
-                    onClick={() => {
-                      showMorePools(type)
-                    }}
-                  >
+                {isLoadMoreVisible(type) && (
+                  <LoadCard onClick={() => handleLoadMoreClick(type)}>
                     <div>Load more</div>
                   </LoadCard>
                 )}

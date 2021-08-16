@@ -13,22 +13,30 @@ interface FetchStateCallbacks<T> {
 }
 
 export const useFetchState = <T>(initialState: FetchState<T> = {}): [FetchState<T>, FetchStateCallbacks<T>] => {
-  const [fetchState, setFetchState] = useState<FetchState<T>>(initialState)
+  const [fetching, setFetching] = useState<FetchState<T>['fetching']>(initialState.fetching)
+  const [value, setValue] = useState<FetchState<T>['value']>(initialState.value)
+  const [error, setError] = useState<FetchState<T>['error']>(initialState.error)
 
   const callbacks = useMemo<FetchStateCallbacks<T>>(
     () => ({
       value: value => {
-        setFetchState({ value })
+        setValue(value)
+        setFetching(false)
+        setError(undefined)
       },
       error: error => {
-        setFetchState({ error })
+        console.error(error)
+        setError(error)
+        setFetching(false)
       },
       fetching: () => {
-        setFetchState({ fetching: true })
+        // retain value
+        setFetching(true)
+        setError(undefined)
       },
     }),
-    [setFetchState],
+    [],
   )
 
-  return [fetchState, callbacks]
+  return [useMemo(() => ({ fetching, value, error }), [fetching, value, error]), callbacks]
 }

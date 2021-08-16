@@ -50,7 +50,7 @@ export interface FeederPoolState {
   masset: FassetState
   token: SubscribedToken
   totalSupply: BigDecimal
-  vault: BoostedSavingsVaultState
+  vault?: BoostedSavingsVaultState
   invariantK: BigNumber
   dailyApy: number
   price: BigDecimal

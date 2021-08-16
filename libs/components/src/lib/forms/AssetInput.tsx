@@ -257,7 +257,7 @@ export const AssetInput: FC<Props> = ({
   hideToken,
 }) => {
   const amount = BigDecimal.maybeParse(formValue)
-  return spender && address ? (
+  return address ? (
     <ApproveProvider address={address} spender={spender} amount={amount}>
       <AssetInputApproveContent
         className={className}

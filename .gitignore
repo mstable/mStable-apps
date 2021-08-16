@@ -8,8 +8,9 @@
 /tmp
 /out-tsc
 
-# postinstall
+# artifacts
 /libs/artifacts/src/typechain
+/libs/artifacts/src/abi/external/*.json
 
 # dependencies
 /node_modules
