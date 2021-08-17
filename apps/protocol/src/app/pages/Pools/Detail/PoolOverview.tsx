@@ -40,7 +40,6 @@ const components: Record<string, ReactElement> = {
 
 export const PoolOverview: FC = () => {
   const [selection, setSelection] = useState<Selection | undefined>()
-
   const feederPool = useSelectedFeederPoolState()
   const rewardStreams = useRewardStreams()
   const apy = useFeederPoolApy(feederPool.address)
@@ -60,7 +59,7 @@ export const PoolOverview: FC = () => {
 
   const handleSelection = useCallback((newValue?: Selection) => setSelection(selection === newValue ? undefined : newValue), [selection])
 
-  return !showLiquidityMessage ? (
+  return showLiquidityMessage ? (
     <LiquidityMessage />
   ) : (
     <TransitionCard components={components} selection={selection}>
