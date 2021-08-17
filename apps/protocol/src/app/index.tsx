@@ -3,14 +3,12 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 
 import { useBaseCtx, MessageHandler } from '@apps/base'
-import { ChainIds, useNetwork } from '@apps/base/context/network'
+import { ChainIds, useChainIdCtx, useNetwork } from '@apps/base/context/network'
 import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
-import { useSelectedMassetState } from '@apps/hooks'
+import { useSelectedMassetState, useURLQuery } from '@apps/hooks'
 import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/masset-provider'
-
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
-import { usePolygonModal } from './hooks/usePolygonModal'
 
 import { Balances } from './components/Balances'
 import { Save } from './pages/Save'
@@ -72,9 +70,8 @@ export const ProtocolApp: FC = () => {
   const hasFeederPools = massetState?.hasFeederPools
   const [bannerMessage, setBannerMessage] = useBannerMessage()
   const { undergoingRecol } = useSelectedMassetState() ?? {}
-  const { chainId } = useNetwork()
-  const showPolygonModal = usePolygonModal()
-
+  const urlQuery = useURLQuery()
+  const [, setChainId] = useChainIdCtx()
   const [, setBaseCtx] = useBaseCtx()
 
   useEffect(() => {
@@ -102,11 +99,14 @@ export const ProtocolApp: FC = () => {
   }, [bannerMessage, massetConfig, setBannerMessage, undergoingRecol])
 
   useLayoutEffect(() => {
-    if (chainId === ChainIds.MaticMainnet && !localStorage.getItem('polygonViewed')) {
-      localStorage.setItem('polygonViewed', 'true')
-      showPolygonModal()
+    const network = urlQuery.get('network')
+    if (!network) return
+    const networkIds = {
+      ethereum: ChainIds['EthereumMainnet'],
+      polygon: ChainIds['MaticMainnet'],
     }
-  }, [chainId, showPolygonModal])
+    setChainId(networkIds[network] ?? 1)
+  }, [])
 
   return (
     <SelectedSaveVersionProvider>
