@@ -1,5 +1,6 @@
 import React, { createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useRef, useState } from 'react'
 
+import { useApolloClients } from '@apps/base/context/apollo'
 import { SavingsContractState } from '@apps/data-provider'
 import { useSelectedMassetName } from '@apps/masset-provider'
 import { useWalletAddress } from '@apps/base/context/account'
@@ -16,6 +17,7 @@ type SelectedSaveVersionCtx = [SaveVersion | undefined, Dispatch<SetStateAction<
 const ctx = createContext<SelectedSaveVersionCtx>(null as never)
 
 export const SelectedSaveVersionProvider: FC = ({ children }) => {
+  const clients = useApolloClients()
   const ctxValue = useState<SaveVersion | undefined>(undefined)
   const [selectedSaveVersion, setSelectedSaveVersion] = ctxValue
   const setRef = useRef(false)
@@ -39,6 +41,7 @@ export const SelectedSaveVersionProvider: FC = ({ children }) => {
     },
     skip: !v1Address,
     returnPartialData: false,
+    client: clients.protocol,
   })
 
   const v1Balance = v1SavingsBalanceQuery.data?.savingsContract?.creditBalances[0]

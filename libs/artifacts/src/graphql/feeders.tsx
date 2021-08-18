@@ -1,52 +1,29 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { BigNumber } from 'ethers';
+import { BigDecimal } from '@apps/bigdecimal';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 
-      export interface IntrospectionResultData {
-        __schema: {
-          types: {
-            kind: string;
-            name: string;
-            possibleTypes: {
-              name: string;
-            }[];
-          }[];
-        };
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
       }
-      const result: IntrospectionResultData = {
-  "__schema": {
-    "types": [
-      {
-        "kind": "INTERFACE",
-        "name": "Transaction",
-        "possibleTypes": [
-          {
-            "name": "BoostedSavingsVaultRewardAddedTransaction"
-          },
-          {
-            "name": "BoostedSavingsVaultRewardPaidTransaction"
-          },
-          {
-            "name": "BoostedSavingsVaultStakeTransaction"
-          },
-          {
-            "name": "BoostedSavingsVaultWithdrawTransaction"
-          },
-          {
-            "name": "FPMintMultiTransaction"
-          },
-          {
-            "name": "FPMintSingleTransaction"
-          },
-          {
-            "name": "FPRedeemTransaction"
-          },
-          {
-            "name": "FPSwapTransaction"
-          }
-        ]
-      }
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "Transaction": [
+      "BoostedSavingsVaultRewardAddedTransaction",
+      "BoostedSavingsVaultRewardPaidTransaction",
+      "BoostedSavingsVaultStakeTransaction",
+      "BoostedSavingsVaultWithdrawTransaction",
+      "FPMintMultiTransaction",
+      "FPMintSingleTransaction",
+      "FPRedeemTransaction",
+      "FPSwapTransaction"
     ]
   }
 };
@@ -61,8 +38,13 @@ export type Scalars = {
   Float: number;
   BigDecimal: string;
   BigInt: string;
+  BigNumber: BigNumber;
   Bytes: string;
+  MstableBigDecimal: BigDecimal;
 };
+
+
+
 
 export type Account = {
   id: Scalars['ID'];
@@ -536,6 +518,7 @@ export enum Basset_OrderBy {
   CumulativeRedeemed = 'cumulativeRedeemed',
   CumulativeFeesPaid = 'cumulativeFeesPaid'
 }
+
 
 
 
@@ -2780,6 +2763,7 @@ export enum Metric_OrderBy {
   Simple = 'simple'
 }
 
+
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -3862,82 +3846,55 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-type TransactionFields_BoostedSavingsVaultRewardAddedTransaction_Fragment = Pick<BoostedSavingsVaultRewardAddedTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_BoostedSavingsVaultRewardAddedTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_BoostedSavingsVaultRewardPaidTransaction_Fragment = Pick<BoostedSavingsVaultRewardPaidTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_BoostedSavingsVaultRewardPaidTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_BoostedSavingsVaultStakeTransaction_Fragment = Pick<BoostedSavingsVaultStakeTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_BoostedSavingsVaultStakeTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_BoostedSavingsVaultWithdrawTransaction_Fragment = Pick<BoostedSavingsVaultWithdrawTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_BoostedSavingsVaultWithdrawTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_FpMintMultiTransaction_Fragment = Pick<FpMintMultiTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_FpMintMultiTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_FpMintSingleTransaction_Fragment = Pick<FpMintSingleTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_FpMintSingleTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_FpRedeemTransaction_Fragment = Pick<FpRedeemTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_FpRedeemTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
-type TransactionFields_FpSwapTransaction_Fragment = Pick<FpSwapTransaction, 'id' | 'hash' | 'timestamp' | 'block' | 'sender'>;
+type TransactionFields_FpSwapTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
 export type TransactionFieldsFragment = TransactionFields_BoostedSavingsVaultRewardAddedTransaction_Fragment | TransactionFields_BoostedSavingsVaultRewardPaidTransaction_Fragment | TransactionFields_BoostedSavingsVaultStakeTransaction_Fragment | TransactionFields_BoostedSavingsVaultWithdrawTransaction_Fragment | TransactionFields_FpMintMultiTransaction_Fragment | TransactionFields_FpMintSingleTransaction_Fragment | TransactionFields_FpRedeemTransaction_Fragment | TransactionFields_FpSwapTransaction_Fragment;
 
-export type MetricFieldsFragment = Pick<Metric, 'id' | 'exact' | 'decimals' | 'simple'>;
+export type MetricFieldsFragment = { id: string, exact: string, decimals: number, simple: string };
 
-export type FpMetricsFragment = (
-  Pick<FeederPool, 'price' | 'invariantK' | 'dailyAPY'>
-  & { cumulativeSwapped: MetricFieldsFragment, cumulativeInterestCollected: MetricFieldsFragment, cumulativeInterestDistributed: MetricFieldsFragment, cumulativeFeesPaid: MetricFieldsFragment, cumulativeMinted: MetricFieldsFragment, cumulativeRedeemed: MetricFieldsFragment, totalMints: Pick<Counter, 'value'>, totalRedeemMassets: Pick<Counter, 'value'>, totalRedemptions: Pick<Counter, 'value'>, totalSupply: MetricFieldsFragment, totalSwaps: Pick<Counter, 'value'> }
-);
+export type FpMetricsFragment = { price: string, invariantK: string, dailyAPY: string, cumulativeSwapped: { id: string, exact: string, decimals: number, simple: string }, cumulativeInterestCollected: { id: string, exact: string, decimals: number, simple: string }, cumulativeInterestDistributed: { id: string, exact: string, decimals: number, simple: string }, cumulativeFeesPaid: { id: string, exact: string, decimals: number, simple: string }, cumulativeMinted: { id: string, exact: string, decimals: number, simple: string }, cumulativeRedeemed: { id: string, exact: string, decimals: number, simple: string }, totalMints: { value: string }, totalRedeemMassets: { value: string }, totalRedemptions: { value: string }, totalSupply: { id: string, exact: string, decimals: number, simple: string }, totalSwaps: { value: string } };
 
-export type TokenAllFragment = (
-  Pick<Token, 'id' | 'address' | 'decimals' | 'symbol'>
-  & { totalSupply: MetricFieldsFragment }
-);
+export type TokenAllFragment = { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } };
 
-export type BassetAllFragment = (
-  Pick<Basset, 'id' | 'isTransferFeeCharged' | 'ratio' | 'status' | 'maxWeight'>
-  & { vaultBalance: MetricFieldsFragment, token: TokenAllFragment }
-);
+export type BassetAllFragment = { id: string, isTransferFeeCharged: boolean, ratio: string, status: string, maxWeight?: Maybe<string>, vaultBalance: { id: string, exact: string, decimals: number, simple: string }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } };
 
-export type BoostedSavingsVaultAllFragment = (
-  Pick<BoostedSavingsVault, 'id' | 'lastUpdateTime' | 'lockupDuration' | 'unlockPercentage' | 'periodDuration' | 'periodFinish' | 'rewardPerTokenStored' | 'rewardRate' | 'stakingContract' | 'totalStakingRewards' | 'totalRaw' | 'totalSupply' | 'priceCoeff' | 'boostCoeff' | 'platformRewardPerTokenStored' | 'platformRewardRate'>
-  & { stakingToken: Pick<Token, 'address' | 'symbol'>, platformRewardsToken?: Maybe<Pick<Token, 'address' | 'symbol'>>, rewardsToken: Pick<Token, 'address' | 'symbol'>, accounts: Array<(
-    Pick<BoostedSavingsVaultAccount, 'id' | 'boostedBalance' | 'lastAction' | 'lastClaim' | 'rawBalance' | 'rewardCount' | 'rewardPerTokenPaid' | 'rewards' | 'platformRewardPerTokenPaid' | 'platformRewards'>
-    & { rewardEntries: Array<Pick<BoostedSavingsVaultRewardEntry, 'id' | 'finish' | 'index' | 'rate' | 'start'>> }
-  )> }
-);
+export type BoostedSavingsVaultAllFragment = { id: string, lastUpdateTime: number, lockupDuration: number, unlockPercentage: string, periodDuration: number, periodFinish: number, rewardPerTokenStored: string, rewardRate: string, stakingContract: string, totalStakingRewards: string, totalRaw?: Maybe<string>, totalSupply: string, priceCoeff?: Maybe<string>, boostCoeff?: Maybe<string>, platformRewardPerTokenStored?: Maybe<string>, platformRewardRate?: Maybe<string>, stakingToken: { address: string, symbol: string }, platformRewardsToken?: Maybe<{ address: string, symbol: string }>, rewardsToken: { address: string, symbol: string }, accounts?: Maybe<Array<{ id: string, boostedBalance: string, lastAction: number, lastClaim: number, rawBalance: string, rewardCount: number, rewardPerTokenPaid: string, rewards: string, platformRewardPerTokenPaid?: Maybe<string>, platformRewards?: Maybe<string>, rewardEntries: Array<{ id: string, finish: number, index: number, rate: string, start: number }> }>> };
 
-export type FeederPoolsQueryVariables = {
+export type FeederPoolsQueryVariables = Exact<{
   account: Scalars['String'];
   accountId: Scalars['ID'];
   hasAccount: Scalars['Boolean'];
-};
+}>;
 
 
-export type FeederPoolsQuery = { feederPools: Array<(
-    Pick<FeederPool, 'id' | 'swapFeeRate' | 'redemptionFeeRate' | 'governanceFeeRate' | 'dailyAPY' | 'price' | 'invariantK'>
-    & { basket: (
-      Pick<Basket, 'undergoingRecol' | 'failed'>
-      & { bassets: Array<BassetAllFragment> }
-    ), token: TokenAllFragment, fasset: TokenAllFragment, masset: Pick<Token, 'id'>, vault: BoostedSavingsVaultAllFragment, accounts: Array<(
-      Pick<FeederPoolAccount, 'balance' | 'price' | 'lastUpdate' | 'balanceVault' | 'priceVault' | 'lastUpdateVault'>
-      & { cumulativeEarned: Pick<Metric, 'exact' | 'decimals'>, cumulativeEarnedVault: Pick<Metric, 'exact' | 'decimals'> }
-    )> }
-  )>, saveVaults: Array<BoostedSavingsVaultAllFragment>, userVaults: Array<(
-    Pick<Account, 'id'>
-    & { boostDirection: Array<Pick<BoostedSavingsVault, 'directorVaultId'>> }
-  )>, boostDirectors: Array<Pick<BoostDirector, 'id'>>, vaultIds: Array<Pick<BoostedSavingsVault, 'directorVaultId' | 'id'>> };
+export type FeederPoolsQuery = { feederPools: Array<{ id: string, swapFeeRate: string, redemptionFeeRate: string, governanceFeeRate: string, dailyAPY: string, price: string, invariantK: string, basket: { undergoingRecol: boolean, failed: boolean, bassets: Array<{ id: string, isTransferFeeCharged: boolean, ratio: string, status: string, maxWeight?: Maybe<string>, vaultBalance: { id: string, exact: string, decimals: number, simple: string }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } }> }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }, fasset: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }, masset: { id: string }, vault: { id: string, lastUpdateTime: number, lockupDuration: number, unlockPercentage: string, periodDuration: number, periodFinish: number, rewardPerTokenStored: string, rewardRate: string, stakingContract: string, totalStakingRewards: string, totalRaw?: Maybe<string>, totalSupply: string, priceCoeff?: Maybe<string>, boostCoeff?: Maybe<string>, platformRewardPerTokenStored?: Maybe<string>, platformRewardRate?: Maybe<string>, stakingToken: { address: string, symbol: string }, platformRewardsToken?: Maybe<{ address: string, symbol: string }>, rewardsToken: { address: string, symbol: string }, accounts?: Maybe<Array<{ id: string, boostedBalance: string, lastAction: number, lastClaim: number, rawBalance: string, rewardCount: number, rewardPerTokenPaid: string, rewards: string, platformRewardPerTokenPaid?: Maybe<string>, platformRewards?: Maybe<string>, rewardEntries: Array<{ id: string, finish: number, index: number, rate: string, start: number }> }>> }, accounts?: Maybe<Array<{ balance: string, price: string, lastUpdate: number, balanceVault: string, priceVault: string, lastUpdateVault: number, cumulativeEarned: { exact: string, decimals: number }, cumulativeEarnedVault: { exact: string, decimals: number } }>> }>, saveVaults: Array<{ id: string, lastUpdateTime: number, lockupDuration: number, unlockPercentage: string, periodDuration: number, periodFinish: number, rewardPerTokenStored: string, rewardRate: string, stakingContract: string, totalStakingRewards: string, totalRaw?: Maybe<string>, totalSupply: string, priceCoeff?: Maybe<string>, boostCoeff?: Maybe<string>, platformRewardPerTokenStored?: Maybe<string>, platformRewardRate?: Maybe<string>, stakingToken: { address: string, symbol: string }, platformRewardsToken?: Maybe<{ address: string, symbol: string }>, rewardsToken: { address: string, symbol: string }, accounts?: Maybe<Array<{ id: string, boostedBalance: string, lastAction: number, lastClaim: number, rawBalance: string, rewardCount: number, rewardPerTokenPaid: string, rewards: string, platformRewardPerTokenPaid?: Maybe<string>, platformRewards?: Maybe<string>, rewardEntries: Array<{ id: string, finish: number, index: number, rate: string, start: number }> }>> }>, userVaults: Array<{ id: string, boostDirection: Array<{ directorVaultId?: Maybe<number> }> }>, boostDirectors: Array<{ id: string }>, vaultIds: Array<{ directorVaultId?: Maybe<number>, id: string }> };
 
-export type FeederTokensQueryVariables = {};
+export type FeederTokensQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FeederTokensQuery = { feederPools: Array<{ token: TokenAllFragment, fasset: TokenAllFragment }> };
+export type FeederTokensQuery = { feederPools: Array<{ token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }, fasset: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } }> };
 
-export type FeederPoolMetricsQueryVariables = {
+export type FeederPoolMetricsQueryVariables = Exact<{
   feederPool: Scalars['ID'];
   block: Block_Height;
-};
+}>;
 
 
-export type FeederPoolMetricsQuery = { current?: Maybe<FpMetricsFragment>, historic?: Maybe<FpMetricsFragment> };
+export type FeederPoolMetricsQuery = { current?: Maybe<{ price: string, invariantK: string, dailyAPY: string, cumulativeSwapped: { id: string, exact: string, decimals: number, simple: string }, cumulativeInterestCollected: { id: string, exact: string, decimals: number, simple: string }, cumulativeInterestDistributed: { id: string, exact: string, decimals: number, simple: string }, cumulativeFeesPaid: { id: string, exact: string, decimals: number, simple: string }, cumulativeMinted: { id: string, exact: string, decimals: number, simple: string }, cumulativeRedeemed: { id: string, exact: string, decimals: number, simple: string }, totalMints: { value: string }, totalRedeemMassets: { value: string }, totalRedemptions: { value: string }, totalSupply: { id: string, exact: string, decimals: number, simple: string }, totalSwaps: { value: string } }>, historic?: Maybe<{ price: string, invariantK: string, dailyAPY: string, cumulativeSwapped: { id: string, exact: string, decimals: number, simple: string }, cumulativeInterestCollected: { id: string, exact: string, decimals: number, simple: string }, cumulativeInterestDistributed: { id: string, exact: string, decimals: number, simple: string }, cumulativeFeesPaid: { id: string, exact: string, decimals: number, simple: string }, cumulativeMinted: { id: string, exact: string, decimals: number, simple: string }, cumulativeRedeemed: { id: string, exact: string, decimals: number, simple: string }, totalMints: { value: string }, totalRedeemMassets: { value: string }, totalRedemptions: { value: string }, totalSupply: { id: string, exact: string, decimals: number, simple: string }, totalSwaps: { value: string } }> };
 
 export const TransactionFieldsFragmentDoc = gql`
     fragment TransactionFields on Transaction {
@@ -4075,7 +4032,7 @@ export const BoostedSavingsVaultAllFragmentDoc = gql`
 }
     `;
 export const FeederPoolsDocument = gql`
-    query FeederPools($account: String!, $accountId: ID!, $hasAccount: Boolean!) @api(name: feeders) {
+    query FeederPools($account: String!, $accountId: ID!, $hasAccount: Boolean!) {
   feederPools {
     id
     swapFeeRate
@@ -4159,17 +4116,19 @@ ${BoostedSavingsVaultAllFragmentDoc}`;
  *   },
  * });
  */
-export function useFeederPoolsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FeederPoolsQuery, FeederPoolsQueryVariables>) {
-        return ApolloReactHooks.useQuery<FeederPoolsQuery, FeederPoolsQueryVariables>(FeederPoolsDocument, baseOptions);
+export function useFeederPoolsQuery(baseOptions: Apollo.QueryHookOptions<FeederPoolsQuery, FeederPoolsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FeederPoolsQuery, FeederPoolsQueryVariables>(FeederPoolsDocument, options);
       }
-export function useFeederPoolsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FeederPoolsQuery, FeederPoolsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<FeederPoolsQuery, FeederPoolsQueryVariables>(FeederPoolsDocument, baseOptions);
+export function useFeederPoolsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeederPoolsQuery, FeederPoolsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FeederPoolsQuery, FeederPoolsQueryVariables>(FeederPoolsDocument, options);
         }
 export type FeederPoolsQueryHookResult = ReturnType<typeof useFeederPoolsQuery>;
 export type FeederPoolsLazyQueryHookResult = ReturnType<typeof useFeederPoolsLazyQuery>;
-export type FeederPoolsQueryResult = ApolloReactCommon.QueryResult<FeederPoolsQuery, FeederPoolsQueryVariables>;
+export type FeederPoolsQueryResult = Apollo.QueryResult<FeederPoolsQuery, FeederPoolsQueryVariables>;
 export const FeederTokensDocument = gql`
-    query FeederTokens @api(name: feeders) {
+    query FeederTokens {
   feederPools {
     token {
       ...TokenAll
@@ -4196,17 +4155,19 @@ export const FeederTokensDocument = gql`
  *   },
  * });
  */
-export function useFeederTokensQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>) {
-        return ApolloReactHooks.useQuery<FeederTokensQuery, FeederTokensQueryVariables>(FeederTokensDocument, baseOptions);
+export function useFeederTokensQuery(baseOptions?: Apollo.QueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FeederTokensQuery, FeederTokensQueryVariables>(FeederTokensDocument, options);
       }
-export function useFeederTokensLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<FeederTokensQuery, FeederTokensQueryVariables>(FeederTokensDocument, baseOptions);
+export function useFeederTokensLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeederTokensQuery, FeederTokensQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FeederTokensQuery, FeederTokensQueryVariables>(FeederTokensDocument, options);
         }
 export type FeederTokensQueryHookResult = ReturnType<typeof useFeederTokensQuery>;
 export type FeederTokensLazyQueryHookResult = ReturnType<typeof useFeederTokensLazyQuery>;
-export type FeederTokensQueryResult = ApolloReactCommon.QueryResult<FeederTokensQuery, FeederTokensQueryVariables>;
+export type FeederTokensQueryResult = Apollo.QueryResult<FeederTokensQuery, FeederTokensQueryVariables>;
 export const FeederPoolMetricsDocument = gql`
-    query FeederPoolMetrics($feederPool: ID!, $block: Block_height!) @api(name: feeders) {
+    query FeederPoolMetrics($feederPool: ID!, $block: Block_height!) {
   current: feederPool(id: $feederPool) {
     ...FPMetrics
   }
@@ -4233,12 +4194,14 @@ export const FeederPoolMetricsDocument = gql`
  *   },
  * });
  */
-export function useFeederPoolMetricsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>) {
-        return ApolloReactHooks.useQuery<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>(FeederPoolMetricsDocument, baseOptions);
+export function useFeederPoolMetricsQuery(baseOptions: Apollo.QueryHookOptions<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>(FeederPoolMetricsDocument, options);
       }
-export function useFeederPoolMetricsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>(FeederPoolMetricsDocument, baseOptions);
+export function useFeederPoolMetricsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>(FeederPoolMetricsDocument, options);
         }
 export type FeederPoolMetricsQueryHookResult = ReturnType<typeof useFeederPoolMetricsQuery>;
 export type FeederPoolMetricsLazyQueryHookResult = ReturnType<typeof useFeederPoolMetricsLazyQuery>;
-export type FeederPoolMetricsQueryResult = ApolloReactCommon.QueryResult<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>;
+export type FeederPoolMetricsQueryResult = Apollo.QueryResult<FeederPoolMetricsQuery, FeederPoolMetricsQueryVariables>;

@@ -1,13 +1,1 @@
-enum PROJECTS {
-  protocol
-  stakingRewards
-  feeders
-  balancer
-  uniswap
-  sushi
-  staking
-  blocks
-}
-
-# https://github.com/habx/apollo-multi-endpoint-link
-directive @api(name: PROJECTS) on QUERY
+directive @client on FIELD

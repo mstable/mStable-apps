@@ -40,14 +40,14 @@ fragment StakingRewardsContractDetails on StakingRewardsContract {
   }
 }
 
-query AllErc20Tokens @api(name: stakingRewards) {
+query AllErc20Tokens {
   tokens {
     ...TokenDetails
   }
 }
 
 
-query StakingRewardsContract($id: ID!, $account: Bytes) @api(name: stakingRewards) {
+query StakingRewardsContract($id: ID!, $account: Bytes) {
   stakingRewardsContract(id: $id) {
     ...StakingRewardsContractDetails
     stakingBalances(where: { account: $account }) {
@@ -66,7 +66,7 @@ query StakingRewardsContract($id: ID!, $account: Bytes) @api(name: stakingReward
   }
 }
 
-query StakingRewardsForStakingToken($stakingToken: String!, $account: Bytes) @api(name: stakingRewards) {
+query StakingRewardsForStakingToken($stakingToken: String!, $account: Bytes) {
   stakingRewardsContracts(where: { stakingToken: $stakingToken }) {
     ...StakingRewardsContractDetails
     stakingBalances(where: { account: $account }) {

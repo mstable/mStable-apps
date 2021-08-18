@@ -4,7 +4,7 @@ import { DocumentNode, gql } from '@apollo/client'
 
 export const useBlockTimestampsDocument = (dates: Date[]): DocumentNode =>
   useMemo(
-    () => gql`query BlockTimestamps @api(name: blocks) {
+    () => gql`query BlockTimestamps {
       ${dates
         .map(getUnixTime)
         .map(

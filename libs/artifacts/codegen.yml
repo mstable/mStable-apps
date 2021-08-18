@@ -4,13 +4,26 @@ config:
   withHOC: false
   withHooks: true
   scalars:
+    MstableBigDecimal: "@apps/bigdecimal#BigDecimal"
+    BigNumber: "ethers#BigNumber"
     BigDecimal: string
     BigInt: string
     Bytes: string
     Address: string
     ID: string
 
+schema:
+  - ./libs/artifacts/src/graphql/shared/scalars.graphql
+
 generates:
+  ./libs/artifacts/src/graphql/questbook/schema.graphql:
+    overwrite: true
+    schema: https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+
   ./libs/artifacts/src/graphql/protocol/schema.graphql:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-protocol-staging
@@ -50,6 +63,32 @@ generates:
       - 'schema-ast'
     config:
       includeDirectives: true
+
+  ./libs/artifacts/src/graphql/staking/apollo-helpers.ts:
+    overwrite: true
+    schema:
+      - https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
+      - ./libs/artifacts/src/graphql/staking/client.graphql
+    plugins:
+      - typescript-apollo-client-helpers
+
+  ./libs/artifacts/src/graphql/questbook/apollo-helpers.ts:
+    overwrite: true
+    schema:
+      - https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook
+      - ./libs/artifacts/src/graphql/questbook/client.graphql
+    plugins:
+      - typescript-apollo-client-helpers
+
+  ./libs/artifacts/src/graphql/questbook.tsx:
+    overwrite: true
+    schema: https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook
+    documents: 'libs/artifacts/src/graphql/questbook/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
 
   ./libs/artifacts/src/graphql/protocol.tsx:
     overwrite: true
@@ -93,7 +132,9 @@ generates:
 
   ./libs/artifacts/src/graphql/staking.tsx:
     overwrite: true
-    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
+    schema:
+      - https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
+      - ./libs/artifacts/src/graphql/staking/client.graphql
     documents: 'libs/artifacts/src/graphql/staking/*.graphql'
     plugins:
       - 'fragment-matcher'
