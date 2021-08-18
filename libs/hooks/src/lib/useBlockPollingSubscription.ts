@@ -1,4 +1,4 @@
-import { LazyQueryHookOptions, QueryTuple } from '@apollo/react-hooks'
+import { LazyQueryHookOptions, QueryTuple } from '@apollo/client'
 import { QueryResult } from '@apollo/react-common'
 import { useEffect } from 'react'
 

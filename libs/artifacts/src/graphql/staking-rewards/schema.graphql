@@ -2,18 +2,35 @@ schema {
   query: Query
   subscription: Subscription
 }
+
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+directive @entity on OBJECT
+
+directive @subgraphId(id: String) on OBJECT
+
 scalar BigDecimal
+
 scalar BigInt
+
+scalar BigNumber
+
 input Block_height {
   hash: Bytes
   number: Int
 }
+
 scalar Bytes
+
 type Counter {
   id: ID!
-  """Value of the counter; should be positive"""
+  """
+  Value of the counter; should be positive
+  
+  """
   value: BigInt!
 }
+
 input Counter_filter {
   id: ID
   id_not: ID
@@ -32,19 +49,31 @@ input Counter_filter {
   value_in: [BigInt!]
   value_not_in: [BigInt!]
 }
+
 enum Counter_orderBy {
   id
   value
 }
+
 type Metric {
   id: ID!
-  """Exact value of the metric, i.e. in base units as an integer"""
+  """
+  Exact value of the metric, i.e. in base units as an integer
+  
+  """
   exact: BigInt!
-  """Decimals used for the exact value (default: 18)"""
+  """
+  Decimals used for the exact value (default: 18)
+  
+  """
   decimals: Int!
-  """Simple value of the metric, i.e. the exact value represented as a decimal"""
+  """
+  Simple value of the metric, i.e. the exact value represented as a decimal
+  
+  """
   simple: BigDecimal!
 }
+
 input Metric_filter {
   id: ID
   id_not: ID
@@ -79,16 +108,21 @@ input Metric_filter {
   simple_in: [BigDecimal!]
   simple_not_in: [BigDecimal!]
 }
+
 enum Metric_orderBy {
   id
   exact
   decimals
   simple
 }
+
+scalar MstableBigDecimal
+
 enum OrderDirection {
   asc
   desc
 }
+
 type Query {
   token(
     id: ID!
@@ -247,12 +281,20 @@ type Query {
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
 }
+
 type RewardsDistributor {
-  """ID of the rewards distributor contract"""
+  """
+  ID of the rewards distributor contract
+  
+  """
   id: ID!
-  """Whitelisted fund managers"""
+  """
+  Whitelisted fund managers
+  
+  """
   fundManagers: [Bytes!]!
 }
+
 input RewardsDistributor_filter {
   id: ID
   id_not: ID
@@ -267,19 +309,31 @@ input RewardsDistributor_filter {
   fundManagers_contains: [Bytes!]
   fundManagers_not_contains: [Bytes!]
 }
+
 enum RewardsDistributor_orderBy {
   id
   fundManagers
 }
+
 type StakingBalance {
   id: ID!
-  """Account this staking balance belongs to"""
+  """
+  Account this staking balance belongs to
+  
+  """
   account: Bytes!
-  """Staking rewards contract this staking balance is kept on"""
+  """
+  Staking rewards contract this staking balance is kept on
+  
+  """
   stakingRewardsContract: StakingRewardsContract!
-  """Staking balance amount"""
+  """
+  Staking balance amount
+  
+  """
   amount: BigInt!
 }
+
 input StakingBalance_filter {
   id: ID
   id_not: ID
@@ -318,31 +372,48 @@ input StakingBalance_filter {
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
 }
+
 enum StakingBalance_orderBy {
   id
   account
   stakingRewardsContract
   amount
 }
+
 type StakingReward {
   id: ID!
-  """Reward amount"""
+  """
+  Reward amount
+  
+  """
   amount: BigInt!
-  """The reward amount per token paid"""
+  """
+  The reward amount per token paid
+  
+  """
   amountPerTokenPaid: BigInt!
-  """The staking rewards contract this reward is kept on"""
+  """
+  The staking rewards contract this reward is kept on
+  
+  """
   stakingRewardsContract: StakingRewardsContract!
-  """The account the reward belongs to"""
+  """
+  The account the reward belongs to
+  
+  """
   account: Bytes!
   """
   The type of staking reward, e.g. "REWARD" or "PLATFORM_REWARD"
+  
   """
   type: StakingRewardType!
 }
+
 enum StakingRewardType {
   REWARD
   PLATFORM_REWARD
 }
+
 input StakingReward_filter {
   id: ID
   id_not: ID
@@ -391,6 +462,7 @@ input StakingReward_filter {
   type: StakingRewardType
   type_not: StakingRewardType
 }
+
 enum StakingReward_orderBy {
   id
   amount
@@ -399,50 +471,115 @@ enum StakingReward_orderBy {
   account
   type
 }
+
 type StakingRewardsContract {
-  """ID of the staking rewards contract"""
+  """
+  ID of the staking rewards contract
+  
+  """
   id: ID!
-  """The type of staking rewards contract, e.g. `STAKING_REWARDS` or `STAKING_REWARDS_WITH_PLATFORM_TOKEN`"""
+  """
+  The type of staking rewards contract, e.g. `STAKING_REWARDS` or `STAKING_REWARDS_WITH_PLATFORM_TOKEN`
+  
+  """
   type: StakingRewardsContractType!
-  """Duration"""
+  """
+  Duration
+  
+  """
   duration: Int!
-  """Period finish"""
+  """
+  Period finish
+  
+  """
   periodFinish: Int!
-  """Last update time"""
+  """
+  Last update time
+  
+  """
   lastUpdateTime: Int!
-  """Staking token"""
+  """
+  Staking token
+  
+  """
   stakingToken: Token!
-  """Reward per token stored"""
+  """
+  Reward per token stored
+  
+  """
   rewardPerTokenStored: BigInt!
-  """Reward rate"""
+  """
+  Reward rate
+  
+  """
   rewardRate: BigInt!
-  """Rewards token"""
+  """
+  Rewards token
+  
+  """
   rewardsToken: Token!
-  """Rewards distributor"""
+  """
+  Rewards distributor
+  
+  """
   rewardsDistributor: RewardsDistributor!
-  """Total supply"""
+  """
+  Total supply
+  
+  """
   totalSupply: BigInt!
-  """Total staking rewards"""
+  """
+  Total staking rewards
+  
+  """
   totalStakingRewards: BigInt!
-  """Accessor for staking balances kept on this contract"""
+  """
+  Accessor for staking balances kept on this contract
+  
+  """
   stakingBalances(skip: Int = 0, first: Int = 100, orderBy: StakingBalance_orderBy, orderDirection: OrderDirection, where: StakingBalance_filter): [StakingBalance!]!
-  """Accessor for staking rewards kept on this contract"""
+  """
+  Accessor for staking rewards kept on this contract
+  
+  """
   stakingRewards(skip: Int = 0, first: Int = 100, orderBy: StakingReward_orderBy, orderDirection: OrderDirection, where: StakingReward_filter): [StakingReward!]!
-  """Accessor for claim reward transactions sent to this contract"""
+  """
+  Accessor for claim reward transactions sent to this contract
+  
+  """
   claimRewardTransactions(skip: Int = 0, first: Int = 100, orderBy: StakingRewardsContractClaimRewardTransaction_orderBy, orderDirection: OrderDirection, where: StakingRewardsContractClaimRewardTransaction_filter): [StakingRewardsContractClaimRewardTransaction!]!
-  """Accessor for stake transactions sent to this contract"""
+  """
+  Accessor for stake transactions sent to this contract
+  
+  """
   stakeTransactions(skip: Int = 0, first: Int = 100, orderBy: StakingRewardsContractStakeTransaction_orderBy, orderDirection: OrderDirection, where: StakingRewardsContractStakeTransaction_filter): [StakingRewardsContractStakeTransaction!]!
-  """Accessor for withdraw transactions sent to this contract"""
+  """
+  Accessor for withdraw transactions sent to this contract
+  
+  """
   withdrawTransactions(skip: Int = 0, first: Int = 100, orderBy: StakingRewardsContractWithdrawTransaction_orderBy, orderDirection: OrderDirection, where: StakingRewardsContractWithdrawTransaction_filter): [StakingRewardsContractWithdrawTransaction!]!
-  """Platform token"""
+  """
+  Platform token
+  
+  """
   platformToken: Token
-  """Platform reward rate"""
+  """
+  Platform reward rate
+  
+  """
   platformRewardRate: BigInt
-  """Platform reward per token stored"""
+  """
+  Platform reward per token stored
+  
+  """
   platformRewardPerTokenStored: BigInt
-  """Total platform rewards"""
+  """
+  Total platform rewards
+  
+  """
   totalPlatformRewards: BigInt
 }
+
 type StakingRewardsContractClaimRewardTransaction implements Transaction {
   id: ID!
   hash: Bytes!
@@ -452,6 +589,7 @@ type StakingRewardsContractClaimRewardTransaction implements Transaction {
   stakingRewardsContract: StakingRewardsContract!
   amount: BigInt!
 }
+
 input StakingRewardsContractClaimRewardTransaction_filter {
   id: ID
   id_not: ID
@@ -512,6 +650,7 @@ input StakingRewardsContractClaimRewardTransaction_filter {
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
 }
+
 enum StakingRewardsContractClaimRewardTransaction_orderBy {
   id
   hash
@@ -521,6 +660,7 @@ enum StakingRewardsContractClaimRewardTransaction_orderBy {
   stakingRewardsContract
   amount
 }
+
 type StakingRewardsContractStakeTransaction implements Transaction {
   id: ID!
   hash: Bytes!
@@ -530,6 +670,7 @@ type StakingRewardsContractStakeTransaction implements Transaction {
   stakingRewardsContract: StakingRewardsContract!
   amount: BigInt!
 }
+
 input StakingRewardsContractStakeTransaction_filter {
   id: ID
   id_not: ID
@@ -590,6 +731,7 @@ input StakingRewardsContractStakeTransaction_filter {
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
 }
+
 enum StakingRewardsContractStakeTransaction_orderBy {
   id
   hash
@@ -599,10 +741,12 @@ enum StakingRewardsContractStakeTransaction_orderBy {
   stakingRewardsContract
   amount
 }
+
 enum StakingRewardsContractType {
   STAKING_REWARDS
   STAKING_REWARDS_WITH_PLATFORM_TOKEN
 }
+
 type StakingRewardsContractWithdrawTransaction implements Transaction {
   id: ID!
   hash: Bytes!
@@ -612,6 +756,7 @@ type StakingRewardsContractWithdrawTransaction implements Transaction {
   stakingRewardsContract: StakingRewardsContract!
   amount: BigInt!
 }
+
 input StakingRewardsContractWithdrawTransaction_filter {
   id: ID
   id_not: ID
@@ -672,6 +817,7 @@ input StakingRewardsContractWithdrawTransaction_filter {
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
 }
+
 enum StakingRewardsContractWithdrawTransaction_orderBy {
   id
   hash
@@ -681,6 +827,7 @@ enum StakingRewardsContractWithdrawTransaction_orderBy {
   stakingRewardsContract
   amount
 }
+
 input StakingRewardsContract_filter {
   id: ID
   id_not: ID
@@ -829,6 +976,7 @@ input StakingRewardsContract_filter {
   totalPlatformRewards_in: [BigInt!]
   totalPlatformRewards_not_in: [BigInt!]
 }
+
 enum StakingRewardsContract_orderBy {
   id
   type
@@ -852,6 +1000,7 @@ enum StakingRewardsContract_orderBy {
   platformRewardPerTokenStored
   totalPlatformRewards
 }
+
 type Subscription {
   token(
     id: ID!
@@ -1010,30 +1159,65 @@ type Subscription {
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
 }
-"""An ERC20-compatible token"""
+
+"""
+An ERC20-compatible token
+
+"""
 type Token {
   id: ID!
-  """Token address"""
+  """
+  Token address
+  
+  """
   address: Bytes!
-  """Token decimals"""
+  """
+  Token decimals
+  
+  """
   decimals: Int!
-  """Token name"""
+  """
+  Token name
+  
+  """
   name: String!
-  """Token symbol"""
+  """
+  Token symbol
+  
+  """
   symbol: String!
-  """Total supply of the token"""
+  """
+  Total supply of the token
+  
+  """
   totalSupply: Metric!
-  """Total quantity of tokens burned"""
+  """
+  Total quantity of tokens burned
+  
+  """
   totalBurned: Metric!
-  """Total quantity of tokens minted"""
+  """
+  Total quantity of tokens minted
+  
+  """
   totalMinted: Metric!
-  """Count of transfer transactions"""
+  """
+  Count of transfer transactions
+  
+  """
   totalTransfers: Counter!
-  """Count of transfer transactions that minted the token"""
+  """
+  Count of transfer transactions that minted the token
+  
+  """
   totalMints: Counter!
-  """Count of transfer transactions that burned the token"""
+  """
+  Count of transfer transactions that burned the token
+  
+  """
   totalBurns: Counter!
 }
+
 input Token_filter {
   id: ID
   id_not: ID
@@ -1170,6 +1354,7 @@ input Token_filter {
   totalBurns_ends_with: String
   totalBurns_not_ends_with: String
 }
+
 enum Token_orderBy {
   id
   address
@@ -1183,18 +1368,35 @@ enum Token_orderBy {
   totalMints
   totalBurns
 }
+
 interface Transaction {
-  """Transaction hash + log index"""
+  """
+  Transaction hash + log index
+  
+  """
   id: ID!
-  """Transaction hash"""
+  """
+  Transaction hash
+  
+  """
   hash: Bytes!
-  """Block number the transaction is in"""
+  """
+  Block number the transaction is in
+  
+  """
   block: Int!
-  """Timestamp of the block the transaction is in"""
+  """
+  Timestamp of the block the transaction is in
+  
+  """
   timestamp: BigInt!
-  """Address of the sender of the transaction"""
+  """
+  Address of the sender of the transaction
+  
+  """
   sender: Bytes!
 }
+
 input Transaction_filter {
   id: ID
   id_not: ID
@@ -1233,6 +1435,7 @@ input Transaction_filter {
   sender_contains: Bytes
   sender_not_contains: Bytes
 }
+
 enum Transaction_orderBy {
   id
   hash
@@ -1240,12 +1443,14 @@ enum Transaction_orderBy {
   timestamp
   sender
 }
+
 type _Block_ {
   """The hash of the block"""
   hash: Bytes
   """The block number"""
   number: Int!
 }
+
 """The type for the top-level _meta field"""
 type _Meta_ {
   """
@@ -1253,6 +1458,7 @@ type _Meta_ {
   will be null if the _meta field has a block constraint that asks for
   a block number. It will be filled if the _meta field has no block constraint
   and therefore asks for the latest  block
+  
   """
   block: _Block_!
   """The deployment ID"""
@@ -1260,6 +1466,7 @@ type _Meta_ {
   """If `true`, the subgraph encountered indexing errors at some past block"""
   hasIndexingErrors: Boolean!
 }
+
 enum _SubgraphErrorPolicy_ {
   """Data will be returned even if the subgraph has indexing errors"""
   allow

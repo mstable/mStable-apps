@@ -1,6 +1,6 @@
 # import './fragments.graphql'
 
-query Staking($account: ID!, $hasAccount: Boolean!) @api(name: staking) {
+query Staking($account: ID!, $hasAccount: Boolean!) {
   stakedToken(id: "StakedToken") {
     address
     token {
@@ -49,7 +49,7 @@ query Staking($account: ID!, $hasAccount: Boolean!) @api(name: staking) {
       id
     }
     cooldownTimestamp
-    cooldownTimestamp
+    cooldownPercentage
     balance {
       lastAction
       permMultiplier
@@ -57,7 +57,9 @@ query Staking($account: ID!, $hasAccount: Boolean!) @api(name: staking) {
       seasonMultiplier
       cooldownMultiplier
       raw
+      rawBN @client
       votes
+      votesBN @client
       weightedTimestamp
     }
   }

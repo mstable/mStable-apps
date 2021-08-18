@@ -3,6 +3,7 @@ import { DocumentNode, gql, useQuery } from '@apollo/client'
 import { format, getUnixTime } from 'date-fns'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
+import { useApolloClients } from '@apps/base/context/apollo'
 import { Color } from '@apps/base/theme'
 import { useBlockTimesForDates, useSelectedMassetState } from '@apps/hooks'
 import { periodFormatMapping, toK } from '@apps/formatters'
@@ -117,6 +118,7 @@ const useVolumeMetrics = (): ({ timestamp: number } & Record<
   | TransactionType.MassetRedeem,
   number
 >)[] => {
+  const clients = useApolloClients()
   const dateFilter = useDateFilter()
   const massetState = useSelectedMassetState()
   const massetAddress = massetState?.address ?? ''
@@ -158,7 +160,7 @@ const useVolumeMetrics = (): ({ timestamp: number } & Record<
           }
         }
       }
-      query Metrics @api(name: protocol) {
+      query Metrics {
         ${current}
         ${blockMetrics}
       }
@@ -167,6 +169,7 @@ const useVolumeMetrics = (): ({ timestamp: number } & Record<
 
   const query = useQuery<MetricsQueryResult>(metricsDoc, {
     fetchPolicy: 'no-cache',
+    client: clients.protocol,
   })
 
   return useMemo(() => {

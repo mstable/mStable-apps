@@ -2,8 +2,19 @@ schema {
   query: Query
   subscription: Subscription
 }
+
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+directive @entity on OBJECT
+
+directive @subgraphId(id: String) on OBJECT
+
 scalar BigDecimal
+
 scalar BigInt
+
+scalar BigNumber
+
 type Block {
   id: ID!
   number: BigInt!
@@ -20,6 +31,7 @@ type Block {
   size: BigInt
   unclesHash: String
 }
+
 input Block_filter {
   id: ID
   id_not: ID
@@ -170,10 +182,12 @@ input Block_filter {
   unclesHash_ends_with: String
   unclesHash_not_ends_with: String
 }
+
 input Block_height {
   hash: Bytes
   number: Int
 }
+
 enum Block_orderBy {
   id
   number
@@ -190,11 +204,16 @@ enum Block_orderBy {
   size
   unclesHash
 }
+
 scalar Bytes
+
+scalar MstableBigDecimal
+
 enum OrderDirection {
   asc
   desc
 }
+
 type Query {
   block(
     id: ID!
@@ -213,6 +232,7 @@ type Query {
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
 }
+
 type Subscription {
   block(
     id: ID!
@@ -231,12 +251,14 @@ type Subscription {
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
 }
+
 type _Block_ {
   """The hash of the block"""
   hash: Bytes
   """The block number"""
   number: Int!
 }
+
 """The type for the top-level _meta field"""
 type _Meta_ {
   """
@@ -244,6 +266,7 @@ type _Meta_ {
   will be null if the _meta field has a block constraint that asks for
   a block number. It will be filled if the _meta field has no block constraint
   and therefore asks for the latest  block
+  
   """
   block: _Block_!
   """The deployment ID"""
@@ -251,6 +274,7 @@ type _Meta_ {
   """If `true`, the subgraph encountered indexing errors at some past block"""
   hasIndexingErrors: Boolean!
 }
+
 enum _SubgraphErrorPolicy_ {
   """Data will be returned even if the subgraph has indexing errors"""
   allow

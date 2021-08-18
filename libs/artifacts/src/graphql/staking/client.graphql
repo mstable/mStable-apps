@@ -1,0 +1,8 @@
+type Metric {
+  bigDecimal: MstableBigDecimal!
+}
+
+type Balance {
+  rawBN: BigNumber!
+  votesBN: BigNumber!
+}

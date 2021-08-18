@@ -1,23 +1,20 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { BigNumber } from 'ethers';
+import { BigDecimal } from '@apps/bigdecimal';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 
-      export interface IntrospectionResultData {
-        __schema: {
-          types: {
-            kind: string;
-            name: string;
-            possibleTypes: {
-              name: string;
-            }[];
-          }[];
-        };
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
       }
-      const result: IntrospectionResultData = {
-  "__schema": {
-    "types": []
-  }
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {}
 };
       export default result;
     
@@ -30,8 +27,14 @@ export type Scalars = {
   Float: number;
   BigDecimal: string;
   BigInt: string;
+  BigNumber: BigNumber;
   Bytes: string;
+  MstableBigDecimal: BigDecimal;
 };
+
+
+
+
 
 
 
@@ -226,6 +229,7 @@ export enum Block_OrderBy {
 }
 
 
+
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -316,24 +320,24 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type BlockTimestampQueryVariables = {
+export type BlockTimestampQueryVariables = Exact<{
   start: Scalars['BigInt'];
   end: Scalars['BigInt'];
-};
+}>;
 
 
-export type BlockTimestampQuery = { blocks: Array<Pick<Block, 'number' | 'timestamp'>> };
+export type BlockTimestampQuery = { blocks: Array<{ number: string, timestamp: string }> };
 
-export type BlockQueryVariables = {
+export type BlockQueryVariables = Exact<{
   number: Scalars['BigInt'];
-};
+}>;
 
 
-export type BlockQuery = { blocks: Array<Pick<Block, 'number' | 'timestamp'>> };
+export type BlockQuery = { blocks: Array<{ number: string, timestamp: string }> };
 
 
 export const BlockTimestampDocument = gql`
-    query BlockTimestamp($start: BigInt!, $end: BigInt!) @api(name: blocks) {
+    query BlockTimestamp($start: BigInt!, $end: BigInt!) {
   blocks(
     first: 1
     orderBy: timestamp
@@ -363,17 +367,19 @@ export const BlockTimestampDocument = gql`
  *   },
  * });
  */
-export function useBlockTimestampQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<BlockTimestampQuery, BlockTimestampQueryVariables>) {
-        return ApolloReactHooks.useQuery<BlockTimestampQuery, BlockTimestampQueryVariables>(BlockTimestampDocument, baseOptions);
+export function useBlockTimestampQuery(baseOptions: Apollo.QueryHookOptions<BlockTimestampQuery, BlockTimestampQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BlockTimestampQuery, BlockTimestampQueryVariables>(BlockTimestampDocument, options);
       }
-export function useBlockTimestampLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<BlockTimestampQuery, BlockTimestampQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<BlockTimestampQuery, BlockTimestampQueryVariables>(BlockTimestampDocument, baseOptions);
+export function useBlockTimestampLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BlockTimestampQuery, BlockTimestampQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BlockTimestampQuery, BlockTimestampQueryVariables>(BlockTimestampDocument, options);
         }
 export type BlockTimestampQueryHookResult = ReturnType<typeof useBlockTimestampQuery>;
 export type BlockTimestampLazyQueryHookResult = ReturnType<typeof useBlockTimestampLazyQuery>;
-export type BlockTimestampQueryResult = ApolloReactCommon.QueryResult<BlockTimestampQuery, BlockTimestampQueryVariables>;
+export type BlockTimestampQueryResult = Apollo.QueryResult<BlockTimestampQuery, BlockTimestampQueryVariables>;
 export const BlockDocument = gql`
-    query Block($number: BigInt!) @api(name: blocks) {
+    query Block($number: BigInt!) {
   blocks(where: {number: $number}) {
     number
     timestamp
@@ -397,12 +403,14 @@ export const BlockDocument = gql`
  *   },
  * });
  */
-export function useBlockQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<BlockQuery, BlockQueryVariables>) {
-        return ApolloReactHooks.useQuery<BlockQuery, BlockQueryVariables>(BlockDocument, baseOptions);
+export function useBlockQuery(baseOptions: Apollo.QueryHookOptions<BlockQuery, BlockQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BlockQuery, BlockQueryVariables>(BlockDocument, options);
       }
-export function useBlockLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<BlockQuery, BlockQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<BlockQuery, BlockQueryVariables>(BlockDocument, baseOptions);
+export function useBlockLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BlockQuery, BlockQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BlockQuery, BlockQueryVariables>(BlockDocument, options);
         }
 export type BlockQueryHookResult = ReturnType<typeof useBlockQuery>;
 export type BlockLazyQueryHookResult = ReturnType<typeof useBlockLazyQuery>;
-export type BlockQueryResult = ApolloReactCommon.QueryResult<BlockQuery, BlockQueryVariables>;
+export type BlockQueryResult = Apollo.QueryResult<BlockQuery, BlockQueryVariables>;

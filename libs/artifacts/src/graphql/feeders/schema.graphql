@@ -2,12 +2,20 @@ schema {
   query: Query
   subscription: Subscription
 }
+
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+directive @entity on OBJECT
+
+directive @subgraphId(id: String) on OBJECT
+
 type Account {
   id: ID!
   boostedSavingsVaultAccounts(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultAccount_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultAccount_filter): [BoostedSavingsVaultAccount!]!
   feederPoolAccounts(skip: Int = 0, first: Int = 100, orderBy: FeederPoolAccount_orderBy, orderDirection: OrderDirection, where: FeederPoolAccount_filter): [FeederPoolAccount!]!
   boostDirection(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVault_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVault_filter): [BoostedSavingsVault!]!
 }
+
 input Account_filter {
   id: ID
   id_not: ID
@@ -22,15 +30,18 @@ input Account_filter {
   boostDirection_contains: [String!]
   boostDirection_not_contains: [String!]
 }
+
 enum Account_orderBy {
   id
   boostedSavingsVaultAccounts
   feederPoolAccounts
   boostDirection
 }
+
 """
 Amplification value; amplifies the rate of change of the curve.
 Lower A = higher rate of change = higher slippage.
+
 """
 type AmpData {
   id: ID!
@@ -39,6 +50,7 @@ type AmpData {
   startTime: BigInt!
   rampEndTime: BigInt!
 }
+
 input AmpData_filter {
   id: ID
   id_not: ID
@@ -81,6 +93,7 @@ input AmpData_filter {
   rampEndTime_in: [BigInt!]
   rampEndTime_not_in: [BigInt!]
 }
+
 enum AmpData_orderBy {
   id
   currentA
@@ -88,22 +101,45 @@ enum AmpData_orderBy {
   startTime
   rampEndTime
 }
-"""A Basket of Bassets"""
+
+"""
+A Basket of Bassets
+
+"""
 type Basket {
   id: ID!
-  """The Bassets in the Basket"""
+  """
+  The Bassets in the Basket
+  
+  """
   bassets(skip: Int = 0, first: Int = 100, orderBy: Basset_orderBy, orderDirection: OrderDirection, where: Basset_filter): [Basset!]!
-  """The collateralisation ratio of the Basket (mUSD only)"""
+  """
+  The collateralisation ratio of the Basket (mUSD only)
+  
+  """
   collateralisationRatio: BigInt
-  """Max number of Bassets that can be present in the Basket"""
+  """
+  Max number of Bassets that can be present in the Basket
+  
+  """
   maxBassets: Int!
-  """Flag for whether the Basket has failed"""
+  """
+  Flag for whether the Basket has failed
+  
+  """
   undergoingRecol: Boolean!
-  """Flag for whether the Basket has failed"""
+  """
+  Flag for whether the Basket has failed
+  
+  """
   failed: Boolean!
-  """FeederPool the Basket belongs to"""
+  """
+  FeederPool the Basket belongs to
+  
+  """
   feederPool: FeederPool
 }
+
 input Basket_filter {
   id: ID
   id_not: ID
@@ -142,6 +178,7 @@ input Basket_filter {
   failed_in: [Boolean!]
   failed_not_in: [Boolean!]
 }
+
 enum Basket_orderBy {
   id
   bassets
@@ -151,45 +188,104 @@ enum Basket_orderBy {
   failed
   feederPool
 }
-"""Basket Asset (e.g. DAI for the mUSD basket)"""
+
+"""
+Basket Asset (e.g. DAI for the mUSD basket)
+
+"""
 type Basset {
-  """Address of the Basset token contract"""
+  """
+  Address of the Basset token contract
+  
+  """
   id: ID!
-  """If a main pool asset, the Masset the Basset is associated with (optional)"""
+  """
+  If a main pool asset, the Masset the Basset is associated with (optional)
+  
+  """
   masset: Token
-  """Target weight of the Basset (mUSD only)"""
+  """
+  Target weight of the Basset (mUSD only)
+  
+  """
   maxWeight: BigInt
-  """Basset to Masset ratio for quantity conversion"""
+  """
+  Basset to Masset ratio for quantity conversion
+  
+  """
   ratio: BigInt!
-  """Flag that is set when the bAsset is removed from the basket (and unset when added)"""
+  """
+  Flag that is set when the bAsset is removed from the basket (and unset when added)
+  
+  """
   removed: Boolean!
-  """Status of the Basset, e.g. 'Normal'"""
+  """
+  Status of the Basset, e.g. 'Normal'
+  
+  """
   status: String!
-  """An ERC20 can charge transfer fee, e.g. USDT or DGX tokens"""
+  """
+  An ERC20 can charge transfer fee, e.g. USDT or DGX tokens
+  
+  """
   isTransferFeeCharged: Boolean!
-  """The underlying Token for the Basset"""
+  """
+  The underlying Token for the Basset
+  
+  """
   token: Token!
-  """Amount of the Basset that is held in collateral"""
+  """
+  Amount of the Basset that is held in collateral
+  
+  """
   vaultBalance: Metric!
-  """Total number of mint transactions in which the Basset was an input"""
+  """
+  Total number of mint transactions in which the Basset was an input
+  
+  """
   totalMints: Counter!
-  """Total number of swap transactions in which the Basset was an input"""
+  """
+  Total number of swap transactions in which the Basset was an input
+  
+  """
   totalSwapsAsInput: Counter!
-  """Total number of swap transactions in which the Basset was an output"""
+  """
+  Total number of swap transactions in which the Basset was an output
+  
+  """
   totalSwapsAsOutput: Counter!
-  """Total number of redemption transactions in which the Basset was an output"""
+  """
+  Total number of redemption transactions in which the Basset was an output
+  
+  """
   totalRedemptions: Counter!
-  """Total supply of the Basset token"""
+  """
+  Total supply of the Basset token
+  
+  """
   totalSupply: Metric!
-  """Cumulative amount of the Basset that was used in mint transactions as input"""
+  """
+  Cumulative amount of the Basset that was used in mint transactions as input
+  
+  """
   cumulativeMinted: Metric!
-  """Cumulative amount of the Basset that was used in swap transactions as output"""
+  """
+  Cumulative amount of the Basset that was used in swap transactions as output
+  
+  """
   cumulativeSwappedAsOutput: Metric!
-  """Cumulative amount of the Basset that was used in redemption transactions as output (excluding proportional redemption)"""
+  """
+  Cumulative amount of the Basset that was used in redemption transactions as output (excluding proportional redemption)
+  
+  """
   cumulativeRedeemed: Metric!
-  """Cumulative amount of fees paid (e.g. for swaps and redemptions) using this Basset"""
+  """
+  Cumulative amount of fees paid (e.g. for swaps and redemptions) using this Basset
+  
+  """
   cumulativeFeesPaid: Metric!
 }
+
 input Basset_filter {
   id: ID
   id_not: ID
@@ -406,6 +502,7 @@ input Basset_filter {
   cumulativeFeesPaid_ends_with: String
   cumulativeFeesPaid_not_ends_with: String
 }
+
 enum Basset_orderBy {
   id
   masset
@@ -426,17 +523,24 @@ enum Basset_orderBy {
   cumulativeRedeemed
   cumulativeFeesPaid
 }
+
 scalar BigDecimal
+
 scalar BigInt
+
+scalar BigNumber
+
 input Block_height {
   hash: Bytes
   number: Int
 }
+
 type BoostDirector {
   id: ID!
   stakingContract: Token!
   whitelisted(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVault_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVault_filter): [BoostedSavingsVault!]!
 }
+
 input BoostDirector_filter {
   id: ID
   id_not: ID
@@ -465,62 +569,128 @@ input BoostDirector_filter {
   whitelisted_contains: [String!]
   whitelisted_not_contains: [String!]
 }
+
 enum BoostDirector_orderBy {
   id
   stakingContract
   whitelisted
 }
+
 type BoostedSavingsVault {
   id: ID!
-  """ID of the vault on the BoostDirector contract"""
+  """
+  ID of the vault on the BoostDirector contract
+  
+  """
   directorVaultId: Int
-  """The boost coefficient"""
+  """
+  The boost coefficient
+  
+  """
   boostCoeff: BigInt
-  """The price coefficient"""
+  """
+  The price coefficient
+  
+  """
   priceCoeff: BigInt
-  """The Feeder Pool associated with this vault (optional)"""
+  """
+  The Feeder Pool associated with this vault (optional)
+  
+  """
   feederPool: FeederPool
   accounts(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultAccount_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultAccount_filter): [BoostedSavingsVaultAccount!]!
   rewardEntries(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultRewardEntry_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultRewardEntry_filter): [BoostedSavingsVaultRewardEntry!]!
-  """Length of token lockup (in seconds), after rewards are earned"""
+  """
+  Length of token lockup (in seconds), after rewards are earned
+  
+  """
   lockupDuration: Int!
-  """Percentage of earned tokens that are unlocked immediately upon claiming"""
+  """
+  Percentage of earned tokens that are unlocked immediately upon claiming
+  
+  """
   unlockPercentage: BigInt!
-  """Rewards period duration (in seconds)"""
+  """
+  Rewards period duration (in seconds)
+  
+  """
   periodDuration: Int!
-  """Timestamp for current rewards period finish"""
+  """
+  Timestamp for current rewards period finish
+  
+  """
   periodFinish: Int!
-  """Last time any user took action"""
+  """
+  Last time any user took action
+  
+  """
   lastUpdateTime: Int!
-  """The staking token, e.g. imUSD"""
+  """
+  The staking token, e.g. imUSD
+  
+  """
   stakingToken: Token!
-  """The reward per token stored"""
+  """
+  The reward per token stored
+  
+  """
   rewardPerTokenStored: BigInt!
-  """The reward rate for the rest of the rewards period"""
+  """
+  The reward rate for the rest of the rewards period
+  
+  """
   rewardRate: BigInt!
-  """The rewards token, e.g. MTA"""
+  """
+  The rewards token, e.g. MTA
+  
+  """
   rewardsToken: Token!
-  """Rewards distributor contract address"""
+  """
+  Rewards distributor contract address
+  
+  """
   rewardsDistributor: Bytes!
-  """Staking rewards contract address"""
+  """
+  Staking rewards contract address
+  
+  """
   stakingContract: Bytes!
-  """Total boosted amount"""
+  """
+  Total boosted amount
+  
+  """
   totalSupply: BigInt!
-  """Total staking rewards (rewardRate * periodDuration)"""
+  """
+  Total staking rewards (rewardRate * periodDuration)
+  
+  """
   totalStakingRewards: BigInt!
-  """The platform reward per token stored (optional)"""
+  """
+  The platform reward per token stored (optional)
+  
+  """
   platformRewardPerTokenStored: BigInt
-  """The platform reward rate for the rest of the rewards period (optional)"""
+  """
+  The platform reward rate for the rest of the rewards period (optional)
+  
+  """
   platformRewardRate: BigInt
-  """Total raw balance"""
+  """
+  Total raw balance
+  
+  """
   totalRaw: BigInt
-  """The platform rewards token, e.g. WMATIC (optional)"""
+  """
+  The platform rewards token, e.g. WMATIC (optional)
+  
+  """
   platformRewardsToken: Token
   stakeTransactions(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultStakeTransaction_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultStakeTransaction_filter): [BoostedSavingsVaultStakeTransaction!]!
   rewardAddedTransactions(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultRewardAddedTransaction_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultRewardAddedTransaction_filter): [BoostedSavingsVaultRewardAddedTransaction!]!
   rewardPaidTransactions(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultRewardPaidTransaction_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultRewardPaidTransaction_filter): [BoostedSavingsVaultRewardPaidTransaction!]!
   withdrawTransactions(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultWithdrawTransaction_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultWithdrawTransaction_filter): [BoostedSavingsVaultWithdrawTransaction!]!
 }
+
 type BoostedSavingsVaultAccount {
   id: ID!
   boostedSavingsVault: BoostedSavingsVault!
@@ -540,6 +710,7 @@ type BoostedSavingsVaultAccount {
   rewardPaidTransactions(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultRewardPaidTransaction_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultRewardPaidTransaction_filter): [BoostedSavingsVaultRewardPaidTransaction!]!
   withdrawTransactions(skip: Int = 0, first: Int = 100, orderBy: BoostedSavingsVaultWithdrawTransaction_orderBy, orderDirection: OrderDirection, where: BoostedSavingsVaultWithdrawTransaction_filter): [BoostedSavingsVaultWithdrawTransaction!]!
 }
+
 input BoostedSavingsVaultAccount_filter {
   id: ID
   id_not: ID
@@ -664,6 +835,7 @@ input BoostedSavingsVaultAccount_filter {
   cumulativeClaimed_ends_with: String
   cumulativeClaimed_not_ends_with: String
 }
+
 enum BoostedSavingsVaultAccount_orderBy {
   id
   boostedSavingsVault
@@ -683,19 +855,30 @@ enum BoostedSavingsVaultAccount_orderBy {
   rewardPaidTransactions
   withdrawTransactions
 }
+
 type BoostedSavingsVaultRewardAddedTransaction implements Transaction {
   id: ID!
   hash: Bytes!
   block: Int!
   sender: Bytes!
   timestamp: BigInt!
-  """The BoostedSavingsVault the transaction relates to."""
+  """
+  The BoostedSavingsVault the transaction relates to.
+  
+  """
   boostedSavingsVault: BoostedSavingsVault!
-  """The amount of rewards added."""
+  """
+  The amount of rewards added.
+  
+  """
   amount: BigInt!
-  """The amount of platform rewards added (optional)."""
+  """
+  The amount of platform rewards added (optional).
+  
+  """
   platformAmount: BigInt
 }
+
 input BoostedSavingsVaultRewardAddedTransaction_filter {
   id: ID
   id_not: ID
@@ -764,6 +947,7 @@ input BoostedSavingsVaultRewardAddedTransaction_filter {
   platformAmount_in: [BigInt!]
   platformAmount_not_in: [BigInt!]
 }
+
 enum BoostedSavingsVaultRewardAddedTransaction_orderBy {
   id
   hash
@@ -774,6 +958,7 @@ enum BoostedSavingsVaultRewardAddedTransaction_orderBy {
   amount
   platformAmount
 }
+
 type BoostedSavingsVaultRewardEntry {
   id: ID!
   account: BoostedSavingsVaultAccount!
@@ -783,6 +968,7 @@ type BoostedSavingsVaultRewardEntry {
   finish: Int!
   rate: BigInt!
 }
+
 input BoostedSavingsVaultRewardEntry_filter {
   id: ID
   id_not: ID
@@ -853,6 +1039,7 @@ input BoostedSavingsVaultRewardEntry_filter {
   rate_in: [BigInt!]
   rate_not_in: [BigInt!]
 }
+
 enum BoostedSavingsVaultRewardEntry_orderBy {
   id
   account
@@ -862,21 +1049,35 @@ enum BoostedSavingsVaultRewardEntry_orderBy {
   finish
   rate
 }
+
 type BoostedSavingsVaultRewardPaidTransaction implements Transaction {
   id: ID!
   hash: Bytes!
   block: Int!
   sender: Bytes!
   timestamp: BigInt!
-  """The BoostedSavingsVault the transaction relates to."""
+  """
+  The BoostedSavingsVault the transaction relates to.
+  
+  """
   boostedSavingsVault: BoostedSavingsVault!
-  """The amount of the reward paid."""
+  """
+  The amount of the reward paid.
+  
+  """
   amount: BigInt!
-  """The amount of platform reward paid (optional)."""
+  """
+  The amount of platform reward paid (optional).
+  
+  """
   platformAmount: BigInt
-  """The account receiving the rewarded amount."""
+  """
+  The account receiving the rewarded amount.
+  
+  """
   account: BoostedSavingsVaultAccount!
 }
+
 input BoostedSavingsVaultRewardPaidTransaction_filter {
   id: ID
   id_not: ID
@@ -959,6 +1160,7 @@ input BoostedSavingsVaultRewardPaidTransaction_filter {
   account_ends_with: String
   account_not_ends_with: String
 }
+
 enum BoostedSavingsVaultRewardPaidTransaction_orderBy {
   id
   hash
@@ -970,19 +1172,30 @@ enum BoostedSavingsVaultRewardPaidTransaction_orderBy {
   platformAmount
   account
 }
+
 type BoostedSavingsVaultStakeTransaction implements Transaction {
   id: ID!
   hash: Bytes!
   block: Int!
   sender: Bytes!
   timestamp: BigInt!
-  """The BoostedSavingsVault the transaction relates to."""
+  """
+  The BoostedSavingsVault the transaction relates to.
+  
+  """
   boostedSavingsVault: BoostedSavingsVault!
-  """The amount staked."""
+  """
+  The amount staked.
+  
+  """
   amount: BigInt!
-  """The account the staked amount is being added for."""
+  """
+  The account the staked amount is being added for.
+  
+  """
   account: BoostedSavingsVaultAccount!
 }
+
 input BoostedSavingsVaultStakeTransaction_filter {
   id: ID
   id_not: ID
@@ -1057,6 +1270,7 @@ input BoostedSavingsVaultStakeTransaction_filter {
   account_ends_with: String
   account_not_ends_with: String
 }
+
 enum BoostedSavingsVaultStakeTransaction_orderBy {
   id
   hash
@@ -1067,19 +1281,30 @@ enum BoostedSavingsVaultStakeTransaction_orderBy {
   amount
   account
 }
+
 type BoostedSavingsVaultWithdrawTransaction implements Transaction {
   id: ID!
   hash: Bytes!
   block: Int!
   sender: Bytes!
   timestamp: BigInt!
-  """The BoostedSavingsVault the transaction relates to."""
+  """
+  The BoostedSavingsVault the transaction relates to.
+  
+  """
   boostedSavingsVault: BoostedSavingsVault!
-  """The amount of the stake withdrawn."""
+  """
+  The amount of the stake withdrawn.
+  
+  """
   amount: BigInt!
-  """The account the stake is withdrawn for."""
+  """
+  The account the stake is withdrawn for.
+  
+  """
   account: BoostedSavingsVaultAccount!
 }
+
 input BoostedSavingsVaultWithdrawTransaction_filter {
   id: ID
   id_not: ID
@@ -1154,6 +1379,7 @@ input BoostedSavingsVaultWithdrawTransaction_filter {
   account_ends_with: String
   account_not_ends_with: String
 }
+
 enum BoostedSavingsVaultWithdrawTransaction_orderBy {
   id
   hash
@@ -1164,6 +1390,7 @@ enum BoostedSavingsVaultWithdrawTransaction_orderBy {
   amount
   account
 }
+
 input BoostedSavingsVault_filter {
   id: ID
   id_not: ID
@@ -1362,6 +1589,7 @@ input BoostedSavingsVault_filter {
   platformRewardsToken_ends_with: String
   platformRewardsToken_not_ends_with: String
 }
+
 enum BoostedSavingsVault_orderBy {
   id
   directorVaultId
@@ -1392,12 +1620,18 @@ enum BoostedSavingsVault_orderBy {
   rewardPaidTransactions
   withdrawTransactions
 }
+
 scalar Bytes
+
 type Counter {
   id: ID!
-  """Value of the counter; should be positive"""
+  """
+  Value of the counter; should be positive
+  
+  """
   value: BigInt!
 }
+
 input Counter_filter {
   id: ID
   id_not: ID
@@ -1416,10 +1650,12 @@ input Counter_filter {
   value_in: [BigInt!]
   value_not_in: [BigInt!]
 }
+
 enum Counter_orderBy {
   id
   value
 }
+
 type FPMintMultiTransaction implements Transaction {
   id: ID!
   hash: Bytes!
@@ -1427,18 +1663,29 @@ type FPMintMultiTransaction implements Transaction {
   sender: Bytes!
   recipient: Bytes!
   timestamp: BigInt!
-  """The Feeder Pool the transaction relates to."""
+  """
+  The Feeder Pool the transaction relates to.
+  
+  """
   feederPool: FeederPool!
-  """The amount minted in Masset units."""
+  """
+  The amount minted in Masset units.
+  
+  """
   massetUnits: BigInt!
   """
   The tokens used as the collateral asset for this mint.
   This can be fAsset or mAsset.
+  
   """
   inputs(skip: Int = 0, first: Int = 100, orderBy: Basset_orderBy, orderDirection: OrderDirection, where: Basset_filter): [Basset!]!
-  """The respective Basset units for each Basset used in this mint."""
+  """
+  The respective Basset units for each Basset used in this mint.
+  
+  """
   bassetsUnits: [BigInt!]!
 }
+
 input FPMintMultiTransaction_filter {
   id: ID
   id_not: ID
@@ -1513,6 +1760,7 @@ input FPMintMultiTransaction_filter {
   bassetsUnits_contains: [BigInt!]
   bassetsUnits_not_contains: [BigInt!]
 }
+
 enum FPMintMultiTransaction_orderBy {
   id
   hash
@@ -1525,6 +1773,7 @@ enum FPMintMultiTransaction_orderBy {
   inputs
   bassetsUnits
 }
+
 type FPMintSingleTransaction implements Transaction {
   id: ID!
   hash: Bytes!
@@ -1532,18 +1781,29 @@ type FPMintSingleTransaction implements Transaction {
   sender: Bytes!
   recipient: Bytes!
   timestamp: BigInt!
-  """The Feeder Pool the transaction relates to."""
+  """
+  The Feeder Pool the transaction relates to.
+  
+  """
   feederPool: FeederPool!
-  """The amount minted in Masset units."""
+  """
+  The amount minted in Masset units.
+  
+  """
   massetUnits: BigInt!
   """
   The token used as the collateral asset for this mint.
   This can be fAsset, mAsset or mpAsset (main pool asset).
+  
   """
   input: Token!
-  """The amount of the Basset used for this mint, in Basset units."""
+  """
+  The amount of the Basset used for this mint, in Basset units.
+  
+  """
   bassetUnits: BigInt!
 }
+
 input FPMintSingleTransaction_filter {
   id: ID
   id_not: ID
@@ -1632,6 +1892,7 @@ input FPMintSingleTransaction_filter {
   bassetUnits_in: [BigInt!]
   bassetUnits_not_in: [BigInt!]
 }
+
 enum FPMintSingleTransaction_orderBy {
   id
   hash
@@ -1644,6 +1905,7 @@ enum FPMintSingleTransaction_orderBy {
   input
   bassetUnits
 }
+
 type FPRedeemTransaction implements Transaction {
   id: ID!
   hash: Bytes!
@@ -1651,15 +1913,28 @@ type FPRedeemTransaction implements Transaction {
   sender: Bytes!
   recipient: Bytes!
   timestamp: BigInt!
-  """The Feeder Pool the transaction relates to."""
+  """
+  The Feeder Pool the transaction relates to.
+  
+  """
   feederPool: FeederPool!
-  """The amount redeemed in Masset units."""
+  """
+  The amount redeemed in Masset units.
+  
+  """
   massetUnits: BigInt!
-  """The Bassets selected as assets to redeem."""
+  """
+  The Bassets selected as assets to redeem.
+  
+  """
   bassets(skip: Int = 0, first: Int = 100, orderBy: Basset_orderBy, orderDirection: OrderDirection, where: Basset_filter): [Basset!]!
-  """The respective units of each Basset selected to redeem."""
+  """
+  The respective units of each Basset selected to redeem.
+  
+  """
   bassetsUnits: [BigInt!]!
 }
+
 input FPRedeemTransaction_filter {
   id: ID
   id_not: ID
@@ -1734,6 +2009,7 @@ input FPRedeemTransaction_filter {
   bassetsUnits_contains: [BigInt!]
   bassetsUnits_not_contains: [BigInt!]
 }
+
 enum FPRedeemTransaction_orderBy {
   id
   hash
@@ -1746,23 +2022,40 @@ enum FPRedeemTransaction_orderBy {
   bassets
   bassetsUnits
 }
+
 type FPSwapTransaction implements Transaction {
   id: ID!
   hash: Bytes!
   block: Int!
   sender: Bytes!
   timestamp: BigInt!
-  """The Feeder Pool the transaction relates to."""
+  """
+  The Feeder Pool the transaction relates to.
+  
+  """
   feederPool: FeederPool!
-  """The amount of the swap output in Masset units"""
+  """
+  The amount of the swap output in Masset units
+  
+  """
   massetUnits: BigInt!
-  """The Basset used as the input for this swap."""
+  """
+  The Basset used as the input for this swap.
+  
+  """
   inputBasset: Basset!
-  """The Basset used as the output for this swap."""
+  """
+  The Basset used as the output for this swap.
+  
+  """
   outputBasset: Basset!
-  """The recipient of the swap output."""
+  """
+  The recipient of the swap output.
+  
+  """
   recipient: Bytes!
 }
+
 input FPSwapTransaction_filter {
   id: ID
   id_not: ID
@@ -1857,6 +2150,7 @@ input FPSwapTransaction_filter {
   recipient_contains: Bytes
   recipient_not_contains: Bytes
 }
+
 enum FPSwapTransaction_orderBy {
   id
   hash
@@ -1869,6 +2163,7 @@ enum FPSwapTransaction_orderBy {
   outputBasset
   recipient
 }
+
 type FeederPool {
   id: ID!
   ampData: AmpData!
@@ -1905,6 +2200,7 @@ type FeederPool {
   vault: BoostedSavingsVault!
   accounts(skip: Int = 0, first: Int = 100, orderBy: FeederPoolAccount_orderBy, orderDirection: OrderDirection, where: FeederPoolAccount_filter): [FeederPoolAccount!]!
 }
+
 type FeederPoolAccount {
   id: ID!
   account: Account!
@@ -1918,6 +2214,7 @@ type FeederPoolAccount {
   priceVault: BigInt!
   lastUpdateVault: Int!
 }
+
 input FeederPoolAccount_filter {
   id: ID
   id_not: ID
@@ -2032,6 +2329,7 @@ input FeederPoolAccount_filter {
   lastUpdateVault_in: [Int!]
   lastUpdateVault_not_in: [Int!]
 }
+
 enum FeederPoolAccount_orderBy {
   id
   account
@@ -2045,6 +2343,7 @@ enum FeederPoolAccount_orderBy {
   priceVault
   lastUpdateVault
 }
+
 input FeederPool_filter {
   id: ID
   id_not: ID
@@ -2373,6 +2672,7 @@ input FeederPool_filter {
   totalSwaps_ends_with: String
   totalSwaps_not_ends_with: String
 }
+
 enum FeederPool_orderBy {
   id
   ampData
@@ -2409,15 +2709,26 @@ enum FeederPool_orderBy {
   vault
   accounts
 }
+
 type Metric {
   id: ID!
-  """Exact value of the metric, i.e. in base units as an integer"""
+  """
+  Exact value of the metric, i.e. in base units as an integer
+  
+  """
   exact: BigInt!
-  """Decimals used for the exact value (default: 18)"""
+  """
+  Decimals used for the exact value (default: 18)
+  
+  """
   decimals: Int!
-  """Simple value of the metric, i.e. the exact value represented as a decimal"""
+  """
+  Simple value of the metric, i.e. the exact value represented as a decimal
+  
+  """
   simple: BigDecimal!
 }
+
 input Metric_filter {
   id: ID
   id_not: ID
@@ -2452,16 +2763,21 @@ input Metric_filter {
   simple_in: [BigDecimal!]
   simple_not_in: [BigDecimal!]
 }
+
 enum Metric_orderBy {
   id
   exact
   decimals
   simple
 }
+
+scalar MstableBigDecimal
+
 enum OrderDirection {
   asc
   desc
 }
+
 type Query {
   token(
     id: ID!
@@ -2774,6 +3090,7 @@ type Query {
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
 }
+
 type Subscription {
   token(
     id: ID!
@@ -3086,30 +3403,65 @@ type Subscription {
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
 }
-"""An ERC20-compatible token"""
+
+"""
+An ERC20-compatible token
+
+"""
 type Token {
   id: ID!
-  """Token address"""
+  """
+  Token address
+  
+  """
   address: Bytes!
-  """Token decimals"""
+  """
+  Token decimals
+  
+  """
   decimals: Int!
-  """Token name"""
+  """
+  Token name
+  
+  """
   name: String!
-  """Token symbol"""
+  """
+  Token symbol
+  
+  """
   symbol: String!
-  """Total supply of the token"""
+  """
+  Total supply of the token
+  
+  """
   totalSupply: Metric!
-  """Total quantity of tokens burned"""
+  """
+  Total quantity of tokens burned
+  
+  """
   totalBurned: Metric!
-  """Total quantity of tokens minted"""
+  """
+  Total quantity of tokens minted
+  
+  """
   totalMinted: Metric!
-  """Count of transfer transactions"""
+  """
+  Count of transfer transactions
+  
+  """
   totalTransfers: Counter!
-  """Count of transfer transactions that minted the token"""
+  """
+  Count of transfer transactions that minted the token
+  
+  """
   totalMints: Counter!
-  """Count of transfer transactions that burned the token"""
+  """
+  Count of transfer transactions that burned the token
+  
+  """
   totalBurns: Counter!
 }
+
 input Token_filter {
   id: ID
   id_not: ID
@@ -3246,6 +3598,7 @@ input Token_filter {
   totalBurns_ends_with: String
   totalBurns_not_ends_with: String
 }
+
 enum Token_orderBy {
   id
   address
@@ -3259,18 +3612,35 @@ enum Token_orderBy {
   totalMints
   totalBurns
 }
+
 interface Transaction {
-  """Transaction hash + log index"""
+  """
+  Transaction hash + log index
+  
+  """
   id: ID!
-  """Transaction hash"""
+  """
+  Transaction hash
+  
+  """
   hash: Bytes!
-  """Block number the transaction is in"""
+  """
+  Block number the transaction is in
+  
+  """
   block: Int!
-  """Timestamp of the block the transaction is in"""
+  """
+  Timestamp of the block the transaction is in
+  
+  """
   timestamp: BigInt!
-  """Address of the sender of the transaction"""
+  """
+  Address of the sender of the transaction
+  
+  """
   sender: Bytes!
 }
+
 input Transaction_filter {
   id: ID
   id_not: ID
@@ -3309,6 +3679,7 @@ input Transaction_filter {
   sender_contains: Bytes
   sender_not_contains: Bytes
 }
+
 enum Transaction_orderBy {
   id
   hash
@@ -3316,12 +3687,14 @@ enum Transaction_orderBy {
   timestamp
   sender
 }
+
 type _Block_ {
   """The hash of the block"""
   hash: Bytes
   """The block number"""
   number: Int!
 }
+
 """The type for the top-level _meta field"""
 type _Meta_ {
   """
@@ -3329,6 +3702,7 @@ type _Meta_ {
   will be null if the _meta field has a block constraint that asks for
   a block number. It will be filled if the _meta field has no block constraint
   and therefore asks for the latest  block
+  
   """
   block: _Block_!
   """The deployment ID"""
@@ -3336,6 +3710,7 @@ type _Meta_ {
   """If `true`, the subgraph encountered indexing errors at some past block"""
   hasIndexingErrors: Boolean!
 }
+
 enum _SubgraphErrorPolicy_ {
   """Data will be returned even if the subgraph has indexing errors"""
   allow

@@ -3,6 +3,7 @@ import { DocumentNode, gql, useQuery } from '@apollo/client'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { format, getUnixTime } from 'date-fns'
 
+import { useApolloClients } from '@apps/base/context/apollo'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { ThemedSkeleton } from '@apps/components/core'
 import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
@@ -46,6 +47,7 @@ const useAggregateMetrics = (): {
   totalSavingsV1: number
   totalSavingsV2: number
 }[] => {
+  const clients = useApolloClients()
   const dateFilter = useDateFilter()
   const savingsContractState = useSelectedSavingsContractState()
   const massetAddress = savingsContractState?.massetAddress
@@ -76,7 +78,7 @@ const useAggregateMetrics = (): {
           }
         }
       }
-      query AggregateMetrics @api(name: protocol) {
+      query AggregateMetrics  {
         ${current}
         ${blockMetrics}
       }
@@ -85,6 +87,7 @@ const useAggregateMetrics = (): {
 
   const query = useQuery<AggregateMetricsQueryResult>(metricsDoc, {
     fetchPolicy: 'no-cache',
+    client: clients.protocol,
   })
 
   return useMemo(() => {

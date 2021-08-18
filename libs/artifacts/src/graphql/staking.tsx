@@ -1,22 +1,21 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { BigNumber } from 'ethers';
+import { BigDecimal } from '@apps/bigdecimal';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 
-      export interface IntrospectionResultData {
-        __schema: {
-          types: {
-            kind: string;
-            name: string;
-            possibleTypes: {
-              name: string;
-            }[];
-          }[];
-        };
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
       }
-      const result: IntrospectionResultData = {
-  "__schema": {
-    "types": []
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "Transaction": []
   }
 };
       export default result;
@@ -30,8 +29,13 @@ export type Scalars = {
   Float: number;
   BigDecimal: string;
   BigInt: string;
+  BigNumber: BigNumber;
   Bytes: string;
+  MstableBigDecimal: BigDecimal;
 };
+
+
+
 
 export type Account = {
   id: Scalars['ID'];
@@ -147,16 +151,18 @@ export enum Account_OrderBy {
 }
 
 export type Balance = {
-  id: Scalars['ID'];
   account: Account;
-  raw: Scalars['BigInt'];
-  weightedTimestamp: Scalars['Int'];
+  cooldownMultiplier: Scalars['Int'];
+  id: Scalars['ID'];
   lastAction: Scalars['Int'];
   permMultiplier: Scalars['Int'];
+  raw: Scalars['BigInt'];
+  rawBN: Scalars['BigNumber'];
   seasonMultiplier: Scalars['Int'];
   timeMultiplier: Scalars['Int'];
-  cooldownMultiplier: Scalars['Int'];
   votes: Scalars['BigInt'];
+  votesBN: Scalars['BigNumber'];
+  weightedTimestamp: Scalars['Int'];
 };
 
 export type Balance_Filter = {
@@ -263,6 +269,7 @@ export enum Balance_OrderBy {
 
 
 
+
 export type Block_Height = {
   hash?: Maybe<Scalars['Bytes']>;
   number?: Maybe<Scalars['Int']>;
@@ -361,11 +368,12 @@ export enum Counter_OrderBy {
 }
 
 export type Metric = {
-  id: Scalars['ID'];
-  /** Exact value of the metric, i.e. in base units as an integer */
-  exact: Scalars['BigInt'];
+  bigDecimal: Scalars['MstableBigDecimal'];
   /** Decimals used for the exact value (default: 18) */
   decimals: Scalars['Int'];
+  /** Exact value of the metric, i.e. in base units as an integer */
+  exact: Scalars['BigInt'];
+  id: Scalars['ID'];
   /** Simple value of the metric, i.e. the exact value represented as a decimal */
   simple: Scalars['BigDecimal'];
 };
@@ -412,6 +420,7 @@ export enum Metric_OrderBy {
   Simple = 'simple'
 }
 
+
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -437,6 +446,8 @@ export type Query = {
   stakingRewards: Array<StakingRewards>;
   account?: Maybe<Account>;
   accounts: Array<Account>;
+  transaction?: Maybe<Transaction>;
+  transactions: Array<Transaction>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -592,6 +603,22 @@ export type QueryAccountsArgs = {
   orderBy?: Maybe<Account_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Account_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryTransactionArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryTransactionsArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Transaction_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Transaction_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -1024,6 +1051,8 @@ export type Subscription = {
   stakingRewards: Array<StakingRewards>;
   account?: Maybe<Account>;
   accounts: Array<Account>;
+  transaction?: Maybe<Transaction>;
+  transactions: Array<Transaction>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -1179,6 +1208,22 @@ export type SubscriptionAccountsArgs = {
   orderBy?: Maybe<Account_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Account_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionTransactionArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionTransactionsArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Transaction_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Transaction_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -1363,6 +1408,66 @@ export enum Token_OrderBy {
   TotalBurns = 'totalBurns'
 }
 
+export type Transaction = {
+  /** Transaction hash + log index */
+  id: Scalars['ID'];
+  /** Transaction hash */
+  hash: Scalars['Bytes'];
+  /** Block number the transaction is in */
+  block: Scalars['Int'];
+  /** Timestamp of the block the transaction is in */
+  timestamp: Scalars['BigInt'];
+  /** Address of the sender of the transaction */
+  sender: Scalars['Bytes'];
+};
+
+export type Transaction_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  hash?: Maybe<Scalars['Bytes']>;
+  hash_not?: Maybe<Scalars['Bytes']>;
+  hash_in?: Maybe<Array<Scalars['Bytes']>>;
+  hash_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  hash_contains?: Maybe<Scalars['Bytes']>;
+  hash_not_contains?: Maybe<Scalars['Bytes']>;
+  block?: Maybe<Scalars['Int']>;
+  block_not?: Maybe<Scalars['Int']>;
+  block_gt?: Maybe<Scalars['Int']>;
+  block_lt?: Maybe<Scalars['Int']>;
+  block_gte?: Maybe<Scalars['Int']>;
+  block_lte?: Maybe<Scalars['Int']>;
+  block_in?: Maybe<Array<Scalars['Int']>>;
+  block_not_in?: Maybe<Array<Scalars['Int']>>;
+  timestamp?: Maybe<Scalars['BigInt']>;
+  timestamp_not?: Maybe<Scalars['BigInt']>;
+  timestamp_gt?: Maybe<Scalars['BigInt']>;
+  timestamp_lt?: Maybe<Scalars['BigInt']>;
+  timestamp_gte?: Maybe<Scalars['BigInt']>;
+  timestamp_lte?: Maybe<Scalars['BigInt']>;
+  timestamp_in?: Maybe<Array<Scalars['BigInt']>>;
+  timestamp_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  sender?: Maybe<Scalars['Bytes']>;
+  sender_not?: Maybe<Scalars['Bytes']>;
+  sender_in?: Maybe<Array<Scalars['Bytes']>>;
+  sender_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  sender_contains?: Maybe<Scalars['Bytes']>;
+  sender_not_contains?: Maybe<Scalars['Bytes']>;
+};
+
+export enum Transaction_OrderBy {
+  Id = 'id',
+  Hash = 'hash',
+  Block = 'block',
+  Timestamp = 'timestamp',
+  Sender = 'sender'
+}
+
 export type _Block_ = {
   /** The hash of the block */
   hash?: Maybe<Scalars['Bytes']>;
@@ -1392,29 +1497,17 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type MetricFieldsFragment = Pick<Metric, 'id' | 'exact' | 'decimals' | 'simple'>;
+export type MetricFieldsFragment = { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal };
 
-export type TokenAllFragment = (
-  Pick<Token, 'id' | 'address' | 'decimals' | 'symbol'>
-  & { totalSupply: MetricFieldsFragment }
-);
+export type TokenAllFragment = { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } };
 
-export type StakingQueryVariables = {
+export type StakingQueryVariables = Exact<{
   account: Scalars['ID'];
   hasAccount: Scalars['Boolean'];
-};
+}>;
 
 
-export type StakingQuery = { stakedToken?: Maybe<(
-    Pick<StakedToken, 'address' | 'questSigner' | 'UNSTAKE_WINDOW' | 'COOLDOWN_SECONDS' | 'COOLDOWN_PERCENTAGE_SCALE' | 'collateralisationRatio' | 'slashingPercentage'>
-    & { token: TokenAllFragment, stakingToken: TokenAllFragment, stakingRewards: (
-      Pick<StakingRewards, 'DURATION' | 'periodFinish' | 'lastUpdateTime' | 'rewardRate' | 'rewardPerTokenStored' | 'rewardsTokenVendor' | 'rewardsDistributor' | 'pendingAdditionalReward'>
-      & { rewardsToken: TokenAllFragment }
-    ), season: Pick<Season, 'id' | 'endedAt' | 'startedAt' | 'seasonNumber'> }
-  )>, accounts: Array<(
-    Pick<Account, 'id' | 'rewardPerTokenPaid' | 'rewards' | 'cooldownTimestamp'>
-    & { delegatee?: Maybe<Pick<Account, 'id'>>, delegators: Array<Pick<Account, 'id'>>, completedQuests: Array<Pick<CompletedQuest, 'id'>>, balance: Pick<Balance, 'lastAction' | 'permMultiplier' | 'timeMultiplier' | 'seasonMultiplier' | 'cooldownMultiplier' | 'raw' | 'votes' | 'weightedTimestamp'> }
-  )>, quests: Array<Pick<Quest, 'id'>> };
+export type StakingQuery = { stakedToken?: Maybe<{ address: string, questSigner: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, COOLDOWN_PERCENTAGE_SCALE: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, season: { id: string, endedAt?: Maybe<number>, startedAt: number, seasonNumber: number } }>, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, cooldownTimestamp?: Maybe<string>, cooldownPercentage?: Maybe<string>, delegatee?: Maybe<{ id: string }>, delegators: Array<{ id: string }>, completedQuests: Array<{ id: string }>, balance: { lastAction: number, permMultiplier: number, timeMultiplier: number, seasonMultiplier: number, cooldownMultiplier: number, raw: string, rawBN: BigNumber, votes: string, votesBN: BigNumber, weightedTimestamp: number } }>>, quests: Array<{ id: string }> };
 
 export const MetricFieldsFragmentDoc = gql`
     fragment MetricFields on Metric {
@@ -1422,6 +1515,7 @@ export const MetricFieldsFragmentDoc = gql`
   exact
   decimals
   simple
+  bigDecimal @client
 }
     `;
 export const TokenAllFragmentDoc = gql`
@@ -1436,7 +1530,7 @@ export const TokenAllFragmentDoc = gql`
 }
     ${MetricFieldsFragmentDoc}`;
 export const StakingDocument = gql`
-    query Staking($account: ID!, $hasAccount: Boolean!) @api(name: staking) {
+    query Staking($account: ID!, $hasAccount: Boolean!) {
   stakedToken(id: "StakedToken") {
     address
     token {
@@ -1485,7 +1579,7 @@ export const StakingDocument = gql`
       id
     }
     cooldownTimestamp
-    cooldownTimestamp
+    cooldownPercentage
     balance {
       lastAction
       permMultiplier
@@ -1493,7 +1587,9 @@ export const StakingDocument = gql`
       seasonMultiplier
       cooldownMultiplier
       raw
+      rawBN @client
       votes
+      votesBN @client
       weightedTimestamp
     }
   }
@@ -1520,12 +1616,14 @@ export const StakingDocument = gql`
  *   },
  * });
  */
-export function useStakingQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<StakingQuery, StakingQueryVariables>) {
-        return ApolloReactHooks.useQuery<StakingQuery, StakingQueryVariables>(StakingDocument, baseOptions);
+export function useStakingQuery(baseOptions: Apollo.QueryHookOptions<StakingQuery, StakingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StakingQuery, StakingQueryVariables>(StakingDocument, options);
       }
-export function useStakingLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<StakingQuery, StakingQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<StakingQuery, StakingQueryVariables>(StakingDocument, baseOptions);
+export function useStakingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakingQuery, StakingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StakingQuery, StakingQueryVariables>(StakingDocument, options);
         }
 export type StakingQueryHookResult = ReturnType<typeof useStakingQuery>;
 export type StakingLazyQueryHookResult = ReturnType<typeof useStakingLazyQuery>;
-export type StakingQueryResult = ApolloReactCommon.QueryResult<StakingQuery, StakingQueryVariables>;
+export type StakingQueryResult = Apollo.QueryResult<StakingQuery, StakingQueryVariables>;
