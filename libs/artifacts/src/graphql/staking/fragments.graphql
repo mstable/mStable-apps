@@ -3,6 +3,7 @@ fragment MetricFields on Metric {
   exact
   decimals
   simple
+  bigDecimal @client
 }
 
 fragment TokenAll on Token {

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { getUnixTime } from 'date-fns'
 import { useQuery, gql, DocumentNode } from '@apollo/client'
 
+import { useApolloClients } from '@apps/base/context/apollo'
 import { getKeyTimestamp } from '@apps/formatters'
 
 interface BlockTime {
@@ -34,7 +35,7 @@ const useDailyApysDocument = (savingsContractAddress: string | undefined, blockT
               rate
           }
       }
-      query DailyApys @api(name: protocol) {
+      query DailyApys {
           ${currentApy}
           ${blockApys}
       }
@@ -45,6 +46,7 @@ export const useDailyApysForBlockTimes = (
   savingsContractAddress: string | undefined,
   blockTimes: BlockTime[],
 ): { timestamp: number; dailyAPY: number; utilisationRate: number; capped: boolean }[] => {
+  const clients = useApolloClients()
   const apysDoc = useDailyApysDocument(savingsContractAddress, blockTimes)
 
   const apysQuery = useQuery<{
@@ -55,7 +57,7 @@ export const useDailyApysForBlockTimes = (
         latestExchangeRate?: { rate: string }
       },
     ]
-  }>(apysDoc, { fetchPolicy: 'cache-and-network' })
+  }>(apysDoc, { fetchPolicy: 'cache-and-network', client: clients.protocol })
 
   const isPolygon = savingsContractAddress === '0x5290ad3d83476ca6a2b178cd9727ee1ef72432af'
 

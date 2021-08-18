@@ -1,0 +1,48 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+scalar BigNumber
+
+scalar MstableBigDecimal
+
+type Mutation {
+  queueOptIn(account: ID!, signature: String!): Boolean!
+  queueOptOut(account: ID!, signature: String!): Boolean!
+  setMetadata(json: String!, signature: String!): Boolean!
+}
+
+type Query {
+  quest(id: ID!): Quest
+  quests: [Quest]!
+  user(account: ID!): User
+  optInQueue: [User]!
+}
+
+type Quest {
+  id: ID!
+  metadata: QuestMetadata
+  submission(account: ID!): QuestSubmission
+}
+
+type QuestMetadata {
+  title: String!
+  description: String!
+  imageUrl: String
+}
+
+type QuestSubmission {
+  complete: Boolean!
+  progress: Float
+  signature: String
+  quest: Quest!
+  user: User
+}
+
+type User {
+  id: ID!
+  queueOptIn: Boolean
+  completed: [Quest]!
+  queue: [Quest]!
+}

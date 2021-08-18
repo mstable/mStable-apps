@@ -88,12 +88,12 @@ export interface EthereumMainnet
         WBTC: string
       }
     },
-    { feeders: string[] }
+    GraphQLEndpoints<'feeders'>
   > {
   chainId: ChainIds.EthereumMainnet
 }
 
-export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking'>> {
+export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking' | 'questbook'>> {
   chainId: ChainIds.EthereumRopsten
 }
 
@@ -120,7 +120,7 @@ export interface MaticMainnet
   }
 }
 
-export interface MaticMumbai extends Network<{ ERC20: { wMATIC: string } }, {}> {
+export interface MaticMumbai extends Network<{ ERC20: { wMATIC: string } }, CoreGqlEndpoints> {
   chainId: ChainIds.MaticMumbai
   parentChainId: ChainIds.EthereumGoerli
   nativeToken: {
@@ -131,6 +131,12 @@ export interface MaticMumbai extends Network<{ ERC20: { wMATIC: string } }, {}> 
 }
 
 export type AllNetworks = EthereumMainnet | EthereumRopsten | EthereumGoerli | MaticMainnet | MaticMumbai
+
+export type AllGqlEndpoints = keyof (EthereumMainnet['gqlEndpoints'] &
+  EthereumGoerli['gqlEndpoints'] &
+  EthereumRopsten['gqlEndpoints'] &
+  MaticMainnet['gqlEndpoints'] &
+  MaticMumbai['gqlEndpoints'])
 
 const etherscanUrl =
   (network?: string, domain = 'etherscan.io') =>
@@ -209,6 +215,7 @@ const ETH_ROPSTEN: EthereumRopsten = {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-ropsten')],
     staking: [graphHostedEndpoint('mstable', 'mstable-staking-ropsten')],
     blocks: [graphHostedEndpoint('blocklytics', 'ropsten-blocks')],
+    questbook: ['https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook'],
   },
   addresses: {
     MTA: '0x273bc479e5c21caa15aa8538decbf310981d14c0',

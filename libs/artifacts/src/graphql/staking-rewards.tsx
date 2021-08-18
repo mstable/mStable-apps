@@ -1,37 +1,24 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import { BigNumber } from 'ethers';
+import { BigDecimal } from '@apps/bigdecimal';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 
-      export interface IntrospectionResultData {
-        __schema: {
-          types: {
-            kind: string;
-            name: string;
-            possibleTypes: {
-              name: string;
-            }[];
-          }[];
-        };
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
       }
-      const result: IntrospectionResultData = {
-  "__schema": {
-    "types": [
-      {
-        "kind": "INTERFACE",
-        "name": "Transaction",
-        "possibleTypes": [
-          {
-            "name": "StakingRewardsContractClaimRewardTransaction"
-          },
-          {
-            "name": "StakingRewardsContractStakeTransaction"
-          },
-          {
-            "name": "StakingRewardsContractWithdrawTransaction"
-          }
-        ]
-      }
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "Transaction": [
+      "StakingRewardsContractClaimRewardTransaction",
+      "StakingRewardsContractStakeTransaction",
+      "StakingRewardsContractWithdrawTransaction"
     ]
   }
 };
@@ -46,8 +33,14 @@ export type Scalars = {
   Float: number;
   BigDecimal: string;
   BigInt: string;
+  BigNumber: BigNumber;
   Bytes: string;
+  MstableBigDecimal: BigDecimal;
 };
+
+
+
+
 
 
 
@@ -138,6 +131,7 @@ export enum Metric_OrderBy {
   Decimals = 'decimals',
   Simple = 'simple'
 }
+
 
 export enum OrderDirection {
   Asc = 'asc',
@@ -1496,46 +1490,30 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type TokenDetailsFragment = (
-  Pick<Token, 'id' | 'address' | 'decimals' | 'symbol'>
-  & { totalSupply: Pick<Metric, 'exact' | 'simple' | 'decimals'> }
-);
+export type TokenDetailsFragment = { id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, simple: string, decimals: number } };
 
-export type StakingRewardsContractDetailsFragment = (
-  Pick<StakingRewardsContract, 'id' | 'type' | 'duration' | 'lastUpdateTime' | 'periodFinish' | 'rewardRate' | 'rewardPerTokenStored' | 'platformRewardPerTokenStored' | 'platformRewardRate' | 'totalSupply' | 'totalStakingRewards' | 'totalPlatformRewards'>
-  & { address: StakingRewardsContract['id'] }
-  & { stakingToken: (
-    { totalSupply: Pick<Metric, 'exact' | 'decimals' | 'simple'> }
-    & TokenDetailsFragment
-  ), rewardsToken: TokenDetailsFragment, platformToken?: Maybe<TokenDetailsFragment> }
-);
+export type StakingRewardsContractDetailsFragment = { id: string, type: StakingRewardsContractType, duration: number, lastUpdateTime: number, periodFinish: number, rewardRate: string, rewardPerTokenStored: string, platformRewardPerTokenStored?: Maybe<string>, platformRewardRate?: Maybe<string>, totalSupply: string, totalStakingRewards: string, totalPlatformRewards?: Maybe<string>, address: string, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, decimals: number, simple: string } }, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, simple: string, decimals: number } }, platformToken?: Maybe<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, simple: string, decimals: number } }> };
 
-export type AllErc20TokensQueryVariables = {};
+export type AllErc20TokensQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllErc20TokensQuery = { tokens: Array<TokenDetailsFragment> };
+export type AllErc20TokensQuery = { tokens: Array<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, simple: string, decimals: number } }> };
 
-export type StakingRewardsContractQueryVariables = {
+export type StakingRewardsContractQueryVariables = Exact<{
   id: Scalars['ID'];
   account?: Maybe<Scalars['Bytes']>;
-};
+}>;
 
 
-export type StakingRewardsContractQuery = { stakingRewardsContract?: Maybe<(
-    { stakingBalances: Array<Pick<StakingBalance, 'amount'>>, stakingRewards: Array<Pick<StakingReward, 'amount' | 'amountPerTokenPaid'>>, platformRewards: Array<Pick<StakingReward, 'amount' | 'amountPerTokenPaid'>> }
-    & StakingRewardsContractDetailsFragment
-  )> };
+export type StakingRewardsContractQuery = { stakingRewardsContract?: Maybe<{ id: string, type: StakingRewardsContractType, duration: number, lastUpdateTime: number, periodFinish: number, rewardRate: string, rewardPerTokenStored: string, platformRewardPerTokenStored?: Maybe<string>, platformRewardRate?: Maybe<string>, totalSupply: string, totalStakingRewards: string, totalPlatformRewards?: Maybe<string>, address: string, stakingBalances: Array<{ amount: string }>, stakingRewards: Array<{ amount: string, amountPerTokenPaid: string }>, platformRewards: Array<{ amount: string, amountPerTokenPaid: string }>, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, decimals: number, simple: string } }, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, simple: string, decimals: number } }, platformToken?: Maybe<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, simple: string, decimals: number } }> }> };
 
-export type StakingRewardsForStakingTokenQueryVariables = {
+export type StakingRewardsForStakingTokenQueryVariables = Exact<{
   stakingToken: Scalars['String'];
   account?: Maybe<Scalars['Bytes']>;
-};
+}>;
 
 
-export type StakingRewardsForStakingTokenQuery = { stakingRewardsContracts: Array<(
-    { stakingBalances: Array<Pick<StakingBalance, 'amount'>>, stakingRewards: Array<Pick<StakingReward, 'amount' | 'amountPerTokenPaid'>>, platformRewards: Array<Pick<StakingReward, 'amount' | 'amountPerTokenPaid'>> }
-    & StakingRewardsContractDetailsFragment
-  )> };
+export type StakingRewardsForStakingTokenQuery = { stakingRewardsContracts: Array<{ id: string, type: StakingRewardsContractType, duration: number, lastUpdateTime: number, periodFinish: number, rewardRate: string, rewardPerTokenStored: string, platformRewardPerTokenStored?: Maybe<string>, platformRewardRate?: Maybe<string>, totalSupply: string, totalStakingRewards: string, totalPlatformRewards?: Maybe<string>, address: string, stakingBalances: Array<{ amount: string }>, stakingRewards: Array<{ amount: string, amountPerTokenPaid: string }>, platformRewards: Array<{ amount: string, amountPerTokenPaid: string }>, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, decimals: number, simple: string } }, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, simple: string, decimals: number } }, platformToken?: Maybe<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { exact: string, simple: string, decimals: number } }> }> };
 
 export const TokenDetailsFragmentDoc = gql`
     fragment TokenDetails on Token {
@@ -1582,7 +1560,7 @@ export const StakingRewardsContractDetailsFragmentDoc = gql`
 }
     ${TokenDetailsFragmentDoc}`;
 export const AllErc20TokensDocument = gql`
-    query AllErc20Tokens @api(name: stakingRewards) {
+    query AllErc20Tokens {
   tokens {
     ...TokenDetails
   }
@@ -1604,17 +1582,19 @@ export const AllErc20TokensDocument = gql`
  *   },
  * });
  */
-export function useAllErc20TokensQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AllErc20TokensQuery, AllErc20TokensQueryVariables>) {
-        return ApolloReactHooks.useQuery<AllErc20TokensQuery, AllErc20TokensQueryVariables>(AllErc20TokensDocument, baseOptions);
+export function useAllErc20TokensQuery(baseOptions?: Apollo.QueryHookOptions<AllErc20TokensQuery, AllErc20TokensQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllErc20TokensQuery, AllErc20TokensQueryVariables>(AllErc20TokensDocument, options);
       }
-export function useAllErc20TokensLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AllErc20TokensQuery, AllErc20TokensQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AllErc20TokensQuery, AllErc20TokensQueryVariables>(AllErc20TokensDocument, baseOptions);
+export function useAllErc20TokensLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllErc20TokensQuery, AllErc20TokensQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllErc20TokensQuery, AllErc20TokensQueryVariables>(AllErc20TokensDocument, options);
         }
 export type AllErc20TokensQueryHookResult = ReturnType<typeof useAllErc20TokensQuery>;
 export type AllErc20TokensLazyQueryHookResult = ReturnType<typeof useAllErc20TokensLazyQuery>;
-export type AllErc20TokensQueryResult = ApolloReactCommon.QueryResult<AllErc20TokensQuery, AllErc20TokensQueryVariables>;
+export type AllErc20TokensQueryResult = Apollo.QueryResult<AllErc20TokensQuery, AllErc20TokensQueryVariables>;
 export const StakingRewardsContractDocument = gql`
-    query StakingRewardsContract($id: ID!, $account: Bytes) @api(name: stakingRewards) {
+    query StakingRewardsContract($id: ID!, $account: Bytes) {
   stakingRewardsContract(id: $id) {
     ...StakingRewardsContractDetails
     stakingBalances(where: {account: $account}) {
@@ -1651,17 +1631,19 @@ export const StakingRewardsContractDocument = gql`
  *   },
  * });
  */
-export function useStakingRewardsContractQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>) {
-        return ApolloReactHooks.useQuery<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>(StakingRewardsContractDocument, baseOptions);
+export function useStakingRewardsContractQuery(baseOptions: Apollo.QueryHookOptions<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>(StakingRewardsContractDocument, options);
       }
-export function useStakingRewardsContractLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>(StakingRewardsContractDocument, baseOptions);
+export function useStakingRewardsContractLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>(StakingRewardsContractDocument, options);
         }
 export type StakingRewardsContractQueryHookResult = ReturnType<typeof useStakingRewardsContractQuery>;
 export type StakingRewardsContractLazyQueryHookResult = ReturnType<typeof useStakingRewardsContractLazyQuery>;
-export type StakingRewardsContractQueryResult = ApolloReactCommon.QueryResult<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>;
+export type StakingRewardsContractQueryResult = Apollo.QueryResult<StakingRewardsContractQuery, StakingRewardsContractQueryVariables>;
 export const StakingRewardsForStakingTokenDocument = gql`
-    query StakingRewardsForStakingToken($stakingToken: String!, $account: Bytes) @api(name: stakingRewards) {
+    query StakingRewardsForStakingToken($stakingToken: String!, $account: Bytes) {
   stakingRewardsContracts(where: {stakingToken: $stakingToken}) {
     ...StakingRewardsContractDetails
     stakingBalances(where: {account: $account}) {
@@ -1698,12 +1680,14 @@ export const StakingRewardsForStakingTokenDocument = gql`
  *   },
  * });
  */
-export function useStakingRewardsForStakingTokenQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>) {
-        return ApolloReactHooks.useQuery<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>(StakingRewardsForStakingTokenDocument, baseOptions);
+export function useStakingRewardsForStakingTokenQuery(baseOptions: Apollo.QueryHookOptions<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>(StakingRewardsForStakingTokenDocument, options);
       }
-export function useStakingRewardsForStakingTokenLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>(StakingRewardsForStakingTokenDocument, baseOptions);
+export function useStakingRewardsForStakingTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>(StakingRewardsForStakingTokenDocument, options);
         }
 export type StakingRewardsForStakingTokenQueryHookResult = ReturnType<typeof useStakingRewardsForStakingTokenQuery>;
 export type StakingRewardsForStakingTokenLazyQueryHookResult = ReturnType<typeof useStakingRewardsForStakingTokenLazyQuery>;
-export type StakingRewardsForStakingTokenQueryResult = ApolloReactCommon.QueryResult<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>;
+export type StakingRewardsForStakingTokenQueryResult = Apollo.QueryResult<StakingRewardsForStakingTokenQuery, StakingRewardsForStakingTokenQueryVariables>;
