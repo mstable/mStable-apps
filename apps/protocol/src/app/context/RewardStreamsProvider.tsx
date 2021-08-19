@@ -13,7 +13,6 @@ export enum StreamType {
   Unlocked,
   Locked,
   LockedPreview,
-  Unclaimed,
 }
 
 export interface Stream {
