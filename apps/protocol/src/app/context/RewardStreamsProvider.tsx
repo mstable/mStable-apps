@@ -179,7 +179,7 @@ export const RewardStreamsProvider: FC<{
             const { start, finish, index } = entry
             const amount = getEntryAmount(entry)
 
-            const type = start > currentTime || start === currentTime ? StreamType.Locked : StreamType.Unlocked
+            const type = start >= currentTime ? StreamType.Locked : StreamType.Unlocked
 
             return {
               amount: { [type]: amount },
