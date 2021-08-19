@@ -172,9 +172,6 @@ export const SaveOverview: FC = () => {
   const userBoost = useCalculateUserBoost(boostedSavingsVault)
   const apy = useSaveVaultAPY(userBoost)
 
-  const totalEarned =
-    (rewardStreams?.amounts.earned.unlocked ?? 0) + (rewardStreams?.amounts.previewLocked ?? 0) + (rewardStreams?.amounts.locked ?? 0)
-
   const userBalance = useMemo(() => {
     if (selectedSaveVersion === 1) return saveV1Balance?.balance
 
@@ -239,7 +236,7 @@ export const SaveOverview: FC = () => {
             <Button active={selection === Rewards} onClick={() => handleSelection(Rewards)}>
               <h3>Rewards</h3>
               <div>
-                <CountUp end={totalEarned} suffix=" MTA" />
+                <CountUp end={rewardStreams?.amounts?.total} suffix=" MTA" />
                 <Tooltip tip="MTA rewards unlock over time" />
               </div>
             </Button>

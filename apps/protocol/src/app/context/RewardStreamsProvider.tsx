@@ -13,7 +13,6 @@ export enum StreamType {
   Unlocked,
   Locked,
   LockedPreview,
-  Unclaimed,
 }
 
 export interface Stream {
@@ -34,11 +33,10 @@ export interface RewardStreams {
       unlocked: number
       locked: number
     }
+    total: number
     locked: number
-    previewLocked: number
-    received: number
     unlocked: number
-    unclaimed: number
+    previewLocked: number
   }
   nextUnlock?: number
   chartData: ChartData
@@ -181,7 +179,7 @@ export const RewardStreamsProvider: FC<{
             const { start, finish, index } = entry
             const amount = getEntryAmount(entry)
 
-            const type = start > currentTime ? StreamType.Locked : StreamType.Unlocked
+            const type = start >= currentTime ? StreamType.Locked : StreamType.Unlocked
 
             return {
               amount: { [type]: amount },
@@ -192,11 +190,9 @@ export const RewardStreamsProvider: FC<{
           }),
         )
 
-      const unlocked = unlockedStreams.reduce((prev, stream) => prev + (stream.amount[StreamType.Unlocked] as number), 0)
-      const locked = lockedStreams.reduce((prev, stream) => prev + (stream.amount[StreamType.Locked] as number), 0)
+      const unlocked = unlockedStreams.reduce((prev, stream) => prev + (stream.amount[StreamType.Unlocked] ?? 0), 0)
+      const locked = lockedStreams.reduce((prev, stream) => prev + (stream.amount[StreamType.Locked] ?? 0), 0)
       const earned = calculateEarned(currentTime, vault)
-      const unclaimed = unlocked + earned.total
-      const received = unlocked + earned.unlocked
 
       const earnedStream: Stream = {
         amount: {
@@ -215,6 +211,8 @@ export const RewardStreamsProvider: FC<{
         start: lastAction + lockupDuration,
         finish: currentTime + lockupDuration,
       }
+
+      const total = earned.unlocked + previewLocked + locked + unlocked
 
       // TODO Unclaimed and earned can overlap (but not immediately)
       //   amount: {
@@ -253,9 +251,8 @@ export const RewardStreamsProvider: FC<{
           earned,
           locked,
           previewLocked,
-          received,
-          unclaimed,
           unlocked,
+          total,
         },
         chartData,
         claimRange,

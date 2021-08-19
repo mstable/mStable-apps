@@ -36,10 +36,6 @@ const dataTypes: Record<
   [StreamType.Earned]: {
     label: 'Earned',
   },
-  [StreamType.Unclaimed]: {
-    subTypes: [StreamType.Earned, StreamType.Unlocked],
-    label: 'Unclaimed',
-  },
 }
 
 const timeFormatter =

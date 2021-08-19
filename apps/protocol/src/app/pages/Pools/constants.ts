@@ -39,7 +39,6 @@ export const rewardsColorMapping: Record<StreamType, { fill1: string; fill2: str
     light: 'rgb(102,79,33)',
     dark: 'rgb(201, 150, 46)',
   },
-  [StreamType.Unclaimed]: greenRewards,
   [StreamType.Unlocked]: greenRewards,
   [StreamType.Locked]: blueRewards,
   [StreamType.LockedPreview]: blueRewards,
