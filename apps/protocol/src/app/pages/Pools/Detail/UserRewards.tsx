@@ -258,8 +258,8 @@ export const UserRewards: FC = () => {
   const propose = usePropose()
   const contract = feederVault ?? saveVault
 
-  const showGraph = (rewardStreams?.amounts.earned.total ?? 0) > 0 || (rewardStreams?.amounts.locked ?? 0) > 0
-  const canClaim = rewardStreams && rewardStreams.amounts.unclaimed > 0
+  const showGraph = !!rewardStreams?.amounts?.total
+  const canClaim = !!rewardStreams?.amounts.unlocked || !!rewardStreams?.amounts.earned.unlocked
 
   const headerTitles = ['Date unlocked', 'Amount'].map(t => ({ title: t }))
 
@@ -314,7 +314,7 @@ export const UserRewards: FC = () => {
               {!isMasquerading && (
                 <ClaimButton
                   visible
-                  valid={!!canClaim}
+                  valid={canClaim}
                   title="Claim Rewards"
                   handleSend={() => {
                     if (contract && rewardStreams) {
