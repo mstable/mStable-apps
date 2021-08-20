@@ -37,6 +37,7 @@ const Container = styled.div<{
   h2 {
     font-size: 2rem;
     font-weight: 600;
+    margin-bottom: 1rem;
   }
 
   p {
