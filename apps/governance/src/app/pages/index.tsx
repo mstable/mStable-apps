@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import img from '../../../../../libs/assets/metanaut.gif'
+import mtaImg from '../../../../../libs/assets/mta.gif'
 
 const Container = styled.div`
   h3 {
@@ -13,7 +14,7 @@ const Container = styled.div`
 
   > div {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     gap: 1rem;
   }
@@ -23,6 +24,7 @@ const Container = styled.div`
     background: linear-gradient(333.23deg, #8b1e59 30.23%, #e364b8 135.17%);
     border-radius: 18px;
     color: white;
+    width: 20rem;
 
     .header {
       display: flex;
@@ -90,6 +92,17 @@ export const Home: FC = () => {
             <div className="details">
               <div className="type">Permanent</div>
               <div className="multiplier">+1.2x</div>
+            </div>
+          </div>
+          <div className="quest permanent">
+            <div className="header">
+              <h4>MTA Whale</h4>
+              <p>One of the largest mammals in DeFi. Truly majestic.</p>
+              <img src={mtaImg} />
+            </div>
+            <div className="details">
+              <div className="type">Seasonal</div>
+              <div className="multiplier">+1.1x</div>
             </div>
           </div>
         </div>
