@@ -51,8 +51,14 @@ export const Navigation: FC = () => {
               isActive={(match, location) => {
                 if (match?.path) return true
 
-                // TODO assumption, may not work for future routes
-                return location.pathname.split('/')[2] === path.split('/')[2]
+                const routeParts = location.pathname.split('/')
+                const pathParts = path.split('/')
+
+                if (routeParts.length === 2 && pathParts.length === 2) {
+                  return routeParts[1] === pathParts[1]
+                }
+
+                return routeParts[2] === pathParts[2]
               }}
             >
               {title}
