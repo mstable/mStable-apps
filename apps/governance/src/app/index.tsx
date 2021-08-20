@@ -1,17 +1,23 @@
 import React, { FC, useEffect } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
 import { useBaseCtx } from '@apps/base'
 
-import { Home } from './pages'
-import { Foo } from './pages/foo'
+import { Stake } from './pages/Stake'
+import { Quests } from './pages/Quests'
+import { Vote } from './pages/Vote'
+import { Stats } from './pages/Stats'
+import { NotFound } from './pages/NotFound'
 
 const GovernanceRoutes: FC = () => {
   return (
     <Switch>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/foo" component={Foo} />
-      <Route component={Home} />
+      <Redirect exact path="/" to="/stake" />
+      <Route exact path="/stake" component={Stake} />
+      <Route exact path="/vote" component={Vote} />
+      <Route exact path="/quests" component={Quests} />
+      <Route exact path="/stats" component={Stats} />
+      <Route component={NotFound} />
     </Switch>
   )
 }
@@ -21,8 +27,10 @@ export const GovernanceApp: FC = () => {
 
   useEffect(() => {
     const navItems = [
-      { title: 'Example', path: '/' },
-      { title: 'Foo', path: '/foo' },
+      { title: 'Stake', path: '/stake' },
+      { title: 'Vote', path: '/vote' },
+      { title: 'Quests', path: '/quests' },
+      { title: 'Stats', path: '/stats' },
     ]
 
     setBaseCtx({ navItems })
