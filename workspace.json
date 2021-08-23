@@ -249,8 +249,22 @@
             "index": "apps/governance/src/index.html",
             "main": "apps/governance/src/main.tsx",
             "polyfills": "apps/governance/src/polyfills.ts",
+            "progress": true,
             "tsConfig": "apps/governance/tsconfig.app.json",
-            "assets": ["apps/governance/src/favicon.ico", "apps/governance/src/assets"],
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "apps/governance/src/assets/",
+                "output": "./assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "libs/assets/",
+                "output": "./assets/"
+              },
+              "apps/governance/src/favicon.ico",
+              "apps/governance/src/manifest.json"
+            ],
             "styles": [],
             "scripts": [],
             "webpackConfig": "./webpack-config.js"
@@ -275,8 +289,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "10mb"
                 }
               ]
             }
