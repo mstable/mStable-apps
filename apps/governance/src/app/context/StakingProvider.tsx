@@ -1,9 +1,16 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useMemo, createContext, useContext } from 'react'
 import { useAccount } from '@apps/base/context/account'
 import { useBlockPollingSubscription } from '@apps/hooks'
-import { useStakingLazyQuery } from '@apps/artifacts/graphql/staking'
+import { StakingQueryHookResult, useStakingLazyQuery } from '@apps/artifacts/graphql/staking'
+import { QuestsQueryHookResult, useQuestsLazyQuery, useQuestsQuery } from '@apps/artifacts/graphql/questbook'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { useQuestsLazyQuery, useQuestsQuery } from '@apps/artifacts/graphql/questbook'
+
+const stakingCtx = createContext<StakingQueryHookResult>(null as never)
+const questbookCtx = createContext<QuestsQueryHookResult>(null as never)
+
+export const useStakingQuery = () => useContext(stakingCtx)
+
+export const useQuestbookQuery = () => useContext(questbookCtx)
 
 export const StakingProvider: FC = ({ children }) => {
   const apollo = useApolloClients()
@@ -26,12 +33,16 @@ export const StakingProvider: FC = ({ children }) => {
     }
   }, [account, apollo])
 
-  const stakingSub = useBlockPollingSubscription(useStakingLazyQuery, options.staking)
+  const stakingSub = useBlockPollingSubscription(useStakingLazyQuery, options.staking) as unknown as StakingQueryHookResult
   const questbookSub = useQuestsQuery(options.questbook) // maybe this should use block polling too
 
   // TODO use the data
-  ;(window as any).Staking = stakingSub.data
-  ;(window as any).Questbook = questbookSub.data
+  // ;(window as any).Staking = stakingSub.data
+  // ;(window as any).Questbook = questbookSub.data
 
-  return <>{children}</>
+  return (
+    <stakingCtx.Provider value={stakingSub}>
+      <questbookCtx.Provider value={questbookSub}>{children}</questbookCtx.Provider>
+    </stakingCtx.Provider>
+  )
 }
