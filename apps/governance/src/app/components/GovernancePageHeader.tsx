@@ -42,6 +42,8 @@ const Container = styled.div<{
   p {
     padding: 0.25rem 0 0;
     font-size: 1rem;
+    line-height: 1.5rem;
+    max-width: 65ch;
     color: ${({ theme }) => theme.color.bodyAccent};
   }
 
