@@ -2,10 +2,13 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { ViewportWidth } from '@apps/base/theme'
 
+import { StakedTokenSwitcher } from './StakedTokenSwitcher'
+
 interface Props {
   title: string
   icon?: JSX.Element
   subtitle?: string
+  stakedTokenSwitcher?: boolean
 }
 
 const Icon = styled.div<{ inverted?: boolean }>`
@@ -59,6 +62,7 @@ const Container = styled.div<{
 const Row = styled.div`
   display: flex;
   align-items: center;
+  gap: 2rem;
 `
 
 const ChildrenRow = styled.div`
@@ -73,13 +77,14 @@ const ChildrenRow = styled.div`
   }
 `
 
-export const GovernancePageHeader: FC<Props> = ({ children, title, subtitle, icon }) => {
+export const GovernancePageHeader: FC<Props> = ({ children, title, subtitle, icon, stakedTokenSwitcher }) => {
   return (
     <div>
       <Container>
         <Row>
           {icon && <Icon inverted>{icon}</Icon>}
           <h2>{title}</h2>
+          {stakedTokenSwitcher && <StakedTokenSwitcher />}
         </Row>
         {subtitle && <p>{subtitle}</p>}
         {children && <ChildrenRow>{children}</ChildrenRow>}
