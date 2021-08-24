@@ -93,7 +93,7 @@ export const colorTheme = (theme: 'light' | 'dark'): ColorTheme & typeof Color =
         }
       : {
           0: ColorNew.spaceBlue[0],
-          1: ColorNew.spaceBlue[3],
+          1: ColorNew.spaceBlue[2],
           2: ColorNew.spaceBlue[3],
           3: ColorNew.spaceBlue[4],
         },

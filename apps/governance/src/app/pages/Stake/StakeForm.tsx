@@ -35,8 +35,8 @@ const Container = styled.div`
 
 export const StakeForm: FC = () => {
   const { data, loading } = useStakingQuery()
-  const stakingToken = useTokenSubscription(data?.stakedToken.stakingToken.address)
-  const stakedToken = useTokenSubscription(data?.stakedToken.token.address)
+  const stakingToken = useTokenSubscription(data?.stakedTokens[0].stakingToken.address)
+  const stakedToken = useTokenSubscription(data?.stakedTokens[0].token.address)
 
   const propose = usePropose()
   const signer = useSigner()
@@ -56,7 +56,7 @@ export const StakeForm: FC = () => {
           setFormValue(stakingToken.balance.string)
         }}
         handleSetAmount={setFormValue}
-        spender={data?.stakedToken.address}
+        spender={data?.stakedTokens[0].id}
       />
       <DelegateToggle>
         <div>Delegate stake?</div>
@@ -75,7 +75,7 @@ export const StakeForm: FC = () => {
           if (signer && data && amount && amount.exact.gt(0)) {
             propose<Interfaces.StakedToken, 'stake(uint256,address)'>(
               new TransactionManifest(
-                StakedToken__factory.connect(data.stakedToken.address, signer),
+                StakedToken__factory.connect(data.stakedTokens[0].id, signer),
                 'stake(uint256,address)',
                 [amount.exact, delegate],
                 { present: `Staking ${stakingToken.symbol}`, past: `Staked ${stakingToken.symbol}` },

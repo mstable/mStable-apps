@@ -1,8 +1,8 @@
 # import './fragments.graphql'
 
-query Staking($account: ID!, $hasAccount: Boolean!) {
-  stakedToken(id: "StakedToken") {
-    address
+query Staking($account: Bytes!, $hasAccount: Boolean!) {
+  stakedTokens {
+    id
     token {
       ...TokenAll
     }
@@ -22,10 +22,9 @@ query Staking($account: ID!, $hasAccount: Boolean!) {
       rewardsDistributor
       pendingAdditionalReward
     }
-    questSigner
+    questMaster
     UNSTAKE_WINDOW
     COOLDOWN_SECONDS
-    COOLDOWN_PERCENTAGE_SCALE
     collateralisationRatio
     slashingPercentage
     season {
@@ -34,33 +33,32 @@ query Staking($account: ID!, $hasAccount: Boolean!) {
       startedAt
       seasonNumber
     }
-  }
-  accounts(where: { id: $account }) @include(if: $hasAccount) {
-    id
-    delegatee {
+    accounts(where: { address: $account }) @include(if: $hasAccount) {
       id
-    }
-    rewardPerTokenPaid
-    rewards
-    delegators {
-      id
-    }
-    completedQuests {
-      id
-    }
-    cooldownTimestamp
-    cooldownPercentage
-    balance {
-      lastAction
-      permMultiplier
-      timeMultiplier
-      seasonMultiplier
-      cooldownMultiplier
-      raw
-      rawBN @client
-      votes
-      votesBN @client
-      weightedTimestamp
+      delegatee {
+        id
+      }
+      rewardPerTokenPaid
+      rewards
+      delegators {
+        id
+      }
+      completedQuests {
+        id
+      }
+      cooldownTimestamp
+      cooldownPercentage
+      balance {
+        lastAction
+        permMultiplier
+        timeMultiplier
+        seasonMultiplier
+        raw
+        votes
+        weightedTimestamp
+        rawBD @client
+        votesBD @client
+      }
     }
   }
   quests {
