@@ -19,7 +19,7 @@ const defaultOptions =  {}
   }
 };
       export default result;
-    
+
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -1524,13 +1524,19 @@ export type MetricFieldsFragment = { id: string, exact: string, decimals: number
 
 export type TokenAllFragment = { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } };
 
-export type StakingQueryVariables = Exact<{
+export type StakingQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StakingQuery = { stakedTokens: Array<{ id: string, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }>, quests: Array<{ id: string }> };
+
+export type StakedTokenQueryVariables = Exact<{
+  id: Scalars['ID'];
   account: Scalars['Bytes'];
   hasAccount: Scalars['Boolean'];
 }>;
 
 
-export type StakingQuery = { stakedTokens: Array<{ id: string, questMaster: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, season: { id: string, endedAt?: Maybe<number>, startedAt: number, seasonNumber: number }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, cooldownTimestamp?: Maybe<string>, cooldownPercentage?: Maybe<string>, delegatee?: Maybe<{ id: string }>, delegators: Array<{ id: string }>, completedQuests: Array<{ id: string }>, balance: { lastAction: number, permMultiplier: number, timeMultiplier: number, seasonMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigNumber, votesBD: BigNumber } }>> }>, quests: Array<{ id: string }> };
+export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, questMaster: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, season: { id: string, endedAt?: Maybe<number>, startedAt: number, seasonNumber: number }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, cooldownTimestamp?: Maybe<string>, cooldownPercentage?: Maybe<string>, delegatee?: Maybe<{ id: string }>, delegators: Array<{ id: string }>, completedQuests: Array<{ id: string }>, balance: { lastAction: number, permMultiplier: number, timeMultiplier: number, seasonMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }>> }> };
 
 export const MetricFieldsFragmentDoc = gql`
     fragment MetricFields on Metric {
@@ -1553,8 +1559,48 @@ export const TokenAllFragmentDoc = gql`
 }
     ${MetricFieldsFragmentDoc}`;
 export const StakingDocument = gql`
-    query Staking($account: Bytes!, $hasAccount: Boolean!) {
+    query Staking {
   stakedTokens {
+    id
+    stakingToken {
+      ...TokenAll
+    }
+  }
+  quests {
+    id
+  }
+}
+    ${TokenAllFragmentDoc}`;
+
+/**
+ * __useStakingQuery__
+ *
+ * To run a query within a React component, call `useStakingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStakingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStakingQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStakingQuery(baseOptions?: Apollo.QueryHookOptions<StakingQuery, StakingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StakingQuery, StakingQueryVariables>(StakingDocument, options);
+      }
+export function useStakingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakingQuery, StakingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StakingQuery, StakingQueryVariables>(StakingDocument, options);
+        }
+export type StakingQueryHookResult = ReturnType<typeof useStakingQuery>;
+export type StakingLazyQueryHookResult = ReturnType<typeof useStakingLazyQuery>;
+export type StakingQueryResult = Apollo.QueryResult<StakingQuery, StakingQueryVariables>;
+export const StakedTokenDocument = gql`
+    query StakedToken($id: ID!, $account: Bytes!, $hasAccount: Boolean!) {
+  stakedToken(id: $id) {
     id
     token {
       ...TokenAll
@@ -1614,37 +1660,35 @@ export const StakingDocument = gql`
       }
     }
   }
-  quests {
-    id
-  }
 }
     ${TokenAllFragmentDoc}`;
 
 /**
- * __useStakingQuery__
+ * __useStakedTokenQuery__
  *
- * To run a query within a React component, call `useStakingQuery` and pass it any options that fit your needs.
- * When your component renders, `useStakingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useStakedTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStakedTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useStakingQuery({
+ * const { data, loading, error } = useStakedTokenQuery({
  *   variables: {
+ *      id: // value for 'id'
  *      account: // value for 'account'
  *      hasAccount: // value for 'hasAccount'
  *   },
  * });
  */
-export function useStakingQuery(baseOptions: Apollo.QueryHookOptions<StakingQuery, StakingQueryVariables>) {
+export function useStakedTokenQuery(baseOptions: Apollo.QueryHookOptions<StakedTokenQuery, StakedTokenQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<StakingQuery, StakingQueryVariables>(StakingDocument, options);
+        return Apollo.useQuery<StakedTokenQuery, StakedTokenQueryVariables>(StakedTokenDocument, options);
       }
-export function useStakingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakingQuery, StakingQueryVariables>) {
+export function useStakedTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakedTokenQuery, StakedTokenQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<StakingQuery, StakingQueryVariables>(StakingDocument, options);
+          return Apollo.useLazyQuery<StakedTokenQuery, StakedTokenQueryVariables>(StakedTokenDocument, options);
         }
-export type StakingQueryHookResult = ReturnType<typeof useStakingQuery>;
-export type StakingLazyQueryHookResult = ReturnType<typeof useStakingLazyQuery>;
-export type StakingQueryResult = Apollo.QueryResult<StakingQuery, StakingQueryVariables>;
+export type StakedTokenQueryHookResult = ReturnType<typeof useStakedTokenQuery>;
+export type StakedTokenLazyQueryHookResult = ReturnType<typeof useStakedTokenLazyQuery>;
+export type StakedTokenQueryResult = Apollo.QueryResult<StakedTokenQuery, StakedTokenQueryVariables>;

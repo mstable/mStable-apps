@@ -1,7 +1,20 @@
 # import './fragments.graphql'
 
-query Staking($account: Bytes!, $hasAccount: Boolean!) {
+query Staking {
   stakedTokens {
+    id
+    stakingToken {
+      ...TokenAll
+    }
+  }
+  # TODO consider quests moving to another query
+  quests {
+    id
+  }
+}
+
+query StakedToken($id: ID!, $account: Bytes!, $hasAccount: Boolean!) {
+  stakedToken(id: $id) {
     id
     token {
       ...TokenAll
@@ -60,8 +73,5 @@ query Staking($account: Bytes!, $hasAccount: Boolean!) {
         votesBD @client
       }
     }
-  }
-  quests {
-    id
   }
 }
