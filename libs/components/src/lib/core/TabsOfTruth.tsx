@@ -46,7 +46,7 @@ const TabButton = styled(UnstyledButton)<{ active: boolean }>`
   color: ${({ theme, active }) => (active ? theme.color.white : theme.color.bodyAccent)};
   border-radius: 1rem;
   &:hover {
-    background: ${({ theme, active }) => (active ? 'transparent' : theme.color.lighterGrey)};
+    background: ${({ theme, active }) => (active ? 'transparent' : theme.color.background[2])};
   }
 `
 
@@ -74,8 +74,8 @@ const ActiveTab = styled.div<{ pos: [number, number] }>`
 
 const TabsContainer = styled.div`
   position: relative;
-  background: white;
-  border: 1px ${({ theme }) => theme.color.lightGrey} solid;
+  background: ${({ theme }) => theme.color.background[0]};
+  border: 1px ${({ theme }) => theme.color.background[2]} solid;
   border-radius: 1rem;
   overflow: hidden;
   display: flex;
