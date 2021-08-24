@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
@@ -11,7 +11,7 @@ import { useBigDecimalInput } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetInput, SendButton, ToggleInput } from '@apps/components/forms'
 
-import { useStakingQuery } from '../../context/StakingProvider'
+import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 const Input = styled(AssetInput)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -34,16 +34,17 @@ const Container = styled.div`
 `
 
 export const StakeForm: FC = () => {
-  const { data, loading } = useStakingQuery()
-  const stakingToken = useTokenSubscription(data?.stakedTokens[0].stakingToken.address)
-  const stakedToken = useTokenSubscription(data?.stakedTokens[0].token.address)
+  const { data, loading } = useStakedTokenQuery()
+  const { selected: stakedTokenAddress } = useStakedToken()
+
+  const stakingToken = useTokenSubscription(data?.stakedToken.stakingToken.address)
 
   const propose = usePropose()
   const signer = useSigner()
 
   const [amount, formValue, setFormValue] = useBigDecimalInput()
   const [isDelegating, toggleIsDelegating] = useToggle(true)
-  const [delegate, setDelegate] = useState<string>('sassal0x.eth')
+  // const [delegate, setDelegate] = useState<string>()
 
   return (
     <Container>
@@ -56,7 +57,7 @@ export const StakeForm: FC = () => {
           setFormValue(stakingToken.balance.string)
         }}
         handleSetAmount={setFormValue}
-        spender={data?.stakedTokens[0].id}
+        spender={stakedTokenAddress}
       />
       <DelegateToggle>
         <div>Delegate stake?</div>
@@ -73,13 +74,11 @@ export const StakeForm: FC = () => {
         title="Stake"
         handleSend={() => {
           if (signer && data && amount && amount.exact.gt(0)) {
-            propose<Interfaces.StakedToken, 'stake(uint256,address)'>(
-              new TransactionManifest(
-                StakedToken__factory.connect(data.stakedTokens[0].id, signer),
-                'stake(uint256,address)',
-                [amount.exact, delegate],
-                { present: `Staking ${stakingToken.symbol}`, past: `Staked ${stakingToken.symbol}` },
-              ),
+            propose<Interfaces.StakedToken, 'stake(uint256)'>(
+              new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'stake(uint256)', [amount.exact], {
+                present: `Staking ${stakingToken.symbol}`,
+                past: `Staked ${stakingToken.symbol}`,
+              }),
             )
           }
         }}

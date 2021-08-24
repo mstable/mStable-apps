@@ -9,8 +9,7 @@ import { usePropose } from '@apps/base/context/transactions'
 import { useBigDecimalInput } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetInput, SendButton, ToggleInput } from '@apps/components/forms'
-
-import { useStakingQuery } from '../../context/StakingProvider'
+import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 const Input = styled(AssetInput)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -33,9 +32,10 @@ const Container = styled.div`
 `
 
 export const ClaimForm: FC = () => {
-  const { data, loading } = useStakingQuery()
-  const stakingToken = useTokenSubscription(data?.stakedTokens[0].stakingToken.address)
-  const stakedToken = useTokenSubscription(data?.stakedTokens[0].token.address)
+  const { data, loading } = useStakedTokenQuery()
+  const { selected: stakedTokenAddress } = useStakedToken()
+
+  const stakingToken = useTokenSubscription(data?.stakedToken.stakingToken.address)
 
   const propose = usePropose()
   const signer = useSigner()
@@ -54,7 +54,6 @@ export const ClaimForm: FC = () => {
           setFormValue(stakingToken.balance.string)
         }}
         handleSetAmount={setFormValue}
-        spender={data?.stakedTokens[0].id}
       />
       <CompoundingToggle>
         <div>Compound rewards?</div>
@@ -68,7 +67,7 @@ export const ClaimForm: FC = () => {
           if (signer && data && amount && amount.exact.gt(0)) {
             propose<Interfaces.StakedToken, 'stake(uint256,address)'>(
               new TransactionManifest(
-                StakedToken__factory.connect(data.stakedTokens[0].id, signer),
+                StakedToken__factory.connect(stakedTokenAddress, signer),
                 'stake(uint256,address)',
                 [amount.exact, ''],
                 { present: `Staking ${stakingToken.symbol}`, past: `Staked ${stakingToken.symbol}` },

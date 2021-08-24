@@ -3,9 +3,8 @@ import styled from 'styled-components'
 
 import { CountUp, ThemedSkeleton } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
-import { useTokenSubscription } from '@apps/base/context/tokens'
 
-import { useStakingQuery } from '../../context/StakingProvider'
+import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 interface Balance {
   symbol?: string
@@ -67,31 +66,27 @@ const Container = styled.div`
 `
 
 export const StakeBalances: FC = () => {
-  const { data, loading } = useStakingQuery()
-  const stakingToken = useTokenSubscription(data?.stakedTokens[0].stakingToken.address)
-  const stakedToken = useTokenSubscription(data?.stakedTokens[0].token.address)
+  const { data } = useStakedTokenQuery()
 
   const { stake, votingPower, rewardsEarned } = useMemo<{ stake?: Balance[]; votingPower?: Balance[]; rewardsEarned?: Balance[] }>(() => {
-    const account = data?.stakedTokens[0]?.accounts?.[0]
+    const account = data?.stakedToken.accounts?.[0]
     if (!data || !account) {
       return {}
     }
 
     const {
-      balance: { raw, votes },
+      balance: { rawBD, votesBD },
       rewards,
     } = account
     return {
-      // TODO set simple raw balance, BPT balance, simple vote balance, simple rewards earned
-      stake: [
-        { amount: parseInt(raw) / 1e18, symbol: 'MTA' },
-        { amount: 23, symbol: 'BPT-MTA' },
-      ],
-      votingPower: [{ amount: parseInt(votes) / 1e18, symbol: 'vMTA', decimals: 0 }],
-      rewardsEarned: [{ symbol: 'MTA', amount: parseInt(rewards) / 1e18 }],
+      // TODO simple rewards earned
+      stake: [{ amount: rawBD.simple, symbol: data.stakedToken.stakingToken.symbol }],
+      votingPower: [{ amount: votesBD.simple, symbol: 'vMTA' }],
+      rewardsEarned: [{ symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: parseInt(rewards) / 1e18 }],
     }
   }, [data])
 
+  // TODO calculate rewards APY
   const rewardsApy = [{ suffix: '%', amount: 23.02 }]
 
   return (
