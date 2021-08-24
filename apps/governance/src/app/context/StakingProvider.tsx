@@ -20,14 +20,12 @@ export const StakingProvider: FC = ({ children }) => {
     staking: Parameters<typeof useStakingLazyQuery>[0]
     questbook: Parameters<typeof useQuestsLazyQuery>[0]
   }>(() => {
-    const baseOptions = { variables: { account: account ?? '', hasAccount: !!account } }
     return {
       staking: {
-        ...baseOptions,
         client: apollo.staking,
       },
       questbook: {
-        ...baseOptions,
+        variables: { account: account ?? '', hasAccount: !!account },
         client: apollo.questbook,
       },
     }
@@ -35,10 +33,6 @@ export const StakingProvider: FC = ({ children }) => {
 
   const stakingSub = useBlockPollingSubscription(useStakingLazyQuery, options.staking) as unknown as StakingQueryHookResult
   const questbookSub = useQuestsQuery(options.questbook) // maybe this should use block polling too
-
-  // TODO use the data
-  // ;(window as any).Staking = stakingSub.data
-  // ;(window as any).Questbook = questbookSub.data
 
   return (
     <stakingCtx.Provider value={stakingSub}>
