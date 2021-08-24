@@ -15,7 +15,7 @@ const Container = styled.div`
 export const Stake: FC = () => {
   return (
     <Container>
-      <GovernancePageHeader title="Stake">
+      <GovernancePageHeader title="Stake" stakedTokenSwitcher>
         <p>
           This dashboard allows you to stake MTA or MTA/ETH Balancer tokens in exchange for MTA rewards. As a staker, you risk getting
           diluted in the event that the mStable protocol requires recollateralisation. <a>Read More</a>
