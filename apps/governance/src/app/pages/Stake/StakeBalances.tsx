@@ -62,7 +62,7 @@ const Container = styled.div`
   justify-content: space-between;
   gap: 1rem;
   border-radius: 1.5rem;
-  border: 1px ${({ theme }) => theme.color.lightGrey} solid;
+  border: 1px ${({ theme }) => theme.color.background[2]} solid;
   padding: 1.5rem;
 `
 
