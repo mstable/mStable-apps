@@ -9,216 +9,6 @@ directive @entity on OBJECT
 
 directive @subgraphId(id: String) on OBJECT
 
-type Account {
-  id: ID!
-  balance: Balance!
-  delegatee: Account
-  rewardPerTokenPaid: BigInt
-  rewards: BigInt
-  delegators(skip: Int = 0, first: Int = 100, orderBy: Account_orderBy, orderDirection: OrderDirection, where: Account_filter): [Account!]!
-  cooldownTimestamp: BigInt
-  cooldownPercentage: BigInt
-  completedQuests(skip: Int = 0, first: Int = 100, orderBy: CompletedQuest_orderBy, orderDirection: OrderDirection, where: CompletedQuest_filter): [CompletedQuest!]!
-}
-
-input Account_filter {
-  id: ID
-  id_not: ID
-  id_gt: ID
-  id_lt: ID
-  id_gte: ID
-  id_lte: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  balance: String
-  balance_not: String
-  balance_gt: String
-  balance_lt: String
-  balance_gte: String
-  balance_lte: String
-  balance_in: [String!]
-  balance_not_in: [String!]
-  balance_contains: String
-  balance_not_contains: String
-  balance_starts_with: String
-  balance_not_starts_with: String
-  balance_ends_with: String
-  balance_not_ends_with: String
-  delegatee: String
-  delegatee_not: String
-  delegatee_gt: String
-  delegatee_lt: String
-  delegatee_gte: String
-  delegatee_lte: String
-  delegatee_in: [String!]
-  delegatee_not_in: [String!]
-  delegatee_contains: String
-  delegatee_not_contains: String
-  delegatee_starts_with: String
-  delegatee_not_starts_with: String
-  delegatee_ends_with: String
-  delegatee_not_ends_with: String
-  rewardPerTokenPaid: BigInt
-  rewardPerTokenPaid_not: BigInt
-  rewardPerTokenPaid_gt: BigInt
-  rewardPerTokenPaid_lt: BigInt
-  rewardPerTokenPaid_gte: BigInt
-  rewardPerTokenPaid_lte: BigInt
-  rewardPerTokenPaid_in: [BigInt!]
-  rewardPerTokenPaid_not_in: [BigInt!]
-  rewards: BigInt
-  rewards_not: BigInt
-  rewards_gt: BigInt
-  rewards_lt: BigInt
-  rewards_gte: BigInt
-  rewards_lte: BigInt
-  rewards_in: [BigInt!]
-  rewards_not_in: [BigInt!]
-  cooldownTimestamp: BigInt
-  cooldownTimestamp_not: BigInt
-  cooldownTimestamp_gt: BigInt
-  cooldownTimestamp_lt: BigInt
-  cooldownTimestamp_gte: BigInt
-  cooldownTimestamp_lte: BigInt
-  cooldownTimestamp_in: [BigInt!]
-  cooldownTimestamp_not_in: [BigInt!]
-  cooldownPercentage: BigInt
-  cooldownPercentage_not: BigInt
-  cooldownPercentage_gt: BigInt
-  cooldownPercentage_lt: BigInt
-  cooldownPercentage_gte: BigInt
-  cooldownPercentage_lte: BigInt
-  cooldownPercentage_in: [BigInt!]
-  cooldownPercentage_not_in: [BigInt!]
-}
-
-enum Account_orderBy {
-  id
-  balance
-  delegatee
-  rewardPerTokenPaid
-  rewards
-  delegators
-  cooldownTimestamp
-  cooldownPercentage
-  completedQuests
-}
-
-type Balance {
-  id: ID!
-  account: Account!
-  raw: BigInt!
-  weightedTimestamp: Int!
-  lastAction: Int!
-  permMultiplier: Int!
-  seasonMultiplier: Int!
-  timeMultiplier: Int!
-  cooldownMultiplier: Int!
-  votes: BigInt!
-}
-
-input Balance_filter {
-  id: ID
-  id_not: ID
-  id_gt: ID
-  id_lt: ID
-  id_gte: ID
-  id_lte: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  account: String
-  account_not: String
-  account_gt: String
-  account_lt: String
-  account_gte: String
-  account_lte: String
-  account_in: [String!]
-  account_not_in: [String!]
-  account_contains: String
-  account_not_contains: String
-  account_starts_with: String
-  account_not_starts_with: String
-  account_ends_with: String
-  account_not_ends_with: String
-  raw: BigInt
-  raw_not: BigInt
-  raw_gt: BigInt
-  raw_lt: BigInt
-  raw_gte: BigInt
-  raw_lte: BigInt
-  raw_in: [BigInt!]
-  raw_not_in: [BigInt!]
-  weightedTimestamp: Int
-  weightedTimestamp_not: Int
-  weightedTimestamp_gt: Int
-  weightedTimestamp_lt: Int
-  weightedTimestamp_gte: Int
-  weightedTimestamp_lte: Int
-  weightedTimestamp_in: [Int!]
-  weightedTimestamp_not_in: [Int!]
-  lastAction: Int
-  lastAction_not: Int
-  lastAction_gt: Int
-  lastAction_lt: Int
-  lastAction_gte: Int
-  lastAction_lte: Int
-  lastAction_in: [Int!]
-  lastAction_not_in: [Int!]
-  permMultiplier: Int
-  permMultiplier_not: Int
-  permMultiplier_gt: Int
-  permMultiplier_lt: Int
-  permMultiplier_gte: Int
-  permMultiplier_lte: Int
-  permMultiplier_in: [Int!]
-  permMultiplier_not_in: [Int!]
-  seasonMultiplier: Int
-  seasonMultiplier_not: Int
-  seasonMultiplier_gt: Int
-  seasonMultiplier_lt: Int
-  seasonMultiplier_gte: Int
-  seasonMultiplier_lte: Int
-  seasonMultiplier_in: [Int!]
-  seasonMultiplier_not_in: [Int!]
-  timeMultiplier: Int
-  timeMultiplier_not: Int
-  timeMultiplier_gt: Int
-  timeMultiplier_lt: Int
-  timeMultiplier_gte: Int
-  timeMultiplier_lte: Int
-  timeMultiplier_in: [Int!]
-  timeMultiplier_not_in: [Int!]
-  cooldownMultiplier: Int
-  cooldownMultiplier_not: Int
-  cooldownMultiplier_gt: Int
-  cooldownMultiplier_lt: Int
-  cooldownMultiplier_gte: Int
-  cooldownMultiplier_lte: Int
-  cooldownMultiplier_in: [Int!]
-  cooldownMultiplier_not_in: [Int!]
-  votes: BigInt
-  votes_not: BigInt
-  votes_gt: BigInt
-  votes_lt: BigInt
-  votes_gte: BigInt
-  votes_lte: BigInt
-  votes_in: [BigInt!]
-  votes_not_in: [BigInt!]
-}
-
-enum Balance_orderBy {
-  id
-  account
-  raw
-  weightedTimestamp
-  lastAction
-  permMultiplier
-  seasonMultiplier
-  timeMultiplier
-  cooldownMultiplier
-  votes
-}
-
 scalar BigDecimal
 
 scalar BigInt
@@ -234,7 +24,7 @@ scalar Bytes
 
 type CompletedQuest {
   id: ID!
-  account: Account!
+  account: StakedTokenAccount!
   quest: Quest!
   completedAt: Int!
 }
@@ -437,20 +227,20 @@ type Query {
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
   ): [Counter!]!
-  balance(
+  stakedTokenBalance(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
-  ): Balance
-  balances(
+  ): StakedTokenBalance
+  stakedTokenBalances(
     skip: Int = 0
     first: Int = 100
-    orderBy: Balance_orderBy
+    orderBy: StakedTokenBalance_orderBy
     orderDirection: OrderDirection
-    where: Balance_filter
+    where: StakedTokenBalance_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
-  ): [Balance!]!
+  ): [StakedTokenBalance!]!
   quest(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
@@ -516,20 +306,20 @@ type Query {
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
   ): [StakingRewards!]!
-  account(
+  stakedTokenAccount(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
-  ): Account
-  accounts(
+  ): StakedTokenAccount
+  stakedTokenAccounts(
     skip: Int = 0
     first: Int = 100
-    orderBy: Account_orderBy
+    orderBy: StakedTokenAccount_orderBy
     orderDirection: OrderDirection
-    where: Account_filter
+    where: StakedTokenAccount_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
-  ): [Account!]!
+  ): [StakedTokenAccount!]!
   transaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
@@ -676,20 +466,33 @@ enum Season_orderBy {
 
 type StakedToken {
   id: ID!
-  address: Bytes!
   token: Token!
   stakingToken: Token!
   season: Season!
   stakingRewards: StakingRewards!
-  questSigner: Bytes!
+  questMaster: Bytes!
   COOLDOWN_SECONDS: BigInt!
   UNSTAKE_WINDOW: BigInt!
-  COOLDOWN_PERCENTAGE_SCALE: BigInt!
   collateralisationRatio: BigInt!
   slashingPercentage: BigInt!
+  accounts(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
 }
 
-input StakedToken_filter {
+type StakedTokenAccount {
+  id: ID!
+  address: Bytes!
+  stakedToken: StakedToken!
+  balance: StakedTokenBalance!
+  delegatee: StakedTokenAccount
+  rewardPerTokenPaid: BigInt
+  rewards: BigInt
+  delegators(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
+  cooldownTimestamp: BigInt
+  cooldownPercentage: BigInt
+  completedQuests(skip: Int = 0, first: Int = 100, orderBy: CompletedQuest_orderBy, orderDirection: OrderDirection, where: CompletedQuest_filter): [CompletedQuest!]!
+}
+
+input StakedTokenAccount_filter {
   id: ID
   id_not: ID
   id_gt: ID
@@ -704,6 +507,226 @@ input StakedToken_filter {
   address_not_in: [Bytes!]
   address_contains: Bytes
   address_not_contains: Bytes
+  stakedToken: String
+  stakedToken_not: String
+  stakedToken_gt: String
+  stakedToken_lt: String
+  stakedToken_gte: String
+  stakedToken_lte: String
+  stakedToken_in: [String!]
+  stakedToken_not_in: [String!]
+  stakedToken_contains: String
+  stakedToken_not_contains: String
+  stakedToken_starts_with: String
+  stakedToken_not_starts_with: String
+  stakedToken_ends_with: String
+  stakedToken_not_ends_with: String
+  balance: String
+  balance_not: String
+  balance_gt: String
+  balance_lt: String
+  balance_gte: String
+  balance_lte: String
+  balance_in: [String!]
+  balance_not_in: [String!]
+  balance_contains: String
+  balance_not_contains: String
+  balance_starts_with: String
+  balance_not_starts_with: String
+  balance_ends_with: String
+  balance_not_ends_with: String
+  delegatee: String
+  delegatee_not: String
+  delegatee_gt: String
+  delegatee_lt: String
+  delegatee_gte: String
+  delegatee_lte: String
+  delegatee_in: [String!]
+  delegatee_not_in: [String!]
+  delegatee_contains: String
+  delegatee_not_contains: String
+  delegatee_starts_with: String
+  delegatee_not_starts_with: String
+  delegatee_ends_with: String
+  delegatee_not_ends_with: String
+  rewardPerTokenPaid: BigInt
+  rewardPerTokenPaid_not: BigInt
+  rewardPerTokenPaid_gt: BigInt
+  rewardPerTokenPaid_lt: BigInt
+  rewardPerTokenPaid_gte: BigInt
+  rewardPerTokenPaid_lte: BigInt
+  rewardPerTokenPaid_in: [BigInt!]
+  rewardPerTokenPaid_not_in: [BigInt!]
+  rewards: BigInt
+  rewards_not: BigInt
+  rewards_gt: BigInt
+  rewards_lt: BigInt
+  rewards_gte: BigInt
+  rewards_lte: BigInt
+  rewards_in: [BigInt!]
+  rewards_not_in: [BigInt!]
+  cooldownTimestamp: BigInt
+  cooldownTimestamp_not: BigInt
+  cooldownTimestamp_gt: BigInt
+  cooldownTimestamp_lt: BigInt
+  cooldownTimestamp_gte: BigInt
+  cooldownTimestamp_lte: BigInt
+  cooldownTimestamp_in: [BigInt!]
+  cooldownTimestamp_not_in: [BigInt!]
+  cooldownPercentage: BigInt
+  cooldownPercentage_not: BigInt
+  cooldownPercentage_gt: BigInt
+  cooldownPercentage_lt: BigInt
+  cooldownPercentage_gte: BigInt
+  cooldownPercentage_lte: BigInt
+  cooldownPercentage_in: [BigInt!]
+  cooldownPercentage_not_in: [BigInt!]
+}
+
+enum StakedTokenAccount_orderBy {
+  id
+  address
+  stakedToken
+  balance
+  delegatee
+  rewardPerTokenPaid
+  rewards
+  delegators
+  cooldownTimestamp
+  cooldownPercentage
+  completedQuests
+}
+
+type StakedTokenBalance {
+  id: ID!
+  account: StakedTokenAccount!
+  stakedToken: StakedToken!
+  raw: BigInt!
+  weightedTimestamp: Int!
+  lastAction: Int!
+  permMultiplier: Int!
+  seasonMultiplier: Int!
+  timeMultiplier: Int!
+  votes: BigInt!
+}
+
+input StakedTokenBalance_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  account: String
+  account_not: String
+  account_gt: String
+  account_lt: String
+  account_gte: String
+  account_lte: String
+  account_in: [String!]
+  account_not_in: [String!]
+  account_contains: String
+  account_not_contains: String
+  account_starts_with: String
+  account_not_starts_with: String
+  account_ends_with: String
+  account_not_ends_with: String
+  stakedToken: String
+  stakedToken_not: String
+  stakedToken_gt: String
+  stakedToken_lt: String
+  stakedToken_gte: String
+  stakedToken_lte: String
+  stakedToken_in: [String!]
+  stakedToken_not_in: [String!]
+  stakedToken_contains: String
+  stakedToken_not_contains: String
+  stakedToken_starts_with: String
+  stakedToken_not_starts_with: String
+  stakedToken_ends_with: String
+  stakedToken_not_ends_with: String
+  raw: BigInt
+  raw_not: BigInt
+  raw_gt: BigInt
+  raw_lt: BigInt
+  raw_gte: BigInt
+  raw_lte: BigInt
+  raw_in: [BigInt!]
+  raw_not_in: [BigInt!]
+  weightedTimestamp: Int
+  weightedTimestamp_not: Int
+  weightedTimestamp_gt: Int
+  weightedTimestamp_lt: Int
+  weightedTimestamp_gte: Int
+  weightedTimestamp_lte: Int
+  weightedTimestamp_in: [Int!]
+  weightedTimestamp_not_in: [Int!]
+  lastAction: Int
+  lastAction_not: Int
+  lastAction_gt: Int
+  lastAction_lt: Int
+  lastAction_gte: Int
+  lastAction_lte: Int
+  lastAction_in: [Int!]
+  lastAction_not_in: [Int!]
+  permMultiplier: Int
+  permMultiplier_not: Int
+  permMultiplier_gt: Int
+  permMultiplier_lt: Int
+  permMultiplier_gte: Int
+  permMultiplier_lte: Int
+  permMultiplier_in: [Int!]
+  permMultiplier_not_in: [Int!]
+  seasonMultiplier: Int
+  seasonMultiplier_not: Int
+  seasonMultiplier_gt: Int
+  seasonMultiplier_lt: Int
+  seasonMultiplier_gte: Int
+  seasonMultiplier_lte: Int
+  seasonMultiplier_in: [Int!]
+  seasonMultiplier_not_in: [Int!]
+  timeMultiplier: Int
+  timeMultiplier_not: Int
+  timeMultiplier_gt: Int
+  timeMultiplier_lt: Int
+  timeMultiplier_gte: Int
+  timeMultiplier_lte: Int
+  timeMultiplier_in: [Int!]
+  timeMultiplier_not_in: [Int!]
+  votes: BigInt
+  votes_not: BigInt
+  votes_gt: BigInt
+  votes_lt: BigInt
+  votes_gte: BigInt
+  votes_lte: BigInt
+  votes_in: [BigInt!]
+  votes_not_in: [BigInt!]
+}
+
+enum StakedTokenBalance_orderBy {
+  id
+  account
+  stakedToken
+  raw
+  weightedTimestamp
+  lastAction
+  permMultiplier
+  seasonMultiplier
+  timeMultiplier
+  votes
+}
+
+input StakedToken_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
   token: String
   token_not: String
   token_gt: String
@@ -760,12 +783,12 @@ input StakedToken_filter {
   stakingRewards_not_starts_with: String
   stakingRewards_ends_with: String
   stakingRewards_not_ends_with: String
-  questSigner: Bytes
-  questSigner_not: Bytes
-  questSigner_in: [Bytes!]
-  questSigner_not_in: [Bytes!]
-  questSigner_contains: Bytes
-  questSigner_not_contains: Bytes
+  questMaster: Bytes
+  questMaster_not: Bytes
+  questMaster_in: [Bytes!]
+  questMaster_not_in: [Bytes!]
+  questMaster_contains: Bytes
+  questMaster_not_contains: Bytes
   COOLDOWN_SECONDS: BigInt
   COOLDOWN_SECONDS_not: BigInt
   COOLDOWN_SECONDS_gt: BigInt
@@ -782,14 +805,6 @@ input StakedToken_filter {
   UNSTAKE_WINDOW_lte: BigInt
   UNSTAKE_WINDOW_in: [BigInt!]
   UNSTAKE_WINDOW_not_in: [BigInt!]
-  COOLDOWN_PERCENTAGE_SCALE: BigInt
-  COOLDOWN_PERCENTAGE_SCALE_not: BigInt
-  COOLDOWN_PERCENTAGE_SCALE_gt: BigInt
-  COOLDOWN_PERCENTAGE_SCALE_lt: BigInt
-  COOLDOWN_PERCENTAGE_SCALE_gte: BigInt
-  COOLDOWN_PERCENTAGE_SCALE_lte: BigInt
-  COOLDOWN_PERCENTAGE_SCALE_in: [BigInt!]
-  COOLDOWN_PERCENTAGE_SCALE_not_in: [BigInt!]
   collateralisationRatio: BigInt
   collateralisationRatio_not: BigInt
   collateralisationRatio_gt: BigInt
@@ -810,17 +825,16 @@ input StakedToken_filter {
 
 enum StakedToken_orderBy {
   id
-  address
   token
   stakingToken
   season
   stakingRewards
-  questSigner
+  questMaster
   COOLDOWN_SECONDS
   UNSTAKE_WINDOW
-  COOLDOWN_PERCENTAGE_SCALE
   collateralisationRatio
   slashingPercentage
+  accounts
 }
 
 type StakingRewards {
@@ -977,20 +991,20 @@ type Subscription {
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
   ): [Counter!]!
-  balance(
+  stakedTokenBalance(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
-  ): Balance
-  balances(
+  ): StakedTokenBalance
+  stakedTokenBalances(
     skip: Int = 0
     first: Int = 100
-    orderBy: Balance_orderBy
+    orderBy: StakedTokenBalance_orderBy
     orderDirection: OrderDirection
-    where: Balance_filter
+    where: StakedTokenBalance_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
-  ): [Balance!]!
+  ): [StakedTokenBalance!]!
   quest(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
@@ -1056,20 +1070,20 @@ type Subscription {
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
   ): [StakingRewards!]!
-  account(
+  stakedTokenAccount(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
-  ): Account
-  accounts(
+  ): StakedTokenAccount
+  stakedTokenAccounts(
     skip: Int = 0
     first: Int = 100
-    orderBy: Account_orderBy
+    orderBy: StakedTokenAccount_orderBy
     orderDirection: OrderDirection
-    where: Account_filter
+    where: StakedTokenAccount_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
-  ): [Account!]!
+  ): [StakedTokenAccount!]!
   transaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""

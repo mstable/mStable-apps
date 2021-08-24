@@ -68,11 +68,11 @@ const Container = styled.div`
 
 export const StakeBalances: FC = () => {
   const { data, loading } = useStakingQuery()
-  const stakingToken = useTokenSubscription(data?.stakedToken.stakingToken.address)
-  const stakedToken = useTokenSubscription(data?.stakedToken.token.address)
+  const stakingToken = useTokenSubscription(data?.stakedTokens[0].stakingToken.address)
+  const stakedToken = useTokenSubscription(data?.stakedTokens[0].token.address)
 
   const { stake, votingPower, rewardsEarned } = useMemo<{ stake?: Balance[]; votingPower?: Balance[]; rewardsEarned?: Balance[] }>(() => {
-    const account = data?.accounts?.[0]
+    const account = data?.stakedTokens[0]?.accounts?.[0]
     if (!data || !account) {
       return {}
     }

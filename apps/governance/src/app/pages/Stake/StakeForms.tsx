@@ -71,8 +71,8 @@ const FormsContainer = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
-  background: ${({ theme }) => theme.color.background};
-  border: 1px ${({ theme }) => theme.color.lightGrey} solid;
+  background: ${({ theme }) => theme.color.background[0]};
+  border: 1px ${({ theme }) => theme.color.background[1]} solid;
   border-radius: 1rem;
 
   > :first-child {
@@ -84,7 +84,7 @@ const FormsContainer = styled.div`
     min-width: 24rem;
     max-width: 28rem;
     padding: 0.75rem;
-    background: ${({ theme }) => theme.color.lighterGrey};
+    background: ${({ theme }) => theme.color.background[1]};
     border-radius: 0.5rem;
     display: flex;
     flex-direction: column;

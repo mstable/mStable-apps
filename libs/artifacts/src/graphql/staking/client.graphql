@@ -2,7 +2,7 @@ type Metric {
   bigDecimal: MstableBigDecimal!
 }
 
-type Balance {
-  rawBN: BigNumber!
-  votesBN: BigNumber!
+type StakedTokenBalance {
+  rawBD: BigNumber!
+  votesBD: BigNumber!
 }
