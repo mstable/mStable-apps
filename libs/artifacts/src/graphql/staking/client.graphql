@@ -3,6 +3,10 @@ type Metric {
 }
 
 type StakedTokenBalance {
-  rawBD: BigNumber!
-  votesBD: BigNumber!
+  rawBD: MstableBigDecimal!
+  votesBD: MstableBigDecimal!
+}
+
+type Account {
+  totalVotesBD: MstableBigDecimal!
 }

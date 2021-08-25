@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@mstable/delegatee-lists": {
+      "signature": "8cc7644cc3abe9b97f85ebdd9af1610e",
+      "file": true
+    }
+  }
+}

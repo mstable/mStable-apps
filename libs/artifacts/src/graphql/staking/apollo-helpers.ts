@@ -1,9 +1,10 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type AccountKeySpecifier = ('id' | 'totalVotes' | 'stakedTokenAccounts' | AccountKeySpecifier)[];
+export type AccountKeySpecifier = ('id' | 'stakedTokenAccounts' | 'totalVotes' | 'totalVotesBD' | AccountKeySpecifier)[];
 export type AccountFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	stakedTokenAccounts?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalVotes?: FieldPolicy<any> | FieldReadFunction<any>,
-	stakedTokenAccounts?: FieldPolicy<any> | FieldReadFunction<any>
+	totalVotesBD?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CompletedQuestKeySpecifier = ('id' | 'account' | 'quest' | 'completedAt' | CompletedQuestKeySpecifier)[];
 export type CompletedQuestFieldPolicy = {
