@@ -1,5 +1,5 @@
 import { FieldPolicy, InMemoryCache } from '@apollo/client'
-import { StakedTokenBalance, Metric } from '@apps/artifacts/graphql/staking'
+import { StakedTokenBalance, Metric, Account } from '@apps/artifacts/graphql/staking'
 import { TypedTypePolicies } from '@apps/artifacts/graphql/staking/apollo-helpers'
 import { BigDecimal } from '@apps/bigdecimal'
 
@@ -10,6 +10,11 @@ const typePolicies: TypedTypePolicies = {
     fields: {
       rawBD: readAsBD<StakedTokenBalance>('raw'),
       votesBD: readAsBD<StakedTokenBalance>('votes'),
+    },
+  },
+  Account: {
+    fields: {
+      totalVotesBD: readAsBD<Account>('totalVotes'),
     },
   },
   Metric: {

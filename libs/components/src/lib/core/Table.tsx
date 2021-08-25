@@ -7,6 +7,7 @@ import { Tooltip } from './ReactTooltip'
 interface Props {
   className?: string
   headerTitles?: {
+    align?: 'left' | 'right' | 'center'
     title: string
     tooltip?: string
   }[]
@@ -30,10 +31,11 @@ const Cell = styled.td<{ width?: number }>`
   }
 `
 
-const HeaderCell = styled.th<{ width?: number }>`
+const HeaderCell = styled.th<{ width?: number; align?: 'left' | 'right' | 'center' }>`
   padding: 0 1rem;
   display: flex;
   flex-basis: ${({ width }) => width && `${width}%`};
+  text-align: ${({ align }) => align ?? 'inherit'}; // FIXME
 `
 
 const Row = styled.tr<{ isSelectable: boolean }>`
@@ -172,8 +174,8 @@ export const Table: FC<Props> = ({ children, className, headerTitles, onHeaderCl
       {!!headerTitles?.length && (
         <Header isSelectable={!!onHeaderClick}>
           <tr>
-            {headerTitles.map(({ title, tooltip }, i) => (
-              <HeaderCell role="columnheader" key={title} onClick={() => onHeaderClick?.(i)} width={widths?.[i]}>
+            {headerTitles.map(({ title, tooltip, align }, i) => (
+              <HeaderCell role="columnheader" key={title} onClick={() => onHeaderClick?.(i)} width={widths?.[i]} align={align}>
                 <span>{title}</span>
                 {tooltip && <Tooltip tip={tooltip} />}
               </HeaderCell>
