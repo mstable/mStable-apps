@@ -41,7 +41,7 @@
     "@ethersproject/abstract-provider": "^5.4.0",
     "@ethersproject/logger": "^5.4.0",
     "@ethersproject/providers": "^5.4.1",
-    "@mstable/delegatee-lists": "file:.yalc/@mstable/delegatee-lists",
+    "@mstable/delegatee-lists": "^0.1.0-alpha1",
     "@mstable/protocol": "^2.2.2",
     "@types/date-fns": "^2.6.0",
     "@types/jest": "^26.0.20",
