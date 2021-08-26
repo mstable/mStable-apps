@@ -47,6 +47,10 @@ const Input = styled.div`
 `
 
 const LockButton = styled(Button)`
+  display: flex;
+  height: 100%;
+  align-items: center;
+
   svg {
     width: 1rem;
     height: 1rem;
@@ -57,7 +61,8 @@ const MaxButton = styled(Button)`
   display: none;
 
   @media (min-width: ${ViewportWidth.s}) {
-    display: inherit;
+    display: flex;
+    align-items: center;
   }
 `
 
@@ -77,7 +82,6 @@ const InputContainer = styled.div`
   justify-content: space-between;
   overflow: hidden;
   transition: all 0.4s ease;
-  margin-right: 1rem;
 
   > :last-child {
     margin-right: 0;
@@ -100,7 +104,7 @@ const Container = styled.div<{
   justify-content: space-between;
   border: 1px solid
     ${({ theme, error }) => (error === 'warning' ? '#F4C886' : error === 'error' ? theme.color.red : theme.color.defaultBorder)};
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   padding: 0.5rem;
   background: ${({ theme, disabled }) => disabled && theme.color.disabledInput};
   height: 4.25rem;
@@ -111,6 +115,10 @@ const Container = styled.div<{
 
   ${InputContainer} {
     flex: 1;
+  }
+
+  > *:not(:last-child) {
+    margin-right: 0.5rem;
   }
 `
 
@@ -177,16 +185,24 @@ const AssetInputContent: FC<Props> = ({
               )}
             </Input>
           </InputContainer>
-          <TokenContainer>
-            {!!address && !hideToken && (
-              <SubscribedTokenInput disabled={addressDisabled} value={address} options={addressOptions} onChange={handleSetAddress} />
-            )}
-            {spender && (
-              <LockButton highlighted={needsApprove} transparent={!needsApprove} disabled={!needsApprove} onClick={handleUnlockClick}>
-                {needsApprove ? <UnlockedIcon /> : <LockIcon />}
-              </LockButton>
-            )}
-          </TokenContainer>
+          {((!!address && !hideToken) || !!spender) && (
+            <TokenContainer>
+              {!!address && !hideToken && (
+                <SubscribedTokenInput disabled={addressDisabled} value={address} options={addressOptions} onChange={handleSetAddress} />
+              )}
+              {spender && (
+                <LockButton
+                  scale={0.75}
+                  highlighted={needsApprove}
+                  transparent={!needsApprove}
+                  disabled={!needsApprove}
+                  onClick={handleUnlockClick}
+                >
+                  {needsApprove ? <UnlockedIcon /> : <LockIcon />}
+                </LockButton>
+              )}
+            </TokenContainer>
+          )}
         </>
       )}
     </Container>

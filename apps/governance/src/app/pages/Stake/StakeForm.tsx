@@ -9,11 +9,11 @@ import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { useBigDecimalInput } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { AssetInput, SendButton, ToggleInput } from '@apps/components/forms'
+import { AssetInputSingle, SendButton, ToggleInput } from '@apps/components/forms'
 
 import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
-const Input = styled(AssetInput)`
+const Input = styled(AssetInputSingle)`
   background: ${({ theme }) => theme.color.background[0]};
   height: 3.5rem;
 `
@@ -50,12 +50,9 @@ export const StakeForm: FC = () => {
     <Container>
       <Input
         isFetching={loading}
-        address={stakingToken?.address}
-        addressOptions={stakingToken ? [stakingToken.address] : []}
+        token={stakingToken}
         formValue={formValue}
-        handleSetMax={() => {
-          setFormValue(stakingToken.balance.string)
-        }}
+        handleSetMax={() => setFormValue(stakingToken.balance.string)}
         handleSetAmount={setFormValue}
         spender={stakedTokenAddress}
       />

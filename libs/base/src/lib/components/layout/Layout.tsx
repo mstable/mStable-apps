@@ -91,6 +91,10 @@ const GlobalStyle = (createGlobalStyle as <P extends object = {}>(
     color: ${({ theme }) => theme.color.body};
     line-height: 1.3rem;
   }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
   input[type=number] {
     -moz-appearance: textfield;
   }

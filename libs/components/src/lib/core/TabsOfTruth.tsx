@@ -63,7 +63,7 @@ const ActiveTab = styled.div<{ pos: [number, number] }>`
 
   &.entering,
   &.exiting {
-    box-shadow: 4px 0 4px 0 ${({ theme }) => theme.color.blue}, -4px 0 4px 0 ${({ theme }) => theme.color.blue};
+    box-shadow: 1px 0 1px 0 ${({ theme }) => theme.color.blue}, -1px 0 1px 0 ${({ theme }) => theme.color.blue};
   }
 
   ${({ pos: [x, w] }) =>
