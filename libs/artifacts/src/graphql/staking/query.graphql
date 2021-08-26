@@ -13,7 +13,7 @@ query Staking {
   }
 }
 
-query StakedToken($id: ID!, $account: Bytes!, $hasAccount: Boolean!) {
+query StakedToken($id: ID!, $account: ID!, $hasAccount: Boolean!) {
   stakedToken(id: $id) {
     id
     token {
@@ -46,7 +46,7 @@ query StakedToken($id: ID!, $account: Bytes!, $hasAccount: Boolean!) {
       startedAt
       seasonNumber
     }
-    accounts(where: { address: $account }) @include(if: $hasAccount) {
+    accounts(where: { id: $account }) @include(if: $hasAccount) {
       id
       delegatee {
         id
