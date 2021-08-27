@@ -9,6 +9,7 @@ import type { FeederPoolState } from '@apps/data-provider'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
 import { TabCard, Button, UnstyledButton, InfoBox, UserLookup } from '@apps/components/core'
+// @ts-ignore
 import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
 import { useFeederPool } from '@apps/hooks'
 

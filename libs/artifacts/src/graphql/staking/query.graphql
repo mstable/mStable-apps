@@ -28,6 +28,47 @@ query Leaderboard($count: Int!, $skip: Int!) {
   }
 }
 
+query Account($id: ID!) {
+  account(id: $id) {
+    id
+    totalVotesBD @client
+    lastAction
+    seasonMultiplier
+    permMultiplier
+    completedQuests {
+      id
+      completedAt
+      quest {
+        id
+        season {
+          id
+        }
+        status
+        multiplier
+      }
+    }
+    stakedTokenAccounts {
+      id
+      stakedToken {
+        id
+        stakingToken {
+          symbol
+        }
+      }
+      balance {
+        raw
+        votes
+        timeMultiplier
+        questMultiplier
+        cooldownTimestamp
+        weightedTimestamp
+        rawBD @client
+        votesBD @client
+      }
+    }
+  }
+}
+
 query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
   stakedToken(id: $id) {
     id
@@ -50,17 +91,10 @@ query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
       rewardsDistributor
       pendingAdditionalReward
     }
-    questMaster
     UNSTAKE_WINDOW
     COOLDOWN_SECONDS
     collateralisationRatio
     slashingPercentage
-    season {
-      id
-      endedAt
-      startedAt
-      seasonNumber
-    }
     accounts(where: { account: $account }) @include(if: $hasAccount) {
       id
       delegatee {
@@ -71,16 +105,11 @@ query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
       delegators {
         id
       }
-      completedQuests {
-        id
-      }
-      cooldownTimestamp
-      cooldownPercentage
       balance {
-        lastAction
-        permMultiplier
         timeMultiplier
-        seasonMultiplier
+        cooldownTimestamp
+        cooldownUnits
+        questMultiplier
         raw
         votes
         weightedTimestamp

@@ -38,10 +38,23 @@ export type Scalars = {
 
 
 export type Account = {
+  completedQuests: Array<CompletedQuest>;
   id: Scalars['ID'];
+  lastAction: Scalars['Int'];
+  permMultiplier: Scalars['Int'];
+  seasonMultiplier: Scalars['Int'];
   stakedTokenAccounts: Array<StakedTokenAccount>;
   totalVotes: Scalars['BigInt'];
   totalVotesBD: Scalars['MstableBigDecimal'];
+};
+
+
+export type AccountCompletedQuestsArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<CompletedQuest_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<CompletedQuest_Filter>;
 };
 
 
@@ -70,11 +83,39 @@ export type Account_Filter = {
   totalVotes_lte?: Maybe<Scalars['BigInt']>;
   totalVotes_in?: Maybe<Array<Scalars['BigInt']>>;
   totalVotes_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  lastAction?: Maybe<Scalars['Int']>;
+  lastAction_not?: Maybe<Scalars['Int']>;
+  lastAction_gt?: Maybe<Scalars['Int']>;
+  lastAction_lt?: Maybe<Scalars['Int']>;
+  lastAction_gte?: Maybe<Scalars['Int']>;
+  lastAction_lte?: Maybe<Scalars['Int']>;
+  lastAction_in?: Maybe<Array<Scalars['Int']>>;
+  lastAction_not_in?: Maybe<Array<Scalars['Int']>>;
+  permMultiplier?: Maybe<Scalars['Int']>;
+  permMultiplier_not?: Maybe<Scalars['Int']>;
+  permMultiplier_gt?: Maybe<Scalars['Int']>;
+  permMultiplier_lt?: Maybe<Scalars['Int']>;
+  permMultiplier_gte?: Maybe<Scalars['Int']>;
+  permMultiplier_lte?: Maybe<Scalars['Int']>;
+  permMultiplier_in?: Maybe<Array<Scalars['Int']>>;
+  permMultiplier_not_in?: Maybe<Array<Scalars['Int']>>;
+  seasonMultiplier?: Maybe<Scalars['Int']>;
+  seasonMultiplier_not?: Maybe<Scalars['Int']>;
+  seasonMultiplier_gt?: Maybe<Scalars['Int']>;
+  seasonMultiplier_lt?: Maybe<Scalars['Int']>;
+  seasonMultiplier_gte?: Maybe<Scalars['Int']>;
+  seasonMultiplier_lte?: Maybe<Scalars['Int']>;
+  seasonMultiplier_in?: Maybe<Array<Scalars['Int']>>;
+  seasonMultiplier_not_in?: Maybe<Array<Scalars['Int']>>;
 };
 
 export enum Account_OrderBy {
   Id = 'id',
   TotalVotes = 'totalVotes',
+  LastAction = 'lastAction',
+  PermMultiplier = 'permMultiplier',
+  SeasonMultiplier = 'seasonMultiplier',
+  CompletedQuests = 'completedQuests',
   StakedTokenAccounts = 'stakedTokenAccounts'
 }
 
@@ -89,7 +130,7 @@ export type Block_Height = {
 
 export type CompletedQuest = {
   id: Scalars['ID'];
-  account: StakedTokenAccount;
+  account: Account;
   quest: Quest;
   completedAt: Scalars['Int'];
 };
@@ -259,6 +300,8 @@ export type Query = {
   accounts: Array<Account>;
   stakedTokenAccount?: Maybe<StakedTokenAccount>;
   stakedTokenAccounts: Array<StakedTokenAccount>;
+  questManager?: Maybe<QuestManager>;
+  questManagers: Array<QuestManager>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
   /** Access to subgraph metadata */
@@ -436,6 +479,22 @@ export type QueryStakedTokenAccountsArgs = {
 };
 
 
+export type QueryQuestManagerArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryQuestManagersArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<QuestManager_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<QuestManager_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
 export type QueryTransactionArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
@@ -474,6 +533,57 @@ export type QuestCompletionsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<CompletedQuest_Filter>;
 };
+
+export type QuestManager = {
+  id: Scalars['ID'];
+  season: Season;
+  questMaster: Scalars['Bytes'];
+  questSigner?: Maybe<Scalars['Bytes']>;
+};
+
+export type QuestManager_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  season?: Maybe<Scalars['String']>;
+  season_not?: Maybe<Scalars['String']>;
+  season_gt?: Maybe<Scalars['String']>;
+  season_lt?: Maybe<Scalars['String']>;
+  season_gte?: Maybe<Scalars['String']>;
+  season_lte?: Maybe<Scalars['String']>;
+  season_in?: Maybe<Array<Scalars['String']>>;
+  season_not_in?: Maybe<Array<Scalars['String']>>;
+  season_contains?: Maybe<Scalars['String']>;
+  season_not_contains?: Maybe<Scalars['String']>;
+  season_starts_with?: Maybe<Scalars['String']>;
+  season_not_starts_with?: Maybe<Scalars['String']>;
+  season_ends_with?: Maybe<Scalars['String']>;
+  season_not_ends_with?: Maybe<Scalars['String']>;
+  questMaster?: Maybe<Scalars['Bytes']>;
+  questMaster_not?: Maybe<Scalars['Bytes']>;
+  questMaster_in?: Maybe<Array<Scalars['Bytes']>>;
+  questMaster_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  questMaster_contains?: Maybe<Scalars['Bytes']>;
+  questMaster_not_contains?: Maybe<Scalars['Bytes']>;
+  questSigner?: Maybe<Scalars['Bytes']>;
+  questSigner_not?: Maybe<Scalars['Bytes']>;
+  questSigner_in?: Maybe<Array<Scalars['Bytes']>>;
+  questSigner_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  questSigner_contains?: Maybe<Scalars['Bytes']>;
+  questSigner_not_contains?: Maybe<Scalars['Bytes']>;
+};
+
+export enum QuestManager_OrderBy {
+  Id = 'id',
+  Season = 'season',
+  QuestMaster = 'questMaster',
+  QuestSigner = 'questSigner'
+}
 
 export enum QuestStatus {
   Active = 'ACTIVE',
@@ -604,9 +714,8 @@ export type StakedToken = {
   id: Scalars['ID'];
   token: Token;
   stakingToken: Token;
-  season: Season;
   stakingRewards: StakingRewards;
-  questMaster: Scalars['Bytes'];
+  questManager: QuestManager;
   COOLDOWN_SECONDS: Scalars['BigInt'];
   UNSTAKE_WINDOW: Scalars['BigInt'];
   collateralisationRatio: Scalars['BigInt'];
@@ -632,9 +741,6 @@ export type StakedTokenAccount = {
   rewardPerTokenPaid?: Maybe<Scalars['BigInt']>;
   rewards?: Maybe<Scalars['BigInt']>;
   delegators: Array<StakedTokenAccount>;
-  cooldownTimestamp?: Maybe<Scalars['BigInt']>;
-  cooldownPercentage?: Maybe<Scalars['BigInt']>;
-  completedQuests: Array<CompletedQuest>;
 };
 
 
@@ -644,15 +750,6 @@ export type StakedTokenAccountDelegatorsArgs = {
   orderBy?: Maybe<StakedTokenAccount_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<StakedTokenAccount_Filter>;
-};
-
-
-export type StakedTokenAccountCompletedQuestsArgs = {
-  skip?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<CompletedQuest_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<CompletedQuest_Filter>;
 };
 
 export type StakedTokenAccount_Filter = {
@@ -736,22 +833,6 @@ export type StakedTokenAccount_Filter = {
   rewards_lte?: Maybe<Scalars['BigInt']>;
   rewards_in?: Maybe<Array<Scalars['BigInt']>>;
   rewards_not_in?: Maybe<Array<Scalars['BigInt']>>;
-  cooldownTimestamp?: Maybe<Scalars['BigInt']>;
-  cooldownTimestamp_not?: Maybe<Scalars['BigInt']>;
-  cooldownTimestamp_gt?: Maybe<Scalars['BigInt']>;
-  cooldownTimestamp_lt?: Maybe<Scalars['BigInt']>;
-  cooldownTimestamp_gte?: Maybe<Scalars['BigInt']>;
-  cooldownTimestamp_lte?: Maybe<Scalars['BigInt']>;
-  cooldownTimestamp_in?: Maybe<Array<Scalars['BigInt']>>;
-  cooldownTimestamp_not_in?: Maybe<Array<Scalars['BigInt']>>;
-  cooldownPercentage?: Maybe<Scalars['BigInt']>;
-  cooldownPercentage_not?: Maybe<Scalars['BigInt']>;
-  cooldownPercentage_gt?: Maybe<Scalars['BigInt']>;
-  cooldownPercentage_lt?: Maybe<Scalars['BigInt']>;
-  cooldownPercentage_gte?: Maybe<Scalars['BigInt']>;
-  cooldownPercentage_lte?: Maybe<Scalars['BigInt']>;
-  cooldownPercentage_in?: Maybe<Array<Scalars['BigInt']>>;
-  cooldownPercentage_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum StakedTokenAccount_OrderBy {
@@ -762,20 +843,17 @@ export enum StakedTokenAccount_OrderBy {
   Delegatee = 'delegatee',
   RewardPerTokenPaid = 'rewardPerTokenPaid',
   Rewards = 'rewards',
-  Delegators = 'delegators',
-  CooldownTimestamp = 'cooldownTimestamp',
-  CooldownPercentage = 'cooldownPercentage',
-  CompletedQuests = 'completedQuests'
+  Delegators = 'delegators'
 }
 
 export type StakedTokenBalance = {
   account: StakedTokenAccount;
+  cooldownTimestamp: Scalars['Int'];
+  cooldownUnits: Scalars['Int'];
   id: Scalars['ID'];
-  lastAction: Scalars['Int'];
-  permMultiplier: Scalars['Int'];
+  questMultiplier: Scalars['Int'];
   raw: Scalars['BigInt'];
   rawBD: Scalars['MstableBigDecimal'];
-  seasonMultiplier: Scalars['Int'];
   stakedToken: StakedToken;
   timeMultiplier: Scalars['Int'];
   votes: Scalars['BigInt'];
@@ -836,30 +914,14 @@ export type StakedTokenBalance_Filter = {
   weightedTimestamp_lte?: Maybe<Scalars['Int']>;
   weightedTimestamp_in?: Maybe<Array<Scalars['Int']>>;
   weightedTimestamp_not_in?: Maybe<Array<Scalars['Int']>>;
-  lastAction?: Maybe<Scalars['Int']>;
-  lastAction_not?: Maybe<Scalars['Int']>;
-  lastAction_gt?: Maybe<Scalars['Int']>;
-  lastAction_lt?: Maybe<Scalars['Int']>;
-  lastAction_gte?: Maybe<Scalars['Int']>;
-  lastAction_lte?: Maybe<Scalars['Int']>;
-  lastAction_in?: Maybe<Array<Scalars['Int']>>;
-  lastAction_not_in?: Maybe<Array<Scalars['Int']>>;
-  permMultiplier?: Maybe<Scalars['Int']>;
-  permMultiplier_not?: Maybe<Scalars['Int']>;
-  permMultiplier_gt?: Maybe<Scalars['Int']>;
-  permMultiplier_lt?: Maybe<Scalars['Int']>;
-  permMultiplier_gte?: Maybe<Scalars['Int']>;
-  permMultiplier_lte?: Maybe<Scalars['Int']>;
-  permMultiplier_in?: Maybe<Array<Scalars['Int']>>;
-  permMultiplier_not_in?: Maybe<Array<Scalars['Int']>>;
-  seasonMultiplier?: Maybe<Scalars['Int']>;
-  seasonMultiplier_not?: Maybe<Scalars['Int']>;
-  seasonMultiplier_gt?: Maybe<Scalars['Int']>;
-  seasonMultiplier_lt?: Maybe<Scalars['Int']>;
-  seasonMultiplier_gte?: Maybe<Scalars['Int']>;
-  seasonMultiplier_lte?: Maybe<Scalars['Int']>;
-  seasonMultiplier_in?: Maybe<Array<Scalars['Int']>>;
-  seasonMultiplier_not_in?: Maybe<Array<Scalars['Int']>>;
+  questMultiplier?: Maybe<Scalars['Int']>;
+  questMultiplier_not?: Maybe<Scalars['Int']>;
+  questMultiplier_gt?: Maybe<Scalars['Int']>;
+  questMultiplier_lt?: Maybe<Scalars['Int']>;
+  questMultiplier_gte?: Maybe<Scalars['Int']>;
+  questMultiplier_lte?: Maybe<Scalars['Int']>;
+  questMultiplier_in?: Maybe<Array<Scalars['Int']>>;
+  questMultiplier_not_in?: Maybe<Array<Scalars['Int']>>;
   timeMultiplier?: Maybe<Scalars['Int']>;
   timeMultiplier_not?: Maybe<Scalars['Int']>;
   timeMultiplier_gt?: Maybe<Scalars['Int']>;
@@ -868,6 +930,22 @@ export type StakedTokenBalance_Filter = {
   timeMultiplier_lte?: Maybe<Scalars['Int']>;
   timeMultiplier_in?: Maybe<Array<Scalars['Int']>>;
   timeMultiplier_not_in?: Maybe<Array<Scalars['Int']>>;
+  cooldownTimestamp?: Maybe<Scalars['Int']>;
+  cooldownTimestamp_not?: Maybe<Scalars['Int']>;
+  cooldownTimestamp_gt?: Maybe<Scalars['Int']>;
+  cooldownTimestamp_lt?: Maybe<Scalars['Int']>;
+  cooldownTimestamp_gte?: Maybe<Scalars['Int']>;
+  cooldownTimestamp_lte?: Maybe<Scalars['Int']>;
+  cooldownTimestamp_in?: Maybe<Array<Scalars['Int']>>;
+  cooldownTimestamp_not_in?: Maybe<Array<Scalars['Int']>>;
+  cooldownUnits?: Maybe<Scalars['Int']>;
+  cooldownUnits_not?: Maybe<Scalars['Int']>;
+  cooldownUnits_gt?: Maybe<Scalars['Int']>;
+  cooldownUnits_lt?: Maybe<Scalars['Int']>;
+  cooldownUnits_gte?: Maybe<Scalars['Int']>;
+  cooldownUnits_lte?: Maybe<Scalars['Int']>;
+  cooldownUnits_in?: Maybe<Array<Scalars['Int']>>;
+  cooldownUnits_not_in?: Maybe<Array<Scalars['Int']>>;
   votes?: Maybe<Scalars['BigInt']>;
   votes_not?: Maybe<Scalars['BigInt']>;
   votes_gt?: Maybe<Scalars['BigInt']>;
@@ -884,10 +962,10 @@ export enum StakedTokenBalance_OrderBy {
   StakedToken = 'stakedToken',
   Raw = 'raw',
   WeightedTimestamp = 'weightedTimestamp',
-  LastAction = 'lastAction',
-  PermMultiplier = 'permMultiplier',
-  SeasonMultiplier = 'seasonMultiplier',
+  QuestMultiplier = 'questMultiplier',
   TimeMultiplier = 'timeMultiplier',
+  CooldownTimestamp = 'cooldownTimestamp',
+  CooldownUnits = 'cooldownUnits',
   Votes = 'votes'
 }
 
@@ -928,20 +1006,6 @@ export type StakedToken_Filter = {
   stakingToken_not_starts_with?: Maybe<Scalars['String']>;
   stakingToken_ends_with?: Maybe<Scalars['String']>;
   stakingToken_not_ends_with?: Maybe<Scalars['String']>;
-  season?: Maybe<Scalars['String']>;
-  season_not?: Maybe<Scalars['String']>;
-  season_gt?: Maybe<Scalars['String']>;
-  season_lt?: Maybe<Scalars['String']>;
-  season_gte?: Maybe<Scalars['String']>;
-  season_lte?: Maybe<Scalars['String']>;
-  season_in?: Maybe<Array<Scalars['String']>>;
-  season_not_in?: Maybe<Array<Scalars['String']>>;
-  season_contains?: Maybe<Scalars['String']>;
-  season_not_contains?: Maybe<Scalars['String']>;
-  season_starts_with?: Maybe<Scalars['String']>;
-  season_not_starts_with?: Maybe<Scalars['String']>;
-  season_ends_with?: Maybe<Scalars['String']>;
-  season_not_ends_with?: Maybe<Scalars['String']>;
   stakingRewards?: Maybe<Scalars['String']>;
   stakingRewards_not?: Maybe<Scalars['String']>;
   stakingRewards_gt?: Maybe<Scalars['String']>;
@@ -956,12 +1020,20 @@ export type StakedToken_Filter = {
   stakingRewards_not_starts_with?: Maybe<Scalars['String']>;
   stakingRewards_ends_with?: Maybe<Scalars['String']>;
   stakingRewards_not_ends_with?: Maybe<Scalars['String']>;
-  questMaster?: Maybe<Scalars['Bytes']>;
-  questMaster_not?: Maybe<Scalars['Bytes']>;
-  questMaster_in?: Maybe<Array<Scalars['Bytes']>>;
-  questMaster_not_in?: Maybe<Array<Scalars['Bytes']>>;
-  questMaster_contains?: Maybe<Scalars['Bytes']>;
-  questMaster_not_contains?: Maybe<Scalars['Bytes']>;
+  questManager?: Maybe<Scalars['String']>;
+  questManager_not?: Maybe<Scalars['String']>;
+  questManager_gt?: Maybe<Scalars['String']>;
+  questManager_lt?: Maybe<Scalars['String']>;
+  questManager_gte?: Maybe<Scalars['String']>;
+  questManager_lte?: Maybe<Scalars['String']>;
+  questManager_in?: Maybe<Array<Scalars['String']>>;
+  questManager_not_in?: Maybe<Array<Scalars['String']>>;
+  questManager_contains?: Maybe<Scalars['String']>;
+  questManager_not_contains?: Maybe<Scalars['String']>;
+  questManager_starts_with?: Maybe<Scalars['String']>;
+  questManager_not_starts_with?: Maybe<Scalars['String']>;
+  questManager_ends_with?: Maybe<Scalars['String']>;
+  questManager_not_ends_with?: Maybe<Scalars['String']>;
   COOLDOWN_SECONDS?: Maybe<Scalars['BigInt']>;
   COOLDOWN_SECONDS_not?: Maybe<Scalars['BigInt']>;
   COOLDOWN_SECONDS_gt?: Maybe<Scalars['BigInt']>;
@@ -1000,9 +1072,8 @@ export enum StakedToken_OrderBy {
   Id = 'id',
   Token = 'token',
   StakingToken = 'stakingToken',
-  Season = 'season',
   StakingRewards = 'stakingRewards',
-  QuestMaster = 'questMaster',
+  QuestManager = 'questManager',
   CooldownSeconds = 'COOLDOWN_SECONDS',
   UnstakeWindow = 'UNSTAKE_WINDOW',
   CollateralisationRatio = 'collateralisationRatio',
@@ -1143,6 +1214,8 @@ export type Subscription = {
   accounts: Array<Account>;
   stakedTokenAccount?: Maybe<StakedTokenAccount>;
   stakedTokenAccounts: Array<StakedTokenAccount>;
+  questManager?: Maybe<QuestManager>;
+  questManagers: Array<QuestManager>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
   /** Access to subgraph metadata */
@@ -1316,6 +1389,22 @@ export type SubscriptionStakedTokenAccountsArgs = {
   orderBy?: Maybe<StakedTokenAccount_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<StakedTokenAccount_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionQuestManagerArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionQuestManagersArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<QuestManager_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<QuestManager_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -1622,6 +1711,13 @@ export type LeaderboardQueryVariables = Exact<{
 
 export type LeaderboardQuery = { stakedTokens: Array<{ token: { totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }>, accounts: Array<{ id: string, totalVotes: string, totalVotesBD: BigDecimal }> };
 
+export type AccountQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type AccountQuery = { account?: Maybe<{ id: string, totalVotesBD: BigDecimal, lastAction: number, seasonMultiplier: number, permMultiplier: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string, status: QuestStatus, multiplier: number, season?: Maybe<{ id: string }> } }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }> }> };
+
 export type StakedTokenQueryVariables = Exact<{
   id: Scalars['ID'];
   account: Scalars['String'];
@@ -1629,7 +1725,7 @@ export type StakedTokenQueryVariables = Exact<{
 }>;
 
 
-export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, questMaster: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, season: { id: string, endedAt?: Maybe<number>, startedAt: number, seasonNumber: number }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, cooldownTimestamp?: Maybe<string>, cooldownPercentage?: Maybe<string>, delegatee?: Maybe<{ id: string }>, delegators: Array<{ id: string }>, completedQuests: Array<{ id: string }>, balance: { lastAction: number, permMultiplier: number, timeMultiplier: number, seasonMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }>> }> };
+export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, delegatee?: Maybe<{ id: string }>, delegators: Array<{ id: string }>, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: number, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }>> }> };
 
 export const MetricFieldsFragmentDoc = gql`
     fragment MetricFields on Metric {
@@ -1736,6 +1832,76 @@ export function useLeaderboardLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type LeaderboardQueryHookResult = ReturnType<typeof useLeaderboardQuery>;
 export type LeaderboardLazyQueryHookResult = ReturnType<typeof useLeaderboardLazyQuery>;
 export type LeaderboardQueryResult = Apollo.QueryResult<LeaderboardQuery, LeaderboardQueryVariables>;
+export const AccountDocument = gql`
+    query Account($id: ID!) {
+  account(id: $id) {
+    id
+    totalVotesBD @client
+    lastAction
+    seasonMultiplier
+    permMultiplier
+    completedQuests {
+      id
+      completedAt
+      quest {
+        id
+        season {
+          id
+        }
+        status
+        multiplier
+      }
+    }
+    stakedTokenAccounts {
+      id
+      stakedToken {
+        id
+        stakingToken {
+          symbol
+        }
+      }
+      balance {
+        raw
+        votes
+        timeMultiplier
+        questMultiplier
+        cooldownTimestamp
+        weightedTimestamp
+        rawBD @client
+        votesBD @client
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useAccountQuery__
+ *
+ * To run a query within a React component, call `useAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccountQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useAccountQuery(baseOptions: Apollo.QueryHookOptions<AccountQuery, AccountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options);
+      }
+export function useAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountQuery, AccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options);
+        }
+export type AccountQueryHookResult = ReturnType<typeof useAccountQuery>;
+export type AccountLazyQueryHookResult = ReturnType<typeof useAccountLazyQuery>;
+export type AccountQueryResult = Apollo.QueryResult<AccountQuery, AccountQueryVariables>;
 export const StakedTokenDocument = gql`
     query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
   stakedToken(id: $id) {
@@ -1759,17 +1925,10 @@ export const StakedTokenDocument = gql`
       rewardsDistributor
       pendingAdditionalReward
     }
-    questMaster
     UNSTAKE_WINDOW
     COOLDOWN_SECONDS
     collateralisationRatio
     slashingPercentage
-    season {
-      id
-      endedAt
-      startedAt
-      seasonNumber
-    }
     accounts(where: {account: $account}) @include(if: $hasAccount) {
       id
       delegatee {
@@ -1780,16 +1939,11 @@ export const StakedTokenDocument = gql`
       delegators {
         id
       }
-      completedQuests {
-        id
-      }
-      cooldownTimestamp
-      cooldownPercentage
       balance {
-        lastAction
-        permMultiplier
         timeMultiplier
-        seasonMultiplier
+        cooldownTimestamp
+        cooldownUnits
+        questMultiplier
         raw
         votes
         weightedTimestamp
