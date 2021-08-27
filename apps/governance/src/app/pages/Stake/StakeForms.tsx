@@ -36,13 +36,17 @@ const slide = keyframes`
   }
 `
 
+// Temp scroll, maybe move delegation position
 const StyledTransitionGroup = styled(TransitionGroup)`
-  overflow: hidden;
-  min-height: 20rem;
+  overflow-y: scroll;
+  height: 100%;
+  min-height: 22rem;
   position: relative;
+
   > * {
     position: absolute;
     top: 0;
+    bottom: 0;
     left: 0;
   }
 `

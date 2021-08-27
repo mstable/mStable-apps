@@ -1,5 +1,5 @@
 export * from './AmountInputButton'
-export * from './AmountInputV2'
+export * from './AmountInput'
 export * from './ApproveProvider'
 export * from './AssetExchange'
 export * from './AssetInput'

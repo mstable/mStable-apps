@@ -50,9 +50,7 @@ export const ClaimForm: FC = () => {
         address={stakingToken?.address}
         addressOptions={stakingToken ? [stakingToken.address] : []}
         formValue={formValue}
-        handleSetMax={() => {
-          setFormValue(stakingToken.balance.string)
-        }}
+        handleSetMax={() => setFormValue(stakingToken.balance.string)}
         handleSetAmount={setFormValue}
       />
       <CompoundingToggle>

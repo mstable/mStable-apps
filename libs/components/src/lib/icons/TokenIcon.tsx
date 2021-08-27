@@ -17,6 +17,7 @@ import Curve3Pool, { ReactComponent as Curve3PoolSvg } from './tokens/3pool.svg'
 import MTA, { ReactComponent as MtaSvg } from './tokens/MTA.svg'
 import Uniswap, { ReactComponent as UniswapSvg } from './tokens/Uniswap.svg'
 import Balancer, { ReactComponent as BalancerSvg } from './tokens/Balancer.svg'
+import BPTMTAETH, { ReactComponent as BptMtaEthSvg } from './tokens/BPT-MTA-ETH.svg'
 import ETH, { ReactComponent as EtherSvg } from './tokens/Ether.svg'
 import IMUSD, { ReactComponent as ImusdSvg } from './tokens/imUSD.svg'
 import IMBTC, { ReactComponent as ImbtcSvg } from './tokens/imBTC.svg'
@@ -67,7 +68,7 @@ export const TOKEN_ICONS: Record<string, string> = {
   MUSD3CRV,
   'UNI-V2': Uniswap,
   BAL: Balancer,
-  BPT: Balancer,
+  BPT: BPTMTAETH,
   'MK-MTA': MTA,
   'MK-BAL': Balancer,
   IMUSD,
@@ -119,7 +120,7 @@ const SVG_ICONS: Record<string, SvgComponent> = {
   MTA: MtaSvg as SvgComponent,
   'UNI-V2': UniswapSvg as SvgComponent,
   BAL: BalancerSvg as SvgComponent,
-  BPT: BalancerSvg as SvgComponent,
+  BPT: BptMtaEthSvg as SvgComponent,
   'MK-MTA': MtaSvg as SvgComponent,
   'MK-BAL': BalancerSvg as SvgComponent,
   IMUSD: ImusdSvg as SvgComponent,

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
@@ -10,8 +10,10 @@ import { usePropose } from '@apps/base/context/transactions'
 import { useBigDecimalInput } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetInputSingle, SendButton, ToggleInput } from '@apps/components/forms'
+import { DelegateInput } from '../../components/DelegateInput'
 
 import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { ethers } from 'ethers'
 
 const Input = styled(AssetInputSingle)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -23,8 +25,12 @@ const DelegateToggle = styled.div`
   justify-content: space-between;
   gap: 1rem;
   align-items: center;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: 0.25rem;
+  }
 `
 
 const Container = styled.div`
@@ -44,7 +50,32 @@ export const StakeForm: FC = () => {
 
   const [amount, formValue, setFormValue] = useBigDecimalInput()
   const [isDelegating, toggleIsDelegating] = useToggle(true)
-  // const [delegate, setDelegate] = useState<string>()
+  const [delegate, setDelegate] = useState<string | undefined>()
+
+  const handleSend = () => {
+    if (!signer || !data || !amount.exact.eq(0)) return
+
+    if (delegate) {
+      return propose<Interfaces.StakedToken, 'stake(uint256,address)'>(
+        new TransactionManifest(
+          StakedToken__factory.connect(stakedTokenAddress, signer),
+          'stake(uint256,address)',
+          [amount.exact, delegate],
+          {
+            present: `Staking ${stakingToken.symbol} and delegating to ${delegate}`,
+            past: `Staked ${stakingToken.symbol} and delegated to ${delegate}`,
+          },
+        ),
+      )
+    }
+
+    propose<Interfaces.StakedToken, 'stake(uint256)'>(
+      new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'stake(uint256)', [amount.exact], {
+        present: `Staking ${stakingToken.symbol}`,
+        past: `Staked ${stakingToken.symbol}`,
+      }),
+    )
+  }
 
   return (
     <Container>
@@ -57,29 +88,17 @@ export const StakeForm: FC = () => {
         spender={stakedTokenAddress}
       />
       <DelegateToggle>
-        <div>Delegate stake?</div>
+        <h3>Delegate stake?</h3>
         <ToggleInput onClick={toggleIsDelegating} checked={isDelegating} />
       </DelegateToggle>
+      {isDelegating && <DelegateInput delegate={delegate} onClick={setDelegate} />}
       <Warning>
         Unstaking is subject to a cooldown period of X days, followed by a Y day withdrawable period. <a>Learn more</a>
       </Warning>
       <Warning>
         A redemption fee applies to all withdrawals. The longer you stake, the lower the redemption fee. <a>Learn more</a>
       </Warning>
-      <SendButton
-        valid
-        title="Stake"
-        handleSend={() => {
-          if (signer && data && amount && amount.exact.gt(0)) {
-            propose<Interfaces.StakedToken, 'stake(uint256)'>(
-              new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'stake(uint256)', [amount.exact], {
-                present: `Staking ${stakingToken.symbol}`,
-                past: `Staked ${stakingToken.symbol}`,
-              }),
-            )
-          }
-        }}
-      />
+      <SendButton valid title="Stake" handleSend={handleSend} />
     </Container>
   )
 }

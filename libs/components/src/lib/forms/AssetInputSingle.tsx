@@ -16,6 +16,15 @@ interface Props {
 const Input = styled(AssetInput)`
   background: ${({ theme }) => theme.color.background[0]};
   height: 3.5rem;
+  padding: 0.25rem 0.25rem 0.25rem 0;
+
+  input {
+    padding-left: 0.75rem;
+  }
+
+  button {
+    max-height: 3.5rem;
+  }
 `
 
 const Balance = styled.div`

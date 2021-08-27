@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, FC, KeyboardEventHandler, useCallback, useMemo } from 'react'
-import styled from 'styled-components'
+import { Input } from './Input'
 
 interface Props {
   className?: string
@@ -15,27 +15,6 @@ interface Props {
   decimals?: number
 }
 
-export const InputV2 = styled.input<{
-  error?: boolean
-  disabled?: boolean
-}>`
-  ${({ theme }) => theme.mixins.numeric};
-
-  font-size: 1rem;
-  padding: 0 0.5rem;
-  appearance: none;
-  background: none;
-  border: none;
-  color: ${({ error, theme, disabled }) => (error ? theme.color.red : disabled ? theme.color.disabled : theme.color.body)};
-  background: ${({ theme, disabled }) => (disabled ? theme.color.disabledInput : 'none')};
-  opacity: ${({ disabled }) => (disabled ? 0.85 : 1)};
-  font-weight: normal;
-  border-radius: 0.75rem;
-  outline: none;
-  height: 3rem;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'auto')};
-`
-
 const trimInput = (value?: string, decimals?: number): string => {
   if (!value) return ''
   if (!decimals) return value
@@ -49,7 +28,7 @@ const trimInput = (value?: string, decimals?: number): string => {
   return value
 }
 
-export const AmountInputV2: FC<Props> = ({
+export const AmountInput: FC<Props> = ({
   className,
   error,
   disabled = false,
@@ -74,12 +53,11 @@ export const AmountInputV2: FC<Props> = ({
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(event => onChange?.(event.target.value ?? undefined), [onChange])
 
   return (
-    <InputV2
+    <Input
       className={className}
       error={error}
       min={min}
       max={max}
-      type="number"
       placeholder={placeholder}
       step={step}
       value={trimmedValue}

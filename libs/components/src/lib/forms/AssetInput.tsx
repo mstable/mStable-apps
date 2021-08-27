@@ -7,7 +7,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { ThemedSkeleton, Button } from '@apps/components/core'
 
 import { SubscribedTokenInput } from './SubscribedTokenInput'
-import { AmountInputV2 as InputField } from './AmountInputV2'
+import { AmountInput } from './AmountInput'
 import { ApproveContent } from './SendButton'
 import { ReactComponent as LockIcon } from '../icons/lock-open.svg'
 import { ReactComponent as UnlockedIcon } from '../icons/lock-closed.svg'
@@ -63,6 +63,7 @@ const MaxButton = styled(Button)`
   @media (min-width: ${ViewportWidth.s}) {
     display: flex;
     align-items: center;
+    height: 100%;
   }
 `
 
@@ -176,7 +177,7 @@ const AssetInputContent: FC<Props> = ({
               {isFetching ? (
                 <StyledSkeleton />
               ) : (
-                <InputField disabled={amountDisabled} value={formValue} onChange={handleSetAmount} step="any" decimals={decimals} />
+                <AmountInput disabled={amountDisabled} value={formValue} onChange={handleSetAmount} step="any" decimals={decimals} />
               )}
               {handleSetMax && (
                 <MaxButton type="button" onClick={handleSetMax} scale={0.75} transparent>
