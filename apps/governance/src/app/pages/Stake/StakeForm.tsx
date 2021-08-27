@@ -13,7 +13,6 @@ import { AssetInputSingle, SendButton, ToggleInput } from '@apps/components/form
 import { DelegateInput } from '../../components/DelegateInput'
 
 import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
-import { ethers } from 'ethers'
 
 const Input = styled(AssetInputSingle)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -27,8 +26,6 @@ const DelegateToggle = styled.div`
   align-items: center;
 
   h3 {
-    font-size: 1rem;
-    font-weight: 500;
     margin-left: 0.25rem;
   }
 `
@@ -43,7 +40,7 @@ export const StakeForm: FC = () => {
   const { data, loading } = useStakedTokenQuery()
   const { selected: stakedTokenAddress } = useStakedToken()
 
-  const stakingToken = useTokenSubscription(data?.stakedToken.stakingToken.address)
+  const stakingToken = useTokenSubscription(data?.stakedToken?.stakingToken.address)
 
   const propose = usePropose()
   const signer = useSigner()

@@ -69,7 +69,7 @@ export const StakeBalances: FC = () => {
   const { data } = useStakedTokenQuery()
 
   const { stake, votingPower, rewardsEarned } = useMemo<{ stake?: Balance[]; votingPower?: Balance[]; rewardsEarned?: Balance[] }>(() => {
-    const account = data?.stakedToken.accounts?.[0]
+    const account = data?.stakedToken?.accounts?.[0]
     if (!data || !account) {
       return {}
     }
