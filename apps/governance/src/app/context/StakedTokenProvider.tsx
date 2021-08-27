@@ -3,7 +3,7 @@ import React, { createContext, Dispatch, FC, SetStateAction, useMemo, useState }
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { providerFactory, createUseContextFn, useBlockPollingSubscription } from '@apps/hooks'
-import { useStakedTokenLazyQuery } from '@apps/artifacts/graphql/staking'
+import { useStakedTokenLazyQuery, useStakedTokenQuery as useStakedTokenQueryHook } from '@apps/artifacts/graphql/staking'
 
 import { useStakingQuery } from './StakingProvider'
 
@@ -51,9 +51,11 @@ export const useStakedTokenQuery = () => {
   const { selected } = useStakedToken()
 
   const options = useMemo(
-    () => ({ client: clients.staking, variables: { id: selected, account: account ?? '', hasAccount: !!account } }),
+    () => ({ client: clients.staking, variables: { id: selected, account: account ?? '', hasAccount: !!account }, skip: !selected }),
     [account, clients, selected],
   )
 
-  return useBlockPollingSubscription(useStakedTokenLazyQuery, options, !selected)
+  // return useBlockPollingSubscription(useStakedTokenLazyQuery, options, !selected)
+  // FIXME make sure we're subscribed
+  return useStakedTokenQueryHook(options)
 }

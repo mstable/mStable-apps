@@ -6,7 +6,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 export const readAsBN = <T>(field: keyof T): FieldPolicy<BigNumber> => ({
   read(existing, options) {
     const exact = options.readField(field as string)
-    return BigNumber.from(exact)
+    return BigNumber.from(exact ?? 0)
   },
 })
 
@@ -14,6 +14,6 @@ export const readAsBN = <T>(field: keyof T): FieldPolicy<BigNumber> => ({
 export const readAsBD = <T>(field: keyof T, decimals = 18): FieldPolicy<BigDecimal> => ({
   read(existing, options) {
     const exact: number = options.readField(field as string) as number
-    return new BigDecimal(exact, decimals)
+    return new BigDecimal(exact ?? 0, decimals)
   },
 })

@@ -1,3 +1,40 @@
 import React, { FC } from 'react'
+import { useParams } from 'react-router-dom'
+import { isAddress } from 'ethers/lib/utils'
 
-export const Delegatee: FC = () => <div>Delegatee</div>
+import { ResolveENS } from '@apps/components/core'
+import { FetchState } from '@apps/hooks'
+
+import { DelegateePageHeader } from '../../components/GovernancePageHeader'
+import { useDelegateesAll } from '../../context/DelegateeListsProvider'
+import { DelegateeProfile } from './DelegateeProfile'
+
+const Content: FC<{ address?: string; addressOrENSName: string; resolvedENSName?: FetchState<string | null> }> = ({
+  address,
+  addressOrENSName,
+  resolvedENSName,
+}) => {
+  const all = useDelegateesAll()
+  const resolvedAddress = address ?? resolvedENSName.value
+  const delegateeInfo = resolvedAddress ? all[resolvedAddress.toLowerCase()] : undefined
+
+  return (
+    <div>
+      <DelegateePageHeader addressOrENSName={addressOrENSName} address={resolvedAddress} delegateeInfo={delegateeInfo} />
+      <DelegateeProfile delegateeInfo={delegateeInfo} addressOrENSName={addressOrENSName} address={resolvedAddress} />
+    </div>
+  )
+}
+
+export const Delegatee: FC = () => {
+  const { delegatee: addressOrENSName } = useParams<{ delegatee: string }>()
+
+  return isAddress(addressOrENSName) ? (
+    <Content address={addressOrENSName} addressOrENSName={addressOrENSName} />
+  ) : (
+    <ResolveENS
+      ensName={addressOrENSName}
+      render={({ resolvedENSName }) => <Content addressOrENSName={addressOrENSName} resolvedENSName={resolvedENSName} />}
+    />
+  )
+}
