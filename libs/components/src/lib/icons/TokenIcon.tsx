@@ -237,8 +237,8 @@ export const TokenPair: FC<{
   if (!symbols || (symbols?.length ?? 0) < 2) return null
   return (
     <IconContainer isLarge={isLarge} className={className}>
-      <TokenIcon symbol={symbols[0]} hideNetwork />
-      <TokenIcon symbol={symbols[1]} hideNetwork />
+      <TokenIcon symbol={symbols[0]} />
+      <TokenIcon symbol={symbols[1]} />
     </IconContainer>
   )
 }

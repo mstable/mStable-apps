@@ -57,7 +57,7 @@ export const MultiRewards: FC<Props> = ({ rewardsEarned, onClaimRewards }) => {
               <TableRow key={token}>
                 <TableCell width={TABLE_CELL_WIDTHS[0]}>
                   <Token>
-                    <TokenIcon symbol={token} hideNetwork />
+                    <TokenIcon symbol={token} />
                     <h3>{token}</h3>
                   </Token>
                 </TableCell>

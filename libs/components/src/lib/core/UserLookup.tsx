@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import styled from 'styled-components'
 import { isAddress } from 'ethers/lib/utils'
 
-import { InputV2 as Input } from '@apps/components/forms'
+import { Input } from '@apps/components/forms'
 import { Button } from '@apps/components/core'
 import { useIsMasquerading, useMasquerade } from '@apps/base/context/account'
 import { ViewportWidth } from '@apps/base/theme'

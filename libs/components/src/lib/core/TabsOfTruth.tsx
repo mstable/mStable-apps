@@ -39,14 +39,16 @@ export const createTabsContext = (tabs: Tab[], defaultActiveTabIndex: number = 0
 const TabButton = styled(UnstyledButton)<{ active: boolean }>`
   flex: 1;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: ${({ active }) => (active ? 500 : 400)};
   height: 2.5rem;
   z-index: 1;
   transition: all 0.25s ease-in-out;
   color: ${({ theme, active }) => (active ? theme.color.white : theme.color.bodyAccent)};
   border-radius: 1rem;
+
   &:hover {
-    background: ${({ theme, active }) => (active ? 'transparent' : theme.color.background[2])};
+    font-weight: 500;
+    transition: 0.5s ease-out font-weight;
   }
 `
 

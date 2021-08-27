@@ -43,6 +43,11 @@ const StyledTransitionGroup = styled(TransitionGroup)`
   min-height: 22rem;
   position: relative;
 
+  h3 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
   > * {
     position: absolute;
     top: 0;

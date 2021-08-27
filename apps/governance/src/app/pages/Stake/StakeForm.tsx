@@ -50,7 +50,8 @@ export const StakeForm: FC = () => {
   const [delegate, setDelegate] = useState<string | undefined>()
 
   const handleSend = () => {
-    if (!signer || !data || !amount.exact.eq(0)) return
+    console.log(signer, data, amount)
+    if (!signer || !data || amount.exact.lte(0)) return
 
     if (delegate) {
       return propose<Interfaces.StakedToken, 'stake(uint256,address)'>(
@@ -95,7 +96,7 @@ export const StakeForm: FC = () => {
       <Warning>
         A redemption fee applies to all withdrawals. The longer you stake, the lower the redemption fee. <a>Learn more</a>
       </Warning>
-      <SendButton valid title="Stake" handleSend={handleSend} />
+      <SendButton valid={(isDelegating && delegate) || !isDelegating} title="Stake" handleSend={handleSend} />
     </Container>
   )
 }
