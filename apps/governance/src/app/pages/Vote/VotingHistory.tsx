@@ -1,16 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { useApolloClients } from '@apps/base/context/apollo'
+import { ExternalLink } from '@apps/components/core'
+import { formatUnix } from '@apps/formatters'
+import { useVotesQuery, VotesQueryResult } from '@apps/artifacts/graphql/snapshot'
 
-// TODO use Snapshot gql data
-const items = [
-  {
-    id: 1,
-    title: 'Creation & Funding of the mStableDAO Asset Management subDAO',
-    status: 'Closed',
-    date: 'March 14th, 2021',
-    choice: '207,692 MTA weekly',
-  },
-]
+type VoteData = NonNullable<VotesQueryResult['data']>['votes'][number]
 
 const VotingHistoryItemContainer = styled.div`
   display: flex;
@@ -60,20 +55,15 @@ const VotingHistoryItemContainer = styled.div`
   }
 `
 
-const VotingHistoryItem: FC<{ id: string | number; status: string; title: string; date: string; choice?: string }> = ({
-  status,
-  title,
-  date,
-  choice,
-}) => (
+const VotingHistoryItem: FC<VoteData['proposal'] & Omit<VoteData, 'proposal'>> = ({ state, title, created, choice, choices, link }) => (
   <VotingHistoryItemContainer>
     <div>
-      <div>{title}</div>
-      <div>{status}</div>
+      <ExternalLink href={link}>{title}</ExternalLink>
+      <div>{state.slice(0, 1).toUpperCase() + state.slice(1)}</div>
     </div>
     <div>
-      <div>{date}</div>
-      <div>{choice}</div>
+      <div>{formatUnix(created)}</div>
+      <div>{choices[choice - 1]}</div>
     </div>
   </VotingHistoryItemContainer>
 )
@@ -91,12 +81,16 @@ const Container = styled.div`
 `
 
 export const VotingHistory: FC<{ addressOrENSName: string; address?: string }> = ({ address, addressOrENSName }) => {
+  const clients = useApolloClients()
+  const votesQuery = useVotesQuery({ client: clients.snapshot, variables: { account: address }, skip: !address })
+
+  console.log(votesQuery.data)
   return (
     <Container>
       <h3>Voting History</h3>
       <div>
-        {items.map(({ title, id, status, date, choice }) => (
-          <VotingHistoryItem key={id} id={id} title={title} status={status} date={date} choice={choice} />
+        {votesQuery.data?.votes.map(({ proposal: { title, state, link, choices }, id, created, choice }) => (
+          <VotingHistoryItem key={id} id={id} title={title} state={state} link={link} created={created} choice={choice} choices={choices} />
         ))}
       </div>
     </Container>

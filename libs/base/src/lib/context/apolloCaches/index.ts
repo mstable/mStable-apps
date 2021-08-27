@@ -7,6 +7,7 @@ export const caches: Record<AllGqlEndpoints, InMemoryCache> = Object.freeze({
   feeders: new InMemoryCache(),
   protocol: new InMemoryCache(),
   stakingRewards: new InMemoryCache(),
+  snapshot: new InMemoryCache(),
   staking,
   questbook: new InMemoryCache(),
 })

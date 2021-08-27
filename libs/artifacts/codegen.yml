@@ -56,6 +56,14 @@ generates:
     config:
       includeDirectives: true
 
+  ./libs/artifacts/src/graphql/snapshot/schema.graphql:
+    overwrite: true
+    schema: https://hub.snapshot.org/graphql
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+
   ./libs/artifacts/src/graphql/staking/schema.graphql:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
@@ -124,6 +132,16 @@ generates:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks
     documents: 'libs/artifacts/src/graphql/blocks/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+
+  ./libs/artifacts/src/graphql/snapshot.tsx:
+    overwrite: true
+    schema: https://hub.snapshot.org/graphql
+    documents: 'libs/artifacts/src/graphql/snapshot/*.graphql'
     plugins:
       - 'fragment-matcher'
       - 'typescript'

@@ -32,7 +32,7 @@ export const DelegateeListsProvider: FC = ({ children }) => {
       // TODO support https etc
       DEFAULT_LIST_OF_LISTS.map(async ensName => {
         const ipfsHash = await resolveENSContentHash(ensName, provider)
-        const url = `https://cloudflare-ipfs.com/ipfs/${ipfsHash.slice(7)}/`
+        const url = `https://cloudflare-ipfs.com/ipfs/${ipfsHash ? ipfsHash.slice(7) : ''}/`
         const response = await fetch(url)
         const list = (await response.json()) as DelegateeList
         return [ensName, list]

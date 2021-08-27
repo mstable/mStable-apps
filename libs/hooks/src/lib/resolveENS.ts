@@ -6,7 +6,7 @@ import { useFetchState } from '@apps/hooks'
 
 export const resolveENSContentHash = async (ensName: string, provider: Provider): Promise<string | null> => {
   const resolver = await provider.getResolver(ensName)
-  return resolver.getContentHash()
+  return resolver?.getContentHash()
 }
 
 export const useResolveENSContentHash = (ensName: string) => {

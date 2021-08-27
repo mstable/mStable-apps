@@ -48,6 +48,17 @@
         }
       }
     },
+    "snapshot": {
+      "includes": ["./shared/*", "./snapshot/*"],
+      "extensions": {
+        "endpoints": {
+          "mainnet": {
+            "url": "https://hub.snapshot.org/graphql",
+            "introspect": false
+          }
+        }
+      }
+    },
     "staking": {
       "includes": ["./shared/*", "./staking/*"],
       "extensions": {

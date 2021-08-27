@@ -88,12 +88,12 @@ export interface EthereumMainnet
         WBTC: string
       }
     },
-    GraphQLEndpoints<'feeders'>
+    GraphQLEndpoints<'feeders' | 'snapshot'>
   > {
   chainId: ChainIds.EthereumMainnet
 }
 
-export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking' | 'questbook'>> {
+export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking' | 'questbook' | 'snapshot'>> {
   chainId: ChainIds.EthereumRopsten
 }
 
@@ -181,6 +181,7 @@ const ETH_MAINNET: EthereumMainnet = {
       graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0, process.env.NX_PROTOCOL_SUBGRAPH_API_KEY as string),
       graphHostedEndpoint('mstable', 'mstable-protocol-staging'),
     ],
+    snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
       // TODO remove temporary URL once we have enough indexers
       'https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.8',
@@ -215,6 +216,7 @@ const ETH_ROPSTEN: EthereumRopsten = {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-ropsten')],
     staking: [graphHostedEndpoint('mstable', 'mstable-staking-ropsten')],
     blocks: [graphHostedEndpoint('blocklytics', 'ropsten-blocks')],
+    snapshot: ['https://hub.snapshot.org/graphql'],
     questbook: ['https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook'],
   },
   addresses: {

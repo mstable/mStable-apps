@@ -1,0 +1,21 @@
+query Votes($account: String!) {
+  votes(
+    first: 500
+    where: {
+      space: "mstablegovernance.eth",
+      voter: $account
+    },
+    orderBy: "created",
+    orderDirection: desc
+  ) {
+    id
+    created
+    proposal {
+      title
+      link
+      state
+      choices
+    }
+    choice
+  }
+}
