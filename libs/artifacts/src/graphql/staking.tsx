@@ -19,7 +19,7 @@ const defaultOptions =  {}
   }
 };
       export default result;
-
+    
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -39,6 +39,7 @@ export type Scalars = {
 
 export type Account = {
   completedQuests: Array<CompletedQuest>;
+  delegators: Array<StakedTokenAccount>;
   id: Scalars['ID'];
   lastAction: Scalars['Int'];
   permMultiplier: Scalars['Int'];
@@ -55,6 +56,15 @@ export type AccountCompletedQuestsArgs = {
   orderBy?: Maybe<CompletedQuest_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<CompletedQuest_Filter>;
+};
+
+
+export type AccountDelegatorsArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<StakedTokenAccount_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<StakedTokenAccount_Filter>;
 };
 
 
@@ -116,7 +126,8 @@ export enum Account_OrderBy {
   PermMultiplier = 'permMultiplier',
   SeasonMultiplier = 'seasonMultiplier',
   CompletedQuests = 'completedQuests',
-  StakedTokenAccounts = 'stakedTokenAccounts'
+  StakedTokenAccounts = 'stakedTokenAccounts',
+  Delegators = 'delegators'
 }
 
 
@@ -737,19 +748,9 @@ export type StakedTokenAccount = {
   account: Account;
   stakedToken: StakedToken;
   balance: StakedTokenBalance;
-  delegatee?: Maybe<StakedTokenAccount>;
+  delegatee?: Maybe<Account>;
   rewardPerTokenPaid?: Maybe<Scalars['BigInt']>;
   rewards?: Maybe<Scalars['BigInt']>;
-  delegators: Array<StakedTokenAccount>;
-};
-
-
-export type StakedTokenAccountDelegatorsArgs = {
-  skip?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<StakedTokenAccount_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<StakedTokenAccount_Filter>;
 };
 
 export type StakedTokenAccount_Filter = {
@@ -842,8 +843,7 @@ export enum StakedTokenAccount_OrderBy {
   Balance = 'balance',
   Delegatee = 'delegatee',
   RewardPerTokenPaid = 'rewardPerTokenPaid',
-  Rewards = 'rewards',
-  Delegators = 'delegators'
+  Rewards = 'rewards'
 }
 
 export type StakedTokenBalance = {
@@ -1716,7 +1716,7 @@ export type AccountQueryVariables = Exact<{
 }>;
 
 
-export type AccountQuery = { account?: Maybe<{ id: string, totalVotesBD: BigDecimal, lastAction: number, seasonMultiplier: number, permMultiplier: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string, status: QuestStatus, multiplier: number, season?: Maybe<{ id: string }> } }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }> }> };
+export type AccountQuery = { account?: Maybe<{ id: string, totalVotesBD: BigDecimal, lastAction: number, seasonMultiplier: number, permMultiplier: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string, status: QuestStatus, multiplier: number, season?: Maybe<{ id: string }> } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }> }> };
 
 export type StakedTokenQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1725,7 +1725,7 @@ export type StakedTokenQueryVariables = Exact<{
 }>;
 
 
-export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, delegatee?: Maybe<{ id: string }>, delegators: Array<{ id: string }>, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: number, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }>> }> };
+export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, delegatee?: Maybe<{ id: string }>, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: number, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }>> }> };
 
 export const MetricFieldsFragmentDoc = gql`
     fragment MetricFields on Metric {
@@ -1852,6 +1852,9 @@ export const AccountDocument = gql`
         multiplier
       }
     }
+    delegators {
+      id
+    }
     stakedTokenAccounts {
       id
       stakedToken {
@@ -1936,9 +1939,6 @@ export const StakedTokenDocument = gql`
       }
       rewardPerTokenPaid
       rewards
-      delegators {
-        id
-      }
       balance {
         timeMultiplier
         cooldownTimestamp

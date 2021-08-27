@@ -17,6 +17,7 @@ type Account {
   seasonMultiplier: Int!
   completedQuests(skip: Int = 0, first: Int = 100, orderBy: CompletedQuest_orderBy, orderDirection: OrderDirection, where: CompletedQuest_filter): [CompletedQuest!]!
   stakedTokenAccounts(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
+  delegators(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
 }
 
 input Account_filter {
@@ -70,6 +71,7 @@ enum Account_orderBy {
   seasonMultiplier
   completedQuests
   stakedTokenAccounts
+  delegators
 }
 
 scalar BigDecimal
@@ -624,10 +626,9 @@ type StakedTokenAccount {
   account: Account!
   stakedToken: StakedToken!
   balance: StakedTokenBalance!
-  delegatee: StakedTokenAccount
+  delegatee: Account
   rewardPerTokenPaid: BigInt
   rewards: BigInt
-  delegators(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
 }
 
 input StakedTokenAccount_filter {
@@ -721,7 +722,6 @@ enum StakedTokenAccount_orderBy {
   delegatee
   rewardPerTokenPaid
   rewards
-  delegators
 }
 
 type StakedTokenBalance {

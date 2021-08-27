@@ -47,6 +47,9 @@ query Account($id: ID!) {
         multiplier
       }
     }
+    delegators {
+      id
+    }
     stakedTokenAccounts {
       id
       stakedToken {
@@ -102,9 +105,6 @@ query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
       }
       rewardPerTokenPaid
       rewards
-      delegators {
-        id
-      }
       balance {
         timeMultiplier
         cooldownTimestamp

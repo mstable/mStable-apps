@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { DelegateeInfo } from '@mstable/delegatee-lists'
 
-import { Address, ExplorerLink, IPFSImg } from '@apps/components/core'
+import { Address, ExplorerLink, ExternalLink, IPFSImg } from '@apps/components/core'
 import { ViewportWidth } from '@apps/base/theme'
 
 import { DelegateeToggle } from '../pages/Vote/DelegateeToggle'
@@ -152,8 +152,8 @@ const DelegateeContainer = styled(Container)`
         min-height: 3.5rem;
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-        justify-content: space-between;
+        gap: 1rem;
+        justify-content: center;
 
         > :first-child a {
           color: ${({ theme }) => theme.color.body};
@@ -182,13 +182,16 @@ export const DelegateePageHeader: FC<{ delegateeInfo?: DelegateeInfo; addressOrE
       <div>
         <div>{delegateeInfo?.avatarURI && <IPFSImg uri={delegateeInfo.avatarURI} />}</div>
         <div>
-          <h2>
-            {delegateeInfo && (
-              <AccountLink data={address ?? addressOrENSName} type="account">
-                {delegateeInfo.displayName}
-              </AccountLink>
-            )}
-          </h2>
+          {delegateeInfo && (
+            <h2>
+              {(delegateeInfo as any).websiteURI ? (
+                <ExternalLink href={(delegateeInfo as any).websiteURI as string}>{delegateeInfo.displayName}</ExternalLink>
+              ) : (
+                delegateeInfo.displayName
+              )}
+            </h2>
+          )}
+          {!delegateeInfo && addressOrENSName !== address && <h2>{addressOrENSName}</h2>}
           <Address address={addressOrENSName} type="account" truncate={false} link={false} copyable />
         </div>
       </div>

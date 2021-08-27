@@ -1,7 +1,8 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type AccountKeySpecifier = ('completedQuests' | 'id' | 'lastAction' | 'permMultiplier' | 'seasonMultiplier' | 'stakedTokenAccounts' | 'totalVotes' | 'totalVotesBD' | AccountKeySpecifier)[];
+export type AccountKeySpecifier = ('completedQuests' | 'delegators' | 'id' | 'lastAction' | 'permMultiplier' | 'seasonMultiplier' | 'stakedTokenAccounts' | 'totalVotes' | 'totalVotesBD' | AccountKeySpecifier)[];
 export type AccountFieldPolicy = {
 	completedQuests?: FieldPolicy<any> | FieldReadFunction<any>,
+	delegators?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	lastAction?: FieldPolicy<any> | FieldReadFunction<any>,
 	permMultiplier?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -97,7 +98,7 @@ export type StakedTokenFieldPolicy = {
 	slashingPercentage?: FieldPolicy<any> | FieldReadFunction<any>,
 	accounts?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type StakedTokenAccountKeySpecifier = ('id' | 'account' | 'stakedToken' | 'balance' | 'delegatee' | 'rewardPerTokenPaid' | 'rewards' | 'delegators' | StakedTokenAccountKeySpecifier)[];
+export type StakedTokenAccountKeySpecifier = ('id' | 'account' | 'stakedToken' | 'balance' | 'delegatee' | 'rewardPerTokenPaid' | 'rewards' | StakedTokenAccountKeySpecifier)[];
 export type StakedTokenAccountFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	account?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -105,8 +106,7 @@ export type StakedTokenAccountFieldPolicy = {
 	balance?: FieldPolicy<any> | FieldReadFunction<any>,
 	delegatee?: FieldPolicy<any> | FieldReadFunction<any>,
 	rewardPerTokenPaid?: FieldPolicy<any> | FieldReadFunction<any>,
-	rewards?: FieldPolicy<any> | FieldReadFunction<any>,
-	delegators?: FieldPolicy<any> | FieldReadFunction<any>
+	rewards?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type StakedTokenBalanceKeySpecifier = ('account' | 'cooldownTimestamp' | 'cooldownUnits' | 'id' | 'questMultiplier' | 'raw' | 'rawBD' | 'stakedToken' | 'timeMultiplier' | 'votes' | 'votesBD' | 'weightedTimestamp' | StakedTokenBalanceKeySpecifier)[];
 export type StakedTokenBalanceFieldPolicy = {
