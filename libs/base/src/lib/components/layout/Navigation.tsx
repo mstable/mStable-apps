@@ -9,6 +9,7 @@ import { colorTheme, ViewportWidth } from '../../theme'
 import { useBaseCtx } from '../../BaseProviders'
 
 const Container = styled.nav`
+
   > :first-child {
     display: block;
   }
@@ -27,12 +28,14 @@ const Container = styled.nav`
 `
 
 const StyledNavLink = styled(NavLink)`
-  margin: 0 0.5rem;
+  margin: 0 0.25rem;
   position: relative;
-  font-weight: 600;
-  font-size: 1.25rem;
+  font-weight: 400;
+  font-size: 1rem;
   color: ${({ theme }) => theme.color.body};
   white-space: nowrap;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.675rem;
 `
 
 export const Navigation: FC = () => {
@@ -46,7 +49,7 @@ export const Navigation: FC = () => {
         {navItems.map(({ title, path }) => (
           <li key={path}>
             <StyledNavLink
-              activeStyle={{ color: colorTheme(themeMode).primary }}
+              activeStyle={{ color: colorTheme(themeMode).primary, background: colorTheme(themeMode).coolBlueTransparent }}
               to={path}
               isActive={(match, location) => {
                 if (match?.path) return true
