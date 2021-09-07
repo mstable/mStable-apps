@@ -194,7 +194,7 @@ const GlobalStyle = (createGlobalStyle as <P extends object = {}>(
         margin-bottom: 0.75rem;
       }
     }
-    
+
 
     @media (min-width: ${ViewportWidth.s}) {
       .bn-onboard-modal-content {
@@ -207,6 +207,9 @@ const GlobalStyle = (createGlobalStyle as <P extends object = {}>(
 
 `
 
+const StyledTooltip = styled(Tooltip)`
+  display: none;
+`
 const Background = styled.div`
   position: fixed;
   top: 0;
@@ -247,7 +250,7 @@ export const Layout: FC = ({ children }) => {
       </Container>
       <Footer />
       <Toasts />
-      <Tooltip tip="" hideIcon />
+      <StyledTooltip tip="" hideIcon />
       <ReactTooltip id="global" place="top" />
       <GlobalStyle />
     </ModalProvider>

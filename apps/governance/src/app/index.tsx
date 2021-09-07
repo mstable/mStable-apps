@@ -20,6 +20,7 @@ const GovernanceRoutes: FC = () => {
       <Route exact path="/vote/leaderboard" component={LeaderboardPage} />
       <Route exact path="/vote/:delegatee" component={Delegatee} />
       <Route exact path="/quests" component={Quests} />
+      <Route exact path="/quests/:questId" component={Quests} />
       <Route exact path="/stats" component={Stats} />
       <Route component={NotFound} />
     </Switch>
