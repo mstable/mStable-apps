@@ -77,6 +77,7 @@ const Inner = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
+  max-width: 1000px;
 
   > div {
     flex-basis: 33.33%;
@@ -85,11 +86,12 @@ const Inner = styled.div`
 
 const Container = styled.div`
   background: ${({ theme }) => theme.color.background[0]};
-  height: 56px;
+  height: 72px;
   display: flex;
   justify-content: center;
   padding-top: 2px;
-  border-bottom: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  border-bottom: 1px solid ${({ theme }) => theme.color.lightBorder};
+  grid-column: 2;
 
   ${AccountButton} {
     color: ${({ theme }) => theme.color.body};
@@ -119,6 +121,11 @@ const StickyHeader = styled.div`
   top: 0;
   width: 100%;
   z-index: 3;
+
+  grid-template-columns:
+    1fr
+    min(1000px, 100%)
+    1fr;
 `
 
 export const AppBar: FC = () => {

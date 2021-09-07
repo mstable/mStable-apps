@@ -7,7 +7,7 @@ export enum Color {
   coolMint = 'rgb(133,242,190)',
   blue = 'rgb(23,110,222)',
   coolBlue = 'rgb(74,161,255)',
-  coolBlueTransparent = 'rgb(74,161,255, 0.2)',
+  coolBlueTransparent = 'rgba(169, 203, 255, 0.25)',
   blueTransparent = 'rgba(0,92,222,0.2)',
   orange = 'rgb(202,94,0)',
   red = 'rgb(202,0,27)',
@@ -61,6 +61,7 @@ interface ColorTheme {
   disabledInput: string
   disabledButton: string
   defaultBorder: string
+  lightBorder: string
   defaultToggle: string
   onboardBackground: string
   onboardItemHover: string
@@ -81,6 +82,7 @@ export const colorTheme = (theme: 'light' | 'dark'): ColorTheme & typeof Color =
     disabledInput: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     disabledButton: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[1],
     defaultBorder: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[4],
+    lightBorder: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     defaultToggle: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[3],
     onboardBackground: isLight ? ColorNew.white[0] : ColorNew.spaceBlue[1],
     onboardItemHover: isLight ? ColorNew.white[1] : ColorNew.spaceBlue[2],
