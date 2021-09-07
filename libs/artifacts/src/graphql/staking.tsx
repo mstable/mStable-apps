@@ -849,7 +849,7 @@ export enum StakedTokenAccount_OrderBy {
 export type StakedTokenBalance = {
   account: StakedTokenAccount;
   cooldownTimestamp: Scalars['Int'];
-  cooldownUnits: Scalars['Int'];
+  cooldownUnits: Scalars['BigInt'];
   id: Scalars['ID'];
   questMultiplier: Scalars['Int'];
   raw: Scalars['BigInt'];
@@ -938,14 +938,14 @@ export type StakedTokenBalance_Filter = {
   cooldownTimestamp_lte?: Maybe<Scalars['Int']>;
   cooldownTimestamp_in?: Maybe<Array<Scalars['Int']>>;
   cooldownTimestamp_not_in?: Maybe<Array<Scalars['Int']>>;
-  cooldownUnits?: Maybe<Scalars['Int']>;
-  cooldownUnits_not?: Maybe<Scalars['Int']>;
-  cooldownUnits_gt?: Maybe<Scalars['Int']>;
-  cooldownUnits_lt?: Maybe<Scalars['Int']>;
-  cooldownUnits_gte?: Maybe<Scalars['Int']>;
-  cooldownUnits_lte?: Maybe<Scalars['Int']>;
-  cooldownUnits_in?: Maybe<Array<Scalars['Int']>>;
-  cooldownUnits_not_in?: Maybe<Array<Scalars['Int']>>;
+  cooldownUnits?: Maybe<Scalars['BigInt']>;
+  cooldownUnits_not?: Maybe<Scalars['BigInt']>;
+  cooldownUnits_gt?: Maybe<Scalars['BigInt']>;
+  cooldownUnits_lt?: Maybe<Scalars['BigInt']>;
+  cooldownUnits_gte?: Maybe<Scalars['BigInt']>;
+  cooldownUnits_lte?: Maybe<Scalars['BigInt']>;
+  cooldownUnits_in?: Maybe<Array<Scalars['BigInt']>>;
+  cooldownUnits_not_in?: Maybe<Array<Scalars['BigInt']>>;
   votes?: Maybe<Scalars['BigInt']>;
   votes_not?: Maybe<Scalars['BigInt']>;
   votes_gt?: Maybe<Scalars['BigInt']>;
@@ -1701,7 +1701,7 @@ export type TokenAllFragment = { id: string, address: string, decimals: number, 
 export type StakingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StakingQuery = { stakedTokens: Array<{ id: string, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }>, quests: Array<{ id: string }> };
+export type StakingQuery = { stakedTokens: Array<{ id: string, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }> };
 
 export type LeaderboardQueryVariables = Exact<{
   count: Scalars['Int'];
@@ -1716,7 +1716,7 @@ export type AccountQueryVariables = Exact<{
 }>;
 
 
-export type AccountQuery = { account?: Maybe<{ id: string, totalVotesBD: BigDecimal, lastAction: number, seasonMultiplier: number, permMultiplier: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string, status: QuestStatus, multiplier: number, season?: Maybe<{ id: string }> } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }> }> };
+export type AccountQuery = { account?: Maybe<{ id: string, totalVotesBD: BigDecimal, lastAction: number, seasonMultiplier: number, permMultiplier: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }> }> };
 
 export type StakedTokenQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1725,7 +1725,21 @@ export type StakedTokenQueryVariables = Exact<{
 }>;
 
 
-export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, delegatee?: Maybe<{ id: string }>, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: number, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }>> }> };
+export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, delegatee?: Maybe<{ id: string }>, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: string, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }>> }> };
+
+export type QuestAllFragment = { id: string, expiry: number, multiplier: number, status: QuestStatus, type: QuestType, season?: Maybe<{ id: string }> };
+
+export type QuestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type QuestsQuery = { questManagers: Array<{ id: string, questMaster: string, questSigner?: Maybe<string> }>, seasons: Array<{ id: string, seasonNumber: number, startedAt: number, endedAt?: Maybe<number> }>, quests: Array<{ id: string, expiry: number, multiplier: number, status: QuestStatus, type: QuestType, season?: Maybe<{ id: string }> }> };
+
+export type QuestQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type QuestQuery = { quest?: Maybe<{ id: string, expiry: number, multiplier: number, status: QuestStatus, type: QuestType, season?: Maybe<{ id: string }> }> };
 
 export const MetricFieldsFragmentDoc = gql`
     fragment MetricFields on Metric {
@@ -1747,6 +1761,18 @@ export const TokenAllFragmentDoc = gql`
   }
 }
     ${MetricFieldsFragmentDoc}`;
+export const QuestAllFragmentDoc = gql`
+    fragment QuestAll on Quest {
+  id
+  expiry
+  multiplier
+  status
+  type
+  season {
+    id
+  }
+}
+    `;
 export const StakingDocument = gql`
     query Staking {
   stakedTokens {
@@ -1754,9 +1780,6 @@ export const StakingDocument = gql`
     stakingToken {
       ...TokenAll
     }
-  }
-  quests {
-    id
   }
 }
     ${TokenAllFragmentDoc}`;
@@ -1845,11 +1868,6 @@ export const AccountDocument = gql`
       completedAt
       quest {
         id
-        season {
-          id
-        }
-        status
-        multiplier
       }
     }
     delegators {
@@ -1984,3 +2002,83 @@ export function useStakedTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type StakedTokenQueryHookResult = ReturnType<typeof useStakedTokenQuery>;
 export type StakedTokenLazyQueryHookResult = ReturnType<typeof useStakedTokenLazyQuery>;
 export type StakedTokenQueryResult = Apollo.QueryResult<StakedTokenQuery, StakedTokenQueryVariables>;
+export const QuestsDocument = gql`
+    query Quests {
+  questManagers {
+    id
+    questMaster
+    questSigner
+  }
+  seasons {
+    id
+    seasonNumber
+    startedAt
+    endedAt
+  }
+  quests {
+    ...QuestAll
+  }
+}
+    ${QuestAllFragmentDoc}`;
+
+/**
+ * __useQuestsQuery__
+ *
+ * To run a query within a React component, call `useQuestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useQuestsQuery(baseOptions?: Apollo.QueryHookOptions<QuestsQuery, QuestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuestsQuery, QuestsQueryVariables>(QuestsDocument, options);
+      }
+export function useQuestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuestsQuery, QuestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuestsQuery, QuestsQueryVariables>(QuestsDocument, options);
+        }
+export type QuestsQueryHookResult = ReturnType<typeof useQuestsQuery>;
+export type QuestsLazyQueryHookResult = ReturnType<typeof useQuestsLazyQuery>;
+export type QuestsQueryResult = Apollo.QueryResult<QuestsQuery, QuestsQueryVariables>;
+export const QuestDocument = gql`
+    query Quest($id: ID!) {
+  quest(id: $id) {
+    ...QuestAll
+  }
+}
+    ${QuestAllFragmentDoc}`;
+
+/**
+ * __useQuestQuery__
+ *
+ * To run a query within a React component, call `useQuestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuestQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuestQuery(baseOptions: Apollo.QueryHookOptions<QuestQuery, QuestQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuestQuery, QuestQueryVariables>(QuestDocument, options);
+      }
+export function useQuestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuestQuery, QuestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuestQuery, QuestQueryVariables>(QuestDocument, options);
+        }
+export type QuestQueryHookResult = ReturnType<typeof useQuestQuery>;
+export type QuestLazyQueryHookResult = ReturnType<typeof useQuestLazyQuery>;
+export type QuestQueryResult = Apollo.QueryResult<QuestQuery, QuestQueryVariables>;

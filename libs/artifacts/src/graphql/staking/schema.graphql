@@ -733,7 +733,7 @@ type StakedTokenBalance {
   questMultiplier: Int!
   timeMultiplier: Int!
   cooldownTimestamp: Int!
-  cooldownUnits: Int!
+  cooldownUnits: BigInt!
   votes: BigInt!
 }
 
@@ -814,14 +814,14 @@ input StakedTokenBalance_filter {
   cooldownTimestamp_lte: Int
   cooldownTimestamp_in: [Int!]
   cooldownTimestamp_not_in: [Int!]
-  cooldownUnits: Int
-  cooldownUnits_not: Int
-  cooldownUnits_gt: Int
-  cooldownUnits_lt: Int
-  cooldownUnits_gte: Int
-  cooldownUnits_lte: Int
-  cooldownUnits_in: [Int!]
-  cooldownUnits_not_in: [Int!]
+  cooldownUnits: BigInt
+  cooldownUnits_not: BigInt
+  cooldownUnits_gt: BigInt
+  cooldownUnits_lt: BigInt
+  cooldownUnits_gte: BigInt
+  cooldownUnits_lte: BigInt
+  cooldownUnits_in: [BigInt!]
+  cooldownUnits_not_in: [BigInt!]
   votes: BigInt
   votes_not: BigInt
   votes_gt: BigInt

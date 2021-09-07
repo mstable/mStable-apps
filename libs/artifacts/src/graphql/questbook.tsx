@@ -112,6 +112,8 @@ export type QueueOptInMutationVariables = Exact<{
 
 export type QueueOptInMutation = { queueOptIn: boolean };
 
+export type QuestAllFragment = { id: string, metadata?: Maybe<{ title: string, description: string, imageUrl?: Maybe<string> }>, submission?: Maybe<{ signature?: Maybe<string>, complete: boolean, progress?: Maybe<number> }> };
+
 export type QuestsQueryVariables = Exact<{
   account: Scalars['ID'];
   hasAccount: Scalars['Boolean'];
@@ -120,7 +122,30 @@ export type QuestsQueryVariables = Exact<{
 
 export type QuestsQuery = { quests: Array<Maybe<{ id: string, metadata?: Maybe<{ title: string, description: string, imageUrl?: Maybe<string> }>, submission?: Maybe<{ signature?: Maybe<string>, complete: boolean, progress?: Maybe<number> }> }>> };
 
+export type QuestQueryVariables = Exact<{
+  id: Scalars['ID'];
+  account: Scalars['ID'];
+  hasAccount: Scalars['Boolean'];
+}>;
 
+
+export type QuestQuery = { quest?: Maybe<{ id: string, metadata?: Maybe<{ title: string, description: string, imageUrl?: Maybe<string> }>, submission?: Maybe<{ signature?: Maybe<string>, complete: boolean, progress?: Maybe<number> }> }> };
+
+export const QuestAllFragmentDoc = gql`
+    fragment QuestAll on Quest {
+  id
+  metadata {
+    title
+    description
+    imageUrl
+  }
+  submission(account: $account) @include(if: $hasAccount) {
+    signature
+    complete
+    progress
+  }
+}
+    `;
 export const QueueOptInDocument = gql`
     mutation QueueOptIn($account: ID!, $signature: String!) {
   queueOptIn(account: $account, signature: $signature)
@@ -156,20 +181,10 @@ export type QueueOptInMutationOptions = Apollo.BaseMutationOptions<QueueOptInMut
 export const QuestsDocument = gql`
     query Quests($account: ID!, $hasAccount: Boolean!) {
   quests {
-    id
-    metadata {
-      title
-      description
-      imageUrl
-    }
-    submission(account: $account) @include(if: $hasAccount) {
-      signature
-      complete
-      progress
-    }
+    ...QuestAll
   }
 }
-    `;
+    ${QuestAllFragmentDoc}`;
 
 /**
  * __useQuestsQuery__
@@ -199,3 +214,40 @@ export function useQuestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Que
 export type QuestsQueryHookResult = ReturnType<typeof useQuestsQuery>;
 export type QuestsLazyQueryHookResult = ReturnType<typeof useQuestsLazyQuery>;
 export type QuestsQueryResult = Apollo.QueryResult<QuestsQuery, QuestsQueryVariables>;
+export const QuestDocument = gql`
+    query Quest($id: ID!, $account: ID!, $hasAccount: Boolean!) {
+  quest(id: $id) {
+    ...QuestAll
+  }
+}
+    ${QuestAllFragmentDoc}`;
+
+/**
+ * __useQuestQuery__
+ *
+ * To run a query within a React component, call `useQuestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuestQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      account: // value for 'account'
+ *      hasAccount: // value for 'hasAccount'
+ *   },
+ * });
+ */
+export function useQuestQuery(baseOptions: Apollo.QueryHookOptions<QuestQuery, QuestQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuestQuery, QuestQueryVariables>(QuestDocument, options);
+      }
+export function useQuestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuestQuery, QuestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuestQuery, QuestQueryVariables>(QuestDocument, options);
+        }
+export type QuestQueryHookResult = ReturnType<typeof useQuestQuery>;
+export type QuestLazyQueryHookResult = ReturnType<typeof useQuestLazyQuery>;
+export type QuestQueryResult = Apollo.QueryResult<QuestQuery, QuestQueryVariables>;

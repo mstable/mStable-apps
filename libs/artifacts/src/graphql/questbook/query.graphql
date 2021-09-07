@@ -2,18 +2,28 @@ mutation QueueOptIn($account: ID!, $signature: String!) {
   queueOptIn(account: $account, signature: $signature)
 }
 
+fragment QuestAll on Quest {
+  id
+  metadata {
+    title
+    description
+    imageUrl
+  }
+  submission(account: $account) @include(if: $hasAccount) {
+    signature
+    complete
+    progress
+  }
+}
+
 query Quests($account: ID!, $hasAccount: Boolean!) {
   quests {
-    id
-    metadata {
-      title
-      description
-      imageUrl
-    }
-    submission(account: $account) @include(if: $hasAccount) {
-      signature
-      complete
-      progress
-    }
+    ...QuestAll
+  }
+}
+
+query Quest($id: ID!, $account: ID!, $hasAccount: Boolean!) {
+  quest(id: $id) {
+    ...QuestAll
   }
 }
