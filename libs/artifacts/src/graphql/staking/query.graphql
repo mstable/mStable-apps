@@ -7,10 +7,6 @@ query Staking {
       ...TokenAll
     }
   }
-  # TODO consider quests moving to another query
-  quests {
-    id
-  }
 }
 
 query Leaderboard($count: Int!, $skip: Int!) {
@@ -40,11 +36,6 @@ query Account($id: ID!) {
       completedAt
       quest {
         id
-        season {
-          id
-        }
-        status
-        multiplier
       }
     }
     delegators {
@@ -117,5 +108,39 @@ query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
         votesBD @client
       }
     }
+  }
+}
+
+fragment QuestAll on Quest {
+  id
+  expiry
+  multiplier
+  status
+  type
+  season {
+    id
+  }
+}
+
+query Quests {
+  questManagers {
+    id
+    questMaster
+    questSigner
+  }
+  seasons {
+    id
+    seasonNumber
+    startedAt
+    endedAt
+  }
+  quests {
+    ...QuestAll
+  }
+}
+
+query Quest($id: ID!) {
+  quest(id: $id) {
+    ...QuestAll
   }
 }
