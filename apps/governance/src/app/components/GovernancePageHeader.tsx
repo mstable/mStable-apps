@@ -81,6 +81,7 @@ const Container = styled.div<{
 
   h2 {
     font-size: 1.75rem;
+    line-height: 2.5rem;
     font-weight: 600;
   }
 
