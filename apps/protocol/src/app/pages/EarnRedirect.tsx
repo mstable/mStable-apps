@@ -20,7 +20,7 @@ export const EarnRedirect: FC = () => {
     <Container>
       <PageHeader massetSwitcher title="Earn" icon={<EarnIcon />} subtitle="Ecosystem rewards with mStable" />
       <div>
-        Visit the <ExternalLink href={`https://earn.mstable.org/#/${selectedMassetName}/earn`}>Earn App</ExternalLink> to access Earn
+        Visit the <ExternalLink href={`https://earn.mstable.org/#/${selectedMassetName}/earn`}>Earn App</ExternalLink> to access Earn.
       </div>
     </Container>
   )
