@@ -23,8 +23,8 @@ const Icon = styled.div<{ inverted?: boolean }>`
 
   img,
   svg {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
 
     * {
       fill: ${({ theme }) => theme.color.body};
@@ -46,7 +46,7 @@ const Container = styled.div<{
 
   h2 {
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   p {
