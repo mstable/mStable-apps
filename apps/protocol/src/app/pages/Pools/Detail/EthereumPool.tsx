@@ -185,8 +185,7 @@ const PoolDetailContent: FC = () => {
         <PoolOverview />
         <Exchange>
           <TabCard tabs={tabs} active={activeTab} onClick={setActiveTab} />
-          <InfoBox>
-            <h4>Using mStable Feeder Pools</h4>
+          <InfoBox highlight subtitle="Using mStable Feeder Pools">
             <p>
               Feeder Pools offer a way to earn with your assets with <span>low impermanent loss risk.</span>
             </p>

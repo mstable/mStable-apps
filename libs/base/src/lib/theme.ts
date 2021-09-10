@@ -56,6 +56,7 @@ interface ColorTheme {
   bodyTransparent: string
   bodyTransparenter: string
   offYellow: string
+  yellowBorder: string
   disabled: string
   background: Record<string, string>
   disabledInput: string
@@ -82,6 +83,7 @@ export const colorTheme = (theme: 'light' | 'dark'): ColorTheme & typeof Color =
     disabledInput: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     disabledButton: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[1],
     defaultBorder: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[4],
+    yellowBorder: `rgba(255, 179, 52, 0.2)`,
     lightBorder: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     defaultToggle: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[3],
     onboardBackground: isLight ? ColorNew.white[0] : ColorNew.spaceBlue[1],
