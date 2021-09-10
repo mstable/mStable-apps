@@ -14,12 +14,10 @@ import Email from '@apps/components/icons/social/email.svg'
 
 const Links = styled.ul`
   align-items: center;
-  padding-bottom: 16px;
 
   li {
     display: inline-block;
     margin-right: 0.75rem;
-    margin-bottom: 0.75rem;
   }
 `
 
@@ -78,7 +76,7 @@ const Masquerade: FC<{}> = () => {
 }
 
 const Inner = styled.div`
-  padding: 1rem;
+  padding: 2rem 1rem;
 
   > div {
     width: 100%;
@@ -104,12 +102,13 @@ const Container = styled.div`
   > * {
     grid-column: 2;
   }
+
+  border-top: 1px solid ${({ theme }) => theme.color.lightBorder};
 `
 
 const links = [
   { title: 'mStable', href: 'https://mstable.org' },
   { title: 'Docs', href: 'https://docs.mstable.org' },
-  { title: 'Code', href: 'https://github.com/mstable' },
   { title: 'Governance', href: 'https://governance.mstable.org' },
 ]
 
@@ -155,14 +154,6 @@ export const Footer: FC = () => {
               <Version />
               <Masquerade />
             </div>
-            <GitHubButton
-              href="https://github.com/mstable/mStable-contracts"
-              data-icon="octicon-star"
-              data-show-count
-              aria-label="Star mstable/mStable-contracts on GitHub"
-            >
-              mStable-contracts
-            </GitHubButton>
           </Gubbins>
         </div>
       </Inner>

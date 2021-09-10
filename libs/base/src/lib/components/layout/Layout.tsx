@@ -225,7 +225,7 @@ const Background = styled.div`
 const Container = styled.div`
   display: grid;
   overflow-x: hidden;
-  min-height: calc(100vh - 182px);
+  min-height: calc(100vh - 174px);
 
   // Space for the footer
   padding-bottom: 4rem;
