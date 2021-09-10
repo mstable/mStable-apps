@@ -105,10 +105,7 @@ export const EthereumSave: FC = () => {
                   content="Lockup MTA to participate in Governance and boost your rewards on Vault deposits."
                   onClick={handleGovernanceClick}
                 />
-                <InfoBox>
-                  <h4>
-                    <span>Using mStable Save</span>
-                  </h4>
+                <InfoBox highlight subtitle="Using mStable Save">
                   <p>
                     By depositing to {`i${massetConfig.formattedName}`} you will begin earning interest on your underlying{' '}
                     {massetConfig.formattedName}. {vault ? 'Deposits to the Vault earn interest in addition to MTA rewards.' : ''}
