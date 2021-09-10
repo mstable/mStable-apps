@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { Button, ThemedSkeleton } from '@apps/components/core'
+import { Button, ThemedSkeleton, Tooltip } from '@apps/components/core'
 
 import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'
@@ -179,10 +179,12 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
           {questbookQuery.data?.quest ? (
             <Typist>
               <Objectives>
-                {mockObjectives.map(({ title, complete }) => (
+                {mockObjectives.map(({ title, complete, description }) => (
                   <div>
                     {complete ? <img src="/assets/tick.png" alt="Complete" /> : <img src="/assets/cross.png" alt="Incomplete" />}
-                    <p>{title}</p>
+                    <Tooltip hideIcon tip={description}>
+                      <p>{title}</p>
+                    </Tooltip>
                   </div>
                 ))}
               </Objectives>
