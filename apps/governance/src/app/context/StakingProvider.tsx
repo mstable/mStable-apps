@@ -25,7 +25,7 @@ export const StakingProvider: FC = ({ children }) => {
         client: apollo.staking,
       },
       questbook: {
-        variables: { account: account ?? '', hasAccount: !!account },
+        variables: { userId: account ?? '', hasUser: !!account },
         client: apollo.questbook,
       },
     }

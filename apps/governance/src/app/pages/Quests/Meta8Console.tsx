@@ -26,7 +26,7 @@ const Display = styled.div`
     background: ${({ theme }) => (theme.isLight ? '#443836' : '#29252f')};
     box-shadow: inset 0 0 10px 5px rgba(0, 0, 0, 0.25);
     border-radius: 18px;
-    overflow-x: scroll;
+    overflow: hidden;
 
     &:after {
       content: '';
@@ -85,18 +85,20 @@ const Container = styled.div`
   }
 `
 
-export const Meta8Console: FC = () => (
-  <Container>
-    <div>
-      <Display>
-        <div>
-          <Meta8Logic />
-          <div className="scanlines" />
-        </div>
-      </Display>
+export const Meta8Console: FC = () => {
+  return (
+    <Container>
       <div>
-        <img src="/assets/meta-8.png" alt="Meta-8" />
+        <Display>
+          <div>
+            <Meta8Logic />
+            <div className="scanlines" />
+          </div>
+        </Display>
+        <div>
+          <img src="/assets/meta-8.png" alt="Meta-8" />
+        </div>
       </div>
-    </div>
-  </Container>
-)
+    </Container>
+  )
+}

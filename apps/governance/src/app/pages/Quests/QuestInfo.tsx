@@ -5,32 +5,61 @@ import styled from 'styled-components'
 import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { Button, ThemedSkeleton, Tooltip } from '@apps/components/core'
+import { Button, ThemedSkeleton } from '@apps/components/core'
 
 import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'
-import { QuestProgress } from './QuestProgress'
+import { QuestObjectiveProgress, QuestProgress } from './QuestProgress'
 import { ViewportWidth } from '@apps/base/theme'
 
 enum ProgressType {
   Personal,
-  Group,
   TimeRemaining,
   Rarity,
 }
 
+const QP = styled.div`
+  padding: 0.25rem 0.5rem;
+  background: ${({ theme }) => theme.color.blue};
+  color: white;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  &:after {
+    content: ' QP';
+  }
+`
+
 const Objectives = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
 
   > div {
     font-size: 0.875rem;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    > :first-child {
+      width: 100%;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    > :last-child {
+      display: block;
+      > :last-child {
+        opacity: 0.7;
+      }
+    }
 
     img {
-      margin-right: 0.75rem;
+      width: 23px;
+      height: 23px;
     }
   }
 `
@@ -119,53 +148,34 @@ const Container = styled.div<{ type?: QuestType }>`
   }
 `
 
-const mockObjectives: {
-  title: string
-  description: string
-  points: number
-  complete: boolean
-  progress: number
-}[] = [
-  {
-    title: 'STAKED IN MSTABLE BEFORE 16.01.19',
-    description: 'Tooltip',
-    points: 120,
-    complete: true,
-    progress: 12,
-  },
-  {
-    title: 'STAKED in mStable v2 staking',
-    description: 'Tooltip',
-    points: 120,
-    complete: false,
-    progress: 12,
-  },
-  {
-    title: 'new deposit is at least 80% of your staking v1 balance at its highest point',
-    description: 'Tooltip',
-    points: 120,
-    complete: false,
-    progress: 12,
-  },
-]
-
 export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
   const account = useAccount()
   const clients = useApolloClients()
-  const questQuery = useStakingQuestQuery({
-    client: clients.staking,
-    variables: { id: questId },
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
-  })
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
-    variables: { id: questId, account: account ?? '', hasAccount: !account },
+    variables: { questId, userId: account ?? '', hasUser: !!account },
+    skip: !account,
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
+  const questbookQuest = questbookQuery.data?.quest
 
-  const questType = questQuery.data?.quest.type
+  const questQuery = useStakingQuestQuery({
+    client: clients.staking,
+    variables: { id: questbookQuest?.ethereumId?.toString() },
+    skip: typeof questbookQuest?.ethereumId !== 'number',
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-and-network',
+  })
+  const quest = questQuery.data?.quest
+  const questType = quest?.type
+
+  const nowUnix = Math.floor(Date.now() / 1e3)
+  const expiry = quest?.expiry
+  const timeRemaining = expiry && expiry > nowUnix ? nowUnix / expiry : 0
+
+  const questProgress = questbookQuest?.userQuest?.progress ?? 0
+  console.log(questbookQuest)
 
   const handleClaimQuest = () => {
     // TODO;
@@ -176,17 +186,29 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
       <QuestCard questId={questId} />
       <Inner>
         <div>
-          {questbookQuery.data?.quest ? (
+          {questbookQuest ? (
             <Typist>
               <Objectives>
-                {mockObjectives.map(({ title, complete, description }) => (
-                  <div>
-                    {complete ? <img src="/assets/tick.png" alt="Complete" /> : <img src="/assets/cross.png" alt="Incomplete" />}
-                    <Tooltip hideIcon tip={description}>
-                      <p>{title}</p>
-                    </Tooltip>
-                  </div>
-                ))}
+                {questbookQuest.objectives.map(({ title, id, description, points }) => {
+                  const userQuestObjective = questbookQuest.userQuest?.objectives.find(o => o.id === id)
+                  return (
+                    <div key={id}>
+                      <div>
+                        <QP>{points.toString()}</QP>
+                        {userQuestObjective?.complete ? (
+                          <img src="/assets/tick.png" alt="Complete" />
+                        ) : (
+                          <img src="/assets/cross.png" alt="Incomplete" />
+                        )}
+                        <QuestObjectiveProgress value={(userQuestObjective?.progress ?? 0) * 100} />
+                      </div>
+                      <div>
+                        <p>{title}</p>
+                        <p>{description}</p>
+                      </div>
+                    </div>
+                  )
+                })}
               </Objectives>
             </Typist>
           ) : (
@@ -195,13 +217,8 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
         </div>
         <Bottom>
           <Progress>
-            <QuestProgress
-              value={questbookQuery.data?.quest.submission?.progress ?? 0}
-              progressType={ProgressType.Personal}
-              questType={questType}
-            />
-            <QuestProgress value={42} progressType={ProgressType.Group} questType={questType} />
-            <QuestProgress value={13} progressType={ProgressType.TimeRemaining} questType={questType} />
+            <QuestProgress value={questProgress * 100} progressType={ProgressType.Personal} questType={questType} />
+            <QuestProgress value={timeRemaining} progressType={ProgressType.TimeRemaining} questType={questType} />
           </Progress>
           <Season>
             <div>
