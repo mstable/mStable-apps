@@ -1,6 +1,7 @@
 import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, NormalizedCacheObject } from '@apollo/client'
+import { RetryLink } from '@apollo/client/link/retry'
 import { onError } from '@apollo/client/link/error'
 import { persistCache } from 'apollo-cache-persist'
 
@@ -98,7 +99,8 @@ export const ApolloProvider: FC = ({ children }) => {
         const endpoint = preferred ?? fallback
 
         const httpLink = new HttpLink({ uri: endpoint })
-        const link = ApolloLink.from([errorLink, httpLink])
+        const retryLink = new RetryLink()
+        const link = ApolloLink.from([errorLink, retryLink, httpLink])
         const client = new ApolloClient<NormalizedCacheObject>({
           cache: caches[name],
           link,

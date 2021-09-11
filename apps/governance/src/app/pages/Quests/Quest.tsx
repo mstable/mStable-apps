@@ -16,7 +16,7 @@ enum ProgressType {
   Rarity,
 }
 
-const ProgressBar = styled.div.attrs((props: { value?: number }) => ({ width: `${props.value.toFixed(0)}%` }))`
+const ProgressBar = styled.div.attrs((props: { value?: number }) => ({ width: `${(props.value * 100).toFixed(0)}%` }))`
   width: 100%;
   height: 1rem;
   position: relative;
@@ -54,7 +54,7 @@ const Progress: FC<{ value?: number; progressType: ProgressType; questType?: Que
     <div>
       {typeof value === 'number' ? (
         <Typist>
-          <span>{value.toFixed(2)}%</span>{' '}
+          <span>{(value * 100).toFixed(2)}%</span>{' '}
           {progressType === ProgressType.Personal
             ? 'My completion'
             : progressType === ProgressType.Group
@@ -182,7 +182,8 @@ export const Quest: FC<{ questId: string }> = ({ questId }) => {
   })
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
-    variables: { id: questId, account: account ?? '', hasAccount: !account },
+    variables: { questId, userId: account ?? '', hasUser: !!account },
+    skip: !account,
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
@@ -196,8 +197,8 @@ export const Quest: FC<{ questId: string }> = ({ questId }) => {
           <div className="title">
             {questbookQuery.data?.quest ? (
               <Typist>
-                <h2>{questbookQuery.data.quest.metadata.title}</h2>
-                <p>{questbookQuery.data.quest.metadata.description}</p>
+                <h2>{questbookQuery.data.quest.title}</h2>
+                <p>{questbookQuery.data.quest.description}</p>
               </Typist>
             ) : (
               <ThemedSkeleton height={30} />
@@ -205,11 +206,10 @@ export const Quest: FC<{ questId: string }> = ({ questId }) => {
           </div>
           <div className="progress">
             <Progress
-              value={questbookQuery.data?.quest.submission?.progress ?? 0}
+              value={questbookQuery.data?.quest?.userQuest?.progress ?? 0}
               progressType={ProgressType.Personal}
               questType={questType}
             />
-            <Progress value={42} progressType={ProgressType.Group} questType={questType} />
             <Progress value={13} progressType={ProgressType.TimeRemaining} questType={questType} />
             <Progress value={0} progressType={ProgressType.Rarity} questType={questType} />
           </div>
@@ -217,7 +217,10 @@ export const Quest: FC<{ questId: string }> = ({ questId }) => {
         <div className="metadata">
           <div>
             {questbookQuery.data?.quest ? (
-              <IPFSImg uri={questbookQuery.data.quest.metadata.imageUrl} alt="Quest graphic" />
+              <IPFSImg
+                uri={questbookQuery.data.quest.imageURI ?? 'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'}
+                alt="Quest graphic"
+              />
             ) : (
               <ThemedSkeleton height={128} width={128} />
             )}

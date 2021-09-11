@@ -1,29 +1,45 @@
-mutation QueueOptIn($account: ID!, $signature: String!) {
-  queueOptIn(account: $account, signature: $signature)
-}
-
 fragment QuestAll on Quest {
   id
-  metadata {
+  ethereumId
+  title
+  description
+  imageURI
+  requiredPoints
+  objectives {
+    id
     title
     description
-    imageUrl
+    points
   }
-  submission(account: $account) @include(if: $hasAccount) {
+  userQuest(userId: $userId) @include(if: $hasUser) {
+    id
     signature
     complete
     progress
+    objectives {
+      id
+      complete
+      progress
+    }
   }
 }
 
-query Quests($account: ID!, $hasAccount: Boolean!) {
-  quests {
+query Quests($userId: ID!, $hasUser: Boolean!) {
+  quests(userId: $userId) {
     ...QuestAll
   }
 }
 
-query Quest($id: ID!, $account: ID!, $hasAccount: Boolean!) {
-  quest(id: $id) {
+query Quest($questId: ID!, $userId: ID!, $hasUser: Boolean!) {
+  quest(questId: $questId, userId: $userId) {
     ...QuestAll
   }
+}
+
+mutation UpdateQuest($userId: ID!, $questId: ID!) {
+  updateQuest(userId: $userId, questId: $questId)
+}
+
+mutation UpdateQuests($userId: ID!) {
+  updateQuests(userId: $userId)
 }

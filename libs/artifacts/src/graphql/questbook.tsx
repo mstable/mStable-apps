@@ -32,155 +32,136 @@ export type Scalars = {
 
 
 export type Mutation = {
-  queueOptIn: Scalars['Boolean'];
-  queueOptOut: Scalars['Boolean'];
-  setMetadata: Scalars['Boolean'];
+  updateQuest: Scalars['Boolean'];
+  updateQuests: Scalars['Boolean'];
 };
 
 
-export type MutationQueueOptInArgs = {
-  account: Scalars['ID'];
-  signature: Scalars['String'];
+export type MutationUpdateQuestArgs = {
+  userId: Scalars['ID'];
+  questId: Scalars['ID'];
 };
 
 
-export type MutationQueueOptOutArgs = {
-  account: Scalars['ID'];
-  signature: Scalars['String'];
-};
-
-
-export type MutationSetMetadataArgs = {
-  json: Scalars['String'];
-  signature: Scalars['String'];
+export type MutationUpdateQuestsArgs = {
+  userId: Scalars['ID'];
 };
 
 export type Query = {
+  quests: Array<Quest>;
   quest?: Maybe<Quest>;
-  quests: Array<Maybe<Quest>>;
-  user?: Maybe<User>;
-  optInQueue: Array<Maybe<User>>;
+};
+
+
+export type QueryQuestsArgs = {
+  userId?: Maybe<Scalars['ID']>;
 };
 
 
 export type QueryQuestArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryUserArgs = {
-  account: Scalars['ID'];
+  questId: Scalars['ID'];
+  userId?: Maybe<Scalars['ID']>;
 };
 
 export type Quest = {
   id: Scalars['ID'];
-  metadata?: Maybe<QuestMetadata>;
-  submission?: Maybe<QuestSubmission>;
-};
-
-
-export type QuestSubmissionArgs = {
-  account: Scalars['ID'];
-};
-
-export type QuestMetadata = {
+  ethereumId?: Maybe<Scalars['Int']>;
+  objectives: Array<QuestObjective>;
   title: Scalars['String'];
   description: Scalars['String'];
-  imageUrl?: Maybe<Scalars['String']>;
+  imageURI?: Maybe<Scalars['String']>;
+  userQuest?: Maybe<UserQuest>;
 };
 
-export type QuestSubmission = {
+
+export type QuestUserQuestArgs = {
+  userId: Scalars['ID'];
+};
+
+export type QuestObjective = {
+  id: Scalars['ID'];
+  points: Scalars['Int'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+};
+
+export type UserQuest = {
+  id: Scalars['ID'];
   complete: Scalars['Boolean'];
   progress?: Maybe<Scalars['Float']>;
   signature?: Maybe<Scalars['String']>;
-  quest: Quest;
-  user?: Maybe<User>;
+  objectives?: Maybe<Array<UserQuestObjective>>;
 };
 
-export type User = {
+export type UserQuestObjective = {
   id: Scalars['ID'];
-  queueOptIn?: Maybe<Scalars['Boolean']>;
-  completed: Array<Maybe<Quest>>;
-  queue: Array<Maybe<Quest>>;
+  complete: Scalars['Boolean'];
+  progress?: Maybe<Scalars['Float']>;
 };
 
-export type QueueOptInMutationVariables = Exact<{
-  account: Scalars['ID'];
-  signature: Scalars['String'];
-}>;
-
-
-export type QueueOptInMutation = { queueOptIn: boolean };
-
-export type QuestAllFragment = { id: string, metadata?: Maybe<{ title: string, description: string, imageUrl?: Maybe<string> }>, submission?: Maybe<{ signature?: Maybe<string>, complete: boolean, progress?: Maybe<number> }> };
+export type QuestAllFragment = { id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> };
 
 export type QuestsQueryVariables = Exact<{
-  account: Scalars['ID'];
-  hasAccount: Scalars['Boolean'];
+  userId: Scalars['ID'];
+  hasUser: Scalars['Boolean'];
 }>;
 
 
-export type QuestsQuery = { quests: Array<Maybe<{ id: string, metadata?: Maybe<{ title: string, description: string, imageUrl?: Maybe<string> }>, submission?: Maybe<{ signature?: Maybe<string>, complete: boolean, progress?: Maybe<number> }> }>> };
+export type QuestsQuery = { quests: Array<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
 
 export type QuestQueryVariables = Exact<{
-  id: Scalars['ID'];
-  account: Scalars['ID'];
-  hasAccount: Scalars['Boolean'];
+  questId: Scalars['ID'];
+  userId: Scalars['ID'];
+  hasUser: Scalars['Boolean'];
 }>;
 
 
-export type QuestQuery = { quest?: Maybe<{ id: string, metadata?: Maybe<{ title: string, description: string, imageUrl?: Maybe<string> }>, submission?: Maybe<{ signature?: Maybe<string>, complete: boolean, progress?: Maybe<number> }> }> };
+export type QuestQuery = { quest?: Maybe<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
+
+export type UpdateQuestMutationVariables = Exact<{
+  userId: Scalars['ID'];
+  questId: Scalars['ID'];
+}>;
+
+
+export type UpdateQuestMutation = { updateQuest: boolean };
+
+export type UpdateQuestsMutationVariables = Exact<{
+  userId: Scalars['ID'];
+}>;
+
+
+export type UpdateQuestsMutation = { updateQuests: boolean };
 
 export const QuestAllFragmentDoc = gql`
     fragment QuestAll on Quest {
   id
-  metadata {
+  ethereumId
+  title
+  description
+  imageURI
+  objectives {
+    id
     title
     description
-    imageUrl
+    points
   }
-  submission(account: $account) @include(if: $hasAccount) {
+  userQuest(userId: $userId) @include(if: $hasUser) {
+    id
     signature
     complete
     progress
+    objectives {
+      id
+      complete
+      progress
+    }
   }
 }
     `;
-export const QueueOptInDocument = gql`
-    mutation QueueOptIn($account: ID!, $signature: String!) {
-  queueOptIn(account: $account, signature: $signature)
-}
-    `;
-export type QueueOptInMutationFn = Apollo.MutationFunction<QueueOptInMutation, QueueOptInMutationVariables>;
-
-/**
- * __useQueueOptInMutation__
- *
- * To run a mutation, you first call `useQueueOptInMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useQueueOptInMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [queueOptInMutation, { data, loading, error }] = useQueueOptInMutation({
- *   variables: {
- *      account: // value for 'account'
- *      signature: // value for 'signature'
- *   },
- * });
- */
-export function useQueueOptInMutation(baseOptions?: Apollo.MutationHookOptions<QueueOptInMutation, QueueOptInMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<QueueOptInMutation, QueueOptInMutationVariables>(QueueOptInDocument, options);
-      }
-export type QueueOptInMutationHookResult = ReturnType<typeof useQueueOptInMutation>;
-export type QueueOptInMutationResult = Apollo.MutationResult<QueueOptInMutation>;
-export type QueueOptInMutationOptions = Apollo.BaseMutationOptions<QueueOptInMutation, QueueOptInMutationVariables>;
 export const QuestsDocument = gql`
-    query Quests($account: ID!, $hasAccount: Boolean!) {
-  quests {
+    query Quests($userId: ID!, $hasUser: Boolean!) {
+  quests(userId: $userId) {
     ...QuestAll
   }
 }
@@ -198,8 +179,8 @@ export const QuestsDocument = gql`
  * @example
  * const { data, loading, error } = useQuestsQuery({
  *   variables: {
- *      account: // value for 'account'
- *      hasAccount: // value for 'hasAccount'
+ *      userId: // value for 'userId'
+ *      hasUser: // value for 'hasUser'
  *   },
  * });
  */
@@ -215,8 +196,8 @@ export type QuestsQueryHookResult = ReturnType<typeof useQuestsQuery>;
 export type QuestsLazyQueryHookResult = ReturnType<typeof useQuestsLazyQuery>;
 export type QuestsQueryResult = Apollo.QueryResult<QuestsQuery, QuestsQueryVariables>;
 export const QuestDocument = gql`
-    query Quest($id: ID!, $account: ID!, $hasAccount: Boolean!) {
-  quest(id: $id) {
+    query Quest($questId: ID!, $userId: ID!, $hasUser: Boolean!) {
+  quest(questId: $questId, userId: $userId) {
     ...QuestAll
   }
 }
@@ -234,9 +215,9 @@ export const QuestDocument = gql`
  * @example
  * const { data, loading, error } = useQuestQuery({
  *   variables: {
- *      id: // value for 'id'
- *      account: // value for 'account'
- *      hasAccount: // value for 'hasAccount'
+ *      questId: // value for 'questId'
+ *      userId: // value for 'userId'
+ *      hasUser: // value for 'hasUser'
  *   },
  * });
  */
@@ -251,3 +232,66 @@ export function useQuestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ques
 export type QuestQueryHookResult = ReturnType<typeof useQuestQuery>;
 export type QuestLazyQueryHookResult = ReturnType<typeof useQuestLazyQuery>;
 export type QuestQueryResult = Apollo.QueryResult<QuestQuery, QuestQueryVariables>;
+export const UpdateQuestDocument = gql`
+    mutation UpdateQuest($userId: ID!, $questId: ID!) {
+  updateQuest(userId: $userId, questId: $questId)
+}
+    `;
+export type UpdateQuestMutationFn = Apollo.MutationFunction<UpdateQuestMutation, UpdateQuestMutationVariables>;
+
+/**
+ * __useUpdateQuestMutation__
+ *
+ * To run a mutation, you first call `useUpdateQuestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateQuestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateQuestMutation, { data, loading, error }] = useUpdateQuestMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      questId: // value for 'questId'
+ *   },
+ * });
+ */
+export function useUpdateQuestMutation(baseOptions?: Apollo.MutationHookOptions<UpdateQuestMutation, UpdateQuestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateQuestMutation, UpdateQuestMutationVariables>(UpdateQuestDocument, options);
+      }
+export type UpdateQuestMutationHookResult = ReturnType<typeof useUpdateQuestMutation>;
+export type UpdateQuestMutationResult = Apollo.MutationResult<UpdateQuestMutation>;
+export type UpdateQuestMutationOptions = Apollo.BaseMutationOptions<UpdateQuestMutation, UpdateQuestMutationVariables>;
+export const UpdateQuestsDocument = gql`
+    mutation UpdateQuests($userId: ID!) {
+  updateQuests(userId: $userId)
+}
+    `;
+export type UpdateQuestsMutationFn = Apollo.MutationFunction<UpdateQuestsMutation, UpdateQuestsMutationVariables>;
+
+/**
+ * __useUpdateQuestsMutation__
+ *
+ * To run a mutation, you first call `useUpdateQuestsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateQuestsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateQuestsMutation, { data, loading, error }] = useUpdateQuestsMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUpdateQuestsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateQuestsMutation, UpdateQuestsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateQuestsMutation, UpdateQuestsMutationVariables>(UpdateQuestsDocument, options);
+      }
+export type UpdateQuestsMutationHookResult = ReturnType<typeof useUpdateQuestsMutation>;
+export type UpdateQuestsMutationResult = Apollo.MutationResult<UpdateQuestsMutation>;
+export type UpdateQuestsMutationOptions = Apollo.BaseMutationOptions<UpdateQuestsMutation, UpdateQuestsMutationVariables>;
