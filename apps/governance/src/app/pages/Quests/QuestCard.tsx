@@ -7,6 +7,7 @@ import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { IPFSImg, UnstyledButton } from '@apps/components/core'
+
 import { Typist } from './Typist'
 
 interface Props {
@@ -20,25 +21,22 @@ const Title = styled.div`
   gap: 1rem;
 
   h2 {
-    font-size: 1.5rem;
-    line-height: 2rem;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
     text-align: center;
   }
 `
 
-const QuestMultiplier = styled.div<{ type?: QuestType }>`
+const QuestMultiplier = styled.div`
+  position: absolute;
+  bottom: 1rem;
   display: flex;
-  height: 100%;
-  align-items: flex-end;
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 1rem 0 0.5rem;
+  justify-content: center;
+  width: 100%;
 
   > div {
-    background: ${({ type }) =>
-      type === QuestType.Seasonal
-        ? `linear-gradient(180deg, #4c24bb 0%, #2c1470 100%)`
-        : `linear-gradient(180deg, #a31e65 0%, #751749 100%)`};
-    box-shadow: 0px 4px 10px ${({ type }) => (type === QuestType.Seasonal ? '#220f58' : '#520f32')};
+    background: linear-gradient(180deg, #a62e6f 0%, #8b1f5a 100%);
+    box-shadow: 0px 4px 10px #78144a;
     font-size: 1.125rem;
     padding: 0.75rem 1rem;
     border-radius: 1rem;
@@ -48,7 +46,7 @@ const QuestMultiplier = styled.div<{ type?: QuestType }>`
 const QuestImage = styled.div`
   display: flex;
   mix-blend-mode: lighten;
-  width: 7.5rem;
+  width: 7rem;
 
   img {
     width: 100%;
@@ -76,17 +74,16 @@ const Container = styled(UnstyledButton)<{ type?: QuestType }>`
   min-width: 16rem;
   align-items: center;
   color: white;
-  padding: 1rem 0;
   gap: 1.5rem;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 1rem;
   min-height: 20rem;
   transition: 0.25s linear transform;
   box-shadow: inset 0 0 0 2px rgba(252, 174, 220, 0.5);
   background: ${({ type }) =>
     type === QuestType.Seasonal
-      ? `linear-gradient(333.23deg, #3B1E8B 30.23%, #E364B8 135.17%)`
-      : `linear-gradient(333.23deg, #8b1e59 30.23%, #ff3abd 135.17%)`};
+      ? `linear-gradient(333.23deg, #8b1e59 30.23%, #ff3abd 135.17%)`
+      : `linear-gradient(333.23deg, #3B1E8B 30.23%, #E364B8 135.17%)`};
 
   &:hover {
     transform: ${({ onClick }) => !!onClick && `scale(1.01)`};
@@ -104,45 +101,47 @@ export const QuestCard: FC<Props> = ({ questId, onClick }) => {
   const account = useAccount()
 
   const clients = useApolloClients()
-  const questQuery = useStakingQuestQuery({
-    client: clients.staking,
-    variables: { id: questId },
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
-  })
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
-    variables: { id: questId, account: account ?? '', hasAccount: !account },
+    variables: { questId, userId: account ?? '', hasUser: !!account },
+    skip: !account,
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })
+  const questbookQuest = questbookQuery.data?.quest
 
-  const questType = questQuery.data?.quest.type
+  const questQuery = useStakingQuestQuery({
+    client: clients.staking,
+    variables: { id: questbookQuest?.ethereumId?.toString() as string },
+    skip: typeof questbookQuest?.ethereumId !== 'number',
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-and-network',
+  })
+  const quest = questQuery.data?.quest
+  const questType = quest?.type
 
   return (
-    <>
-      {/* @ts-ignore */}
-      <Container type={questType} onClick={onClick ? () => onClick?.(questId) : undefined}>
-        <Title>
-          {questbookQuery.data?.quest ? (
-            <Typist>
-              <h2>{questbookQuery.data.quest.metadata?.title}</h2>
-            </Typist>
-          ) : (
-            <CardSkeleton height={30} />
-          )}
-        </Title>
-        <QuestImage>
-          {questbookQuery.data?.quest ? (
-            <IPFSImg uri={questbookQuery.data.quest.metadata?.imageUrl} alt="Quest graphic" />
-          ) : (
-            <CardSkeleton height={128} width={128} />
-          )}
-        </QuestImage>
-        <QuestMultiplier type={questType}>
-          <div>1.{questQuery.data?.quest.multiplier.toString().slice(1)}x</div>
-        </QuestMultiplier>
-      </Container>
-    </>
+    <Container type={questType as never} onClick={onClick ? () => onClick?.(questId) : undefined}>
+      <Title>
+        {questbookQuest ? (
+          <Typist>
+            <h2>{questbookQuest.title}</h2>
+            <h3>{questbookQuest.description}</h3>
+          </Typist>
+        ) : (
+          <CardSkeleton height={30} />
+        )}
+      </Title>
+      <QuestImage>
+        {questbookQuest ? (
+          <IPFSImg uri={questbookQuest.imageURI ?? 'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'} alt="Quest graphic" />
+        ) : (
+          <CardSkeleton height={128} width={128} />
+        )}
+      </QuestImage>
+      <QuestMultiplier>
+        <div>1.{quest?.multiplier.toString().slice(1)}x</div>
+      </QuestMultiplier>
+    </Container>
   )
 }
