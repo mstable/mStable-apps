@@ -11,6 +11,7 @@ enum ProgressType {
   Group,
   TimeRemaining,
   Rarity,
+  Objective,
 }
 
 const ProgressBar = styled.div.attrs((props: { value?: number }) => ({ width: `${props.value.toFixed(0)}%` }))`
@@ -56,6 +57,12 @@ const Container = styled.div<{ progressType: ProgressType; questType?: QuestType
   }
 `
 
+const QuestObjectiveProgressContainer = styled(Container)`
+  > :last-child {
+    background: ${({ theme }) => (theme.isLight ? '#735f5c' : '#473f50')};
+  }
+`
+
 export const QuestProgress: FC<{ value?: number; progressType: ProgressType; questType?: QuestType }> = ({
   value,
   progressType,
@@ -81,4 +88,20 @@ export const QuestProgress: FC<{ value?: number; progressType: ProgressType; que
     {/* @ts-ignore */}
     <ProgressBar value={value} />
   </Container>
+)
+
+export const QuestObjectiveProgress: FC<{ value?: number }> = ({ value }) => (
+  <QuestObjectiveProgressContainer progressType={ProgressType.Objective}>
+    <div>
+      {typeof value === 'number' ? (
+        <Typist>
+          <span>{value.toFixed(2)}%</span>{' '}
+        </Typist>
+      ) : (
+        <ThemedSkeleton height={20} />
+      )}
+    </div>
+    {/* @ts-ignore */}
+    <ProgressBar value={value} />
+  </QuestObjectiveProgressContainer>
 )

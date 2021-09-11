@@ -80,23 +80,25 @@ export const Meta8Logic: FC = () => {
 
   const account = useAccount()
   const clients = useApolloClients()
-  const stakingQuestsQuery = useStakingQuestsQuery({ client: clients.staking, nextFetchPolicy: 'cache-only' })
+
+  // Just subscribe here
+  useStakingQuestsQuery({ client: clients.staking, nextFetchPolicy: 'cache-only' })
+
   const accountQuery = useAccountQuery({
     client: clients.staking,
     variables: { id: account ?? '' },
     skip: !account,
     nextFetchPolicy: 'cache-only',
   })
+
   const questbookQuestsQuery = useQuestbookQuestsQuery({
     client: clients.questbook,
-    variables: { account: account ?? '', hasAccount: !!account },
+    variables: { userId: account ?? '', hasUser: !!account },
     skip: !account,
     nextFetchPolicy: 'cache-only',
   })
 
   const [selectedId, setSelectedId] = useState<string>()
-
-  const handleQuestClick = (questId: string) => setSelectedId(questId)
 
   return (
     <Container>
@@ -113,8 +115,8 @@ export const Meta8Logic: FC = () => {
         <div>
           {accountQuery.data?.account && (
             <>
-              <div>Permanent: {accountQuery.data.account.permMultiplier}x</div>
-              <div>Season 0: {accountQuery.data.account.seasonMultiplier}x</div>
+              <div>Permanent: {accountQuery.data.account.permMultiplier.toFixed(1)}x</div>
+              <div>Season 0: {accountQuery.data.account.seasonMultiplier.toFixed(1)}x</div>
               <div>Hodl time: 1.1x</div>
             </>
           )}
@@ -124,9 +126,9 @@ export const Meta8Logic: FC = () => {
         {selectedId ? (
           <QuestInfo questId={selectedId} />
         ) : questId ? (
-          <QuestCard questId={questId} onClick={handleQuestClick} />
+          <QuestCard questId={questId} onClick={setSelectedId} />
         ) : (
-          stakingQuestsQuery.data?.quests.map(quest => <QuestCard key={quest?.id} questId={quest?.id} onClick={handleQuestClick} />)
+          questbookQuestsQuery.data?.quests.map(quest => <QuestCard key={quest?.id} questId={quest?.id} onClick={setSelectedId} />)
         )}
       </Quests>
     </Container>

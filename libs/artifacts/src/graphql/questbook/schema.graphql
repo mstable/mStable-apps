@@ -8,41 +8,42 @@ scalar BigNumber
 scalar MstableBigDecimal
 
 type Mutation {
-  queueOptIn(account: ID!, signature: String!): Boolean!
-  queueOptOut(account: ID!, signature: String!): Boolean!
-  setMetadata(json: String!, signature: String!): Boolean!
+  updateQuest(userId: ID!, questId: ID!): Boolean!
+  updateQuests(userId: ID!): Boolean!
 }
 
 type Query {
-  quest(id: ID!): Quest
-  quests: [Quest]!
-  user(account: ID!): User
-  optInQueue: [User]!
+  quests(userId: ID): [Quest!]!
+  quest(questId: ID!, userId: ID): Quest
 }
 
 type Quest {
   id: ID!
-  metadata: QuestMetadata
-  submission(account: ID!): QuestSubmission
-}
-
-type QuestMetadata {
+  ethereumId: Int
+  objectives: [QuestObjective!]!
   title: String!
   description: String!
-  imageUrl: String
+  imageURI: String
+  userQuest(userId: ID!): UserQuest
 }
 
-type QuestSubmission {
+type QuestObjective {
+  id: ID!
+  points: Int!
+  title: String!
+  description: String!
+}
+
+type UserQuest {
+  id: ID!
   complete: Boolean!
   progress: Float
   signature: String
-  quest: Quest!
-  user: User
+  objectives: [UserQuestObjective!]
 }
 
-type User {
+type UserQuestObjective {
   id: ID!
-  queueOptIn: Boolean
-  completed: [Quest]!
-  queue: [Quest]!
+  complete: Boolean!
+  progress: Float
 }
