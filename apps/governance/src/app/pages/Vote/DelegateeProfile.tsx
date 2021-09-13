@@ -59,7 +59,7 @@ const DelegateeBio: FC<{ delegateeInfo?: DelegateeInfo }> = ({ delegateeInfo }) 
   delegateeInfo ? (
     <DelegateeBioContainer>
       <h4>Bio</h4>
-      <p>{(delegateeInfo as any)?.bio as string}</p>
+      <p>{(delegateeInfo as { bio?: string })?.bio as string}</p>
     </DelegateeBioContainer>
   ) : null
 
