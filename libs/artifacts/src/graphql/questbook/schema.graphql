@@ -8,8 +8,8 @@ scalar BigNumber
 scalar MstableBigDecimal
 
 type Mutation {
-  updateQuest(userId: ID!, questId: ID!): Boolean!
-  updateQuests(userId: ID!): Boolean!
+  updateQuest(userId: ID!, questId: ID!): Quest!
+  updateQuests(userId: ID!): [Quest!]!
 }
 
 type Query {
@@ -20,6 +20,7 @@ type Query {
 type Quest {
   id: ID!
   ethereumId: Int
+  requiredPoints: Int
   objectives: [QuestObjective!]!
   title: String!
   description: String!

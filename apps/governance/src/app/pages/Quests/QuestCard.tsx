@@ -104,7 +104,6 @@ export const QuestCard: FC<Props> = ({ questId, onClick }) => {
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
     variables: { questId, userId: account ?? '', hasUser: !!account },
-    skip: !account,
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
   })

@@ -19,7 +19,7 @@ const defaultOptions =  {}
   }
 };
       export default result;
-
+    
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -1703,6 +1703,11 @@ export type StakingQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type StakingQuery = { stakedTokens: Array<{ id: string, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }> };
 
+export type TokensQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TokensQuery = { tokens: Array<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }> };
+
 export type LeaderboardQueryVariables = Exact<{
   count: Scalars['Int'];
   skip: Scalars['Int'];
@@ -1810,6 +1815,40 @@ export function useStakingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<St
 export type StakingQueryHookResult = ReturnType<typeof useStakingQuery>;
 export type StakingLazyQueryHookResult = ReturnType<typeof useStakingLazyQuery>;
 export type StakingQueryResult = Apollo.QueryResult<StakingQuery, StakingQueryVariables>;
+export const TokensDocument = gql`
+    query Tokens {
+  tokens {
+    ...TokenAll
+  }
+}
+    ${TokenAllFragmentDoc}`;
+
+/**
+ * __useTokensQuery__
+ *
+ * To run a query within a React component, call `useTokensQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTokensQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTokensQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTokensQuery(baseOptions?: Apollo.QueryHookOptions<TokensQuery, TokensQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TokensQuery, TokensQueryVariables>(TokensDocument, options);
+      }
+export function useTokensLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TokensQuery, TokensQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TokensQuery, TokensQueryVariables>(TokensDocument, options);
+        }
+export type TokensQueryHookResult = ReturnType<typeof useTokensQuery>;
+export type TokensLazyQueryHookResult = ReturnType<typeof useTokensLazyQuery>;
+export type TokensQueryResult = Apollo.QueryResult<TokensQuery, TokensQueryVariables>;
 export const LeaderboardDocument = gql`
     query Leaderboard($count: Int!, $skip: Int!) {
   stakedTokens {
