@@ -1,9 +1,14 @@
-import React, { FC } from 'react'
+import { UnstyledButton } from '@apps/components/core'
+import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import useSound from 'use-sound'
+// @ts-ignore
+import startup from '../../../assets/startup.mp3'
 
 import { Meta8Logic } from './Meta8Logic'
+import { RealisticSwitch } from './RealisticSwitch'
 
-const Display = styled.div`
+const Display = styled.div<{ isOn: boolean }>`
   @keyframes scandown {
     0% {
       background-position-y: 0;
@@ -13,8 +18,11 @@ const Display = styled.div`
     }
   }
 
-  background: ${({ theme }) => (theme.isLight ? '#2c2b2b' : '#000')};
-  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25) inset, 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  background: ${({ theme, isOn }) => (isOn ? '#000e32' : theme.isLight ? '#2c2b2b' : '#000')};
+  box-shadow: ${({ theme, isOn }) =>
+    `0 0 10px 5px rgba(0, 0, 0, 0.25) inset, 0 0 10px 0 rgba(0, 0, 0, 0.5), rgba(80, 156, 255, ${
+      isOn && !theme.isLight ? 0.8 : 0
+    }) -2px 0 30px`};
   border-radius: 1.375rem;
   flex: 1;
   display: flex;
@@ -23,10 +31,12 @@ const Display = styled.div`
   > div {
     flex: 1;
     position: relative;
-    background: ${({ theme }) => (theme.isLight ? '#443836' : '#29252f')};
+    background: ${({ theme, isOn }) => (isOn ? (theme.isLight ? '#443836' : '#29252f') : 'transparent')};
+    transition: background-color 1s ease-in;
     box-shadow: inset 0 0 10px 5px rgba(0, 0, 0, 0.25);
     border-radius: 18px;
     overflow: hidden;
+    height: 29rem;
 
     &:after {
       content: '';
@@ -73,7 +83,7 @@ const Container = styled.div`
     > :last-child {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       gap: 0.5rem;
       padding: 1rem 0.5rem 0.5rem;
 
@@ -86,17 +96,44 @@ const Container = styled.div`
 `
 
 export const Meta8Console: FC = () => {
+  const [isOn, setIsOn] = useState(false)
+  const [isBooted, setIsBooted] = useState(false)
+  const [playStartup] = useSound(startup)
+
+  useEffect(() => {
+    if (isOn) {
+      playStartup()
+      setTimeout(() => {
+        setIsBooted(true)
+      }, 4500)
+    } else {
+      setIsBooted(false)
+    }
+  }, [isOn, playStartup])
+
   return (
     <Container>
       <div>
-        <Display>
+        <Display isOn={isOn}>
           <div>
-            <Meta8Logic />
-            <div className="scanlines" />
+            {isOn && (
+              <>
+                <Meta8Logic isBooted={isBooted} />
+                <div className="scanlines" />
+              </>
+            )}
           </div>
         </Display>
         <div>
+          <div />
           <img src="/assets/meta-8.png" alt="Meta-8" />
+          <RealisticSwitch
+            checked={isOn}
+            onClick={() => {
+              if (isOn) setIsBooted(false)
+              setIsOn(!isOn)
+            }}
+          />
         </div>
       </div>
     </Container>

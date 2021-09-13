@@ -1,16 +1,27 @@
-import { useAccount } from '@apps/base/context/account'
 import React, { FC } from 'react'
+import { useToggle } from 'react-use'
 import styled from 'styled-components'
+import useSound from 'use-sound'
 
-import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
+// @ts-ignore
+import bleep28 from '../../../assets/bleeps_28.mp3'
+// @ts-ignore
+import bleep29 from '../../../assets/bleeps_29.mp3'
+
+import { useQuestQuery as useQuestbookQuestQuery, useUpdateQuestMutation } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { Button, ThemedSkeleton } from '@apps/components/core'
+import { ViewportWidth } from '@apps/base/theme'
+import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
+import { useAccount } from '@apps/base/context/account'
+import { usePropose } from '@apps/base/context/transactions'
+
+import { useQuestManagerContract } from '../../context/QuestManagerProvider'
 
 import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'
 import { QuestObjectiveProgress, QuestProgress } from './QuestProgress'
-import { ViewportWidth } from '@apps/base/theme'
 
 enum ProgressType {
   Personal,
@@ -70,6 +81,7 @@ const Season = styled.div`
   gap: 0.5rem;
   font-size: 1.125rem;
   justify-content: center;
+  min-width: 12rem;
 
   > div:first-child {
     display: flex;
@@ -149,23 +161,31 @@ const Container = styled.div<{ type?: QuestType }>`
 `
 
 export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
+  const [isPending, toggleIsPending] = useToggle(false)
   const account = useAccount()
   const clients = useApolloClients()
+  const questManagerContract = useQuestManagerContract()
+  const propose = usePropose()
+
+  const [playBleep28] = useSound(bleep28, { volume: 0.2 })
+  const [playBleep29] = useSound(bleep29, { volume: 0.2 })
+
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
     variables: { questId, userId: account ?? '', hasUser: !!account },
-    skip: !account,
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
   })
-  const questbookQuest = questbookQuery.data?.quest
 
+  const [updateQuest] = useUpdateQuestMutation({
+    client: clients.questbook,
+    variables: { questId, userId: account, hasUser: !!account },
+    // onCompleted: () => questbookQuery.refetch(),
+  })
+
+  const questbookQuest = questbookQuery.data?.quest
   const questQuery = useStakingQuestQuery({
     client: clients.staking,
     variables: { id: questbookQuest?.ethereumId?.toString() },
     skip: typeof questbookQuest?.ethereumId !== 'number',
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-and-network',
   })
   const quest = questQuery.data?.quest
   const questType = quest?.type
@@ -173,12 +193,44 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
   const nowUnix = Math.floor(Date.now() / 1e3)
   const expiry = quest?.expiry
   const timeRemaining = expiry && expiry > nowUnix ? nowUnix / expiry : 0
-
   const questProgress = questbookQuest?.userQuest?.progress ?? 0
-  console.log(questbookQuest)
 
   const handleClaimQuest = () => {
-    // TODO;
+    if (
+      isPending ||
+      !questManagerContract ||
+      !questbookQuest ||
+      typeof questbookQuest.ethereumId !== 'number' ||
+      !questbookQuest.userQuest?.signature
+    )
+      return
+
+    propose(
+      new TransactionManifest<Interfaces.QuestManager, 'completeUserQuests'>(
+        questManagerContract,
+        'completeUserQuests',
+        [account, [questbookQuest.ethereumId], questbookQuest.userQuest.signature],
+        {
+          present: 'Complete quest',
+          past: 'Completed quest',
+        },
+      ),
+    )
+  }
+
+  const handleRefresh = () => {
+    if (isPending) return
+
+    playBleep28()
+    toggleIsPending(true)
+    updateQuest()
+      .catch(error => {
+        console.error(error)
+      })
+      .finally(() => {
+        toggleIsPending(false)
+        playBleep29()
+      })
   }
 
   return (
@@ -187,7 +239,7 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
       <Inner>
         <div>
           {questbookQuest ? (
-            <Typist>
+            <div>
               <Objectives>
                 {questbookQuest.objectives.map(({ title, id, description, points }) => {
                   const userQuestObjective = questbookQuest.userQuest?.objectives.find(o => o.id === id)
@@ -202,15 +254,15 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
                         )}
                         <QuestObjectiveProgress value={(userQuestObjective?.progress ?? 0) * 100} />
                       </div>
-                      <div>
+                      <Typist>
                         <p>{title}</p>
                         <p>{description}</p>
-                      </div>
+                      </Typist>
                     </div>
                   )
                 })}
               </Objectives>
-            </Typist>
+            </div>
           ) : (
             <ThemedSkeleton height={30} />
           )}
@@ -221,13 +273,16 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
             <QuestProgress value={timeRemaining} progressType={ProgressType.TimeRemaining} questType={questType} />
           </Progress>
           <Season>
-            <div>
-              {questType === QuestType.Seasonal ? 'S-0' : 'P'}
-              <span>solo QUEST</span>
-            </div>
-            <Button highlighted onClick={handleClaimQuest}>
-              Claim
-            </Button>
+            <div>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</div>
+            {questbookQuest?.userQuest?.complete ? (
+              <Button highlighted onClick={handleClaimQuest}>
+                Claim
+              </Button>
+            ) : (
+              <Button highlighted onClick={handleRefresh}>
+                {isPending ? 'Checking...' : 'Check status'}
+              </Button>
+            )}
           </Season>
         </Bottom>
       </Inner>

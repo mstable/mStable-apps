@@ -1,10 +1,17 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import useSound from 'use-sound'
+
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useQuestsQuery as useStakingQuestsQuery, useAccountQuery } from '@apps/artifacts/graphql/staking'
 import { useQuestsQuery as useQuestbookQuestsQuery } from '@apps/artifacts/graphql/questbook'
+
+// @ts-ignore
+import bleep26 from '../../../assets/bleeps_26.mp3'
+// @ts-ignore
+import bleep27 from '../../../assets/bleeps_27.mp3'
 
 import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'
@@ -17,7 +24,7 @@ const NavButton = styled(UnstyledButton)`
   padding: 0;
 `
 
-const Quests = styled.div`
+const Content = styled.div`
   display: flex;
   flex-direction: row;
   gap: 2rem;
@@ -60,7 +67,7 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: flex-start;
     padding: 0.5rem 1.25rem;
-
+    height: 5rem;
     font-size: 1rem;
 
     > :last-child {
@@ -75,7 +82,7 @@ const Container = styled.div`
   }
 `
 
-export const Meta8Logic: FC = () => {
+export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
   const { questId } = useParams<{ questId?: string }>()
 
   const account = useAccount()
@@ -88,32 +95,49 @@ export const Meta8Logic: FC = () => {
     client: clients.staking,
     variables: { id: account ?? '' },
     skip: !account,
-    nextFetchPolicy: 'cache-only',
   })
 
   const questbookQuestsQuery = useQuestbookQuestsQuery({
     client: clients.questbook,
     variables: { userId: account ?? '', hasUser: !!account },
-    skip: !account,
-    nextFetchPolicy: 'cache-only',
   })
 
   const [selectedId, setSelectedId] = useState<string>()
+
+  const [playBleep26] = useSound(bleep26, { volume: 0.4 })
+  const [playBleep27] = useSound(bleep27, { volume: 0.4 })
+  const selectQuest = useCallback(
+    (id?: string) => {
+      if (id) {
+        playBleep27()
+      } else {
+        playBleep26()
+      }
+      setSelectedId(id)
+    },
+    [playBleep26, playBleep27],
+  )
 
   return (
     <Container>
       <header>
         <div>
           {selectedId ? (
-            <NavButton onClick={() => setSelectedId(undefined)}>
+            <NavButton
+              onClick={() => {
+                selectQuest()
+              }}
+            >
               <Typist>[Back]</Typist>
             </NavButton>
-          ) : (
+          ) : isBooted ? (
             <Typist>[Quests]</Typist>
+          ) : (
+            'Booting...'
           )}
         </div>
         <div>
-          {accountQuery.data?.account && (
+          {isBooted && accountQuery.data?.account && (
             <>
               <div>Permanent: {accountQuery.data.account.permMultiplier.toFixed(1)}x</div>
               <div>Season 0: {accountQuery.data.account.seasonMultiplier.toFixed(1)}x</div>
@@ -122,15 +146,28 @@ export const Meta8Logic: FC = () => {
           )}
         </div>
       </header>
-      <Quests>
-        {selectedId ? (
-          <QuestInfo questId={selectedId} />
-        ) : questId ? (
-          <QuestCard questId={questId} onClick={setSelectedId} />
+      <Content>
+        {isBooted ? (
+          selectedId ? (
+            <QuestInfo questId={selectedId} />
+          ) : questId ? (
+            <QuestCard questId={questId} onClick={setSelectedId} />
+          ) : (
+            questbookQuestsQuery.data?.quests.map(quest => <QuestCard key={quest?.id} questId={quest?.id} onClick={selectQuest} />)
+          )
         ) : (
-          questbookQuestsQuery.data?.quests.map(quest => <QuestCard key={quest?.id} questId={quest?.id} onClick={setSelectedId} />)
+          <Typist cursor={{ show: true, blink: true }} avgTypingDelay={20}>
+            <p>Meta-8 (c) 1991 mStable Entertainment Australia</p>
+            <br />
+            <p>Loading sprites...</p>
+            <p>Depositing into Save...</p>
+            <p>Aping into MTA...</p>
+            <p>Voting on Snapshot...</p>
+            <p>Following @metaboi_...</p>
+            <p>System startup complete.</p>
+          </Typist>
         )}
-      </Quests>
+      </Content>
     </Container>
   )
 }

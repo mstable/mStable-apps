@@ -21,5 +21,14 @@ module.exports = (config, context) => {
   }
   config.output.publicPath = './'
 
+  config.module.rules.push({
+    test: /\.(mp3|ogg)$/,
+    use: [
+      {
+        loader: 'file-loader',
+      },
+    ],
+  })
+
   return config
 }

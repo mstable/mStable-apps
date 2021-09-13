@@ -1,9 +1,10 @@
+import { StakedToken, StakedToken__factory } from '@apps/artifacts/typechain'
 import React, { createContext, Dispatch, FC, SetStateAction, useMemo, useState } from 'react'
 
-import { useAccount } from '@apps/base/context/account'
+import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { providerFactory, createUseContextFn, useBlockPollingSubscription } from '@apps/hooks'
-import { useStakedTokenLazyQuery, useStakedTokenQuery as useStakedTokenQueryHook } from '@apps/artifacts/graphql/staking'
+import { providerFactory, createUseContextFn } from '@apps/hooks'
+import { useStakedTokenQuery as useStakedTokenQueryHook } from '@apps/artifacts/graphql/staking'
 
 import { useStakingQuery } from './StakingProvider'
 
@@ -14,8 +15,10 @@ interface State {
 
 const stateCtx = createContext<State>(null as never)
 const dispatchCtx = createContext<Dispatch<SetStateAction<string>>>(null as never)
+const stakedTokenContractCtx = createContext<StakedToken | undefined>(undefined)
 
 export const StakedTokenProvider: FC = ({ children }) => {
+  const signer = useSigner()
   const [selected, setSelected] = useState<string>()
   const stakingQuery = useStakingQuery()
 
@@ -35,10 +38,18 @@ export const StakedTokenProvider: FC = ({ children }) => {
           return { selected: selected ?? data.find(st => st.stakingToken.symbol === 'MTA')?.id, options }
         }, [selected, stakingQuery.data]),
       },
-      children,
+      providerFactory(
+        stakedTokenContractCtx,
+        {
+          value: useMemo(() => (signer && selected ? StakedToken__factory.connect(selected, signer) : null), [signer, selected]),
+        },
+        children,
+      ),
     ),
   )
 }
+
+export const useStakedTokenContract = createUseContextFn(stakedTokenContractCtx)
 
 export const useStakedToken = createUseContextFn(stateCtx)
 
@@ -55,7 +66,5 @@ export const useStakedTokenQuery = () => {
     [account, clients, selected],
   )
 
-  // return useBlockPollingSubscription(useStakedTokenLazyQuery, options, !selected)
-  // FIXME make sure we're subscribed
   return useStakedTokenQueryHook(options)
 }
