@@ -56,7 +56,7 @@ const BackLink = styled(Link)`
 const Row = styled.div`
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 `
 
 const ChildrenRow = styled.div`
@@ -76,13 +76,13 @@ const Container = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  padding: 2rem 0;
-  gap: 1rem;
+  padding: 2rem 0 0;
+  gap: 0.25rem;
 
   h2 {
     font-size: 1.75rem;
     line-height: 2.5rem;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   p {
@@ -94,7 +94,7 @@ const Container = styled.div<{
   }
 
   @media (min-width: ${ViewportWidth.s}) {
-    padding: 3rem 0;
+    padding: 3rem 0 1rem;
   }
 `
 

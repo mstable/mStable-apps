@@ -17,3 +17,8 @@ export const MASSETS = {
     slug: 'mbtc',
   },
 }
+
+export enum APP_NAME {
+  PROTOCOL = 'protocol',
+  GOVERNANCE = 'governance',
+}

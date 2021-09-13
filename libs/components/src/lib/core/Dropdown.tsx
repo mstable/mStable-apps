@@ -50,7 +50,7 @@ const TokenDetails = styled.div`
     align-items: center;
 
     span {
-      font-weight: 600;
+      font-weight: 500;
     }
 
     > * svg {

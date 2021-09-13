@@ -48,6 +48,7 @@ const Container = styled.div`
   display: flex;
   gap: 0.25rem;
   width: 100%;
+  align-items: center;
 `
 
 export const AddressInput: FC<Props> = ({ onClick, title, className }) => {
