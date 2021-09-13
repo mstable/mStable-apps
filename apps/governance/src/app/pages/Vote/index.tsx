@@ -12,6 +12,7 @@ import { useOwnAccount, useSigner } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { StakedToken__factory } from '@apps/artifacts/typechain'
 import { DelegateInput } from '../../components/DelegateInput'
+import { ViewportWidth } from '@apps/base/theme'
 
 const DOCS_URL = 'https://docs.mstable.org/'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
@@ -22,8 +23,10 @@ const DelegationBox = styled(InfoBox)`
   }
 
   > div {
-    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
     justify-content: space-between;
+    align-items: flex-start;
   }
 
   > div > div:first-child {
@@ -32,11 +35,16 @@ const DelegationBox = styled(InfoBox)`
 
   > div > div:last-child:not(:first-child) {
     display: flex;
+    justify-content: space-between;
     gap: 0.25rem;
     border: 1px solid ${({ theme }) => theme.color.defaultBorder};
     border-radius: 0.75rem;
     padding: 0.5rem;
     font-size: 0.875rem;
+
+    > div {
+      margin-left: 1rem;
+    }
 
     img,
     div {
@@ -51,6 +59,14 @@ const DelegationBox = styled(InfoBox)`
       color: ${({ theme }) => theme.color.body};
     }
   }
+
+  @media (min-width: ${ViewportWidth.l}) {
+    > div {
+      flex-direction: row;
+      align-items: center;
+      gap: 0;
+    }
+  }
 `
 
 const StyledDelegateInput = styled(DelegateInput)`
@@ -58,7 +74,7 @@ const StyledDelegateInput = styled(DelegateInput)`
 
   input {
     border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-    height: inherit;
+    height: 2.5rem;
     width: 12rem;
   }
 `
@@ -66,27 +82,47 @@ const StyledDelegateInput = styled(DelegateInput)`
 const VoteBox = styled(InfoBox)`
   div {
     display: flex;
+    flex-direction: row;
     gap: 0.5rem;
+  }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    div {
+      flex-direction: column;
+    }
+  }
+
+  @media (min-width: ${ViewportWidth.l}) {
+    div {
+      flex-direction: row;
+    }
   }
 `
 
 const Row = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 0.75rem;
 
-  > *:first-child {
-    flex-basis: 60%;
-  }
+  @media (min-width: ${ViewportWidth.m}) {
+    flex-direction: row;
 
-  > *:last-child {
-    flex-basis: 40%;
+    > *:first-child {
+      flex-basis: 60%;
+    }
+
+    > *:last-child {
+      flex-basis: 40%;
+    }
   }
 `
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 `
 
 const External: FC<{ highlighted?: boolean }> = ({ highlighted }) => (
@@ -149,37 +185,43 @@ export const Vote: FC = () => {
   return (
     <Container>
       <GovernancePageHeader title="Vote" subtitle="View list of voting addresses and delegate" />
-      <Row>
-        <DelegationBox subtitle="Delegated to" title={isSelfDelegated ? 'Self' : delegatee} dashed={false}>
-          <div>
+      <div>
+        <Row>
+          <DelegationBox subtitle="Delegated to" title={isSelfDelegated ? 'Self' : delegatee} dashed={false}>
             <div>
-              <Button highlighted onClick={() => history.push(`/vote/${delegateeId}`)}>
-                View Profile
-              </Button>
-              {isSelfDelegated ? <StyledDelegateInput onClick={handleDelegate} /> : <Button onClick={handleUndelegate}>Undelegate</Button>}
-            </div>
-            {!isSelfDelegated && (
               <div>
-                Delegated &nbsp;
-                <TokenIcon symbol={options[stakedTokenAddress]?.icon.symbol} />
-                <span>{votingPower?.[0]}</span>
+                <Button highlighted onClick={() => history.push(`/vote/${delegateeId}`)}>
+                  View Profile
+                </Button>
+                {isSelfDelegated ? (
+                  <StyledDelegateInput onClick={handleDelegate} />
+                ) : (
+                  <Button onClick={handleUndelegate}>Undelegate</Button>
+                )}
               </div>
-            )}
-          </div>
-        </DelegationBox>
-        <VoteBox subtitle="Participate" title="Vote">
-          <div>
-            <Button highlighted onClick={() => window.open(SNAPSHOT_URL)}>
-              Snapshot <External highlighted />
-            </Button>
-            <Button onClick={() => window.open(DOCS_URL)}>
-              Learn More <External />
-            </Button>
-          </div>
-        </VoteBox>
-      </Row>
-      <UserLookup />
-      <Leaderboard preview />
+              {!isSelfDelegated && (
+                <div>
+                  Delegated &nbsp;
+                  <TokenIcon symbol={options[stakedTokenAddress]?.icon.symbol} />
+                  <span>{votingPower?.[0] ?? 100}</span>
+                </div>
+              )}
+            </div>
+          </DelegationBox>
+          <VoteBox subtitle="Participate" title="Vote">
+            <div>
+              <Button highlighted onClick={() => window.open(SNAPSHOT_URL)}>
+                Snapshot <External highlighted />
+              </Button>
+              <Button onClick={() => window.open(DOCS_URL)}>
+                Learn More <External />
+              </Button>
+            </div>
+          </VoteBox>
+        </Row>
+        <UserLookup />
+        <Leaderboard preview />
+      </div>
     </Container>
   )
 }

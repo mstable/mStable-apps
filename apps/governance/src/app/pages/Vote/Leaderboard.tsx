@@ -13,6 +13,8 @@ import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 const headerTitles = [{ title: 'Rank' }, { title: 'vMTA %' }, { title: 'vMTA' }]
 
 const StyledTable = styled(Table)`
+  margin-top: 0.5rem;
+
   tr:hover > td:nth-last-child(2) {
     display: flex !important;
   }
@@ -22,6 +24,11 @@ const StyledTable = styled(Table)`
 `
 
 const ViewLeaderboardRow = styled(TableRow)`
+  > td {
+    display: flex;
+    justify-content: center;
+  }
+
   > td > div {
     width: 100%;
     text-align: center;
@@ -34,6 +41,10 @@ const NumericCell = styled(TableCell)`
 `
 
 const StyledDelegateeCell = styled(TableCell)`
+  span {
+    ${({ theme }) => theme.mixins.numeric};
+  }
+
   > div {
     display: flex;
     align-items: center;
@@ -51,15 +62,17 @@ const StyledDelegateeCell = styled(TableCell)`
       }
     }
 
-    > :last-child {
-      font-weight: 600;
+    &:first-child {
+      margin-right: 1rem;
     }
   }
 `
 
 const DelegateeCell: FC<{ address: string; rank: number; delegatee?: DelegateeInfo }> = ({ address, delegatee, rank }) => (
-  <StyledDelegateeCell>
-    <div>{rank}</div>
+  <StyledDelegateeCell width={30}>
+    <div>
+      <span>{rank}</span>
+    </div>
     <div className="avatar">{delegatee && <IPFSImg uri={delegatee.avatarURI} />}</div>
     <div>{delegatee?.displayName ?? truncateAddress(address)}</div>
   </StyledDelegateeCell>
@@ -81,7 +94,7 @@ export const Leaderboard: FC<{ preview?: boolean }> = ({ preview }) => {
   )
 
   return (
-    <StyledTable headerTitles={headerTitles}>
+    <StyledTable headerTitles={headerTitles} widths={[30, 30, 30]} width={32}>
       {leaderboardQuery.data?.accounts.map(({ totalVotesBD, id }, index) => (
         <TableRow
           key={id}
@@ -89,7 +102,7 @@ export const Leaderboard: FC<{ preview?: boolean }> = ({ preview }) => {
             history.push(`/vote/${id}`)
           }}
         >
-          <DelegateeCell address={id} delegatee={delegatesAll[id]} rank={index + 1} />
+          <DelegateeCell address={id} delegatee={delegatesAll[id]} rank={(index ?? 0) + 1} />
           <NumericCell>{(totalVotesBD.simple / totalVotingToken).toFixed(2)}%</NumericCell>
           <NumericCell>{totalVotesBD.simple.toFixed(2)}</NumericCell>
         </TableRow>

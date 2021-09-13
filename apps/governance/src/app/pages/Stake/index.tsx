@@ -8,9 +8,11 @@ import { StakeBalances } from './StakeBalances'
 import { PendingBalances } from './PendingBalances'
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 `
 
 export const Stake: FC = () => {
@@ -22,9 +24,11 @@ export const Stake: FC = () => {
           diluted in the event that the mStable protocol requires recollateralisation. <a>Read More</a>
         </p>
       </GovernancePageHeader>
-      <StakeBalances />
-      <PendingBalances />
-      <StakeForms />
+      <div>
+        <StakeBalances />
+        <PendingBalances />
+        <StakeForms />
+      </div>
     </Container>
   )
 }

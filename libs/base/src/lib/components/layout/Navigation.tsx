@@ -9,7 +9,6 @@ import { colorTheme, ViewportWidth } from '../../theme'
 import { useBaseCtx } from '../../BaseProviders'
 
 const Container = styled.nav`
-
   > :first-child {
     display: block;
   }
@@ -49,7 +48,7 @@ export const Navigation: FC = () => {
         {navItems.map(({ title, path }) => (
           <li key={path}>
             <StyledNavLink
-              activeStyle={{ color: colorTheme(themeMode).primary, background: colorTheme(themeMode).coolBlueTransparent }}
+              activeStyle={{ color: colorTheme(themeMode).primary, background: colorTheme(themeMode).coolBlueTransparent, fontWeight: 500 }}
               to={path}
               isActive={(match, location) => {
                 if (match?.path) return true

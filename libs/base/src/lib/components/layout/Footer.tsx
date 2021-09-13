@@ -11,9 +11,20 @@ import Github from '@apps/components/icons/social/github.svg'
 import Discord from '@apps/components/icons/social/discord.svg'
 import Twitter from '@apps/components/icons/social/twitter.svg'
 import Email from '@apps/components/icons/social/email.svg'
+import { ChainIds, useNetwork } from '@apps/base/context/network'
 
 const Links = styled.ul`
   align-items: center;
+  color: ${({ theme }) => theme.color.bodyAccent};
+
+  b {
+    color: ${({ theme }) => theme.color.body};
+    font-weight: 500;
+  }
+
+  a {
+    color: ${({ theme }) => theme.color.bodyAccent};
+  }
 
   li {
     display: inline-block;
@@ -83,10 +94,14 @@ const Inner = styled.div`
   }
 
   > div > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+
     @media (min-width: ${ViewportWidth.m}) {
-      display: flex;
+      flex-direction: row;
       justify-content: space-between;
-      align-items: center;
     }
   }
 `
@@ -106,12 +121,6 @@ const Container = styled.div`
   border-top: 1px solid ${({ theme }) => theme.color.lightBorder};
 `
 
-const links = [
-  { title: 'mStable', href: 'https://mstable.org' },
-  { title: 'Docs', href: 'https://docs.mstable.org' },
-  { title: 'Governance', href: 'https://governance.mstable.org' },
-]
-
 const socialIcons = [
   { title: 'Github', icon: Github, href: 'https://github.com/mstable' },
   { title: 'Discord', icon: Discord, href: 'https://discord.gg/pgCVG7e' },
@@ -121,23 +130,17 @@ const socialIcons = [
 ]
 
 export const Footer: FC = () => {
+  const network = useNetwork()
+  const isEthereum = network.chainId === ChainIds.EthereumMainnet
+
   return (
     <Container>
       <Inner>
         <div>
           <div>
             <Links>
-              {links.map(({ title, href }) => (
-                <li key={href}>
-                  {href.startsWith('/') ? (
-                    <Link to={href}>{title}</Link>
-                  ) : (
-                    <a href={href} target="_blank" rel="noopener noreferrer">
-                      {title}
-                    </a>
-                  )}
-                </li>
-              ))}
+              <b>mStable</b> powered by{' '}
+              {isEthereum ? <a href="https://ethereum.org/en/">Ethereum</a> : <a href="https://polygon.technology">Polygon</a>}
             </Links>
             <SocialIcons>
               {socialIcons.map(({ title, href, icon }) => (
