@@ -2,14 +2,13 @@ import { truncateAddress } from '@apps/formatters'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { StakedToken__factory } from '@apps/artifacts/typechain'
-import { useAccount, useSigner } from '@apps/base/context/account'
+import { useAccount } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 import { Button, ThemedSkeleton } from '@apps/components/core'
 
 import { StakedTokenSwitcher } from '../../components/StakedTokenSwitcher'
-import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
 
 const Check: FC = () => (
   <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,10 +29,9 @@ const Container = styled.div`
 
 export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boolean }> = ({ address, stakedTokenSwitcher }) => {
   const propose = usePropose()
-  const signer = useSigner()
+  const stakedTokenContract = useStakedTokenContract()
   const account = useAccount()
 
-  const stakedToken = useStakedToken()
   const stakedTokenQuery = useStakedTokenQuery()
   const delegatee = stakedTokenQuery.data?.stakedToken.accounts?.[0]?.delegatee
   const isDelegated = delegatee && address && delegatee.id.toLowerCase() === address.toLowerCase()
@@ -51,8 +49,10 @@ export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boole
             <Button
               highlighted
               onClick={() => {
+                if (!stakedTokenContract) return
+
                 propose<Interfaces.StakedToken, 'delegate'>(
-                  new TransactionManifest(StakedToken__factory.connect(stakedToken.selected, signer), 'delegate', [account], {
+                  new TransactionManifest(stakedTokenContract, 'delegate', [account], {
                     present: 'Disabling delegation',
                     past: 'Disabled delegation',
                   }),
@@ -66,8 +66,10 @@ export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boole
           <Button
             highlighted
             onClick={() => {
+              if (!stakedTokenContract) return
+
               propose<Interfaces.StakedToken, 'delegate'>(
-                new TransactionManifest(StakedToken__factory.connect(stakedToken.selected, signer), 'delegate', [address], {
+                new TransactionManifest(stakedTokenContract, 'delegate', [address], {
                   present: `Delegating to ${truncateAddress(address)}`,
                   past: `Delegated to ${truncateAddress(address)}`,
                 }),
