@@ -171,7 +171,7 @@ export const StakeSelection: FC = () => {
   const handleSelection = (selection: Selection) => {
     const tokens = Object.keys(options)
       .map(key => key)
-      .sort(a => (a == mtaAddress ? 1 : -1))
+      .sort(a => (a === mtaAddress ? 1 : -1))
     if (selection === Selection.MTA) {
       setStakedToken(tokens[0])
       return setSelectedOption()

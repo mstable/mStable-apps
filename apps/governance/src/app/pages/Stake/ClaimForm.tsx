@@ -2,14 +2,13 @@ import React, { FC, useMemo } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
-import { StakedToken__factory } from '@apps/artifacts/typechain'
-import { useSigner } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { SendButton, ToggleInput } from '@apps/components/forms'
-import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { MultiRewards } from '@apps/components/core'
 import { BigDecimal } from '@apps/bigdecimal'
+
+import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 interface Balance {
   symbol?: string
@@ -52,22 +51,22 @@ export const ClaimForm: FC = () => {
   const { selected: stakedTokenAddress, options } = useStakedToken()
   const [isCompounding, toggleIsCompounding] = useToggle(false)
 
+  const stakedTokenContract = useStakedTokenContract()
   const propose = usePropose()
-  const signer = useSigner()
 
   const stakedTokenSymbol = options[stakedTokenAddress]?.icon?.symbol
 
   const rewards = useMemo<Balance>((): Balance | undefined => {
     const account = data?.stakedToken?.accounts?.[0]
     return { symbol: stakedTokenSymbol, amount: new BigDecimal(account?.rewards ?? 0) }
-  }, [data])
+  }, [data, stakedTokenSymbol])
 
   const handleSend = () => {
-    if (!signer || !data) return
+    if (!stakedTokenContract || !data) return
 
     if (isCompounding) {
       return propose<Interfaces.StakedToken, 'compoundRewards'>(
-        new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'compoundRewards', [], {
+        new TransactionManifest(stakedTokenContract, 'compoundRewards', [], {
           present: `Compound rewards`,
           past: `Compounded rewards`,
         }),
@@ -75,7 +74,7 @@ export const ClaimForm: FC = () => {
     }
 
     propose<Interfaces.StakedToken, 'claimReward()'>(
-      new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'claimReward()', [], {
+      new TransactionManifest(stakedTokenContract, 'claimReward()', [], {
         present: `Claim rewards`,
         past: `Claimed rewards`,
       }),

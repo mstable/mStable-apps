@@ -1,37 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Color } from '@apps/base/theme'
 import styled from 'styled-components'
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
-const WEEK = 604800
-
 interface DataType {
   mta: number
-  week: number
-}
-
-const generateData = (weeksStaked?: number): DataType[] => {
-  return [
-    {
-      mta: 0,
-      week: 0,
-    },
-    {
-      mta: weeksStaked,
-      week: 1,
-    },
-  ]
-}
-
-const removeDuplicatesBy = (keyFn: (n: DataType) => void, array: DataType[]) => {
-  const uniqueSet = new Set()
-  return array.filter(x => {
-    const key = keyFn(x),
-      isNew = !uniqueSet.has(key)
-    if (isNew) uniqueSet.add(key)
-    return isNew
-  })
+  ordering: number
 }
 
 const Container = styled.div`
@@ -50,10 +25,22 @@ const Container = styled.div`
 `
 
 export const ClaimGraph: FC = () => {
-  const { data: stakedData } = useStakedTokenQuery()
-  const rewardsCount = 130
+  const stakedTokenQuery = useStakedTokenQuery()
 
-  const data = generateData(rewardsCount)
+  const data = useMemo<DataType[]>(() => {
+    if (!stakedTokenQuery?.data.stakedToken.accounts[0]?.rewards) return []
+    const earned = parseFloat(stakedTokenQuery.data.stakedToken.accounts[0].rewards)
+    return [
+      {
+        mta: 0,
+        ordering: 0,
+      },
+      {
+        mta: earned,
+        ordering: 1,
+      },
+    ]
+  }, [stakedTokenQuery.data])
 
   return (
     <Container>
@@ -66,8 +53,8 @@ export const ClaimGraph: FC = () => {
             </linearGradient>
           </defs>
           <XAxis
-            dataKey="week"
-            tickFormatter={w => (w === 0 ? 'Last claim' : 'Now')}
+            dataKey="ordering"
+            tickFormatter={ordering => (ordering === 0 ? 'Last claim' : 'Now')}
             axisLine={false}
             padding={{ left: 16 }}
             tickLine={false}
