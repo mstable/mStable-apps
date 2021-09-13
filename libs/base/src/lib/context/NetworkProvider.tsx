@@ -2,7 +2,11 @@ import React, { FC, useEffect, createContext, useCallback, useContext, useMemo }
 import { createStateContext, useInterval } from 'react-use'
 import { providers } from 'ethers'
 import type { Provider } from '@ethersproject/providers'
+
+// TODO fix circular dep
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { FetchState, useFetchState } from '@apps/hooks'
+
 import { composedComponent } from '@apps/react-utils'
 
 import { MassetName, DEAD_ADDRESS } from '@apps/types'
@@ -36,6 +40,7 @@ export enum ChainIds {
   EthereumMainnet = 1,
   EthereumRopsten = 3,
   EthereumGoerli = 5,
+  EthereumKovan = 42,
   MaticMainnet = 137,
   MaticMumbai = 80001,
 }
@@ -99,6 +104,10 @@ export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, Gr
   chainId: ChainIds.EthereumRopsten
 }
 
+export interface EthereumKovan extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking' | 'questbook' | 'snapshot'>> {
+  chainId: ChainIds.EthereumKovan
+}
+
 export interface EthereumGoerli extends Network<{ ERC20: { WETH: string } }, {}> {
   chainId: ChainIds.EthereumGoerli
 }
@@ -132,11 +141,12 @@ export interface MaticMumbai extends Network<{ ERC20: { wMATIC: string } }, Core
   }
 }
 
-export type AllNetworks = EthereumMainnet | EthereumRopsten | EthereumGoerli | MaticMainnet | MaticMumbai
+export type AllNetworks = EthereumMainnet | EthereumRopsten | EthereumKovan | EthereumGoerli | MaticMainnet | MaticMumbai
 
 export type AllGqlEndpoints = keyof (EthereumMainnet['gqlEndpoints'] &
   EthereumGoerli['gqlEndpoints'] &
   EthereumRopsten['gqlEndpoints'] &
+  EthereumKovan['gqlEndpoints'] &
   MaticMainnet['gqlEndpoints'] &
   MaticMumbai['gqlEndpoints'])
 
@@ -260,6 +270,33 @@ const ETH_GOERLI: EthereumGoerli = {
   getExplorerUrl: etherscanUrl('goerli'),
 }
 
+const ETH_KOVAN: EthereumKovan = {
+  ...ETH_MAINNET,
+  isTestnet: true,
+  chainId: ChainIds.EthereumKovan,
+  chainName: 'Kovan',
+  rpcEndpoints: ['https://kovan.infura.io/v3/62bdcedba8ba449d9a795ef6310e713c'],
+  gasStationEndpoint: 'https://gasprice.poa.network/',
+  gqlEndpoints: {
+    protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-kovan')],
+    staking: [graphHostedEndpoint('mstable', 'mstable-staking-kovan')],
+    blocks: [graphHostedEndpoint('blocklytics', 'kovan-blocks')],
+    snapshot: ['https://hub.snapshot.org/graphql'],
+    questbook: ['https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook'],
+  },
+  addresses: {
+    MTA: '0xe9553b420eab4ebe7237ac3f97035ef090f15e1d',
+    vMTA: '0x77f9bf80e0947408f64faa07fd150920e6b52015',
+    FeederWrapper: DEAD_ADDRESS,
+    SaveWrapper: '',
+    UniswapRouter02_Like: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+    ERC20: {
+      WETH: '0xE131AbCD2114bf457B1fBc5cE01593E06c435A63',
+    },
+  },
+  getExplorerUrl: etherscanUrl('kovan'),
+}
+
 const MATIC_MAINNET: MaticMainnet = {
   chainId: ChainIds.MaticMainnet,
   parentChainId: ChainIds.EthereumMainnet,
@@ -333,7 +370,7 @@ const MATIC_MUMBAI: MaticMumbai = {
   getExplorerUrl: etherscanUrl('mumbai', 'polygonscan.com'),
 }
 
-export const NETWORKS = [ETH_MAINNET, ETH_GOERLI, ETH_ROPSTEN, MATIC_MAINNET, MATIC_MUMBAI]
+export const NETWORKS = [ETH_MAINNET, ETH_GOERLI, ETH_ROPSTEN, ETH_KOVAN, MATIC_MAINNET, MATIC_MUMBAI]
 
 export const getNetwork = (chainId: ChainIds | 0): Extract<AllNetworks, { chainId: typeof chainId }> => {
   switch (chainId) {
@@ -344,6 +381,9 @@ export const getNetwork = (chainId: ChainIds | 0): Extract<AllNetworks, { chainI
 
     case ChainIds.EthereumRopsten:
       return ETH_ROPSTEN
+
+    case ChainIds.EthereumKovan:
+      return ETH_KOVAN
 
     case ChainIds.EthereumGoerli:
       return ETH_GOERLI
