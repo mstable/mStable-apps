@@ -9,10 +9,11 @@ export type QueryFieldPolicy = {
 	quests?: FieldPolicy<any> | FieldReadFunction<any>,
 	quest?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QuestKeySpecifier = ('id' | 'ethereumId' | 'objectives' | 'title' | 'description' | 'imageURI' | 'userQuest' | QuestKeySpecifier)[];
+export type QuestKeySpecifier = ('id' | 'ethereumId' | 'requiredPoints' | 'objectives' | 'title' | 'description' | 'imageURI' | 'userQuest' | QuestKeySpecifier)[];
 export type QuestFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	ethereumId?: FieldPolicy<any> | FieldReadFunction<any>,
+	requiredPoints?: FieldPolicy<any> | FieldReadFunction<any>,
 	objectives?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
 	description?: FieldPolicy<any> | FieldReadFunction<any>,

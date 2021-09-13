@@ -9,6 +9,12 @@ query Staking {
   }
 }
 
+query Tokens {
+  tokens {
+    ...TokenAll
+  }
+}
+
 query Leaderboard($count: Int!, $skip: Int!) {
   stakedTokens {
     token {
