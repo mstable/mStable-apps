@@ -84,7 +84,6 @@ export const VotingHistory: FC<{ addressOrENSName: string; address?: string }> =
   const clients = useApolloClients()
   const votesQuery = useVotesQuery({ client: clients.snapshot, variables: { account: address }, skip: !address })
 
-  console.log(votesQuery.data)
   return (
     <Container>
       <h3>Voting History</h3>
