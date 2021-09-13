@@ -14,22 +14,25 @@ const getCurrentMultiplier = (hodlLength: number) => {
   if (hodlLength < 13) {
     // 0-3 months = 1x
     return 1
-  } else if (hodlLength < 26) {
+  }
+  if (hodlLength < 26) {
     // 3 months = 1.2x
     return 1.2
-  } else if (hodlLength < 52) {
+  }
+  if (hodlLength < 52) {
     // 6 months = 1.3x
     return 1.3
-  } else if (hodlLength < 78) {
+  }
+  if (hodlLength < 78) {
     // 12 months = 1.4x
     return 1.4
-  } else if (hodlLength < 104) {
+  }
+  if (hodlLength < 104) {
     // 18 months = 1.5x
     return 1.5
-  } else {
-    // > 24 months = 1.6x
-    return 1.6
   }
+  // > 24 months = 1.6x
+  return 1.6
 }
 
 const generateData = (startTime: number): DataType[] => {
@@ -37,8 +40,7 @@ const generateData = (startTime: number): DataType[] => {
   const week = Math.floor((now - startTime) / WEEK)
   const totalIntervals = 117
   const intervals = [...Array(totalIntervals - week + 1).keys()]
-  const mapped = intervals.map((w, i) => ({ multiplier: getCurrentMultiplier(w + week), week: i * WEEK }))
-  return mapped
+  return intervals.map((w, i) => ({ multiplier: getCurrentMultiplier(w + week), week: i * WEEK }))
 }
 
 const removeDuplicatesBy = (keyFn: (n: DataType) => void, array: DataType[]) => {

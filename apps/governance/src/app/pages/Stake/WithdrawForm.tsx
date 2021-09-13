@@ -1,17 +1,16 @@
 import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { StakedToken__factory } from '@apps/artifacts/typechain'
-import { useAccount, useSigner } from '@apps/base/context/account'
 import { Warning } from '@apps/components/core'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { useBigDecimalInput, useFetchState } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetInputSingle, SendButton } from '@apps/components/forms'
-import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { useBlockNow } from '@apps/base/context/block'
 import { BigDecimal } from '@apps/bigdecimal'
+
+import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
 
 const Input = styled(AssetInputSingle)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -48,13 +47,11 @@ const Container = styled.div`
 
 export const WithdrawForm: FC = () => {
   const { data, loading } = useStakedTokenQuery()
-  const { selected: stakedTokenAddress } = useStakedToken()
   const [fee, setFee] = useFetchState<BigDecimal>()
   const blockNumber = useBlockNow()
 
   const propose = usePropose()
-  const signer = useSigner()
-  const account = useAccount()
+  const stakedTokenContract = useStakedTokenContract()
 
   const stakingToken = useTokenSubscription(data?.stakedToken?.stakingToken.address)
   const [amount, formValue, setFormValue] = useBigDecimalInput()
@@ -63,21 +60,23 @@ export const WithdrawForm: FC = () => {
   const isValid = amount?.simple <= (stakedAmount?.simple ?? 0) && amount?.simple > 0
 
   // need to figure out how to get weighted timestamp
+  const weightedTimestamp = data?.stakedToken.accounts[0]?.balance.weightedTimestamp
   useEffect(() => {
-    const weightedTimestamp = data?.stakedToken?.accounts?.[0]?.balance.weightedTimestamp
-    if (!weightedTimestamp) return
-    Promise.all([account ? StakedToken__factory.connect(stakedTokenAddress, signer).calcRedemptionFeeRate(weightedTimestamp) : undefined])
+    if (!weightedTimestamp || fee.fetching) return
+
+    setFee.fetching()
+    Promise.all([stakedTokenContract ? stakedTokenContract.calcRedemptionFeeRate(weightedTimestamp) : undefined])
       .then(([fee = 0]) => {
         setFee.value(new BigDecimal(fee))
       })
       .catch(setFee.error)
-  }, [blockNumber, account])
+  }, [blockNumber, weightedTimestamp, setFee, fee.fetching, stakedTokenContract])
 
   const handleSend = () => {
-    if (!signer || !data || amount.exact.lte(0) || !fee.value) return
+    if (!stakedTokenContract || !data || amount.exact.lte(0) || !fee.value) return
 
     propose<Interfaces.StakedToken, 'startCooldown'>(
-      new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'startCooldown', [amount.exact], {
+      new TransactionManifest(stakedTokenContract, 'startCooldown', [amount.exact], {
         present: `Initiating cooldown of ${amount.simple} ${stakingToken.symbol}`,
         past: `Initiated cooldown of ${amount.simple} ${stakingToken.symbol}`,
       }),
