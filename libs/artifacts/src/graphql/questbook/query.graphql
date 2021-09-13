@@ -36,10 +36,14 @@ query Quest($questId: ID!, $userId: ID!, $hasUser: Boolean!) {
   }
 }
 
-mutation UpdateQuest($userId: ID!, $questId: ID!) {
-  updateQuest(userId: $userId, questId: $questId)
+mutation UpdateQuest($userId: ID!, $questId: ID!, $hasUser: Boolean!) {
+  updateQuest(userId: $userId, questId: $questId) {
+    ...QuestAll
+  }
 }
 
-mutation UpdateQuests($userId: ID!) {
-  updateQuests(userId: $userId)
+mutation UpdateQuests($userId: ID!, $hasUser: Boolean!) {
+  updateQuests(userId: $userId) {
+    ...QuestAll
+  }
 }

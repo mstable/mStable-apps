@@ -32,8 +32,8 @@ export type Scalars = {
 
 
 export type Mutation = {
-  updateQuest: Scalars['Boolean'];
-  updateQuests: Scalars['Boolean'];
+  updateQuest: Quest;
+  updateQuests: Array<Quest>;
 };
 
 
@@ -66,6 +66,7 @@ export type QueryQuestArgs = {
 export type Quest = {
   id: Scalars['ID'];
   ethereumId?: Maybe<Scalars['Int']>;
+  requiredPoints?: Maybe<Scalars['Int']>;
   objectives: Array<QuestObjective>;
   title: Scalars['String'];
   description: Scalars['String'];
@@ -99,7 +100,7 @@ export type UserQuestObjective = {
   progress?: Maybe<Scalars['Float']>;
 };
 
-export type QuestAllFragment = { id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> };
+export type QuestAllFragment = { id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> };
 
 export type QuestsQueryVariables = Exact<{
   userId: Scalars['ID'];
@@ -107,7 +108,7 @@ export type QuestsQueryVariables = Exact<{
 }>;
 
 
-export type QuestsQuery = { quests: Array<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
+export type QuestsQuery = { quests: Array<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
 
 export type QuestQueryVariables = Exact<{
   questId: Scalars['ID'];
@@ -116,22 +117,24 @@ export type QuestQueryVariables = Exact<{
 }>;
 
 
-export type QuestQuery = { quest?: Maybe<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
+export type QuestQuery = { quest?: Maybe<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
 
 export type UpdateQuestMutationVariables = Exact<{
   userId: Scalars['ID'];
   questId: Scalars['ID'];
+  hasUser: Scalars['Boolean'];
 }>;
 
 
-export type UpdateQuestMutation = { updateQuest: boolean };
+export type UpdateQuestMutation = { updateQuest: { id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> } };
 
 export type UpdateQuestsMutationVariables = Exact<{
   userId: Scalars['ID'];
+  hasUser: Scalars['Boolean'];
 }>;
 
 
-export type UpdateQuestsMutation = { updateQuests: boolean };
+export type UpdateQuestsMutation = { updateQuests: Array<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
 
 export const QuestAllFragmentDoc = gql`
     fragment QuestAll on Quest {
@@ -140,6 +143,7 @@ export const QuestAllFragmentDoc = gql`
   title
   description
   imageURI
+  requiredPoints
   objectives {
     id
     title
@@ -233,10 +237,12 @@ export type QuestQueryHookResult = ReturnType<typeof useQuestQuery>;
 export type QuestLazyQueryHookResult = ReturnType<typeof useQuestLazyQuery>;
 export type QuestQueryResult = Apollo.QueryResult<QuestQuery, QuestQueryVariables>;
 export const UpdateQuestDocument = gql`
-    mutation UpdateQuest($userId: ID!, $questId: ID!) {
-  updateQuest(userId: $userId, questId: $questId)
+    mutation UpdateQuest($userId: ID!, $questId: ID!, $hasUser: Boolean!) {
+  updateQuest(userId: $userId, questId: $questId) {
+    ...QuestAll
+  }
 }
-    `;
+    ${QuestAllFragmentDoc}`;
 export type UpdateQuestMutationFn = Apollo.MutationFunction<UpdateQuestMutation, UpdateQuestMutationVariables>;
 
 /**
@@ -254,6 +260,7 @@ export type UpdateQuestMutationFn = Apollo.MutationFunction<UpdateQuestMutation,
  *   variables: {
  *      userId: // value for 'userId'
  *      questId: // value for 'questId'
+ *      hasUser: // value for 'hasUser'
  *   },
  * });
  */
@@ -265,10 +272,12 @@ export type UpdateQuestMutationHookResult = ReturnType<typeof useUpdateQuestMuta
 export type UpdateQuestMutationResult = Apollo.MutationResult<UpdateQuestMutation>;
 export type UpdateQuestMutationOptions = Apollo.BaseMutationOptions<UpdateQuestMutation, UpdateQuestMutationVariables>;
 export const UpdateQuestsDocument = gql`
-    mutation UpdateQuests($userId: ID!) {
-  updateQuests(userId: $userId)
+    mutation UpdateQuests($userId: ID!, $hasUser: Boolean!) {
+  updateQuests(userId: $userId) {
+    ...QuestAll
+  }
 }
-    `;
+    ${QuestAllFragmentDoc}`;
 export type UpdateQuestsMutationFn = Apollo.MutationFunction<UpdateQuestsMutation, UpdateQuestsMutationVariables>;
 
 /**
@@ -285,6 +294,7 @@ export type UpdateQuestsMutationFn = Apollo.MutationFunction<UpdateQuestsMutatio
  * const [updateQuestsMutation, { data, loading, error }] = useUpdateQuestsMutation({
  *   variables: {
  *      userId: // value for 'userId'
+ *      hasUser: // value for 'hasUser'
  *   },
  * });
  */
