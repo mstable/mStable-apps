@@ -11,6 +11,7 @@ export { BannerMessage } from './components/layout/BannerMessage'
 interface BaseContext {
   navItems: { path: string; title: string }[]
   AccountModalContent?: FC<any>
+  appName?: string
 }
 
 export const [useBaseCtx, BaseCtxProvider, baseCtx] = createStateContext<BaseContext>({ navItems: [] })

@@ -18,6 +18,7 @@ import { EarnRedirect } from './pages/EarnRedirect'
 import { Pools } from './pages/Pools'
 import { PoolDetail } from './pages/Pools/Detail'
 import { Exchange } from './pages/Exchange'
+import { APP_NAME } from 'libs/types/src/lib/constants'
 
 const ProtocolRoutes: FC = () => {
   const { supportedMassets } = useNetwork()
@@ -81,8 +82,9 @@ export const ProtocolApp: FC = () => {
       { title: 'Swap', path: `/${massetName}/swap` },
       { title: 'Stats', path: `/${massetName}/stats` },
     ]
+    const appName = APP_NAME.PROTOCOL
 
-    setBaseCtx({ navItems, AccountModalContent: Balances })
+    setBaseCtx({ navItems, AccountModalContent: Balances, appName })
   }, [hasFeederPools, setBaseCtx, massetName])
 
   // Handle message prioritisation:

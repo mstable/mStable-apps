@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 
 // FIXME
 import { ReactComponent as LogoSvg } from '../../../../../components/src/lib/icons/mstable-small.svg'
-
 import { useTransactionsState } from '@apps/base/context/transactions'
 import { UnstyledButton, ActivitySpinner } from '@apps/components/core'
 import { TransactionStatus } from '@apps/transaction-manifest'
@@ -130,6 +129,7 @@ const StickyHeader = styled.div`
 
 export const AppBar: FC = () => {
   const { protocolName } = useNetwork()
+
   return (
     <StickyHeader>
       <Container>
@@ -146,7 +146,6 @@ export const AppBar: FC = () => {
             <NetworkButton>
               <TokenIcon symbol={protocolName.toUpperCase()} />
             </NetworkButton>
-            <SettingsButton />
           </WalletAndSpinner>
         </Inner>
       </Container>

@@ -10,6 +10,7 @@ import { LeaderboardPage } from './pages/Vote/LeaderboardPage'
 import { Delegatee } from './pages/Vote/Delegatee'
 import { Stats } from './pages/Stats'
 import { NotFound } from './pages/NotFound'
+import { APP_NAME } from 'libs/types/src/lib/constants'
 
 const GovernanceRoutes: FC = () => {
   return (
@@ -37,8 +38,9 @@ export const GovernanceApp: FC = () => {
       { title: 'Quests', path: '/quests' },
       { title: 'Stats', path: '/stats' },
     ]
+    const appName = APP_NAME.GOVERNANCE
 
-    setBaseCtx({ navItems })
+    setBaseCtx({ navItems, appName })
   }, [setBaseCtx])
 
   return <GovernanceRoutes />

@@ -1,8 +1,11 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import React, { FC, useCallback, useMemo } from 'react'
 import { useKeyPress } from 'react-use'
 import styled from 'styled-components'
 
-import { ChainIds, useChainIdCtx, NETWORKS } from '@apps/base/context/network'
+import { ChainIds, useChainIdCtx, NETWORKS, Networks } from '@apps/base/context/network'
+import { useBaseCtx } from '@apps/base'
+import { APP_NAME } from 'libs/types/src/lib/constants'
 
 import { Dropdown } from './Dropdown'
 
@@ -26,6 +29,11 @@ const StyledDropdown = styled(Dropdown)`
 export const NetworkDropdown: FC = () => {
   const [chainId, setChainId] = useChainIdCtx()
   const [isAltPressed] = useKeyPress('Alt')
+
+  const [{ appName }] = useBaseCtx()
+
+  // TODO: filter out polygon on governance
+  const isProtocol = appName === APP_NAME.PROTOCOL
 
   const handleSelect = useCallback(
     (_chainId: string) => {

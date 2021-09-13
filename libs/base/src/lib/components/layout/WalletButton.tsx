@@ -15,7 +15,7 @@ const ConnectText = styled.span`
 
 const AccountButton = styled(UnstyledButton)`
   align-items: center;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   display: flex;
   font-weight: 600;

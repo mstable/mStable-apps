@@ -172,7 +172,7 @@ const GlobalStyle = (createGlobalStyle as <P extends object = {}>(
     .bn-onboard-modal-select-wallets {
       .bn-onboard-prepare-button {
         color: 1px solid ${({ theme }) => theme.color.body} !important;
-        border: 1px ${Color.blackTransparent} solid !important;
+        border: 1px ${({ theme }) => theme.color.defaultBorder} solid !important;
       }
     }
     .bn-onboard-select-info-container  {
@@ -200,7 +200,7 @@ const GlobalStyle = (createGlobalStyle as <P extends object = {}>(
       .bn-onboard-modal-content {
         position: relative;
         max-width: 28rem;
-        border-radius: 1rem;
+        border-radius: 0.75rem;
       }
     }
   }
