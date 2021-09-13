@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Color } from '@apps/base/theme'
 import styled from 'styled-components'
@@ -12,7 +12,7 @@ interface DataType {
 }
 
 const getRedemptionFee = (weeksStaked: number) => {
-  var _feeRate = 0
+  let _feeRate = 0
   if (weeksStaked > 2) {
     _feeRate = Math.sqrt(300e18 / weeksStaked) * 1e7
     _feeRate = _feeRate < 25e15 ? 0 : _feeRate - 25e15
@@ -22,21 +22,12 @@ const getRedemptionFee = (weeksStaked: number) => {
   return _feeRate / 1e18
 }
 
-const generateData = (weeksStaked?: number): DataType[] => {
-  const totalIntervals = 50
-  const intervals = [...Array(totalIntervals - Math.floor(weeksStaked) + 1).keys()]
-  const mapped = intervals?.map((w, i) => ({ fee: getRedemptionFee(w + weeksStaked), week: i * WEEK }))
-  return mapped
-}
+const totalIntervals = 50
 
-const removeDuplicatesBy = (keyFn: (n: DataType) => void, array: DataType[]) => {
-  const uniqueSet = new Set()
-  return array.filter(x => {
-    const key = keyFn(x),
-      isNew = !uniqueSet.has(key)
-    if (isNew) uniqueSet.add(key)
-    return isNew
-  })
+const generateData = (weeksStaked: number): DataType[] => {
+  const length = Math.max(totalIntervals - Math.floor(weeksStaked) + 1, 0)
+  const intervals = [...new Array(length).keys()]
+  return intervals.map((w, i) => ({ fee: getRedemptionFee(w + weeksStaked), week: i * WEEK }))
 }
 
 const Container = styled.div`
@@ -54,26 +45,38 @@ const Container = styled.div`
   }
 `
 
+const nowUnix = Math.floor(Date.now() / 1e3)
+
 export const WithdrawGraph: FC = () => {
   const { data: stakedData } = useStakedTokenQuery()
 
-  const weightedTimestamp = (stakedData?.stakedToken?.accounts?.[0]?.balance?.weightedTimestamp ?? Date.now()) / 1e3
-  const weeksStaked = (Date.now() / 1e3 - weightedTimestamp) / WEEK
+  const weightedTimestamp = stakedData?.stakedToken.accounts[0]?.balance?.weightedTimestamp ?? nowUnix
 
-  const data = generateData(weeksStaked)
-  const ticks = removeDuplicatesBy(x => x.fee, data).map(v => v.week)
+  const graphData = useMemo(() => {
+    const weeksStaked = (nowUnix - weightedTimestamp) / WEEK
+    const data = generateData(weeksStaked)
+    const ticks = [...new Set(data.map(d => d.week))]
+    return { data, ticks }
+  }, [weightedTimestamp])
 
   return (
     <Container>
       <ResponsiveContainer width="100%" aspect={1.75}>
-        <AreaChart data={data}>
+        <AreaChart data={graphData.data}>
           <defs>
             <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor={Color.blue} stopOpacity={0.5} />
               <stop offset="95%" stopColor={Color.blue} stopOpacity={0} />
             </linearGradient>
           </defs>
-          <XAxis dataKey="week" tickFormatter={w => `${w / WEEK}`} axisLine={false} padding={{ left: 16 }} tickLine={false} ticks={ticks} />
+          <XAxis
+            dataKey="week"
+            tickFormatter={w => `${w / WEEK}`}
+            axisLine={false}
+            padding={{ left: 16 }}
+            tickLine={false}
+            ticks={graphData.ticks}
+          />
           <YAxis
             domain={['dataMin', 'dataMax']}
             tickCount={2}
