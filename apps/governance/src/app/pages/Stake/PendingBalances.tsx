@@ -1,12 +1,13 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
+
 import { CountdownBar, Table, TableCell, TableRow, Tooltip } from '@apps/components/core'
-import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { usePropose } from '@apps/base/context/transactions'
-import { useOwnAccount, useSigner } from '@apps/base/context/account'
-import { StakedToken__factory } from '@apps/artifacts/typechain'
+import { useOwnAccount } from '@apps/base/context/account'
 import { BigDecimal } from '@apps/bigdecimal'
+
+import { useStakedToken, useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
 
 const TABLE_WIDTHS = [33, 33, 33]
 
@@ -76,7 +77,7 @@ export const PendingBalances: FC = () => {
   const { selected: stakedTokenAddress } = useStakedToken()
 
   const propose = usePropose()
-  const signer = useSigner()
+  const stakedTokenContract = useStakedTokenContract()
   const address = useOwnAccount()
 
   const { percentage, endTime, balance, unlocked, symbol } = useMemo<Props>((): Props => {
@@ -111,10 +112,10 @@ export const PendingBalances: FC = () => {
     : 'Your balance will be available for withdrawal after a cooldown period'
 
   const handleWithdrawal = () => {
-    if (!signer || !data) return
+    if (!stakedTokenContract || !data) return
 
     return propose<Interfaces.StakedToken, 'withdraw'>(
-      new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'withdraw', [balance.exact, address, true, true], {
+      new TransactionManifest(stakedTokenContract, 'withdraw', [balance.exact, address, true, true], {
         present: `Withdraw ${balance?.simple} ${symbol}`,
         past: `Withdrew ${balance?.simple} ${symbol}`,
       }),
