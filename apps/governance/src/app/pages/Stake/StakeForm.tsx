@@ -66,7 +66,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const stakedTokenContract = useStakedTokenContract()
 
   const [amount, formValue, setFormValue] = useBigDecimalInput()
-  const [isDelegating, toggleIsDelegating] = useToggle(true)
+  const [isDelegating, toggleIsDelegating] = useToggle(false)
   const [delegate, setDelegate] = useState<string | undefined>()
 
   const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS) / DAY

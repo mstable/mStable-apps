@@ -79,7 +79,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px ${({ theme }) => theme.color.background[2]} solid;
+    border: 1px ${({ theme }) => theme.color.defaultBorder} solid;
     padding: 1.5rem;
     border-radius: 1.5rem;
     gap: 1rem;

@@ -3,6 +3,9 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { GovernancePageHeader } from '../components/GovernancePageHeader'
+import { useStakedTokenQuery } from '../context/StakedTokenProvider'
+
+const DAY = 86400
 
 const StyledTooltip = styled(Tooltip)`
   position: absolute;
@@ -48,13 +51,26 @@ const Container = styled.div`
 `
 
 export const Stats: FC = () => {
+  const { data } = useStakedTokenQuery()
+  const recollatRatio = parseFloat(data?.stakedToken?.collateralisationRatio) / 1e18
+  const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS) / DAY
+  const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW) / DAY
+
   return (
     <Container>
       <GovernancePageHeader title="Stats" subtitle="Overview of the mStable Governance system" />
       <div>
-        <StatsBox tip="Hello, world!" title="Recollateralisation Percentage" subtitle={'25.00%'} />
-        <StatsBox tip="Hello, world!" title="Withdrawal Cooldown" subtitle={'10d'} />
-        <StatsBox tip="Hello, world!" title="Withdrawal Period" subtitle={'3d'} />
+        <StatsBox
+          tip={`In the event of recollateratalisation, your staked balance will be slashed by ${recollatRatio}%. This rate may vary depending on future governance proposals.`}
+          title="Recollateralisation Percentage"
+          subtitle={`${recollatRatio}%`}
+        />
+        <StatsBox tip="The period of time before your stake is withdrawable" title="Withdrawal Cooldown" subtitle={`${cooldown}d`} />
+        <StatsBox
+          tip="The duration your stake is withdrawable after the cooldown"
+          title="Withdrawal Period"
+          subtitle={`${unstakeWindow}d`}
+        />
       </div>
     </Container>
   )
