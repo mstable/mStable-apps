@@ -16,7 +16,8 @@ const Content: FC<{ address?: string; addressOrENSName: string; resolvedENSName?
 }) => {
   const all = useDelegateesAll()
   const resolvedAddress = address ?? resolvedENSName.value
-  const delegateeInfo = resolvedAddress ? all[resolvedAddress.toLowerCase()] : undefined
+  const delegateeInfo =
+    (address ? all[address] : all[addressOrENSName]) ?? (resolvedAddress && all[resolvedAddress.toLowerCase()]) ?? undefined
 
   return (
     <div>
