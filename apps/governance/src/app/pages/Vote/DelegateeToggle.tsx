@@ -54,7 +54,7 @@ export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boole
             <Button
               highlighted
               onClick={() => {
-                if (!stakedTokenContract) return
+                if (!stakedTokenContract || !account) return
 
                 propose<Interfaces.StakedToken, 'delegate'>(
                   new TransactionManifest(stakedTokenContract, 'delegate', [account], {
@@ -71,7 +71,7 @@ export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boole
           <Button
             highlighted
             onClick={() => {
-              if (!stakedTokenContract) return
+              if (!stakedTokenContract || !address) return
 
               propose<Interfaces.StakedToken, 'delegate'>(
                 new TransactionManifest(stakedTokenContract, 'delegate', [address], {
