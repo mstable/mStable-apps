@@ -10,11 +10,29 @@ const typePolicies: TypedTypePolicies = {
     fields: {
       rawBD: readAsBD<StakedTokenBalance>('raw'),
       votesBD: readAsBD<StakedTokenBalance>('votes'),
+      timeMultiplierSimple: {
+        read(existing, options) {
+          const timeMultiplier = (options.readField('timeMultiplier') ?? 10) as number
+          return timeMultiplier * 0.1
+        },
+      },
     },
   },
   Account: {
     fields: {
       totalVotesBD: readAsBD<Account>('totalVotes'),
+      permMultiplierSimple: {
+        read(existing, options) {
+          const permMultiplier = (options.readField('permMultiplier') ?? 10) as number
+          return permMultiplier * 0.1
+        },
+      },
+      seasonMultiplierSimple: {
+        read(existing, options) {
+          const seasonMultiplier = (options.readField('seasonMultiplier') ?? 10) as number
+          return seasonMultiplier * 0.1
+        },
+      },
     },
   },
   Metric: {
