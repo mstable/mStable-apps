@@ -10,6 +10,7 @@ import { ApolloProvider } from './ApolloProvider'
 import { NetworkProvider } from './NetworkProvider'
 import { AccountProvider } from './AccountProvider'
 import { PricesProvider } from './PricesProvider'
+import { ENSProvider } from './ENSProvider'
 
 const Providers = composedComponent(
   NetworkProvider,
@@ -20,6 +21,7 @@ const Providers = composedComponent(
   TransactionsProvider,
   TokensProvider,
   PricesProvider,
+  ENSProvider,
   AppProvider,
   ThemeProvider,
 )

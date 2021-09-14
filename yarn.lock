@@ -3470,10 +3470,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@mstable/delegatee-lists@^0.1.0-alpha1":
-  version "0.1.0-alpha1"
-  resolved "https://registry.yarnpkg.com/@mstable/delegatee-lists/-/delegatee-lists-0.1.0-alpha1.tgz#ed154c366adf9647ea3689a36f5b3a46324231d5"
-  integrity sha512-ThVG4YFnOFLVzSVTFzzcgjfZYdXnzOp/iZKpp+xyF8/sthL0aLS3yXN93iV/l0aVSc+IwOWklyPB1T+SUdh5vg==
+"@mstable/delegatee-lists@^0.1.0-alpha2":
+  version "0.1.0-alpha2"
+  resolved "https://registry.yarnpkg.com/@mstable/delegatee-lists/-/delegatee-lists-0.1.0-alpha2.tgz#25054c51bc5ca7056133c563f73d3024d5231ad2"
+  integrity sha512-pIMpYHTt+9BL+DHx68jjGdLh/w3gTlReUGpmZ0YuvUw9gMeARinpluVAT7vlqr+1G+7zip6o+HtUdc6VrrsuFg==
 
 "@mstable/protocol@^2.2.2":
   version "2.2.2"

@@ -195,9 +195,9 @@ export const DelegateePageHeader: FC<{ delegateeInfo?: DelegateeInfo; addressOrE
         <div>
           {delegateeInfo && (
             <h2>
-              {(delegateeInfo as unknown as { websiteURI: string }).websiteURI ? (
-                <ExternalLink href={(delegateeInfo as unknown as { websiteURI: string }).websiteURI}>
-                  {delegateeInfo.displayName}
+              {delegateeInfo.profileURI ? (
+                <ExternalLink href={delegateeInfo.profileURI}>
+                  {delegateeInfo.displayName ?? delegateeInfo.ensName ?? delegateeInfo.address}
                 </ExternalLink>
               ) : (
                 delegateeInfo.displayName
