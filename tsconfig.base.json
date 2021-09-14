@@ -30,6 +30,7 @@
       "@apps/artifacts/typechain": ["libs/artifacts/src/typechain/index.ts"],
       "@apps/assets": ["libs/assets/src/index.ts"],
       "@apps/base": ["libs/base/src/index.ts"],
+      "@apps/base/hooks": ["libs/base/src/lib/hooks/index.ts"],
       "@apps/base/context/account": ["libs/base/src/lib/context/AccountProvider.tsx"],
       "@apps/base/context/apollo": ["libs/base/src/lib/context/ApolloProvider.tsx"],
       "@apps/base/context/app": ["libs/base/src/lib/context/AppProvider.tsx"],

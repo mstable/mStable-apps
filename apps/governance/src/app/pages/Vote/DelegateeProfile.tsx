@@ -59,16 +59,16 @@ const DelegateeBioContainer = styled.div`
 `
 
 const DelegateeBio: FC<{ delegateeInfo?: DelegateeInfo }> = ({ delegateeInfo }) =>
-  delegateeInfo ? (
+  delegateeInfo?.bio ? (
     <DelegateeBioContainer>
       <h4>Bio</h4>
-      <p>{(delegateeInfo as { bio?: string })?.bio as string}</p>
+      <p>{delegateeInfo.bio}</p>
     </DelegateeBioContainer>
   ) : null
 
 const DelegateeBalances: FC<{ address?: string }> = ({ address }) => {
   const stakedToken = useStakedToken()
-  const delegateeQuery = useAccountQuery(address.toLowerCase())
+  const delegateeQuery = useAccountQuery(address?.toLowerCase())
   return (
     <>
       {delegateeQuery.data?.account?.stakedTokenAccounts
