@@ -7,7 +7,7 @@ import { usePropose } from '@apps/base/context/transactions'
 import { useOwnAccount } from '@apps/base/context/account'
 import { BigDecimal } from '@apps/bigdecimal'
 
-import { useStakedToken, useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
+import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
 
 const TABLE_WIDTHS = [33, 33, 33]
 
@@ -74,7 +74,6 @@ const getData = (
 
 export const PendingBalances: FC = () => {
   const { data } = useStakedTokenQuery()
-  const { selected: stakedTokenAddress } = useStakedToken()
 
   const propose = usePropose()
   const stakedTokenContract = useStakedTokenContract()
@@ -106,6 +105,7 @@ export const PendingBalances: FC = () => {
   }, [data])
 
   const title = unlocked ? 'Withdrawable:' : 'Pending cooldown:'
+  const buttonTitle = unlocked ? 'Withdraw' : 'Cancel'
 
   const tooltipMessage = unlocked
     ? 'Your balance is now withdrawable, please claim within the allotted timeframe'
@@ -122,10 +122,21 @@ export const PendingBalances: FC = () => {
     )
   }
 
+  const handleCancel = () => {
+    if (!stakedTokenContract || !data) return
+
+    return propose<Interfaces.StakedToken, 'endCooldown'>(
+      new TransactionManifest(stakedTokenContract, 'endCooldown', [], {
+        present: `Exit cooldown and cancel withdrawal`,
+        past: `Exited cooldown`,
+      }),
+    )
+  }
+
   return (
     !!balance?.simple && (
       <StyledTable widths={TABLE_WIDTHS} width={28}>
-        <TableRow buttonTitle="Withdraw" onClick={(unlocked && handleWithdrawal) || undefined}>
+        <TableRow buttonTitle={buttonTitle} onClick={(unlocked ? handleWithdrawal : handleCancel) || undefined}>
           <TableCell width={TABLE_WIDTHS[0]}>
             {title} <Tooltip tip={tooltipMessage} />
           </TableCell>

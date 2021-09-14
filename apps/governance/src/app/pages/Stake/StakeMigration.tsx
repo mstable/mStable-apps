@@ -4,8 +4,17 @@ import styled from 'styled-components'
 import { StakeForm } from './StakeForm'
 import { ReactComponent as MigrationArrow } from '../../../assets/migration-arrow.svg'
 import { ViewportWidth } from '@apps/base/theme'
-import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
-import { useStakingQuery } from '../../context/StakingProvider'
+import { UnstyledButton } from '@apps/components/core'
+
+const CloseButton = styled(UnstyledButton)`
+  color: ${({ theme }) => theme.color.whiteTransparent};
+  border-radius: 1rem;
+  align-self: flex-end;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 const StyledStakeForm = styled(StakeForm)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -114,32 +123,31 @@ const Container = styled.div`
   }
 `
 
-export const StakeMigration: FC = () => {
-  return (
-    <Container>
-      <MigrationPanel>
-        <div>
-          <h1>
-            Migrate
-            <br /> to Staking V2
-          </h1>
-          <MigrationArrow />
-        </div>
-        <p>
-          Migrating your MTA will reward you with a permanent quest multiplier. This multiplier will increase your Voting Power & Savings
-          boost within the mStable ecosystem.&nbsp;
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            Learn more
-          </a>
-        </p>
-        <Achievement>
-          <div>Quest Multiplier</div>
-          <span>+1.2x</span>
-        </Achievement>
-      </MigrationPanel>
-      <StakeFormContainer>
-        <StyledStakeForm isMigrating={true} />
-      </StakeFormContainer>
-    </Container>
-  )
-}
+export const StakeMigration: FC<{ onSkip?: () => void }> = ({ onSkip }) => (
+  <Container>
+    <MigrationPanel>
+      <div>
+        <h1>
+          Migrate
+          <br /> to Staking V2
+        </h1>
+        <MigrationArrow />
+      </div>
+      <p>
+        Migrating your MTA will reward you with a permanent quest multiplier. This multiplier will increase your Voting Power & Savings
+        boost within the mStable ecosystem.&nbsp;
+        <a href="#" target="_blank" rel="noopener noreferrer">
+          Learn more
+        </a>
+      </p>
+      <Achievement>
+        <div>Quest Multiplier</div>
+        <span>+1.2x</span>
+      </Achievement>
+      <CloseButton onClick={onSkip}>Skip</CloseButton>
+    </MigrationPanel>
+    <StakeFormContainer>
+      <StyledStakeForm isMigrating={true} />
+    </StakeFormContainer>
+  </Container>
+)

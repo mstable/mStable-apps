@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled, { keyframes } from 'styled-components'
 
-import { TabsOfTruth, createTabsContext } from '@apps/components/core'
+import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/components/core'
 
 import { ClaimForm } from './ClaimForm'
 import { ClaimGraph } from './ClaimGraph'
@@ -15,6 +15,10 @@ import { useNetworkAddresses } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { StakingStatusProvider, useStakingStatus } from '../../context/StakingStatusProvider'
 import { ViewportWidth } from '@apps/base/theme'
+import { useToggle } from 'react-use'
+import { BigDecimal } from '@apps/bigdecimal'
+import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useURLQuery } from '@apps/hooks'
 
 enum Tabs {
   Stake,
@@ -84,12 +88,24 @@ const FormContainer = styled.div`
   }
 `
 
+const Empty = styled.div`
+  border: 1px ${({ theme }) => theme.color.defaultBorder} solid;
+  border-radius: 1rem;
+  height: 24rem;
+
+  * {
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+  }
+`
+
 const FormsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
   background: ${({ theme }) => theme.color.background[0]};
-  border: 1px ${({ theme }) => theme.color.background[1]} solid;
+  border: 1px ${({ theme }) => theme.color.defaultBorder} solid;
   border-radius: 1rem;
 
   > :first-child {
@@ -105,15 +121,29 @@ const FormsContainer = styled.div`
 
 const Content: FC = () => {
   const [{ tabs, activeTabIndex }, setActiveIndex] = useTabs()
+  const { data, loading } = useStakedTokenQuery()
   const networkAddresses = useNetworkAddresses()
+  const urlQuery = useURLQuery()
   const balanceV1Simple = useTokenSubscription(networkAddresses.vMTA)?.balance?.simple
+  const balanceV2Simple =
+    data?.stakedToken?.accounts?.[0]?.balance?.rawBD?.simple + parseFloat(data?.stakedToken?.accounts?.[0]?.balance?.cooldownUnits) / 1e18
   const { hasWithdrawnV1Balance, hasSelectedStakeOption } = useStakingStatus()
+  const migrateSlug = urlQuery.get('migrate') === 'true' // ?migrate=true
+
+  const [showMigration, setHideMigration] = useToggle(true)
 
   const { Graph, Form, heading, subheading } = stakeTabs[activeTabIndex]
 
-  return !!balanceV1Simple || hasWithdrawnV1Balance ? (
-    <StakeMigration />
-  ) : !hasSelectedStakeOption ? (
+  if (loading)
+    return (
+      <Empty>
+        <ThemedSkeleton />
+      </Empty>
+    )
+
+  return ((!!balanceV1Simple || hasWithdrawnV1Balance) && showMigration && !balanceV2Simple) || migrateSlug ? (
+    <StakeMigration onSkip={setHideMigration} />
+  ) : !hasSelectedStakeOption && !balanceV2Simple ? (
     <StakeSelection />
   ) : (
     <FormsContainer>
