@@ -40,7 +40,7 @@ const Container = styled.div`
   }
 `
 
-export const UserLookup: FC = () => {
+export const UserMasquerade: FC = () => {
   const inputText = useRef<string | undefined>()
   const masquerade = useMasquerade()
   const isMasquerading = useIsMasquerading()

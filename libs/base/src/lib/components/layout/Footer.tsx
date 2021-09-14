@@ -131,7 +131,9 @@ const socialIcons = [
 
 export const Footer: FC = () => {
   const network = useNetwork()
-  const isEthereum = network.chainId === ChainIds.EthereumMainnet
+  const isEthereum = [ChainIds.EthereumMainnet, ChainIds.EthereumKovan, ChainIds.EthereumGoerli, ChainIds.EthereumRopsten].find(
+    n => n === network.chainId,
+  )
 
   return (
     <Container>

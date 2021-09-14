@@ -6,7 +6,7 @@ import { DelegateeInfo } from '@mstable/delegatee-lists'
 import { truncateAddress } from '@apps/formatters'
 import { useLeaderboardQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { IPFSImg, Table, TableCell, TableRow } from '@apps/components/core'
+import { IPFSImg, Table, TableCell, TableRow, UserIcon } from '@apps/components/core'
 
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 
@@ -45,22 +45,24 @@ const StyledDelegateeCell = styled(TableCell)`
     ${({ theme }) => theme.mixins.numeric};
   }
 
+  .avatar {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    margin-right: 1rem;
+    background: red;
+    overflow: hidden;
+    background-color: blueviolet;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
   > div {
     display: flex;
     align-items: center;
     gap: 1rem;
-
-    .avatar {
-      width: 1rem;
-      height: 1rem;
-      border-radius: 50%;
-      overflow: hidden;
-      background-color: blueviolet;
-      img {
-        width: 100%;
-        height: auto;
-      }
-    }
 
     &:first-child {
       margin-right: 1rem;
@@ -73,7 +75,7 @@ const DelegateeCell: FC<{ address: string; rank: number; delegatee?: DelegateeIn
     <div>
       <span>{rank}</span>
     </div>
-    <div className="avatar">{delegatee && <IPFSImg uri={delegatee.avatarURI} />}</div>
+    <div className="avatar">{delegatee ? <IPFSImg uri={delegatee.avatarURI} /> : <UserIcon address={address} />}</div>
     <div>{delegatee?.displayName ?? truncateAddress(address)}</div>
   </StyledDelegateeCell>
 )

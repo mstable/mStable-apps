@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { StakeForm } from './StakeForm'
 import { ReactComponent as MigrationArrow } from '../../../assets/migration-arrow.svg'
 import { ViewportWidth } from '@apps/base/theme'
+import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakingQuery } from '../../context/StakingProvider'
 
 const StyledStakeForm = styled(StakeForm)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -79,15 +81,15 @@ const Achievement = styled.div`
   text-transform: uppercase;
   letter-spacing: 0.2ch;
   justify-content: space-between;
-  font-size: 0.675rem;
+  font-size: 0.875rem;
   color: ${({ theme }) => theme.color.white};
   align-items: center;
   border-top: 1px solid ${({ theme }) => theme.color.whiteTransparenter};
   padding-top: 1.5rem;
 
   span {
-    background: linear-gradient(180deg, #3f51f0 0%, #1526c7 100%);
-    box-shadow: 0px 4px 10px 0px #1b2bbd;
+    background: linear-gradient(180deg, #4859f0 0%, #1929c0 100%);
+    box-shadow: 0px 4px 10px 0px #1e2db9;
     border-radius: 1rem;
     padding: 1rem;
   }

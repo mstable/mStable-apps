@@ -91,7 +91,7 @@ export const WithdrawForm: FC = () => {
         formValue={formValue}
         handleSetMax={() => setFormValue(stakedAmount.string)}
         handleSetAmount={setFormValue}
-        balance={stakedAmount}
+        stakedBalance={stakedAmount}
       />
       <Warnings>
         <Warning>

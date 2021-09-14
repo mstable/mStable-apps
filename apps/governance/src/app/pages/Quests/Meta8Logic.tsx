@@ -50,17 +50,14 @@ const Content = styled.div`
 `
 
 const Container = styled.div`
-  @import url('https://fonts.cdnfonts.com/css/vcr-osd-mono');
+  * {
+    ${({ theme }) => theme.mixins.pixel};
+  }
+
   font-size: 1.125rem;
   color: white;
   text-transform: uppercase;
   flex: 1;
-
-  * {
-    font-family: 'VCR OSD Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.125ch;
-  }
 
   header {
     display: flex;

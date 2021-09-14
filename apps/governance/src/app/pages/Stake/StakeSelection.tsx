@@ -140,8 +140,10 @@ const Container = styled.div`
   border-radius: 1.125rem;
   background: ${({ theme }) => theme.color.background[1]};
   gap: 1rem;
+  margin-top: 1rem;
 
   @media (min-width: ${ViewportWidth.m}) {
+    margin-top: 0;
     padding: 1rem;
     border: 1px solid ${({ theme }) => theme.color.defaultBorder};
     align-items: center;
@@ -166,17 +168,13 @@ export const StakeSelection: FC = () => {
   const { options } = useStakedToken()
   const setStakedToken = useSetStakedToken()
   const { setSelectedOption } = useStakingStatusDispatch()
-  const mtaAddress = useNetworkAddresses()?.MTA
+  const stkMtaAddress = useNetworkAddresses()?.stkMTA
 
   const handleSelection = (selection: Selection) => {
     const tokens = Object.keys(options)
       .map(key => key)
-      .sort(a => (a === mtaAddress ? 1 : -1))
-    if (selection === Selection.MTA) {
-      setStakedToken(tokens[0])
-      return setSelectedOption()
-    }
-    setStakedToken(tokens[1])
+      .sort(a => (a === stkMtaAddress ? -1 : 1))
+    setStakedToken(tokens[selection === Selection.MTA ? 0 : 1])
     setSelectedOption()
   }
 

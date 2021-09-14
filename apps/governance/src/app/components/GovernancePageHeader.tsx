@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { DelegateeInfo } from '@mstable/delegatee-lists'
 
-import { Address, ExplorerLink, ExternalLink, IPFSImg } from '@apps/components/core'
+import { Address, ExplorerLink, ExternalLink, IPFSImg, UserIcon } from '@apps/components/core'
 import { ViewportWidth } from '@apps/base/theme'
 
 import { DelegateeToggle } from '../pages/Vote/DelegateeToggle'
@@ -76,7 +76,7 @@ const Container = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  padding: 2rem 0 0;
+  padding: 2rem 0 1rem;
   gap: 0.25rem;
 
   h2 {
@@ -147,6 +147,16 @@ const DelegateeContainer = styled(Container)`
           width: 100%;
           height: auto;
         }
+
+        > div {
+          width: 100%;
+          height: 100%;
+
+          * {
+            width: 100% !important;
+            height: 100% !important;
+          }
+        }
       }
 
       > :last-child {
@@ -181,7 +191,7 @@ export const DelegateePageHeader: FC<{ delegateeInfo?: DelegateeInfo; addressOrE
     </BackLink>
     <Row>
       <div>
-        <div>{delegateeInfo?.avatarURI && <IPFSImg uri={delegateeInfo.avatarURI} />}</div>
+        <div>{delegateeInfo?.avatarURI ? <IPFSImg uri={delegateeInfo.avatarURI} /> : <UserIcon address={address} />}</div>
         <div>
           {delegateeInfo && (
             <h2>

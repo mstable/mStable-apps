@@ -5,6 +5,7 @@ import { CountUp, ThemedSkeleton } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
 
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { ViewportWidth } from '@apps/base/theme'
 
 interface Balance {
   symbol?: string
@@ -19,28 +20,40 @@ interface GroupProps {
 }
 
 const StyledTokenIcon = styled(TokenIcon)`
-  width: 2rem;
+  width: 1.5rem;
   height: auto;
 `
 
 const GroupContainer = styled.div`
   > :first-child {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
+
   > :last-child {
     display: flex;
     gap: 1rem;
+
     > * {
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
   }
+
+  h3 {
+    font-size: 0.875rem;
+    color: ${({ theme }) => theme.color.bodyAccent};
+  }
+
+  span {
+    font-size: 1.125rem;
+    font-weight: 300;
+  }
 `
 
 const Group: FC<GroupProps> = ({ balances, label }) => (
   <GroupContainer>
-    <div>{label}</div>
+    <h3>{label}</h3>
     <div>
       {balances ? (
         balances.map(({ amount, symbol, suffix, decimals }, key) => (
@@ -58,11 +71,32 @@ const Group: FC<GroupProps> = ({ balances, label }) => (
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  border-radius: 1.5rem;
-  border: 1px ${({ theme }) => theme.color.background[2]} solid;
-  padding: 1.5rem;
+  flex-direction: row;
+  width: 100%;
+  gap: 0.75rem;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px ${({ theme }) => theme.color.background[2]} solid;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    > div {
+      flex-direction: row;
+    }
+    > div:first-child {
+      flex-basis: 60%;
+    }
+    > div:last-child {
+      flex-basis: 40%;
+    }
+  }
 `
 
 export const StakeBalances: FC = () => {
@@ -91,10 +125,14 @@ export const StakeBalances: FC = () => {
 
   return (
     <Container>
-      <Group label="My Stake" balances={stake} />
-      <Group label="My Voting Power" balances={votingPower} />
-      <Group label="Rewards Earned" balances={rewardsEarned} />
-      <Group label="APY" balances={rewardsApy} />
+      <div>
+        <Group label="My Stake" balances={stake} />
+        <Group label="My Voting Power" balances={votingPower} />
+      </div>
+      <div>
+        <Group label="Rewards Earned" balances={rewardsEarned} />
+        <Group label="APY" balances={rewardsApy} />
+      </div>
     </Container>
   )
 }

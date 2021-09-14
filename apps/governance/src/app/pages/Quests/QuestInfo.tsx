@@ -46,6 +46,23 @@ const Objectives = styled.div`
   flex-direction: column;
   gap: 2rem;
 
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.5);
+
+  ::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 0;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 0;
+    border: 4px solid rgba(255, 255, 255, 0.5);
+  }
+
   > div {
     font-size: 0.875rem;
     display: flex;
@@ -72,6 +89,15 @@ const Objectives = styled.div`
       width: 23px;
       height: 23px;
     }
+  }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    overflow-y: scroll;
+    max-height: 7rem;
+  }
+
+  @media (min-width: ${ViewportWidth.l}) {
+    max-height: 14rem;
   }
 `
 
@@ -117,7 +143,7 @@ const Bottom = styled.div`
   gap: 0.5rem;
   padding-bottom: 1rem;
 
-  @media (min-width: ${ViewportWidth.m}) {
+  @media (min-width: ${ViewportWidth.l}) {
     flex-direction: row;
     gap: 0;
     padding-bottom: 0;
