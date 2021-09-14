@@ -17,6 +17,11 @@ const Check: FC = () => (
   </svg>
 )
 
+const Delegated = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`
+
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -42,10 +47,10 @@ export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boole
       {address ? (
         isDelegated ? (
           <>
-            <div>
+            <Delegated>
               <Check />
               Delegated
-            </div>
+            </Delegated>
             <Button
               highlighted
               onClick={() => {

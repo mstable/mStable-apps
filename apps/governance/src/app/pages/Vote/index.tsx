@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
-import { UserLookup, InfoBox, Button } from '@apps/components/core'
 
+import { InfoBox, Button } from '@apps/components/core'
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
 import { Leaderboard } from './Leaderboard'
 import { TokenIcon } from '@apps/components/icons'
@@ -12,7 +12,9 @@ import { useOwnAccount, useSigner } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { StakedToken__factory } from '@apps/artifacts/typechain'
 import { DelegateInput } from '../../components/DelegateInput'
+import { UserLookup } from '../../components/UserLookup'
 import { ViewportWidth } from '@apps/base/theme'
+import { truncateAddress } from '@apps/formatters'
 
 const DOCS_URL = 'https://docs.mstable.org/'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
@@ -142,8 +144,7 @@ export const Vote: FC = () => {
   const signer = useSigner()
 
   // TODO;
-  const delegatee = 'Bob Ross'
-  const delegateeId = data?.stakedToken?.accounts?.[0]?.delegatee?.id
+  const delegateeId = data?.stakedToken?.accounts?.[0]?.delegatee?.id ?? account
   const isSelfDelegated = delegateeId?.toLowerCase() === account?.toLowerCase()
 
   // FIXME;
@@ -187,7 +188,7 @@ export const Vote: FC = () => {
       <GovernancePageHeader title="Vote" subtitle="View list of voting addresses and delegate" />
       <div>
         <Row>
-          <DelegationBox subtitle="Delegated to" title={isSelfDelegated ? 'Self' : delegatee} dashed={false}>
+          <DelegationBox subtitle="Delegated to" title={isSelfDelegated ? 'Self' : truncateAddress(delegateeId)} dashed={false}>
             <div>
               <div>
                 <Button highlighted onClick={() => history.push(`/vote/${delegateeId}`)}>
@@ -219,7 +220,7 @@ export const Vote: FC = () => {
             </div>
           </VoteBox>
         </Row>
-        <UserLookup />
+        <UserLookup title="Lookup user" onClick={address => history.push(`/vote/${address}`)} />
         <Leaderboard preview />
       </div>
     </Container>

@@ -51,8 +51,11 @@ const ApproveContainer = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  padding: 0 0.25rem;
 
   > button:not(:last-child) {
+    font-size: 0.875rem;
+    height: 100%;
     margin-right: 0.5rem;
   }
 `

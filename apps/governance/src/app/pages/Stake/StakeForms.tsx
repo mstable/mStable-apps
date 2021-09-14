@@ -73,7 +73,7 @@ const FormContainer = styled.div`
   min-height: 20rem;
   padding: 0.75rem;
   background: ${({ theme }) => theme.color.background[1]};
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;

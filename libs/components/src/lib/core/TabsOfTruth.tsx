@@ -16,7 +16,7 @@ interface State {
   tabs: (Tab & { active: boolean })[]
 }
 
-export const createTabsContext = (tabs: Tab[], defaultActiveTabIndex: number = 0) => {
+export const createTabsContext = (tabs: Tab[], defaultActiveTabIndex = 0) => {
   const context = createContext<[State, Dispatch<SetStateAction<number>>]>([{ tabs, activeTabIndex: defaultActiveTabIndex }] as never)
 
   const TabsOfTruthProvider: FC = ({ children }) => {
@@ -44,7 +44,7 @@ const TabButton = styled(UnstyledButton)<{ active: boolean }>`
   z-index: 1;
   transition: all 0.25s ease-in-out;
   color: ${({ theme, active }) => (active ? theme.color.white : theme.color.bodyAccent)};
-  border-radius: 1rem;
+  border-radius: 0.75rem;
 
   &:hover {
     font-weight: 500;
@@ -57,7 +57,7 @@ const ActiveTab = styled.div<{ pos: [number, number] }>`
   z-index: 0;
   top: 0;
   bottom: 0;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   background: ${({ theme }) => theme.color.blue};
   user-select: none;
   pointer-events: none;
@@ -78,7 +78,7 @@ const TabsContainer = styled.div`
   position: relative;
   background: ${({ theme }) => theme.color.background[0]};
   border: 1px ${({ theme }) => theme.color.background[2]} solid;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   overflow: hidden;
   display: flex;
   justify-content: space-between;

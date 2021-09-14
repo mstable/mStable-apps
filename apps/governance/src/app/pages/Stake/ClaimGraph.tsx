@@ -28,8 +28,7 @@ export const ClaimGraph: FC = () => {
   const stakedTokenQuery = useStakedTokenQuery()
 
   const data = useMemo<DataType[]>(() => {
-    if (!stakedTokenQuery?.data.stakedToken.accounts[0]?.rewards) return []
-    const earned = parseFloat(stakedTokenQuery.data.stakedToken.accounts[0].rewards)
+    const earned = parseFloat(stakedTokenQuery?.data?.stakedToken?.accounts?.[0]?.rewards ?? '0')
     return [
       {
         mta: 0,
@@ -62,7 +61,7 @@ export const ClaimGraph: FC = () => {
           <YAxis
             domain={['dataMin', 'dataMax']}
             tickCount={2}
-            tickFormatter={m => `${m}%`}
+            tickFormatter={m => `${m}`}
             axisLine={false}
             padding={{ bottom: 16 }}
             tickLine={false}
