@@ -134,6 +134,13 @@ export type UserQuestObjective = {
 
 export type QuestAllFragment = { id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> };
 
+export type UserQueryVariables = Exact<{
+  userId: Scalars['ID'];
+}>;
+
+
+export type UserQuery = { user: { id: string, optInQueue: boolean } };
+
 export type QuestsQueryVariables = Exact<{
   userId: Scalars['ID'];
   hasUser: Scalars['Boolean'];
@@ -168,6 +175,22 @@ export type UpdateQuestsMutationVariables = Exact<{
 
 export type UpdateQuestsMutation = { updateQuests: Array<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
 
+export type QueueOptInMutationVariables = Exact<{
+  userId: Scalars['ID'];
+  signature: Scalars['String'];
+}>;
+
+
+export type QueueOptInMutation = { queueOptIn: { id: string, optInQueue: boolean } };
+
+export type QueueOptOutMutationVariables = Exact<{
+  userId: Scalars['ID'];
+  signature: Scalars['String'];
+}>;
+
+
+export type QueueOptOutMutation = { queueOptOut: { id: string, optInQueue: boolean } };
+
 export const QuestAllFragmentDoc = gql`
     fragment QuestAll on Quest {
   id
@@ -195,6 +218,42 @@ export const QuestAllFragmentDoc = gql`
   }
 }
     `;
+export const UserDocument = gql`
+    query User($userId: ID!) {
+  user(userId: $userId) {
+    id
+    optInQueue
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const QuestsDocument = gql`
     query Quests($userId: ID!, $hasUser: Boolean!) {
   quests(userId: $userId) {
@@ -337,3 +396,73 @@ export function useUpdateQuestsMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateQuestsMutationHookResult = ReturnType<typeof useUpdateQuestsMutation>;
 export type UpdateQuestsMutationResult = Apollo.MutationResult<UpdateQuestsMutation>;
 export type UpdateQuestsMutationOptions = Apollo.BaseMutationOptions<UpdateQuestsMutation, UpdateQuestsMutationVariables>;
+export const QueueOptInDocument = gql`
+    mutation QueueOptIn($userId: ID!, $signature: String!) {
+  queueOptIn(userId: $userId, signature: $signature) {
+    id
+    optInQueue
+  }
+}
+    `;
+export type QueueOptInMutationFn = Apollo.MutationFunction<QueueOptInMutation, QueueOptInMutationVariables>;
+
+/**
+ * __useQueueOptInMutation__
+ *
+ * To run a mutation, you first call `useQueueOptInMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueOptInMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [queueOptInMutation, { data, loading, error }] = useQueueOptInMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      signature: // value for 'signature'
+ *   },
+ * });
+ */
+export function useQueueOptInMutation(baseOptions?: Apollo.MutationHookOptions<QueueOptInMutation, QueueOptInMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<QueueOptInMutation, QueueOptInMutationVariables>(QueueOptInDocument, options);
+      }
+export type QueueOptInMutationHookResult = ReturnType<typeof useQueueOptInMutation>;
+export type QueueOptInMutationResult = Apollo.MutationResult<QueueOptInMutation>;
+export type QueueOptInMutationOptions = Apollo.BaseMutationOptions<QueueOptInMutation, QueueOptInMutationVariables>;
+export const QueueOptOutDocument = gql`
+    mutation QueueOptOut($userId: ID!, $signature: String!) {
+  queueOptOut(userId: $userId, signature: $signature) {
+    id
+    optInQueue
+  }
+}
+    `;
+export type QueueOptOutMutationFn = Apollo.MutationFunction<QueueOptOutMutation, QueueOptOutMutationVariables>;
+
+/**
+ * __useQueueOptOutMutation__
+ *
+ * To run a mutation, you first call `useQueueOptOutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueOptOutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [queueOptOutMutation, { data, loading, error }] = useQueueOptOutMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      signature: // value for 'signature'
+ *   },
+ * });
+ */
+export function useQueueOptOutMutation(baseOptions?: Apollo.MutationHookOptions<QueueOptOutMutation, QueueOptOutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<QueueOptOutMutation, QueueOptOutMutationVariables>(QueueOptOutDocument, options);
+      }
+export type QueueOptOutMutationHookResult = ReturnType<typeof useQueueOptOutMutation>;
+export type QueueOptOutMutationResult = Apollo.MutationResult<QueueOptOutMutation>;
+export type QueueOptOutMutationOptions = Apollo.BaseMutationOptions<QueueOptOutMutation, QueueOptOutMutationVariables>;

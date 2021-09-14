@@ -1,12 +1,12 @@
-import React, { FC, ComponentProps } from 'react'
-import styled from 'styled-components'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-
-import { useAccount } from '@apps/base/context/account'
 import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
+
+import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { IPFSImg, UnstyledButton } from '@apps/components/core'
+import React, { ComponentProps, FC } from 'react'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import styled from 'styled-components'
 
 import { Typist } from './Typist'
 
@@ -27,19 +27,24 @@ const Title = styled.div`
   }
 `
 
-const QuestMultiplier = styled.div`
+const QuestFeatures = styled.div`
   position: absolute;
   bottom: 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
+  padding: 0 1rem;
+  gap: 1rem;
 
   > div {
-    background: linear-gradient(180deg, #a62e6f 0%, #8b1f5a 100%);
-    box-shadow: 0px 4px 10px #78144a;
     font-size: 1.125rem;
     padding: 0.75rem 1rem;
     border-radius: 1rem;
+  }
+
+  > :first-child {
+    background: linear-gradient(180deg, #a62e6f 0%, #8b1f5a 100%);
+    box-shadow: 0 4px 10px #78144a;
   }
 `
 
@@ -125,7 +130,6 @@ export const QuestCard: FC<Props> = ({ questId, onClick }) => {
         {questbookQuest ? (
           <Typist>
             <h2>{questbookQuest.title}</h2>
-            <h3>{questbookQuest.description}</h3>
           </Typist>
         ) : (
           <CardSkeleton height={30} />
@@ -138,9 +142,10 @@ export const QuestCard: FC<Props> = ({ questId, onClick }) => {
           <CardSkeleton height={128} width={128} />
         )}
       </QuestImage>
-      <QuestMultiplier>
+      <QuestFeatures>
         <div>1.{quest?.multiplier.toString().slice(1)}x</div>
-      </QuestMultiplier>
+        <div>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</div>
+      </QuestFeatures>
     </Container>
   )
 }
