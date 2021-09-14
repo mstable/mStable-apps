@@ -10,12 +10,13 @@ import { useAccountQuery } from '../../hooks/useAccountQuery'
 import { VotingHistory } from './VotingHistory'
 
 const StyledTokenIcon = styled(TokenIcon)`
-  width: 2rem;
+  width: 1.5rem;
   height: auto;
 `
 
 const StyledCountUp = styled(CountUp)`
-  font-size: 1.4rem;
+  font-size: 1.25rem;
+  font-weight: 300;
 `
 
 const DelegateeBalancesContainer = styled.div`
@@ -27,12 +28,14 @@ const DelegateeBalancesContainer = styled.div`
 
   h4 {
     padding-bottom: 0.5rem;
+    font-size: 0.875rem;
   }
 
   > * {
     padding: 1rem 0;
+
     > * {
-      padding: 0 1rem;
+      padding: 0 1.25rem;
     }
     > div {
       align-items: center;

@@ -3,17 +3,41 @@ import styled from 'styled-components'
 import { AssetInput } from './AssetInput'
 import { SubscribedToken } from '@apps/types'
 import { BigDecimal } from '@apps/bigdecimal'
+import { ReactComponent as SwitchIcon } from '../icons/switch-icon.svg'
+import { UnstyledButton } from '../core'
+import { useToggle } from 'react-use'
 
 interface Props {
   className?: string
   isFetching?: boolean
   formValue?: string
   handleSetAmount?(formValue?: string): void
-  handleSetMax?(): void
+  handleSetMax?(amount?: string): void
   spender?: string
   token?: SubscribedToken
-  balance?: BigDecimal
+  stakedBalance?: BigDecimal
 }
+
+const SwitchButton = styled(UnstyledButton)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 1.25rem;
+  margin-left: 0.5rem;
+  background: ${({ theme }) => theme.color.background[0]};
+  border-radius: 0.25rem;
+
+  > * {
+    width: 1rem;
+    height: 1rem;
+
+    rect,
+    path {
+      stroke: ${({ theme }) => theme.color.bodyAccent};
+    }
+  }
+`
 
 const Input = styled(AssetInput)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -59,23 +83,30 @@ const Container = styled.div`
   border-radius: 0.75rem;
 `
 
-export const AssetInputSingle: FC<Props> = ({ isFetching, formValue, token, handleSetMax, handleSetAmount, spender, balance }) => {
+export const AssetInputSingle: FC<Props> = ({ isFetching, formValue, token, handleSetMax, handleSetAmount, spender, stakedBalance }) => {
+  const [walletSelected, toggleSelection] = useToggle(!stakedBalance)
+
   return (
     <Container>
       <Input
         isFetching={isFetching}
         address={token?.address}
         formValue={formValue}
-        handleSetMax={handleSetMax}
+        handleSetMax={() => handleSetMax?.(walletSelected ? token?.balance?.string : stakedBalance?.string)}
         handleSetAmount={handleSetAmount}
-        spender={spender}
+        spender={walletSelected ? spender : undefined}
         hideToken
       />
       <Balance>
         <div>
-          {!!balance ? 'Staked' : 'Wallet'} <span>{token?.symbol}</span>
+          {walletSelected ? 'Wallet' : 'Staked'} <span>{token?.symbol}</span>
+          {!!stakedBalance && (
+            <SwitchButton onClick={toggleSelection}>
+              <SwitchIcon />
+            </SwitchButton>
+          )}
         </div>
-        <div>{(balance ?? token?.balance)?.toFixed(4)}</div>
+        <div>{(walletSelected ? token?.balance : stakedBalance)?.toFixed(4)}</div>
       </Balance>
     </Container>
   )

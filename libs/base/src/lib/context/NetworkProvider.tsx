@@ -24,6 +24,7 @@ interface NetworkPrices {
 interface CoreAddresses {
   MTA: string
   vMTA: string
+  stkMTA?: string
   FeederWrapper: string
   SaveWrapper: string
   UniswapRouter02_Like: string
@@ -283,6 +284,7 @@ const ETH_KOVAN: EthereumKovan = {
   addresses: {
     MTA: '0xe9553b420eab4ebe7237ac3f97035ef090f15e1d',
     vMTA: '0x77f9bf80e0947408f64faa07fd150920e6b52015',
+    stkMTA: '0x9157233faFC65B5193c016B04fA847DB49677c3b',
     FeederWrapper: DEAD_ADDRESS,
     SaveWrapper: '',
     UniswapRouter02_Like: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',

@@ -9,16 +9,17 @@ const Container = styled.div`
   border-radius: 0.75rem;
 `
 
-export const UserIcon: FC = () => {
+export const UserIcon: FC<{ address?: string }> = ({ address }) => {
   const ref = useRef<HTMLDivElement | null>(null)
-  const address = useWalletAddress()
+  const walletAddress = useWalletAddress()
+  const userAddress = address ?? walletAddress
 
   useEffect(() => {
-    if (address && ref.current) {
+    if (userAddress && ref.current) {
       ref.current.innerHTML = ''
-      ref.current.appendChild(Jazzicon(20, parseInt(address.slice(2, 10), 16)))
+      ref.current.appendChild(Jazzicon(20, parseInt(userAddress.slice(2, 10), 16)))
     }
-  }, [address])
+  }, [userAddress])
 
   return <Container ref={ref} />
 }

@@ -2,6 +2,7 @@ import React, { FC, useEffect } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
 import { useBaseCtx } from '@apps/base'
+import { APP_NAME } from '@apps/types'
 
 import { Stake } from './pages/Stake'
 import { Quests } from './pages/Quests'
@@ -10,7 +11,6 @@ import { LeaderboardPage } from './pages/Vote/LeaderboardPage'
 import { Delegatee } from './pages/Vote/Delegatee'
 import { Stats } from './pages/Stats'
 import { NotFound } from './pages/NotFound'
-import { APP_NAME } from 'libs/types/src/lib/constants'
 
 const GovernanceRoutes: FC = () => {
   return (
