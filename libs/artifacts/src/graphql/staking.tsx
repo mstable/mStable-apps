@@ -1721,7 +1721,7 @@ export type AccountQueryVariables = Exact<{
 }>;
 
 
-export type AccountQuery = { account?: Maybe<{ id: string, totalVotesBD: BigDecimal, lastAction: number, seasonMultiplier: number, permMultiplier: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }> }> };
+export type AccountQuery = { account?: Maybe<{ id: string, totalVotesBD: BigDecimal, lastAction: number, seasonMultiplier: number, permMultiplier: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal } }> }> };
 
 export type StakedTokenQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1927,6 +1927,7 @@ export const AccountDocument = gql`
         questMultiplier
         cooldownTimestamp
         weightedTimestamp
+        cooldownUnits
         rawBD @client
         votesBD @client
       }

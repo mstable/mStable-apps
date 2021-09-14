@@ -66,6 +66,7 @@ interface ColorTheme {
   defaultToggle: string
   onboardBackground: string
   onboardItemHover: string
+  navItemActive: string
 }
 
 export const colorTheme = (theme: 'light' | 'dark'): ColorTheme & typeof Color => {
@@ -88,6 +89,7 @@ export const colorTheme = (theme: 'light' | 'dark'): ColorTheme & typeof Color =
     defaultToggle: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[3],
     onboardBackground: isLight ? ColorNew.white[0] : ColorNew.spaceBlue[1],
     onboardItemHover: isLight ? ColorNew.white[1] : ColorNew.spaceBlue[2],
+    navItemActive: isLight ? Color.coolBlueTransparent : 'rgba(169, 203, 255, 0.1)',
     background: isLight
       ? {
           0: ColorNew.white[0],

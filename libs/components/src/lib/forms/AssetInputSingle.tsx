@@ -100,11 +100,11 @@ export const AssetInputSingle: FC<Props> = ({ isFetching, formValue, token, hand
       <Balance>
         <div>
           {walletSelected ? 'Wallet' : 'Staked'} <span>{token?.symbol}</span>
-          {!!stakedBalance && (
+          {/* {!!stakedBalance && (
             <SwitchButton onClick={toggleSelection}>
               <SwitchIcon />
             </SwitchButton>
-          )}
+          )} */}
         </div>
         <div>{(walletSelected ? token?.balance : stakedBalance)?.toFixed(4)}</div>
       </Balance>

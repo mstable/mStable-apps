@@ -58,8 +58,8 @@ export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boole
 
                 propose<Interfaces.StakedToken, 'delegate'>(
                   new TransactionManifest(stakedTokenContract, 'delegate', [account], {
-                    present: 'Disabling delegation',
-                    past: 'Disabled delegation',
+                    present: 'Removing delegation',
+                    past: 'Removed delegation',
                   }),
                 )
               }}

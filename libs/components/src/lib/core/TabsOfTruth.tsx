@@ -58,14 +58,14 @@ const ActiveTab = styled.div<{ pos: [number, number] }>`
   top: 0;
   bottom: 0;
   border-radius: 0.75rem;
-  background: ${({ theme }) => theme.color.blue};
+  background: ${({ theme }) => theme.color.primary};
   user-select: none;
   pointer-events: none;
   transition: all 0.25s ease-in-out;
 
   &.entering,
   &.exiting {
-    box-shadow: 1px 0 1px 0 ${({ theme }) => theme.color.blue}, -1px 0 1px 0 ${({ theme }) => theme.color.blue};
+    box-shadow: 1px 0 1px 0 ${({ theme }) => theme.color.primary}, -1px 0 1px 0 ${({ theme }) => theme.color.blue};
   }
 
   ${({ pos: [x, w] }) =>
