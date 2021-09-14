@@ -18,15 +18,18 @@ import { useAccount } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 
 import { useQuestManagerContract } from '../../context/QuestManagerProvider'
+import { QueueOptInOutButton } from './QueueOptInOutButtons'
 
 import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'
-import { QuestObjectiveProgress, QuestProgress } from './QuestProgress'
+import { QuestObjectiveProgress, QuestProgress, QuestTimeRemaining } from './QuestProgress'
 
 enum ProgressType {
   Personal,
+  Group,
   TimeRemaining,
   Rarity,
+  Objective,
 }
 
 const QP = styled.div`
@@ -97,11 +100,11 @@ const Objectives = styled.div`
   }
 
   @media (min-width: ${ViewportWidth.l}) {
-    max-height: 14rem;
+    max-height: 11rem;
   }
 `
 
-const Season = styled.div`
+const Actions = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -123,14 +126,14 @@ const Season = styled.div`
   }
 
   button {
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1.5rem;
   }
 `
 
 const Progress = styled.div`
   background: rgba(255, 255, 255, 0.15);
   border-radius: 0.75rem;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -160,6 +163,10 @@ const Inner = styled.div`
   gap: 1rem;
   justify-content: space-between;
   flex: 1;
+
+  h3 {
+    margin-bottom: 1.5rem;
+  }
 
   @media (min-width: ${ViewportWidth.m}) {
     padding: 0.25rem 1.5rem 0;
@@ -204,7 +211,6 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
   const [updateQuest] = useUpdateQuestMutation({
     client: clients.questbook,
     variables: { questId, userId: account, hasUser: !!account },
-    // onCompleted: () => questbookQuery.refetch(),
   })
 
   const questbookQuest = questbookQuery.data?.quest
@@ -216,9 +222,7 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
   const quest = questQuery.data?.quest
   const questType = quest?.type
 
-  const nowUnix = Math.floor(Date.now() / 1e3)
   const expiry = quest?.expiry
-  const timeRemaining = expiry && expiry > nowUnix ? nowUnix / expiry : 0
   const questProgress = questbookQuest?.userQuest?.progress ?? 0
 
   const handleClaimQuest = () => {
@@ -266,6 +270,9 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
         <div>
           {questbookQuest ? (
             <div>
+              <h3>
+                <Typist>{questbookQuest.description}</Typist>
+              </h3>
               <Objectives>
                 {questbookQuest.objectives.map(({ title, id, description, points }) => {
                   const userQuestObjective = questbookQuest.userQuest?.objectives.find(o => o.id === id)
@@ -296,10 +303,10 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
         <Bottom>
           <Progress>
             <QuestProgress value={questProgress * 100} progressType={ProgressType.Personal} questType={questType} />
-            <QuestProgress value={timeRemaining} progressType={ProgressType.TimeRemaining} questType={questType} />
+            <QuestTimeRemaining expiry={expiry} />
           </Progress>
-          <Season>
-            <div>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</div>
+          <Actions>
+            <QueueOptInOutButton />
             {questbookQuest?.userQuest?.complete ? (
               <Button highlighted onClick={handleClaimQuest}>
                 Claim
@@ -309,7 +316,7 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
                 {isPending ? 'Checking...' : 'Check status'}
               </Button>
             )}
-          </Season>
+          </Actions>
         </Bottom>
       </Inner>
     </Container>
