@@ -51,6 +51,7 @@ const Objectives = styled.div`
 
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.5);
+  padding-right: 1rem;
 
   ::-webkit-scrollbar {
     height: 4px;
@@ -84,7 +85,7 @@ const Objectives = styled.div`
     > :last-child {
       display: block;
       > :last-child {
-        opacity: 0.7;
+        color: rgba(201, 252, 213, 1);
       }
     }
 
@@ -170,6 +171,10 @@ const Inner = styled.div`
 
   @media (min-width: ${ViewportWidth.m}) {
     padding: 0.25rem 1.5rem 0;
+  }
+
+  @media (min-width: ${ViewportWidth.l}) {
+    padding-right: 0;
   }
 `
 
