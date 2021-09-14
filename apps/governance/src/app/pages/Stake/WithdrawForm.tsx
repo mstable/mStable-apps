@@ -56,14 +56,12 @@ export const WithdrawForm: FC = () => {
   const stakingToken = useTokenSubscription(data?.stakedToken?.stakingToken.address)
   const [amount, formValue, setFormValue] = useBigDecimalInput()
 
-  const stakedAmount = data?.stakedToken?.accounts?.[0]?.balance?.rawBD
+  const weightedTimestamp = data?.stakedToken?.accounts?.[0]?.balance?.weightedTimestamp
+  const stakedAmount = data?.stakedToken?.accounts?.[0]?.balance?.rawBD ?? BigDecimal.ZERO
   const isValid = amount?.simple <= (stakedAmount?.simple ?? 0) && amount?.simple > 0
 
-  // need to figure out how to get weighted timestamp
-  const weightedTimestamp = data?.stakedToken.accounts[0]?.balance.weightedTimestamp
   useEffect(() => {
-    if (!weightedTimestamp || fee.fetching) return
-
+    if (!weightedTimestamp || fee.fetching || !stakedTokenContract) return
     setFee.fetching()
     Promise.all([stakedTokenContract ? stakedTokenContract.calcRedemptionFeeRate(weightedTimestamp) : undefined])
       .then(([fee = 0]) => {

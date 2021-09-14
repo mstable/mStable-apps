@@ -82,7 +82,7 @@ export const colorTheme = (theme: 'light' | 'dark'): ColorTheme & typeof Color =
     bodyAccent: Color.grey,
     disabledInput: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     disabledButton: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[1],
-    defaultBorder: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[4],
+    defaultBorder: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     yellowBorder: `rgba(255, 179, 52, 0.2)`,
     lightBorder: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     defaultToggle: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[3],

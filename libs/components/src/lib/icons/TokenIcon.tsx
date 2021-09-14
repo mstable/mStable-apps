@@ -69,6 +69,8 @@ export const TOKEN_ICONS: Record<string, string> = {
   'UNI-V2': Uniswap,
   BAL: Balancer,
   BPT: BPTMTAETH,
+  MBPT: BPTMTAETH,
+  TMBPT: BPTMTAETH,
   'MK-MTA': MTA,
   'MK-BAL': Balancer,
   IMUSD,
