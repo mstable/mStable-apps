@@ -1,23 +1,14 @@
 import React, { FC } from 'react'
-import { useToggle } from 'react-use'
 import styled from 'styled-components'
-import useSound from 'use-sound'
 
-// @ts-ignore
-import bleep28 from '../../../assets/bleeps_28.mp3'
-// @ts-ignore
-import bleep29 from '../../../assets/bleeps_29.mp3'
-
-import { useQuestQuery as useQuestbookQuestQuery, useUpdateQuestMutation } from '@apps/artifacts/graphql/questbook'
+import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { Button, ThemedSkeleton } from '@apps/components/core'
+import { ThemedSkeleton } from '@apps/components/core'
 import { ViewportWidth } from '@apps/base/theme'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { useAccount } from '@apps/base/context/account'
-import { usePropose } from '@apps/base/context/transactions'
 
-import { useQuestManagerContract } from '../../context/QuestManagerProvider'
+import { ClaimButtons } from './ClaimButtons'
 import { QueueOptInOutButton } from './QueueOptInOutButtons'
 
 import { Typist } from './Typist'
@@ -199,23 +190,12 @@ const Container = styled.div<{ type?: QuestType }>`
 `
 
 export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
-  const [isPending, toggleIsPending] = useToggle(false)
   const account = useAccount()
   const clients = useApolloClients()
-  const questManagerContract = useQuestManagerContract()
-  const propose = usePropose()
-
-  const [playBleep28] = useSound(bleep28, { volume: 0.2 })
-  const [playBleep29] = useSound(bleep29, { volume: 0.2 })
 
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
     variables: { questId, userId: account ?? '', hasUser: !!account },
-  })
-
-  const [updateQuest] = useUpdateQuestMutation({
-    client: clients.questbook,
-    variables: { questId, userId: account, hasUser: !!account },
   })
 
   const questbookQuest = questbookQuery.data?.quest
@@ -229,44 +209,6 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
 
   const expiry = quest?.expiry
   const questProgress = questbookQuest?.userQuest?.progress ?? 0
-
-  const handleClaimQuest = () => {
-    if (
-      isPending ||
-      !questManagerContract ||
-      !questbookQuest ||
-      typeof questbookQuest.ethereumId !== 'number' ||
-      !questbookQuest.userQuest?.signature
-    )
-      return
-
-    propose(
-      new TransactionManifest<Interfaces.QuestManager, 'completeUserQuests'>(
-        questManagerContract,
-        'completeUserQuests',
-        [account, [questbookQuest.ethereumId], questbookQuest.userQuest.signature],
-        {
-          present: 'Complete quest',
-          past: 'Completed quest',
-        },
-      ),
-    )
-  }
-
-  const handleRefresh = () => {
-    if (isPending) return
-
-    playBleep28()
-    toggleIsPending(true)
-    updateQuest()
-      .catch(error => {
-        console.error(error)
-      })
-      .finally(() => {
-        toggleIsPending(false)
-        playBleep29()
-      })
-  }
 
   return (
     <Container>
@@ -312,15 +254,7 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
           </Progress>
           <Actions>
             <QueueOptInOutButton />
-            {questbookQuest?.userQuest?.complete ? (
-              <Button highlighted onClick={handleClaimQuest}>
-                Claim
-              </Button>
-            ) : (
-              <Button highlighted onClick={handleRefresh}>
-                {isPending ? 'Checking...' : 'Check status'}
-              </Button>
-            )}
+            <ClaimButtons questId={questId} />
           </Actions>
         </Bottom>
       </Inner>

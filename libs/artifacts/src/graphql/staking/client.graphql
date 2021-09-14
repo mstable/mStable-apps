@@ -5,8 +5,11 @@ type Metric {
 type StakedTokenBalance {
   rawBD: MstableBigDecimal!
   votesBD: MstableBigDecimal!
+  timeMultiplierSimple: Float!
 }
 
 type Account {
   totalVotesBD: MstableBigDecimal!
+  permMultiplierSimple: Float!
+  seasonMultiplierSimple: Float!
 }
