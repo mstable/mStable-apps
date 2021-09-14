@@ -102,6 +102,7 @@ const Container = styled.div`
 export const StakeBalances: FC = () => {
   const { data } = useStakedTokenQuery()
 
+  // TODO create rewardsEarned context
   const { stake, votingPower, rewardsEarned } = useMemo<{ stake?: Balance[]; votingPower?: Balance[]; rewardsEarned?: Balance[] }>(() => {
     const account = data?.stakedToken?.accounts?.[0]
     if (!data || !account) {
