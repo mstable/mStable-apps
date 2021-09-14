@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { formatDistanceToNow } from 'date-fns'
 import styled from 'styled-components'
 
 import { QuestType } from '@apps/artifacts/graphql/staking'
@@ -46,7 +47,7 @@ const Container = styled.div<{ progressType: ProgressType; questType?: QuestType
     }
   }
 
-  > :last-child {
+  > :first-child + div {
     margin-top: 0.25rem;
     overflow: hidden;
     background: ${({ theme }) => (theme.isLight ? '#443836' : '#29252f')};
@@ -72,14 +73,8 @@ export const QuestProgress: FC<{ value?: number; progressType: ProgressType; que
     <div>
       {typeof value === 'number' ? (
         <Typist>
-          {progressType === ProgressType.Personal
-            ? 'My completion'
-            : progressType === ProgressType.Group
-            ? 'Group completion'
-            : progressType === ProgressType.TimeRemaining
-            ? 'Time remaining'
-            : 'Rarity'}
-          <span>{value.toFixed(2)}%</span>{' '}
+          {progressType === ProgressType.Personal ? 'My completion' : progressType === ProgressType.Group ? 'Group completion' : 'Rarity'}
+          <span>{value.toFixed(2)}%</span>
         </Typist>
       ) : (
         <ThemedSkeleton height={20} />
@@ -89,6 +84,27 @@ export const QuestProgress: FC<{ value?: number; progressType: ProgressType; que
     <ProgressBar value={value} />
   </Container>
 )
+
+export const QuestTimeRemaining: FC<{ expiry?: number }> = ({ expiry }) => {
+  const end = typeof expiry === 'number' ? expiry * 1e3 : 0
+  const expired = end && Date.now() > end
+  return (
+    <Container progressType={ProgressType.TimeRemaining} questType={QuestType.Seasonal}>
+      <div>
+        {typeof expiry !== 'number' ? (
+          <ThemedSkeleton height={20} />
+        ) : expired ? (
+          <span>Expired</span>
+        ) : (
+          <Typist>
+            Time remaining
+            <span>{formatDistanceToNow(end)}</span>
+          </Typist>
+        )}
+      </div>
+    </Container>
+  )
+}
 
 export const QuestObjectiveProgress: FC<{ value?: number }> = ({ value }) => (
   <QuestObjectiveProgressContainer progressType={ProgressType.Objective}>
