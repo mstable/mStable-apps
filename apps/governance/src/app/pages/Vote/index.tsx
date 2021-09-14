@@ -1,20 +1,20 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { InfoBox, Button } from '@apps/components/core'
-import { GovernancePageHeader } from '../../components/GovernancePageHeader'
-import { Leaderboard } from './Leaderboard'
+import {  InfoBox, Button } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
-import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { useHistory } from 'react-router-dom'
 import { usePropose } from '@apps/base/context/transactions'
-import { useOwnAccount, useSigner } from '@apps/base/context/account'
+import { useOwnAccount } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { StakedToken__factory } from '@apps/artifacts/typechain'
+
+import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { GovernancePageHeader } from '../../components/GovernancePageHeader'
 import { DelegateInput } from '../../components/DelegateInput'
 import { UserLookup } from '../../components/UserLookup'
 import { ViewportWidth } from '@apps/base/theme'
 import { truncateAddress } from '@apps/formatters'
+import { Leaderboard } from './Leaderboard'
 
 const DOCS_URL = 'https://docs.mstable.org/'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
@@ -141,13 +141,12 @@ export const Vote: FC = () => {
   const history = useHistory()
   const account = useOwnAccount()
   const propose = usePropose()
-  const signer = useSigner()
+  const stakedTokenContract = useStakedTokenContract()
 
   // TODO;
   const delegateeId = data?.stakedToken?.accounts?.[0]?.delegatee?.id ?? account
   const isSelfDelegated = delegateeId?.toLowerCase() === account?.toLowerCase()
 
-  // FIXME;
   const { votingPower } = useMemo<{ votingPower?: number[] }>(() => {
     const account = data?.stakedToken?.accounts?.[0]
     if (!data || !account) {
@@ -162,10 +161,10 @@ export const Vote: FC = () => {
   }, [data])
 
   const handleDelegate = (address: string) => {
-    if (!signer || !data) return
+    if (!stakedTokenContract || !data) return
 
     propose<Interfaces.StakedToken, 'delegate'>(
-      new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'delegate', [address], {
+      new TransactionManifest(stakedTokenContract, 'delegate', [address], {
         present: `Delegating to ${address}`,
         past: `Delegated to ${address}`,
       }),
@@ -173,10 +172,10 @@ export const Vote: FC = () => {
   }
 
   const handleUndelegate = () => {
-    if (!signer || !data) return
+    if (!stakedTokenContract || !data) return
 
     propose<Interfaces.StakedToken, 'delegate'>(
-      new TransactionManifest(StakedToken__factory.connect(stakedTokenAddress, signer), 'delegate', [account], {
+      new TransactionManifest(stakedTokenContract, 'delegate', [account], {
         present: `Removing delegation`,
         past: `Removed delegation`,
       }),

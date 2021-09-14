@@ -81,10 +81,10 @@ const DelegateeCell: FC<{ address: string; rank: number; delegatee?: DelegateeIn
 )
 
 export const Leaderboard: FC<{ preview?: boolean }> = ({ preview }) => {
-  const [count, setCount] = useState<number>(preview ? 4 : 25)
-  const [skip, setSkip] = useState<number>(0)
+  const [count] = useState<number>(preview ? 4 : 25)
+  const [skip] = useState<number>(0)
 
-  const delegatesAll = useDelegateesAll()
+  const delegateesAll = useDelegateesAll()
   const clients = useApolloClients()
   const history = useHistory()
 
@@ -95,6 +95,7 @@ export const Leaderboard: FC<{ preview?: boolean }> = ({ preview }) => {
     [leaderboardQuery.data],
   )
 
+  // TODO delegatees that haven't staked won't show up yet
   return (
     <StyledTable headerTitles={headerTitles} widths={[30, 30, 30]} width={32}>
       {leaderboardQuery.data?.accounts.map(({ totalVotesBD, id }, index) => (
@@ -104,7 +105,7 @@ export const Leaderboard: FC<{ preview?: boolean }> = ({ preview }) => {
             history.push(`/vote/${id}`)
           }}
         >
-          <DelegateeCell address={id} delegatee={delegatesAll[id]} rank={(index ?? 0) + 1} />
+          <DelegateeCell address={id} delegatee={delegateesAll[id]} rank={(index ?? 0) + 1} />
           <NumericCell>{(totalVotesBD.simple / totalVotingToken).toFixed(2)}%</NumericCell>
           <NumericCell>{totalVotesBD.simple.toFixed(2)}</NumericCell>
         </TableRow>
