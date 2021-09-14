@@ -17,8 +17,14 @@ const stateCtx = createContext<State>(null as never)
 const dispatchCtx = createContext<Dispatch<SetStateAction<string>>>(null as never)
 const stakedTokenContractCtx = createContext<StakedToken | undefined>(undefined)
 
-export const StakedTokenProvider: FC = ({ children }) => {
+const ContractProvider: FC = ({ children }) => {
   const signer = useSigner()
+  const { selected } = useStakedToken()
+  const value = useMemo(() => (signer && selected ? StakedToken__factory.connect(selected, signer) : null), [signer, selected])
+  return providerFactory(stakedTokenContractCtx, { value }, children)
+}
+
+export const StakedTokenProvider: FC = ({ children }) => {
   const [selected, setSelected] = useState<string>()
   const stakingQuery = useStakingQuery()
 
@@ -38,16 +44,7 @@ export const StakedTokenProvider: FC = ({ children }) => {
           return { selected: selected ?? data.find(st => st.stakingToken.symbol === 'MTA')?.id, options }
         }, [selected, stakingQuery.data]),
       },
-      providerFactory(
-        stakedTokenContractCtx,
-        {
-          value: useMemo(() => {
-            const data = stakingQuery.data?.stakedTokens ?? []
-            return signer ? StakedToken__factory.connect(selected ?? data.find(st => st.stakingToken.symbol === 'MTA')?.id, signer) : null
-          }, [stakingQuery.data, signer, selected]),
-        },
-        children,
-      ),
+      <ContractProvider>{children}</ContractProvider>,
     ),
   )
 }
@@ -59,14 +56,14 @@ export const useStakedToken = createUseContextFn(stateCtx)
 export const useSetStakedToken = createUseContextFn(dispatchCtx)
 
 export const useStakedTokenQuery = () => {
-  const clients = useApolloClients()
+  const { staking: client } = useApolloClients()
   const account = useAccount()
 
   const { selected } = useStakedToken()
 
   const options = useMemo(
-    () => ({ client: clients.staking, variables: { id: selected, account: account ?? '', hasAccount: !!account }, skip: !selected }),
-    [account, clients, selected],
+    () => ({ client, variables: { id: selected, account: account ?? '', hasAccount: !!account }, skip: !selected }),
+    [account, client, selected],
   )
 
   return useStakedTokenQueryHook(options)
