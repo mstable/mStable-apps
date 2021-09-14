@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import {  InfoBox, Button } from '@apps/components/core'
+import { InfoBox, Button } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
 import { useHistory } from 'react-router-dom'
 import { usePropose } from '@apps/base/context/transactions'
@@ -184,7 +184,7 @@ export const Vote: FC = () => {
 
   return (
     <Container>
-      <GovernancePageHeader title="Vote" subtitle="View list of voting addresses and delegate" />
+      <GovernancePageHeader title="Vote" subtitle="View list of voting addresses and delegate" stakedTokenSwitcher />
       <div>
         <Row>
           <DelegationBox subtitle="Delegated to" title={isSelfDelegated ? 'Self' : truncateAddress(delegateeId)} dashed={false}>
