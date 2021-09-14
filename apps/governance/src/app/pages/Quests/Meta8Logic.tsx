@@ -3,20 +3,21 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import useSound from 'use-sound'
 
+import { UnstyledButton } from '@apps/components/core'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useQuestsQuery as useStakingQuestsQuery, useAccountQuery } from '@apps/artifacts/graphql/staking'
-import { useQuestsQuery as useQuestbookQuestsQuery, useUserQuery } from '@apps/artifacts/graphql/questbook'
+import { useQuestsQuery as useQuestbookQuestsQuery } from '@apps/artifacts/graphql/questbook'
 
 // @ts-ignore
 import bleep26 from '../../../assets/bleeps_26.mp3'
 // @ts-ignore
 import bleep27 from '../../../assets/bleeps_27.mp3'
+import { useStakedToken } from '../../context/StakedTokenProvider'
 
 import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'
 import { QuestInfo } from './QuestInfo'
-import { UnstyledButton } from '@apps/components/core'
 
 const NavButton = styled(UnstyledButton)`
   color: white;
@@ -80,6 +81,32 @@ const Container = styled.div`
   }
 `
 
+const Meta8Account: FC = () => {
+  // TODO make sure we have the staked token switcher on Quests
+  const stakedToken = useStakedToken()
+
+  const account = useAccount()
+  const { staking: client } = useApolloClients()
+
+  const accountQuery = useAccountQuery({
+    client,
+    variables: { id: account ?? '' },
+    skip: !account,
+  })
+
+  const accountData = accountQuery.data?.account
+
+  return accountData ? (
+    <>
+      <div>Permanent: {accountData.permMultiplier.toFixed(2)}x</div>
+      <div>Season 0: {accountData.seasonMultiplier.toFixed(2)}x</div>
+      <div>
+        Hodl time: {(accountData.stakedTokenAccounts.find(st => st.id === stakedToken.selected)?.balance?.timeMultiplier ?? 1).toFixed(2)}x
+      </div>
+    </>
+  ) : null
+}
+
 export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
   const { questId } = useParams<{ questId?: string }>()
 
@@ -88,12 +115,6 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
 
   // Just subscribe here
   useStakingQuestsQuery({ client: clients.staking, nextFetchPolicy: 'cache-only' })
-
-  const accountQuery = useAccountQuery({
-    client: clients.staking,
-    variables: { id: account ?? '' },
-    skip: !account,
-  })
 
   const questbookQuestsQuery = useQuestbookQuestsQuery({
     client: clients.questbook,
@@ -134,15 +155,7 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
             'Booting...'
           )}
         </div>
-        <div>
-          {isBooted && accountQuery.data?.account && (
-            <>
-              <div>Permanent: {accountQuery.data.account.permMultiplier.toFixed(1)}x</div>
-              <div>Season 0: {accountQuery.data.account.seasonMultiplier.toFixed(1)}x</div>
-              <div>Hodl time: 1.1x</div>
-            </>
-          )}
-        </div>
+        <div>{isBooted && <Meta8Account />}</div>
       </header>
       <Content>
         {isBooted ? (
