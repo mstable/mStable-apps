@@ -6,7 +6,7 @@ import useSound from 'use-sound'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useQuestsQuery as useStakingQuestsQuery, useAccountQuery } from '@apps/artifacts/graphql/staking'
-import { useQuestsQuery as useQuestbookQuestsQuery } from '@apps/artifacts/graphql/questbook'
+import { useQuestsQuery as useQuestbookQuestsQuery, useUserQuery } from '@apps/artifacts/graphql/questbook'
 
 // @ts-ignore
 import bleep26 from '../../../assets/bleeps_26.mp3'
@@ -31,6 +31,7 @@ const Content = styled.div`
   height: 24rem;
   padding: 1rem 1.25rem;
   overflow-x: scroll;
+  overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.5);
 

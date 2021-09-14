@@ -24,6 +24,13 @@ fragment QuestAll on Quest {
   }
 }
 
+query User($userId: ID!) {
+  user(userId: $userId) {
+    id
+    optInQueue
+  }
+}
+
 query Quests($userId: ID!, $hasUser: Boolean!) {
   quests(userId: $userId) {
     ...QuestAll
@@ -45,5 +52,19 @@ mutation UpdateQuest($userId: ID!, $questId: ID!, $hasUser: Boolean!) {
 mutation UpdateQuests($userId: ID!, $hasUser: Boolean!) {
   updateQuests(userId: $userId) {
     ...QuestAll
+  }
+}
+
+mutation QueueOptIn($userId: ID!, $signature: String!) {
+  queueOptIn(userId: $userId, signature: $signature) {
+    id
+    optInQueue
+  }
+}
+
+mutation QueueOptOut($userId: ID!, $signature: String!) {
+  queueOptOut(userId: $userId, signature: $signature) {
+    id
+    optInQueue
   }
 }
