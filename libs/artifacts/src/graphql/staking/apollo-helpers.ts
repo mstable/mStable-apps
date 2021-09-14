@@ -1,12 +1,14 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type AccountKeySpecifier = ('completedQuests' | 'delegators' | 'id' | 'lastAction' | 'permMultiplier' | 'seasonMultiplier' | 'stakedTokenAccounts' | 'totalVotes' | 'totalVotesBD' | AccountKeySpecifier)[];
+export type AccountKeySpecifier = ('completedQuests' | 'delegators' | 'id' | 'lastAction' | 'permMultiplier' | 'permMultiplierSimple' | 'seasonMultiplier' | 'seasonMultiplierSimple' | 'stakedTokenAccounts' | 'totalVotes' | 'totalVotesBD' | AccountKeySpecifier)[];
 export type AccountFieldPolicy = {
 	completedQuests?: FieldPolicy<any> | FieldReadFunction<any>,
 	delegators?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	lastAction?: FieldPolicy<any> | FieldReadFunction<any>,
 	permMultiplier?: FieldPolicy<any> | FieldReadFunction<any>,
+	permMultiplierSimple?: FieldPolicy<any> | FieldReadFunction<any>,
 	seasonMultiplier?: FieldPolicy<any> | FieldReadFunction<any>,
+	seasonMultiplierSimple?: FieldPolicy<any> | FieldReadFunction<any>,
 	stakedTokenAccounts?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalVotes?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalVotesBD?: FieldPolicy<any> | FieldReadFunction<any>
@@ -108,7 +110,7 @@ export type StakedTokenAccountFieldPolicy = {
 	rewardPerTokenPaid?: FieldPolicy<any> | FieldReadFunction<any>,
 	rewards?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type StakedTokenBalanceKeySpecifier = ('account' | 'cooldownTimestamp' | 'cooldownUnits' | 'id' | 'questMultiplier' | 'raw' | 'rawBD' | 'stakedToken' | 'timeMultiplier' | 'votes' | 'votesBD' | 'weightedTimestamp' | StakedTokenBalanceKeySpecifier)[];
+export type StakedTokenBalanceKeySpecifier = ('account' | 'cooldownTimestamp' | 'cooldownUnits' | 'id' | 'questMultiplier' | 'raw' | 'rawBD' | 'stakedToken' | 'timeMultiplier' | 'timeMultiplierSimple' | 'votes' | 'votesBD' | 'weightedTimestamp' | StakedTokenBalanceKeySpecifier)[];
 export type StakedTokenBalanceFieldPolicy = {
 	account?: FieldPolicy<any> | FieldReadFunction<any>,
 	cooldownTimestamp?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -119,6 +121,7 @@ export type StakedTokenBalanceFieldPolicy = {
 	rawBD?: FieldPolicy<any> | FieldReadFunction<any>,
 	stakedToken?: FieldPolicy<any> | FieldReadFunction<any>,
 	timeMultiplier?: FieldPolicy<any> | FieldReadFunction<any>,
+	timeMultiplierSimple?: FieldPolicy<any> | FieldReadFunction<any>,
 	votes?: FieldPolicy<any> | FieldReadFunction<any>,
 	votesBD?: FieldPolicy<any> | FieldReadFunction<any>,
 	weightedTimestamp?: FieldPolicy<any> | FieldReadFunction<any>

@@ -98,10 +98,11 @@ const Meta8Account: FC = () => {
 
   return accountData ? (
     <>
-      <div>Permanent: {accountData.permMultiplier.toFixed(2)}x</div>
-      <div>Season 0: {accountData.seasonMultiplier.toFixed(2)}x</div>
+      <div>Permanent: {accountData.permMultiplierSimple.toFixed(2)}x</div>
+      <div>Season 0: {accountData.seasonMultiplierSimple.toFixed(2)}x</div>
       <div>
-        Hodl time: {(accountData.stakedTokenAccounts.find(st => st.id === stakedToken.selected)?.balance?.timeMultiplier ?? 1).toFixed(2)}x
+        Hodl time:{' '}
+        {(accountData.stakedTokenAccounts.find(st => st.id === stakedToken.selected)?.balance?.timeMultiplierSimple ?? 1).toFixed(2)}x
       </div>
     </>
   ) : null
