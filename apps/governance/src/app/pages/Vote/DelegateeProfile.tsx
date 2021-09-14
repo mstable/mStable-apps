@@ -73,24 +73,27 @@ const DelegateeBalances: FC<{ address?: string }> = ({ address }) => {
     <>
       {delegateeQuery.data?.account?.stakedTokenAccounts
         .filter(account => account.stakedToken.id === stakedToken.selected)
-        .map(({ stakedToken: { stakingToken }, balance, id }) => (
-          <DelegateeBalancesContainer key={id}>
-            <div>
-              <h4>Staked Balance</h4>
+        .map(({ stakedToken: { stakingToken }, balance, id }) => {
+          const cooldownSimple = parseFloat(balance.cooldownUnits) / 1e18
+          return (
+            <DelegateeBalancesContainer key={id}>
               <div>
-                <StyledTokenIcon symbol={stakingToken.symbol} />
-                <StyledCountUp end={balance.rawBD.simple} />
+                <h4>Staked Balance</h4>
+                <div>
+                  <StyledTokenIcon symbol={stakingToken.symbol} />
+                  <StyledCountUp end={balance.rawBD.simple + cooldownSimple} />
+                </div>
               </div>
-            </div>
-            <div>
-              <h4>Voting Power</h4>
               <div>
-                <StyledTokenIcon symbol="vMTA" />
-                <StyledCountUp end={balance.votesBD.simple} />
+                <h4>Voting Power</h4>
+                <div>
+                  <StyledTokenIcon symbol="vMTA" />
+                  <StyledCountUp end={balance.votesBD.simple} />
+                </div>
               </div>
-            </div>
-          </DelegateeBalancesContainer>
-        ))}
+            </DelegateeBalancesContainer>
+          )
+        })}
     </>
   )
 }
@@ -105,7 +108,7 @@ const Container = styled.div`
     flex-direction: column;
     gap: 1rem;
     min-width: 16rem;
-    margin-top: 2.2rem;
+    margin-top: 2.25rem;
   }
 
   h4 {

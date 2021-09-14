@@ -1,13 +1,17 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type MutationKeySpecifier = ('updateQuest' | 'updateQuests' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('updateQuest' | 'updateQuests' | 'queueOptIn' | 'queueOptOut' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	updateQuest?: FieldPolicy<any> | FieldReadFunction<any>,
-	updateQuests?: FieldPolicy<any> | FieldReadFunction<any>
+	updateQuests?: FieldPolicy<any> | FieldReadFunction<any>,
+	queueOptIn?: FieldPolicy<any> | FieldReadFunction<any>,
+	queueOptOut?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('quests' | 'quest' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('quests' | 'quest' | 'queue' | 'user' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	quests?: FieldPolicy<any> | FieldReadFunction<any>,
-	quest?: FieldPolicy<any> | FieldReadFunction<any>
+	quest?: FieldPolicy<any> | FieldReadFunction<any>,
+	queue?: FieldPolicy<any> | FieldReadFunction<any>,
+	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type QuestKeySpecifier = ('id' | 'ethereumId' | 'requiredPoints' | 'objectives' | 'title' | 'description' | 'imageURI' | 'userQuest' | QuestKeySpecifier)[];
 export type QuestFieldPolicy = {
@@ -20,12 +24,23 @@ export type QuestFieldPolicy = {
 	imageURI?: FieldPolicy<any> | FieldReadFunction<any>,
 	userQuest?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type QuestCompletionQueueItemKeySpecifier = ('ethereumId' | 'userId' | QuestCompletionQueueItemKeySpecifier)[];
+export type QuestCompletionQueueItemFieldPolicy = {
+	ethereumId?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type QuestObjectiveKeySpecifier = ('id' | 'points' | 'title' | 'description' | QuestObjectiveKeySpecifier)[];
 export type QuestObjectiveFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	points?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
 	description?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type UserKeySpecifier = ('id' | 'optInQueue' | 'quests' | UserKeySpecifier)[];
+export type UserFieldPolicy = {
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	optInQueue?: FieldPolicy<any> | FieldReadFunction<any>,
+	quests?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type UserQuestKeySpecifier = ('id' | 'complete' | 'progress' | 'signature' | 'objectives' | UserQuestKeySpecifier)[];
 export type UserQuestFieldPolicy = {
@@ -54,9 +69,17 @@ export type TypedTypePolicies = TypePolicies & {
 		keyFields?: false | QuestKeySpecifier | (() => undefined | QuestKeySpecifier),
 		fields?: QuestFieldPolicy,
 	},
+	QuestCompletionQueueItem?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | QuestCompletionQueueItemKeySpecifier | (() => undefined | QuestCompletionQueueItemKeySpecifier),
+		fields?: QuestCompletionQueueItemFieldPolicy,
+	},
 	QuestObjective?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | QuestObjectiveKeySpecifier | (() => undefined | QuestObjectiveKeySpecifier),
 		fields?: QuestObjectiveFieldPolicy,
+	},
+	User?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | UserKeySpecifier | (() => undefined | UserKeySpecifier),
+		fields?: UserFieldPolicy,
 	},
 	UserQuest?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | UserQuestKeySpecifier | (() => undefined | UserQuestKeySpecifier),

@@ -34,6 +34,8 @@ export type Scalars = {
 export type Mutation = {
   updateQuest: Quest;
   updateQuests: Array<Quest>;
+  queueOptIn: User;
+  queueOptOut: User;
 };
 
 
@@ -47,9 +49,23 @@ export type MutationUpdateQuestsArgs = {
   userId: Scalars['ID'];
 };
 
+
+export type MutationQueueOptInArgs = {
+  userId: Scalars['ID'];
+  signature: Scalars['String'];
+};
+
+
+export type MutationQueueOptOutArgs = {
+  userId: Scalars['ID'];
+  signature: Scalars['String'];
+};
+
 export type Query = {
   quests: Array<Quest>;
   quest?: Maybe<Quest>;
+  queue: Array<QuestCompletionQueueItem>;
+  user: User;
 };
 
 
@@ -61,6 +77,11 @@ export type QueryQuestsArgs = {
 export type QueryQuestArgs = {
   questId: Scalars['ID'];
   userId?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryUserArgs = {
+  userId: Scalars['ID'];
 };
 
 export type Quest = {
@@ -79,11 +100,22 @@ export type QuestUserQuestArgs = {
   userId: Scalars['ID'];
 };
 
+export type QuestCompletionQueueItem = {
+  ethereumId: Scalars['Int'];
+  userId: Scalars['ID'];
+};
+
 export type QuestObjective = {
   id: Scalars['ID'];
   points: Scalars['Int'];
   title: Scalars['String'];
   description: Scalars['String'];
+};
+
+export type User = {
+  id: Scalars['ID'];
+  optInQueue: Scalars['Boolean'];
+  quests: Array<UserQuest>;
 };
 
 export type UserQuest = {

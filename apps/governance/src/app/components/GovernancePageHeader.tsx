@@ -51,6 +51,7 @@ const BackLink = styled(Link)`
   display: flex;
   gap: 1rem;
   align-items: center;
+  margin-bottom: 0.5rem;
 `
 
 const Row = styled.div`

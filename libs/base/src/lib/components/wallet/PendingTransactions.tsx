@@ -55,7 +55,7 @@ const Container = styled.div<{ status: TransactionStatus }>`
         ? theme.color.green
         : status === TransactionStatus.Error
         ? theme.color.red
-        : theme.color.lightGrey}
+        : theme.color.background[3]}
     solid;
   border-radius: 1rem;
   color: ${({ theme }) => theme.color.body};

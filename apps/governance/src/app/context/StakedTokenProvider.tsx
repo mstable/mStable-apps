@@ -41,7 +41,10 @@ export const StakedTokenProvider: FC = ({ children }) => {
       providerFactory(
         stakedTokenContractCtx,
         {
-          value: useMemo(() => (signer && selected ? StakedToken__factory.connect(selected, signer) : null), [signer, selected]),
+          value: useMemo(() => {
+            const data = stakingQuery.data?.stakedTokens ?? []
+            return signer ? StakedToken__factory.connect(selected ?? data.find(st => st.stakingToken.symbol === 'MTA')?.id, signer) : null
+          }, [stakingQuery.data, signer, selected]),
         },
         children,
       ),

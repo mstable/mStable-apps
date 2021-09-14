@@ -62,6 +62,7 @@ query Account($id: ID!) {
         questMultiplier
         cooldownTimestamp
         weightedTimestamp
+        cooldownUnits
         rawBD @client
         votesBD @client
       }
