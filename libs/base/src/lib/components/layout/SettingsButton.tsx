@@ -40,7 +40,7 @@ const List = styled.div`
   position: absolute;
   border-radius: 0.75rem;
   right: 0;
-  top: 2rem;
+  top: 2.5rem;
   width: 20rem;
   background: ${({ theme }) => theme.color.background[0]};
   border: 1px solid ${({ theme }) => theme.color.defaultBorder};

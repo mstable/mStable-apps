@@ -48,9 +48,9 @@ const Container = styled.div`
 const nowUnix = Math.floor(Date.now() / 1e3)
 
 export const WithdrawGraph: FC = () => {
-  const { data: stakedData } = useStakedTokenQuery()
+  const { data } = useStakedTokenQuery() ?? {}
 
-  const weightedTimestamp = stakedData?.stakedToken.accounts[0]?.balance?.weightedTimestamp ?? nowUnix
+  const weightedTimestamp = data?.stakedToken?.accounts?.[0]?.balance?.weightedTimestamp ?? nowUnix
 
   const graphData = useMemo(() => {
     const weeksStaked = (nowUnix - weightedTimestamp) / WEEK

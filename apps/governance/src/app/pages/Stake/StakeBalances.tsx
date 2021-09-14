@@ -109,12 +109,13 @@ export const StakeBalances: FC = () => {
     }
 
     const {
-      balance: { rawBD, votesBD },
+      balance: { rawBD, votesBD, cooldownUnits },
       rewards,
     } = account
+    const cooldown = parseFloat(cooldownUnits) / 1e18
     return {
       // TODO simple rewards earned
-      stake: [{ amount: rawBD.simple, symbol: data.stakedToken.stakingToken.symbol }],
+      stake: [{ amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol }],
       votingPower: [{ amount: votesBD.simple, symbol: 'vMTA' }],
       rewardsEarned: [{ symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: parseInt(rewards) / 1e18 }],
     }

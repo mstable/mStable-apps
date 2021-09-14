@@ -10,11 +10,15 @@ scalar MstableBigDecimal
 type Mutation {
   updateQuest(userId: ID!, questId: ID!): Quest!
   updateQuests(userId: ID!): [Quest!]!
+  queueOptIn(userId: ID!, signature: String!): User!
+  queueOptOut(userId: ID!, signature: String!): User!
 }
 
 type Query {
   quests(userId: ID): [Quest!]!
   quest(questId: ID!, userId: ID): Quest
+  queue: [QuestCompletionQueueItem!]!
+  user(userId: ID!): User!
 }
 
 type Quest {
@@ -28,11 +32,22 @@ type Quest {
   userQuest(userId: ID!): UserQuest
 }
 
+type QuestCompletionQueueItem {
+  ethereumId: Int!
+  userId: ID!
+}
+
 type QuestObjective {
   id: ID!
   points: Int!
   title: String!
   description: String!
+}
+
+type User {
+  id: ID!
+  optInQueue: Boolean!
+  quests: [UserQuest!]!
 }
 
 type UserQuest {
