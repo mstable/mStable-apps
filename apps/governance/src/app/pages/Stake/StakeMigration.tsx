@@ -134,15 +134,12 @@ export const StakeMigration: FC<{ onSkip?: () => void }> = ({ onSkip }) => (
         <MigrationArrow />
       </div>
       <p>
-        Migrating your MTA will reward you with a permanent quest multiplier. This multiplier will increase your Voting Power & Savings
-        boost within the mStable ecosystem.&nbsp;
-        <a href="https://docs.mstable.org/" target="_blank" rel="noopener noreferrer">
-          Learn more
-        </a>
+        Migrating your MTA will reward you with a permanent quest multiplier.{' '}
+        <b>Completing quests will increase your Voting Power & Savings boost within the mStable ecosystem.</b>
       </p>
       <Achievement>
         <div>Quest Multiplier</div>
-        <span>+1.2x</span>
+        <span>1.2x</span>
       </Achievement>
       <CloseButton onClick={onSkip}>Skip</CloseButton>
     </MigrationPanel>

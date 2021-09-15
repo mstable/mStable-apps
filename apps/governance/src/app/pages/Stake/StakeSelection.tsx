@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled, { css } from 'styled-components'
 
-import { Button } from '@apps/components/core'
+import { Button, Tooltip } from '@apps/components/core'
 import { ViewportWidth } from '@apps/base/theme'
 import { ReactComponent as MTAIcon } from '@apps/components/icons/tokens/MTA.svg'
 import { ReactComponent as BPTIcon } from '@apps/components/icons/tokens/BPT-MTA-ETH.svg'
@@ -182,7 +182,11 @@ export const StakeSelection: FC = () => {
     <Container>
       <MTASelectionBox>
         <RecommendedBox>
-          <div>Recommended</div>
+          <div>
+            <Tooltip tip="MTA is the preferred staking choice as the transaction cost is cheaper and less complex" hideIcon>
+              Recommended
+            </Tooltip>
+          </div>
         </RecommendedBox>
         <Header>
           <div>

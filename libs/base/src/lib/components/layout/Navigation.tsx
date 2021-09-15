@@ -24,6 +24,24 @@ const Container = styled.nav`
       display: flex;
     }
   }
+
+  .active {
+    div {
+      display: none;
+    }
+  }
+`
+
+const New = styled.div<{ hide?: boolean }>`
+  display: ${({ hide }) => (hide ? 'none' : 'block')};
+  position: absolute;
+  bottom: -0.675rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.625rem;
+  color: #bf4800;
+  opacity: 0.75;
 `
 
 const StyledNavLink = styled(NavLink)`
@@ -35,6 +53,7 @@ const StyledNavLink = styled(NavLink)`
   white-space: nowrap;
   padding: 0.25rem 0.5rem;
   border-radius: 0.675rem;
+  position: relative;
 `
 
 export const Navigation: FC = () => {
@@ -63,6 +82,7 @@ export const Navigation: FC = () => {
                 return routeParts[2] === pathParts[2]
               }}
             >
+              <New hide={title !== 'Quests'}>New</New>
               {title}
             </StyledNavLink>
           </li>
