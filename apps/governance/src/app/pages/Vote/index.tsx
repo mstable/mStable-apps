@@ -160,6 +160,8 @@ export const Vote: FC = () => {
     }
   }, [data])
 
+  const handleRowClick = (id: string) => history.push(`/vote/${id}`)
+
   const handleDelegate = (address: string) => {
     if (!stakedTokenContract || !data) return
 
@@ -220,7 +222,7 @@ export const Vote: FC = () => {
           </VoteBox>
         </Row>
         <UserLookup title="Lookup user" onClick={address => history.push(`/vote/${address}`)} />
-        <Leaderboard preview />
+        <Leaderboard preview onClick={handleRowClick} />
       </div>
     </Container>
   )

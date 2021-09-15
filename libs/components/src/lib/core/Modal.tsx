@@ -122,12 +122,12 @@ const Animation = styled(CSSTransition)<{ classNames: string }>`
   transform-origin: 50% 50%;
   &.item-enter-active {
     animation: ${css`
-        ${scale}`} 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        ${scale}`} 0.25s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   &.item-exit-active {
     animation: ${css`
-        ${scale}`} 0.4s cubic-bezier(0.19, 1, 0.22, 1) reverse;
+        ${scale}`} 0.2s cubic-bezier(0.19, 1, 0.22, 1) reverse;
   }
 `
 
@@ -158,7 +158,7 @@ export const Modal: FC<Props> = ({ children, title, className, hideModal, open, 
       <Animation
         classNames="item"
         // @ts-ignore
-        timeout={400}
+        timeout={200}
         unmountOnExit
         in={open}
         onExited={onExited}
