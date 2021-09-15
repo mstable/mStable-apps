@@ -64,7 +64,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const propose = usePropose()
   const signer = useSigner()
   const stakedTokenContract = useStakedTokenContract()
-  const allowance = useTokenAllowance(underlyingStakeToken, stakedTokenContract.address)
+  const allowance = useTokenAllowance(underlyingStakeToken, stakedTokenContract?.address)
 
   const [amount, formValue, setFormValue] = useBigDecimalInput()
   const [isDelegating, toggleIsDelegating] = useToggle(true)
@@ -131,7 +131,6 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
       </div>
       <Warning>
         Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.&nbsp;
-        <a>Learn more</a>
       </Warning>
       <Warning>A redemption fee applies to all withdrawals. The longer you stake, the lower the redemption fee.</Warning>
       {isMigrating ? (

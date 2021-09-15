@@ -19,7 +19,8 @@ interface Balance {
 
 interface GroupProps {
   label: string
-  balances?: Balance[]
+  loading: boolean
+  balance?: Balance
 }
 
 const StyledTokenIcon = styled(TokenIcon)`
@@ -55,23 +56,24 @@ const GroupContainer = styled.div`
   }
 `
 
-const Group: FC<GroupProps> = ({ balances, label }) => (
-  <GroupContainer>
-    <h3>{label}</h3>
-    <div>
-      {balances ? (
-        balances.map(({ amount, symbol, suffix, decimals }, key) => (
-          <div key={symbol ?? key}>
+const Group: FC<GroupProps> = ({ balance, label, loading }) => {
+  const { amount, symbol, suffix, decimals } = balance ?? {}
+  return (
+    <GroupContainer>
+      <h3>{label}</h3>
+      <div>
+        {!loading ? (
+          <div key={symbol}>
             {symbol && <StyledTokenIcon symbol={symbol} />}
             <CountUp end={amount} suffix={suffix} decimals={decimals} />
           </div>
-        ))
-      ) : (
-        <ThemedSkeleton height={20} width={80} />
-      )}
-    </div>
-  </GroupContainer>
-)
+        ) : (
+          <ThemedSkeleton height={20} width={80} />
+        )}
+      </div>
+    </GroupContainer>
+  )
+}
 
 const Container = styled.div`
   display: flex;
@@ -104,17 +106,17 @@ const Container = styled.div`
 `
 
 export const StakeBalances: FC = () => {
-  const { data } = useStakedTokenQuery()
+  const { data, loading } = useStakedTokenQuery()
   const rewardsEarned = useRewardsEarned()
   const useFetchPrice = useFetchPriceCtx()
   const mtaPrice = useFetchPrice('0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2') // MTA (Eth mainnet)
 
   const values = useMemo<{
-    baseRewardsApy?: Balance[]
-    userRewardsApy?: Balance[]
-    stake?: Balance[]
-    votingPower?: Balance[]
-    rewardsEarned?: Balance[]
+    baseRewardsApy?: Balance
+    userRewardsApy?: Balance
+    stake?: Balance
+    votingPower?: Balance
+    rewardsEarned?: Balance
   }>(() => {
     if (!data?.stakedToken?.accounts?.[0]?.balance || !mtaPrice.value) {
       return {}
@@ -148,24 +150,24 @@ export const StakeBalances: FC = () => {
     const userRewardsApy = calculateApy(stakingTokenPrice, mtaPrice.value, rewardRate * multiplier, totalSupply.bigDecimal)
 
     return {
-      stake: [{ amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol }],
-      votingPower: [{ amount: votesBD.simple, symbol: 'vMTA' }],
-      rewardsEarned: [{ decimals: 6, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards }],
-      baseRewardsApy: [{ suffix: '%', amount: baseRewardsApy }],
-      userRewardsApy: [{ suffix: '%', amount: userRewardsApy }],
+      stake: { amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol },
+      votingPower: { amount: votesBD.simple, symbol: 'vMTA' },
+      rewardsEarned: { decimals: 4, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards },
+      baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
+      userRewardsApy: { suffix: '%', amount: userRewardsApy },
     }
   }, [data, mtaPrice.value, rewardsEarned.rewards])
 
   return (
     <Container>
       <div>
-        <Group label="My Stake" balances={values.stake} />
-        <Group label="My Voting Power" balances={values.votingPower} />
+        <Group label="My Stake" balance={values.stake} loading={loading} />
+        <Group label="My Voting Power" balance={values.votingPower} loading={loading} />
       </div>
       <div>
-        <Group label="Rewards Earned" balances={values.rewardsEarned} />
-        <Group label="Base APY" balances={values.baseRewardsApy} />
-        <Group label="My APY" balances={values.userRewardsApy} />
+        <Group label="Earned" balance={values.rewardsEarned} loading={loading} />
+        <Group label="Base APY" balance={values.baseRewardsApy} loading={loading} />
+        <Group label="My APY" balance={values.userRewardsApy} loading={loading} />
       </div>
     </Container>
   )

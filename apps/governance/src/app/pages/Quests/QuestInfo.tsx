@@ -46,8 +46,8 @@ const Objectives = styled.div`
   padding-right: 1rem;
 
   ::-webkit-scrollbar {
-    height: 4px;
-    width: 4px;
+    height: 8px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.5);

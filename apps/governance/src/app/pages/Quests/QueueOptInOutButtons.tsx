@@ -67,7 +67,9 @@ export const QueueOptInOutButton: FC = () => {
     </Button>
   ) : (
     <Button highlighted onClick={handleOptIn}>
-      <Tooltip tip="Sign a message and we'll submit your completed quests at regular intervals, saving you gas">Submit quests</Tooltip>
+      <Tooltip tip="Sign a message and we'll submit your completed quests at regular intervals, saving you gas" hideIcon>
+        Submit quests
+      </Tooltip>
     </Button>
   )
 }
