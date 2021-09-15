@@ -158,7 +158,8 @@ const Inner = styled.div`
   flex: 1;
 
   h3 {
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   @media (min-width: ${ViewportWidth.m}) {
@@ -272,7 +273,15 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
   const stakedTokenQuery = useStakedTokenQuery()
   const account = useAccount()
 
-  const quest = useMemo<{ objectives: TimeMultiplierQuestObjective[]; progress: number; complete: boolean }>(() => {
+  const quest = useMemo<{
+    objectives: TimeMultiplierQuestObjective[]
+    progress: number
+    currentProgress: number
+    currentTitle: string
+    complete: boolean
+  }>(() => {
+    let currentProgress = 0
+    let currentTitle: string
     let objectives: TimeMultiplierQuestObjective[] = [
       {
         id: '1',
@@ -308,7 +317,9 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
 
     const balance = stakedTokenQuery.data?.stakedToken?.accounts?.[0]?.balance
 
-    if (!balance) return { objectives, progress: 0, complete: false }
+    if (!balance) {
+      return { objectives, progress: 0, currentProgress: 0, currentTitle: objectives[0].objective.title, complete: false }
+    }
 
     const nowUnix = Math.floor(Date.now() / 1e3)
     const hodlLength = nowUnix - balance.weightedTimestamp
@@ -317,6 +328,12 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
       const previous = idx === 0 ? 0 : arr[idx - 1].objective.seconds
       const unbounded = (hodlLength - previous) / (objective.seconds - previous)
       const progress = Math.max(0, Math.min(1, unbounded))
+
+      if (progress > 0) {
+        currentTitle = objective.title
+        currentProgress = progress * 100
+      }
+
       return {
         objective,
         userObjective: {
@@ -327,9 +344,9 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
       }
     })
 
-    const progress = Math.max(0, Math.min(1, hodlLength / objectives[objectives.length - 1].objective.seconds))
+    const progress = Math.max(0, Math.min(1, hodlLength / objectives[objectives.length - 1].objective.seconds)) * 100
 
-    return { objectives, progress, complete: progress === 1 }
+    return { objectives, progress, currentProgress, currentTitle, complete: progress === 1 }
   }, [account, stakedTokenQuery.data?.stakedToken?.accounts])
 
   return (
@@ -364,7 +381,20 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
         </div>
         <Bottom>
           <Progress>
-            <QuestProgress decimals={4} value={quest.progress} progressType={ProgressType.Personal} questType={QuestType.Permanent} />
+            <QuestProgress
+              decimals={4}
+              value={quest.currentProgress}
+              title={quest.currentTitle}
+              progressType={ProgressType.Personal}
+              questType={QuestType.Permanent}
+            />
+            <QuestProgress
+              decimals={4}
+              value={quest.progress}
+              title="Overall progress"
+              progressType={ProgressType.Personal}
+              questType={QuestType.Permanent}
+            />
           </Progress>
           <div />
         </Bottom>
