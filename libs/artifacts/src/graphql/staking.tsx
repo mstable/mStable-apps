@@ -47,8 +47,12 @@ export type Account = {
   seasonMultiplier: Scalars['Int'];
   seasonMultiplierSimple: Scalars['Float'];
   stakedTokenAccounts: Array<StakedTokenAccount>;
-  totalVotes: Scalars['BigInt'];
-  totalVotesBD: Scalars['MstableBigDecimal'];
+  totalVotesAll: Scalars['BigInt'];
+  totalVotesAllBD: Scalars['MstableBigDecimal'];
+  totalVotesBPT: Scalars['BigInt'];
+  totalVotesBPTBD: Scalars['MstableBigDecimal'];
+  totalVotesMTA: Scalars['BigInt'];
+  totalVotesMTABD: Scalars['MstableBigDecimal'];
 };
 
 
@@ -87,14 +91,30 @@ export type Account_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
-  totalVotes?: Maybe<Scalars['BigInt']>;
-  totalVotes_not?: Maybe<Scalars['BigInt']>;
-  totalVotes_gt?: Maybe<Scalars['BigInt']>;
-  totalVotes_lt?: Maybe<Scalars['BigInt']>;
-  totalVotes_gte?: Maybe<Scalars['BigInt']>;
-  totalVotes_lte?: Maybe<Scalars['BigInt']>;
-  totalVotes_in?: Maybe<Array<Scalars['BigInt']>>;
-  totalVotes_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  totalVotesMTA?: Maybe<Scalars['BigInt']>;
+  totalVotesMTA_not?: Maybe<Scalars['BigInt']>;
+  totalVotesMTA_gt?: Maybe<Scalars['BigInt']>;
+  totalVotesMTA_lt?: Maybe<Scalars['BigInt']>;
+  totalVotesMTA_gte?: Maybe<Scalars['BigInt']>;
+  totalVotesMTA_lte?: Maybe<Scalars['BigInt']>;
+  totalVotesMTA_in?: Maybe<Array<Scalars['BigInt']>>;
+  totalVotesMTA_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  totalVotesBPT?: Maybe<Scalars['BigInt']>;
+  totalVotesBPT_not?: Maybe<Scalars['BigInt']>;
+  totalVotesBPT_gt?: Maybe<Scalars['BigInt']>;
+  totalVotesBPT_lt?: Maybe<Scalars['BigInt']>;
+  totalVotesBPT_gte?: Maybe<Scalars['BigInt']>;
+  totalVotesBPT_lte?: Maybe<Scalars['BigInt']>;
+  totalVotesBPT_in?: Maybe<Array<Scalars['BigInt']>>;
+  totalVotesBPT_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  totalVotesAll?: Maybe<Scalars['BigInt']>;
+  totalVotesAll_not?: Maybe<Scalars['BigInt']>;
+  totalVotesAll_gt?: Maybe<Scalars['BigInt']>;
+  totalVotesAll_lt?: Maybe<Scalars['BigInt']>;
+  totalVotesAll_gte?: Maybe<Scalars['BigInt']>;
+  totalVotesAll_lte?: Maybe<Scalars['BigInt']>;
+  totalVotesAll_in?: Maybe<Array<Scalars['BigInt']>>;
+  totalVotesAll_not_in?: Maybe<Array<Scalars['BigInt']>>;
   lastAction?: Maybe<Scalars['Int']>;
   lastAction_not?: Maybe<Scalars['Int']>;
   lastAction_gt?: Maybe<Scalars['Int']>;
@@ -123,7 +143,9 @@ export type Account_Filter = {
 
 export enum Account_OrderBy {
   Id = 'id',
-  TotalVotes = 'totalVotes',
+  TotalVotesMta = 'totalVotesMTA',
+  TotalVotesBpt = 'totalVotesBPT',
+  TotalVotesAll = 'totalVotesAll',
   LastAction = 'lastAction',
   PermMultiplier = 'permMultiplier',
   SeasonMultiplier = 'seasonMultiplier',
@@ -734,6 +756,8 @@ export type StakedToken = {
   collateralisationRatio: Scalars['BigInt'];
   slashingPercentage: Scalars['BigInt'];
   priceCoefficient?: Maybe<Scalars['BigInt']>;
+  isStakedTokenBPT: Scalars['Boolean'];
+  isStakedTokenMTA: Scalars['Boolean'];
   accounts: Array<StakedTokenAccount>;
 };
 
@@ -1079,6 +1103,14 @@ export type StakedToken_Filter = {
   priceCoefficient_lte?: Maybe<Scalars['BigInt']>;
   priceCoefficient_in?: Maybe<Array<Scalars['BigInt']>>;
   priceCoefficient_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  isStakedTokenBPT?: Maybe<Scalars['Boolean']>;
+  isStakedTokenBPT_not?: Maybe<Scalars['Boolean']>;
+  isStakedTokenBPT_in?: Maybe<Array<Scalars['Boolean']>>;
+  isStakedTokenBPT_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  isStakedTokenMTA?: Maybe<Scalars['Boolean']>;
+  isStakedTokenMTA_not?: Maybe<Scalars['Boolean']>;
+  isStakedTokenMTA_in?: Maybe<Array<Scalars['Boolean']>>;
+  isStakedTokenMTA_not_in?: Maybe<Array<Scalars['Boolean']>>;
 };
 
 export enum StakedToken_OrderBy {
@@ -1092,6 +1124,8 @@ export enum StakedToken_OrderBy {
   CollateralisationRatio = 'collateralisationRatio',
   SlashingPercentage = 'slashingPercentage',
   PriceCoefficient = 'priceCoefficient',
+  IsStakedTokenBpt = 'isStakedTokenBPT',
+  IsStakedTokenMta = 'isStakedTokenMTA',
   Accounts = 'accounts'
 }
 
@@ -1728,14 +1762,14 @@ export type LeaderboardQueryVariables = Exact<{
 }>;
 
 
-export type LeaderboardQuery = { stakedTokens: Array<{ token: { totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }>, accounts: Array<{ id: string, totalVotes: string, totalVotesBD: BigDecimal }> };
+export type LeaderboardQuery = { stakedTokens: Array<{ token: { totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }>, accounts: Array<{ id: string, totalVotesAll: string, totalVotesAllBD: BigDecimal }> };
 
 export type AccountQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type AccountQuery = { account?: Maybe<{ id: string, lastAction: number, seasonMultiplier: number, permMultiplier: number, totalVotesBD: BigDecimal, seasonMultiplierSimple: number, permMultiplierSimple: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number } }> }> };
+export type AccountQuery = { account?: Maybe<{ id: string, lastAction: number, seasonMultiplier: number, permMultiplier: number, totalVotesAll: string, totalVotesMTA: string, totalVotesBPT: string, totalVotesBPTBD: BigDecimal, totalVotesMTABD: BigDecimal, totalVotesAllBD: BigDecimal, seasonMultiplierSimple: number, permMultiplierSimple: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number } }> }> };
 
 export type StakedTokenQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1872,10 +1906,15 @@ export const LeaderboardDocument = gql`
       }
     }
   }
-  accounts(first: $count, skip: $skip, orderBy: totalVotes, orderDirection: desc) {
+  accounts(
+    first: $count
+    skip: $skip
+    orderBy: totalVotesAll
+    orderDirection: desc
+  ) {
     id
-    totalVotes
-    totalVotesBD @client
+    totalVotesAll
+    totalVotesAllBD @client
   }
 }
     ${MetricFieldsFragmentDoc}`;
@@ -1915,7 +1954,12 @@ export const AccountDocument = gql`
     lastAction
     seasonMultiplier
     permMultiplier
-    totalVotesBD @client
+    totalVotesAll
+    totalVotesMTA
+    totalVotesBPT
+    totalVotesBPTBD @client
+    totalVotesMTABD @client
+    totalVotesAllBD @client
     seasonMultiplierSimple @client
     permMultiplierSimple @client
     completedQuests {

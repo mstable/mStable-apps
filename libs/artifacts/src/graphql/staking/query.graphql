@@ -23,10 +23,10 @@ query Leaderboard($count: Int!, $skip: Int!) {
       }
     }
   }
-  accounts(first: $count, skip: $skip, orderBy: totalVotes, orderDirection: desc) {
+  accounts(first: $count, skip: $skip, orderBy: totalVotesAll, orderDirection: desc) {
     id
-    totalVotes
-    totalVotesBD @client
+    totalVotesAll
+    totalVotesAllBD @client
   }
 }
 
@@ -36,7 +36,12 @@ query Account($id: ID!) {
     lastAction
     seasonMultiplier
     permMultiplier
-    totalVotesBD @client
+    totalVotesAll
+    totalVotesMTA
+    totalVotesBPT
+    totalVotesBPTBD @client
+    totalVotesMTABD @client
+    totalVotesAllBD @client
     seasonMultiplierSimple @client
     permMultiplierSimple @client
     completedQuests {

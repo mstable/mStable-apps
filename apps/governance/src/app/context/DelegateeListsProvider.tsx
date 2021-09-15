@@ -35,7 +35,7 @@ export const DelegateeListsProvider: FC = ({ children }) => {
         // TODO reinstate me when on mainnet
         // const ipfsHash = await resolveENSContentHash(ensName, provider)
         // const url = `https://cloudflare-ipfs.com/ipfs/${ipfsHash ? ipfsHash.slice(7) : ''}/`
-        const url = 'https://gateway.pinata.cloud/ipfs/QmesgEGdi7txP8yUT6QcMfYgMF1FLRkmkvTHfKMrnUe9jt'
+        const url = 'https://gateway.pinata.cloud/ipfs/QmTXzjaYBMkbM3uQJC5tqGRCDVYSuPrPxpWGtbN9MfoTZE'
 
         const response = await fetch(url)
         const list = (await response.json()) as DelegateeList
