@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import useSound from 'use-sound'
@@ -7,7 +7,7 @@ import { UnstyledButton } from '@apps/components/core'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useQuestsQuery as useStakingQuestsQuery, useAccountQuery } from '@apps/artifacts/graphql/staking'
-import { useQuestsQuery as useQuestbookQuestsQuery } from '@apps/artifacts/graphql/questbook'
+import { useQuestsQuery as useQuestbookQuestsQuery, useUpdateQuestsMutation } from '@apps/artifacts/graphql/questbook'
 
 // @ts-ignore
 import bleep26 from '../../../assets/bleeps_26.mp3'
@@ -122,6 +122,14 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
     variables: { userId: account ?? '', hasUser: !!account },
   })
 
+  // Update all quests when the user changes
+  const [updateUserQuests] = useUpdateQuestsMutation({ client: clients.questbook })
+  useEffect(() => {
+    updateUserQuests({ variables: { userId: account ?? '', hasUser: !!account } }).catch(error => {
+      console.error(error)
+    })
+  }, [updateUserQuests, account])
+
   const [selectedId, setSelectedId] = useState<string>()
 
   const [playBleep26] = useSound(bleep26, { volume: 0.4 })
@@ -165,7 +173,12 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
           ) : questId ? (
             <QuestCard questId={questId} onClick={setSelectedId} />
           ) : (
-            questbookQuestsQuery.data?.quests.map(quest => <QuestCard key={quest?.id} questId={quest?.id} onClick={selectQuest} />)
+            <>
+              {questbookQuestsQuery.data?.quests.map(quest => (
+                <QuestCard key={quest?.id} questId={quest?.id} onClick={selectQuest} />
+              ))}
+              <QuestCard questId="timeMultiplier" onClick={selectQuest} />
+            </>
           )
         ) : (
           <Typist cursor={{ show: true, blink: true }} avgTypingDelay={20}>

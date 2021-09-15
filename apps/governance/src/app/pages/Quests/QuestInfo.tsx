@@ -1,19 +1,20 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
+import { QuestObjective, useQuestQuery as useQuestbookQuestQuery, UserQuestObjective } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
-import { useApolloClients } from '@apps/base/context/apollo'
-import { ThemedSkeleton } from '@apps/components/core'
-import { ViewportWidth } from '@apps/base/theme'
 import { useAccount } from '@apps/base/context/account'
+import { useApolloClients } from '@apps/base/context/apollo'
+import { ViewportWidth } from '@apps/base/theme'
+import { ThemedSkeleton } from '@apps/components/core'
+
+import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 import { ClaimButtons } from './ClaimButtons'
-import { QueueOptInOutButton } from './QueueOptInOutButtons'
-
-import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'
 import { QuestObjectiveProgress, QuestProgress, QuestTimeRemaining } from './QuestProgress'
+import { QueueOptInOutButton } from './QueueOptInOutButtons'
+import { Typist } from './Typist'
 
 enum ProgressType {
   Personal,
@@ -189,7 +190,7 @@ const Container = styled.div<{ type?: QuestType }>`
   }
 `
 
-export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
+const DefaultQuestInfo: FC<{ questId: string }> = ({ questId }) => {
   const account = useAccount()
   const clients = useApolloClients()
 
@@ -261,3 +262,116 @@ export const QuestInfo: FC<{ questId: string }> = ({ questId }) => {
     </Container>
   )
 }
+
+interface TimeMultiplierQuestObjective {
+  objective: Omit<QuestObjective, 'points'> & { seconds: number }
+  userObjective?: UserQuestObjective
+}
+
+export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) => {
+  const stakedTokenQuery = useStakedTokenQuery()
+  const account = useAccount()
+
+  const quest = useMemo<{ objectives: TimeMultiplierQuestObjective[]; progress: number; complete: boolean }>(() => {
+    let objectives: TimeMultiplierQuestObjective[] = [
+      {
+        id: '1',
+        title: 'Friend of the Library',
+        description: 'Staked for 3 months: 1.2x',
+        seconds: 7862400,
+      },
+      {
+        id: '2',
+        title: `Congratulations ${account ?? 'Metanaut'} 😎 You are the staker of the week`,
+        description: 'Staked for 6 months: 1.3x',
+        seconds: 15724800,
+      },
+      {
+        id: '3',
+        title: 'Happy birthday 🎂 and many happy financial returns',
+        description: 'Staked for 12 months: 1.4x',
+        seconds: 31449600,
+      },
+      {
+        id: '4',
+        title: '‘naut since small times',
+        description: 'Staked for 18 months: 1.5x',
+        seconds: 47174400,
+      },
+      {
+        id: '5',
+        title: 'mStable Platinum Select',
+        description: 'Staked for 24 months: 1.6x',
+        seconds: 62899200,
+      },
+    ].map(objective => ({ objective }))
+
+    const balance = stakedTokenQuery.data?.stakedToken?.accounts?.[0]?.balance
+
+    if (!balance) return { objectives, progress: 0, complete: false }
+
+    const nowUnix = Math.floor(Date.now() / 1e3)
+    const hodlLength = nowUnix - balance.weightedTimestamp
+
+    objectives = objectives.map<TimeMultiplierQuestObjective>(({ objective }, idx, arr) => {
+      const previous = idx === 0 ? 0 : arr[idx - 1].objective.seconds
+      const unbounded = (hodlLength - previous) / (objective.seconds - previous)
+      const progress = Math.max(0, Math.min(1, unbounded))
+      return {
+        objective,
+        userObjective: {
+          id: objective.id,
+          progress,
+          complete: progress === 1,
+        },
+      }
+    })
+
+    const progress = Math.max(0, Math.min(1, hodlLength / objectives[objectives.length - 1].objective.seconds))
+
+    return { objectives, progress, complete: progress === 1 }
+  }, [account, stakedTokenQuery.data?.stakedToken?.accounts])
+
+  return (
+    <Container>
+      <QuestCard questId={questId} />
+      <Inner>
+        <div>
+          <div>
+            <h3>
+              <Typist>Good things come to those who wait – earn a multiplier for staking over time</Typist>
+            </h3>
+            <Objectives>
+              {quest.objectives.map(({ objective: { title, id, description }, userObjective }) => (
+                <div key={id}>
+                  <div>
+                    <div />
+                    {userObjective?.complete ? (
+                      <img src="/assets/tick.png" alt="Complete" />
+                    ) : (
+                      <img src="/assets/cross.png" alt="Incomplete" />
+                    )}
+                    <QuestObjectiveProgress value={(userObjective?.progress ?? 0) * 100} />
+                  </div>
+                  <Typist>
+                    <p>{title}</p>
+                    <p>{description}</p>
+                  </Typist>
+                </div>
+              ))}
+            </Objectives>
+          </div>
+        </div>
+        <Bottom>
+          <Progress>
+            <QuestProgress decimals={4} value={quest.progress} progressType={ProgressType.Personal} questType={QuestType.Permanent} />
+          </Progress>
+          <div />
+        </Bottom>
+      </Inner>
+    </Container>
+  )
+}
+
+export const QuestInfo: FC<{ questId: string }> = ({ questId }) =>
+  questId === 'timeMultiplier' ? <TimeMultiplierQuestInfo questId={questId} /> : <DefaultQuestInfo questId={questId} />
