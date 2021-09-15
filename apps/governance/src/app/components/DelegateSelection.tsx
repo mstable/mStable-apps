@@ -50,6 +50,8 @@ const Info = styled.div`
     width: 1.75rem;
 
     * {
+      border-radius: 50%;
+      overflow: hidden;
       width: 100% !important;
       height: 100% !important;
     }
@@ -92,24 +94,24 @@ const Container = styled.div`
 
 export const DelegateSelection: FC<Props> = ({ className }) => {
   const [showModal] = useDelegationModal()
-  const { delegateSelection: delegate } = useModalData()
+  const { delegateSelection: delegatee } = useModalData()
   const delegateesAll = useDelegateesAll()
-  const delegatee = delegateesAll[delegate]
+  const delegateeInfo = delegateesAll[delegatee]
 
   return (
     <Container className={className}>
-      {delegate ? (
+      {delegatee ? (
         <Delegation>
           <Info>
-            <div>{delegatee ? <IPFSImg uri={delegatee.avatarURI} /> : <UserIcon address={delegate} />}</div>
-            {delegatee ? (
+            <div>{delegateeInfo ? <IPFSImg uri={delegateeInfo.avatarURI} /> : <UserIcon address={delegatee} />}</div>
+            {delegateeInfo ? (
               <User>
-                <h3>{delegatee?.displayName}</h3>
-                <span>{truncateAddress(delegate)}</span>
+                <h3>{delegateeInfo?.displayName}</h3>
+                <span>{delegateeInfo?.ensName ?? truncateAddress(delegatee)}</span>
               </User>
             ) : (
               <Address>
-                <span>{truncateAddress(delegate)}</span>
+                <span>{delegateeInfo?.ensName ?? truncateAddress(delegatee)}</span>
               </Address>
             )}
           </Info>
