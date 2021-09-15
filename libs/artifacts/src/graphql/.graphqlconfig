@@ -64,7 +64,7 @@
       "extensions": {
         "endpoints": {
           "mainnet": {
-            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten",
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-kovan",
             "introspect": false
           }
         }

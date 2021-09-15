@@ -9,6 +9,7 @@ import { MultiRewards } from '@apps/components/core'
 import { BigDecimal } from '@apps/bigdecimal'
 
 import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useRewardsEarned } from './context'
 
 interface Balance {
   symbol?: string
@@ -48,6 +49,7 @@ const Container = styled.div`
 
 export const ClaimForm: FC = () => {
   const { data } = useStakedTokenQuery()
+  const rewardsEarned = useRewardsEarned()
   const { selected: stakedTokenAddress, options } = useStakedToken()
   const [isCompounding, toggleIsCompounding] = useToggle(false)
 
@@ -55,11 +57,6 @@ export const ClaimForm: FC = () => {
   const propose = usePropose()
 
   const stakedTokenSymbol = options[stakedTokenAddress]?.icon?.symbol
-
-  const rewards = useMemo<Balance>((): Balance | undefined => {
-    const account = data?.stakedToken?.accounts?.[0]
-    return { symbol: stakedTokenSymbol, amount: new BigDecimal(account?.rewards ?? 0) }
-  }, [data, stakedTokenSymbol])
 
   const handleSend = () => {
     if (!stakedTokenContract || !data) return
@@ -83,7 +80,7 @@ export const ClaimForm: FC = () => {
 
   return (
     <Container>
-      <StyledMultiRewards rewardsEarned={{ rewards: [{ earned: rewards?.amount, token: rewards?.symbol }] }} />
+      <StyledMultiRewards rewardsEarned={{ rewards: [{ earned: BigDecimal.fromSimple(rewardsEarned?.rewards ?? 0), token: 'MTA' }] }} />
       {stakedTokenSymbol === 'MTA' && (
         <Compound>
           <div>
@@ -93,7 +90,7 @@ export const ClaimForm: FC = () => {
           <p>This will claim and re-stake your earned MTA in 1 transaction</p>
         </Compound>
       )}
-      <SendButton valid={!!rewards?.amount} title={isCompounding ? 'Compound Rewards' : 'Claim Rewards'} handleSend={handleSend} />
+      <SendButton valid={!!rewardsEarned?.rewards} title={isCompounding ? 'Compound Rewards' : 'Claim Rewards'} handleSend={handleSend} />
     </Container>
   )
 }

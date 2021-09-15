@@ -6,6 +6,7 @@ import { GovernancePageHeader } from '../../components/GovernancePageHeader'
 import { StakeForms } from './StakeForms'
 import { StakeBalances } from './StakeBalances'
 import { PendingBalances } from './PendingBalances'
+import { RewardsEarnedProvider } from './context'
 
 const Container = styled.div`
   > div:last-child {
@@ -17,18 +18,20 @@ const Container = styled.div`
 
 export const Stake: FC = () => {
   return (
-    <Container>
-      <GovernancePageHeader title="Stake" stakedTokenSwitcher>
-        <p>
-          This dashboard allows you to stake MTA or MTA/ETH Balancer tokens in exchange for MTA rewards. As a staker, you risk getting
-          diluted in the event that the mStable protocol requires recollateralisation. <a>Learn More</a>
-        </p>
-      </GovernancePageHeader>
-      <div>
-        <StakeBalances />
-        <PendingBalances />
-        <StakeForms />
-      </div>
-    </Container>
+    <RewardsEarnedProvider>
+      <Container>
+        <GovernancePageHeader title="Stake" stakedTokenSwitcher>
+          <p>
+            This dashboard allows you to stake MTA or MTA/ETH Balancer tokens in exchange for MTA rewards. As a staker, you risk getting
+            diluted in the event that the mStable protocol requires recollateralisation. <a>Learn More</a>
+          </p>
+        </GovernancePageHeader>
+        <div>
+          <StakeBalances />
+          <PendingBalances />
+          <StakeForms />
+        </div>
+      </Container>
+    </RewardsEarnedProvider>
   )
 }
