@@ -1,11 +1,14 @@
+import { useFetchPriceCtx } from '@apps/base/context/prices'
+import { calculateApy } from '@apps/quick-maths'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { CountUp, ThemedSkeleton } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
+import { ViewportWidth } from '@apps/base/theme'
 
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
-import { ViewportWidth } from '@apps/base/theme'
+import { useRewardsEarned } from './context'
 
 interface Balance {
   symbol?: string
@@ -32,6 +35,7 @@ const GroupContainer = styled.div`
   > :last-child {
     display: flex;
     gap: 1rem;
+    min-height: 1.5rem;
 
     > * {
       display: flex;
@@ -101,39 +105,67 @@ const Container = styled.div`
 
 export const StakeBalances: FC = () => {
   const { data } = useStakedTokenQuery()
+  const rewardsEarned = useRewardsEarned()
+  const useFetchPrice = useFetchPriceCtx()
+  const mtaPrice = useFetchPrice('0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2') // MTA (Eth mainnet)
 
-  // TODO create rewardsEarned context
-  const { stake, votingPower, rewardsEarned } = useMemo<{ stake?: Balance[]; votingPower?: Balance[]; rewardsEarned?: Balance[] }>(() => {
-    const account = data?.stakedToken?.accounts?.[0]
-    if (!data || !account) {
+  const values = useMemo<{
+    baseRewardsApy?: Balance[]
+    userRewardsApy?: Balance[]
+    stake?: Balance[]
+    votingPower?: Balance[]
+    rewardsEarned?: Balance[]
+  }>(() => {
+    if (!data?.stakedToken?.accounts?.[0]?.balance || !mtaPrice.value) {
       return {}
     }
 
     const {
-      balance: { rawBD, votesBD, cooldownUnits },
-      rewards,
-    } = account
+      stakedToken: {
+        token: { totalSupply },
+        stakingRewards: { rewardRate: _rewardRate },
+        accounts: [
+          {
+            balance: { rawBD, votesBD, cooldownUnits, questMultiplierSimple, timeMultiplierSimple },
+          },
+        ],
+      },
+    } = data
+
+    // TODO use @client Apollo fields
+    const rewardRate = parseInt(_rewardRate) / 1e18
     const cooldown = parseFloat(cooldownUnits) / 1e18
+
+    const stakingTokenPrice =
+      data.stakedToken.stakingToken.symbol === 'MTA'
+        ? mtaPrice.value
+        : // TODO check me (also priceCoeff is incorrect on Kovan/Ropsten)
+          (mtaPrice.value * parseInt(data.stakedToken.priceCoefficient)) / 10000
+
+    const multiplier = Math.max(1, questMultiplierSimple) * Math.max(1, timeMultiplierSimple)
+
+    const baseRewardsApy = calculateApy(stakingTokenPrice, mtaPrice.value, rewardRate, totalSupply.bigDecimal)
+    const userRewardsApy = calculateApy(stakingTokenPrice, mtaPrice.value, rewardRate * multiplier, totalSupply.bigDecimal)
+
     return {
-      // TODO simple rewards earned
       stake: [{ amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol }],
       votingPower: [{ amount: votesBD.simple, symbol: 'vMTA' }],
-      rewardsEarned: [{ symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: parseInt(rewards) / 1e18 }],
+      rewardsEarned: [{ decimals: 6, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards }],
+      baseRewardsApy: [{ suffix: '%', amount: baseRewardsApy }],
+      userRewardsApy: [{ suffix: '%', amount: userRewardsApy }],
     }
-  }, [data])
-
-  // TODO calculate rewards APY
-  const rewardsApy = [{ suffix: '%', amount: 23.02 }]
+  }, [data, mtaPrice.value, rewardsEarned.rewards])
 
   return (
     <Container>
       <div>
-        <Group label="My Stake" balances={stake} />
-        <Group label="My Voting Power" balances={votingPower} />
+        <Group label="My Stake" balances={values.stake} />
+        <Group label="My Voting Power" balances={values.votingPower} />
       </div>
       <div>
-        <Group label="Rewards Earned" balances={rewardsEarned} />
-        <Group label="APY" balances={rewardsApy} />
+        <Group label="Rewards Earned" balances={values.rewardsEarned} />
+        <Group label="Base APY" balances={values.baseRewardsApy} />
+        <Group label="My APY" balances={values.userRewardsApy} />
       </div>
     </Container>
   )

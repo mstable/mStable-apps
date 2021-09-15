@@ -16,6 +16,12 @@ const typePolicies: TypedTypePolicies = {
           return timeMultiplier * 0.1
         },
       },
+      questMultiplierSimple: {
+        read(existing, options) {
+          const questMultiplier = (options.readField('questMultiplier') ?? 10) as number
+          return questMultiplier * 0.1
+        },
+      },
     },
   },
   Account: {

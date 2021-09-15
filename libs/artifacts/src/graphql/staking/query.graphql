@@ -68,6 +68,7 @@ query Account($id: ID!) {
         rawBD @client
         votesBD @client
         timeMultiplierSimple @client
+        questMultiplierSimple @client
       }
     }
   }
@@ -99,6 +100,7 @@ query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
     COOLDOWN_SECONDS
     collateralisationRatio
     slashingPercentage
+    priceCoefficient
     accounts(where: { account: $account }) @include(if: $hasAccount) {
       id
       delegatee {
@@ -116,6 +118,8 @@ query StakedToken($id: ID!, $account: String!, $hasAccount: Boolean!) {
         weightedTimestamp
         rawBD @client
         votesBD @client
+        timeMultiplierSimple @client
+        questMultiplierSimple @client
       }
     }
   }

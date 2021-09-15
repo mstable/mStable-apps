@@ -733,6 +733,7 @@ export type StakedToken = {
   UNSTAKE_WINDOW: Scalars['BigInt'];
   collateralisationRatio: Scalars['BigInt'];
   slashingPercentage: Scalars['BigInt'];
+  priceCoefficient?: Maybe<Scalars['BigInt']>;
   accounts: Array<StakedTokenAccount>;
 };
 
@@ -854,6 +855,7 @@ export type StakedTokenBalance = {
   cooldownUnits: Scalars['BigInt'];
   id: Scalars['ID'];
   questMultiplier: Scalars['Int'];
+  questMultiplierSimple: Scalars['Float'];
   raw: Scalars['BigInt'];
   rawBD: Scalars['MstableBigDecimal'];
   stakedToken: StakedToken;
@@ -1069,6 +1071,14 @@ export type StakedToken_Filter = {
   slashingPercentage_lte?: Maybe<Scalars['BigInt']>;
   slashingPercentage_in?: Maybe<Array<Scalars['BigInt']>>;
   slashingPercentage_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  priceCoefficient?: Maybe<Scalars['BigInt']>;
+  priceCoefficient_not?: Maybe<Scalars['BigInt']>;
+  priceCoefficient_gt?: Maybe<Scalars['BigInt']>;
+  priceCoefficient_lt?: Maybe<Scalars['BigInt']>;
+  priceCoefficient_gte?: Maybe<Scalars['BigInt']>;
+  priceCoefficient_lte?: Maybe<Scalars['BigInt']>;
+  priceCoefficient_in?: Maybe<Array<Scalars['BigInt']>>;
+  priceCoefficient_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum StakedToken_OrderBy {
@@ -1081,6 +1091,7 @@ export enum StakedToken_OrderBy {
   UnstakeWindow = 'UNSTAKE_WINDOW',
   CollateralisationRatio = 'collateralisationRatio',
   SlashingPercentage = 'slashingPercentage',
+  PriceCoefficient = 'priceCoefficient',
   Accounts = 'accounts'
 }
 
@@ -1724,7 +1735,7 @@ export type AccountQueryVariables = Exact<{
 }>;
 
 
-export type AccountQuery = { account?: Maybe<{ id: string, lastAction: number, seasonMultiplier: number, permMultiplier: number, totalVotesBD: BigDecimal, seasonMultiplierSimple: number, permMultiplierSimple: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number } }> }> };
+export type AccountQuery = { account?: Maybe<{ id: string, lastAction: number, seasonMultiplier: number, permMultiplier: number, totalVotesBD: BigDecimal, seasonMultiplierSimple: number, permMultiplierSimple: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number } }> }> };
 
 export type StakedTokenQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1733,7 +1744,7 @@ export type StakedTokenQueryVariables = Exact<{
 }>;
 
 
-export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, delegatee?: Maybe<{ id: string }>, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: string, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal } }>> }> };
+export type StakedTokenQuery = { stakedToken?: Maybe<{ id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, priceCoefficient?: Maybe<string>, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: Maybe<number>, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Maybe<Array<{ id: string, rewardPerTokenPaid?: Maybe<string>, rewards?: Maybe<string>, delegatee?: Maybe<{ id: string }>, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: string, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number } }>> }> };
 
 export type QuestAllFragment = { id: string, expiry: number, multiplier: number, status: QuestStatus, type: QuestType, season?: Maybe<{ id: string }> };
 
@@ -1936,6 +1947,7 @@ export const AccountDocument = gql`
         rawBD @client
         votesBD @client
         timeMultiplierSimple @client
+        questMultiplierSimple @client
       }
     }
   }
@@ -1996,6 +2008,7 @@ export const StakedTokenDocument = gql`
     COOLDOWN_SECONDS
     collateralisationRatio
     slashingPercentage
+    priceCoefficient
     accounts(where: {account: $account}) @include(if: $hasAccount) {
       id
       delegatee {
@@ -2013,6 +2026,8 @@ export const StakedTokenDocument = gql`
         weightedTimestamp
         rawBD @client
         votesBD @client
+        timeMultiplierSimple @client
+        questMultiplierSimple @client
       }
     }
   }
