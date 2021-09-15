@@ -11,7 +11,9 @@ directive @subgraphId(id: String) on OBJECT
 
 type Account {
   id: ID!
-  totalVotes: BigInt!
+  totalVotesMTA: BigInt!
+  totalVotesBPT: BigInt!
+  totalVotesAll: BigInt!
   lastAction: Int!
   permMultiplier: Int!
   seasonMultiplier: Int!
@@ -29,14 +31,30 @@ input Account_filter {
   id_lte: ID
   id_in: [ID!]
   id_not_in: [ID!]
-  totalVotes: BigInt
-  totalVotes_not: BigInt
-  totalVotes_gt: BigInt
-  totalVotes_lt: BigInt
-  totalVotes_gte: BigInt
-  totalVotes_lte: BigInt
-  totalVotes_in: [BigInt!]
-  totalVotes_not_in: [BigInt!]
+  totalVotesMTA: BigInt
+  totalVotesMTA_not: BigInt
+  totalVotesMTA_gt: BigInt
+  totalVotesMTA_lt: BigInt
+  totalVotesMTA_gte: BigInt
+  totalVotesMTA_lte: BigInt
+  totalVotesMTA_in: [BigInt!]
+  totalVotesMTA_not_in: [BigInt!]
+  totalVotesBPT: BigInt
+  totalVotesBPT_not: BigInt
+  totalVotesBPT_gt: BigInt
+  totalVotesBPT_lt: BigInt
+  totalVotesBPT_gte: BigInt
+  totalVotesBPT_lte: BigInt
+  totalVotesBPT_in: [BigInt!]
+  totalVotesBPT_not_in: [BigInt!]
+  totalVotesAll: BigInt
+  totalVotesAll_not: BigInt
+  totalVotesAll_gt: BigInt
+  totalVotesAll_lt: BigInt
+  totalVotesAll_gte: BigInt
+  totalVotesAll_lte: BigInt
+  totalVotesAll_in: [BigInt!]
+  totalVotesAll_not_in: [BigInt!]
   lastAction: Int
   lastAction_not: Int
   lastAction_gt: Int
@@ -65,7 +83,9 @@ input Account_filter {
 
 enum Account_orderBy {
   id
-  totalVotes
+  totalVotesMTA
+  totalVotesBPT
+  totalVotesAll
   lastAction
   permMultiplier
   seasonMultiplier
@@ -619,6 +639,8 @@ type StakedToken {
   collateralisationRatio: BigInt!
   slashingPercentage: BigInt!
   priceCoefficient: BigInt
+  isStakedTokenBPT: Boolean!
+  isStakedTokenMTA: Boolean!
   accounts(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
 }
 
@@ -951,6 +973,14 @@ input StakedToken_filter {
   priceCoefficient_lte: BigInt
   priceCoefficient_in: [BigInt!]
   priceCoefficient_not_in: [BigInt!]
+  isStakedTokenBPT: Boolean
+  isStakedTokenBPT_not: Boolean
+  isStakedTokenBPT_in: [Boolean!]
+  isStakedTokenBPT_not_in: [Boolean!]
+  isStakedTokenMTA: Boolean
+  isStakedTokenMTA_not: Boolean
+  isStakedTokenMTA_in: [Boolean!]
+  isStakedTokenMTA_not_in: [Boolean!]
 }
 
 enum StakedToken_orderBy {
@@ -964,6 +994,8 @@ enum StakedToken_orderBy {
   collateralisationRatio
   slashingPercentage
   priceCoefficient
+  isStakedTokenBPT
+  isStakedTokenMTA
   accounts
 }
 

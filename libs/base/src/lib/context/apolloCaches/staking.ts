@@ -26,7 +26,9 @@ const typePolicies: TypedTypePolicies = {
   },
   Account: {
     fields: {
-      totalVotesBD: readAsBD<Account>('totalVotes'),
+      totalVotesAllBD: readAsBD<Account>('totalVotesAll'),
+      totalVotesMTABD: readAsBD<Account>('totalVotesMTA'),
+      totalVotesBPTBD: readAsBD<Account>('totalVotesBPT'),
       permMultiplierSimple: {
         read(existing, options) {
           const permMultiplier = (options.readField('permMultiplier') ?? 10) as number
