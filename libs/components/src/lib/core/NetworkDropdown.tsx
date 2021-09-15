@@ -29,11 +29,9 @@ const StyledDropdown = styled(Dropdown)`
 export const NetworkDropdown: FC = () => {
   const [chainId, setChainId] = useChainIdCtx()
   const [isAltPressed] = useKeyPress('Alt')
-
   const [{ appName }] = useBaseCtx()
 
-  // TODO: filter out polygon on governance
-  const isProtocol = appName === APP_NAME.PROTOCOL
+  const isGovernance = appName === APP_NAME.GOVERNANCE
 
   const handleSelect = useCallback(
     (_chainId: string) => {
@@ -43,20 +41,24 @@ export const NetworkDropdown: FC = () => {
     [setChainId],
   )
 
+  const filteredNetworks = isGovernance
+    ? NETWORKS.filter(({ chainId }) => ![ChainIds.MaticMainnet, ChainIds.MaticMumbai].includes(chainId))
+    : NETWORKS
+
   const options = useMemo<Record<string, { icon: { symbol: string; hideNetwork: boolean }; subtext?: string }>>(
     () =>
       Object.fromEntries(
-        NETWORKS.filter(({ isTestnet, chainId: _chainId }) => _chainId === chainId || !isTestnet || isAltPressed).map(
-          ({ protocolName, chainName, chainId: _chainId, isTestnet }) => [
+        filteredNetworks
+          .filter(({ isTestnet, chainId: _chainId }) => _chainId === chainId || !isTestnet || isAltPressed)
+          .map(({ protocolName, chainName, chainId: _chainId, isTestnet }) => [
             _chainId,
             {
               icon: { symbol: protocolName, hideNetwork: true },
               subtext: isTestnet ? chainName : undefined,
             },
-          ],
-        ),
+          ]),
       ),
-    [chainId, isAltPressed],
+    [chainId, isAltPressed, filteredNetworks],
   )
 
   return <StyledDropdown onChange={handleSelect} options={options} defaultOption={chainId?.toString()} />

@@ -28,7 +28,7 @@ const NavButton = styled(UnstyledButton)`
 const Content = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  gap: 1.25rem;
   height: 24rem;
   padding: 1rem 1.25rem;
   overflow-x: scroll;
@@ -37,8 +37,8 @@ const Content = styled.div`
   scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.5);
 
   ::-webkit-scrollbar {
-    height: 4px;
-    width: 4px;
+    height: 8px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.5);

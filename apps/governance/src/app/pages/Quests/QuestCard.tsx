@@ -27,14 +27,14 @@ const Title = styled.div`
   }
 `
 
-const QuestFeatures = styled.div`
+const QuestFeatures = styled.div<{ type?: QuestType }>`
   position: absolute;
-  bottom: 1rem;
+  bottom: 0;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  width: 100%;
   padding: 0 1rem;
-  gap: 1rem;
+  align-items: center;
 
   > div {
     font-size: 1.125rem;
@@ -43,15 +43,28 @@ const QuestFeatures = styled.div`
   }
 
   > :first-child {
-    background: linear-gradient(180deg, #a62e6f 0%, #8b1f5a 100%);
-    box-shadow: 0 4px 10px #78144a;
+    box-shadow: 0 4px 10px ${({ type }) => (type === QuestType.Seasonal ? `#77174c` : `#271066`)};
+    background: ${({ type }) =>
+      type === QuestType.Seasonal
+        ? `linear-gradient(180deg, #a62e6f 0%, #8b1f5a 100%)`
+        : `linear-gradient(180deg, #4a27aa 0%, #32187a 100%)`};
+  }
+
+  > :last-child {
+    opacity: 0.75;
+    font-size: 0.75rem;
   }
 `
 
 const QuestImage = styled.div`
   display: flex;
   mix-blend-mode: lighten;
+  position: absolute;
+  top: 2rem;
+  bottom: 0;
   width: 7rem;
+  flex: 1;
+  margin-bottom: 3.5rem;
 
   img {
     width: 100%;
@@ -142,7 +155,7 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
           <CardSkeleton height={128} width={128} />
         )}
       </QuestImage>
-      <QuestFeatures>
+      <QuestFeatures type={questType as never}>
         <div>1.{quest?.multiplier.toString().slice(1)}x</div>
         <div>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</div>
       </QuestFeatures>
