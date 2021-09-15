@@ -119,16 +119,12 @@ export const GovernancePageHeader: FC<Props> = ({ children, title, subtitle, ico
   )
 }
 
-const AccountLink = styled(ExplorerLink)`
-  > span {
-    margin-right: 0.5rem;
-  }
-  > svg {
-    width: 1.25rem;
-  }
-`
-
 const DelegateeContainer = styled(Container)`
+  h3 {
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 0;
+  }
+
   ${Row} {
     gap: 1rem;
     justify-content: space-between;
@@ -164,7 +160,7 @@ const DelegateeContainer = styled(Container)`
         min-height: 3.5rem;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.5rem;
         justify-content: center;
 
         > :first-child a {
@@ -206,6 +202,7 @@ export const DelegateePageHeader: FC<{ delegateeInfo?: DelegateeInfo; addressOrE
             </h2>
           )}
           {!delegateeInfo && addressOrENSName !== address && <h2>{addressOrENSName}</h2>}
+          {delegateeInfo?.ensName && <h3>{delegateeInfo.ensName}</h3>}
           <Address address={addressOrENSName} type="account" truncate={false} link={false} copyable />
         </div>
       </div>
