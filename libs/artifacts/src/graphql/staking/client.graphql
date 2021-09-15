@@ -6,6 +6,7 @@ type StakedTokenBalance {
   rawBD: MstableBigDecimal!
   votesBD: MstableBigDecimal!
   timeMultiplierSimple: Float!
+  questMultiplierSimple: Float!
 }
 
 type Account {
