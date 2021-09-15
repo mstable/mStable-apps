@@ -136,7 +136,7 @@ export const StakeMigration: FC<{ onSkip?: () => void }> = ({ onSkip }) => (
       <p>
         Migrating your MTA will reward you with a permanent quest multiplier. This multiplier will increase your Voting Power & Savings
         boost within the mStable ecosystem.&nbsp;
-        <a href="#" target="_blank" rel="noopener noreferrer">
+        <a href="https://docs.mstable.org/" target="_blank" rel="noopener noreferrer">
           Learn more
         </a>
       </p>

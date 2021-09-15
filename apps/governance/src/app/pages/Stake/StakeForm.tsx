@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
 import { useSigner } from '@apps/base/context/account'
 import { Tooltip, Warning } from '@apps/components/core'
-import { useTokenSubscription } from '@apps/base/context/tokens'
+import { useTokenAllowance, useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { useBigDecimalInput } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
@@ -57,18 +57,22 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const { delegateSelection: delegate } = useModalData()
   const { hasWithdrawnV1Balance } = useStakingStatus()
   const { setWithdrewV1Balance } = useStakingStatusDispatch()
+  const balanceV1 = useTokenSubscription(networkAddresses.vMTA)?.balance
   const stakingToken = useTokenSubscription(data?.stakedToken?.stakingToken.address)
-  const balanceV1 = useTokenSubscription(networkAddresses.vMTA)?.balance ?? new BigDecimal((1e18).toString())
+  const underlyingStakeToken = data?.stakedToken?.token?.address
 
   const propose = usePropose()
   const signer = useSigner()
   const stakedTokenContract = useStakedTokenContract()
+  const allowance = useTokenAllowance(underlyingStakeToken, stakedTokenContract.address)
 
   const [amount, formValue, setFormValue] = useBigDecimalInput()
   const [isDelegating, toggleIsDelegating] = useToggle(true)
 
   const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS) / DAY
   const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW) / DAY
+
+  const canUserStake = ((isDelegating && !!delegate) || !isDelegating) && amount?.exact?.gt(0) && amount?.exact?.lte(allowance?.exact)
 
   const handleWithdrawV1 = () => {
     if (!signer || !data || !balanceV1?.simple) return
@@ -119,7 +123,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
       <div>
         <DelegateToggle>
           <h3>
-            Delegate stake? <Tooltip tip="Delegating your voting power will enable a vote in absence" />
+            Delegate voting power <Tooltip tip="Delegating your voting power will enable a vote in absence" />
           </h3>
           <ToggleInput onClick={toggleIsDelegating} checked={isDelegating} />
         </DelegateToggle>
@@ -140,11 +144,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
           />
         </div>
       ) : (
-        <SendButton
-          valid={((isDelegating && !!delegate) || !isDelegating) && amount?.exact?.gt(0)}
-          title="Stake"
-          handleSend={handleDeposit}
-        />
+        <SendButton valid={canUserStake} title="Stake" handleSend={handleDeposit} />
       )}
     </Container>
   )

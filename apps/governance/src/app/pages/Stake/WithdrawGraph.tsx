@@ -13,13 +13,13 @@ interface DataType {
 
 const getRedemptionFee = (weeksStaked: number) => {
   let _feeRate = 0
-  if (weeksStaked > 2) {
+  if (weeksStaked > 3) {
     _feeRate = Math.sqrt(300e18 / weeksStaked) * 1e7
     _feeRate = _feeRate < 25e15 ? 0 : _feeRate - 25e15
   } else {
-    _feeRate = 1e17
+    _feeRate = 75e15
   }
-  return _feeRate / 1e18
+  return _feeRate / 1e16
 }
 
 const totalIntervals = 50
@@ -77,15 +77,7 @@ export const WithdrawGraph: FC = () => {
             tickLine={false}
             ticks={graphData.ticks}
           />
-          <YAxis
-            domain={['dataMin', 'dataMax']}
-            tickCount={2}
-            tickFormatter={m => `${m}%`}
-            axisLine={false}
-            padding={{ bottom: 16 }}
-            tickLine={false}
-            width={32}
-          />
+          <YAxis tickCount={2} tickFormatter={m => `${m}%`} axisLine={false} padding={{ bottom: 16 }} tickLine={false} width={24} />
           <Tooltip
             cursor
             labelFormatter={week => `+${(week as number) / WEEK} weeks`}
