@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState, useEffect } from 'react'
+import React, { FC, useCallback, useState, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import useSound from 'use-sound'
@@ -146,6 +146,11 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
     [playBleep26, playBleep27],
   )
 
+  const questIds = useMemo<string[]>(() => {
+    const questbookQuests = (questbookQuestsQuery.data?.quests ?? []).map(q => q.id)
+    return ['timeMultiplier', ...questbookQuests, 'democracyMaxi']
+  }, [questbookQuestsQuery.data])
+
   return (
     <Container>
       <header>
@@ -173,12 +178,7 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
           ) : questId ? (
             <QuestCard questId={questId} onClick={setSelectedId} />
           ) : (
-            <>
-              {questbookQuestsQuery.data?.quests.map(quest => (
-                <QuestCard key={quest?.id} questId={quest?.id} onClick={selectQuest} />
-              ))}
-              <QuestCard questId="timeMultiplier" onClick={selectQuest} />
-            </>
+            questIds.map(questId => <QuestCard key={questId} questId={questId} onClick={selectQuest} />)
           )
         ) : (
           <Typist cursor={{ show: true, blink: true }} avgTypingDelay={20}>
