@@ -66,7 +66,7 @@ generates:
 
   ./libs/artifacts/src/graphql/staking/schema.graphql:
     overwrite: true
-    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-kovan
     plugins:
       - 'schema-ast'
     config:
@@ -75,7 +75,7 @@ generates:
   ./libs/artifacts/src/graphql/staking/apollo-helpers.ts:
     overwrite: true
     schema:
-      - https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
+      - https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-kovan
       - ./libs/artifacts/src/graphql/staking/client.graphql
     plugins:
       - typescript-apollo-client-helpers
@@ -151,7 +151,7 @@ generates:
   ./libs/artifacts/src/graphql/staking.tsx:
     overwrite: true
     schema:
-      - https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-ropsten
+      - https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-kovan
       - ./libs/artifacts/src/graphql/staking/client.graphql
     documents: 'libs/artifacts/src/graphql/staking/*.graphql'
     plugins:

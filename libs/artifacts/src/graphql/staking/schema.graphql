@@ -618,6 +618,7 @@ type StakedToken {
   UNSTAKE_WINDOW: BigInt!
   collateralisationRatio: BigInt!
   slashingPercentage: BigInt!
+  priceCoefficient: BigInt
   accounts(skip: Int = 0, first: Int = 100, orderBy: StakedTokenAccount_orderBy, orderDirection: OrderDirection, where: StakedTokenAccount_filter): [StakedTokenAccount!]!
 }
 
@@ -942,6 +943,14 @@ input StakedToken_filter {
   slashingPercentage_lte: BigInt
   slashingPercentage_in: [BigInt!]
   slashingPercentage_not_in: [BigInt!]
+  priceCoefficient: BigInt
+  priceCoefficient_not: BigInt
+  priceCoefficient_gt: BigInt
+  priceCoefficient_lt: BigInt
+  priceCoefficient_gte: BigInt
+  priceCoefficient_lte: BigInt
+  priceCoefficient_in: [BigInt!]
+  priceCoefficient_not_in: [BigInt!]
 }
 
 enum StakedToken_orderBy {
@@ -954,6 +963,7 @@ enum StakedToken_orderBy {
   UNSTAKE_WINDOW
   collateralisationRatio
   slashingPercentage
+  priceCoefficient
   accounts
 }
 

@@ -1,7 +1,15 @@
 import React, { FC } from 'react'
-import styled, { keyframes } from 'styled-components'
+import { useToggle } from 'react-use'
+import styled from 'styled-components'
 
+import { useURLQuery } from '@apps/hooks'
 import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/components/core'
+import { useNetworkAddresses } from '@apps/base/context/network'
+import { useTokenSubscription } from '@apps/base/context/tokens'
+import { ViewportWidth } from '@apps/base/theme'
+
+import { StakingStatusProvider, useStakingStatus } from '../../context/StakingStatusProvider'
+import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 import { ClaimForm } from './ClaimForm'
 import { ClaimGraph } from './ClaimGraph'
@@ -11,14 +19,6 @@ import { StakeGraph } from './StakeGraph'
 import { StakeMigration } from './StakeMigration'
 import { WithdrawForm } from './WithdrawForm'
 import { WithdrawGraph } from './WithdrawGraph'
-import { useNetworkAddresses } from '@apps/base/context/network'
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { StakingStatusProvider, useStakingStatus } from '../../context/StakingStatusProvider'
-import { ViewportWidth } from '@apps/base/theme'
-import { useToggle } from 'react-use'
-import { BigDecimal } from '@apps/bigdecimal'
-import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
-import { useURLQuery } from '@apps/hooks'
 
 enum Tabs {
   Stake,
