@@ -65,7 +65,7 @@ export const WithdrawForm: FC = () => {
     setFee.fetching()
     Promise.all([stakedTokenContract ? stakedTokenContract.calcRedemptionFeeRate(weightedTimestamp) : undefined])
       .then(([fee = 0]) => {
-        setFee.value(new BigDecimal(fee))
+        setFee.value(new BigDecimal(((fee as number) * 1e2).toString()))
       })
       .catch(setFee.error)
   }, [blockNumber, weightedTimestamp, setFee, fee.fetching, stakedTokenContract])
@@ -100,7 +100,7 @@ export const WithdrawForm: FC = () => {
         </Warning>
         <Fee>
           <div>Redemption Fee</div>
-          <span>{fee.value?.simple}</span>
+          <span>{fee.value?.simple}%</span>
         </Fee>
       </Warnings>
       <SendButton valid={isValid} title="Begin Withdrawal" handleSend={handleSend} />
