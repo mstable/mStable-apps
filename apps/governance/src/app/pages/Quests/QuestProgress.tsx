@@ -64,17 +64,18 @@ const QuestObjectiveProgressContainer = styled(Container)`
   }
 `
 
-export const QuestProgress: FC<{ value?: number; progressType: ProgressType; questType?: QuestType }> = ({
+export const QuestProgress: FC<{ value?: number; progressType: ProgressType; questType?: QuestType; decimals?: number }> = ({
   value,
   progressType,
   questType,
+  decimals = 2,
 }) => (
   <Container progressType={progressType} questType={questType}>
     <div>
       {typeof value === 'number' ? (
         <Typist>
           {progressType === ProgressType.Personal ? 'My completion' : progressType === ProgressType.Group ? 'Group completion' : 'Rarity'}
-          <span>{value.toFixed(2)}%</span>
+          <span>{value.toFixed(decimals)}%</span>
         </Typist>
       ) : (
         <ThemedSkeleton height={20} />
