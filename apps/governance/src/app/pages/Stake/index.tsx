@@ -23,7 +23,10 @@ export const Stake: FC = () => {
         <GovernancePageHeader title="Stake" stakedTokenSwitcher>
           <p>
             This dashboard allows you to stake MTA or MTA/ETH Balancer tokens in exchange for MTA rewards. As a staker, you risk getting
-            diluted in the event that the mStable protocol requires recollateralisation. <a>Learn More</a>
+            diluted in the event that the mStable protocol requires recollateralisation.{' '}
+            <a href="https://docs.mstable.org/" target="_blank" rel="noopener noreferrer">
+              Learn More
+            </a>
           </p>
         </GovernancePageHeader>
         <div>
