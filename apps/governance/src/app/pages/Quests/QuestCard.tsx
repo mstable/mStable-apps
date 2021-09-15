@@ -1,12 +1,11 @@
-import React, { ComponentProps, FC } from 'react'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import styled from 'styled-components'
-
 import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { IPFSImg, UnstyledButton } from '@apps/components/core'
+import React, { ComponentProps, FC } from 'react'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import styled from 'styled-components'
 
 import { Typist } from './Typist'
 
@@ -180,9 +179,28 @@ const TimeMultiplierQuestCard: FC<Props> = ({ questId, onClick }) => (
   </Container>
 )
 
+const DemocracyMaxiQuestCard: FC<Props> = ({ questId, onClick }) => (
+  <Container type={QuestType.Seasonal as never} onClick={onClick ? () => onClick?.(questId) : undefined}>
+    <Title>
+      <Typist>
+        <h2>Democracy Maxi</h2>
+      </Typist>
+    </Title>
+    <QuestImage>
+      <IPFSImg uri={'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'} alt="Quest graphic" />
+    </QuestImage>
+    <QuestFeatures type={QuestType.Seasonal as never}>
+      <div>1.25x</div>
+      <div>SEASON 0</div>
+    </QuestFeatures>
+  </Container>
+)
+
 export const QuestCard: FC<Props> = ({ questId, onClick }) =>
   questId === 'timeMultiplier' ? (
     <TimeMultiplierQuestCard questId={questId} onClick={onClick} />
+  ) : questId === 'democracyMaxi' ? (
+    <DemocracyMaxiQuestCard questId={questId} onClick={onClick} />
   ) : (
     <DefaultQuestCard questId={questId} onClick={onClick} />
   )
