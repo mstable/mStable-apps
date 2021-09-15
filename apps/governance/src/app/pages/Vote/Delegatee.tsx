@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useLayoutEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { isAddress } from 'ethers/lib/utils'
 
@@ -28,6 +28,10 @@ const Content: FC<{ address?: string; addressOrENSName: string; resolvedENSName?
 }
 
 export const Delegatee: FC = () => {
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0 })
+  }, [])
+
   const { delegatee: addressOrENSName } = useParams<{ delegatee: string }>()
 
   return isAddress(addressOrENSName) ? (

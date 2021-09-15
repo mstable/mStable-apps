@@ -1,3 +1,4 @@
+import { BigDecimal } from '@apps/bigdecimal'
 import React, { FC, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -6,7 +7,7 @@ import { DelegateeInfo } from '@mstable/delegatee-lists'
 import { truncateAddress } from '@apps/formatters'
 import { useLeaderboardQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { Button, IPFSImg, Table, TableCell, TableRow, UnstyledButton, UserIcon } from '@apps/components/core'
+import { IPFSImg, Table, TableCell, TableRow, UnstyledButton, UserIcon } from '@apps/components/core'
 
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 
@@ -111,28 +112,40 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const [skip, setSkip] = useState<number>(0)
 
   const delegateesAll = useDelegateesAll()
-  const clients = useApolloClients()
+  const { staking: client } = useApolloClients()
 
-  const leaderboardQuery = useLeaderboardQuery({ client: clients.staking, variables: { count, skip } })
+  const leaderboardQuery = useLeaderboardQuery({ client, variables: { count, skip } })
 
-  const totalVotingToken = useMemo<number>(
-    () => leaderboardQuery.data?.stakedTokens.reduce((_total, st) => st.token.totalSupply.bigDecimal.simple + _total, 0) ?? 0,
-    [leaderboardQuery.data],
-  )
+  const leaderboardItems = useMemo<{ id: string; votes: number; share: number }[]>(() => {
+    // TODO could do this on subgraph
+    const totalVotingToken =
+      leaderboardQuery.data?.stakedTokens.reduce((_total, st) => st.token.totalSupply.bigDecimal.simple + _total, 0) ?? 0
+
+    const stakers = leaderboardQuery.data?.accounts ?? []
+    const hasStaked = new Set(stakers.map(a => a.id))
+    const delegateesNotStaked = Object.keys(delegateesAll).filter(address => !hasStaked.has(address))
+
+    return [...stakers, ...delegateesNotStaked.map(id => ({ id, totalVotesAllBD: BigDecimal.ZERO }))].map(({ id, totalVotesAllBD }) => ({
+      id,
+      votes: totalVotesAllBD.simple,
+      share: (totalVotesAllBD.simple / totalVotingToken) * 100,
+    }))
+  }, [leaderboardQuery.data, delegateesAll])
 
   const buttonTitle = delegation ? 'Delegate' : 'View profile'
   const cellWidths = delegation ? [70, 30] : [33, 33, 33]
   const tableWidth = delegation ? 16 : 32
-  const headerTitles = delegation ? [{ title: 'Rank' }, { title: 'vMTA' }] : [{ title: 'Rank' }, { title: 'vMTA %' }, { title: 'vMTA' }]
+  const headerTitles = delegation
+    ? [{ title: 'Rank' }, { title: 'stkMTA' }]
+    : [{ title: 'Rank' }, { title: 'stkMTA %' }, { title: 'stkMTA' }]
 
-  // TODO delegatees that haven't staked won't show up yet
   return (
     <StyledTable headerTitles={headerTitles} widths={cellWidths} width={tableWidth}>
-      {leaderboardQuery.data?.accounts.map(({ totalVotesBD, id }, index) => (
+      {leaderboardItems.map(({ id, votes, share }, index) => (
         <TableRow key={id} buttonTitle={buttonTitle} onClick={() => onClick(id)}>
           <DelegateeCell width={cellWidths[0]} address={id} delegatee={delegateesAll[id]} rank={(index ?? 0) + 1 + skip} />
-          {!delegation && <NumericCell width={cellWidths[1]}>{(totalVotesBD.simple / totalVotingToken).toFixed(2)}%</NumericCell>}
-          <NumericCell width={cellWidths[cellWidths.length - 1]}>{totalVotesBD.simple.toFixed(2)}</NumericCell>
+          {!delegation && <NumericCell width={cellWidths[1]}>{share.toFixed(2)}%</NumericCell>}
+          <NumericCell width={cellWidths[cellWidths.length - 1]}>{votes.toFixed(2)}</NumericCell>
         </TableRow>
       ))}
       {preview && (
