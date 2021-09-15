@@ -108,7 +108,7 @@ const DelegateeCell: FC<{ address: string; rank: number; delegatee?: DelegateeIn
 )
 
 export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
-  const [count] = useState<number>(preview || delegation ? 5 : 25)
+  const [count] = useState<number>(preview ? 5 : 25)
   const [skip, setSkip] = useState<number>(0)
 
   const delegateesAll = useDelegateesAll()
@@ -125,12 +125,14 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
     const hasStaked = new Set(stakers.map(a => a.id))
     const delegateesNotStaked = Object.keys(delegateesAll).filter(address => !hasStaked.has(address))
 
-    return [...stakers, ...delegateesNotStaked.map(id => ({ id, totalVotesAllBD: BigDecimal.ZERO }))].map(({ id, totalVotesAllBD }) => ({
-      id,
-      votes: totalVotesAllBD.simple,
-      share: (totalVotesAllBD.simple / totalVotingToken) * 100,
-    }))
-  }, [leaderboardQuery.data, delegateesAll])
+    return [...stakers, ...delegateesNotStaked.map(id => ({ id, totalVotesAllBD: BigDecimal.ZERO }))]
+      .map(({ id, totalVotesAllBD }) => ({
+        id,
+        votes: totalVotesAllBD.simple,
+        share: (totalVotesAllBD.simple / totalVotingToken) * 100,
+      }))
+      .slice(0, count)
+  }, [leaderboardQuery.data, delegateesAll, count])
 
   const buttonTitle = delegation ? 'Delegate' : 'View profile'
   const cellWidths = delegation ? [70, 30] : [33, 33, 33]
