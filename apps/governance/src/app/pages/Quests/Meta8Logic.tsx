@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useState, useEffect, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { FC, useCallback, useEffect, useMemo } from 'react'
+import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import useSound from 'use-sound'
 
@@ -76,9 +76,6 @@ const Container = styled.div`
 
     border-bottom: 1px dashed darkgrey;
   }
-
-  > :last-child {
-  }
 `
 
 const Meta8Account: FC = () => {
@@ -110,6 +107,7 @@ const Meta8Account: FC = () => {
 
 export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
   const { questId } = useParams<{ questId?: string }>()
+  const history = useHistory()
 
   const account = useAccount()
   const clients = useApolloClients()
@@ -130,8 +128,6 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
     })
   }, [updateUserQuests, account])
 
-  const [selectedId, setSelectedId] = useState<string>()
-
   const [playBleep26] = useSound(bleep26, { volume: 0.4 })
   const [playBleep27] = useSound(bleep27, { volume: 0.4 })
   const selectQuest = useCallback(
@@ -141,27 +137,28 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
       } else {
         playBleep26()
       }
-      setSelectedId(id)
+      history.push(id ? `/quests/${id}` : '/quests')
     },
-    [playBleep26, playBleep27],
+    [history, playBleep26, playBleep27],
   )
 
   const questIds = useMemo<string[]>(() => {
     const questbookQuests = (questbookQuestsQuery.data?.quests ?? []).map(q => q.id)
-    return ['timeMultiplier', ...questbookQuests, 'democracyMaxi']
+    // TODO remove magic strings
+    return ['timeMultiplier', ...questbookQuests.filter(q => q !== 'democracyMaxi'), 'democracyMaxi']
   }, [questbookQuestsQuery.data])
 
   return (
     <Container>
       <header>
         <div>
-          {selectedId ? (
+          {questId ? (
             <NavButton
               onClick={() => {
                 selectQuest()
               }}
             >
-              <Typist>[Back]</Typist>
+              <Typist>[&lt; Back]</Typist>
             </NavButton>
           ) : isBooted ? (
             <Typist>[Quests]</Typist>
@@ -173,18 +170,31 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
       </header>
       <Content>
         {isBooted ? (
-          selectedId ? (
-            <QuestInfo questId={selectedId} />
+          questId ? (
+            <QuestInfo questId={questId} />
           ) : questId ? (
-            <QuestCard questId={questId} onClick={setSelectedId} />
+            <QuestCard
+              questId={questId}
+              onClick={() => {
+                selectQuest(questId)
+              }}
+            />
           ) : (
-            questIds.map(questId => <QuestCard key={questId} questId={questId} onClick={selectQuest} />)
+            questIds.map(questId => (
+              <QuestCard
+                key={questId}
+                questId={questId}
+                onClick={() => {
+                  selectQuest(questId)
+                }}
+              />
+            ))
           )
         ) : (
           <Typist cursor={{ show: true, blink: true }} avgTypingDelay={20}>
             <p>Meta-8 (c) 1991 mStable Entertainment Australia</p>
             <br />
-            <p>Loading sprites...</p>
+            <p>Reticulating splines...</p>
             <p>Depositing into Save...</p>
             <p>Aping into MTA...</p>
             <p>Voting on Snapshot...</p>
