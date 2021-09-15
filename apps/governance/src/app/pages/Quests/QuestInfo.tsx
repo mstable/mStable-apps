@@ -373,5 +373,38 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
   )
 }
 
+export const DemocracyMaxiQuestInfo: FC<{ questId: string }> = ({ questId }) => {
+  return (
+    <Container>
+      <QuestCard questId={questId} />
+      <Inner>
+        <div>
+          <div>
+            <h3>
+              <Typist>Have your say – Participate in mStable Governance</Typist>
+            </h3>
+            <Objectives>
+              <div>
+                <div />
+                <Typist>
+                  <p>Available to complete at the end of Season 0</p>
+                  <p>Participate in over 80% of mStable Governance votes over the course of Season 0 in order to qualify for this quest.</p>
+                </Typist>
+              </div>
+            </Objectives>
+          </div>
+        </div>
+        <Bottom />
+      </Inner>
+    </Container>
+  )
+}
+
 export const QuestInfo: FC<{ questId: string }> = ({ questId }) =>
-  questId === 'timeMultiplier' ? <TimeMultiplierQuestInfo questId={questId} /> : <DefaultQuestInfo questId={questId} />
+  questId === 'timeMultiplier' ? (
+    <TimeMultiplierQuestInfo questId={questId} />
+  ) : questId === 'democracyMaxi' ? (
+    <DemocracyMaxiQuestInfo questId={questId} />
+  ) : (
+    <DefaultQuestInfo questId={questId} />
+  )
