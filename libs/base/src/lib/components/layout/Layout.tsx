@@ -13,6 +13,7 @@ import { ModalProvider } from 'react-modal-hook'
 
 import { Color, FontSize, Size, Spacing, ViewportWidth } from '@apps/base/theme'
 import { ReactTooltip, Tooltip } from '@apps/components/core'
+import { ModalDataProvider } from '../../context/ModalDataProvider'
 
 import { Footer } from './Footer'
 import { AppBar } from './AppBar'
@@ -242,17 +243,19 @@ const Container = styled.div`
 
 export const Layout: FC = ({ children }) => {
   return (
-    <ModalProvider rootComponent={TransitionGroup}>
-      <Background />
-      <AppBar />
-      <Container>
-        <Main>{children}</Main>
-      </Container>
-      <Footer />
-      <Toasts />
-      <StyledTooltip tip="" hideIcon />
-      <ReactTooltip id="global" place="top" />
-      <GlobalStyle />
-    </ModalProvider>
+    <ModalDataProvider>
+      <ModalProvider rootComponent={TransitionGroup}>
+        <Background />
+        <AppBar />
+        <Container>
+          <Main>{children}</Main>
+        </Container>
+        <Footer />
+        <Toasts />
+        <StyledTooltip tip="" hideIcon />
+        <ReactTooltip id="global" place="top" />
+        <GlobalStyle />
+      </ModalProvider>
+    </ModalDataProvider>
   )
 }
