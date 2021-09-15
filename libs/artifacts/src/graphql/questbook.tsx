@@ -87,7 +87,7 @@ export type QueryUserArgs = {
 export type Quest = {
   id: Scalars['ID'];
   ethereumId?: Maybe<Scalars['Int']>;
-  requiredPoints?: Maybe<Scalars['Int']>;
+  requiredPoints?: Maybe<Scalars['Float']>;
   objectives: Array<QuestObjective>;
   title: Scalars['String'];
   description: Scalars['String'];
@@ -107,7 +107,7 @@ export type QuestCompletionQueueItem = {
 
 export type QuestObjective = {
   id: Scalars['ID'];
-  points: Scalars['Int'];
+  points: Scalars['Float'];
   title: Scalars['String'];
   description: Scalars['String'];
 };

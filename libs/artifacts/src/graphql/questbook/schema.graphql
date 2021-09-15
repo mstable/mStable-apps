@@ -24,7 +24,7 @@ type Query {
 type Quest {
   id: ID!
   ethereumId: Int
-  requiredPoints: Int
+  requiredPoints: Float
   objectives: [QuestObjective!]!
   title: String!
   description: String!
@@ -39,7 +39,7 @@ type QuestCompletionQueueItem {
 
 type QuestObjective {
   id: ID!
-  points: Int!
+  points: Float!
   title: String!
   description: String!
 }
