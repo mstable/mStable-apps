@@ -1,12 +1,12 @@
-import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
-import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
-
-import { useAccount } from '@apps/base/context/account'
-import { useApolloClients } from '@apps/base/context/apollo'
-import { IPFSImg, UnstyledButton } from '@apps/components/core'
 import React, { ComponentProps, FC } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import styled from 'styled-components'
+
+import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
+import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
+import { useAccount } from '@apps/base/context/account'
+import { useApolloClients } from '@apps/base/context/apollo'
+import { IPFSImg, UnstyledButton } from '@apps/components/core'
 
 import { Typist } from './Typist'
 
@@ -102,7 +102,7 @@ const CardSkeleton: FC<ComponentProps<typeof Skeleton> & { className?: string }>
   </SkeletonTheme>
 )
 
-export const QuestCard: FC<Props> = ({ questId, onClick }) => {
+const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
   const account = useAccount()
 
   const clients = useApolloClients()
@@ -149,3 +149,27 @@ export const QuestCard: FC<Props> = ({ questId, onClick }) => {
     </Container>
   )
 }
+
+const TimeMultiplierQuestCard: FC<Props> = ({ questId, onClick }) => (
+  <Container type={QuestType.Permanent as never} onClick={onClick ? () => onClick?.(questId) : undefined}>
+    <Title>
+      <Typist>
+        <h2>Time multiplier</h2>
+      </Typist>
+    </Title>
+    <QuestImage>
+      <IPFSImg uri={'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'} alt="Quest graphic" />
+    </QuestImage>
+    <QuestFeatures>
+      <div>1.6x</div>
+      <div>PERMANENT</div>
+    </QuestFeatures>
+  </Container>
+)
+
+export const QuestCard: FC<Props> = ({ questId, onClick }) =>
+  questId === 'timeMultiplier' ? (
+    <TimeMultiplierQuestCard questId={questId} onClick={onClick} />
+  ) : (
+    <DefaultQuestCard questId={questId} onClick={onClick} />
+  )
