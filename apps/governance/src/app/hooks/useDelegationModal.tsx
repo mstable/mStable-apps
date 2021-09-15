@@ -32,9 +32,11 @@ const CustomDelegate = styled.div`
 `
 
 const Container = styled.div`
+  max-height: 75vh;
   background: ${({ theme }) => theme.color.background[0]};
   color: ${({ theme }) => theme.color.body};
   padding: 0.5rem;
+  overflow-y: scroll;
 
   p {
     font-size: 0.875rem;

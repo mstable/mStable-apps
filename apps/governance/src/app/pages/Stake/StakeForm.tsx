@@ -59,20 +59,20 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const { setWithdrewV1Balance } = useStakingStatusDispatch()
   const balanceV1 = useTokenSubscription(networkAddresses.vMTA)?.balance
   const stakingToken = useTokenSubscription(data?.stakedToken?.stakingToken.address)
-  const underlyingStakeToken = data?.stakedToken?.token?.address
 
   const propose = usePropose()
   const signer = useSigner()
   const stakedTokenContract = useStakedTokenContract()
-  const allowance = useTokenAllowance(underlyingStakeToken, stakedTokenContract?.address)
+  const allowance = useTokenAllowance(data?.stakedToken?.stakingToken.address, stakedTokenContract?.address)
 
-  const [amount, formValue, setFormValue] = useBigDecimalInput()
+  const [amount, formValue, setFormValue] = useBigDecimalInput('0')
   const [isDelegating, toggleIsDelegating] = useToggle(true)
 
   const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS) / DAY
   const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW) / DAY
 
-  const canUserStake = ((isDelegating && !!delegate) || !isDelegating) && amount?.exact?.gt(0) && amount?.exact?.lte(allowance?.exact)
+  const canUserStake =
+    ((isDelegating && !!delegate) || !isDelegating) && amount?.exact?.gt(0) && allowance?.exact && amount?.exact?.lte(allowance?.exact)
 
   const handleWithdrawV1 = () => {
     if (!signer || !data || !balanceV1?.simple) return
