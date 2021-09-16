@@ -62,7 +62,7 @@ export const useStakedTokenQuery = () => {
   const { selected } = useStakedToken()
 
   const options = useMemo(
-    () => ({ client, variables: { id: selected, account: account ?? '', hasAccount: !!account }, skip: !selected }),
+    () => ({ client, variables: { id: selected, account: account ?? '', hasAccount: !!account }, skip: !selected, pollInterval: 15e3 }),
     [account, client, selected],
   )
 
