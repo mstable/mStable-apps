@@ -138,11 +138,10 @@ export const StakeBalances: FC = () => {
     const rewardRate = parseInt(_rewardRate) / 1e18
     const cooldown = parseFloat(cooldownUnits) / 1e18
 
-    const stakingTokenPrice =
-      data.stakedToken.stakingToken.symbol === 'MTA'
-        ? mtaPrice.value
-        : // TODO check me (also priceCoeff is incorrect on Kovan/Ropsten)
-          (mtaPrice.value * parseInt(data.stakedToken.priceCoefficient)) / 10000
+    let priceCoeff = parseInt(data.stakedToken.priceCoefficient)
+    if (priceCoeff === 1) priceCoeff = 10000 // Testnet data
+
+    const stakingTokenPrice = data.stakedToken.stakingToken.symbol === 'MTA' ? mtaPrice.value : (priceCoeff / 10000) * mtaPrice.value
 
     const multiplier = Math.max(1, questMultiplierSimple) * Math.max(1, timeMultiplierSimple)
 
