@@ -25,6 +25,10 @@ enum ProgressType {
   Objective,
 }
 
+interface Props {
+  questId: string
+}
+
 const QP = styled.div`
   padding: 0.25rem 0.5rem;
   background: ${({ theme }) => theme.color.blue};
@@ -77,8 +81,11 @@ const Objectives = styled.div`
 
     > :last-child {
       display: block;
-      > :last-child {
+      > * {
         color: rgba(201, 252, 213, 1);
+        &:first-child {
+          color: white;
+        }
       }
     }
 
@@ -196,7 +203,7 @@ const Container = styled.div<{ type?: QuestType }>`
   }
 `
 
-const DefaultQuestInfo: FC<{ questId: string }> = ({ questId }) => {
+const DefaultQuestInfo: FC<Props> = ({ questId }) => {
   const account = useAccount()
   const clients = useApolloClients()
 
@@ -245,6 +252,17 @@ const DefaultQuestInfo: FC<{ questId: string }> = ({ questId }) => {
                     </div>
                   )
                 })}
+                {questId === 'metanautSpaceProgram' && (
+                  <div>
+                    <div>
+                      <QP>Next</QP>
+                    </div>
+                    <Typist>
+                      <p>Further objectives are on the way!</p>
+                      <p>More QP will be made available soon.</p>
+                    </Typist>
+                  </div>
+                )}
               </Objectives>
             </div>
           ) : (
@@ -271,7 +289,7 @@ interface TimeMultiplierQuestObjective {
   userObjective?: UserQuestObjective
 }
 
-export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) => {
+export const TimeMultiplierQuestInfo: FC<Props> = ({ questId }) => {
   const stakedTokenQuery = useStakedTokenQuery()
   const account = useAccount()
 
@@ -401,7 +419,7 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
   )
 }
 
-export const DemocracyMaxiQuestInfo: FC<{ questId: string }> = ({ questId }) => {
+export const DemocracyMaxiQuestInfo: FC<Props> = ({ questId }) => {
   return (
     <Container>
       <QuestCard questId={questId} />
@@ -414,6 +432,8 @@ export const DemocracyMaxiQuestInfo: FC<{ questId: string }> = ({ questId }) => 
                 <Typist>
                   <p>Available to complete at the end of Season 0</p>
                   <p>Participate in over 80% of mStable Governance votes over the course of Season 0 in order to qualify for this quest.</p>
+                  <br />
+                  <p>Rewards to be announced at a later date. Metanauts stand by for further instructions.</p>
                 </Typist>
               </div>
             </Objectives>
@@ -425,11 +445,14 @@ export const DemocracyMaxiQuestInfo: FC<{ questId: string }> = ({ questId }) => 
   )
 }
 
-export const QuestInfo: FC<{ questId: string }> = ({ questId }) =>
-  questId === 'timeMultiplier' ? (
-    <TimeMultiplierQuestInfo questId={questId} />
-  ) : questId === 'democracyMaxi' ? (
-    <DemocracyMaxiQuestInfo questId={questId} />
-  ) : (
-    <DefaultQuestInfo questId={questId} />
-  )
+const QuestInfoComponents: Record<string, FC<Props>> = {
+  timeMultiplier: TimeMultiplierQuestInfo,
+  democracyMaxi: DemocracyMaxiQuestInfo,
+  // whale: WhaleQuestInfo,
+  default: DefaultQuestInfo,
+}
+
+export const QuestInfo: FC<Props> = ({ questId }) => {
+  const QuestInfo = QuestInfoComponents[questId] ?? QuestInfoComponents.default
+  return <QuestInfo questId={questId} />
+}
