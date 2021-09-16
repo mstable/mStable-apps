@@ -94,7 +94,7 @@ export const WithdrawForm: FC = () => {
         <Warning>
           There is a cooldown period to unstake & a penalty if you have not staked long enough. <a>Learn more</a>
         </Warning>
-        <TimeMultiplierImpact isStaking={false} stakeDelta={amount?.exact} />
+        {weightedTimestamp && <TimeMultiplierImpact isStaking={false} stakeDelta={amount?.exact} />}
         <Fee>
           <div>Redemption Fee</div>
           <span>{fee.value?.simple}%</span>
