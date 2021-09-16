@@ -128,9 +128,11 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
   // Update all quests when the user changes
   const [updateUserQuests] = useUpdateQuestsMutation({ client: clients.questbook })
   useEffect(() => {
-    updateUserQuests({ variables: { userId: account ?? '', hasUser: !!account } }).catch(error => {
-      console.error(error)
-    })
+    if (account) {
+      updateUserQuests({ variables: { userId: account ?? '', hasUser: !!account } }).catch(error => {
+        console.error(error)
+      })
+    }
   }, [updateUserQuests, account])
 
   const [playBleep26] = useSound(bleep26, { volume: 0.4 })
