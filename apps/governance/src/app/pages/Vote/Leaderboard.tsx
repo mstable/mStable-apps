@@ -128,8 +128,8 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
     return [...stakers, ...delegateesNotStaked.map(id => ({ id, totalVotesAllBD: BigDecimal.ZERO }))]
       .map(({ id, totalVotesAllBD }) => ({
         id,
-        votes: totalVotesAllBD.simple,
-        share: (totalVotesAllBD.simple / totalVotingToken) * 100,
+        votes: totalVotesAllBD.simple ?? 0,
+        share: totalVotingToken ? ((totalVotesAllBD.simple ?? 0) / totalVotingToken) * 100 : 0,
       }))
       .slice(0, count)
   }, [leaderboardQuery.data, delegateesAll, count])
