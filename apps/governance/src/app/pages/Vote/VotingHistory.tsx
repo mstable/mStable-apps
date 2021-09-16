@@ -32,7 +32,8 @@ const VotingHistoryItemContainer = styled.div`
     align-items: flex-start;
 
     > :first-child {
-      font-size: 1.1rem;
+      font-size: 1rem;
+      font-weight: 500;
       line-height: 1.5rem;
     }
 
@@ -68,7 +69,15 @@ const VotingHistoryItem: FC<VoteData['proposal'] & Omit<VoteData, 'proposal'>> =
   </VotingHistoryItemContainer>
 )
 
+const Empty = styled.div`
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  padding: 1rem;
+  border-radius: 1rem;
+`
+
 const Container = styled.div`
+  flex: 1;
+
   h3 {
     font-weight: 600;
     padding: 0 1rem 1rem;
@@ -88,9 +97,24 @@ export const VotingHistory: FC<{ addressOrENSName: string; address?: string }> =
     <Container>
       <h3>Voting History</h3>
       <div>
-        {votesQuery.data?.votes.map(({ proposal: { title, state, link, choices }, id, created, choice }) => (
-          <VotingHistoryItem key={id} id={id} title={title} state={state} link={link} created={created} choice={choice} choices={choices} />
-        ))}
+        {!!votesQuery.data?.votes?.length ? (
+          votesQuery.data?.votes.map(({ proposal: { title, state, link, choices }, id, created, choice }) => (
+            <VotingHistoryItem
+              key={id}
+              id={id}
+              title={title}
+              state={state}
+              link={link}
+              created={created}
+              choice={choice}
+              choices={choices}
+            />
+          ))
+        ) : (
+          <Empty>
+            <p>No voter history</p>
+          </Empty>
+        )}
       </div>
     </Container>
   )
