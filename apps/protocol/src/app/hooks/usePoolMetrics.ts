@@ -1,13 +1,16 @@
+import { useApolloClients } from '@apps/base/context/apollo'
 import React, { useMemo } from 'react'
 import { useFeederPoolMetricsQuery } from '@apps/artifacts/graphql/feeders'
 import { useBlockNumbers } from '@apps/base/context/block'
 import { BigDecimal } from '@apps/bigdecimal'
 
 export const usePoolMetrics = (feederPoolAddress?: string): { volume: BigDecimal; baseApy: number } => {
+  const clients = useApolloClients()
   const { block24h } = useBlockNumbers()
   const fpMetrics = useFeederPoolMetricsQuery({
     variables: { feederPool: feederPoolAddress, block: { number: block24h as number } },
     skip: !block24h,
+    client: clients.feeders,
   })
   return useMemo(() => {
     let volume = BigDecimal.ZERO
