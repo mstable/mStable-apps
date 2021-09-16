@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { StakeForm } from './StakeForm'
+// @ts-ignore
 import { ReactComponent as MigrationArrow } from '../../../assets/migration-arrow.svg'
 import { ViewportWidth } from '@apps/base/theme'
 import { UnstyledButton } from '@apps/components/core'
@@ -139,7 +140,7 @@ export const StakeMigration: FC<{ onSkip?: () => void }> = ({ onSkip }) => (
       </p>
       <Achievement>
         <div>Quest Multiplier</div>
-        <span>1.2x</span>
+        <span>1.25x</span>
       </Achievement>
       <CloseButton onClick={onSkip}>Skip</CloseButton>
     </MigrationPanel>
