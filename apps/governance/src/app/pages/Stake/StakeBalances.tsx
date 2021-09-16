@@ -1,5 +1,5 @@
-import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { calculateApy } from '@apps/quick-maths'
+import { useTokenSubscription } from '@apps/base/context/tokens'
+import { BigNumber, utils } from 'ethers'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -21,6 +21,40 @@ interface GroupProps {
   label: string
   loading: boolean
   balance?: Balance
+}
+
+const ONE_DAY = BigNumber.from(60 * 60 * 24)
+const SCALE = BigNumber.from((1e18).toString())
+
+const calculateStakingApy = (
+  priceCoefficient?: string,
+  rewardRate?: BigNumber,
+  rawBalance?: BigNumber,
+  stakingBalance?: BigNumber,
+  totalSupply?: BigNumber,
+) => {
+  if (!(rewardRate && stakingBalance && totalSupply && rawBalance) || (totalSupply && totalSupply.eq(0))) {
+    return
+  }
+
+  // share = stakingBalance / totalSupply
+  // dailyRewards = day * rewardRate
+  // dailyReturn = (dailyRewards * share) / stakingBalance
+  // percentage = dailyReturn * 365 * 100
+
+  const maybePriceCoeff = BigNumber.from(priceCoefficient ?? 1)
+  const priceScaledStakingBalance = maybePriceCoeff.mul(stakingBalance)
+  const priceScaledRawBalance = maybePriceCoeff.mul(rawBalance)
+
+  const share = priceScaledStakingBalance.mul(SCALE).div(totalSupply)
+  if (share.eq(0)) {
+    return
+  }
+
+  const dailyRewards = ONE_DAY.mul(rewardRate)
+  const dailyReturn = dailyRewards.mul(share).div(priceScaledRawBalance)
+
+  return parseFloat(utils.formatUnits(dailyReturn)) * 365 * 100
 }
 
 const StyledTokenIcon = styled(TokenIcon)`
@@ -108,8 +142,7 @@ const Container = styled.div`
 export const StakeBalances: FC = () => {
   const { data, loading } = useStakedTokenQuery()
   const rewardsEarned = useRewardsEarned()
-  const useFetchPrice = useFetchPriceCtx()
-  const mtaPrice = useFetchPrice('0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2') // MTA (Eth mainnet)
+  const stakedToken = useTokenSubscription(data?.stakedToken?.token.address)
 
   const values = useMemo<{
     baseRewardsApy?: Balance
@@ -118,12 +151,13 @@ export const StakeBalances: FC = () => {
     votingPower?: Balance
     rewardsEarned?: Balance
   }>(() => {
-    if (!data?.stakedToken?.accounts?.[0]?.balance || !mtaPrice.value) {
+    if (!data?.stakedToken?.accounts?.[0]?.balance) {
       return {}
     }
 
     const {
       stakedToken: {
+        priceCoefficient,
         token: { totalSupply },
         stakingRewards: { rewardRate: _rewardRate },
         accounts: [
@@ -135,18 +169,18 @@ export const StakeBalances: FC = () => {
     } = data
 
     // TODO use @client Apollo fields
-    const rewardRate = parseInt(_rewardRate) / 1e18
+    const rewardRate = BigNumber.from(_rewardRate)
     const cooldown = parseFloat(cooldownUnits) / 1e18
 
-    let priceCoeff = parseInt(data.stakedToken.priceCoefficient)
-    if (priceCoeff === 1) priceCoeff = 10000 // Testnet data
+    const userRewardsApy = calculateStakingApy(
+      priceCoefficient,
+      rewardRate,
+      rawBD?.exact,
+      stakedToken?.balance?.exact,
+      totalSupply?.bigDecimal.exact,
+    )
 
-    const stakingTokenPrice = data.stakedToken.stakingToken.symbol === 'MTA' ? mtaPrice.value : (priceCoeff / 10000) * mtaPrice.value
-
-    const multiplier = Math.max(1, questMultiplierSimple) * Math.max(1, timeMultiplierSimple)
-
-    const baseRewardsApy = calculateApy(stakingTokenPrice, mtaPrice.value, rewardRate, totalSupply.bigDecimal)
-    const userRewardsApy = calculateApy(stakingTokenPrice, mtaPrice.value, rewardRate * multiplier, totalSupply.bigDecimal)
+    const baseRewardsApy = userRewardsApy / ((1 + questMultiplierSimple / 10) * (1 + timeMultiplierSimple / 10))
 
     return {
       stake: { amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol },
@@ -155,7 +189,7 @@ export const StakeBalances: FC = () => {
       baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
       userRewardsApy: { suffix: '%', amount: userRewardsApy },
     }
-  }, [data, mtaPrice.value, rewardsEarned.rewards])
+  }, [data, rewardsEarned.rewards, stakedToken])
 
   return (
     <Container>
