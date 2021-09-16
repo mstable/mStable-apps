@@ -111,7 +111,7 @@ const Container = styled(UnstyledButton)<{ type?: QuestType }>`
   > :last-child {
     position: absolute;
     right: 0.75rem;
-    bottom: calc(0.75rem);
+    bottom: 0.875rem;
 
     svg {
       path {
