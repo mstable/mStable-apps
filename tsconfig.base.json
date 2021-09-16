@@ -36,6 +36,7 @@
       "@apps/base/context/app": ["libs/base/src/lib/context/AppProvider.tsx"],
       "@apps/base/context/block": ["libs/base/src/lib/context/BlockProvider.tsx"],
       "@apps/base/context/data": ["libs/base/src/lib/context/DataProvider/index.ts"],
+      "@apps/base/context/ModalDataProvider": ["libs/base/src/lib/context/ModalDataProvider.tsx"],
       "@apps/base/context/masset": ["libs/base/src/lib/context/MassetProvider.tsx"],
       "@apps/base/context/network": ["libs/base/src/lib/context/NetworkProvider.tsx"],
       "@apps/base/context/notifications": ["libs/base/src/lib/context/NotificationsProvider.tsx"],
