@@ -133,7 +133,7 @@ const Content: FC = () => {
   const { hasWithdrawnV1Balance, hasSelectedStakeOption, lockedV1 } = useStakingStatus()
   const migrateSlug = urlQuery.get('migrate') === 'true' // ?migrate=true
 
-  const { balance: balanceV1, end: balanceV1Unlock } = lockedV1 ?? {}
+  const { balance: balanceV1, end: balanceV1Unlock } = lockedV1?.value ?? {}
 
   const userNeedsMigration = (balanceV1Unlock?.simple > Date.now() && !!balanceV1?.simple) || hasWithdrawnV1Balance
 

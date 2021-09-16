@@ -88,7 +88,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS) / DAY
   const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW) / DAY
 
-  const balanceV1 = lockedV1?.balance
+  const balanceV1 = lockedV1?.value?.balance
   const balanceV2 = data?.stakedToken?.accounts?.[0]?.balance?.rawBD
   const canUserStake =
     ((isDelegating && !!delegate) || !isDelegating) && amount?.exact?.gt(0) && allowance?.exact && amount?.exact?.lte(allowance?.exact)
@@ -140,6 +140,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
         spender={stakedTokenAddress}
         stakedBalance={isMigrating ? balanceV1 : undefined}
         isMigrating={isMigrating}
+        preferStaked={isMigrating}
       />
       <div>
         <DelegateToggle>
