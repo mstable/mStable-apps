@@ -26,9 +26,16 @@ interface Props {
   isMigrating?: boolean
 }
 
-const Input = styled(AssetInputSingle)`
-  background: ${({ theme }) => theme.color.background[0]};
-  height: 3.5rem;
+const StyledDelegateSelection = styled(DelegateSelection)<{ isMigrating: boolean }>`
+  background: ${({ theme, isMigrating }) => isMigrating && theme.color.background[1]};
+
+  button {
+    background: ${({ theme, isMigrating }) => isMigrating && theme.color.background[3]};
+  }
+`
+
+const Input = styled(AssetInputSingle)<{ isMigrating: boolean }>`
+  background: ${({ theme, isMigrating }) => isMigrating && theme.color.background[1]};
 `
 
 const DelegateToggle = styled.div`
@@ -119,6 +126,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
         handleSetAmount={setFormValue}
         spender={stakedTokenAddress}
         stakedBalance={isMigrating ? balanceV1 : undefined}
+        isMigrating={isMigrating}
       />
       <div>
         <DelegateToggle>
@@ -127,7 +135,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
           </h3>
           <ToggleInput onClick={toggleIsDelegating} checked={isDelegating} />
         </DelegateToggle>
-        {isDelegating && <DelegateSelection />}
+        {isDelegating && <StyledDelegateSelection isMigrating={isMigrating} />}
       </div>
       <Warning>
         Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.&nbsp;

@@ -12,11 +12,6 @@ import { BigDecimal } from '@apps/bigdecimal'
 
 import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
 
-const Input = styled(AssetInputSingle)`
-  background: ${({ theme }) => theme.color.background[0]};
-  height: 3.5rem;
-`
-
 const Fee = styled.div`
   display: flex;
   justify-content: space-between;
@@ -83,7 +78,7 @@ export const WithdrawForm: FC = () => {
 
   return (
     <Container>
-      <Input
+      <AssetInputSingle
         isFetching={loading}
         token={stakingToken}
         formValue={formValue}

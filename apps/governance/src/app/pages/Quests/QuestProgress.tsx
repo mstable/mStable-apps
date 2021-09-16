@@ -50,7 +50,7 @@ const Container = styled.div<{ progressType: ProgressType; questType?: QuestType
   > :first-child + div {
     margin-top: 0.25rem;
     overflow: hidden;
-    background: ${({ theme }) => (theme.isLight ? '#443836' : '#29252f')};
+    background: ${({ theme }) => (theme.isLight ? '#584b48' : '#464050')};
     &:after {
       background: ${({ progressType }) =>
         progressType === ProgressType.Rarity ? '#42C1E9' : progressType === ProgressType.TimeRemaining ? '#E94C42' : '#6CC000'};

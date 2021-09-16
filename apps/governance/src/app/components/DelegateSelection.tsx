@@ -23,6 +23,7 @@ const Address = styled.div`
 const User = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
 
   * {
     line-height: 1rem;
@@ -46,8 +47,8 @@ const Info = styled.div`
   gap: 0.5rem;
 
   > div:first-child {
-    height: 1.75rem;
-    width: 1.75rem;
+    height: 2rem;
+    width: 2rem;
 
     * {
       border-radius: 50%;
@@ -55,12 +56,6 @@ const Info = styled.div`
       width: 100% !important;
       height: 100% !important;
     }
-  }
-`
-
-const NullState = styled.div`
-  h3 {
-    margin-left: 0.5rem;
   }
 `
 
@@ -77,7 +72,7 @@ const Container = styled.div`
   display: flex;
   gap: 0.5rem;
   border-radius: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   align-items: center;
   height: 3.25rem;
   justify-content: space-between;
