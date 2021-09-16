@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Color } from '@apps/base/theme'
 import styled from 'styled-components'
+import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 const WEEK = 604800
 
@@ -69,7 +70,8 @@ const Container = styled.div`
 `
 
 export const StakeGraph: FC = () => {
-  const stakeDate = Date.now() - WEEK * 12
+  const { data: tokenData } = useStakedTokenQuery()
+  const stakeDate = tokenData?.stakedToken?.accounts?.[0]?.balance?.weightedTimestamp ?? Date.now()
 
   const data = generateData(stakeDate)
   const ticks = removeDuplicatesBy(x => x.multiplier, data).map(v => v.week)
