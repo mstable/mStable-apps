@@ -11,7 +11,7 @@ export interface State {
   hasSelectedStakeOption: boolean
   lockedV1: FetchState<{
     balance: BigDecimal
-    end?: BigDecimal
+    end?: number
   }>
 }
 
@@ -33,7 +33,7 @@ export const StakingStatusProvider: FC = ({ children }) => {
   const [state, setState] = useState<State>(initialState)
   const [lockedV1, setLockedV1] = useFetchState<{
     balance: BigDecimal
-    end: BigDecimal
+    end: number
   }>()
 
   const networkAddresses = useNetworkAddresses()
@@ -48,7 +48,7 @@ export const StakingStatusProvider: FC = ({ children }) => {
       const contract = IncentivisedVotingLockup__factory.connect(networkAddresses.vMTA, signer)
       const data = await contract.locked(account)
       const balance = new BigDecimal(data?.[0] ?? 0)
-      const end = data?.[1] ? new BigDecimal(data?.[1]) : undefined
+      const end = data?.[1]?.toNumber() * 1e3
       setLockedV1.value({ balance, end })
     })()
   }, [account, lockedV1?.value, networkAddresses.vMTA, setLockedV1, signer, state])

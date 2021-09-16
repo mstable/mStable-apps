@@ -134,8 +134,8 @@ const Content: FC = () => {
   const migrateSlug = urlQuery.get('migrate') === 'true' // ?migrate=true
 
   const { balance: balanceV1, end: balanceV1Unlock } = lockedV1?.value ?? {}
-
-  const userNeedsMigration = (balanceV1Unlock?.simple > Date.now() && !!balanceV1?.simple) || hasWithdrawnV1Balance
+  const userNeedsMigration =
+    (!!balanceV1Unlock && balanceV1Unlock < Date.now() && !!balanceV1?.simple && !balanceV2Simple) || hasWithdrawnV1Balance
 
   const { Graph, Form, heading, subheading } = stakeTabs[activeTabIndex]
 
