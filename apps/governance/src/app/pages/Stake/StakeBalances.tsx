@@ -12,7 +12,7 @@ import { useRewardsEarned } from './context'
 
 interface Balance {
   symbol?: string
-  amount: number
+  amount?: number
   decimals?: number
   suffix?: string
 }
@@ -20,6 +20,7 @@ interface Balance {
 interface GroupProps {
   label: string
   loading: boolean
+  placeholder?: string
   balance?: Balance
 }
 
@@ -90,17 +91,21 @@ const GroupContainer = styled.div`
   }
 `
 
-const Group: FC<GroupProps> = ({ balance, label, loading }) => {
+const Group: FC<GroupProps> = ({ balance, label, loading, placeholder }) => {
   const { amount, symbol, suffix, decimals } = balance ?? {}
   return (
     <GroupContainer>
       <h3>{label}</h3>
       <div>
         {!loading ? (
-          <div key={symbol}>
-            {symbol && <StyledTokenIcon symbol={symbol} />}
-            <CountUp end={amount} suffix={suffix} decimals={decimals} />
-          </div>
+          placeholder ? (
+            <div>{placeholder}</div>
+          ) : (
+            <div key={symbol}>
+              {symbol && <StyledTokenIcon symbol={symbol} />}
+              <CountUp end={amount} suffix={suffix} decimals={decimals} />
+            </div>
+          )
         ) : (
           <ThemedSkeleton height={20} width={80} />
         )}
@@ -201,6 +206,7 @@ export const StakeBalances: FC = () => {
         <Group label="Earned" balance={values.rewardsEarned} loading={loading} />
         <Group label="Base APY" balance={values.baseRewardsApy} loading={loading} />
         <Group label="My APY" balance={values.userRewardsApy} loading={loading} />
+        {stakedToken?.symbol === 'stkBPT' && <Group label="BAL APY" placeholder="Soon!" loading={loading} />}
       </div>
     </Container>
   )
