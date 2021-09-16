@@ -1,4 +1,3 @@
-import { UnstyledButton } from '@apps/components/core'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import useSound from 'use-sound'
