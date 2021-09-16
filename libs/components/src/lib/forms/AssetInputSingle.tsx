@@ -3,9 +3,7 @@ import styled from 'styled-components'
 import { AssetInput } from './AssetInput'
 import { SubscribedToken } from '@apps/types'
 import { BigDecimal } from '@apps/bigdecimal'
-import { ReactComponent as SwitchIcon } from '../icons/switch-icon.svg'
 import { UnstyledButton } from '../core'
-import { useToggle } from 'react-use'
 
 interface Props {
   className?: string
@@ -16,28 +14,8 @@ interface Props {
   spender?: string
   token?: SubscribedToken
   stakedBalance?: BigDecimal
+  preferStaked?: boolean
 }
-
-const SwitchButton = styled(UnstyledButton)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 1.25rem;
-  margin-left: 0.5rem;
-  background: ${({ theme }) => theme.color.background[0]};
-  border-radius: 0.25rem;
-
-  > * {
-    width: 1rem;
-    height: 1rem;
-
-    rect,
-    path {
-      stroke: ${({ theme }) => theme.color.bodyAccent};
-    }
-  }
-`
 
 const Input = styled(AssetInput)`
   background: ${({ theme }) => theme.color.background[0]};
@@ -92,30 +70,24 @@ export const AssetInputSingle: FC<Props> = ({
   handleSetAmount,
   spender,
   stakedBalance,
+  preferStaked = false,
 }) => {
-  const [walletSelected, toggleSelection] = useToggle(!stakedBalance)
-
   return (
     <Container className={className}>
       <Input
         isFetching={isFetching}
         address={token?.address}
         formValue={formValue}
-        handleSetMax={() => handleSetMax?.(walletSelected ? token?.balance?.string : stakedBalance?.string)}
+        handleSetMax={() => handleSetMax?.(preferStaked ? stakedBalance?.string : token?.balance?.string)}
         handleSetAmount={handleSetAmount}
-        spender={walletSelected ? spender : undefined}
+        spender={preferStaked ? undefined : spender}
         hideToken
       />
       <Balance>
         <div>
-          {walletSelected ? 'Wallet' : 'Staked'} <span>{token?.symbol}</span>
-          {/* {!!stakedBalance && (
-            <SwitchButton onClick={toggleSelection}>
-              <SwitchIcon />
-            </SwitchButton>
-          )} */}
+          {preferStaked ? 'Staked' : 'Wallet'} <span>{token?.symbol}</span>
         </div>
-        <div>{(walletSelected ? token?.balance : stakedBalance)?.toFixed(4)}</div>
+        <div>{preferStaked ? stakedBalance?.toFixed(4) : token?.balance?.toFixed(4)}</div>
       </Balance>
     </Container>
   )
