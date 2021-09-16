@@ -11,6 +11,7 @@ import { useBlockNow } from '@apps/base/context/block'
 import { BigDecimal } from '@apps/bigdecimal'
 
 import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
+import { TimeMultiplierImpact } from './TimeMultiplierImpact'
 
 const Fee = styled.div`
   display: flex;
@@ -93,6 +94,7 @@ export const WithdrawForm: FC = () => {
         <Warning>
           There is a cooldown period to unstake & a penalty if you have not staked long enough. <a>Learn more</a>
         </Warning>
+        <TimeMultiplierImpact isStaking={false} stakeDelta={amount?.exact} />
         <Fee>
           <div>Redemption Fee</div>
           <span>{fee.value?.simple}%</span>
