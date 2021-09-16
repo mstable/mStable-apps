@@ -1,6 +1,6 @@
 import { FC, createContext, useState, useContext, useEffect } from 'react'
 
-import { providerFactory } from '@apps/hooks'
+import { FetchState, providerFactory, useFetchState } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
 import { useNetworkAddresses } from '@apps/base/context/network'
@@ -9,10 +9,10 @@ import { useOwnAccount, useSigner } from '@apps/base/context/account'
 export interface State {
   hasWithdrawnV1Balance: boolean
   hasSelectedStakeOption: boolean
-  lockedV1?: {
+  lockedV1: FetchState<{
     balance: BigDecimal
-    end: BigDecimal
-  }
+    end?: BigDecimal
+  }>
 }
 
 interface Dispatch {
@@ -23,6 +23,7 @@ interface Dispatch {
 const initialState: State = {
   hasWithdrawnV1Balance: false,
   hasSelectedStakeOption: false,
+  lockedV1: {},
 }
 
 const dispatchContext = createContext<Dispatch>(null as never)
@@ -30,21 +31,27 @@ const stateContext = createContext<State>(null as never)
 
 export const StakingStatusProvider: FC = ({ children }) => {
   const [state, setState] = useState<State>(initialState)
+  const [lockedV1, setLockedV1] = useFetchState<{
+    balance: BigDecimal
+    end: BigDecimal
+  }>()
+
   const networkAddresses = useNetworkAddresses()
   const signer = useSigner()
   const account = useOwnAccount()
 
   // TODO: Query via graphql instead (?)
   useEffect(() => {
-    if (!!state?.lockedV1 || !signer) return
+    if (!signer || !account || !!lockedV1?.value) return
+    setLockedV1.fetching()
     ;(async () => {
       const contract = IncentivisedVotingLockup__factory.connect(networkAddresses.vMTA, signer)
       const data = await contract.locked(account)
-      if (data?.length === 2) {
-        setState({ ...state, lockedV1: { balance: new BigDecimal(data[0]), end: new BigDecimal(data[1]) } })
-      }
+      const balance = new BigDecimal(data?.[0] ?? 0)
+      const end = data?.[1] ? new BigDecimal(data?.[1]) : undefined
+      setLockedV1.value({ balance, end })
     })()
-  }, [account, networkAddresses.vMTA, signer, state])
+  }, [account, lockedV1?.value, networkAddresses.vMTA, setLockedV1, signer, state])
 
   return providerFactory(
     dispatchContext,
@@ -58,7 +65,7 @@ export const StakingStatusProvider: FC = ({ children }) => {
         },
       },
     },
-    providerFactory(stateContext, { value: state }, children),
+    providerFactory(stateContext, { value: { ...state, lockedV1 } }, children),
   )
 }
 
