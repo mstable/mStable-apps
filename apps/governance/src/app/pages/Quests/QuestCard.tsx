@@ -170,7 +170,7 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
         <QuestMultiplier type={questType as never}>1.{quest?.multiplier.toString().slice(1)}x</QuestMultiplier>
         <QuestSeason>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</QuestSeason>
       </QuestFeatures>
-      <Tooltip tip={questbookQuest.description} />
+      <Tooltip tip={questbookQuest?.description} />
     </Container>
   )
 }
