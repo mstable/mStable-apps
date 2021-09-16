@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
@@ -7,17 +7,17 @@ import { useSigner } from '@apps/base/context/account'
 import { Tooltip, Warning } from '@apps/components/core'
 import { useTokenAllowance, useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
+import { useModalData } from '@apps/base/context/ModalDataProvider'
 import { useBigDecimalInput } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetInputSingle, SendButton, ToggleInput } from '@apps/components/forms'
 import { useNetworkAddresses } from '@apps/base/context/network'
+import { truncateAddress } from '@apps/formatters'
 
 import { useStakedToken, useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
 import { DelegateSelection } from '../../components/DelegateSelection'
 import { useStakingStatus, useStakingStatusDispatch } from '../../context/StakingStatusProvider'
-import { BigDecimal } from '@apps/bigdecimal'
-import { useModalData } from 'libs/base/src/lib/context/ModalDataProvider'
-import { truncateAddress } from '@apps/formatters'
+import { TimeMultiplierImpact } from './TimeMultiplierImpact'
 
 const DAY = 86400
 
@@ -137,6 +137,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
         </DelegateToggle>
         {isDelegating && <StyledDelegateSelection isMigrating={isMigrating} />}
       </div>
+      <TimeMultiplierImpact isStaking stakeDelta={amount?.exact} />
       <Warning>
         Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.&nbsp;
       </Warning>
