@@ -49,6 +49,7 @@ const DelegateeBalancesContainer = styled.div`
 
   @media (min-width: ${ViewportWidth.m}) {
     flex-direction: column;
+    width: 16rem;
 
     > * {
       &:not(:last-child) {

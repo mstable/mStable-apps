@@ -9,6 +9,7 @@ import { Button, ThemedSkeleton } from '@apps/components/core'
 
 import { StakedTokenSwitcher } from '../../components/StakedTokenSwitcher'
 import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
+import { ViewportWidth } from '@apps/base/theme'
 
 const Check: FC = () => (
   <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,11 +26,16 @@ const Delegated = styled.div`
 const Container = styled.div`
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   gap: 1rem;
   padding: 1.5rem;
   border-radius: 1rem;
   background: ${({ theme }) => theme.color.background[1]};
+
+  @media (min-width: ${ViewportWidth.m}) {
+    flex-direction: row;
+  }
 `
 
 export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boolean }> = ({ address, stakedTokenSwitcher }) => {

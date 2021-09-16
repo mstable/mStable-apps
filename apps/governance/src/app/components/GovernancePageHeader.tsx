@@ -177,7 +177,7 @@ const UserDelegate = styled.div`
 
       > :last-child {
         align-items: flex-start;
-        justify-content: flex-start;
+        justify-content: center;
 
         > :last-child {
           font-size: 1rem;
