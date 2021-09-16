@@ -22,6 +22,7 @@ const Box = styled.div`
   border-radius: 1rem;
   border: 1px solid ${({ theme }) => theme.color.defaultBorder};
   gap: 0.5rem;
+  text-align: center;
 
   h3 {
     color: ${({ theme }) => theme.color.bodyAccent};
@@ -52,7 +53,8 @@ const Container = styled.div`
 
 export const Stats: FC = () => {
   const { data } = useStakedTokenQuery()
-  const recollatRatio = parseFloat(data?.stakedToken?.collateralisationRatio ?? '0') / 1e18
+  const collateralisationRatio = parseFloat(data?.stakedToken?.collateralisationRatio ?? '0') / 1e16
+  const slashingPercentage = parseFloat(data?.stakedToken?.slashingPercentage ?? '0') / 1e16
   const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS ?? '0') / DAY
   const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW ?? '0') / DAY
 
@@ -61,9 +63,14 @@ export const Stats: FC = () => {
       <GovernancePageHeader title="Stats" subtitle="Overview of the mStable Governance system" />
       <div>
         <StatsBox
-          tip={`In the event of recollateratalisation, your staked balance will be slashed by ${recollatRatio}%. This rate may vary depending on future governance proposals.`}
-          title="Recollateralisation Percentage"
-          subtitle={`${recollatRatio}%`}
+          tip={`In the event of recollateratalisation, your staked balance will be slashed by ${slashingPercentage}%. This rate may vary depending on future governance proposals.`}
+          title="Collateralisation ratio"
+          subtitle={`${collateralisationRatio}%`}
+        />
+        <StatsBox
+          tip={`In the event of recollateratalisation, your staked balance will be slashed by ${slashingPercentage}%. This rate may vary depending on future governance proposals.`}
+          title="Slashing percentage"
+          subtitle={`${slashingPercentage}%`}
         />
         <StatsBox tip="The period of time before your stake is withdrawable" title="Withdrawal Cooldown" subtitle={`${cooldown}d`} />
         <StatsBox
