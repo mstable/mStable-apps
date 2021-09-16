@@ -62,6 +62,10 @@ const NumericCell = styled(TableCell)`
   text-align: right;
 `
 
+const DisplayName = styled.div<{ isTitleAddress: boolean }>`
+  ${({ isTitleAddress, theme }) => isTitleAddress && theme.mixins.numeric};
+`
+
 const StyledDelegateeCell = styled(TableCell)`
   span {
     ${({ theme }) => theme.mixins.numeric};
@@ -103,7 +107,7 @@ const DelegateeCell: FC<{ address: string; rank: number; delegatee?: DelegateeIn
       <span>{rank}</span>
     </div>
     <div className="avatar">{delegatee ? <IPFSImg uri={delegatee.avatarURI} /> : <UserIcon address={address} />}</div>
-    <div>{delegatee?.displayName ?? truncateAddress(address)}</div>
+    <DisplayName isTitleAddress={!delegatee?.displayName}>{delegatee?.displayName ?? truncateAddress(address)}</DisplayName>
   </StyledDelegateeCell>
 )
 
