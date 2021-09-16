@@ -137,7 +137,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
         </DelegateToggle>
         {isDelegating && <StyledDelegateSelection isMigrating={isMigrating} />}
       </div>
-      <TimeMultiplierImpact isStaking stakeDelta={amount?.exact} />
+      {data?.stakedToken?.accounts?.[0] && <TimeMultiplierImpact isStaking stakeDelta={amount?.exact} />}
       <Warning>
         Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.&nbsp;
       </Warning>
