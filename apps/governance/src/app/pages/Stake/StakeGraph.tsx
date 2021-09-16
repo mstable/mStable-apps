@@ -36,9 +36,10 @@ const getCurrentMultiplier = (hodlLength: number) => {
   return 1.6
 }
 
-const generateData = (startTime: number): DataType[] => {
-  const now = Date.now()
-  const week = Math.floor((now - startTime) / WEEK)
+const generateData = (startTime?: number): DataType[] => {
+  const now = Date.now() / 1e3
+  const start = startTime ?? now
+  const week = Math.floor((now - start) / WEEK)
   const totalIntervals = 117
   const intervals = [...Array(totalIntervals - week + 1).keys()]
   return intervals.map((w, i) => ({ multiplier: getCurrentMultiplier(w + week), week: i * WEEK }))
@@ -71,11 +72,9 @@ const Container = styled.div`
 
 export const StakeGraph: FC = () => {
   const { data: tokenData } = useStakedTokenQuery()
-
   const weightedTimestamp = tokenData?.stakedToken?.accounts?.[0]?.balance?.weightedTimestamp
-  const stakeDate = !!weightedTimestamp ? weightedTimestamp * 1e3 : Date.now()
 
-  const data = generateData(stakeDate)
+  const data = generateData(weightedTimestamp)
   const ticks = removeDuplicatesBy(x => x.multiplier, data).map(v => v.week)
 
   return (

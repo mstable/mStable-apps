@@ -88,6 +88,7 @@ export const WithdrawForm: FC = () => {
         handleSetMax={() => setFormValue(stakedAmount.string)}
         handleSetAmount={setFormValue}
         stakedBalance={stakedAmount}
+        preferStaked
       />
       {!!balanceV2?.simple && <TimeMultiplierImpact isStaking={false} stakeDelta={amount?.exact} />}
       <Warnings>
