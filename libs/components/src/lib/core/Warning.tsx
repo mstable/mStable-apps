@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import warningSvg from '@apps/components/icons/warning.svg'
 
-const Container = styled.div`
+const Container = styled.div<{ highlight?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -14,14 +16,14 @@ const Container = styled.div`
   }
 
   > div {
-    color: ${({ theme }) => theme.color.bodyAccent};
+    color: ${({ theme, highlight }) => (highlight ? theme.color.body : theme.color.bodyAccent)};
     font-size: 0.8rem;
     line-height: 1.2rem;
   }
 `
 
-export const Warning: FC<{ alt?: string }> = ({ alt = 'Warning', children }) => (
-  <Container>
+export const Warning: FC<{ alt?: string; highlight?: boolean }> = ({ alt = 'Warning', highlight, children }) => (
+  <Container highlight={highlight}>
     <img src={warningSvg} alt={alt} />
     <div>{children}</div>
   </Container>
