@@ -15,6 +15,7 @@ import { QuestCard } from './QuestCard'
 import { QuestObjectiveProgress, QuestProgress, QuestTimeRemaining } from './QuestProgress'
 import { QueueOptInOutButton } from './QueueOptInOutButtons'
 import { Typist } from './Typist'
+import { truncateAddress } from '@apps/formatters'
 
 enum ProgressType {
   Personal,
@@ -39,8 +40,6 @@ const QP = styled.div`
 const Objectives = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.5);
   padding-right: 1rem;
@@ -65,7 +64,9 @@ const Objectives = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    padding: 1rem 0;
     gap: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 
     > :first-child {
       width: 100%;
@@ -87,13 +88,14 @@ const Objectives = styled.div`
     }
   }
 
-  @media (min-width: ${ViewportWidth.m}) {
-    overflow-y: scroll;
-    max-height: 7rem;
+  > div:first-child {
+    padding-top: 0;
   }
 
-  @media (min-width: ${ViewportWidth.l}) {
-    max-height: 11rem;
+  @media (min-width: ${ViewportWidth.m}) {
+    overflow-y: scroll;
+    max-height: 14rem;
+    height: 100%;
   }
 `
 
@@ -156,6 +158,8 @@ const Inner = styled.div`
   gap: 1rem;
   justify-content: space-between;
   flex: 1;
+  width: 100%;
+  overflow: hidden;
 
   h3 {
     font-size: 1rem;
@@ -177,6 +181,7 @@ const Container = styled.div<{ type?: QuestType }>`
   border-radius: 1rem;
   min-height: 20rem;
   flex: 1;
+  width: 100%;
 
   > *:first-child {
     display: none;
@@ -219,16 +224,13 @@ const DefaultQuestInfo: FC<{ questId: string }> = ({ questId }) => {
         <div>
           {questbookQuest ? (
             <div>
-              <h3>
-                <Typist>{questbookQuest.description}</Typist>
-              </h3>
               <Objectives>
                 {questbookQuest.objectives.map(({ title, id, description, points }) => {
                   const userQuestObjective = questbookQuest.userQuest?.objectives.find(o => o.id === id)
                   return (
                     <div key={id}>
                       <div>
-                        <QP>{points.toString()}</QP>
+                        {!!points && <QP>{points.toString()}</QP>}
                         {userQuestObjective?.complete ? (
                           <img src="/assets/tick.png" alt="Complete" />
                         ) : (
@@ -291,7 +293,7 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
       },
       {
         id: '2',
-        title: `Congratulations ${account ?? 'Metanaut'} 😎 You are the staker of the week`,
+        title: `Congratulations ${truncateAddress(account) ?? 'Metanaut'} 😎 You are the staker of the week`,
         description: 'Staked for 6 months: 1.3x',
         seconds: 15724800,
       },
@@ -355,14 +357,10 @@ export const TimeMultiplierQuestInfo: FC<{ questId: string }> = ({ questId }) =>
       <Inner>
         <div>
           <div>
-            <h3>
-              <Typist>Good things come to those who wait – earn a multiplier for staking over time</Typist>
-            </h3>
             <Objectives>
               {quest.objectives.map(({ objective: { title, id, description }, userObjective }) => (
                 <div key={id}>
                   <div>
-                    <div />
                     {userObjective?.complete ? (
                       <img src="/assets/tick.png" alt="Complete" />
                     ) : (
@@ -410,9 +408,6 @@ export const DemocracyMaxiQuestInfo: FC<{ questId: string }> = ({ questId }) => 
       <Inner>
         <div>
           <div>
-            <h3>
-              <Typist>Have your say – Participate in mStable Governance</Typist>
-            </h3>
             <Objectives>
               <div>
                 <div />
