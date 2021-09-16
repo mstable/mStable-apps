@@ -311,7 +311,7 @@ export const TimeMultiplierQuestInfo: FC<Props> = ({ questId }) => {
       },
       {
         id: '2',
-        title: `Congratulations ${account ? truncateAddress(account) : 'ANONYMOUS METANAUT'} 😎 You are the staker of the week`,
+        title: `Congratulations ${account ? truncateAddress(account) : 'ANON METANAUT'} 😎 You are the staker of the week`,
         description: 'Staked for 6 months: 1.3x',
         seconds: 15724800,
       },
