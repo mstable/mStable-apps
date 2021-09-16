@@ -33,6 +33,7 @@ const Box = styled.div`
     ${({ theme }) => theme.mixins.numeric};
     color: ${({ theme }) => theme.color.body};
     font-size: 1.25rem;
+    font-weight: 300;
   }
 `
 
