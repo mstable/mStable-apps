@@ -146,7 +146,7 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
     nextFetchPolicy: 'cache-and-network',
   })
   const quest = questQuery.data?.quest
-  const questType = quest?.type
+  const questType = quest?.type ?? questId === 'metanautSpaceProgram' ? QuestType.Seasonal : undefined
 
   return (
     <Container type={questType as never} onClick={onClick ? () => onClick?.(questId) : undefined}>
@@ -167,7 +167,9 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
         )}
       </QuestImage>
       <QuestFeatures>
-        <QuestMultiplier type={questType as never}>1.{quest?.multiplier.toString().slice(1)}x</QuestMultiplier>
+        <QuestMultiplier type={questType as never}>
+          1.{quest ? quest.multiplier : questId === 'metanautSpaceProgram' ? 5 : undefined}x
+        </QuestMultiplier>
         <QuestSeason>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</QuestSeason>
       </QuestFeatures>
       <Tooltip tip={questbookQuest?.description} />
@@ -205,15 +207,18 @@ const DemocracyMaxiQuestCard: FC<Props> = ({ questId, onClick }) => (
     <QuestFeatures>
       <QuestSeason>SEASON 0</QuestSeason>
     </QuestFeatures>
-    <Tooltip tip={'Participate in mStable Governance'} />
+    <Tooltip tip="Participate in mStable Governance" />
   </Container>
 )
 
-export const QuestCard: FC<Props> = ({ questId, onClick }) =>
-  questId === 'timeMultiplier' ? (
-    <TimeMultiplierQuestCard questId={questId} onClick={onClick} />
-  ) : questId === 'democracyMaxi' ? (
-    <DemocracyMaxiQuestCard questId={questId} onClick={onClick} />
-  ) : (
-    <DefaultQuestCard questId={questId} onClick={onClick} />
-  )
+const Cards: Record<string, FC<Props>> = {
+  timeMultiplier: TimeMultiplierQuestCard,
+  democracyMaxi: DemocracyMaxiQuestCard,
+  default: DefaultQuestCard,
+  // whale: WhaleQuestCard,
+}
+
+export const QuestCard: FC<Props> = ({ questId, onClick }) => {
+  const Card = Cards[questId] ?? Cards.default
+  return <Card questId={questId} onClick={onClick} />
+}
