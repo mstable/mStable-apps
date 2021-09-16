@@ -145,6 +145,7 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
     skip: typeof questbookQuest?.ethereumId !== 'number',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
+    pollInterval: 15e3,
   })
   const quest = questQuery.data?.quest
   const questType = quest?.type ?? questId === 'metanautSpaceProgram' ? QuestType.Seasonal : undefined

@@ -89,9 +89,9 @@ const Container = styled.div`
   }
 `
 
-export const VotingHistory: FC<{ addressOrENSName: string; address?: string }> = ({ address, addressOrENSName }) => {
-  const clients = useApolloClients()
-  const votesQuery = useVotesQuery({ client: clients.snapshot, variables: { account: address }, skip: !address })
+export const VotingHistory: FC<{ addressOrENSName: string; address?: string }> = ({ address }) => {
+  const { snapshot: client } = useApolloClients()
+  const votesQuery = useVotesQuery({ client, variables: { account: address }, skip: !address })
 
   return (
     <Container>
