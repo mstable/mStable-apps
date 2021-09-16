@@ -4,6 +4,7 @@ import { BigNumber } from 'ethers'
 import { getUnixTime } from 'date-fns'
 
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { Tooltip } from '@apps/components/core'
 
 const getTimeMultiplier = (hodlLengthSeconds: BigNumber) => {
   if (hodlLengthSeconds.lt(7862400)) return 0
@@ -63,8 +64,11 @@ const useSimulatedTimeMultiplier = (isStaking: boolean, stakeDelta?: BigNumber) 
 }
 
 const Container = styled.div`
+  border-top: 1px solid ${({ theme }) => theme.color.bodyTransparenter};
+  padding-top: 1rem;
+
   h4 {
-    font-size: 0.9rem;
+    margin: 0 0.25rem;
     margin-bottom: 0.5rem;
   }
 
@@ -80,15 +84,19 @@ const Container = styled.div`
       justify-content: space-between;
       align-items: center;
       gap: 0.25rem;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 0.75rem;
       border-radius: 0.5rem;
-      background: ${({ theme }) => theme.color.background[2]};
+      background: ${({ theme }) => theme.color.background[0]};
+      border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+
       > :first-child {
         color: ${({ theme }) => theme.color.bodyTransparent};
-        font-size: 0.8rem;
+        font-size: 0.875rem;
       }
+
       > :last-child {
-        font-size: 1.3rem;
+        font-size: 1rem;
+        font-weight: 300;
         font-family: 'DM Mono', monospace;
       }
     }
@@ -99,7 +107,9 @@ export const TimeMultiplierImpact: FC<{ isStaking: boolean; stakeDelta: BigNumbe
   const { timeMultiplier, simulatedTimeMultiplier } = useSimulatedTimeMultiplier(isStaking, stakeDelta)
   return (
     <Container>
-      <h4>Time multiplier impact</h4>
+      <h4>
+        <Tooltip tip="Your time multiplier will reduce slightly when modifying your staked amount">Time multiplier impact</Tooltip>
+      </h4>
       <div>
         <div>
           <div>Now</div>

@@ -142,8 +142,8 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const cellWidths = delegation ? [70, 30] : [33, 33, 33]
   const tableWidth = delegation ? 16 : 32
   const headerTitles = delegation
-    ? [{ title: 'Rank' }, { title: 'stkMTA' }]
-    : [{ title: 'Rank' }, { title: 'stkMTA %' }, { title: 'stkMTA' }]
+    ? [{ title: 'Rank' }, { title: 'Voting Power' }]
+    : [{ title: 'Rank' }, { title: 'Voting Power %' }, { title: 'Voting Power' }]
 
   return (
     <StyledTable headerTitles={headerTitles} widths={cellWidths} width={tableWidth}>

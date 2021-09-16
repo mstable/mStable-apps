@@ -12,6 +12,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 
 import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
 import { TimeMultiplierImpact } from './TimeMultiplierImpact'
+import { getRedemptionFee } from '../../utils'
 
 const Fee = styled.div`
   display: flex;
@@ -55,6 +56,7 @@ export const WithdrawForm: FC = () => {
   const weightedTimestamp = data?.stakedToken?.accounts?.[0]?.balance?.weightedTimestamp
   const stakedAmount = data?.stakedToken?.accounts?.[0]?.balance?.rawBD ?? BigDecimal.ZERO
   const isValid = amount?.simple <= (stakedAmount?.simple ?? 0) && amount?.simple > 0
+  const balanceV2 = data?.stakedToken?.accounts?.[0]?.balance?.rawBD
 
   useEffect(() => {
     if (!weightedTimestamp || fee.fetching || !stakedTokenContract) return
@@ -87,6 +89,7 @@ export const WithdrawForm: FC = () => {
         handleSetAmount={setFormValue}
         stakedBalance={stakedAmount}
       />
+      {!!balanceV2?.simple && <TimeMultiplierImpact isStaking={false} stakeDelta={amount?.exact} />}
       <Warnings>
         <Warning>
           During withdrawals, your voting power will be temporarily reduced. <a>Learn more</a>
@@ -94,10 +97,9 @@ export const WithdrawForm: FC = () => {
         <Warning>
           There is a cooldown period to unstake & a penalty if you have not staked long enough. <a>Learn more</a>
         </Warning>
-        {weightedTimestamp && <TimeMultiplierImpact isStaking={false} stakeDelta={amount?.exact} />}
         <Fee>
           <div>Redemption Fee</div>
-          <span>{fee.value?.simple}%</span>
+          <span>{fee.value?.simple ?? getRedemptionFee(0)}%</span>
         </Fee>
       </Warnings>
       <SendButton valid={isValid} title="Begin Withdrawal" handleSend={handleSend} />

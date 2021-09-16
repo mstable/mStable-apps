@@ -18,6 +18,7 @@ import { useStakedToken, useStakedTokenQuery, useStakedTokenContract } from '../
 import { DelegateSelection } from '../../components/DelegateSelection'
 import { useStakingStatus, useStakingStatusDispatch } from '../../context/StakingStatusProvider'
 import { TimeMultiplierImpact } from './TimeMultiplierImpact'
+import { constants } from 'ethers'
 
 const DAY = 86400
 
@@ -51,6 +52,16 @@ const DelegateToggle = styled.div`
   }
 `
 
+const Warnings = styled.div`
+  background: ${({ theme }) => theme.color.background[0]};
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  border-radius: 0.875rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,9 +73,8 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const { selected: stakedTokenAddress } = useStakedToken()
   const networkAddresses = useNetworkAddresses()
   const { delegateSelection: delegate } = useModalData()
-  const { hasWithdrawnV1Balance } = useStakingStatus()
+  const { hasWithdrawnV1Balance, lockedV1 } = useStakingStatus()
   const { setWithdrewV1Balance } = useStakingStatusDispatch()
-  const balanceV1 = useTokenSubscription(networkAddresses.vMTA)?.balance
   const stakingToken = useTokenSubscription(data?.stakedToken?.stakingToken.address)
 
   const propose = usePropose()
@@ -78,6 +88,8 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS) / DAY
   const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW) / DAY
 
+  const balanceV1 = lockedV1?.balance
+  const balanceV2 = data?.stakedToken?.accounts?.[0]?.balance?.rawBD
   const canUserStake =
     ((isDelegating && !!delegate) || !isDelegating) && amount?.exact?.gt(0) && allowance?.exact && amount?.exact?.lte(allowance?.exact)
 
@@ -100,6 +112,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
     if (!stakedTokenContract || amount.exact.lte(0) || !stakingToken) return
 
     if (delegate) {
+      if (delegate === constants.AddressZero) return
       return propose<Interfaces.StakedToken, 'stake(uint256,address)'>(
         new TransactionManifest(stakedTokenContract, 'stake(uint256,address)', [amount.exact, delegate], {
           present: `Staking ${amount.toFixed(2)} ${stakingToken.symbol} and delegating to ${truncateAddress(delegate)}`,
@@ -137,19 +150,17 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
         </DelegateToggle>
         {isDelegating && <StyledDelegateSelection isMigrating={isMigrating} />}
       </div>
-      {data?.stakedToken?.accounts?.[0] && <TimeMultiplierImpact isStaking stakeDelta={amount?.exact} />}
-      <Warning>
-        Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.&nbsp;
-      </Warning>
-      <Warning>A redemption fee applies to all withdrawals. The longer you stake, the lower the redemption fee.</Warning>
+      {!!balanceV2?.simple && <TimeMultiplierImpact isStaking stakeDelta={amount?.exact} />}
+      <Warnings>
+        <Warning>
+          Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.&nbsp;
+        </Warning>
+        <Warning>A redemption fee applies to all withdrawals. The longer you stake, the lower the redemption fee.</Warning>
+      </Warnings>
       {isMigrating ? (
         <div>
           {!hasWithdrawnV1Balance && <SendButton valid={!!balanceV1?.simple} title="Withdraw from V1" handleSend={handleWithdrawV1} />}
-          <SendButton
-            valid={((isDelegating && !!delegate) || !isDelegating) && !balanceV1?.simple}
-            title="Stake in V2"
-            handleSend={handleDeposit}
-          />
+          <SendButton valid={canUserStake} title="Stake in V2" handleSend={handleDeposit} />
         </div>
       ) : (
         <SendButton valid={canUserStake} title="Stake" handleSend={handleDeposit} />
