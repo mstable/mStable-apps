@@ -122,6 +122,7 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
   const questbookQuestsQuery = useQuestbookQuestsQuery({
     client: clients.questbook,
     variables: { userId: account ?? '', hasUser: !!account },
+    pollInterval: 30e3,
   })
 
   // Update all quests when the user changes
