@@ -94,7 +94,7 @@ export interface EthereumMainnet
         WBTC: string
       }
     },
-    GraphQLEndpoints<'feeders' | 'snapshot'>
+    GraphQLEndpoints<'feeders' | 'snapshot' | 'staking' | 'questbook'>
   > {
   chainId: ChainIds.EthereumMainnet
 }
@@ -192,6 +192,8 @@ const ETH_MAINNET: EthereumMainnet = {
       graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0, process.env.NX_PROTOCOL_SUBGRAPH_API_KEY as string),
       graphHostedEndpoint('mstable', 'mstable-protocol-staging'),
     ],
+    staking: [graphHostedEndpoint('mstable', 'mstable-staking')],
+    questbook: ['https://us-central1-mstable-questbook.cloudfunctions.net/questbook'],
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
       // TODO remove temporary URL once we have enough indexers
