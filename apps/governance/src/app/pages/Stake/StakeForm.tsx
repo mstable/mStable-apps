@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
+import { constants } from 'ethers'
 
 import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
 import { useSigner } from '@apps/base/context/account'
@@ -15,10 +16,10 @@ import { useNetworkAddresses } from '@apps/base/context/network'
 import { truncateAddress } from '@apps/formatters'
 
 import { useStakedToken, useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
+import { useStakingQuery } from '../../context/StakingProvider'
 import { DelegateSelection } from '../../components/DelegateSelection'
 import { useStakingStatus, useStakingStatusDispatch } from '../../context/StakingStatusProvider'
 import { TimeMultiplierImpact } from './TimeMultiplierImpact'
-import { constants } from 'ethers'
 
 const DAY = 86400
 
@@ -70,6 +71,7 @@ const Container = styled.div`
 
 export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const { data, loading } = useStakedTokenQuery()
+  const stakingQuery = useStakingQuery()
   const { selected: stakedTokenAddress } = useStakedToken()
   const networkAddresses = useNetworkAddresses()
   const { delegateSelection: delegate } = useModalData()
@@ -92,6 +94,11 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const balanceV2 = data?.stakedToken?.accounts?.[0]?.balance?.rawBD
   const canUserStake =
     ((isDelegating && !!delegate) || !isDelegating) && amount?.exact?.gt(0) && allowance?.exact && amount?.exact?.lte(allowance?.exact)
+
+  const otherStakedToken = useTokenSubscription(
+    stakedTokenAddress ? stakingQuery.data?.stakedTokens.find(st => st.id !== stakedTokenAddress)?.id : undefined,
+  )
+  const stakedInOtherToken = stakingToken.balance?.exact.eq(0) && otherStakedToken?.balance?.exact.gt(0)
 
   const handleWithdrawV1 = () => {
     if (!signer || !data || !balanceV1?.simple) return
@@ -153,6 +160,9 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
       </div>
       {!!balanceV2?.simple && <TimeMultiplierImpact isStaking stakeDelta={amount?.exact} />}
       <Warnings>
+        {stakedInOtherToken && (
+          <Warning highlight>It is generally not advisable to stake in both MTA and BPT because of increased gas costs.</Warning>
+        )}
         <Warning>
           Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.&nbsp;
         </Warning>
