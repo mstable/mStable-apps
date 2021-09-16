@@ -40,7 +40,7 @@ const New = styled.div<{ hide?: boolean }>`
   right: 0;
   text-align: center;
   font-size: 0.625rem;
-  color: #bf4800;
+  color: ${({ theme }) => (theme.isLight ? `#bf4800` : `#ff9e71`)};
   opacity: 0.75;
 `
 

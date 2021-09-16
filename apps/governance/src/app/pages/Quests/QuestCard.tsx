@@ -2,7 +2,7 @@ import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { IPFSImg, UnstyledButton } from '@apps/components/core'
+import { IPFSImg, Tooltip, UnstyledButton } from '@apps/components/core'
 import React, { ComponentProps, FC } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import styled from 'styled-components'
@@ -106,6 +106,18 @@ const Container = styled(UnstyledButton)<{ type?: QuestType }>`
     transform: ${({ onClick }) => !!onClick && `scale(1.01)`};
     cursor: ${({ onClick }) => (!!onClick ? `pointer` : `inherit`)};
   }
+
+  > :last-child {
+    position: absolute;
+    right: 1rem;
+    bottom: calc(1rem - 1px);
+
+    svg {
+      path {
+        fill: white;
+      }
+    }
+  }
 `
 
 const CardSkeleton: FC<ComponentProps<typeof Skeleton> & { className?: string }> = props => (
@@ -158,6 +170,7 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
         <QuestMultiplier type={questType as never}>1.{quest?.multiplier.toString().slice(1)}x</QuestMultiplier>
         <QuestSeason>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</QuestSeason>
       </QuestFeatures>
+      <Tooltip tip={questbookQuest.description} />
     </Container>
   )
 }
@@ -175,6 +188,7 @@ const TimeMultiplierQuestCard: FC<Props> = ({ questId, onClick }) => (
     <QuestFeatures>
       <QuestMultiplier>1.2-1.6x</QuestMultiplier>
     </QuestFeatures>
+    <Tooltip tip={'Earn a multiplier for staking over time'} />
   </Container>
 )
 
@@ -191,6 +205,7 @@ const DemocracyMaxiQuestCard: FC<Props> = ({ questId, onClick }) => (
     <QuestFeatures>
       <QuestSeason>SEASON 0</QuestSeason>
     </QuestFeatures>
+    <Tooltip tip={'Participate in mStable Governance'} />
   </Container>
 )
 

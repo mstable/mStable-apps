@@ -15,11 +15,12 @@ import { UserLookup } from '../../components/UserLookup'
 import { ViewportWidth } from '@apps/base/theme'
 import { truncateAddress } from '@apps/formatters'
 import { Leaderboard } from './Leaderboard'
+import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 
 const DOCS_URL = 'https://docs.mstable.org/'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
 
-const DelegationBox = styled(InfoBox)`
+const DelegationBox = styled(InfoBox)<{ isTitleAddress: boolean }>`
   div {
     display: flex;
   }
@@ -60,6 +61,10 @@ const DelegationBox = styled(InfoBox)`
       ${({ theme }) => theme.mixins.numeric};
       color: ${({ theme }) => theme.color.body};
     }
+  }
+
+  h3 {
+    ${({ isTitleAddress, theme }) => isTitleAddress && theme.mixins.numeric};
   }
 
   @media (min-width: ${ViewportWidth.l}) {
@@ -142,9 +147,11 @@ export const Vote: FC = () => {
   const account = useOwnAccount()
   const propose = usePropose()
   const stakedTokenContract = useStakedTokenContract()
+  const delegateesAll = useDelegateesAll()
 
   // TODO;
   const delegateeId = data?.stakedToken?.accounts?.[0]?.delegatee?.id ?? account
+  const displayName = delegateesAll[delegateeId]?.displayName
   const isSelfDelegated = delegateeId?.toLowerCase() === account?.toLowerCase()
 
   const { votingPower } = useMemo<{ votingPower?: number[] }>(() => {
@@ -189,7 +196,12 @@ export const Vote: FC = () => {
       <GovernancePageHeader title="Vote" subtitle="View list of voting addresses and delegate" stakedTokenSwitcher />
       <div>
         <Row>
-          <DelegationBox subtitle="Delegated to" title={isSelfDelegated ? 'Self' : truncateAddress(delegateeId)} dashed={false}>
+          <DelegationBox
+            subtitle="Delegated to"
+            title={isSelfDelegated ? 'Self' : displayName ?? truncateAddress(delegateeId)}
+            dashed={false}
+            isTitleAddress={!displayName}
+          >
             <div>
               <div>
                 <Button highlighted onClick={() => history.push(`/vote/${delegateeId}`)}>

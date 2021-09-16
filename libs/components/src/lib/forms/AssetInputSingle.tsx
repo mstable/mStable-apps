@@ -83,11 +83,20 @@ const Container = styled.div`
   border-radius: 0.75rem;
 `
 
-export const AssetInputSingle: FC<Props> = ({ isFetching, formValue, token, handleSetMax, handleSetAmount, spender, stakedBalance }) => {
+export const AssetInputSingle: FC<Props> = ({
+  className,
+  isFetching,
+  formValue,
+  token,
+  handleSetMax,
+  handleSetAmount,
+  spender,
+  stakedBalance,
+}) => {
   const [walletSelected, toggleSelection] = useToggle(!stakedBalance)
 
   return (
-    <Container>
+    <Container className={className}>
       <Input
         isFetching={isFetching}
         address={token?.address}
