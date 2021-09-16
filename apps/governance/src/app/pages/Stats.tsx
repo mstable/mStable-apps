@@ -52,9 +52,9 @@ const Container = styled.div`
 
 export const Stats: FC = () => {
   const { data } = useStakedTokenQuery()
-  const recollatRatio = parseFloat(data?.stakedToken?.collateralisationRatio) / 1e18
-  const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS) / DAY
-  const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW) / DAY
+  const recollatRatio = parseFloat(data?.stakedToken?.collateralisationRatio ?? '0') / 1e18
+  const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS ?? '0') / DAY
+  const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW ?? '0') / DAY
 
   return (
     <Container>
