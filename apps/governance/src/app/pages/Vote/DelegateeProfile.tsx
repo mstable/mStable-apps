@@ -8,6 +8,7 @@ import { useStakedToken } from '../../context/StakedTokenProvider'
 import { useAccountQuery } from '../../hooks/useAccountQuery'
 
 import { VotingHistory } from './VotingHistory'
+import { ViewportWidth } from '@apps/base/theme'
 
 const StyledTokenIcon = styled(TokenIcon)`
   width: 1.5rem;
@@ -21,7 +22,9 @@ const StyledCountUp = styled(CountUp)`
 
 const DelegateeBalancesContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-evenly;
   line-height: 1.5rem;
   border-radius: 1rem;
   border: 1px ${({ theme }) => theme.color.background[3]} solid;
@@ -42,8 +45,15 @@ const DelegateeBalancesContainer = styled.div`
       display: flex;
       gap: 1rem;
     }
-    &:not(:last-child) {
-      border-bottom: 1px ${({ theme }) => theme.color.background[3]} solid;
+  }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    flex-direction: column;
+
+    > * {
+      &:not(:last-child) {
+        border-bottom: 1px ${({ theme }) => theme.color.background[3]} solid;
+      }
     }
   }
 `
@@ -100,19 +110,31 @@ const DelegateeBalances: FC<{ address?: string }> = ({ address }) => {
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   gap: 1rem;
 
   > :first-child {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    min-width: 16rem;
-    margin-top: 2.25rem;
+    margin-bottom: 2.25rem;
   }
 
   h4 {
     color: ${({ theme }) => theme.color.bodyAccent};
+  }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    flex-direction: row;
+    margin-top: 1rem;
+
+    > :first-child {
+      flex-direction: column;
+      max-width: 16rem;
+      margin-top: 2.25rem;
+      margin-bottom: 0;
+    }
   }
 `
 
