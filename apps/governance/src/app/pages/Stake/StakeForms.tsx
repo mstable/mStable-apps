@@ -19,6 +19,7 @@ import { StakeGraph } from './StakeGraph'
 import { StakeMigration } from './StakeMigration'
 import { WithdrawForm } from './WithdrawForm'
 import { WithdrawGraph } from './WithdrawGraph'
+import { useGovernanceV1Query } from '../../context/GovernanceV1Provider'
 
 enum Tabs {
   Stake,
@@ -122,6 +123,9 @@ const FormsContainer = styled.div`
 const Content: FC = () => {
   const [{ tabs, activeTabIndex }, setActiveIndex] = useTabs()
   const { data, loading } = useStakedTokenQuery()
+  const { data: govData } = useGovernanceV1Query()
+
+  console.log(govData)
   const networkAddresses = useNetworkAddresses()
   const urlQuery = useURLQuery()
   const balanceV1Simple = useTokenSubscription(networkAddresses.vMTA)?.balance?.simple

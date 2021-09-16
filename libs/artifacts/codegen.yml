@@ -127,6 +127,16 @@ generates:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
+  
+  ./libs/artifacts/src/graphql/governance-v1.tsx:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-governance
+    documents: 'libs/artifacts/src/graphql/governance-v1/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
 
   ./libs/artifacts/src/graphql/blocks.tsx:
     overwrite: true

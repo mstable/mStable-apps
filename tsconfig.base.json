@@ -21,6 +21,7 @@
       "@apps/artifacts/graphql/snapshot": ["libs/artifacts/src/graphql/snapshot.tsx"],
       "@apps/artifacts/graphql/feeders": ["libs/artifacts/src/graphql/feeders.tsx"],
       "@apps/artifacts/graphql/protocol": ["libs/artifacts/src/graphql/protocol.tsx"],
+      "@apps/artifacts/graphql/governance-v1": ["libs/artifacts/src/graphql/governance-v1.tsx"],
       "@apps/artifacts/graphql/shared": ["libs/artifacts/src/graphql/shared.tsx"],
       "@apps/artifacts/graphql/staking-rewards": ["libs/artifacts/src/graphql/staking-rewards.tsx"],
       "@apps/artifacts/graphql/staking": ["libs/artifacts/src/graphql/staking.tsx"],

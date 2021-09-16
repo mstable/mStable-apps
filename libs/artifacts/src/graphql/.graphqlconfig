@@ -70,6 +70,17 @@
         }
       }
     },
+    "governance-v1": {
+      "includes": ["./shared/*", "./governance-v1/*"],
+      "extensions": {
+        "endpoints": {
+          "mainnet": {
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-governance",
+            "introspect": false
+          }
+        }
+      }
+    },
     "questbook": {
       "includes": ["./shared/*", "./questbook/*"],
       "extensions": {
