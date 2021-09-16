@@ -36,6 +36,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
     variables: { questId, userId: account ?? '', hasUser: !!account },
+    pollInterval: 15e3,
   })
   const questbookQuest = questbookQuery.data?.quest
 
@@ -43,6 +44,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
     client: clients.staking,
     variables: { id: account ?? '' },
     skip: !account,
+    pollInterval: 15e3,
   })
 
   const claimed = accountQuery.data?.account?.completedQuests?.find(c => c.quest.id === questbookQuest?.ethereumId?.toString())

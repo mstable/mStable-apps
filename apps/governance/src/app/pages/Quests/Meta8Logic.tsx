@@ -93,6 +93,7 @@ const Meta8Account: FC = () => {
     client,
     variables: { id: account ?? '' },
     skip: !account,
+    pollInterval: 15e3,
   })
 
   const accountData = accountQuery.data?.account
