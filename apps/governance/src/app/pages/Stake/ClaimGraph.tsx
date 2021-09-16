@@ -3,6 +3,7 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'rec
 import { Color } from '@apps/base/theme'
 import styled from 'styled-components'
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useRewardsEarned } from './context'
 
 interface DataType {
   mta: number
@@ -25,21 +26,20 @@ const Container = styled.div`
 `
 
 export const ClaimGraph: FC = () => {
-  const stakedTokenQuery = useStakedTokenQuery()
+  const rewardsEarned = useRewardsEarned()
 
   const data = useMemo<DataType[]>(() => {
-    const earned = parseFloat(stakedTokenQuery?.data?.stakedToken?.accounts?.[0]?.rewards ?? '0')
     return [
       {
         mta: 0,
         ordering: 0,
       },
       {
-        mta: earned,
+        mta: rewardsEarned?.rewards,
         ordering: 1,
       },
     ]
-  }, [stakedTokenQuery.data])
+  }, [rewardsEarned])
 
   return (
     <Container>
@@ -58,15 +58,7 @@ export const ClaimGraph: FC = () => {
             padding={{ left: 16 }}
             tickLine={false}
           />
-          <YAxis
-            domain={['dataMin', 'dataMax']}
-            tickCount={2}
-            tickFormatter={m => `${m}`}
-            axisLine={false}
-            padding={{ bottom: 16 }}
-            tickLine={false}
-            width={32}
-          />
+          <YAxis tickCount={2} tickFormatter={m => `${m}`} axisLine={false} padding={{ bottom: 16 }} tickLine={false} width={32} />
           <Tooltip
             cursor
             label=""
