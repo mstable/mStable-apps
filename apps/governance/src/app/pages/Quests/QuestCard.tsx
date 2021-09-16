@@ -26,11 +26,6 @@ const Title = styled.div`
   }
 `
 
-const QuestSeason = styled.div`
-  opacity: 0.75;
-  font-size: 0.75rem;
-`
-
 const QuestMultiplier = styled.div<{ type?: QuestType }>`
   box-shadow: 0 4px 10px ${({ type }) => (type === QuestType.Seasonal ? `#77174c` : `#271066`)};
   background: ${({ type }) =>
@@ -39,19 +34,25 @@ const QuestMultiplier = styled.div<{ type?: QuestType }>`
       : `linear-gradient(180deg, #4a27aa 0%, #32187a 100%)`};
 `
 
+const QuestSeason = styled.div`
+  opacity: 0.75;
+  font-size: 0.875rem;
+`
+
 const QuestFeatures = styled.div`
   position: absolute;
-  bottom: 1rem;
+  bottom: 0.75rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 0 1rem;
   align-items: center;
 
-  > div {
+  > div:first-child:not(:last-child) {
     font-size: 1.125rem;
     padding: 0.75rem 1rem;
     border-radius: 1rem;
+    margin-bottom: 0.75rem;
   }
 `
 
@@ -109,8 +110,8 @@ const Container = styled(UnstyledButton)<{ type?: QuestType }>`
 
   > :last-child {
     position: absolute;
-    right: 1rem;
-    bottom: calc(1rem - 1px);
+    right: 0.75rem;
+    bottom: calc(0.75rem);
 
     svg {
       path {
@@ -189,6 +190,7 @@ const TimeMultiplierQuestCard: FC<Props> = ({ questId, onClick }) => (
     </QuestImage>
     <QuestFeatures>
       <QuestMultiplier>1.2-1.6x</QuestMultiplier>
+      <QuestSeason>ONGOING</QuestSeason>
     </QuestFeatures>
     <Tooltip tip={'Earn a multiplier for staking over time'} />
   </Container>

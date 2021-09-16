@@ -2,7 +2,7 @@ import { truncateAddress } from '@apps/formatters'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { useAccount } from '@apps/base/context/account'
+import { useOwnAccount } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 import { Button, ThemedSkeleton } from '@apps/components/core'
@@ -10,6 +10,7 @@ import { Button, ThemedSkeleton } from '@apps/components/core'
 import { StakedTokenSwitcher } from '../../components/StakedTokenSwitcher'
 import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
 import { ViewportWidth } from '@apps/base/theme'
+import { constants } from 'ethers'
 
 const Check: FC = () => (
   <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,7 +42,7 @@ const Container = styled.div`
 export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boolean }> = ({ address, stakedTokenSwitcher }) => {
   const propose = usePropose()
   const stakedTokenContract = useStakedTokenContract()
-  const account = useAccount()
+  const account = useOwnAccount()
 
   const stakedTokenQuery = useStakedTokenQuery()
   const delegatee = stakedTokenQuery.data?.stakedToken.accounts?.[0]?.delegatee
@@ -60,7 +61,7 @@ export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boole
             <Button
               highlighted
               onClick={() => {
-                if (!stakedTokenContract || !account) return
+                if (!stakedTokenContract || !account || account === constants.AddressZero) return
 
                 propose<Interfaces.StakedToken, 'delegate'>(
                   new TransactionManifest(stakedTokenContract, 'delegate', [account], {
@@ -77,7 +78,7 @@ export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boole
           <Button
             highlighted
             onClick={() => {
-              if (!stakedTokenContract || !address) return
+              if (!stakedTokenContract || !address || address === constants.AddressZero) return
 
               propose<Interfaces.StakedToken, 'delegate'>(
                 new TransactionManifest(stakedTokenContract, 'delegate', [address], {

@@ -16,6 +16,7 @@ import { ViewportWidth } from '@apps/base/theme'
 import { truncateAddress } from '@apps/formatters'
 import { Leaderboard } from './Leaderboard'
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
+import { constants } from 'ethers'
 
 const DOCS_URL = 'https://docs.mstable.org/'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
@@ -170,7 +171,7 @@ export const Vote: FC = () => {
   const handleRowClick = (id: string) => history.push(`/vote/${id}`)
 
   const handleDelegate = (address: string) => {
-    if (!stakedTokenContract || !data) return
+    if (!stakedTokenContract || !data || address === constants.AddressZero) return
 
     propose<Interfaces.StakedToken, 'delegate'>(
       new TransactionManifest(stakedTokenContract, 'delegate', [address], {
@@ -181,7 +182,7 @@ export const Vote: FC = () => {
   }
 
   const handleUndelegate = () => {
-    if (!stakedTokenContract || !data) return
+    if (!stakedTokenContract || !data || account === constants.AddressZero) return
 
     propose<Interfaces.StakedToken, 'delegate'>(
       new TransactionManifest(stakedTokenContract, 'delegate', [account], {

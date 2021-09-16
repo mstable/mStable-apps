@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
-import { useURLQuery } from '@apps/hooks'
+import { useFetchState, useURLQuery } from '@apps/hooks'
 import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/components/core'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
@@ -19,6 +19,10 @@ import { StakeGraph } from './StakeGraph'
 import { StakeMigration } from './StakeMigration'
 import { WithdrawForm } from './WithdrawForm'
 import { WithdrawGraph } from './WithdrawGraph'
+import { useEffect } from 'react'
+import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
+import { useOwnAccount, useSigner } from '@apps/base/context/account'
+import { BigDecimal } from '@apps/bigdecimal'
 
 enum Tabs {
   Stake,
@@ -122,15 +126,16 @@ const FormsContainer = styled.div`
 const Content: FC = () => {
   const [{ tabs, activeTabIndex }, setActiveIndex] = useTabs()
   const { data, loading } = useStakedTokenQuery()
-  const networkAddresses = useNetworkAddresses()
   const urlQuery = useURLQuery()
-  const balanceV1Simple = useTokenSubscription(networkAddresses.vMTA)?.balance?.simple
+  const [skipMigration, setSkipMigration] = useToggle(false)
   const balanceV2Simple =
     data?.stakedToken?.accounts?.[0]?.balance?.rawBD?.simple + parseFloat(data?.stakedToken?.accounts?.[0]?.balance?.cooldownUnits) / 1e18
-  const { hasWithdrawnV1Balance, hasSelectedStakeOption } = useStakingStatus()
+  const { hasWithdrawnV1Balance, hasSelectedStakeOption, lockedV1 } = useStakingStatus()
   const migrateSlug = urlQuery.get('migrate') === 'true' // ?migrate=true
 
-  const [showMigration, setHideMigration] = useToggle(true)
+  const { balance: balanceV1, end: balanceV1Unlock } = lockedV1 ?? {}
+
+  const userNeedsMigration = (balanceV1Unlock?.simple > Date.now() && !!balanceV1?.simple) || hasWithdrawnV1Balance
 
   const { Graph, Form, heading, subheading } = stakeTabs[activeTabIndex]
 
@@ -141,8 +146,8 @@ const Content: FC = () => {
       </Empty>
     )
 
-  return ((!!balanceV1Simple || hasWithdrawnV1Balance) && showMigration && !balanceV2Simple) || migrateSlug ? (
-    <StakeMigration onSkip={setHideMigration} />
+  return (userNeedsMigration || migrateSlug) && !skipMigration ? (
+    <StakeMigration onSkip={setSkipMigration} />
   ) : !hasSelectedStakeOption && !balanceV2Simple ? (
     <StakeSelection />
   ) : (
