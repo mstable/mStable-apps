@@ -45,7 +45,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
     skip: !account,
   })
 
-  const claimed = accountQuery.data?.account?.completedQuests?.find(c => c.quest.id === questbookQuest.ethereumId.toString())
+  const claimed = accountQuery.data?.account?.completedQuests?.find(c => c.quest.id === questbookQuest?.ethereumId?.toString())
   const readyToClaim = !claimed && questbookQuest?.userQuest?.complete
 
   const handleClaimQuest = () => {
