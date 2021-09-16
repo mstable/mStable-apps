@@ -71,7 +71,9 @@ const Container = styled.div`
 
 export const StakeGraph: FC = () => {
   const { data: tokenData } = useStakedTokenQuery()
-  const stakeDate = tokenData?.stakedToken?.accounts?.[0]?.balance?.weightedTimestamp * 1e3 ?? Date.now()
+
+  const weightedTimestamp = tokenData?.stakedToken?.accounts?.[0]?.balance?.weightedTimestamp
+  const stakeDate = !!weightedTimestamp ? weightedTimestamp * 1e3 : Date.now()
 
   const data = generateData(stakeDate)
   const ticks = removeDuplicatesBy(x => x.multiplier, data).map(v => v.week)
