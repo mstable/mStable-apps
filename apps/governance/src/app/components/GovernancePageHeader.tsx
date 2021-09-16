@@ -119,6 +119,74 @@ export const GovernancePageHeader: FC<Props> = ({ children, title, subtitle, ico
   )
 }
 
+const UserDelegate = styled.div`
+  :first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    gap: 1rem;
+
+    > :first-child {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background: blueviolet;
+
+      > img {
+        width: 100%;
+        height: auto;
+      }
+
+      > div {
+        width: 100%;
+        height: 100%;
+
+        * {
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
+    }
+
+    > :last-child {
+      min-height: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      > :first-child a {
+        color: ${({ theme }) => theme.color.body};
+      }
+
+      > :last-child {
+        font-size: 0.75rem;
+        color: ${({ theme }) => theme.color.bodyAccent};
+      }
+    }
+  }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    flex-direction: row;
+
+    :first-child {
+      flex-direction: row;
+      justify-content: flex-start;
+
+      > :last-child {
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        > :last-child {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+`
+
 const DelegateeContainer = styled(Container)`
   h3 {
     font-family: 'DM Mono', monospace;
@@ -128,49 +196,17 @@ const DelegateeContainer = styled(Container)`
   ${Row} {
     gap: 1rem;
     justify-content: space-between;
+    flex-direction: column;
 
-    > :first-child {
-      display: flex;
-      gap: 1rem;
+    > :last-child {
+      width: 100%;
+    }
 
-      > :first-child {
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 50%;
-        overflow: hidden;
-        background: blueviolet;
-
-        > img {
-          width: 100%;
-          height: auto;
-        }
-
-        > div {
-          width: 100%;
-          height: 100%;
-
-          * {
-            width: 100% !important;
-            height: 100% !important;
-          }
-        }
-      }
+    @media (min-width: ${ViewportWidth.m}) {
+      flex-direction: row;
 
       > :last-child {
-        min-height: 3.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        justify-content: center;
-
-        > :first-child a {
-          color: ${({ theme }) => theme.color.body};
-        }
-
-        > :last-child {
-          font-size: 1.1rem;
-          color: ${({ theme }) => theme.color.bodyAccent};
-        }
+        width: inherit;
       }
     }
   }
@@ -187,7 +223,7 @@ export const DelegateePageHeader: FC<{ delegateeInfo?: DelegateeInfo; addressOrE
       <span>Leaderboard</span>
     </BackLink>
     <Row>
-      <div>
+      <UserDelegate>
         <div>{delegateeInfo?.avatarURI ? <IPFSImg uri={delegateeInfo.avatarURI} /> : <UserIcon address={address} />}</div>
         <div>
           {delegateeInfo && (
@@ -202,10 +238,9 @@ export const DelegateePageHeader: FC<{ delegateeInfo?: DelegateeInfo; addressOrE
             </h2>
           )}
           {!delegateeInfo && addressOrENSName !== address && <h2>{addressOrENSName}</h2>}
-          {delegateeInfo?.ensName && <h3>{delegateeInfo.ensName}</h3>}
           <Address address={addressOrENSName} type="account" truncate={false} link={false} copyable />
         </div>
-      </div>
+      </UserDelegate>
       <DelegateeToggle address={address} stakedTokenSwitcher />
     </Row>
   </DelegateeContainer>
