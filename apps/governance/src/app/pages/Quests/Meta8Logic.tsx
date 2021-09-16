@@ -61,6 +61,10 @@ const Container = styled.div`
   text-transform: uppercase;
   flex: 1;
 
+  *::selection {
+    background: rgba(201, 252, 213, 0.5);
+  }
+
   header {
     display: flex;
     justify-content: space-between;
