@@ -13,7 +13,7 @@ export const useStakingQuery = () => useContext(stakingCtx)
 export const useQuestbookQuery = () => useContext(questbookCtx)
 
 export const StakingProvider: FC = ({ children }) => {
-  const apollo = useApolloClients()
+  const clients = useApolloClients()
   const account = useAccount()
 
   const options = useMemo<{
@@ -22,17 +22,18 @@ export const StakingProvider: FC = ({ children }) => {
   }>(() => {
     return {
       staking: {
-        client: apollo.staking,
+        client: clients.staking,
       },
       questbook: {
         variables: { userId: account ?? '', hasUser: !!account },
-        client: apollo.questbook,
+        client: clients.questbook,
+        pollInterval: 60e3,
       },
     }
-  }, [account, apollo])
+  }, [account, clients])
 
   const stakingSub = useBlockPollingSubscription(useStakingLazyQuery, options.staking) as unknown as StakingQueryHookResult
-  const questbookSub = useQuestsQuery(options.questbook) // maybe this should use block polling too
+  const questbookSub = useQuestsQuery(options.questbook)
 
   return (
     <stakingCtx.Provider value={stakingSub}>
