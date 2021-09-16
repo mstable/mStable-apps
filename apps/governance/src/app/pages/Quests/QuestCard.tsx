@@ -26,9 +26,22 @@ const Title = styled.div`
   }
 `
 
-const QuestFeatures = styled.div<{ type?: QuestType }>`
+const QuestSeason = styled.div`
+  opacity: 0.75;
+  font-size: 0.75rem;
+`
+
+const QuestMultiplier = styled.div<{ type?: QuestType }>`
+  box-shadow: 0 4px 10px ${({ type }) => (type === QuestType.Seasonal ? `#77174c` : `#271066`)};
+  background: ${({ type }) =>
+    type === QuestType.Seasonal
+      ? `linear-gradient(180deg, #a62e6f 0%, #8b1f5a 100%)`
+      : `linear-gradient(180deg, #4a27aa 0%, #32187a 100%)`};
+`
+
+const QuestFeatures = styled.div`
   position: absolute;
-  bottom: 0;
+  bottom: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -39,19 +52,6 @@ const QuestFeatures = styled.div<{ type?: QuestType }>`
     font-size: 1.125rem;
     padding: 0.75rem 1rem;
     border-radius: 1rem;
-  }
-
-  > :first-child {
-    box-shadow: 0 4px 10px ${({ type }) => (type === QuestType.Seasonal ? `#77174c` : `#271066`)};
-    background: ${({ type }) =>
-      type === QuestType.Seasonal
-        ? `linear-gradient(180deg, #a62e6f 0%, #8b1f5a 100%)`
-        : `linear-gradient(180deg, #4a27aa 0%, #32187a 100%)`};
-  }
-
-  > :last-child {
-    opacity: 0.75;
-    font-size: 0.75rem;
   }
 `
 
@@ -154,9 +154,9 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
           <CardSkeleton height={128} width={128} />
         )}
       </QuestImage>
-      <QuestFeatures type={questType as never}>
-        <div>1.{quest?.multiplier.toString().slice(1)}x</div>
-        <div>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</div>
+      <QuestFeatures>
+        <QuestMultiplier type={questType as never}>1.{quest?.multiplier.toString().slice(1)}x</QuestMultiplier>
+        <QuestSeason>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</QuestSeason>
       </QuestFeatures>
     </Container>
   )
@@ -173,8 +173,7 @@ const TimeMultiplierQuestCard: FC<Props> = ({ questId, onClick }) => (
       <IPFSImg uri={'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'} alt="Quest graphic" />
     </QuestImage>
     <QuestFeatures>
-      <div>1.6x</div>
-      <div>PERMANENT</div>
+      <QuestMultiplier>1.2-1.6x</QuestMultiplier>
     </QuestFeatures>
   </Container>
 )
@@ -189,9 +188,8 @@ const DemocracyMaxiQuestCard: FC<Props> = ({ questId, onClick }) => (
     <QuestImage>
       <IPFSImg uri={'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'} alt="Quest graphic" />
     </QuestImage>
-    <QuestFeatures type={QuestType.Seasonal as never}>
-      <div>1.25x</div>
-      <div>SEASON 0</div>
+    <QuestFeatures>
+      <QuestSeason>SEASON 0</QuestSeason>
     </QuestFeatures>
   </Container>
 )
