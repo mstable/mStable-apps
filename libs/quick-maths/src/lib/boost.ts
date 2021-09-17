@@ -1,81 +1,60 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
+
 import { BigDecimal } from '@apps/bigdecimal'
 import { BoostedSavingsVaultState } from '@apps/data-provider'
 
-// Boost params (imUSD Vault)
-export const MIN_BOOST_IMUSD = 0.5
-export const MAX_BOOST_IMUSD = 1.5
-export const COEFFICIENT_IMUSD = 6
-export const EXPONENT_IMUSD = 7 / 8
-export const PRICE_IMUSD = 0.1
-
-// Multiplied by scale of 2 for UI (0.5-1.5x -> 1-3x)
-export const calculateBoostImusd = (stakingBalance?: BigDecimal, vMTABalance?: BigDecimal): number => {
-  const scaledBalance = (stakingBalance?.simple ?? 0) * PRICE_IMUSD
-  if (vMTABalance && stakingBalance && vMTABalance.simple > 0 && stakingBalance.simple > 0) {
-    const boost = MIN_BOOST_IMUSD + (COEFFICIENT_IMUSD * vMTABalance.simple) / scaledBalance ** EXPONENT_IMUSD
-    return Math.min(MAX_BOOST_IMUSD, boost) * 2
-  }
-  return MIN_BOOST_IMUSD * 2
-}
-
-export const calculateVMTAForMaxBoostImusd = (stakingBalance: BigDecimal): number | undefined => {
-  const scaledBalance = (stakingBalance?.simple ?? 0) * PRICE_IMUSD
-  const vMTA = ((MAX_BOOST_IMUSD - MIN_BOOST_IMUSD) / COEFFICIENT_IMUSD) * scaledBalance ** EXPONENT_IMUSD
-  return vMTA !== 0 ? vMTA : undefined
-}
-
-// Boost params
-export const MAX_BOOST = 3
 export const MIN_BOOST = 1
-export const EXPONENT = 7 / 8
-export const FLOOR = 1
-export const VMTA_CAP = 400000
-export const MIN_DEPOSIT = 1
+export const MAX_BOOST = 3
+export const BOOST_COEFF = 0.9
+export const EXPONENT = 3 / 4
+export const MAX_VMTA = 600000
 
-// 100 deposit, priceCoeff = 1, 0.3 vMTA = 1x
-// 100 deposit, priceCoeff = 1, 32 vMTA = 1.314x
-// 1000 deposit, priceCoeff = 3, 225 vMTA = 1.929x
-// 100000 deposit, priceCoeff = 0.1, 1000 vMTA = 2.468x
-// 100000 deposit, priceCoeff = 1, 11000 vMTA = 3x
+// 0.98 + c * min(voting_weight, f) / scaledBalance^b
+export const calculateVMTAForMaxBoost = (stakingBalance: BigDecimal, priceCoeff?: number): number => {
+  if (!priceCoeff) return 0
 
-export const calculateVMTAForMaxBoost = (stakingBalance: BigDecimal, boostCoeff: number, priceCoeff: number): number => {
   const scaledBalance = stakingBalance.simple * priceCoeff
-  const x = MAX_BOOST - FLOOR * 0.95
+  const x = MAX_BOOST - MIN_BOOST * 0.98
   const y = scaledBalance ** EXPONENT
-  const unbounded = (x * y) / boostCoeff
-  return Math.min(unbounded, VMTA_CAP)
+  const unbounded = (x * y) / BOOST_COEFF
+
+  return Math.min(unbounded, MAX_VMTA)
 }
 
-// 0.95 + c * min(voting_weight, f) / deposit^(7/8)
-export const calculateBoost = (boostCoeff: number, priceCoeff: number, stakingBalance?: BigDecimal, vMTABalance?: BigDecimal): number => {
+// min(m, max(d, 0.98 + c * min(vMTA, f) / USD^b))
+export const calculateBoost = (priceCoeff?: number, stakingBalance?: BigDecimal, vMTABalance?: BigDecimal): number => {
+  if (!priceCoeff) return 1
+
   const scaledBalance = (stakingBalance?.simple ?? 0) * priceCoeff
-  if (vMTABalance && stakingBalance && vMTABalance.simple > 0 && scaledBalance >= MIN_DEPOSIT) {
-    const unbounded = FLOOR * 0.95 + (boostCoeff * Math.min(vMTABalance.simple, VMTA_CAP)) / scaledBalance ** EXPONENT
-    return Math.min(MAX_BOOST, Math.max(MIN_BOOST, unbounded))
-  }
-  return MIN_BOOST
+
+  return Math.min(
+    MAX_BOOST,
+    Math.max(MIN_BOOST, 0.98 + (BOOST_COEFF * Math.min(vMTABalance?.simple ?? 0, MAX_VMTA)) / scaledBalance ** EXPONENT),
+  )
 }
 
-export const getCoeffs = (vault: BoostedSavingsVaultState): [number, number] | undefined => {
-  if (vault.boostCoeff && vault.priceCoeff) {
-    return [vault.boostCoeff / 10, vault.priceCoeff / 1e18]
-  }
+export const getPriceCoeff = (vault: BoostedSavingsVaultState): number => {
+  // if (vault.priceCoeff) return vault.priceCoeff / 1e18
 
   switch (vault.address) {
     // All USD
     case '0xb3114e33fc6ff5f3c452980ccbe7cf1de1fc822b': // ropsten
     case '0xd124b55f70d374f58455c8aedf308e52cf2a6207': // musd/busd
     case '0xadeedd3e5768f7882572ad91065f93ba88343c99': // musd/gusd
-      return [4.8, 1]
+    case '0x0997dddc038c8a958a3a3d00425c16f8eca87deb': // alusd/gusd
+      return 1
 
     // All BTC
-    case '0xae077412fe8c3df00393a63e49caae2658a33019': // ropsten
     case '0x760ea8cfdcc4e78d8b9ca3088ecd460246dc0731': // mbtc/tbtc
     case '0xf65d53aa6e2e4a5f4f026e73cb3e22c22d75e35c': // mbtc/hbtc
-      return [4.8, 58000]
+      return 48000
 
+    // All imAssets
     case '0xf38522f63f40f9dd81abafd2b8efc2ec958a3016': // imbtc vault
-      return [4.8, 5800]
+      return 4800
+    case '0x78befca7de27d07dc6e71da295cc2946681a6c7b': // imusd vault
+      return 0.1
+
     default:
       return undefined
   }

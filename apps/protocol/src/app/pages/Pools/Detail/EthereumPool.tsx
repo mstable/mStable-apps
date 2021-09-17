@@ -192,10 +192,7 @@ const PoolDetailContent: FC = () => {
             </p>
             <p>
               Liquidity providers passively earn swap fees. Deposits to the Vault earn swap fees in addition to{' '}
-              {isEthereum
-                ? `MTA rewards which vest over
-              time.`
-                : `token rewards.`}
+              {isEthereum ? `MTA rewards which vest over time.` : `token rewards.`}
               {isEthereum && !readMore && <UnstyledButton onClick={setReadMore}>Learn more</UnstyledButton>}
             </p>
             {readMore && (
