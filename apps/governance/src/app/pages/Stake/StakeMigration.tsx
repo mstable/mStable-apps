@@ -4,13 +4,19 @@ import styled from 'styled-components'
 import { StakeForm } from './StakeForm'
 // @ts-ignore
 import { ReactComponent as MigrationArrow } from '../../../assets/migration-arrow.svg'
-import { ViewportWidth } from '@apps/base/theme'
-import { UnstyledButton } from '@apps/components/core'
+import { Color, ViewportWidth } from '@apps/base/theme'
+import { CountdownBar, UnstyledButton } from '@apps/components/core'
+import { useStakingStatus } from '../../context/StakingStatusProvider'
+
+const StyledCountdownBar = styled(CountdownBar)`
+  > :first-child {
+    display: none;
+  }
+`
 
 const CloseButton = styled(UnstyledButton)`
   color: ${({ theme }) => theme.color.whiteTransparent};
   border-radius: 1rem;
-  align-self: flex-end;
 
   &:hover {
     text-decoration: underline;
@@ -105,6 +111,12 @@ const Achievement = styled.div`
   }
 `
 
+const Countdown = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+`
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -124,28 +136,41 @@ const Container = styled.div`
   }
 `
 
-export const StakeMigration: FC<{ onSkip?: () => void }> = ({ onSkip }) => (
-  <Container>
-    <MigrationPanel>
-      <div>
-        <h1>
-          Migrate
-          <br /> to Staking V2
-        </h1>
-        <MigrationArrow />
-      </div>
-      <p>
-        Migrating your MTA will reward you with a permanent quest multiplier.{' '}
-        <b>Completing quests will increase your Voting Power & Savings boost within the mStable ecosystem.</b>
-      </p>
-      <Achievement>
-        <div>Quest Multiplier</div>
-        <span>1.25x</span>
-      </Achievement>
-      <CloseButton onClick={onSkip}>Skip</CloseButton>
-    </MigrationPanel>
-    <StakeFormContainer>
-      <StyledStakeForm isMigrating={true} />
-    </StakeFormContainer>
-  </Container>
-)
+export const StakeMigration: FC<{ onSkip?: () => void }> = ({ onSkip }) => {
+  const { lockedV1 } = useStakingStatus()
+  const end = lockedV1?.value?.end
+  const countdownVisible = end > Date.now()
+
+  return (
+    <Container>
+      <MigrationPanel>
+        <div>
+          <h1>
+            Migrate
+            <br /> to Staking V2
+          </h1>
+          <MigrationArrow />
+        </div>
+        <p>
+          Migrating your MTA will reward you with a permanent quest multiplier.{' '}
+          <b>Completing quests will increase your Voting Power & Savings boost within the mStable ecosystem.</b>
+        </p>
+        <Achievement>
+          <div>Quest Multiplier</div>
+          <span>1.25x</span>
+        </Achievement>
+        <Countdown>
+          {countdownVisible ? (
+            <StyledCountdownBar end={end} textColor={Color.whiteTransparent} tip="Time until your V1 balance is withdrawable" />
+          ) : (
+            <div />
+          )}
+          <CloseButton onClick={onSkip}>Skip</CloseButton>
+        </Countdown>
+      </MigrationPanel>
+      <StakeFormContainer>
+        <StyledStakeForm isMigrating={true} />
+      </StakeFormContainer>
+    </Container>
+  )
+}
