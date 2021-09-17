@@ -18,7 +18,7 @@ import { Leaderboard } from './Leaderboard'
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 import { constants } from 'ethers'
 
-const DOCS_URL = 'https://docs.mstable.org/'
+const DOCS_URL = 'https://app.gitbook.com/@mstable/s/mstable-docs/'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
 
 const DelegationBox = styled(InfoBox)<{ isTitleAddress: boolean }>`
