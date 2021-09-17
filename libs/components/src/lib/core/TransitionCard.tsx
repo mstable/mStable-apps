@@ -13,17 +13,15 @@ export const CardButton = styled(UnstyledButton)<{
   padding: 0.5rem 1rem;
 
   h3 {
-    color: ${({ theme }) => theme.color.body};
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  h3:not(:last-child) {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: ${({ theme }) => theme.color.bodyAccent};
     margin-bottom: 0.5rem;
   }
 
   span {
     font-size: 1.125rem;
+    font-weight: 300;
   }
 
   :hover {

@@ -3,17 +3,17 @@ import styled from 'styled-components'
 
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BoostedSavingsVaultState } from '@apps/data-provider'
-import { useNetworkAddresses } from '@apps/base/context/network'
 
 import { useBigDecimalInput } from '@apps/hooks'
 import { ViewportWidth } from '@apps/base/theme'
 import { Button, DifferentialCountup, InfoMessage, Widget } from '@apps/components/core'
 import { AssetInput } from '@apps/components/forms'
-import { calculateBoost, calculateBoostImusd, calculateVMTAForMaxBoost, calculateVMTAForMaxBoostImusd, getCoeffs } from '@apps/quick-maths'
+import { calculateBoost, calculateVMTAForMaxBoost, getPriceCoeff } from '@apps/quick-maths'
 import { BigDecimal } from '@apps/bigdecimal'
 
 import { ReactComponent as ArrowsSvg } from '@apps/components/icons/double-arrow.svg'
 import { ReactComponent as GovSvg } from '@apps/components/icons/governance-icon.svg'
+import { useVMTABalance } from 'libs/hooks/src/lib/useVMTABalance'
 
 const GOVERNANCE_URL = 'https://governance.mstable.org/#/stake'
 
@@ -196,12 +196,10 @@ export const BoostCalculator: FC<{
     stakingToken: { address: inputAddress },
     isImusd,
   } = vault
-  const networkAddresses = useNetworkAddresses()
+  const vMTABalance = useVMTABalance()
 
   const inputToken = useTokenSubscription(inputAddress)
   const inputBalance = inputToken?.balance
-  const vMTA = useTokenSubscription(networkAddresses?.vMTA)
-  const vMTABalance = vMTA?.balance
 
   const defaultInputValue = isImusd ? BigDecimal.fromSimple(100) : BigDecimal.ONE
 
@@ -209,13 +207,12 @@ export const BoostCalculator: FC<{
   const [inputValue, inputFormValue, setInput] = useBigDecimalInput(inputBalance?.simpleRounded !== 0 ? inputBalance : defaultInputValue)
 
   const boost = useMemo(() => {
-    const coeffs = getCoeffs(vault)
+    const priceCoeff = getPriceCoeff(vault)
     return {
-      fromBalance:
-        isImusd || !coeffs ? calculateBoostImusd(inputBalance, vMTABalance) : calculateBoost(...coeffs, inputBalance, vMTABalance),
-      fromInputs: isImusd || !coeffs ? calculateBoostImusd(inputValue, vMTAValue) : calculateBoost(...coeffs, inputValue, vMTAValue),
+      fromBalance: calculateBoost(priceCoeff, inputBalance, vMTABalance),
+      fromInputs: calculateBoost(priceCoeff, inputValue, vMTAValue),
     }
-  }, [isImusd, inputBalance, vMTABalance, vault, inputValue, vMTAValue])
+  }, [inputBalance, vMTABalance, vault, inputValue, vMTAValue])
 
   return (
     <Container
@@ -234,7 +231,21 @@ export const BoostCalculator: FC<{
       </InfoMessage>
       <div>
         <CalculatorInputs>
-          <AssetInput address={vMTA?.address} addressDisabled formValue={vMTAFormValue} handleSetAmount={setVmta} />
+          <AssetInput
+            addressOptions={[
+              {
+                address: 'vmta',
+                balance: vMTABalance,
+                symbol: 'vMTA',
+                custom: true,
+                tip: 'vMTA balance is 12x smaller than your voting power',
+              },
+            ]}
+            address={'vmta'}
+            addressDisabled
+            formValue={vMTAFormValue}
+            handleSetAmount={setVmta}
+          />
           <AssetInput address={inputAddress} addressDisabled formValue={inputFormValue} handleSetAmount={setInput} />
         </CalculatorInputs>
         <CalculatorActions>
@@ -257,9 +268,8 @@ export const BoostCalculator: FC<{
             <StyledButton
               onClick={() => {
                 if (inputValue) {
-                  const coeffs = getCoeffs(vault)
-                  const vMTARequired =
-                    isImusd || !coeffs ? calculateVMTAForMaxBoostImusd(inputValue) : calculateVMTAForMaxBoost(inputValue, ...coeffs)
+                  const priceCoeff = getPriceCoeff(vault)
+                  const vMTARequired = calculateVMTAForMaxBoost(inputValue, priceCoeff)
                   setVmta(vMTARequired?.toFixed(2))
                 }
               }}
