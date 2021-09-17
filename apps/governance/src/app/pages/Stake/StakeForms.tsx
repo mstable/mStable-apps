@@ -2,10 +2,8 @@ import React, { FC } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
-import { useFetchState, useURLQuery } from '@apps/hooks'
+import { useURLQuery } from '@apps/hooks'
 import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/components/core'
-import { useNetworkAddresses } from '@apps/base/context/network'
-import { useTokenSubscription } from '@apps/base/context/tokens'
 import { ViewportWidth } from '@apps/base/theme'
 
 import { StakingStatusProvider, useStakingStatus } from '../../context/StakingStatusProvider'
@@ -19,10 +17,6 @@ import { StakeGraph } from './StakeGraph'
 import { StakeMigration } from './StakeMigration'
 import { WithdrawForm } from './WithdrawForm'
 import { WithdrawGraph } from './WithdrawGraph'
-import { useEffect } from 'react'
-import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
-import { useOwnAccount, useSigner } from '@apps/base/context/account'
-import { BigDecimal } from '@apps/bigdecimal'
 
 enum Tabs {
   Stake,
@@ -134,8 +128,7 @@ const Content: FC = () => {
   const migrateSlug = urlQuery.get('migrate') === 'true' // ?migrate=true
 
   const { balance: balanceV1, end: balanceV1Unlock } = lockedV1?.value ?? {}
-  const userNeedsMigration =
-    (!!balanceV1Unlock && balanceV1Unlock < Date.now() && !!balanceV1?.simple && !balanceV2Simple) || hasWithdrawnV1Balance
+  const userNeedsMigration = (!!balanceV1Unlock && !!balanceV1?.simple && !balanceV2Simple) || hasWithdrawnV1Balance
 
   const { Graph, Form, heading, subheading } = stakeTabs[activeTabIndex]
 

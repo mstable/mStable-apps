@@ -192,7 +192,10 @@ export const StakeSelection: FC = () => {
           <div>
             <h2>Stake MTA</h2>
             <h4>
-              In return for participating in governance, you will receive MTA rewards. <a href="#">Learn about the risks</a>
+              In return for participating in governance, you will receive MTA rewards.{' '}
+              <a href="https://app.gitbook.com/@mstable/s/mstable-docs/" target="_blank" rel="noopener noreferrer">
+                Learn about the risks
+              </a>
             </h4>
           </div>
           <MTAContainer>
@@ -215,7 +218,9 @@ export const StakeSelection: FC = () => {
             <h2>Stake MTA/ETH BPT</h2>
             <h4>
               In return for participating in governance, you will receive MTA, BAL rewards and trading fees.{' '}
-              <a href="#">Learn about the risks</a>
+              <a href="https://app.gitbook.com/@mstable/s/mstable-docs/" target="_blank" rel="noopener noreferrer">
+                Learn about the risks
+              </a>
             </h4>
           </div>
           <BPTContainer>
