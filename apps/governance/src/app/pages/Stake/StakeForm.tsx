@@ -98,7 +98,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const otherStakedToken = useTokenSubscription(
     stakedTokenAddress ? stakingQuery.data?.stakedTokens.find(st => st.id !== stakedTokenAddress)?.id : undefined,
   )
-  const stakedInOtherToken = stakingToken.balance?.exact.eq(0) && otherStakedToken?.balance?.exact.gt(0)
+  const stakedInOtherToken = stakingToken?.balance?.exact.eq(0) && otherStakedToken?.balance?.exact.gt(0)
 
   const handleWithdrawV1 = () => {
     if (!signer || !data || !balanceV1?.simple) return
