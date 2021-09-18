@@ -127,8 +127,8 @@ const Content: FC = () => {
   const { hasWithdrawnV1Balance, hasSelectedStakeOption, lockedV1 } = useStakingStatus()
   const migrateSlug = urlQuery.get('migrate') === 'true' // ?migrate=true
 
-  const { balance: balanceV1, end: balanceV1Unlock } = lockedV1?.value ?? {}
-  const userNeedsMigration = (!!balanceV1Unlock && !!balanceV1?.simple && !balanceV2Simple) || hasWithdrawnV1Balance
+  const { balance: balanceV1 } = lockedV1?.value ?? {}
+  const userNeedsMigration = (!!balanceV1?.simple && !balanceV2Simple) || hasWithdrawnV1Balance
 
   const { Graph, Form, heading, subheading } = stakeTabs[activeTabIndex]
 
