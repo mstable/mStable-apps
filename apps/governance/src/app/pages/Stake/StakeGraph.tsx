@@ -41,7 +41,7 @@ const generateData = (startTime?: number): DataType[] => {
   const start = startTime ?? now
   const week = Math.floor((now - start) / WEEK)
   const totalIntervals = 117
-  const intervals = [...Array(totalIntervals - week + 1).keys()]
+  const intervals = [...new Array(totalIntervals - week + 1).keys()]
   return intervals.map((w, i) => ({ multiplier: getCurrentMultiplier(w + week), week: i * WEEK }))
 }
 
