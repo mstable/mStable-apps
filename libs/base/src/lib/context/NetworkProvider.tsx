@@ -196,7 +196,7 @@ const ETH_MAINNET: EthereumMainnet = {
       graphHostedEndpoint('mstable', 'mstable-protocol-staging'),
     ],
     staking: [graphHostedEndpoint('mstable', 'mstable-staking')],
-    questbook: ['https://us-central1-mstable-questbook.cloudfunctions.net/questbook'],
+    questbook: ['https://europe-west1-mstable-questbook.cloudfunctions.net/questbook'],
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
       // TODO remove temporary URL once we have enough indexers
