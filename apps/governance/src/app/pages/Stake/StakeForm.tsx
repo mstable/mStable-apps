@@ -152,7 +152,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
       <div>
         <DelegateToggle>
           <h3>
-            Delegate voting power <Tooltip tip="Delegating your voting power will enable a vote in absence" />
+            Delegate voting power <Tooltip tip="Delegating your voting power will enable a vote in absence." />
           </h3>
           <ToggleInput onClick={toggleIsDelegating} checked={isDelegating} />
         </DelegateToggle>
