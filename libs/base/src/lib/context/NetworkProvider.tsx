@@ -88,6 +88,8 @@ export interface EthereumMainnet
       ERC20: {
         WETH: string
         WBTC: string
+        stkMTA: string
+        stkBPT: string
       }
     },
     { feeders: string[] }
@@ -196,6 +198,8 @@ const ETH_MAINNET: EthereumMainnet = {
       WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       WBTC: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
       FXS: '0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0',
+      stkMTA: '0x8f2326316ec696f6d023e37a9931c2b2c177a3d7',
+      stkBPT: '0xefbe22085d9f29863cfb77eed16d3cc0d927b011',
     },
   },
   getExplorerUrl: etherscanUrl(),

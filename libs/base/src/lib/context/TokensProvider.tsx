@@ -266,20 +266,20 @@ const reducer: Reducer<State, Action> = (state, action) => {
 const getInitialState = ({ addresses, nativeToken }: AllNetworks): State => {
   return {
     tokens: Object.fromEntries(
-      (
-        [[constants.AddressZero, nativeToken.symbol], ...Object.entries(addresses.ERC20)] as ([string, string] | [string, string, string])[]
-      ).map(([address, symbol, name]): [string, SubscribedToken] => [
-        address,
-        {
+      ([[nativeToken.symbol, constants.AddressZero], ...Object.entries(addresses.ERC20)] as [string, string][]).map(
+        ([symbol, address]): [string, SubscribedToken] => [
           address,
-          decimals: 18,
-          symbol,
-          name,
-          allowances: {},
-          balance: new BigDecimal(0, 18),
-          totalSupply: new BigDecimal(0, 18),
-        },
-      ]),
+          {
+            address,
+            decimals: 18,
+            symbol,
+            name: symbol,
+            allowances: {},
+            balance: new BigDecimal(0, 18),
+            totalSupply: new BigDecimal(0, 18),
+          },
+        ],
+      ),
     ),
     subscriptions: {},
   }
