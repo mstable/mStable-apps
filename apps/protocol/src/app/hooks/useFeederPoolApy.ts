@@ -1,19 +1,18 @@
 import { MaticMainnet, useNetworkAddresses } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { useTokenSubscription } from '@apps/base/context/tokens'
 import { FetchState, useSelectedMassetState } from '@apps/hooks'
 import { calculateApy, calculateBoost, getPriceCoeff, MAX_BOOST } from '@apps/quick-maths'
 import { BoostedCombinedAPY } from '@apps/types'
+import { useVMTABalance } from 'libs/hooks/src/lib/useVMTABalance'
 
 import { useFraxStakingState } from '../context/FraxStakingProvider'
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'
 
 const useFeederPoolApyVault = (poolAddress: string) => {
-  const networkAddresses = useNetworkAddresses()
   const massetState = useSelectedMassetState()
   const massetPrice = useSelectedMassetPrice()
   const useFetchPrice = useFetchPriceCtx()
-  const vMta = useTokenSubscription(networkAddresses?.vMTA)
+  const vMTABalance = useVMTABalance()
 
   const pool = massetState?.feederPools[poolAddress]
   const vault = pool?.vault
@@ -39,8 +38,8 @@ const useFeederPoolApyVault = (poolAddress: string) => {
   let userBoost = baseRewards
 
   const priceCoeff = getPriceCoeff(vault)
-  if (vault.account && vMta && priceCoeff) {
-    const boost = calculateBoost(priceCoeff, vault.account.rawBalance, vMta.balance)
+  if (vault.account && vMTABalance && priceCoeff) {
+    const boost = calculateBoost(priceCoeff, vault.account.rawBalance, vMTABalance)
 
     if (boost) {
       const boostedRewardRate = rewardRateSimple * boost

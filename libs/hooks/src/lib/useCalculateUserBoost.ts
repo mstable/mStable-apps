@@ -2,11 +2,8 @@
 import { useMemo } from 'react'
 
 import type { BoostedSavingsVaultState } from '@apps/data-provider'
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { useNetworkAddresses } from '@apps/base/context/network'
 import { calculateBoost, getPriceCoeff } from '@apps/quick-maths'
 import { useVMTABalance } from './useVMTABalance'
-import { BigDecimal } from '@apps/bigdecimal'
 
 export const useCalculateUserBoost = (vault?: BoostedSavingsVaultState): number => {
   const vMTABalance = useVMTABalance()
