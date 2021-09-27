@@ -316,17 +316,16 @@ const OnboardConnection: FC = ({ children }) => {
   const injectedMismatching = injectedChainId !== chainId
 
   useEffect(() => {
-    if (!chainId || !injectedChainId || !previousInjectedChainId) return
+    if (!chainId || !injectedChainId) return
 
     // Change chainId when injectedChainId changes and doesn't match chainId
-    if (injectedMismatching && previousInjectedChainId !== injectedChainId) {
-      getNetwork(injectedChainId)
+    if (injectedMismatching) {
       setChainId(injectedChainId)
     }
   }, [chainId, injectedChainId, injectedMismatching, previousInjectedChainId, setChainId])
 
   useEffect(() => {
-    if (!injectedProvider || network.isMetaMaskDefault) return
+    if (!injectedProvider || network.isMetaMaskDefault || !previousInjectedChainId) return
 
     // For non-default chains and an injected provider, prompt to add the chain
     injectedProvider
@@ -342,7 +341,7 @@ const OnboardConnection: FC = ({ children }) => {
       .catch(error => {
         console.warn(error)
       })
-  }, [injectedProvider, network])
+  }, [injectedProvider, network, previousInjectedChainId])
 
   useEffect(() => {
     if (!jsonRpcProviders) return setSigners(undefined)
