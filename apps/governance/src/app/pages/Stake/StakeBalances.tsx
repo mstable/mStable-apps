@@ -57,8 +57,9 @@ const calculateStakingApy = (
 
   const dailyRewards = ONE_DAY.mul(rewardRate)
   const dailyReturn = dailyRewards.mul(share).div(priceScaledRawBalance)
+  const priceCoeffSimple = (priceCoefficient && parseFloat(priceCoefficient) / 1e4) || 1
 
-  return parseFloat(utils.formatUnits(dailyReturn)) * 365 * 100
+  return (parseFloat(utils.formatUnits(dailyReturn)) / priceCoeffSimple) * 365 * 100
 }
 
 const External: FC<{ highlighted?: boolean }> = ({ highlighted }) => (

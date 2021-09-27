@@ -171,12 +171,12 @@ const Option: FC<{
   )
 }
 
-export const Dropdown: FC<Props> = ({ defaultOption, options, onChange, disabled, className }) => {
+export const Dropdown: FC<Props> = ({ defaultOption, options = {}, onChange, disabled, className }) => {
   const [show, toggleShow] = useToggle(false)
+  const container = useRef(null)
 
   const selected = useMemo(
-    () =>
-      defaultOption && options ? Object.keys(options).find(option => defaultOption.toLowerCase() === option.toLowerCase()) : undefined,
+    () => Object.keys(options).find(option => defaultOption?.toLowerCase() === option.toLowerCase()) || Object.keys(options)?.[0],
     [options, defaultOption],
   )
 
@@ -185,7 +185,6 @@ export const Dropdown: FC<Props> = ({ defaultOption, options, onChange, disabled
     onChange?.(option)
   }
 
-  const container = useRef(null)
   useOnClickOutside(container, () => {
     toggleShow(false)
   })
@@ -196,7 +195,8 @@ export const Dropdown: FC<Props> = ({ defaultOption, options, onChange, disabled
     <Container ref={container} className={className}>
       <Option
         onClick={() => {
-          if (isDropdown) toggleShow()
+          if (isDropdown) return toggleShow()
+          onChange?.(selected)
         }}
         optionName={selected}
         option={options && selected ? options[selected] : undefined}

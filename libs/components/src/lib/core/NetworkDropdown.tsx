@@ -3,7 +3,7 @@ import React, { FC, useCallback, useMemo } from 'react'
 import { useKeyPress } from 'react-use'
 import styled from 'styled-components'
 
-import { ChainIds, useChainIdCtx, NETWORKS, Networks } from '@apps/base/context/network'
+import { ChainIds, useChainIdCtx, NETWORKS } from '@apps/base/context/network'
 import { useBaseCtx } from '@apps/base'
 import { APP_NAME } from 'libs/types/src/lib/constants'
 
