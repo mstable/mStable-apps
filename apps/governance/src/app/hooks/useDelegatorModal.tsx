@@ -5,35 +5,9 @@ import { useModal } from 'react-modal-hook'
 import { ViewportWidth } from '@apps/base/theme'
 import { Modal, Table, TableRow } from '@apps/components/core'
 import { StakingStatusProvider } from '../context/StakingStatusProvider'
-import { Leaderboard } from '../pages/Vote/Leaderboard'
-import { AddressInput } from '@apps/components/forms'
-import { useModalDataDispatch } from 'libs/base/src/lib/context/ModalDataProvider'
 import { DelegateCell } from '../components/DelegateCell'
 import { useDelegateesAll } from '../context/DelegateeListsProvider'
-import { useHistoricTransactionsLazyQuery } from '@apps/artifacts/graphql/protocol'
 import { useHistory } from 'react-router-dom'
-
-const StyledAddressInput = styled(AddressInput)`
-  background: ${({ theme }) => theme.color.background[0]};
-  border-radius: 1rem;
-  padding: 0.25rem 0.5rem;
-`
-
-const CustomDelegate = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: ${({ theme }) => theme.color.background[1]};
-  justify-content: space-between;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border-radius: 0.75rem;
-  gap: 1rem;
-
-  @media (min-width: ${ViewportWidth.s}) {
-    flex-direction: row;
-    align-items: center;
-  }
-`
 
 const Container = styled.div`
   max-height: 75vh;
@@ -81,7 +55,7 @@ const DelegationContent: FC<{ hideModal?: () => void; delegators: string[] }> = 
           {delegators.map((id, index) => (
             <TableRow key={id} buttonTitle="View profile" onClick={() => handleRowClick(id)}>
               <DelegateCell width={100} address={id} delegatee={delegateesAll[id]} rank={index} />
-              <div />
+              <td />
             </TableRow>
           ))}
         </Table>
