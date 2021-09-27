@@ -1,15 +1,14 @@
-import { BigDecimal } from '@apps/bigdecimal'
 import React, { FC, useMemo, useState } from 'react'
+import { BigDecimal } from '@apps/bigdecimal'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { DelegateeInfo } from '@mstable/delegatee-lists'
 
-import { truncateAddress } from '@apps/formatters'
 import { useLeaderboardQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { IPFSImg, Table, TableCell, TableRow, UnstyledButton, UserIcon } from '@apps/components/core'
+import { Table, TableCell, TableRow, UnstyledButton } from '@apps/components/core'
 
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
+import { DelegateCell } from '../../components/DelegateCell'
 
 interface Props {
   preview?: boolean
@@ -62,55 +61,6 @@ const NumericCell = styled(TableCell)`
   text-align: right;
 `
 
-const DisplayName = styled.div<{ isTitleAddress: boolean }>`
-  ${({ isTitleAddress, theme }) => isTitleAddress && theme.mixins.numeric};
-`
-
-const StyledDelegateeCell = styled(TableCell)`
-  span {
-    ${({ theme }) => theme.mixins.numeric};
-  }
-
-  .avatar {
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 50%;
-    margin-right: 1rem;
-    background: red;
-    overflow: hidden;
-    background-color: blueviolet;
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-
-  > div {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    &:first-child {
-      margin-right: 1rem;
-    }
-  }
-`
-
-const DelegateeCell: FC<{ address: string; rank: number; delegatee?: DelegateeInfo; width: number }> = ({
-  address,
-  delegatee,
-  rank,
-  width,
-}) => (
-  <StyledDelegateeCell width={width}>
-    <div>
-      <span>{rank}</span>
-    </div>
-    <div className="avatar">{delegatee ? <IPFSImg uri={delegatee.avatarURI} /> : <UserIcon address={address} />}</div>
-    <DisplayName isTitleAddress={!delegatee?.displayName}>{delegatee?.displayName ?? truncateAddress(address)}</DisplayName>
-  </StyledDelegateeCell>
-)
-
 export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const [count] = useState<number>(preview ? 5 : 25)
   const [skip, setSkip] = useState<number>(0)
@@ -149,7 +99,7 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
     <StyledTable headerTitles={headerTitles} widths={cellWidths} width={tableWidth}>
       {leaderboardItems.map(({ id, votes, share }, index) => (
         <TableRow key={id} buttonTitle={buttonTitle} onClick={() => onClick(id)}>
-          <DelegateeCell width={cellWidths[0]} address={id} delegatee={delegateesAll[id]} rank={(index ?? 0) + 1 + skip} />
+          <DelegateCell width={cellWidths[0]} address={id} delegatee={delegateesAll[id]} rank={(index ?? 0) + 1 + skip} />
           {!delegation && <NumericCell width={cellWidths[1]}>{share.toFixed(2)}%</NumericCell>}
           <NumericCell width={cellWidths[cellWidths.length - 1]}>{votes.toFixed(2)}</NumericCell>
         </TableRow>
