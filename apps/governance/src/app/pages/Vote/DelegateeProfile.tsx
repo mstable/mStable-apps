@@ -1,4 +1,4 @@
-import { CountUp } from '@apps/components/core'
+import { Button, CountUp } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
 import React, { FC } from 'react'
 import styled from 'styled-components'
@@ -9,6 +9,7 @@ import { useAccountQuery } from '../../hooks/useAccountQuery'
 
 import { VotingHistory } from './VotingHistory'
 import { ViewportWidth } from '@apps/base/theme'
+import { useDelegatorModal } from '../../hooks/useDelegatorModal'
 
 const StyledTokenIcon = styled(TokenIcon)`
   width: 1.5rem;
@@ -20,14 +21,8 @@ const StyledCountUp = styled(CountUp)`
   font-weight: 300;
 `
 
-const DelegateeBalancesContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-evenly;
-  line-height: 1.5rem;
-  border-radius: 1rem;
-  border: 1px ${({ theme }) => theme.color.background[3]} solid;
+const Widget = styled.div`
+  padding: 1rem 0;
 
   h4 {
     padding-bottom: 0.5rem;
@@ -35,17 +30,34 @@ const DelegateeBalancesContainer = styled.div`
   }
 
   > * {
-    padding: 1rem 0;
-
-    > * {
-      padding: 0 1.25rem;
-    }
-    > div {
-      align-items: center;
-      display: flex;
-      gap: 1rem;
-    }
+    padding: 0 1.25rem;
   }
+
+  > div {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+  }
+`
+
+const Delegators = styled(Widget)`
+  border: 1px ${({ theme }) => theme.color.background[3]} solid;
+  border-radius: 1rem;
+
+  > div {
+    justify-content: space-between;
+  }
+`
+
+const DelegateeBalancesContainer = styled.div`
+  flex-direction: row;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
+  line-height: 1.5rem;
+  border-radius: 1rem;
+  border: 1px ${({ theme }) => theme.color.background[3]} solid;
 
   @media (min-width: ${ViewportWidth.m}) {
     flex-direction: column;
@@ -80,32 +92,51 @@ const DelegateeBio: FC<{ delegateeInfo?: DelegateeInfo }> = ({ delegateeInfo }) 
 const DelegateeBalances: FC<{ address?: string }> = ({ address }) => {
   const stakedToken = useStakedToken()
   const delegateeQuery = useAccountQuery(address?.toLowerCase())
+
   return (
-    <>
+    <DelegateeBalancesContainer>
       {delegateeQuery.data?.account?.stakedTokenAccounts
         .filter(account => account.stakedToken.id === stakedToken.selected)
         .map(({ stakedToken: { stakingToken }, balance, id }) => {
           const cooldownSimple = parseFloat(balance.cooldownUnits) / 1e18
           return (
-            <DelegateeBalancesContainer key={id}>
-              <div>
+            <React.Fragment key={id}>
+              <Widget>
                 <h4>Staked Balance</h4>
                 <div>
                   <StyledTokenIcon symbol={stakingToken.symbol} />
                   <StyledCountUp end={balance.rawBD.simple + cooldownSimple} />
                 </div>
-              </div>
-              <div>
+              </Widget>
+              <Widget>
                 <h4>Voting Power</h4>
                 <div>
                   <StyledTokenIcon symbol="vMTA" />
                   <StyledCountUp end={balance.votesBD.simple} />
                 </div>
-              </div>
-            </DelegateeBalancesContainer>
+              </Widget>
+            </React.Fragment>
           )
         })}
-    </>
+    </DelegateeBalancesContainer>
+  )
+}
+
+const DelegateeDelegators: FC<{ address?: string }> = ({ address }) => {
+  const delegateeQuery = useAccountQuery(address?.toLowerCase())
+
+  const delegators = delegateeQuery?.data?.account?.delegators
+
+  const [showModal] = useDelegatorModal((delegators?.map(({ id }) => id?.split('.')?.[0] ?? '') ?? []) as string[])
+
+  return (
+    <Delegators>
+      <h4>Delegators</h4>
+      <div>
+        <StyledCountUp end={delegators?.length} decimals={0} />
+        <Button onClick={showModal}>View List</Button>
+      </div>
+    </Delegators>
   )
 }
 
@@ -149,8 +180,10 @@ export const DelegateeProfile: FC<{ delegateeInfo?: DelegateeInfo; address?: str
       <div>
         <DelegateeBio delegateeInfo={delegateeInfo} />
         <DelegateeBalances address={address} />
+        <DelegateeDelegators address={address} />
       </div>
       <VotingHistory address={address} addressOrENSName={addressOrENSName} />
+      <p>Hello</p>
     </Container>
   )
 }

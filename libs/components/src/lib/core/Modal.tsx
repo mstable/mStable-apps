@@ -18,7 +18,7 @@ interface Props {
 const Title = styled.div`
   flex-grow: 1;
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 500;
   display: flex;
   justify-content: center;
   align-items: center;
