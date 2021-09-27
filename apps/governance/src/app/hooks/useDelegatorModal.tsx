@@ -15,7 +15,7 @@ const Container = styled.div`
   color: ${({ theme }) => theme.color.body};
   padding: 0.5rem;
   overflow-y: scroll;
-
+  //
   p {
     font-size: 0.875rem;
     color: ${({ theme }) => theme.color.bodyTransparent};
