@@ -103,8 +103,8 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const handleWithdrawV1 = () => {
     if (!signer || !data || !balanceV1?.simple) return
 
-    propose<Interfaces.IncentivisedVotingLockup, 'withdraw'>(
-      new TransactionManifest(IncentivisedVotingLockup__factory.connect(networkAddresses.vMTA, signer), 'withdraw', [], {
+    propose<Interfaces.IncentivisedVotingLockup, 'exit'>(
+      new TransactionManifest(IncentivisedVotingLockup__factory.connect(networkAddresses.vMTA, signer), 'exit', [], {
         present: `Withdrawing from Staking V1`,
         past: `Withdrew from Staking V1`,
       }),
