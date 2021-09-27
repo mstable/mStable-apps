@@ -161,10 +161,10 @@ export const Vote: FC = () => {
       return {}
     }
     const {
-      balance: { votesBD },
+      balance: { rawBD },
     } = account
     return {
-      votingPower: [votesBD.simple],
+      votingPower: [rawBD.simple],
     }
   }, [data])
 
@@ -218,7 +218,7 @@ export const Vote: FC = () => {
                 <div>
                   Delegated &nbsp;
                   <TokenIcon symbol={options[stakedTokenAddress]?.icon.symbol} />
-                  <span>{votingPower?.[0] ?? 100}</span>
+                  <span>{votingPower?.[0]?.toFixed(2) ?? 100}</span>
                 </div>
               )}
             </div>
