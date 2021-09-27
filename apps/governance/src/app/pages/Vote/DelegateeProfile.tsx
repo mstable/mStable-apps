@@ -10,6 +10,7 @@ import { useAccountQuery } from '../../hooks/useAccountQuery'
 import { VotingHistory } from './VotingHistory'
 import { ViewportWidth } from '@apps/base/theme'
 import { useDelegatorModal } from '../../hooks/useDelegatorModal'
+import { BigDecimal } from '@apps/bigdecimal'
 
 const StyledTokenIcon = styled(TokenIcon)`
   width: 1.5rem;
@@ -89,14 +90,27 @@ const DelegateeBio: FC<{ delegateeInfo?: DelegateeInfo }> = ({ delegateeInfo }) 
     </DelegateeBioContainer>
   ) : null
 
-const DelegateeBalances: FC<{ address?: string }> = ({ address }) => {
+const DelegateeBalances: FC<{
+  accounts?: {
+    id: string
+    stakedToken: {
+      id: string
+      stakingToken: {
+        symbol: string
+      }
+    }
+    balance: {
+      cooldownUnits: string
+      rawBD: BigDecimal
+      votesBD: BigDecimal
+    }
+  }[]
+}> = ({ accounts }) => {
   const stakedToken = useStakedToken()
-  const delegateeQuery = useAccountQuery(address?.toLowerCase())
-
   return (
     <DelegateeBalancesContainer>
-      {delegateeQuery.data?.account?.stakedTokenAccounts
-        .filter(account => account.stakedToken.id === stakedToken.selected)
+      {accounts
+        ?.filter(account => account?.stakedToken?.id === stakedToken?.selected)
         .map(({ stakedToken: { stakingToken }, balance, id }) => {
           const cooldownSimple = parseFloat(balance.cooldownUnits) / 1e18
           return (
@@ -122,19 +136,14 @@ const DelegateeBalances: FC<{ address?: string }> = ({ address }) => {
   )
 }
 
-const DelegateeDelegators: FC<{ address?: string }> = ({ address }) => {
-  const delegateeQuery = useAccountQuery(address?.toLowerCase())
-
-  const delegators = delegateeQuery?.data?.account?.delegators
-
-  const [showModal] = useDelegatorModal((delegators?.map(({ id }) => id?.split('.')?.[0] ?? '') ?? []) as string[])
-
+const DelegateeDelegators: FC<{ delegators: string[] }> = ({ delegators }) => {
+  const [showModal] = useDelegatorModal(delegators)
   return (
     <Delegators>
       <h4>Delegators</h4>
       <div>
         <StyledCountUp end={delegators?.length} decimals={0} />
-        <Button onClick={showModal}>View List</Button>
+        {!!delegators?.length && <Button onClick={showModal}>View List</Button>}
       </div>
     </Delegators>
   )
@@ -175,15 +184,18 @@ export const DelegateeProfile: FC<{ delegateeInfo?: DelegateeInfo; address?: str
   addressOrENSName,
   address,
 }) => {
+  const delegateeQuery = useAccountQuery(address?.toLowerCase())
+  const accounts = delegateeQuery.data?.account?.stakedTokenAccounts
+  const delegators: string[] = delegateeQuery?.data?.account?.delegators?.map(({ id }) => id?.split('.')?.[0] ?? '') ?? []
+
   return (
     <Container>
       <div>
         <DelegateeBio delegateeInfo={delegateeInfo} />
-        <DelegateeBalances address={address} />
-        <DelegateeDelegators address={address} />
+        <DelegateeBalances accounts={accounts} />
+        <DelegateeDelegators delegators={delegators} />
       </div>
       <VotingHistory address={address} addressOrENSName={addressOrENSName} />
-      <p>Hello</p>
     </Container>
   )
 }
