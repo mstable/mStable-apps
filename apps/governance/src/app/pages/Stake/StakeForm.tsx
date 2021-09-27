@@ -118,7 +118,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const handleDeposit = () => {
     if (!stakedTokenContract || amount.exact.lte(0) || !stakingToken) return
 
-    if (delegate) {
+    if (delegate && isDelegating) {
       if (delegate === constants.AddressZero) return
       return propose<Interfaces.StakedToken, 'stake(uint256,address)'>(
         new TransactionManifest(stakedTokenContract, 'stake(uint256,address)', [amount.exact, delegate], {
