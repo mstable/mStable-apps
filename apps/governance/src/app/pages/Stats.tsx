@@ -1,9 +1,11 @@
+import { ViewportWidth } from '@apps/base/theme'
 import { Tooltip } from '@apps/components/core'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { GovernancePageHeader } from '../components/GovernancePageHeader'
 import { useStakedTokenQuery } from '../context/StakedTokenProvider'
+import { getDaysUntilQueueUpdate } from '../utils'
 
 const DAY = 86400
 
@@ -48,7 +50,14 @@ const StatsBox: FC<{ tip?: string; title: string; subtitle: string }> = ({ title
 const Container = styled.div`
   > div:last-child {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
+
+    @media (min-width: ${ViewportWidth.m}) {
+      > * {
+        flex-basis: calc(100% / 3 - 1rem / 3);
+      }
+    }
   }
 `
 
@@ -58,6 +67,7 @@ export const Stats: FC = () => {
   const slashingPercentage = parseFloat(data?.stakedToken?.slashingPercentage ?? '0') / 1e16
   const cooldown = parseInt(data?.stakedToken?.COOLDOWN_SECONDS ?? '0') / DAY
   const unstakeWindow = parseInt(data?.stakedToken?.UNSTAKE_WINDOW ?? '0') / DAY
+  const nextQueueUpdate = getDaysUntilQueueUpdate()
 
   return (
     <Container>
@@ -73,12 +83,13 @@ export const Stats: FC = () => {
           title="Slashing percentage"
           subtitle={`${slashingPercentage}%`}
         />
-        <StatsBox tip="The period of time before your stake is withdrawable" title="Withdrawal Cooldown" subtitle={`${cooldown}d`} />
+        <StatsBox tip="The period of time before your stake is withdrawable" title="Withdrawal cooldown" subtitle={`${cooldown}d`} />
         <StatsBox
           tip="The duration your stake is withdrawable after the cooldown"
-          title="Withdrawal Period"
+          title="Withdrawal period"
           subtitle={`${unstakeWindow}d`}
         />
+        <StatsBox tip="Quests are submitted as a batch once a week" title="Next queue update" subtitle={`${nextQueueUpdate}d`} />
       </div>
     </Container>
   )

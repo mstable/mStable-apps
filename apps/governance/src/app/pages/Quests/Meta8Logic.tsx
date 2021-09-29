@@ -18,6 +18,7 @@ import { useStakedToken } from '../../context/StakedTokenProvider'
 import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'
 import { QuestInfo } from './QuestInfo'
+import { getDaysUntilQueueUpdate } from '../../utils'
 
 const NavButton = styled(UnstyledButton)`
   color: white;
@@ -73,6 +74,18 @@ const Container = styled.div`
     height: 5rem;
     font-size: 1rem;
 
+    > :first-child {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      height: 100%;
+
+      > div:not(:first-child):last-child {
+        opacity: 0.75;
+      }
+    }
+
     > :last-child {
       color: rgba(201, 252, 213, 1);
       text-align: right;
@@ -113,9 +126,10 @@ const Meta8Account: FC = () => {
 export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
   const { questId } = useParams<{ questId?: string }>()
   const history = useHistory()
-
   const account = useAccount()
   const clients = useApolloClients()
+
+  const nextQueueUpdate = getDaysUntilQueueUpdate()
 
   // Just subscribe here
   useStakingQuestsQuery({ client: clients.staking, nextFetchPolicy: 'cache-only' })
@@ -173,6 +187,7 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
           ) : (
             'Booting...'
           )}
+          {isBooted && <div>Queue submitted in: {nextQueueUpdate}d</div>}
         </div>
         <div>{isBooted && <Meta8Account />}</div>
       </header>
