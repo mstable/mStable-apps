@@ -187,7 +187,7 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
           ) : (
             'Booting...'
           )}
-          {isBooted && <div>Queue submitted in: {nextQueueUpdate}d</div>}
+          {questId && isBooted && <div>Queue submitted in: {nextQueueUpdate}d</div>}
         </div>
         <div>{isBooted && <Meta8Account />}</div>
       </header>

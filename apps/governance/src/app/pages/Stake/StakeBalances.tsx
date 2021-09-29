@@ -57,9 +57,8 @@ const calculateStakingApy = (
 
   const dailyRewards = ONE_DAY.mul(rewardRate)
   const dailyReturn = dailyRewards.mul(share).div(priceScaledRawBalance)
-  const priceCoeffSimple = (priceCoefficient && parseFloat(priceCoefficient) / 1e4) || 1
 
-  return (parseFloat(utils.formatUnits(dailyReturn)) / priceCoeffSimple) * 365 * 100
+  return parseFloat(utils.formatUnits(dailyReturn)) * 365 * 100
 }
 
 const External: FC<{ highlighted?: boolean }> = ({ highlighted }) => (
@@ -232,7 +231,7 @@ export const StakeBalances: FC = () => {
         stakingRewards: { rewardRate: _rewardRate },
         accounts: [
           {
-            balance: { rawBD, votesBD, cooldownUnits, questMultiplierSimple, timeMultiplierSimple },
+            balance: { rawBD, votesBD, cooldownUnits },
           },
         ],
       },
@@ -242,15 +241,18 @@ export const StakeBalances: FC = () => {
     const rewardRate = BigNumber.from(_rewardRate)
     const cooldown = parseFloat(cooldownUnits) / 1e18
 
+    // scale stakedBPT by priceCoefficient
+    const scaledStakedBPT = isBPT ? stakedToken?.balance?.exact?.div(priceCoefficient).mul(1e4) : undefined
+
+    const baseRewardsApy = calculateStakingApy(priceCoefficient, rewardRate, rawBD?.exact, rawBD?.exact, totalSupply?.bigDecimal.exact)
+
     const userRewardsApy = calculateStakingApy(
       priceCoefficient,
       rewardRate,
       rawBD?.exact,
-      stakedToken?.balance?.exact,
+      scaledStakedBPT ?? stakedToken?.balance?.exact,
       totalSupply?.bigDecimal.exact,
     )
-
-    const baseRewardsApy = userRewardsApy / ((1 + questMultiplierSimple / 10) * (1 + timeMultiplierSimple / 10))
 
     return {
       stake: { amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol },
@@ -259,7 +261,7 @@ export const StakeBalances: FC = () => {
       baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
       userRewardsApy: { suffix: '%', amount: userRewardsApy },
     }
-  }, [data, rewardsEarned.rewards, stakedToken])
+  }, [data, rewardsEarned.rewards, stakedToken, isBPT])
 
   return (
     <Container>
@@ -272,7 +274,7 @@ export const StakeBalances: FC = () => {
           <Group label="Earned" balance={values.rewardsEarned} loading={loading} />
           <Group label="Base APY" balance={values.baseRewardsApy} loading={loading} />
           <Group label="My APY" balance={values.userRewardsApy} loading={loading} />
-          {stakedToken?.symbol === 'stkBPT' && <Group label="BAL APY" placeholder="Soon!" loading={loading} />}
+          {/* {stakedToken?.symbol === 'stkBPT' && <Group label="BAL APY" placeholder="Soon!" loading={loading} />} */}
         </DefaultWidget>
       ) : (
         <InfoWidget>
