@@ -31,9 +31,7 @@ const Container = styled.div`
 export const useDelegatorModal = (delegators: string[]): [() => void, () => void] => {
   const [showModal, hideModal] = useModal(({ onExited, in: open }) => (
     <Modal title="User List" onExited={onExited} open={open} hideModal={hideModal}>
-      <StakingStatusProvider>
-        <DelegationContent hideModal={hideModal} delegators={delegators} />
-      </StakingStatusProvider>
+      <DelegationContent hideModal={hideModal} delegators={delegators} />
     </Modal>
   ))
   return [showModal, hideModal]
