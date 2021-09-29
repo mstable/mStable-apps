@@ -254,9 +254,12 @@ export const StakeBalances: FC = () => {
       totalSupply?.bigDecimal.exact,
     )
 
+    // FIXME: - votesBD comes back as 0 when there is no multiplier, should not be the case.
+    const votingPower = !!votesBD.simple ? votesBD.simple : rawBD.simple
+
     return {
       stake: { amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol },
-      votingPower: { amount: votesBD.simple, symbol: 'vMTA' },
+      votingPower: { amount: votingPower, symbol: 'vMTA' },
       rewardsEarned: { decimals: 4, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards },
       baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
       userRewardsApy: { suffix: '%', amount: userRewardsApy },
