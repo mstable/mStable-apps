@@ -9,6 +9,7 @@ import { ViewportWidth } from '@apps/base/theme'
 
 import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { useRewardsEarned } from './context'
+import { useStakingStatus } from '../../context/StakingStatusProvider'
 
 const BALANCER_URL = 'https://app.balancer.fi/#/pool/0xe2469f47ab58cf9cf59f9822e3c5de4950a41c49000200000000000000000089'
 const MTA_URL = 'https://cowswap.exchange/#/swap?outputCurrency=0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2'
@@ -25,6 +26,7 @@ interface GroupProps {
   loading: boolean
   placeholder?: string
   balance?: Balance
+  boost?: number
 }
 
 const ONE_DAY = BigNumber.from(60 * 60 * 24)
@@ -57,9 +59,8 @@ const calculateStakingApy = (
 
   const dailyRewards = ONE_DAY.mul(rewardRate)
   const dailyReturn = dailyRewards.mul(share).div(priceScaledRawBalance)
-  const priceCoeffSimple = (priceCoefficient && parseFloat(priceCoefficient) / 1e4) || 1
 
-  return (parseFloat(utils.formatUnits(dailyReturn)) / priceCoeffSimple) * 365 * 100
+  return parseFloat(utils.formatUnits(dailyReturn)) * 365 * 100
 }
 
 const External: FC<{ highlighted?: boolean }> = ({ highlighted }) => (
@@ -100,6 +101,16 @@ const GroupContainer = styled.div`
     font-size: 1.125rem;
     font-weight: 300;
   }
+`
+
+const Boost = styled.div`
+  ${({ theme }) => theme.mixins.numeric};
+  font-size: 0.875rem;
+  background: ${({ theme }) => (theme.isLight ? theme.color.green : '#28ad6f')};
+  color: ${({ theme }) => theme.color.white};
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.5rem;
+  margin-left: 0.25rem;
 `
 
 const InfoContainer = styled.div`
@@ -145,7 +156,7 @@ const Info: FC<{ isBPT?: boolean }> = ({ isBPT = false }) => {
   )
 }
 
-const Group: FC<GroupProps> = ({ balance, label, loading, placeholder }) => {
+const Group: FC<GroupProps> = ({ balance, label, loading, placeholder, boost }) => {
   const { amount, symbol, suffix, decimals } = balance ?? {}
   return (
     <GroupContainer>
@@ -158,6 +169,7 @@ const Group: FC<GroupProps> = ({ balance, label, loading, placeholder }) => {
             <div key={symbol}>
               {symbol && <StyledTokenIcon symbol={symbol} />}
               <CountUp end={amount} suffix={suffix} decimals={decimals} />
+              {boost > 1 && <Boost>{boost?.toFixed(2)}×</Boost>}
             </div>
           )
         ) : (
@@ -209,6 +221,7 @@ const Container = styled.div`
 
 export const StakeBalances: FC = () => {
   const { selected, options } = useStakedToken()
+  const { hasSelectedStakeOption } = useStakingStatus()
   const { data, loading } = useStakedTokenQuery()
   const rewardsEarned = useRewardsEarned()
   const stakedToken = useTokenSubscription(data?.stakedToken?.token.address)
@@ -220,59 +233,82 @@ export const StakeBalances: FC = () => {
     stake?: Balance
     votingPower?: Balance
     rewardsEarned?: Balance
+    boost?: number
   }>(() => {
+    // TODO use @client Apollo fields
+    const rewardRate = BigNumber.from(data?.stakedToken?.stakingRewards?.rewardRate ?? '0')
+    const priceCoefficient = data?.stakedToken?.priceCoefficient
+    const totalSupply = data?.stakedToken?.token?.totalSupply?.bigDecimal
+
     if (!data?.stakedToken?.accounts?.[0]?.balance) {
+      // no balance, return with apy only
+      if (data?.stakedToken?.stakingRewards?.rewardRate) {
+        const baseRewardsApy = calculateStakingApy(
+          priceCoefficient,
+          rewardRate,
+          BigNumber.from((1e18).toString()),
+          BigNumber.from((1e18).toString()),
+          totalSupply?.exact,
+        )
+
+        return {
+          baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
+        }
+      }
+
       return {}
     }
 
     const {
       stakedToken: {
-        priceCoefficient,
-        token: { totalSupply },
-        stakingRewards: { rewardRate: _rewardRate },
         accounts: [
           {
-            balance: { rawBD, votesBD, cooldownUnits, questMultiplierSimple, timeMultiplierSimple },
+            balance: { rawBD, votesBD, cooldownUnits },
           },
         ],
       },
     } = data
 
-    // TODO use @client Apollo fields
-    const rewardRate = BigNumber.from(_rewardRate)
     const cooldown = parseFloat(cooldownUnits) / 1e18
+
+    // scale stakedBPT by priceCoefficient
+    const scaledStakedBPT = isBPT ? stakedToken?.balance?.exact?.div(priceCoefficient).mul(1e4) : undefined
+
+    const baseRewardsApy = calculateStakingApy(priceCoefficient, rewardRate, rawBD?.exact, rawBD?.exact, totalSupply?.exact)
 
     const userRewardsApy = calculateStakingApy(
       priceCoefficient,
       rewardRate,
       rawBD?.exact,
-      stakedToken?.balance?.exact,
-      totalSupply?.bigDecimal.exact,
+      scaledStakedBPT ?? stakedToken?.balance?.exact,
+      totalSupply?.exact,
     )
 
-    const baseRewardsApy = userRewardsApy / ((1 + questMultiplierSimple / 10) * (1 + timeMultiplierSimple / 10))
+    // FIXME: - votesBD comes back as 0 when there is no multiplier, should not be the case.
+    const votingPower = !!votesBD.simple ? votesBD : rawBD
 
     return {
       stake: { amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol },
-      votingPower: { amount: votesBD.simple, symbol: 'vMTA' },
+      votingPower: { amount: votingPower.simple, symbol: 'vMTA' },
       rewardsEarned: { decimals: 4, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards },
       baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
       userRewardsApy: { suffix: '%', amount: userRewardsApy },
+      boost: votingPower.simple / rawBD.simple,
     }
-  }, [data, rewardsEarned.rewards, stakedToken])
+  }, [data, rewardsEarned.rewards, stakedToken, isBPT])
 
   return (
     <Container>
       <DefaultWidget>
         <Group label="My Stake" balance={values.stake} loading={loading} />
-        <Group label="My Voting Power" balance={values.votingPower} loading={loading} />
+        <Group label="My Voting Power" balance={values.votingPower} loading={loading} boost={values.boost} />
       </DefaultWidget>
-      {!!values.stake ? (
+      {!!values.stake || hasSelectedStakeOption ? (
         <DefaultWidget>
           <Group label="Earned" balance={values.rewardsEarned} loading={loading} />
           <Group label="Base APY" balance={values.baseRewardsApy} loading={loading} />
-          <Group label="My APY" balance={values.userRewardsApy} loading={loading} />
-          {stakedToken?.symbol === 'stkBPT' && <Group label="BAL APY" placeholder="Soon!" loading={loading} />}
+          {values.userRewardsApy && <Group label="My APY" balance={values.userRewardsApy} loading={loading} />}
+          {/* {stakedToken?.symbol === 'stkBPT' && <Group label="BAL APY" placeholder="Soon!" loading={loading} />} */}
         </DefaultWidget>
       ) : (
         <InfoWidget>

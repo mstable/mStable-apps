@@ -161,11 +161,11 @@ export const Vote: FC = () => {
       return {}
     }
     const {
-      balance: { rawBD },
+      balance: { votesBD, rawBD },
     } = account
-    return {
-      votingPower: [rawBD.simple],
-    }
+    // FIXME: - votesBD comes back as 0 when there is no multiplier, should not be the case.
+    const votingPower = [!!votesBD.simple ? votesBD.simple : rawBD.simple]
+    return { votingPower }
   }, [data])
 
   const handleRowClick = (id: string) => history.push(`/vote/${id}`)
