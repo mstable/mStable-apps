@@ -6,7 +6,7 @@ import { useURLQuery } from '@apps/hooks'
 import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/components/core'
 import { ViewportWidth } from '@apps/base/theme'
 
-import { StakingStatusProvider, useStakingStatus } from '../../context/StakingStatusProvider'
+import { useStakingStatus } from '../../context/StakingStatusProvider'
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 import { ClaimForm } from './ClaimForm'
@@ -159,9 +159,7 @@ const Content: FC = () => {
 }
 
 export const StakeForms: FC = () => (
-  <StakingStatusProvider>
-    <TabsProvider>
-      <Content />
-    </TabsProvider>
-  </StakingStatusProvider>
+  <TabsProvider>
+    <Content />
+  </TabsProvider>
 )
