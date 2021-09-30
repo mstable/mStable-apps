@@ -20,8 +20,7 @@ interface NetworkPrices {
 interface CoreAddresses {
   MTA: string
   vMTA: string
-  stkMTA?: string
-  stkBPT?: string
+  WBTC?: string
   FeederWrapper: string
   SaveWrapper: string
   UniswapRouter02_Like: string
@@ -73,7 +72,7 @@ interface Network<TAddresses, TGqlEndpoints> {
 
   gqlEndpoints: CoreGqlEndpoints & TGqlEndpoints
 
-  addresses: CoreAddresses & { ERC20: { wMATIC?: string; WETH?: string; FXS?: string; WBTC?: string } } & TAddresses
+  addresses: CoreAddresses & { ERC20: { wMATIC?: string; WETH?: string; FXS?: string } } & TAddresses
 
   gasStationEndpoint: string
 
@@ -87,7 +86,6 @@ export interface EthereumMainnet
     {
       ERC20: {
         WETH: string
-        WBTC: string
         stkMTA: string
         stkBPT: string
       }
@@ -189,14 +187,12 @@ const ETH_MAINNET: EthereumMainnet = {
   addresses: {
     MTA: '0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2',
     vMTA: '0xae8bc96da4f9a9613c323478be181fdb2aa0e1bf',
-    stkMTA: '0x8f2326316ec696f6d023e37a9931c2b2c177a3d7',
-    stkBPT: '0xefbe22085d9f29863cfb77eed16d3cc0d927b011',
+    WBTC: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
     FeederWrapper: '0x7C1fD068CE739A4687BEe9F69e5FD2275C7372d4',
     SaveWrapper: '0x0CA7A25181FC991e3cC62BaC511E62973991f325',
     UniswapRouter02_Like: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
     ERC20: {
       WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-      WBTC: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
       FXS: '0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0',
       stkMTA: '0x8f2326316ec696f6d023e37a9931c2b2c177a3d7',
       stkBPT: '0xefbe22085d9f29863cfb77eed16d3cc0d927b011',
