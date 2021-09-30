@@ -72,7 +72,7 @@ export const useAccountModal = (): [() => void, () => void] => {
   const [showModal, hideModal] = useModal(({ onExited, in: open }) => {
     // "Modals are also functional components and can use react hooks themselves"
     /* eslint-disable react-hooks/rules-of-hooks */
-    const [showExploreModal] = useExploreAssetModal()
+    const [showExploreModal] = useExploreAssetModal(hideModal)
     const reset = useReset()
     const address = useWalletAddress()
     const connected = useConnected()
@@ -89,7 +89,6 @@ export const useAccountModal = (): [() => void, () => void] => {
 
     // Handled here to allow reuse of Balance w/o conflating modal & balance logic
     const handleRowClick = (symbol: string): void => {
-      hideModal()
       showExploreModal(symbol)
     }
 
