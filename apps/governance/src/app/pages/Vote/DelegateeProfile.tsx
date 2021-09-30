@@ -136,8 +136,8 @@ const DelegateeBalances: FC<{
   )
 }
 
-const DelegateeDelegators: FC<{ delegators: string[] }> = ({ delegators }) => {
-  const [showModal] = useDelegatorModal(delegators)
+const DelegateeDelegators: FC<{ delegators?: string[] }> = ({ delegators }) => {
+  const [showModal] = useDelegatorModal(delegators ?? [])
   return (
     <Delegators>
       <h4>Delegators</h4>
@@ -186,7 +186,7 @@ export const DelegateeProfile: FC<{ delegateeInfo?: DelegateeInfo; address?: str
 }) => {
   const delegateeQuery = useAccountQuery(address?.toLowerCase())
   const accounts = delegateeQuery.data?.account?.stakedTokenAccounts
-  const delegators: string[] = delegateeQuery?.data?.account?.delegators?.map(({ id }) => id?.split('.')?.[0] ?? '') ?? []
+  const delegators = delegateeQuery?.data?.account?.delegators?.map(({ id }) => id?.split('.')?.[0] ?? '')
 
   return (
     <Container>

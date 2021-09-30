@@ -4,7 +4,6 @@ import { useModal } from 'react-modal-hook'
 
 import { ViewportWidth } from '@apps/base/theme'
 import { Modal, Table, TableRow } from '@apps/components/core'
-import { StakingStatusProvider } from '../context/StakingStatusProvider'
 import { DelegateCell } from '../components/DelegateCell'
 import { useDelegateesAll } from '../context/DelegateeListsProvider'
 import { useHistory } from 'react-router-dom'
@@ -15,7 +14,7 @@ const Container = styled.div`
   color: ${({ theme }) => theme.color.body};
   padding: 0.5rem;
   overflow-y: scroll;
-  //
+
   p {
     font-size: 0.875rem;
     color: ${({ theme }) => theme.color.bodyTransparent};
@@ -29,13 +28,14 @@ const Container = styled.div`
 `
 
 export const useDelegatorModal = (delegators: string[]): [() => void, () => void] => {
-  const [showModal, hideModal] = useModal(({ onExited, in: open }) => (
-    <Modal title="User List" onExited={onExited} open={open} hideModal={hideModal}>
-      <StakingStatusProvider>
+  const [showModal, hideModal] = useModal(
+    ({ onExited, in: open }) => (
+      <Modal title="User List" onExited={onExited} open={open} hideModal={hideModal}>
         <DelegationContent hideModal={hideModal} delegators={delegators} />
-      </StakingStatusProvider>
-    </Modal>
-  ))
+      </Modal>
+    ),
+    [delegators],
+  )
   return [showModal, hideModal]
 }
 

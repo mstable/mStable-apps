@@ -7,6 +7,7 @@ import { StakeForms } from './StakeForms'
 import { StakeBalances } from './StakeBalances'
 import { PendingBalances } from './PendingBalances'
 import { RewardsEarnedProvider } from './context'
+import { StakingStatusProvider } from '../../context/StakingStatusProvider'
 
 const Container = styled.div`
   > div:last-child {
@@ -29,11 +30,13 @@ export const Stake: FC = () => {
             </a>
           </p>
         </GovernancePageHeader>
-        <div>
-          <StakeBalances />
-          <PendingBalances />
-          <StakeForms />
-        </div>
+        <StakingStatusProvider>
+          <div>
+            <StakeBalances />
+            <PendingBalances />
+            <StakeForms />
+          </div>
+        </StakingStatusProvider>
       </Container>
     </RewardsEarnedProvider>
   )

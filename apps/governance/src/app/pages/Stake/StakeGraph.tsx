@@ -42,7 +42,6 @@ const generateData = (startTime?: number): DataType[] => {
   const week = Math.floor((now - start) / WEEK)
   const totalIntervals = 117
   const length = Math.max(0, totalIntervals - week + 1)
-  //
   const intervals = [...new Array(length).keys()]
   return intervals.map((w, i) => ({ multiplier: getCurrentMultiplier(w + week), week: i * WEEK }))
 }

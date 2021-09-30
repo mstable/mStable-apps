@@ -2,7 +2,6 @@ import React, { FC, useMemo } from 'react'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Color } from '@apps/base/theme'
 import styled from 'styled-components'
-import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { useRewardsEarned } from './context'
 
 interface DataType {
@@ -35,7 +34,7 @@ export const ClaimGraph: FC = () => {
         ordering: 0,
       },
       {
-        mta: rewardsEarned?.rewards,
+        mta: rewardsEarned?.rewards ?? 0,
         ordering: 1,
       },
     ]
