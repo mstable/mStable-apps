@@ -5,13 +5,18 @@ import { Modal } from '@apps/components/core'
 
 import { ExploreAsset } from '../components/wallet/ExploreAsset'
 
-export const useExploreAssetModal = (): [(symbol: string) => void, () => void] => {
+export const useExploreAssetModal = (hidePrevModal: () => void): [(symbol: string) => void, () => void] => {
   const [symbol, setSymbol] = useState<string | undefined>(undefined)
+
+  const handleRowClick = useCallback(() => {
+    hideModal()
+    hidePrevModal()
+  }, [])
 
   const [_showModal, hideModal] = useModal(
     ({ onExited, in: open }) => (
       <Modal title={symbol ?? 'Explore'} onExited={onExited} open={open} hideModal={hideModal}>
-        <ExploreAsset symbol={symbol} onRowClick={hideModal} />
+        <ExploreAsset symbol={symbol} onRowClick={handleRowClick} />
       </Modal>
     ),
     [symbol],

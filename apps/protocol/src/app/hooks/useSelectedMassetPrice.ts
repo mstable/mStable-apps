@@ -3,9 +3,7 @@ import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { FetchState, useSelectedMassetState } from '@apps/hooks'
 
 const {
-  addresses: {
-    ERC20: { WBTC },
-  },
+  addresses: { WBTC },
 } = getNetwork(ChainIds.EthereumMainnet)
 
 export const useSelectedMassetPrice = (): FetchState<number> => {

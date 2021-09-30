@@ -264,6 +264,8 @@ const reducer: Reducer<State, Action> = (state, action) => {
 }
 
 const getInitialState = ({ addresses, nativeToken }: AllNetworks): State => {
+  // FIXME: - Consider decimal mapping to catch outliers in ERC20 object (ie. WBTC != 18dp)
+  // const decimalMap = {[addresses.WBTC]: 8}
   return {
     tokens: Object.fromEntries(
       ([[nativeToken.symbol, constants.AddressZero], ...Object.entries(addresses.ERC20)] as [string, string][]).map(
