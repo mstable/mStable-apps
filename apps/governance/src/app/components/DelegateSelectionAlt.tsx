@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { useDelegationModal } from '../hooks/useDelegationModal'
 import { useDelegateesAll } from '../context/DelegateeListsProvider'
 import { useModalData } from '@apps/base/context/ModalDataProvider'
+import { StakedTokenToggle } from './StakedTokenToggle'
+import { ViewportWidth } from '@apps/base/theme'
 
 interface Props {
   className?: string
@@ -22,7 +24,7 @@ const Address = styled.div`
 const User = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.125rem;
   align-items: flex-start;
 
   * {
@@ -73,9 +75,12 @@ const Delegation = styled.div`
 const Container = styled.div`
   border: 1px solid ${({ theme }) => theme.color.defaultBorder};
   display: flex;
-  gap: 0.5rem;
+  gap: 0.25rem;
   border-radius: 1rem;
   justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem;
 
   > h3,
   button {
@@ -83,6 +88,12 @@ const Container = styled.div`
 
   > h3 {
     margin-left: 0.25rem;
+  }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    padding: 0;
+    flex-direction: row;
+    align-items: inherit;
   }
 `
 
@@ -114,6 +125,7 @@ export const DelegateSelectionAlt: FC<Props> = ({ className, handleDelegate }) =
       ) : (
         <Button onClick={showModal}>Select Delegate</Button>
       )}
+      <StakedTokenToggle />
     </Container>
   )
 }
