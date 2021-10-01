@@ -1,6 +1,5 @@
 import React, { ChangeEventHandler, FC, useCallback, useRef, useState } from 'react'
 import { Button } from '@apps/components/core'
-import { ethers } from 'ethers'
 import { Input } from 'libs/components/src/lib/forms/Input'
 import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
@@ -67,7 +66,7 @@ export const AddressInput: FC<Props> = ({ onClick, title, className }) => {
       return
     }
     onClick(address)
-  }, [])
+  }, [onClick])
 
   return (
     <Container className={className}>

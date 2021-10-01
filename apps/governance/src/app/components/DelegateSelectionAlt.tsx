@@ -1,13 +1,16 @@
 import React, { FC } from 'react'
-import { Button, IPFSImg, UserIcon } from '@apps/components/core'
+import { Button, UnstyledButton, IPFSImg, UserIcon } from '@apps/components/core'
 import { truncateAddress } from '@apps/formatters'
 import styled from 'styled-components'
 import { useDelegationModal } from '../hooks/useDelegationModal'
 import { useDelegateesAll } from '../context/DelegateeListsProvider'
 import { useModalData } from '@apps/base/context/ModalDataProvider'
+import { StakedTokenToggle } from './StakedTokenToggle'
+import { ViewportWidth } from '@apps/base/theme'
 
 interface Props {
   className?: string
+  handleDelegate: (address: string) => void
 }
 
 const Address = styled.div`
@@ -22,6 +25,7 @@ const User = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
+  align-items: flex-start;
 
   * {
     line-height: 1rem;
@@ -38,11 +42,15 @@ const User = styled.div`
   }
 `
 
-const Info = styled.div`
+const Info = styled(UnstyledButton)`
   display: flex;
   align-items: center;
   flex: 1;
   gap: 0.5rem;
+  border-radius: 0.75rem;
+  margin-right: 0.5rem;
+  min-width: 10rem;
+  width: 100%;
 
   > div:first-child {
     height: 2rem;
@@ -65,26 +73,31 @@ const Delegation = styled.div`
 `
 
 const Container = styled.div`
-  background: ${({ theme }) => theme.color.background[0]};
-  padding: 0.25rem 0.5rem;
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
   display: flex;
-  gap: 0.5rem;
+  gap: 0.25rem;
   border-radius: 1rem;
-  align-items: center;
-  height: 3.25rem;
   justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem;
 
   > h3,
   button {
-    font-size: 0.875rem;
   }
 
   > h3 {
     margin-left: 0.25rem;
   }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    padding: 0;
+    flex-direction: row;
+    align-items: inherit;
+  }
 `
 
-export const DelegateSelection: FC<Props> = ({ className }) => {
+export const DelegateSelectionAlt: FC<Props> = ({ className, handleDelegate }) => {
   const [showModal] = useDelegationModal()
   const { delegateSelection: delegatee } = useModalData()
   const delegateesAll = useDelegateesAll()
@@ -94,7 +107,7 @@ export const DelegateSelection: FC<Props> = ({ className }) => {
     <Container className={className}>
       {delegatee ? (
         <Delegation>
-          <Info>
+          <Info onClick={showModal}>
             <div>{delegateeInfo ? <IPFSImg uri={delegateeInfo.avatarURI} /> : <UserIcon address={delegatee} />}</div>
             {delegateeInfo ? (
               <User>
@@ -107,14 +120,12 @@ export const DelegateSelection: FC<Props> = ({ className }) => {
               </Address>
             )}
           </Info>
-          <Button onClick={showModal}>Edit</Button>
+          <Button onClick={() => handleDelegate(delegatee)}>Delegate</Button>
         </Delegation>
       ) : (
-        <>
-          <h3>No selection</h3>
-          <Button onClick={showModal}>Select Delegate</Button>
-        </>
+        <Button onClick={showModal}>Select Delegate</Button>
       )}
+      <StakedTokenToggle />
     </Container>
   )
 }
