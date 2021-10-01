@@ -10,13 +10,13 @@ import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 
 import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
-import { DelegateInput } from '../../components/DelegateInput'
 import { UserLookup } from '../../components/UserLookup'
 import { ViewportWidth } from '@apps/base/theme'
 import { truncateAddress } from '@apps/formatters'
 import { Leaderboard } from './Leaderboard'
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 import { constants } from 'ethers'
+import { DelegateSelectionAlt } from '../../components/DelegateSelectionAlt'
 
 const DOCS_URL = 'https://app.gitbook.com/@mstable/s/mstable-docs/'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
@@ -29,8 +29,17 @@ const DelegationBox = styled(InfoBox)<{ isTitleAddress: boolean }>`
   > div {
     flex-direction: column;
     gap: 0.5rem;
-    justify-content: space-between;
     align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  > div > div {
+    flex-direction: column;
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
   }
 
   > div > div:first-child {
@@ -64,8 +73,18 @@ const DelegationBox = styled(InfoBox)<{ isTitleAddress: boolean }>`
     }
   }
 
-  h3 {
+  > h3 {
     ${({ isTitleAddress, theme }) => isTitleAddress && theme.mixins.numeric};
+  }
+
+  @media (min-width: ${ViewportWidth.m}) {
+    > div > div {
+      flex-direction: column;
+      width: 100%;
+      button {
+        flex: 1;
+      }
+    }
   }
 
   @media (min-width: ${ViewportWidth.l}) {
@@ -74,16 +93,14 @@ const DelegationBox = styled(InfoBox)<{ isTitleAddress: boolean }>`
       align-items: center;
       gap: 0;
     }
-  }
-`
+    > div > div {
+      flex-direction: row;
+      width: inherit;
 
-const StyledDelegateInput = styled(DelegateInput)`
-  padding: 0;
-
-  input {
-    border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-    height: 2.5rem;
-    width: 12rem;
+      button {
+        width: inherit;
+      }
+    }
   }
 `
 
@@ -91,13 +108,8 @@ const VoteBox = styled(InfoBox)`
   div {
     display: flex;
     flex-direction: row;
+    flex-direction: column;
     gap: 0.5rem;
-  }
-
-  @media (min-width: ${ViewportWidth.m}) {
-    div {
-      flex-direction: column;
-    }
   }
 
   @media (min-width: ${ViewportWidth.l}) {
@@ -175,8 +187,8 @@ export const Vote: FC = () => {
 
     propose<Interfaces.StakedToken, 'delegate'>(
       new TransactionManifest(stakedTokenContract, 'delegate', [address], {
-        present: `Delegating to ${address}`,
-        past: `Delegated to ${address}`,
+        present: `Delegating to ${truncateAddress(address)}`,
+        past: `Delegated to ${truncateAddress(address)}`,
       }),
     )
   }
@@ -194,7 +206,7 @@ export const Vote: FC = () => {
 
   return (
     <Container>
-      <GovernancePageHeader title="Vote" subtitle="View list of voting addresses and delegate" stakedTokenSwitcher />
+      <GovernancePageHeader title="Vote" subtitle="View list of voting addresses and delegate" />
       <div>
         <Row>
           <DelegationBox
@@ -209,7 +221,7 @@ export const Vote: FC = () => {
                   View Profile
                 </Button>
                 {isSelfDelegated ? (
-                  <StyledDelegateInput onClick={handleDelegate} />
+                  <DelegateSelectionAlt handleDelegate={handleDelegate} />
                 ) : (
                   <Button onClick={handleUndelegate}>Undelegate</Button>
                 )}
