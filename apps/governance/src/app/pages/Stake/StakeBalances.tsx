@@ -3,7 +3,7 @@ import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BigNumber, utils } from 'ethers'
 import styled from 'styled-components'
 
-import { Button, CountUp, ThemedSkeleton } from '@apps/components/core'
+import { ButtonExternal, CountUp, ThemedSkeleton } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
 import { ViewportWidth } from '@apps/base/theme'
 
@@ -62,13 +62,6 @@ const calculateStakingApy = (
 
   return parseFloat(utils.formatUnits(dailyReturn)) * 365 * 100
 }
-
-const External: FC<{ highlighted?: boolean }> = ({ highlighted }) => (
-  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5 2C3.82843 2 1 2 1 2V10H9V7.5" stroke={highlighted ? 'white' : 'black'} />
-    <path d="M6 5.5L10.5 1M10.5 1H7.16667M10.5 1V4.33333" stroke={highlighted ? 'white' : 'black'} />
-  </svg>
-)
 
 const StyledTokenIcon = styled(TokenIcon)`
   width: 1.5rem;
@@ -149,9 +142,9 @@ const Info: FC<{ isBPT?: boolean }> = ({ isBPT = false }) => {
         <h3>{subtitle}</h3>
         <span>{title}</span>
       </div>
-      <Button highlighted onClick={() => window.open(link)}>
-        {buttonTitle} <External highlighted />
-      </Button>
+      <ButtonExternal highlighted onClick={() => window.open(link)}>
+        {buttonTitle}
+      </ButtonExternal>
     </InfoContainer>
   )
 }

@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { InfoBox, Button } from '@apps/components/core'
+import { InfoBox, Button, ButtonExternal } from '@apps/components/core'
 import { TokenIcon } from '@apps/components/icons'
 import { useHistory } from 'react-router-dom'
 import { usePropose } from '@apps/base/context/transactions'
@@ -145,13 +145,6 @@ const Container = styled.div`
   }
 `
 
-const External: FC<{ highlighted?: boolean }> = ({ highlighted }) => (
-  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5 2C3.82843 2 1 2 1 2V10H9V7.5" stroke={highlighted ? 'white' : 'black'} />
-    <path d="M6 5.5L10.5 1M10.5 1H7.16667M10.5 1V4.33333" stroke={highlighted ? 'white' : 'black'} />
-  </svg>
-)
-
 export const Vote: FC = () => {
   const { selected: stakedTokenAddress, options } = useStakedToken()
   const { data } = useStakedTokenQuery()
@@ -237,12 +230,10 @@ export const Vote: FC = () => {
           </DelegationBox>
           <VoteBox subtitle="Participate" title="Vote">
             <div>
-              <Button highlighted onClick={() => window.open(SNAPSHOT_URL)}>
-                Snapshot <External highlighted />
-              </Button>
-              <Button onClick={() => window.open(DOCS_URL)}>
-                Learn More <External />
-              </Button>
+              <ButtonExternal highlighted onClick={() => window.open(SNAPSHOT_URL)}>
+                Snapshot
+              </ButtonExternal>
+              <ButtonExternal onClick={() => window.open(DOCS_URL)}>Learn More</ButtonExternal>
             </div>
           </VoteBox>
         </Row>
