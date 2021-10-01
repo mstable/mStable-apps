@@ -30,6 +30,7 @@ interface Props {
 
 const StyledDelegateSelection = styled(DelegateSelection)<{ isMigrating: boolean }>`
   background: ${({ theme, isMigrating }) => isMigrating && theme.color.background[1]};
+  margin-top: 0.75rem;
 
   button {
     background: ${({ theme, isMigrating }) => isMigrating && theme.color.background[3]};

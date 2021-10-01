@@ -1,5 +1,5 @@
 import { ViewportWidth } from '@apps/base/theme'
-import { Tooltip } from '@apps/components/core'
+import { Tooltip, ButtonExternal } from '@apps/components/core'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -8,11 +8,18 @@ import { useStakedTokenQuery } from '../context/StakedTokenProvider'
 import { getDaysUntilQueueUpdate } from '../utils'
 
 const DAY = 86400
+const ANALYTICS_URL = 'https://dune.xyz/naddison/mStable-Staking-V2'
 
 const StyledTooltip = styled(Tooltip)`
   position: absolute;
   top: 0.5rem;
   right: 0.75rem;
+`
+
+const Analytics = styled.div`
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-start;
 `
 
 const Box = styled.div`
@@ -72,6 +79,10 @@ export const Stats: FC = () => {
   return (
     <Container>
       <GovernancePageHeader title="Stats" subtitle="Overview of the mStable Governance system" />
+      <Analytics>
+        <ButtonExternal onClick={() => window.open(ANALYTICS_URL)}>View Analytics</ButtonExternal>
+      </Analytics>
+
       <div>
         <StatsBox
           tip={`In the event of recollateratalisation, your staked balance will be slashed by ${slashingPercentage}%. This rate may vary depending on future governance proposals.`}
