@@ -17,6 +17,7 @@ import { StakeGraph } from './StakeGraph'
 import { StakeMigration } from './StakeMigration'
 import { WithdrawForm } from './WithdrawForm'
 import { WithdrawGraph } from './WithdrawGraph'
+import { Link } from 'react-router-dom'
 
 enum Tabs {
   Stake,
@@ -24,12 +25,21 @@ enum Tabs {
   Withdraw,
 }
 
-const stakeTabs: { id: Tabs; title: string; heading: string; subheading: string; Form: FC; Graph: FC }[] = [
+const stakeTabs: {
+  id: Tabs
+  title: string
+  link?: { title: string; href: string }
+  heading: string
+  subheading: string
+  Form: FC
+  Graph: FC
+}[] = [
   {
     id: Tabs.Stake,
     title: 'Stake',
     heading: 'Voting Power',
     subheading: 'Your vMTA balance will increase the longer you stake',
+    link: { title: 'See quests', href: '/quests' },
     Form: StakeForm,
     Graph: StakeGraph,
   },
@@ -38,6 +48,7 @@ const stakeTabs: { id: Tabs; title: string; heading: string; subheading: string;
     title: 'Claim',
     heading: 'MTA Rewards',
     subheading: 'Your vMTA balance will increase the longer you stake',
+    link: { title: 'See quests', href: '/quests' },
     Form: ClaimForm,
     Graph: ClaimGraph,
   },
@@ -130,7 +141,7 @@ const Content: FC = () => {
   const { balance: balanceV1 } = lockedV1?.value ?? {}
   const userNeedsMigration = (!!balanceV1?.simple && !balanceV2Simple) || hasWithdrawnV1Balance
 
-  const { Graph, Form, heading, subheading } = stakeTabs[activeTabIndex]
+  const { Graph, Form, heading, subheading, link } = stakeTabs[activeTabIndex]
 
   if (loading)
     return (
@@ -147,7 +158,9 @@ const Content: FC = () => {
     <FormsContainer>
       <GraphContainer>
         <h2>{heading}</h2>
-        <h4>{subheading}</h4>
+        <h4>
+          {subheading} {link && <Link to={link.href}>{link.title}</Link>}
+        </h4>
         <Graph />
       </GraphContainer>
       <FormContainer>
