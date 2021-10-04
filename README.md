@@ -9,9 +9,9 @@ This repository comprises multiple mStable apps, all built using common librarie
 
 | Status | Name               | Nx project    | Port  | Public hosts |
 |--------|--------------------|---------------|-------|--------------|
-| ✅      | (example app)      | `example`    | 3100 |              |
 | ✅      | mStable Protocol   | `protocol`   | 3000 | [Fleek/IPFS 1](https://mstable.app) – [Fleek/IPFS 2](https://app.mstable.org) – [Google](https://mstable-apps-protocol.web.app/) |
-| 🏗      | mStable Governance | `governance` | 3200 | [Fleek/IPFS](https://governance.mstable.org) |
+| ✅      | mStable Governance | `governance` | 3200 |  [Fleek/IPFS 1](https://staking.mstable.app) – [Fleek/IPFS 2](https://staking.mstable.org) |
+| ✅      | (example app)      | `example`    | 3100 |              |
 | 🧠      | ...more            |              |      |             |
 
 ---
