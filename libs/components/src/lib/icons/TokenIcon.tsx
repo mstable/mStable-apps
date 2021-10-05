@@ -158,7 +158,6 @@ const IconContainer = styled.div<{ isLarge: boolean }>`
   img {
     height: ${({ isLarge }) => (isLarge ? `2.5rem` : `2rem`)};
     width: ${({ isLarge }) => (isLarge ? `2.5rem` : `2rem`)};
-    background: ${({ theme }) => theme.color.white};
   }
 
   > div:last-child {
