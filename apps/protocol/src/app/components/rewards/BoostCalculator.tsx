@@ -15,7 +15,7 @@ import { ReactComponent as ArrowsSvg } from '@apps/components/icons/double-arrow
 import { ReactComponent as GovSvg } from '@apps/components/icons/governance-icon.svg'
 import { useVMTABalance } from 'libs/hooks/src/lib/useVMTABalance'
 
-const GOVERNANCE_URL = 'https://governance.mstable.org/#/stake'
+const GOVERNANCE_URL = 'https://staking.mstable.app/#/stake'
 
 const BoostCountup = styled(DifferentialCountup)`
   font-weight: normal;

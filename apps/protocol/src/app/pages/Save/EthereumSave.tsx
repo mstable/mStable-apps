@@ -82,7 +82,7 @@ export const EthereumSave: FC = () => {
   const showMigrationView = selectedSaveVersion === 1 && massetConfig.hasV1Save
 
   const handleGovernanceClick = (): void => {
-    window.open('https://governance.mstable.org', '_blank')
+    window.open('https://staking.mstable.app/', '_blank')
   }
 
   return (
