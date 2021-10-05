@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
 import { useToggle } from 'react-use'
 import useSound from 'use-sound'
+import { getUnixTime } from 'date-fns'
 
 import { useQuestQuery as useQuestbookQuestQuery, useUpdateQuestMutation } from '@apps/artifacts/graphql/questbook'
-import { useAccountQuery } from '@apps/artifacts/graphql/staking'
+import { useAccountQuery, useQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { usePropose } from '@apps/base/context/transactions'
-import { Button } from '@apps/components/core'
+import { Button, Tooltip } from '@apps/components/core'
 import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 
 import { useQuestManagerContract } from '../../context/QuestManagerProvider'
@@ -16,6 +17,8 @@ import { useQuestManagerContract } from '../../context/QuestManagerProvider'
 import bleep28 from '../../../assets/bleeps_28.mp3'
 // @ts-ignore
 import bleep29 from '../../../assets/bleeps_29.mp3'
+
+const nowUnix = getUnixTime(new Date())
 
 export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const account = useAccount()
@@ -39,6 +42,13 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
     pollInterval: 15e3,
   })
   const questbookQuest = questbookQuery.data?.quest
+  const ethereumId = questbookQuest?.ethereumId?.toString()
+
+  const questQuery = useQuestQuery({
+    client: clients.staking,
+    variables: { id: ethereumId as string },
+    skip: !ethereumId,
+  })
 
   const accountQuery = useAccountQuery({
     client: clients.staking,
@@ -49,6 +59,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
 
   const claimed = accountQuery.data?.account?.completedQuests?.find(c => c.quest.id === questbookQuest?.ethereumId?.toString())
   const readyToClaim = !claimed && questbookQuest?.userQuest?.complete
+  const questExpired = questQuery.data?.quest && questQuery.data.quest.expiry > nowUnix
 
   const handleClaimQuest = () => {
     if (
@@ -91,11 +102,19 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   return claimed ? (
     <Button disabled>Claimed</Button>
   ) : readyToClaim ? (
-    <Button highlighted onClick={handleClaimQuest}>
-      Claim
+    <Button highlighted onClick={handleClaimQuest} disabled={isPending || questExpired || !ethereumId}>
+      {ethereumId ? (
+        questExpired ? (
+          'Expired'
+        ) : (
+          'Claim'
+        )
+      ) : (
+        <Tooltip tip="This quest is not available to complete on-chain yet, but it will be in the near future">Claim</Tooltip>
+      )}
     </Button>
   ) : (
-    <Button highlighted onClick={handleRefresh}>
+    <Button highlighted onClick={handleRefresh} disabled={isPending}>
       {isPending ? 'Checking...' : 'Check status'}
     </Button>
   )
