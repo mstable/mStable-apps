@@ -2,13 +2,14 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import { StakingRewardsWithPlatformToken__factory } from '@apps/artifacts/typechain'
 
+import { BigDecimal } from '@apps/bigdecimal'
 import { usePropose } from '@apps/base/context/transactions'
 import { useTokenAllowance } from '@apps/base/context/tokens'
 import { useSigner } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { useBigDecimalInput } from '@apps/hooks'
 
-import { Table, TableRow, TableCell, Button, Tooltip, MultiRewards } from '@apps/components/core'
+import { Table, TableRow, TableCell, Button, MultiRewards } from '@apps/components/core'
 import { AssetInput } from '@apps/components/forms'
 
 import { useRewardsEarned, useStakingRewards, RewardsEarnedProvider } from '../hooks'
@@ -111,11 +112,11 @@ export const SaveStake: FC = () => {
     [stakingRewardsAddress, signer],
   )
 
-  const unstakedBalance = stakingRewards?.unstakedBalance
-  const stakedBalance = stakingRewards?.stakedBalance
+  const unstakedBalance: BigDecimal | undefined = stakingRewards?.unstakedBalance
+  const stakedBalance: BigDecimal | undefined = stakingRewards?.stakedBalance
 
-  const [amountToStake, saveFormValue, setSaveAmount] = useBigDecimalInput((unstakedBalance?.simple ?? 0).toString())
-  const [amountToWithdraw, stakedFormValue, setStakedAmount] = useBigDecimalInput((stakedBalance?.simple ?? 0).toString())
+  const [amountToStake, saveFormValue, setSaveAmount] = useBigDecimalInput(unstakedBalance ?? '0')
+  const [amountToWithdraw, stakedFormValue, setStakedAmount] = useBigDecimalInput(stakedBalance ?? '0')
 
   const allowance = useTokenAllowance(stakingTokenAddress, stakingRewardsAddress)
   const needsApprove = !amountToStake || !allowance || (amountToStake && allowance?.exact.lt(amountToStake.exact))

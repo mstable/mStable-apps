@@ -9,9 +9,9 @@ import { StakingRewardsExtended, useBigDecimalInput } from '@apps/hooks'
 import { Interfaces } from '@apps/types'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import { BigDecimal } from '@apps/bigdecimal'
-import { StakingRewards } from 'apps/protocol/src/app/components/rewards/StakingRewards'
 import { useTokenAllowance } from '@apps/base/context/tokens'
 
+import { StakingRewards } from '../../../../components/rewards/StakingRewards'
 import { useFraxStakingContract, useFraxStakingState } from '../../../../context/FraxStakingProvider'
 import { useSelectedFeederPoolState } from '../../FeederPoolProvider'
 
@@ -140,11 +140,11 @@ export const FraxStake: FC = () => {
   const lockTimeMax = staticData.value?.lockTimeMax
 
   const accountData = userData.value?.accountData
-  const poolBalance = accountData?.poolBalance?.simple ?? 0
+  const poolBalance: BigDecimal | undefined = accountData?.poolBalance
   const lockedStakes = accountData?.lockedStakes
   const earned = accountData?.earned
   const [seconds, setValue] = useState(sliderStart ?? DAY)
-  const [inputValue, inputFormValue, handleSetAmount] = useBigDecimalInput(poolBalance.toString())
+  const [inputValue, inputFormValue, handleSetAmount] = useBigDecimalInput(poolBalance ?? '0')
 
   const showDeposit = !!accountData?.poolBalance?.simple
   const showWithdraw = lockedStakes?.length
@@ -206,7 +206,7 @@ export const FraxStake: FC = () => {
     )
   }
 
-  const handleSetMax = (): void => handleSetAmount(poolBalance.toString())
+  const handleSetMax = (): void => handleSetAmount(poolBalance?.string ?? '0')
 
   const rewards = useMemo(() => {
     const stakingRewards: StakingRewardsExtended = {
