@@ -147,7 +147,7 @@
             "main": "apps/example/src/main.tsx",
             "polyfills": "apps/example/src/polyfills.ts",
             "tsConfig": "apps/example/tsconfig.app.json",
-            "progress": true,
+            "progress": false,
             "assets": [
               {
                 "glob": "**/*",
@@ -257,7 +257,7 @@
             "index": "apps/governance/src/index.html",
             "main": "apps/governance/src/main.tsx",
             "polyfills": "apps/governance/src/polyfills.ts",
-            "progress": true,
+            "progress": false,
             "tsConfig": "apps/governance/tsconfig.app.json",
             "assets": [
               {
@@ -420,7 +420,7 @@
             "main": "apps/protocol/src/main.tsx",
             "polyfills": "apps/protocol/src/polyfills.ts",
             "tsConfig": "apps/protocol/tsconfig.app.json",
-            "progress": true,
+            "progress": false,
             "assets": [
               {
                 "glob": "**/*",
