@@ -59,17 +59,23 @@ export const StakingRewards: FC<Props> = ({ stakingRewards }) => {
       <APY>
         {stakingRewards?.rewards
           ?.filter(reward => reward.tokens.length < 2)
-          .map(({ apy, apyTip, tokens, name, id }) => (
-            <div key={id}>
-              <Tooltip tip={apyTip} hideIcon>
-                <span>
-                  {id === 'yieldRewards' ? '' : '+'}
-                  {!!apy && `${apy.toFixed(2)}%`}
-                </span>
-                <span>{tokens.length ? tokens[0] : name}</span>
-              </Tooltip>
-            </div>
-          ))}
+          .map(({ apy: _apy, apyTip, tokens, name, id }) => {
+            const dp = Math.pow(10, 2)
+            const apy = Math.floor(_apy * dp) / dp
+            return (
+              !!apy && (
+                <div key={id}>
+                  <Tooltip tip={apyTip} hideIcon>
+                    <span>
+                      {id === 'yieldRewards' ? '' : '+'}
+                      {!!apy && `${apy.toFixed(2)}%`}
+                    </span>
+                    <span>{tokens.length ? tokens[0] : name}</span>
+                  </Tooltip>
+                </div>
+              )
+            )
+          })}
       </APY>
     </Container>
   )
