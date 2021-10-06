@@ -70,10 +70,6 @@ const LockupRow = styled(TableRow)`
     flex: 1;
     align-items: center;
     justify-content: space-between;
-
-    > * {
-      width: 100%;
-    }
   }
 
   > td > div > div:not(:last-child) {
@@ -85,10 +81,6 @@ const LockupRow = styled(TableRow)`
       ${({ theme }) => theme.mixins.numeric};
       color: ${({ theme }) => theme.color.blue};
     }
-  }
-
-  > td > div > div:last-child {
-    margin-top: 1rem;
   }
 `
 
@@ -127,7 +119,7 @@ const withdrawHeaderTitles = ['Vault', 'Multiplier', 'Time Remaining'].map(t => 
 
 export const FraxStake: FC = () => {
   const network = useNetwork() as MaticMainnet
-  const { subscribedData: userData, staticData: staticData } = useFraxStakingState()
+  const { subscribedData: userData, staticData } = useFraxStakingState()
   const feederPool = useSelectedFeederPoolState()
   const contract = useFraxStakingContract()
   const propose = usePropose()
@@ -289,6 +281,8 @@ export const FraxStake: FC = () => {
                   <h4>Boost:</h4>
                   <span>{boostMultiplier.toFixed(3)}x</span>
                 </div>
+              </TableCell>
+              <TableCell>
                 <Slider min={sliderStart} max={sliderEnd} step={DAY} value={seconds} onChange={setValue} />
               </TableCell>
             </LockupRow>
