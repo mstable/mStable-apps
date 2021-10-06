@@ -7,7 +7,7 @@ import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-u
 import { ethers, utils } from 'ethers'
 import { composedComponent } from '@apps/react-utils'
 
-import { useAddErrorNotification, useAddInfoNotification } from './NotificationsProvider'
+import { useAddInfoNotification } from './NotificationsProvider'
 import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
 
 export interface OnboardCtx {
@@ -99,7 +99,6 @@ const OnboardProvider: FC<{
   const [, setInjectedProvider] = useInjectedProviderCtx()
 
   const addInfoNotification = useAddInfoNotification()
-  const addErrorNotification = useAddErrorNotification()
 
   const network = useNetwork()
   const rpcUrl = network.rpcEndpoints[0]
@@ -111,14 +110,9 @@ const OnboardProvider: FC<{
         networkId: parseInt(isNaN(chainId) ? '1' : (chainId as unknown as string)),
         subscriptions: {
           address: account => {
-            if (!account) {
-              localStorage.removeItem('walletName')
-              setWallet(undefined)
-              setInjectedProvider(undefined)
-              setConnected(false)
-              return
+            if (account) {
+              setAddress(account.toLowerCase())
             }
-            setAddress(account.toLowerCase())
           },
           network: setInjectedChainId,
           balance: setBalance,
@@ -127,6 +121,7 @@ const OnboardProvider: FC<{
               setWallet(undefined)
               setInjectedProvider(undefined)
               setConnected(false)
+              setAddress(undefined)
               return
             }
 
@@ -229,12 +224,11 @@ const OnboardProvider: FC<{
 
       localStorage.removeItem('walletName')
       onboard.walletReset()
-      addErrorNotification('Unable to connect wallet')
       setConnected(false)
       setWallet(undefined)
       setInjectedProvider(undefined)
     },
-    [onboard, addErrorNotification, setInjectedProvider, addInfoNotification, network],
+    [onboard, setInjectedProvider, addInfoNotification, network],
   )
 
   const reset = useCallback(() => {
@@ -317,28 +311,30 @@ const OnboardConnection: FC = ({ children }) => {
     if (!chainId || !injectedChainId) return
 
     // Change chainId when injectedChainId changes and doesn't match chainId
-    if (injectedMismatching) {
+    if (injectedMismatching && previousInjectedChainId) {
       setChainId(injectedChainId)
     }
   }, [chainId, injectedChainId, injectedMismatching, previousInjectedChainId, setChainId])
 
   useEffect(() => {
-    if (!injectedProvider || network.isMetaMaskDefault || !previousInjectedChainId) return
+    if (!injectedProvider || !previousInjectedChainId) return
 
-    // For non-default chains and an injected provider, prompt to add the chain
-    injectedProvider
-      .send('wallet_addEthereumChain', [
-        {
-          chainId: utils.hexStripZeros(utils.hexlify(network.chainId)),
+    const method = network.isMetaMaskDefault ? 'wallet_switchEthereumChain' : 'wallet_addEthereumChain'
+    const data = [
+      {
+        chainId: utils.hexStripZeros(utils.hexlify(network.chainId)),
+        ...(!network.isMetaMaskDefault && {
           chainName: `${network.protocolName} (${network.chainName})`,
           nativeCurrency: network.nativeToken,
           rpcUrls: network.rpcEndpoints,
           blockExplorerUrls: [network.getExplorerUrl()],
-        },
-      ])
-      .catch(error => {
-        console.warn(error)
-      })
+        }),
+      },
+    ]
+
+    injectedProvider.send(method, data).catch(error => {
+      console.warn(error)
+    })
   }, [injectedProvider, network, previousInjectedChainId])
 
   useEffect(() => {
