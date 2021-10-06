@@ -108,7 +108,7 @@ export const ProtocolApp: FC = () => {
       polygon: ChainIds['MaticMainnet'],
     }
     setChainId(networkIds[network] ?? 1)
-  }, [])
+  }, [setChainId, urlQuery])
 
   return (
     <SelectedSaveVersionProvider>
