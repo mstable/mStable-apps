@@ -1,5 +1,6 @@
 import { InMemoryCache } from '@apollo/client'
-import { AllGqlEndpoints } from '@apps/base/context/network'
+
+import { AllGqlEndpoints } from '../NetworkProvider'
 import { staking } from './staking'
 
 export const caches: Record<AllGqlEndpoints, InMemoryCache> = Object.freeze({
