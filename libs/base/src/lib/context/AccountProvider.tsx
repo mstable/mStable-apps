@@ -188,6 +188,7 @@ const OnboardProvider: FC<{
               infuraKey: 'a6daf77ef0ae4b60af39259e435a40fe',
               preferred: true,
             },
+            { walletName: 'xdefi' },
             { walletName: 'opera' },
             { walletName: 'operaTouch' },
             { walletName: 'torus' },
