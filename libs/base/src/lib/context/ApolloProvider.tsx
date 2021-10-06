@@ -105,7 +105,6 @@ export const ApolloProvider: FC = ({ children }) => {
         const retryLink = new RetryLink()
         const link = ApolloLink.from([errorLink, retryLink, httpLink])
         const client = new ApolloClient<NormalizedCacheObject>({
-          name,
           cache: caches[name],
           link,
           defaultOptions: {
