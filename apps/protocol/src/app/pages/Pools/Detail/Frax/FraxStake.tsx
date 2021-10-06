@@ -67,20 +67,26 @@ const LockupRow = styled(TableRow)`
 
   > td {
     display: flex;
+    flex-direction: column;
     flex: 1;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
   }
 
-  > td > div > div:not(:last-child) {
+  > td > div:not(:last-child) {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
+    width: 100%;
 
     span {
       ${({ theme }) => theme.mixins.numeric};
       color: ${({ theme }) => theme.color.blue};
     }
+  }
+
+  > td > div:last-child {
+    margin-top: 0.5rem;
   }
 `
 
@@ -281,8 +287,6 @@ export const FraxStake: FC = () => {
                   <h4>Boost:</h4>
                   <span>{boostMultiplier.toFixed(3)}x</span>
                 </div>
-              </TableCell>
-              <TableCell>
                 <Slider min={sliderStart} max={sliderEnd} step={DAY} value={seconds} onChange={setValue} />
               </TableCell>
             </LockupRow>
