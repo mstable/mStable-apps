@@ -2,6 +2,7 @@ import React, { FC, useEffect, useLayoutEffect } from 'react'
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 
+import { APP_NAME } from '@apps/types'
 import { useBaseCtx, MessageHandler } from '@apps/base'
 import { ChainIds, useChainIdCtx, useNetwork } from '@apps/base/context/network'
 import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
@@ -18,7 +19,6 @@ import { EarnRedirect } from './pages/EarnRedirect'
 import { Pools } from './pages/Pools'
 import { PoolDetail } from './pages/Pools/Detail'
 import { Exchange } from './pages/Exchange'
-import { APP_NAME } from 'libs/types/src/lib/constants'
 
 const ProtocolRoutes: FC = () => {
   const { supportedMassets } = useNetwork()

@@ -8,7 +8,7 @@ import { ethers, utils } from 'ethers'
 import { composedComponent } from '@apps/react-utils'
 
 import { useAddErrorNotification, useAddInfoNotification } from './NotificationsProvider'
-import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork, getNetwork } from './NetworkProvider'
+import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
 
 export interface OnboardCtx {
   onboard?: API
