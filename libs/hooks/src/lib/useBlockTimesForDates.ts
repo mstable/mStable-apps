@@ -1,6 +1,7 @@
-import { useApolloClients } from '@apps/base/context/apollo'
 import { useMemo } from 'react'
 import { useQuery } from '@apollo/client'
+
+import { useApolloClients } from '@apps/base/context/apollo'
 
 import { useBlockTimestampsDocument } from './useBlockTimestampsDocument'
 import { getKeyTimestamp } from '@apps/formatters'
@@ -11,12 +12,12 @@ interface BlockTime {
 }
 
 export const useBlockTimesForDates = (dates: Date[]): BlockTime[] => {
-  const clients = useApolloClients()
+  const { blocks: client } = useApolloClients()
   const blocksDoc = useBlockTimestampsDocument(dates)
 
   const query = useQuery<{
     [timestamp: string]: [] | [{ number: number }]
-  }>(blocksDoc, { fetchPolicy: 'cache-first', client: clients.blocks })
+  }>(blocksDoc, { fetchPolicy: 'cache-first', client })
 
   return useMemo(() => {
     const filtered = Object.entries(query.data ?? {}).filter(([, value]) => !!value[0]?.number) as [string, [{ number: number }]][]
