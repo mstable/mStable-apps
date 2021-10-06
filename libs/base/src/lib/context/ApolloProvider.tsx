@@ -1,5 +1,6 @@
 import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
+import { usePrevious } from 'react-use'
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, NormalizedCacheObject } from '@apollo/client'
 import { RetryLink } from '@apollo/client/link/retry'
 import { onError } from '@apollo/client/link/error'
@@ -22,6 +23,8 @@ export const ApolloProvider: FC = ({ children }) => {
   const addErrorNotification = useAddErrorNotification()
   const [persisted, setPersisted] = useState(false)
   const network = useNetwork()
+  const previousChainId = usePrevious(network.chainId)
+  const networkChanged = previousChainId && network.chainId !== previousChainId
 
   // Serialized array of failed endpoints to be excluded from the client
   const [failedEndpoints, setFailedEndpoints] = useState<string>('')
@@ -102,6 +105,7 @@ export const ApolloProvider: FC = ({ children }) => {
         const retryLink = new RetryLink()
         const link = ApolloLink.from([errorLink, retryLink, httpLink])
         const client = new ApolloClient<NormalizedCacheObject>({
+          name,
           cache: caches[name],
           link,
           defaultOptions: {
@@ -123,6 +127,17 @@ export const ApolloProvider: FC = ({ children }) => {
 
     return { ready: true, clients }
   }, [persisted, failedEndpoints, handleError, network])
+
+  useEffect(() => {
+    // Reset caches that can have conflicting keyFields on network change
+    // This prevents cached data from a previously selected network being used
+    // on a newly-selected network
+    if (networkChanged && (apollo as { clients: ApolloClients }).clients) {
+      ;(apollo as { clients: ApolloClients }).clients.blocks.resetStore().catch(error => {
+        console.error(error)
+      })
+    }
+  }, [apollo, networkChanged])
 
   return apollo.ready ? <apolloClientsCtx.Provider value={apollo.clients}>{children}</apolloClientsCtx.Provider> : <Skeleton />
 }
