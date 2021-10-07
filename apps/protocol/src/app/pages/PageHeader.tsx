@@ -17,25 +17,6 @@ const StyledMassetDropdown = styled(MassetDropdown)`
   margin-left: 0.75rem;
 `
 
-const Icon = styled.div<{ inverted?: boolean }>`
-  display: flex;
-  margin-right: 0.5rem;
-
-  img,
-  svg {
-    width: 2.25rem;
-    height: 2.25rem;
-
-    * {
-      fill: ${({ theme }) => theme.color.body};
-    }
-  }
-
-  img + div {
-    display: none;
-  }
-`
-
 const Container = styled.div<{
   messageVisible?: boolean
 }>`
@@ -45,8 +26,8 @@ const Container = styled.div<{
   padding: 2rem 0;
 
   h2 {
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 1.75rem;
+    font-weight: 500;
   }
 
   p {
@@ -89,7 +70,6 @@ export const PageHeader: FC<Props> = ({ children, title, subtitle, icon, massetS
     <div>
       <Container>
         <Row>
-          <Icon inverted>{icon}</Icon>
           <h2>{title}</h2>
           {massetSwitcher && supportedMassets.length > 1 && <StyledMassetDropdown />}
         </Row>

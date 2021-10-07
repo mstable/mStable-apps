@@ -17,6 +17,8 @@ import { Leaderboard } from './Leaderboard'
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 import { constants } from 'ethers'
 import { DelegateSelectionAlt } from '../../components/DelegateSelectionAlt'
+import { BigDecimal } from '@apps/bigdecimal'
+import { useTokenSubscription } from '@apps/base/context/tokens'
 
 const DOCS_URL = 'https://app.gitbook.com/@mstable/s/mstable-docs/'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
@@ -153,25 +155,28 @@ export const Vote: FC = () => {
   const account = useOwnAccount()
   const propose = usePropose()
   const stakedTokenContract = useStakedTokenContract()
+  const stakedToken = useTokenSubscription(stakedTokenAddress)
   const delegateesAll = useDelegateesAll()
 
-  // TODO;
   const delegateeId = data?.stakedToken?.accounts?.[0]?.delegatee?.id ?? account
   const displayName = delegateesAll[delegateeId]?.displayName
   const isSelfDelegated = delegateeId?.toLowerCase() === account?.toLowerCase()
 
-  const { votingPower } = useMemo<{ votingPower?: number[] }>(() => {
+  const { delegatedPower } = useMemo<{ delegatedPower?: number }>(() => {
     const account = data?.stakedToken?.accounts?.[0]
     if (!data || !account) {
       return {}
     }
-    const {
-      balance: { votesBD, rawBD },
-    } = account
-    // FIXME: - votesBD comes back as 0 when there is no multiplier, should not be the case.
-    const votingPower = [!!votesBD.simple ? votesBD.simple : rawBD.simple]
-    return { votingPower }
-  }, [data])
+
+    const isBPT = options[stakedTokenAddress]?.icon?.symbol === 'mBPT'
+    const priceCoefficient = data?.stakedToken?.priceCoefficient
+
+    const delegatedPower = (
+      isBPT ? new BigDecimal(stakedToken?.balance?.exact?.div(priceCoefficient).mul(1e4).toString()) : stakedToken?.balance
+    )?.simple
+
+    return { delegatedPower }
+  }, [data, options, stakedToken, stakedTokenAddress])
 
   const handleRowClick = (id: string) => history.push(`/vote/${id}`)
 
@@ -223,7 +228,7 @@ export const Vote: FC = () => {
                 <div>
                   Delegated &nbsp;
                   <TokenIcon symbol={options[stakedTokenAddress]?.icon.symbol} />
-                  <span>{votingPower?.[0]?.toFixed(2) ?? 100}</span>
+                  <span>{delegatedPower?.toFixed(2)}</span>
                 </div>
               )}
             </div>

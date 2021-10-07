@@ -10,6 +10,7 @@ import { ViewportWidth } from '@apps/base/theme'
 import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { useRewardsEarned } from './context'
 import { useStakingStatus } from '../../context/StakingStatusProvider'
+import { BigDecimal } from '@apps/bigdecimal'
 
 const BALANCER_URL = 'https://app.balancer.fi/#/pool/0xe2469f47ab58cf9cf59f9822e3c5de4950a41c49000200000000000000000089'
 const MTA_URL = 'https://cowswap.exchange/#/swap?outputCurrency=0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2'
@@ -219,6 +220,7 @@ export const StakeBalances: FC = () => {
   const rewardsEarned = useRewardsEarned()
   const stakedToken = useTokenSubscription(data?.stakedToken?.token.address)
   const isBPT = options[selected]?.icon?.symbol === 'mBPT'
+  const isDelegated = !!data?.stakedToken?.accounts?.[0]?.delegatee
 
   const values = useMemo<{
     baseRewardsApy?: Balance
@@ -265,28 +267,20 @@ export const StakeBalances: FC = () => {
     const cooldown = parseFloat(cooldownUnits) / 1e18
 
     // scale stakedBPT by priceCoefficient
-    const scaledStakedBPT = isBPT ? stakedToken?.balance?.exact?.div(priceCoefficient).mul(1e4) : undefined
+    const scaledBalance = isBPT
+      ? new BigDecimal(stakedToken?.balance?.exact?.div(priceCoefficient).mul(1e4).toString())
+      : stakedToken?.balance
 
     const baseRewardsApy = calculateStakingApy(priceCoefficient, rewardRate, rawBD?.exact, rawBD?.exact, totalSupply?.exact)
-
-    const userRewardsApy = calculateStakingApy(
-      priceCoefficient,
-      rewardRate,
-      rawBD?.exact,
-      scaledStakedBPT ?? stakedToken?.balance?.exact,
-      totalSupply?.exact,
-    )
-
-    // FIXME: - votesBD comes back as 0 when there is no multiplier, should not be the case.
-    const votingPower = !!votesBD.simple ? votesBD : rawBD
+    const userRewardsApy = calculateStakingApy(priceCoefficient, rewardRate, rawBD?.exact, scaledBalance?.exact, totalSupply?.exact)
 
     return {
       stake: { amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol },
-      votingPower: { amount: votingPower.simple, symbol: 'vMTA' },
+      votingPower: { amount: scaledBalance?.simple, symbol: 'vMTA' },
       rewardsEarned: { decimals: 4, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards },
       baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
       userRewardsApy: { suffix: '%', amount: userRewardsApy },
-      boost: votingPower.simple / rawBD.simple,
+      boost: scaledBalance?.simple / rawBD.simple,
     }
   }, [data, rewardsEarned.rewards, stakedToken, isBPT])
 
@@ -294,7 +288,12 @@ export const StakeBalances: FC = () => {
     <Container>
       <DefaultWidget>
         <Group label="My Stake" balance={values.stake} loading={loading} />
-        <Group label="My Voting Power" balance={values.votingPower} loading={loading} boost={values.boost} />
+        <Group
+          label={isDelegated ? 'Delegated Vote Power' : 'My Voting Power'}
+          balance={values.votingPower}
+          loading={loading}
+          boost={values.boost}
+        />
       </DefaultWidget>
       {!!values.stake || hasSelectedStakeOption ? (
         <DefaultWidget>
