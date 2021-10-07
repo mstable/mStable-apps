@@ -47,9 +47,12 @@ export const useSelectedMassetName = (): MassetName => useSelectedMassetNameCtx(
 
 export const useSetSelectedMassetName = (): Dispatch<SetStateAction<MassetName>> => useSelectedMassetNameCtx()[1]
 
-export const useSelectedMassetConfig = (): MassetConfig => useContext(massetConfigCtx)
+export const useSelectedMassetConfig = (): MassetConfig => {
+  const masset = useSelectedMassetName();
+  return MASSET_CONFIG[masset];
+}
 
 export const MassetProvider = composedComponent(SelectedMassetNameProvider, ({ children }) => {
-  // const massetName = useSelectedMassetName()
-  return <massetConfigCtx.Provider value={MASSET_CONFIG.musd}>{children}</massetConfigCtx.Provider>
+  const massetName = useSelectedMassetName()
+  return <massetConfigCtx.Provider value={MASSET_CONFIG[massetName]}>{children}</massetConfigCtx.Provider>
 })
