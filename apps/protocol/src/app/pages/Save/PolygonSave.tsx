@@ -77,7 +77,7 @@ const Card = styled.div`
   }
 
   @media (min-width: ${ViewportWidth.m}) {
-    padding: 1rem 0.5rem 1rem 1.25rem;
+    padding: 0 0.5rem 1rem 1.25rem;
     text-align: left;
     justify-content: space-between;
 

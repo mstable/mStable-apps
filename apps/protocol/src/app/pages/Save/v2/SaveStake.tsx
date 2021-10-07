@@ -7,7 +7,7 @@ import { usePropose } from '@apps/base/context/transactions'
 import { useTokenAllowance } from '@apps/base/context/tokens'
 import { useSigner } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { useBigDecimalInput } from '@apps/hooks'
+import { useBigDecimalInput, useSelectedMassetState } from '@apps/hooks'
 
 import { Table, TableRow, TableCell, Button, MultiRewards } from '@apps/components/core'
 import { AssetInput } from '@apps/components/forms'
@@ -64,6 +64,12 @@ const StyledTable = styled(Table)`
     margin-left: 0.5rem;
     margin-bottom: 0.5rem;
   }
+
+  th:not(:first-child):last-child {
+    ${({ theme }) => theme.mixins.numeric};
+    color: ${({ theme }) => theme.color.bodyAccent};
+    font-weight: 400;
+  }
 `
 
 const Container = styled.div`
@@ -103,6 +109,7 @@ export const SaveStake: FC = () => {
   const stakingRewards = useStakingRewards()
   const signer = useSigner()
   const propose = usePropose()
+  const massetState = useSelectedMassetState()
 
   const stakingRewardsAddress = stakingRewards.stakingRewardsContract?.address
   const stakingTokenAddress = stakingRewards.stakingRewardsContract?.stakingToken.address
@@ -117,6 +124,10 @@ export const SaveStake: FC = () => {
 
   const [amountToStake, saveFormValue, setSaveAmount] = useBigDecimalInput(unstakedBalance ?? '0')
   const [amountToWithdraw, stakedFormValue, setStakedAmount] = useBigDecimalInput(stakedBalance ?? '0')
+
+  const exchangeRate = massetState?.savingsContracts?.v2?.latestExchangeRate?.rate?.simple
+  const amountToWithdrawConverted = (amountToWithdraw?.simple ?? 0) * exchangeRate
+  const amountToStakeConverted = (amountToStake?.simple ?? 0) * exchangeRate
 
   const allowance = useTokenAllowance(stakingTokenAddress, stakingRewardsAddress)
   const needsApprove = !amountToStake || !allowance || (amountToStake && allowance?.exact.lt(amountToStake.exact))
@@ -145,7 +156,7 @@ export const SaveStake: FC = () => {
     <Container>
       <StakingRewards stakingRewards={stakingRewards} />
       {stakingRewards.hasStakedBalance && (
-        <StyledTable headerTitles={[{ title: 'Staked Balance' }]}>
+        <StyledTable headerTitles={[{ title: 'Staked Balance' }, { title: `≈ $${amountToWithdrawConverted.toFixed(2)}` }]}>
           <StyledRow buttonTitle="Stake">
             <TableCell width={70}>
               <Input
@@ -161,7 +172,7 @@ export const SaveStake: FC = () => {
         </StyledTable>
       )}
       {stakingRewards.hasUnstakedBalance && (
-        <StyledTable headerTitles={[{ title: 'Unstaked Balance' }]}>
+        <StyledTable headerTitles={[{ title: 'Unstaked Balance' }, { title: `≈ $${amountToStakeConverted.toFixed(2)}` }]}>
           <StyledRow buttonTitle="Stake">
             <TableCell width={70}>
               <Input
