@@ -48,8 +48,8 @@ export const useSelectedMassetName = (): MassetName => useSelectedMassetNameCtx(
 export const useSetSelectedMassetName = (): Dispatch<SetStateAction<MassetName>> => useSelectedMassetNameCtx()[1]
 
 export const useSelectedMassetConfig = (): MassetConfig => {
-  const masset = useSelectedMassetName();
-  return MASSET_CONFIG[masset];
+  const masset = useSelectedMassetName()
+  return MASSET_CONFIG[masset]
 }
 
 export const MassetProvider = composedComponent(SelectedMassetNameProvider, ({ children }) => {
