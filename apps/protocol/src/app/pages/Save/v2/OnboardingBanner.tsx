@@ -188,7 +188,7 @@ export const OnboardingBanner: FC = () => {
           </ApyTitle>
           <Tooltip tip="Learn about how this is calculated" hideIcon>
             <InfoLink>
-              <a href="https://docs.mstable.org/mstable-assets/protocol/native-interest-rate" target="_blank" rel="noopener noreferrer">
+              <a href="https://docs.mstable.org/using-mstable/mstable-app/save#understanding-save" target="_blank" rel="noopener noreferrer">
                 ↗
               </a>
             </InfoLink>
