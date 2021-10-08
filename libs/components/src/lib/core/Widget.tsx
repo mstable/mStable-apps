@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Title = styled.h3<{ bold?: boolean }>`
-  font-weight: 600;
+  font-weight: 500;
   font-size: ${({ bold }) => (bold ? `1.25rem` : `1.125rem`)};
   color: ${({ theme }) => theme.color.body};
 `

@@ -413,8 +413,8 @@ export { useChainIdCtx }
 
 const capGasPrice = (gwei: number, chainId: number) => {
   // High gas prices should not be necessary on Polygon; despite what the API says,
-  // looking at blocks shows that almost all are <10 gwei.
-  return Math.round(chainId === ChainIds.MaticMainnet ? Math.min(10, gwei) : gwei)
+  // looking at blocks shows that almost all are <30 gwei.
+  return Math.round(chainId === ChainIds.MaticMainnet ? Math.min(30, gwei) : gwei)
 }
 
 const networkCtx = createContext<Network<unknown, unknown>>(null as never)

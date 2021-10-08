@@ -18,19 +18,17 @@ export const calculateVMTAForMaxBoost = (stakingBalance: BigDecimal, priceCoeff?
   const y = scaledBalance ** EXPONENT
   const unbounded = (x * y) / BOOST_COEFF
 
-  return Math.min(unbounded, MAX_VMTA)
+  return Math.min(unbounded, MAX_VMTA) * 12
 }
 
 // min(m, max(d, 0.98 + c * min(vMTA, f) / USD^b))
 export const calculateBoost = (priceCoeff?: number, stakingBalance?: BigDecimal, vMTABalance?: BigDecimal): number => {
   if (!priceCoeff) return 1
 
+  const scaledMTABalance = (vMTABalance?.simple ?? 0) / 12
   const scaledBalance = (stakingBalance?.simple ?? 0) * priceCoeff
 
-  return Math.min(
-    MAX_BOOST,
-    Math.max(MIN_BOOST, 0.98 + (BOOST_COEFF * Math.min(vMTABalance?.simple ?? 0, MAX_VMTA)) / scaledBalance ** EXPONENT),
-  )
+  return Math.min(MAX_BOOST, Math.max(MIN_BOOST, 0.98 + (BOOST_COEFF * Math.min(scaledMTABalance, MAX_VMTA)) / scaledBalance ** EXPONENT))
 }
 
 export const getPriceCoeff = (vault: BoostedSavingsVaultState): number => {

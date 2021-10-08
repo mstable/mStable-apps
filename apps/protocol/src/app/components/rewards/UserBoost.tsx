@@ -11,8 +11,12 @@ import { Boost } from './Boost'
 const Container = styled.div`
   h3 {
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 500;
     color: ${({ theme }) => theme.color.body};
+  }
+
+  p {
+    color: ${({ theme }) => theme.color.bodyAccent};
   }
 
   > div {
@@ -31,7 +35,8 @@ const Container = styled.div`
           display: flex;
           justify-content: space-between;
           h4 {
-            font-weight: 600;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
           }
         }
         p {

@@ -12,7 +12,7 @@ const Container = styled.div`
   border-radius: 1rem;
 
   > h3 {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1rem;
     margin-bottom: 1rem;
   }
@@ -25,7 +25,7 @@ const Container = styled.div`
   > div a {
     display: flex;
     align-items: center;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1rem;
   }
 
@@ -40,7 +40,7 @@ const Container = styled.div`
     justify-content: space-between;
 
     > h3 {
-      font-size: 1.25rem;
+      font-size: 1.125rem;
       margin: 0;
     }
 

@@ -75,7 +75,7 @@ const MultiplierBox = styled.div`
 
     > span:first-child {
       font-size: 1.125rem;
-      font-weight: 600;
+      font-weight: 500;
       color: ${({ theme }) => theme.color.body};
     }
 
@@ -238,7 +238,6 @@ export const BoostCalculator: FC<{
                 balance: vMTABalance,
                 symbol: 'vMTA',
                 custom: true,
-                tip: 'vMTA balance is 12x smaller than your voting power',
               },
             ]}
             address={'vmta'}

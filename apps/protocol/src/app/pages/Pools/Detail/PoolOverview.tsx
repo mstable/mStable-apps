@@ -1,13 +1,6 @@
 import React, { FC, ReactElement, useCallback, useState } from 'react'
 
-import {
-  CountUp,
-  DifferentialCountup,
-  TransitionCard,
-  Tooltip,
-  CardContainer as Container,
-  CardButton as Button,
-} from '@apps/components/core'
+import { CountUp, DifferentialCountup, TransitionCard, Tooltip, CardContainer as Card, CardButton as Button } from '@apps/components/core'
 
 import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { UserBoost } from '../../../components/rewards/UserBoost'
@@ -17,6 +10,8 @@ import { useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { Position } from './Position'
 import { UserRewards } from './UserRewards'
 import { LiquidityMessage } from './LiquidityMessage'
+import { PokeBoost } from '../../../components/PokeBoost'
+import styled from 'styled-components'
 
 enum Selection {
   Stake = 'stake',
@@ -37,6 +32,12 @@ const components: Record<string, ReactElement> = {
   [Boost]: <UserVaultBoost />,
   [Rewards]: <UserRewards />,
 }
+
+const Container = styled.div`
+  > div {
+    margin-bottom: 1.25rem;
+  }
+`
 
 export const PoolOverview: FC = () => {
   const [selection, setSelection] = useState<Selection | undefined>()
@@ -62,46 +63,49 @@ export const PoolOverview: FC = () => {
   return showLiquidityMessage ? (
     <LiquidityMessage />
   ) : (
-    <TransitionCard components={components} selection={selection}>
-      <Container>
-        <Button active={selection === Stake} onClick={() => handleSelection(Stake)}>
-          <h3>Balance</h3>
-          <CountUp end={totalUserBalance} prefix="$" />
-        </Button>
-        <Button active={selection === Boost} onClick={() => handleSelection(Boost)}>
-          <h3>Rewards APY</h3>
-          {apy.value?.rewards.userBoost ? (
-            <DifferentialCountup prev={apy.value.rewards.base} end={apy.value.rewards.userBoost} suffix="%" />
-          ) : (
-            <CountUp end={apy.value?.rewards.base ?? 0} suffix="%" />
+    <Container>
+      <TransitionCard components={components} selection={selection}>
+        <Card>
+          <Button active={selection === Stake} onClick={() => handleSelection(Stake)}>
+            <h3>Balance</h3>
+            <CountUp end={totalUserBalance} prefix="$" />
+          </Button>
+          <Button active={selection === Boost} onClick={() => handleSelection(Boost)}>
+            <h3>Rewards APY</h3>
+            {apy.value?.rewards.userBoost ? (
+              <DifferentialCountup prev={apy.value.rewards.base} end={apy.value.rewards.userBoost} suffix="%" />
+            ) : (
+              <CountUp end={apy.value?.rewards.base ?? 0} suffix="%" />
+            )}
+          </Button>
+          <Button active={selection === Rewards} onClick={() => handleSelection(Rewards)}>
+            <h3>Rewards</h3>
+            <div>
+              <CountUp end={totalEarned} suffix={` ${vault?.rewardsToken.symbol}`} />
+              <Tooltip tip={`${vault?.rewardsToken.symbol} rewards unlock over time`} />
+            </div>
+          </Button>
+          {apy.value?.platformRewards && (
+            <Button active={false} disabled>
+              <h3>Platform APY</h3>
+              <div>
+                <CountUp end={apy.value.platformRewards} suffix="%" />
+                <Tooltip tip={`${vault?.platformRewardsToken?.symbol} rewards are claimed immediately`} />
+              </div>
+            </Button>
           )}
-        </Button>
-        <Button active={selection === Rewards} onClick={() => handleSelection(Rewards)}>
-          <h3>Rewards</h3>
-          <div>
-            <CountUp end={totalEarned} suffix={` ${vault?.rewardsToken.symbol}`} />
-            <Tooltip tip={`${vault?.rewardsToken.symbol} rewards unlock over time`} />
-          </div>
-        </Button>
-        {apy.value?.platformRewards && (
-          <Button active={false} disabled>
-            <h3>Platform APY</h3>
-            <div>
-              <CountUp end={apy.value.platformRewards} suffix="%" />
-              <Tooltip tip={`${vault?.platformRewardsToken?.symbol} rewards are claimed immediately`} />
-            </div>
-          </Button>
-        )}
-        {apy.value?.base && (
-          <Button active={false} disabled>
-            <h3>Base APY</h3>
-            <div>
-              <CountUp end={apy.value.base} suffix="%" />
-              <Tooltip tip="Base APY represents the increase in the value of the pool token over time" />
-            </div>
-          </Button>
-        )}
-      </Container>
-    </TransitionCard>
+          {apy.value?.base && (
+            <Button active={false} disabled>
+              <h3>Base APY</h3>
+              <div>
+                <CountUp end={apy.value.base} suffix="%" />
+                <Tooltip tip="Base APY represents the increase in the value of the pool token over time" />
+              </div>
+            </Button>
+          )}
+        </Card>
+      </TransitionCard>
+      <PokeBoost apy={apy} vault={vault} />
+    </Container>
   )
 }
