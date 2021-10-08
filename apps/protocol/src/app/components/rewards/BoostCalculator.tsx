@@ -75,7 +75,7 @@ const MultiplierBox = styled.div`
 
     > span:first-child {
       font-size: 1.125rem;
-      font-weight: 600;
+      font-weight: 500;
       color: ${({ theme }) => theme.color.body};
     }
 

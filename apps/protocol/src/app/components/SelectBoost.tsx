@@ -25,20 +25,12 @@ const Toggle = styled(Button)`
 const ToggleContainer = styled.div`
   display: flex;
   justify-content: flex-start;
-
+  flex-wrap: wrap;
   flex-direction: column;
-
-  > *:not(:last-child) {
-    margin-bottom: 0.5rem;
-  }
+  gap: 0.5rem;
 
   @media (min-width: ${ViewportWidth.s}) {
     flex-direction: row;
-
-    > *:not(:last-child) {
-      margin-bottom: 0;
-      margin-right: 0.5rem;
-    }
   }
 `
 
