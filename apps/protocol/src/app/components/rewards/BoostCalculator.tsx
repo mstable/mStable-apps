@@ -238,7 +238,6 @@ export const BoostCalculator: FC<{
                 balance: vMTABalance,
                 symbol: 'vMTA',
                 custom: true,
-                tip: 'vMTA balance is 12x smaller than your voting power',
               },
             ]}
             address={'vmta'}

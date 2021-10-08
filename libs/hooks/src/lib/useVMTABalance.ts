@@ -11,7 +11,7 @@ export const useVMTABalance = (): BigDecimal => {
   const stkBPT = useTokenSubscription(networkAddresses.ERC20.stkBPT)
 
   const balance = useMemo<BigDecimal | undefined>(() => {
-    return stkMTA?.balance?.add(stkBPT?.balance ?? BigDecimal.ZERO)?.divPrecisely(new BigDecimal((12e18).toString()))
+    return stkMTA?.balance?.add(stkBPT?.balance ?? BigDecimal.ZERO)
   }, [stkBPT?.balance, stkMTA?.balance])
 
   return balance ?? BigDecimal.ZERO

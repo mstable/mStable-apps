@@ -258,7 +258,7 @@ export const StakeBalances: FC = () => {
       stakedToken: {
         accounts: [
           {
-            balance: { rawBD, votesBD, cooldownUnits },
+            balance: { rawBD, cooldownUnits },
           },
         ],
       },
@@ -266,7 +266,7 @@ export const StakeBalances: FC = () => {
 
     const cooldown = parseFloat(cooldownUnits) / 1e18
 
-    // scale stakedBPT by priceCoefficient
+    // TODO: - Change priceCoefficient -> userPriceCoefficient
     const scaledBalance = isBPT
       ? new BigDecimal(stakedToken?.balance?.exact?.div(priceCoefficient).mul(1e4).toString())
       : stakedToken?.balance
