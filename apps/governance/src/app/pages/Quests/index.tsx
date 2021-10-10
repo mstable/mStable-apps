@@ -13,7 +13,7 @@ const Formula = styled.span`
 
 export const Quests: FC = () => (
   <div>
-    <GovernancePageHeader title="Quests" subtitle="Voting power is determined by quest completions and overall time staked">
+    <GovernancePageHeader title="Quests" subtitle="Voting power is determined by quest completions and overall time staked.">
       <Formula>voting_power = balance * quest_multiplier * time_multiplier</Formula>
     </GovernancePageHeader>
     <Meta8Console />
