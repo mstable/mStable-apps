@@ -70,6 +70,17 @@
         }
       }
     },
+    "merkle-drop": {
+      "includes": ["./shared/*", "./merkle-drop/*"],
+      "extensions": {
+        "endpoints": {
+          "ropsten": {
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-ropsten\n",
+            "introspect": false
+          }
+        }
+      }
+    },
     "questbook": {
       "includes": ["./shared/*", "./questbook/*"],
       "extensions": {

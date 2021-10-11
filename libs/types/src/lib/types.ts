@@ -10,6 +10,7 @@ import type {
   IUniswapV2Router02,
   StakingRewardsWithPlatformToken,
   FraxCrossChainFarm,
+  MerkleDrop,
 } from '@apps/artifacts/typechain'
 
 import type { BigDecimal } from '@apps/bigdecimal'
@@ -34,6 +35,7 @@ export enum Interfaces {
   BoostDirector,
   FraxCrossChainFarm,
   StakingRewardsWithPlatformToken,
+  MerkleDrop,
 }
 
 export interface Instances {
@@ -48,6 +50,7 @@ export interface Instances {
   [Interfaces.BoostDirector]: BoostDirector
   [Interfaces.FraxCrossChainFarm]: FraxCrossChainFarm
   [Interfaces.StakingRewardsWithPlatformToken]: StakingRewardsWithPlatformToken
+  [Interfaces.MerkleDrop]: MerkleDrop
 }
 
 export interface Token {

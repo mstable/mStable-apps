@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@mstable/merkle-drop": {
+      "signature": "a6987829b3321ee1699819b7f5aa7095",
+      "file": true
+    }
+  }
+}

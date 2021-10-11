@@ -72,6 +72,14 @@ generates:
     config:
       includeDirectives: true
 
+  ./libs/artifacts/src/graphql/merkle-drop/schema.graphql:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-ropsten
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
+
   ./libs/artifacts/src/graphql/staking/apollo-helpers.ts:
     overwrite: true
     schema:
@@ -154,6 +162,18 @@ generates:
       - https://api.thegraph.com/subgraphs/name/mstable/mstable-staking-kovan
       - ./libs/artifacts/src/graphql/staking/client.graphql
     documents: 'libs/artifacts/src/graphql/staking/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+
+  ./libs/artifacts/src/graphql/merkle-drop.tsx:
+    overwrite: true
+    schema:
+      - https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-ropsten
+      - ./libs/artifacts/src/graphql/merkle-drop/client.graphql
+    documents: 'libs/artifacts/src/graphql/merkle-drop/*.graphql'
     plugins:
       - 'fragment-matcher'
       - 'typescript'

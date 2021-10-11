@@ -16,6 +16,7 @@ import type {
   StakedToken,
   IncentivisedVotingLockup,
   QuestManager,
+  MerkleDrop,
 } from '@apps/artifacts/typechain'
 
 export interface Purpose {
@@ -39,6 +40,7 @@ export enum Interfaces {
   StakedToken,
   IncentivisedVotingLockup,
   QuestManager,
+  MerkleDrop,
 }
 
 export interface Instances {
@@ -56,6 +58,7 @@ export interface Instances {
   [Interfaces.StakedToken]: StakedToken
   [Interfaces.IncentivisedVotingLockup]: IncentivisedVotingLockup
   [Interfaces.QuestManager]: QuestManager
+  [Interfaces.MerkleDrop]: MerkleDrop
 }
 
 const calculateGasMargin = (value: BigNumber, margin = 1000): BigNumber => {

@@ -406,6 +406,28 @@
         }
       }
     },
+    "merkle-claim": {
+      "root": "libs/merkle-claim",
+      "sourceRoot": "libs/merkle-claim/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/merkle-claim/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/merkle-claim"],
+          "options": {
+            "jestConfig": "libs/merkle-claim/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "protocol": {
       "root": "apps/protocol",
       "sourceRoot": "apps/protocol/src",
