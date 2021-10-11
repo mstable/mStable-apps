@@ -138,7 +138,8 @@ export interface EthereumMainnet
   chainId: ChainIds.EthereumMainnet
 }
 
-export interface EthereumRopsten extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking' | 'questbook' | 'snapshot'>> {
+export interface EthereumRopsten
+  extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking' | 'questbook' | 'snapshot' | 'merkleDrop'>> {
   chainId: ChainIds.EthereumRopsten
 }
 
@@ -272,6 +273,7 @@ const ETH_ROPSTEN: EthereumRopsten = {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-ropsten')],
     staking: [graphHostedEndpoint('mstable', 'mstable-staking-ropsten')],
     blocks: [graphHostedEndpoint('blocklytics', 'ropsten-blocks')],
+    merkleDrop: [graphHostedEndpoint('mstable', 'mstable-merkle-drop-ropsten')],
     snapshot: ['https://hub.snapshot.org/graphql'],
     questbook: ['https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook'],
   },

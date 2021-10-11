@@ -1,0 +1,645 @@
+schema {
+  query: Query
+  subscription: Subscription
+}
+
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+directive @entity on OBJECT
+
+directive @subgraphId(id: String) on OBJECT
+
+"""
+User account for a Merkle Drop
+
+"""
+type Account {
+  """
+  merkleDrop.address
+  
+  """
+  id: ID!
+  address: Bytes!
+  claims(skip: Int = 0, first: Int = 100, orderBy: Claim_orderBy, orderDirection: OrderDirection, where: Claim_filter): [Claim!]!
+  lastClaimedTranche: Tranche
+  merkleDrop: MerkleDrop!
+}
+
+input Account_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  lastClaimedTranche: String
+  lastClaimedTranche_not: String
+  lastClaimedTranche_gt: String
+  lastClaimedTranche_lt: String
+  lastClaimedTranche_gte: String
+  lastClaimedTranche_lte: String
+  lastClaimedTranche_in: [String!]
+  lastClaimedTranche_not_in: [String!]
+  lastClaimedTranche_contains: String
+  lastClaimedTranche_not_contains: String
+  lastClaimedTranche_starts_with: String
+  lastClaimedTranche_not_starts_with: String
+  lastClaimedTranche_ends_with: String
+  lastClaimedTranche_not_ends_with: String
+  merkleDrop: String
+  merkleDrop_not: String
+  merkleDrop_gt: String
+  merkleDrop_lt: String
+  merkleDrop_gte: String
+  merkleDrop_lte: String
+  merkleDrop_in: [String!]
+  merkleDrop_not_in: [String!]
+  merkleDrop_contains: String
+  merkleDrop_not_contains: String
+  merkleDrop_starts_with: String
+  merkleDrop_not_starts_with: String
+  merkleDrop_ends_with: String
+  merkleDrop_not_ends_with: String
+}
+
+enum Account_orderBy {
+  id
+  address
+  claims
+  lastClaimedTranche
+  merkleDrop
+}
+
+scalar BigDecimal
+
+scalar BigInt
+
+scalar BigNumber
+
+input Block_height {
+  hash: Bytes
+  number: Int
+}
+
+scalar Bytes
+
+"""
+A claim for a tranche of a Merkle Drop
+
+"""
+type Claim {
+  """
+  tranche.account
+  
+  """
+  id: ID!
+  account: Account!
+  merkleDrop: MerkleDrop!
+  tranche: Tranche!
+  amount: BigDecimal!
+  claimed: Boolean!
+  claimedAt: Int!
+}
+
+input Claim_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  account: String
+  account_not: String
+  account_gt: String
+  account_lt: String
+  account_gte: String
+  account_lte: String
+  account_in: [String!]
+  account_not_in: [String!]
+  account_contains: String
+  account_not_contains: String
+  account_starts_with: String
+  account_not_starts_with: String
+  account_ends_with: String
+  account_not_ends_with: String
+  merkleDrop: String
+  merkleDrop_not: String
+  merkleDrop_gt: String
+  merkleDrop_lt: String
+  merkleDrop_gte: String
+  merkleDrop_lte: String
+  merkleDrop_in: [String!]
+  merkleDrop_not_in: [String!]
+  merkleDrop_contains: String
+  merkleDrop_not_contains: String
+  merkleDrop_starts_with: String
+  merkleDrop_not_starts_with: String
+  merkleDrop_ends_with: String
+  merkleDrop_not_ends_with: String
+  tranche: String
+  tranche_not: String
+  tranche_gt: String
+  tranche_lt: String
+  tranche_gte: String
+  tranche_lte: String
+  tranche_in: [String!]
+  tranche_not_in: [String!]
+  tranche_contains: String
+  tranche_not_contains: String
+  tranche_starts_with: String
+  tranche_not_starts_with: String
+  tranche_ends_with: String
+  tranche_not_ends_with: String
+  amount: BigDecimal
+  amount_not: BigDecimal
+  amount_gt: BigDecimal
+  amount_lt: BigDecimal
+  amount_gte: BigDecimal
+  amount_lte: BigDecimal
+  amount_in: [BigDecimal!]
+  amount_not_in: [BigDecimal!]
+  claimed: Boolean
+  claimed_not: Boolean
+  claimed_in: [Boolean!]
+  claimed_not_in: [Boolean!]
+  claimedAt: Int
+  claimedAt_not: Int
+  claimedAt_gt: Int
+  claimedAt_lt: Int
+  claimedAt_gte: Int
+  claimedAt_lte: Int
+  claimedAt_in: [Int!]
+  claimedAt_not_in: [Int!]
+}
+
+enum Claim_orderBy {
+  id
+  account
+  merkleDrop
+  tranche
+  amount
+  claimed
+  claimedAt
+}
+
+"""
+A Merkle Drop contract
+
+"""
+type MerkleDrop {
+  """
+  MerkleDrop address
+  
+  """
+  id: ID!
+  token: Token!
+  owner: Bytes!
+  funders: [Bytes!]!
+  tranches(skip: Int = 0, first: Int = 100, orderBy: Tranche_orderBy, orderDirection: OrderDirection, where: Tranche_filter): [Tranche!]!
+  claims(skip: Int = 0, first: Int = 100, orderBy: Claim_orderBy, orderDirection: OrderDirection, where: Claim_filter): [Claim!]!
+}
+
+input MerkleDrop_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  token: String
+  token_not: String
+  token_gt: String
+  token_lt: String
+  token_gte: String
+  token_lte: String
+  token_in: [String!]
+  token_not_in: [String!]
+  token_contains: String
+  token_not_contains: String
+  token_starts_with: String
+  token_not_starts_with: String
+  token_ends_with: String
+  token_not_ends_with: String
+  owner: Bytes
+  owner_not: Bytes
+  owner_in: [Bytes!]
+  owner_not_in: [Bytes!]
+  owner_contains: Bytes
+  owner_not_contains: Bytes
+  funders: [Bytes!]
+  funders_not: [Bytes!]
+  funders_contains: [Bytes!]
+  funders_not_contains: [Bytes!]
+}
+
+enum MerkleDrop_orderBy {
+  id
+  token
+  owner
+  funders
+  tranches
+  claims
+}
+
+scalar MstableBigDecimal
+
+enum OrderDirection {
+  asc
+  desc
+}
+
+type Query {
+  token(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Token
+  tokens(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Token_orderBy
+    orderDirection: OrderDirection
+    where: Token_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Token!]!
+  tranche(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Tranche
+  tranches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Tranche_orderBy
+    orderDirection: OrderDirection
+    where: Tranche_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Tranche!]!
+  claim(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Claim
+  claims(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Claim_orderBy
+    orderDirection: OrderDirection
+    where: Claim_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Claim!]!
+  account(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Account
+  accounts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Account_orderBy
+    orderDirection: OrderDirection
+    where: Account_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Account!]!
+  merkleDrop(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): MerkleDrop
+  merkleDrops(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: MerkleDrop_orderBy
+    orderDirection: OrderDirection
+    where: MerkleDrop_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [MerkleDrop!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+type Subscription {
+  token(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Token
+  tokens(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Token_orderBy
+    orderDirection: OrderDirection
+    where: Token_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Token!]!
+  tranche(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Tranche
+  tranches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Tranche_orderBy
+    orderDirection: OrderDirection
+    where: Tranche_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Tranche!]!
+  claim(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Claim
+  claims(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Claim_orderBy
+    orderDirection: OrderDirection
+    where: Claim_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Claim!]!
+  account(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): Account
+  accounts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Account_orderBy
+    orderDirection: OrderDirection
+    where: Account_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [Account!]!
+  merkleDrop(
+    id: ID!
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): MerkleDrop
+  merkleDrops(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: MerkleDrop_orderBy
+    orderDirection: OrderDirection
+    where: MerkleDrop_filter
+    """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
+    block: Block_height
+  ): [MerkleDrop!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+"""
+An ERC20-compatible token
+
+"""
+type Token {
+  """
+  Token address
+  
+  """
+  id: ID!
+  """
+  Token address
+  
+  """
+  address: Bytes!
+  """
+  Token decimals
+  
+  """
+  decimals: Int!
+  """
+  Token name
+  
+  """
+  name: String!
+  """
+  Token symbol
+  
+  """
+  symbol: String!
+  """
+  Merkle Drop contracts using this token
+  
+  """
+  merkleDrops(skip: Int = 0, first: Int = 100, orderBy: MerkleDrop_orderBy, orderDirection: OrderDirection, where: MerkleDrop_filter): [MerkleDrop!]!
+}
+
+input Token_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  decimals: Int
+  decimals_not: Int
+  decimals_gt: Int
+  decimals_lt: Int
+  decimals_gte: Int
+  decimals_lte: Int
+  decimals_in: [Int!]
+  decimals_not_in: [Int!]
+  name: String
+  name_not: String
+  name_gt: String
+  name_lt: String
+  name_gte: String
+  name_lte: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  symbol: String
+  symbol_not: String
+  symbol_gt: String
+  symbol_lt: String
+  symbol_gte: String
+  symbol_lte: String
+  symbol_in: [String!]
+  symbol_not_in: [String!]
+  symbol_contains: String
+  symbol_not_contains: String
+  symbol_starts_with: String
+  symbol_not_starts_with: String
+  symbol_ends_with: String
+  symbol_not_ends_with: String
+}
+
+enum Token_orderBy {
+  id
+  address
+  decimals
+  name
+  symbol
+  merkleDrops
+}
+
+"""
+A tranche of a Merkle Drop
+
+"""
+type Tranche {
+  """
+  merkleDrop.trancheId
+  
+  """
+  id: ID!
+  trancheId: Int!
+  totalAllocation: BigInt!
+  merkleRoot: Bytes!
+  addedAt: Int!
+  uri: String!
+  merkleDrop: MerkleDrop!
+  expired: Boolean!
+  claims(skip: Int = 0, first: Int = 100, orderBy: Claim_orderBy, orderDirection: OrderDirection, where: Claim_filter): [Claim!]!
+}
+
+input Tranche_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  trancheId: Int
+  trancheId_not: Int
+  trancheId_gt: Int
+  trancheId_lt: Int
+  trancheId_gte: Int
+  trancheId_lte: Int
+  trancheId_in: [Int!]
+  trancheId_not_in: [Int!]
+  totalAllocation: BigInt
+  totalAllocation_not: BigInt
+  totalAllocation_gt: BigInt
+  totalAllocation_lt: BigInt
+  totalAllocation_gte: BigInt
+  totalAllocation_lte: BigInt
+  totalAllocation_in: [BigInt!]
+  totalAllocation_not_in: [BigInt!]
+  merkleRoot: Bytes
+  merkleRoot_not: Bytes
+  merkleRoot_in: [Bytes!]
+  merkleRoot_not_in: [Bytes!]
+  merkleRoot_contains: Bytes
+  merkleRoot_not_contains: Bytes
+  addedAt: Int
+  addedAt_not: Int
+  addedAt_gt: Int
+  addedAt_lt: Int
+  addedAt_gte: Int
+  addedAt_lte: Int
+  addedAt_in: [Int!]
+  addedAt_not_in: [Int!]
+  uri: String
+  uri_not: String
+  uri_gt: String
+  uri_lt: String
+  uri_gte: String
+  uri_lte: String
+  uri_in: [String!]
+  uri_not_in: [String!]
+  uri_contains: String
+  uri_not_contains: String
+  uri_starts_with: String
+  uri_not_starts_with: String
+  uri_ends_with: String
+  uri_not_ends_with: String
+  merkleDrop: String
+  merkleDrop_not: String
+  merkleDrop_gt: String
+  merkleDrop_lt: String
+  merkleDrop_gte: String
+  merkleDrop_lte: String
+  merkleDrop_in: [String!]
+  merkleDrop_not_in: [String!]
+  merkleDrop_contains: String
+  merkleDrop_not_contains: String
+  merkleDrop_starts_with: String
+  merkleDrop_not_starts_with: String
+  merkleDrop_ends_with: String
+  merkleDrop_not_ends_with: String
+  expired: Boolean
+  expired_not: Boolean
+  expired_in: [Boolean!]
+  expired_not_in: [Boolean!]
+}
+
+enum Tranche_orderBy {
+  id
+  trancheId
+  totalAllocation
+  merkleRoot
+  addedAt
+  uri
+  merkleDrop
+  expired
+  claims
+}
+
+type _Block_ {
+  """The hash of the block"""
+  hash: Bytes
+  """The block number"""
+  number: Int!
+}
+
+"""The type for the top-level _meta field"""
+type _Meta_ {
+  """
+  Information about a specific subgraph block. The hash of the block
+  will be null if the _meta field has a block constraint that asks for
+  a block number. It will be filled if the _meta field has no block constraint
+  and therefore asks for the latest  block
+  
+  """
+  block: _Block_!
+  """The deployment ID"""
+  deployment: String!
+  """If `true`, the subgraph encountered indexing errors at some past block"""
+  hasIndexingErrors: Boolean!
+}
+
+enum _SubgraphErrorPolicy_ {
+  """Data will be returned even if the subgraph has indexing errors"""
+  allow
+  """If the subgraph has indexing errors, data will be omitted. The default."""
+  deny
+}

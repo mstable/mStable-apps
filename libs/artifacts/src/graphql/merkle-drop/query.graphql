@@ -1,0 +1,29 @@
+# import './fragments.graphql'
+
+query MerkleDropAccounts($account: Bytes!) {
+  accounts(where: { address: $account }) {
+    id
+    lastClaimedTranche {
+      id
+      trancheId
+    }
+    merkleDrop {
+      id
+      token {
+        address
+        symbol
+      }
+    }
+    claims(where: { claimed: false }, orderBy: id, orderDirection: asc) {
+      id
+      amount
+      tranche {
+        id
+        trancheId
+        merkleRoot
+        expired
+        uri
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
-import React, { FC, useMemo } from 'react'
+import { MerkleClaimForm, MerkleClaimsProvider } from '@apps/merkle-claim'
+import React, { FC } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
@@ -10,11 +11,6 @@ import { BigDecimal } from '@apps/bigdecimal'
 
 import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { useRewardsEarned } from './context'
-
-interface Balance {
-  symbol?: string
-  amount: BigDecimal
-}
 
 const Compound = styled.div`
   padding: 0 0.5rem;
@@ -89,6 +85,11 @@ export const ClaimForm: FC = () => {
           </div>
           <p>This will claim and re-stake your earned MTA in 1 transaction</p>
         </Compound>
+      )}
+      {stakedTokenSymbol === 'mBPT' && (
+        <MerkleClaimsProvider>
+          <MerkleClaimForm merkleDropAddress="0x4912c0fa9ed21f8f5420bdfaa097220120610082" />
+        </MerkleClaimsProvider>
       )}
       <SendButton valid={!!rewardsEarned?.rewards} title={isCompounding ? 'Compound Rewards' : 'Claim Rewards'} handleSend={handleSend} />
     </Container>

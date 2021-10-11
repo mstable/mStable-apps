@@ -19,6 +19,7 @@
     "paths": {
       "@apps/artifacts/graphql/blocks": ["libs/artifacts/src/graphql/blocks.tsx"],
       "@apps/artifacts/graphql/feeders": ["libs/artifacts/src/graphql/feeders.tsx"],
+      "@apps/artifacts/graphql/merkle-drop": ["libs/artifacts/src/graphql/merkle-drop.tsx"],
       "@apps/artifacts/graphql/protocol": ["libs/artifacts/src/graphql/protocol.tsx"],
       "@apps/artifacts/graphql/questbook": ["libs/artifacts/src/graphql/questbook.tsx"],
       "@apps/artifacts/graphql/questbook/apollo-helpers": ["libs/artifacts/src/graphql/questbook/apollo-helpers.ts"],
@@ -55,6 +56,7 @@
       "@apps/formatters": ["libs/formatters/src/index.ts"],
       "@apps/hooks": ["libs/hooks/src/index.ts"],
       "@apps/masset-provider": ["libs/masset-provider/src/index.ts"],
+      "@apps/merkle-claim": ["libs/merkle-claim/src/index.ts"],
       "@apps/quick-maths": ["libs/quick-maths/src/index.ts"],
       "@apps/react-utils": ["libs/react-utils/src/index.ts"],
       "@apps/transaction-manifest": ["libs/transaction-manifest/src/index.ts"],

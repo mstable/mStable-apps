@@ -31,7 +31,7 @@ export const calculateBoost = (priceCoeff?: number, stakingBalance?: BigDecimal,
   return Math.min(MAX_BOOST, Math.max(MIN_BOOST, 0.98 + (BOOST_COEFF * Math.min(scaledMTABalance, MAX_VMTA)) / scaledBalance ** EXPONENT))
 }
 
-export const getPriceCoeff = (vault: BoostedSavingsVaultState): number => {
+export const getPriceCoeff = (vault: BoostedSavingsVaultState): number | undefined => {
   // if (vault.priceCoeff) return vault.priceCoeff / 1e18
 
   switch (vault.address) {
