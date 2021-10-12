@@ -15,6 +15,10 @@ interface Props {
   tip?: string
 }
 
+const YEAR = 365.24
+const MONTH = 30.44
+const WEEK = 7
+
 const StyledTooltip = styled(Tooltip)`
   position: absolute;
   right: -1.25rem;
@@ -53,6 +57,8 @@ const Container = styled.div`
   position: relative;
 `
 
+const formatLabel = (val: number, label: string) => (val > 0 ? `${val}${label}` : ``)
+
 export const CountdownBar: FC<Props> = ({ className, width = 150, percentage = 0, end, color, tip, textColor }) => {
   const [value, setValue] = useState((percentage / 100) * width)
   const endDate = new Date(end)
@@ -60,14 +66,21 @@ export const CountdownBar: FC<Props> = ({ className, width = 150, percentage = 0
   const timeMultiplier = 60 // minute
   const interval = ((((100 - percentage) / 100) * width) / dateDifference) * timeMultiplier
 
-  const renderer = ({ days, hours, minutes, seconds, completed }: CountdownRenderProps): ReactElement => {
-    const weeks = Math.floor(days / 7)
-    const remainder = days % 7
+  const renderer = ({ days: total, hours, minutes, completed }: CountdownRenderProps): ReactElement => {
+    const years = Math.floor(total / YEAR)
+    const months = Math.floor((total % YEAR) / MONTH)
+    const weeks = Math.floor((total % MONTH) / WEEK)
+    const days = total % 7
     return (
       <Time color={textColor}>
         {completed
           ? `Complete`
-          : `${weeks > 0 ? `${weeks}w` : ``} ${remainder > 0 ? `${remainder}d` : ``} ${hours}h ${minutes}m ${seconds}s`}
+          : `${formatLabel(years, 'y')} 
+             ${formatLabel(months, 'm')} 
+             ${formatLabel(weeks, 'w')} 
+             ${formatLabel(days, 'd')} 
+             ${hours}h 
+             ${minutes}m`}
       </Time>
     )
   }
