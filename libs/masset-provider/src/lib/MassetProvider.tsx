@@ -1,10 +1,9 @@
 import type { Dispatch, SetStateAction } from 'react'
-import React, { createContext, useContext } from 'react'
+import React from 'react'
 import { createStateContext } from 'react-use'
 
 import { MassetName, MASSETS } from '@apps/types'
 import { BigDecimal } from '@apps/bigdecimal'
-import { composedComponent } from '@apps/react-utils'
 
 export interface MassetConfig {
   massetName: MassetName
@@ -39,16 +38,15 @@ const defaultValue: MassetName = (() => {
 
 const [useSelectedMassetNameCtx, SelectedMassetNameProvider] = createStateContext<MassetName>(defaultValue)
 
-const massetConfigCtx = createContext<MassetConfig>(MASSET_CONFIG[defaultValue])
-
 export const useSelectedMasset = (): [MassetName, Dispatch<SetStateAction<MassetName>>] => useSelectedMassetNameCtx()
 
 export const useSelectedMassetName = (): MassetName => useSelectedMassetNameCtx()[0]
 
 export const useSetSelectedMassetName = (): Dispatch<SetStateAction<MassetName>> => useSelectedMassetNameCtx()[1]
 
-export const useSelectedMassetConfig = (): MassetConfig => useContext(massetConfigCtx)
+export const useSelectedMassetConfig = (): MassetConfig => {
+  const masset = useSelectedMassetName()
+  return MASSET_CONFIG[masset]
+}
 
-export const MassetProvider = composedComponent(SelectedMassetNameProvider, ({ children }) => (
-  <massetConfigCtx.Provider value={MASSET_CONFIG.musd}>{children}</massetConfigCtx.Provider>
-))
+export const MassetProvider = SelectedMassetNameProvider;
