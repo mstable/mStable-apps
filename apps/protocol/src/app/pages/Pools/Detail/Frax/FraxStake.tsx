@@ -158,8 +158,6 @@ export const FraxStake: FC = () => {
       .filter(([, v]) => v)
       .map(([unit]) => unit)
 
-    if ((duration?.days ?? 0) < 1) return `0 days`
-
     return formatDuration(duration, {
       format: ['years', 'months', 'weeks', 'days'].filter(i => new Set(nonzero).has(i)).slice(0, 3),
       delimiter: ', ',
