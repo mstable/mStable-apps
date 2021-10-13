@@ -70,9 +70,11 @@ const useFeederPoolApyFrax = (poolAddress: string): FetchState<BoostedCombinedAP
 
 export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
   const networkAddresses = useNetworkAddresses()
+  const feederPoolApyFrax = useFeederPoolApyFrax(poolAddress)
+  const feederPoolApyVault = useFeederPoolApyVault(poolAddress)
   if (poolAddress && (networkAddresses as MaticMainnet['addresses']).FRAX?.feederPool === poolAddress) {
-    return useFeederPoolApyFrax(poolAddress)
+    return feederPoolApyFrax
   }
 
-  return useFeederPoolApyVault(poolAddress)
+  return feederPoolApyVault
 }
