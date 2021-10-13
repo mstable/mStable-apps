@@ -4,7 +4,6 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { DelegateeInfo } from '@mstable/delegatee-lists'
 
-import { useStakedToken } from '../../context/StakedTokenProvider'
 import { useAccountQuery } from '../../hooks/useAccountQuery'
 
 import { VotingHistory } from './VotingHistory'
@@ -106,32 +105,30 @@ const DelegateeBalances: FC<{
     }
   }[]
 }> = ({ accounts }) => {
-  const stakedToken = useStakedToken()
+  const votingPower = accounts?.map(a => a?.balance?.votesBD?.simple ?? 0).reduce((a, b) => a + b)
   return (
     <DelegateeBalancesContainer>
-      {accounts
-        ?.filter(account => account?.stakedToken?.id === stakedToken?.selected)
-        .map(({ stakedToken: { stakingToken }, balance, id }) => {
-          const cooldownSimple = parseFloat(balance.cooldownUnits) / 1e18
-          return (
-            <React.Fragment key={id}>
-              <Widget>
-                <h4>Staked Balance</h4>
-                <div>
-                  <StyledTokenIcon symbol={stakingToken.symbol} />
-                  <StyledCountUp end={balance.rawBD.simple + cooldownSimple} />
-                </div>
-              </Widget>
-              <Widget>
-                <h4>Voting Power</h4>
-                <div>
-                  <StyledTokenIcon symbol="vMTA" />
-                  <StyledCountUp end={balance.votesBD.simple} />
-                </div>
-              </Widget>
-            </React.Fragment>
-          )
-        })}
+      {accounts.map(({ stakedToken: { stakingToken }, balance, id }) => {
+        const cooldownSimple = parseFloat(balance.cooldownUnits) / 1e18
+        return (
+          <React.Fragment key={id}>
+            <Widget>
+              <h4>Staked {stakingToken.symbol}</h4>
+              <div>
+                <StyledTokenIcon symbol={stakingToken.symbol} />
+                <StyledCountUp end={balance.rawBD.simple + cooldownSimple} />
+              </div>
+            </Widget>
+          </React.Fragment>
+        )
+      })}
+      <Widget>
+        <h4>Voting Power</h4>
+        <div>
+          <StyledTokenIcon symbol="vMTA" />
+          <StyledCountUp end={votingPower} />
+        </div>
+      </Widget>
     </DelegateeBalancesContainer>
   )
 }
