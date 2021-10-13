@@ -3,7 +3,7 @@ import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { FetchState, useSelectedMassetState } from '@apps/hooks'
 import { calculateApy, calculateBoost, getPriceCoeff, MAX_BOOST } from '@apps/quick-maths'
 import { BoostedCombinedAPY } from '@apps/types'
-import { useVMTABalance } from 'libs/hooks/src/lib/useVMTABalance'
+import { useVMTABalance } from '@apps/hooks'
 
 import { useFraxStakingState } from '../context/FraxStakingProvider'
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'
