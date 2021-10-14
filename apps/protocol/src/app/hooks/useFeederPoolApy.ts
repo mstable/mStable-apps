@@ -3,7 +3,7 @@ import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { FetchState, useSelectedMassetState } from '@apps/hooks'
 import { calculateApy, calculateBoost, getPriceCoeff, MAX_BOOST } from '@apps/quick-maths'
 import { BoostedCombinedAPY } from '@apps/types'
-import { useVMTABalance } from 'libs/hooks/src/lib/useVMTABalance'
+import { useVMTABalance } from '@apps/hooks'
 
 import { useFraxStakingState } from '../context/FraxStakingProvider'
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'
@@ -70,9 +70,11 @@ const useFeederPoolApyFrax = (poolAddress: string): FetchState<BoostedCombinedAP
 
 export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
   const networkAddresses = useNetworkAddresses()
+  const feederPoolApyFrax = useFeederPoolApyFrax(poolAddress)
+  const feederPoolApyVault = useFeederPoolApyVault(poolAddress)
   if (poolAddress && (networkAddresses as MaticMainnet['addresses']).FRAX?.feederPool === poolAddress) {
-    return useFeederPoolApyFrax(poolAddress)
+    return feederPoolApyFrax
   }
 
-  return useFeederPoolApyVault(poolAddress)
+  return feederPoolApyVault
 }

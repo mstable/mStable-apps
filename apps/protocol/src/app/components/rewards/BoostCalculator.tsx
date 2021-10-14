@@ -13,7 +13,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 
 import { ReactComponent as ArrowsSvg } from '@apps/components/icons/double-arrow.svg'
 import { ReactComponent as GovSvg } from '@apps/components/icons/governance-icon.svg'
-import { useVMTABalance } from 'libs/hooks/src/lib/useVMTABalance'
+import { useVMTABalance } from '@apps/hooks'
 
 const GOVERNANCE_URL = 'https://staking.mstable.app/#/stake'
 

@@ -194,7 +194,7 @@ const PoolsContent: FC = () => {
           deprecated: [],
         },
       ),
-    [feederPools, hasFeederPools, network.chainId, network.protocolName, massetConfig],
+    [feederPools, hasFeederPools, isEthereum, network.protocolName, massetConfig],
   )
 
   const [numPoolsVisible, setNumPoolsVisible] = useState({
