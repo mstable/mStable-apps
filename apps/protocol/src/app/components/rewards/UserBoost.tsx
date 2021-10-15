@@ -8,6 +8,12 @@ import { BoostedCombinedAPY } from '@apps/types'
 
 import { Boost } from './Boost'
 
+const APYRange = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`
+
 const Container = styled.div`
   h3 {
     font-size: 1.25rem;
@@ -56,15 +62,17 @@ export const UserBoost: FC<{
       <div>
         <div>
           <div>
-            <h4>Base APY</h4>
-            {apy.fetching ? <ThemedSkeleton height={20} width={64} /> : apy.value && <CountUp end={apy.value.rewards.base} suffix="%" />}
-          </div>
-          <div>
-            <h4>Max APY</h4>
+            <h4>Rewards APY</h4>
             {apy.fetching ? (
               <ThemedSkeleton height={20} width={64} />
             ) : (
-              apy.value && <CountUp end={apy.value.rewards.maxBoost} suffix="%" />
+              apy.value && (
+                <APYRange>
+                  <CountUp end={apy.value.rewards.base} suffix="%" />
+                  →
+                  <CountUp end={apy.value.rewards.maxBoost} suffix="%" />
+                </APYRange>
+              )
             )}
           </div>
           <div>
