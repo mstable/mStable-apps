@@ -189,7 +189,7 @@ const ETH_MAINNET: EthereumMainnet = {
   blockTime: 15e3,
   coingeckoId: 'ethereum',
   rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
-  gasStationEndpoint: 'http://ethgas.watch/api/gas',
+  gasStationEndpoint: 'https://ethgas.watch/api/gas',
   gqlEndpoints: {
     protocol: [
       graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0, process.env.NX_PROTOCOL_SUBGRAPH_API_KEY as string),
