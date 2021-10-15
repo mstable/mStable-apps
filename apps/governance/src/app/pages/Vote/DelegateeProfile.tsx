@@ -108,7 +108,7 @@ const DelegateeBalances: FC<{
   const votingPower = accounts?.map(a => a?.balance?.votesBD?.simple ?? 0).reduce((a, b) => a + b)
   return (
     <DelegateeBalancesContainer>
-      {accounts.map(({ stakedToken: { stakingToken }, balance, id }) => {
+      {accounts?.map(({ stakedToken: { stakingToken }, balance, id }) => {
         const cooldownSimple = parseFloat(balance.cooldownUnits) / 1e18
         return (
           <React.Fragment key={id}>

@@ -276,7 +276,7 @@ export const StakeBalances: FC = () => {
 
     return {
       stake: { amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol },
-      votingPower: { amount: scaledBalance?.simple, symbol: 'vMTA' },
+      votingPower: { amount: stakedToken?.balance?.simple, symbol: 'vMTA' },
       rewardsEarned: { decimals: 4, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards },
       baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
       userRewardsApy: { suffix: '%', amount: userRewardsApy },
@@ -288,11 +288,12 @@ export const StakeBalances: FC = () => {
     <Container>
       <DefaultWidget>
         <Group label="My Stake" balance={values.stake} loading={loading} />
+        {/* // TODO: - On priceCoeff change, enable multiplier for BPT */}
         <Group
           label={isDelegated ? 'Delegated Vote Power' : 'My Voting Power'}
           balance={values.votingPower}
           loading={loading}
-          boost={values.boost}
+          boost={!isBPT && values.boost}
         />
       </DefaultWidget>
       {!!values.stake || hasSelectedStakeOption ? (
@@ -300,6 +301,7 @@ export const StakeBalances: FC = () => {
           <Group label="Earned" balance={values.rewardsEarned} loading={loading} />
           <Group label="Base APY" balance={values.baseRewardsApy} loading={loading} />
           {values.userRewardsApy && <Group label="My APY" balance={values.userRewardsApy} loading={loading} />}
+          {/* // TODO: - Add with BAL Apy */}
           {/* {stakedToken?.symbol === 'stkBPT' && <Group label="BAL APY" placeholder="Soon!" loading={loading} />} */}
         </DefaultWidget>
       ) : (
