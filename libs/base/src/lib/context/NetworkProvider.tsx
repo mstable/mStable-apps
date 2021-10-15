@@ -189,7 +189,7 @@ const ETH_MAINNET: EthereumMainnet = {
   blockTime: 15e3,
   coingeckoId: 'ethereum',
   rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
-  gasStationEndpoint: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:mstable',
+  gasStationEndpoint: 'https://ethgas.watch/api/gas',
   gqlEndpoints: {
     protocol: [
       graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0, process.env.NX_PROTOCOL_SUBGRAPH_API_KEY as string),
@@ -431,6 +431,11 @@ const NetworkConfigProvider: FC = ({ children }) => {
   return <networkCtx.Provider value={network}>{children}</networkCtx.Provider>
 }
 
+interface IPrice {
+  gwei: number
+  usd: number
+}
+
 const NetworkPricesProvider: FC = ({ children }) => {
   const network = useContext(networkCtx)
 
@@ -443,18 +448,20 @@ const NetworkPricesProvider: FC = ({ children }) => {
     const gasStationResponse = await fetch(network.gasStationEndpoint)
     const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${network.coingeckoId}&vs_currencies=usd`)
 
-    const [{ data, standard, instant, fast, fastest, safeLow, slow }, priceResult] = (await Promise.all([
+    const [{ data, standard, instant, normal, fast, fastest, safeLow, slow }, priceResult] = (await Promise.all([
       gasStationResponse.json(),
       priceResponse.json(),
     ])) as [
       {
-        fast: number
-        standard: number
+        fast?: number | IPrice
+        standard?: number
+        // ethgas.watch
+        normal?: IPrice
         // Interface differences across endpoints
         fastest?: number
-        instant?: number
+        instant?: number | IPrice
         safeLow?: number
-        slow?: number
+        slow?: number | IPrice
         data?: {
           slow: number
           fast: number
@@ -472,11 +479,14 @@ const NetworkPricesProvider: FC = ({ children }) => {
     )
 
     const nativeToken = priceResult[network.coingeckoId].usd
+    const fastGwei = typeof fast === 'number' ? fast : fast?.gwei || gasNow?.fast
+    const slowGwei = typeof slow === 'number' ? slow : slow?.gwei || gasNow?.slow
+    const instantGwei = typeof instant === 'number' ? instant : instant?.gwei || gasNow?.rapid
     const gas = {
-      standard: capGasPrice(standard ?? gasNow?.standard, network.chainId),
-      fast: capGasPrice(fast ?? gasNow?.fast, network.chainId),
-      slow: capGasPrice(slow ?? (safeLow as number) ?? gasNow?.slow, network.chainId),
-      instant: capGasPrice(instant ?? (fastest as number) ?? gasNow?.rapid, network.chainId),
+      standard: capGasPrice(normal?.gwei ?? standard ?? gasNow?.standard, network.chainId),
+      fast: capGasPrice(fastGwei, network.chainId),
+      slow: capGasPrice(slowGwei, network.chainId),
+      instant: capGasPrice(instantGwei, network.chainId),
     }
 
     setNetworkPrices.value({ nativeToken, gas })
