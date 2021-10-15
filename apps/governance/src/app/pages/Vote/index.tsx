@@ -168,15 +168,8 @@ export const Vote: FC = () => {
       return {}
     }
 
-    const isBPT = options[stakedTokenAddress]?.icon?.symbol === 'mBPT'
-    const priceCoefficient = data?.stakedToken?.priceCoefficient
-
-    const delegatedPower = (
-      isBPT ? new BigDecimal(stakedToken?.balance?.exact?.div(priceCoefficient).mul(1e4).toString()) : stakedToken?.balance
-    )?.simple
-
-    return { delegatedPower }
-  }, [data, options, stakedToken, stakedTokenAddress])
+    return { delegatedPower: stakedToken?.balance?.simple }
+  }, [data, stakedToken])
 
   const handleRowClick = (id: string) => history.push(`/vote/${id}`)
 
