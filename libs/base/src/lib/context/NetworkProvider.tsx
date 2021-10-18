@@ -21,6 +21,56 @@ interface NetworkPrices {
   }
 }
 
+interface GasPrice {
+  standard: number
+  fast: number
+  slow: number
+  instant: number
+}
+
+interface GasWatch {
+  slow: GasWatchPrice
+  normal: GasWatchPrice
+  fast: GasWatchPrice
+  instant: GasWatchPrice
+  ethPrice: number
+  lastUpdated: number
+  sources: GasWatchSource[]
+}
+
+interface GasWatchPrice {
+  gwei: number
+  usd: number
+}
+
+interface GasWatchSource {
+  name: string
+  source: string
+  fast: number
+  standard: number
+  slow: number
+  lastBlock: number
+}
+
+interface GasPoaNetwork {
+  health: boolean
+  block_number: number
+  slow: number
+  standard: number
+  fast: number
+  instant: number
+  block_time: number
+}
+
+interface MaticMainGas {
+  safeLow: number
+  standard: number
+  fast: number
+  fastest: number
+  blockTime: number
+  blockNumber: number
+}
+
 interface CoreAddresses {
   MTA: string
   vMTA: string
@@ -54,37 +104,23 @@ export enum Networks {
 
 interface Network<TAddresses, TGqlEndpoints> {
   protocolName: string
-
   chainName: string
-
   isMetaMaskDefault: boolean
-
   isTestnet: boolean
-
   blockTime: number
-
   nativeToken: {
     decimals: number
     symbol: string
     parentChainAddress?: string
   }
-
   chainId: ChainIds
-
   parentChainId?: ChainIds
-
   coingeckoId: string
-
   rpcEndpoints: string[]
-
   gqlEndpoints: CoreGqlEndpoints & TGqlEndpoints
-
   addresses: CoreAddresses & { ERC20: { wMATIC?: string; WETH?: string; FXS?: string } } & TAddresses
-
   gasStationEndpoint: string
-
   getExplorerUrl(entity?: string, type?: 'address' | 'transaction' | 'token' | 'account'): string
-
   supportedMassets: MassetName[]
 }
 
@@ -431,11 +467,6 @@ const NetworkConfigProvider: FC = ({ children }) => {
   return <networkCtx.Provider value={network}>{children}</networkCtx.Provider>
 }
 
-interface IPrice {
-  gwei: number
-  usd: number
-}
-
 const NetworkPricesProvider: FC = ({ children }) => {
   const network = useContext(networkCtx)
 
@@ -445,49 +476,44 @@ const NetworkPricesProvider: FC = ({ children }) => {
     if (!network) return
 
     setNetworkPrices.fetching()
-    const gasStationResponse = await fetch(network.gasStationEndpoint)
+
+    let gas: GasPrice
+
+    // eth mainnet
+    if (network.chainId === ChainIds.EthereumMainnet) {
+      const gasStationResponse = await fetch(network.gasStationEndpoint)
+      const gasRes: GasWatch = await gasStationResponse.json()
+      gas = {
+        standard: gasRes.normal.gwei,
+        fast: gasRes.fast.gwei,
+        slow: gasRes.slow.gwei,
+        instant: gasRes.instant.gwei,
+      }
+      // eth testnet
+    } else if ([ChainIds.EthereumGoerli, ChainIds.EthereumKovan, ChainIds.EthereumRopsten].includes(network.chainId)) {
+      const gasStationResponse = await fetch(network.gasStationEndpoint)
+      const gasRes: GasPoaNetwork = await gasStationResponse.json()
+      gas = {
+        standard: gasRes.standard,
+        fast: gasRes.fast,
+        slow: gasRes.slow,
+        instant: gasRes.instant,
+      }
+      // Matic Mainnet + Mumbai
+    } else {
+      const gasStationResponse = await fetch(network.gasStationEndpoint)
+      const gasRes: MaticMainGas = await gasStationResponse.json()
+      gas = {
+        standard: Math.min(30, gasRes.standard),
+        fast: Math.min(30, gasRes.fast),
+        slow: Math.min(30, gasRes.safeLow),
+        instant: Math.min(30, gasRes.fastest),
+      }
+    }
     const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${network.coingeckoId}&vs_currencies=usd`)
 
-    const [{ data, standard, instant, normal, fast, fastest, safeLow, slow }, priceResult] = (await Promise.all([
-      gasStationResponse.json(),
-      priceResponse.json(),
-    ])) as [
-      {
-        fast?: number | IPrice
-        standard?: number
-        // ethgas.watch
-        normal?: IPrice
-        // Interface differences across endpoints
-        fastest?: number
-        instant?: number | IPrice
-        safeLow?: number
-        slow?: number | IPrice
-        data?: {
-          slow: number
-          fast: number
-          standard: number
-          rapid: number
-        }
-      },
-      Record<typeof network['coingeckoId'], { usd: number }>,
-    ]
-
-    const gasNow = Object.fromEntries(
-      Object.entries(data ?? {})
-        .filter(([k]) => ['rapid', 'slow', 'standard', 'fast'].find(v => v === k))
-        .map(([k, v]) => [k, v / 1e9]),
-    )
-
+    const priceResult: Record<typeof network['coingeckoId'], { usd: number }> = await priceResponse.json()
     const nativeToken = priceResult[network.coingeckoId].usd
-    const fastGwei = typeof fast === 'number' ? fast : fast?.gwei || gasNow?.fast
-    const slowGwei = typeof slow === 'number' ? slow : slow?.gwei || gasNow?.slow
-    const instantGwei = typeof instant === 'number' ? instant : instant?.gwei || gasNow?.rapid
-    const gas = {
-      standard: capGasPrice(normal?.gwei ?? standard ?? gasNow?.standard, network.chainId),
-      fast: capGasPrice(fastGwei, network.chainId),
-      slow: capGasPrice(slowGwei, network.chainId),
-      instant: capGasPrice(instantGwei, network.chainId),
-    }
 
     setNetworkPrices.value({ nativeToken, gas })
   }, [network, setNetworkPrices])
