@@ -171,7 +171,7 @@ export const FraxStake: FC = () => {
   }, [maxMultiplier, lockTimeMax, seconds])
 
   const handleWithdraw = (kekId: string): void => {
-    if (!contract || !inputValue?.exact || !seconds) return
+    if (!contract) return
     propose<Interfaces.FraxCrossChainFarm, 'withdrawLocked'>(
       new TransactionManifest(contract, 'withdrawLocked', [kekId], {
         present: 'Withdrawing LP token',
