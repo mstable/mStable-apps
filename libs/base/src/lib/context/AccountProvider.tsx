@@ -159,7 +159,7 @@ const OnboardProvider: FC<{
               // infuraKey: 'a6daf77ef0ae4b60af39259e435a40fe',
               rpc: {
                 '1': 'https://ethereum.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe',
-                '137': 'https://polygon-mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe',
+                '137': 'https://rpc-mainnet.maticvigil.com/v1/9014a595065319bb6d40417c45281c2608a943c7',
               },
             },
             { walletName: 'trust', rpcUrl },
