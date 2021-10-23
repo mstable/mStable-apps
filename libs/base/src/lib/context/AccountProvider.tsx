@@ -156,7 +156,9 @@ const OnboardProvider: FC<{
             },
             {
               walletName: 'walletConnect',
-              infuraKey: 'a6daf77ef0ae4b60af39259e435a40fe',
+              rpc: {
+                [chainId]: rpcUrl,
+              },
             },
             { walletName: 'trust', rpcUrl },
             { walletName: 'coinbase' },
