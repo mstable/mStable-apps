@@ -156,10 +156,8 @@ const OnboardProvider: FC<{
             },
             {
               walletName: 'walletConnect',
-              // infuraKey: 'a6daf77ef0ae4b60af39259e435a40fe',
               rpc: {
-                '1': 'https://ethereum.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe',
-                '137': 'https://rpc-mainnet.maticvigil.com/v1/9014a595065319bb6d40417c45281c2608a943c7',
+                [chainId]: rpcUrl,
               },
             },
             { walletName: 'trust', rpcUrl },
