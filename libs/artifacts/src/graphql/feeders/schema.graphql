@@ -2902,6 +2902,8 @@ type Query {
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Token
   tokens(
     skip: Int = 0
@@ -2911,11 +2913,15 @@ type Query {
     where: Token_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Token!]!
   metric(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Metric
   metrics(
     skip: Int = 0
@@ -2925,11 +2931,15 @@ type Query {
     where: Metric_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Metric!]!
   counter(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Counter
   counters(
     skip: Int = 0
@@ -2939,11 +2949,15 @@ type Query {
     where: Counter_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Counter!]!
   basset(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Basset
   bassets(
     skip: Int = 0
@@ -2953,11 +2967,15 @@ type Query {
     where: Basset_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Basset!]!
   basket(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Basket
   baskets(
     skip: Int = 0
@@ -2967,11 +2985,15 @@ type Query {
     where: Basket_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Basket!]!
   ampData(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): AmpData
   ampDatas(
     skip: Int = 0
@@ -2981,11 +3003,15 @@ type Query {
     where: AmpData_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [AmpData!]!
   boostedSavingsVault(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVault
   boostedSavingsVaults(
     skip: Int = 0
@@ -2995,11 +3021,15 @@ type Query {
     where: BoostedSavingsVault_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVault!]!
   account(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Account
   accounts(
     skip: Int = 0
@@ -3009,11 +3039,15 @@ type Query {
     where: Account_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Account!]!
   boostedSavingsVaultAccount(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultAccount
   boostedSavingsVaultAccounts(
     skip: Int = 0
@@ -3023,11 +3057,15 @@ type Query {
     where: BoostedSavingsVaultAccount_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultAccount!]!
   boostedSavingsVaultRewardEntry(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultRewardEntry
   boostedSavingsVaultRewardEntries(
     skip: Int = 0
@@ -3037,11 +3075,15 @@ type Query {
     where: BoostedSavingsVaultRewardEntry_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultRewardEntry!]!
   boostedSavingsVaultStakeTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultStakeTransaction
   boostedSavingsVaultStakeTransactions(
     skip: Int = 0
@@ -3051,11 +3093,15 @@ type Query {
     where: BoostedSavingsVaultStakeTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultStakeTransaction!]!
   boostedSavingsVaultRewardAddedTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultRewardAddedTransaction
   boostedSavingsVaultRewardAddedTransactions(
     skip: Int = 0
@@ -3065,11 +3111,15 @@ type Query {
     where: BoostedSavingsVaultRewardAddedTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultRewardAddedTransaction!]!
   boostedSavingsVaultRewardPaidTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultRewardPaidTransaction
   boostedSavingsVaultRewardPaidTransactions(
     skip: Int = 0
@@ -3079,11 +3129,15 @@ type Query {
     where: BoostedSavingsVaultRewardPaidTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultRewardPaidTransaction!]!
   boostedSavingsVaultWithdrawTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultWithdrawTransaction
   boostedSavingsVaultWithdrawTransactions(
     skip: Int = 0
@@ -3093,11 +3147,15 @@ type Query {
     where: BoostedSavingsVaultWithdrawTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultWithdrawTransaction!]!
   feederPool(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FeederPool
   feederPools(
     skip: Int = 0
@@ -3107,11 +3165,15 @@ type Query {
     where: FeederPool_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FeederPool!]!
   feederPoolPrice(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FeederPoolPrice
   feederPoolPrices(
     skip: Int = 0
@@ -3121,11 +3183,15 @@ type Query {
     where: FeederPoolPrice_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FeederPoolPrice!]!
   feederPoolAccount(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FeederPoolAccount
   feederPoolAccounts(
     skip: Int = 0
@@ -3135,11 +3201,15 @@ type Query {
     where: FeederPoolAccount_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FeederPoolAccount!]!
   fpswapTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FPSwapTransaction
   fpswapTransactions(
     skip: Int = 0
@@ -3149,11 +3219,15 @@ type Query {
     where: FPSwapTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FPSwapTransaction!]!
   fpmintSingleTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FPMintSingleTransaction
   fpmintSingleTransactions(
     skip: Int = 0
@@ -3163,11 +3237,15 @@ type Query {
     where: FPMintSingleTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FPMintSingleTransaction!]!
   fpmintMultiTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FPMintMultiTransaction
   fpmintMultiTransactions(
     skip: Int = 0
@@ -3177,11 +3255,15 @@ type Query {
     where: FPMintMultiTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FPMintMultiTransaction!]!
   fpredeemTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FPRedeemTransaction
   fpredeemTransactions(
     skip: Int = 0
@@ -3191,11 +3273,15 @@ type Query {
     where: FPRedeemTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FPRedeemTransaction!]!
   boostDirector(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostDirector
   boostDirectors(
     skip: Int = 0
@@ -3205,11 +3291,15 @@ type Query {
     where: BoostDirector_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostDirector!]!
   transaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Transaction
   transactions(
     skip: Int = 0
@@ -3219,6 +3309,8 @@ type Query {
     where: Transaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Transaction!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
@@ -3229,6 +3321,8 @@ type Subscription {
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Token
   tokens(
     skip: Int = 0
@@ -3238,11 +3332,15 @@ type Subscription {
     where: Token_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Token!]!
   metric(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Metric
   metrics(
     skip: Int = 0
@@ -3252,11 +3350,15 @@ type Subscription {
     where: Metric_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Metric!]!
   counter(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Counter
   counters(
     skip: Int = 0
@@ -3266,11 +3368,15 @@ type Subscription {
     where: Counter_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Counter!]!
   basset(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Basset
   bassets(
     skip: Int = 0
@@ -3280,11 +3386,15 @@ type Subscription {
     where: Basset_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Basset!]!
   basket(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Basket
   baskets(
     skip: Int = 0
@@ -3294,11 +3404,15 @@ type Subscription {
     where: Basket_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Basket!]!
   ampData(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): AmpData
   ampDatas(
     skip: Int = 0
@@ -3308,11 +3422,15 @@ type Subscription {
     where: AmpData_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [AmpData!]!
   boostedSavingsVault(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVault
   boostedSavingsVaults(
     skip: Int = 0
@@ -3322,11 +3440,15 @@ type Subscription {
     where: BoostedSavingsVault_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVault!]!
   account(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Account
   accounts(
     skip: Int = 0
@@ -3336,11 +3458,15 @@ type Subscription {
     where: Account_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Account!]!
   boostedSavingsVaultAccount(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultAccount
   boostedSavingsVaultAccounts(
     skip: Int = 0
@@ -3350,11 +3476,15 @@ type Subscription {
     where: BoostedSavingsVaultAccount_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultAccount!]!
   boostedSavingsVaultRewardEntry(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultRewardEntry
   boostedSavingsVaultRewardEntries(
     skip: Int = 0
@@ -3364,11 +3494,15 @@ type Subscription {
     where: BoostedSavingsVaultRewardEntry_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultRewardEntry!]!
   boostedSavingsVaultStakeTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultStakeTransaction
   boostedSavingsVaultStakeTransactions(
     skip: Int = 0
@@ -3378,11 +3512,15 @@ type Subscription {
     where: BoostedSavingsVaultStakeTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultStakeTransaction!]!
   boostedSavingsVaultRewardAddedTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultRewardAddedTransaction
   boostedSavingsVaultRewardAddedTransactions(
     skip: Int = 0
@@ -3392,11 +3530,15 @@ type Subscription {
     where: BoostedSavingsVaultRewardAddedTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultRewardAddedTransaction!]!
   boostedSavingsVaultRewardPaidTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultRewardPaidTransaction
   boostedSavingsVaultRewardPaidTransactions(
     skip: Int = 0
@@ -3406,11 +3548,15 @@ type Subscription {
     where: BoostedSavingsVaultRewardPaidTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultRewardPaidTransaction!]!
   boostedSavingsVaultWithdrawTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostedSavingsVaultWithdrawTransaction
   boostedSavingsVaultWithdrawTransactions(
     skip: Int = 0
@@ -3420,11 +3566,15 @@ type Subscription {
     where: BoostedSavingsVaultWithdrawTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostedSavingsVaultWithdrawTransaction!]!
   feederPool(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FeederPool
   feederPools(
     skip: Int = 0
@@ -3434,11 +3584,15 @@ type Subscription {
     where: FeederPool_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FeederPool!]!
   feederPoolPrice(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FeederPoolPrice
   feederPoolPrices(
     skip: Int = 0
@@ -3448,11 +3602,15 @@ type Subscription {
     where: FeederPoolPrice_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FeederPoolPrice!]!
   feederPoolAccount(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FeederPoolAccount
   feederPoolAccounts(
     skip: Int = 0
@@ -3462,11 +3620,15 @@ type Subscription {
     where: FeederPoolAccount_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FeederPoolAccount!]!
   fpswapTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FPSwapTransaction
   fpswapTransactions(
     skip: Int = 0
@@ -3476,11 +3638,15 @@ type Subscription {
     where: FPSwapTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FPSwapTransaction!]!
   fpmintSingleTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FPMintSingleTransaction
   fpmintSingleTransactions(
     skip: Int = 0
@@ -3490,11 +3656,15 @@ type Subscription {
     where: FPMintSingleTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FPMintSingleTransaction!]!
   fpmintMultiTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FPMintMultiTransaction
   fpmintMultiTransactions(
     skip: Int = 0
@@ -3504,11 +3674,15 @@ type Subscription {
     where: FPMintMultiTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FPMintMultiTransaction!]!
   fpredeemTransaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): FPRedeemTransaction
   fpredeemTransactions(
     skip: Int = 0
@@ -3518,11 +3692,15 @@ type Subscription {
     where: FPRedeemTransaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [FPRedeemTransaction!]!
   boostDirector(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): BoostDirector
   boostDirectors(
     skip: Int = 0
@@ -3532,11 +3710,15 @@ type Subscription {
     where: BoostDirector_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [BoostDirector!]!
   transaction(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Transaction
   transactions(
     skip: Int = 0
@@ -3546,6 +3728,8 @@ type Subscription {
     where: Transaction_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Transaction!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_

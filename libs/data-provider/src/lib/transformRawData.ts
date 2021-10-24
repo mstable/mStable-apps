@@ -367,7 +367,7 @@ const transformMassetData = (
   const bAssets = transformBassets(_bassets, vaultBalances, tokens)
 
   const feederPools = transformFeederPoolsData(
-    allFeederPools.filter(fp => fp.masset.id === address),
+    allFeederPools.filter(fp => fp.masset?.id === address),
     tokens,
   )
 

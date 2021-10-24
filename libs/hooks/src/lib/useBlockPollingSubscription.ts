@@ -1,6 +1,6 @@
 import { LazyQueryHookOptions, QueryTuple } from '@apollo/client'
 import { QueryResult } from '@apollo/react-common'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { useBlockNow } from '@apps/base/context/block'
 import { useNetwork } from '@apps/base/context/network'
@@ -14,6 +14,7 @@ export const useBlockPollingSubscription = <TData, TVariables>(
   baseOptions?: LazyQueryHookOptions<TData, TVariables>,
   skip?: boolean,
 ): QueryResult<TData, TVariables> => {
+  const errorRef = useRef<any>()
   const network = useNetwork()
   const blockNumber = useBlockNow()
   const hasBlock = !!blockNumber
@@ -21,13 +22,19 @@ export const useBlockPollingSubscription = <TData, TVariables>(
   // We're using a long-polling query because subscriptions don't seem to be
   // re-run when derived or nested fields change.
   // See https://github.com/graphprotocol/graph-node/issues/1398
-  const [run, query] = lazyQuery(baseOptions)
+  const [run, query] = lazyQuery({
+    ...baseOptions,
+    errorPolicy: 'all',
+    onError: (error: any) => {
+      errorRef.current = error
+    },
+  })
 
   // Long poll (15s interval) if the block number isn't available.
   useEffect(() => {
     let interval: NodeJS.Timeout
 
-    if (!skip && !hasBlock) {
+    if (!skip && !hasBlock && !errorRef.current) {
       run()
       interval = setInterval(() => {
         run()

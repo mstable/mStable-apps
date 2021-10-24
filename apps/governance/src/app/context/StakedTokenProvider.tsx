@@ -6,7 +6,7 @@ import { useApolloClients } from '@apps/base/context/apollo'
 import { providerFactory, createUseContextFn } from '@apps/hooks'
 import { useStakedTokenQuery as useStakedTokenQueryHook } from '@apps/artifacts/graphql/staking'
 
-import { useStakingQuery } from './StakingProvider'
+import { useStakingQueryCtx } from './StakingProvider'
 
 interface State {
   options: { [address: string]: { asset: { address: string }; icon: { symbol: string } } }
@@ -26,7 +26,7 @@ const ContractProvider: FC = ({ children }) => {
 
 export const StakedTokenProvider: FC = ({ children }) => {
   const [selected, setSelected] = useState<string>()
-  const stakingQuery = useStakingQuery()
+  const stakingQuery = useStakingQueryCtx()
 
   return providerFactory(
     dispatchCtx,

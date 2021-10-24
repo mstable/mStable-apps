@@ -149,6 +149,7 @@ export type Query = {
   votes?: Maybe<Array<Maybe<Vote>>>;
   aliases?: Maybe<Array<Maybe<Alias>>>;
   follows?: Maybe<Array<Maybe<Follow>>>;
+  subscriptions?: Maybe<Array<Maybe<Subscription>>>;
 };
 
 
@@ -211,6 +212,15 @@ export type QueryFollowsArgs = {
   orderDirection?: Maybe<OrderDirection>;
 };
 
+
+export type QuerySubscriptionsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<SubscriptionWhere>;
+  orderBy?: Maybe<Scalars['String']>;
+  orderDirection?: Maybe<OrderDirection>;
+};
+
 export type Space = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
@@ -232,11 +242,19 @@ export type Space = {
   members?: Maybe<Array<Maybe<Scalars['String']>>>;
   filters?: Maybe<SpaceFilters>;
   plugins?: Maybe<Scalars['Any']>;
+  voting?: Maybe<SpaceVoting>;
 };
 
 export type SpaceFilters = {
   minScore?: Maybe<Scalars['Float']>;
   onlyMembers?: Maybe<Scalars['Boolean']>;
+};
+
+export type SpaceVoting = {
+  delay?: Maybe<Scalars['Int']>;
+  period?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
+  quorum?: Maybe<Scalars['Float']>;
 };
 
 export type SpaceWhere = {
@@ -247,6 +265,31 @@ export type SpaceWhere = {
 export type Strategy = {
   name: Scalars['String'];
   params?: Maybe<Scalars['Any']>;
+};
+
+export type Subscription = {
+  id: Scalars['String'];
+  ipfs?: Maybe<Scalars['String']>;
+  address: Scalars['String'];
+  space: Space;
+  created: Scalars['Int'];
+};
+
+export type SubscriptionWhere = {
+  id?: Maybe<Scalars['String']>;
+  id_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  ipfs?: Maybe<Scalars['String']>;
+  ipfs_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  address?: Maybe<Scalars['String']>;
+  address_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  space?: Maybe<Scalars['String']>;
+  space_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  created?: Maybe<Scalars['Int']>;
+  created_in?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  created_gt?: Maybe<Scalars['Int']>;
+  created_gte?: Maybe<Scalars['Int']>;
+  created_lt?: Maybe<Scalars['Int']>;
+  created_lte?: Maybe<Scalars['Int']>;
 };
 
 export type Vote = {

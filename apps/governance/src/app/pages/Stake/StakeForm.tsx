@@ -16,7 +16,7 @@ import { useNetworkAddresses } from '@apps/base/context/network'
 import { truncateAddress } from '@apps/formatters'
 
 import { useStakedToken, useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
-import { useStakingQuery } from '../../context/StakingProvider'
+import { useStakingQueryCtx } from '../../context/StakingProvider'
 import { DelegateSelection } from '../../components/DelegateSelection'
 import { useStakingStatus, useStakingStatusDispatch } from '../../context/StakingStatusProvider'
 import { TimeMultiplierImpact } from './TimeMultiplierImpact'
@@ -72,7 +72,7 @@ const Container = styled.div`
 
 export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const { data, loading } = useStakedTokenQuery()
-  const stakingQuery = useStakingQuery()
+  const stakingQuery = useStakingQueryCtx()
   const { selected: stakedTokenAddress } = useStakedToken()
   const networkAddresses = useNetworkAddresses()
   const { delegateSelection: delegate } = useModalData()

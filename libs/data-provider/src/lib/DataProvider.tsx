@@ -3,10 +3,9 @@ import { Interface } from '@ethersproject/abi'
 import { pipe } from 'ts-pipe-compose'
 
 import { useApolloClients } from '@apps/base/context/apollo'
-import { FeederPoolsQueryResult, useFeederPoolsLazyQuery } from '@apps/artifacts/graphql/feeders'
-import { MassetsQueryResult, useMassetsLazyQuery } from '@apps/artifacts/graphql/protocol'
+import { FeederPoolsQueryResult, useFeederPoolsQuery } from '@apps/artifacts/graphql/feeders'
+import { MassetsQueryResult, useMassetsQuery } from '@apps/artifacts/graphql/protocol'
 import type { IMasset } from '@apps/artifacts/typechain'
-import { useBlockPollingSubscription } from '@apps/hooks'
 import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
 import { useNetwork } from '@apps/base/context/network'
 import { Tokens, useTokensState } from '@apps/base/context/tokens'
@@ -40,20 +39,16 @@ const useRawData = (): Pick<RawData, 'massets' | 'feederPools'> => {
   const options = useMemo(() => {
     const baseOptions = {
       variables: { account: account ?? '', accountId: account ?? '', hasAccount: !!account },
+      pollInterval: 30e3,
     }
     return {
-      feeders: { ...baseOptions, client: clients.feeders },
+      feeders: { ...baseOptions, client: clients.feeders, skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders') },
       protocol: { ...baseOptions, client: clients.protocol },
     }
-  }, [account, clients])
+  }, [account, clients, network])
 
-  const massetsSub = useBlockPollingSubscription(useMassetsLazyQuery, options.protocol)
-
-  const feedersSub = useBlockPollingSubscription(
-    useFeederPoolsLazyQuery,
-    options.feeders,
-    !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders'),
-  )
+  const massetsSub = useMassetsQuery(options.protocol)
+  const feedersSub = useFeederPoolsQuery(options.feeders)
 
   return {
     massets: massetsSub.data,
