@@ -246,6 +246,7 @@ export type Query = {
 export type QueryBlockArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -256,6 +257,7 @@ export type QueryBlocksArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Block_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -274,6 +276,7 @@ export type Subscription = {
 export type SubscriptionBlockArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -284,6 +287,7 @@ export type SubscriptionBlocksArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Block_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 

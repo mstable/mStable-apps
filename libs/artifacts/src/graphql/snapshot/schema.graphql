@@ -1,5 +1,6 @@
 schema {
   query: Query
+  subscription: Subscription
 }
 
 type Alias {
@@ -124,6 +125,7 @@ type Query {
   votes(first: Int, skip: Int, where: VoteWhere, orderBy: String, orderDirection: OrderDirection): [Vote]
   aliases(first: Int, skip: Int, where: AliasWhere, orderBy: String, orderDirection: OrderDirection): [Alias]
   follows(first: Int, skip: Int, where: FollowWhere, orderBy: String, orderDirection: OrderDirection): [Follow]
+  subscriptions(first: Int, skip: Int, where: SubscriptionWhere, orderBy: String, orderDirection: OrderDirection): [Subscription]
 }
 
 type Space {
@@ -147,11 +149,19 @@ type Space {
   members: [String]
   filters: SpaceFilters
   plugins: Any
+  voting: SpaceVoting
 }
 
 type SpaceFilters {
   minScore: Float
   onlyMembers: Boolean
+}
+
+type SpaceVoting {
+  delay: Int
+  period: Int
+  type: String
+  quorum: Float
 }
 
 input SpaceWhere {
@@ -162,6 +172,31 @@ input SpaceWhere {
 type Strategy {
   name: String!
   params: Any
+}
+
+type Subscription {
+  id: String!
+  ipfs: String
+  address: String!
+  space: Space!
+  created: Int!
+}
+
+input SubscriptionWhere {
+  id: String
+  id_in: [String]
+  ipfs: String
+  ipfs_in: [String]
+  address: String
+  address_in: [String]
+  space: String
+  space_in: [String]
+  created: Int
+  created_in: [Int]
+  created_gt: Int
+  created_gte: Int
+  created_lt: Int
+  created_lte: Int
 }
 
 type Vote {
