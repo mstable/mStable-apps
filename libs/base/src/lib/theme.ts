@@ -166,7 +166,7 @@ export const mixins = {
   numeric: css`
     font-family: 'DM Mono', monospace !important;
   `,
-  pixel: css`
+  mono: css`
     font-family: 'Source Code Pro', monospace;
     text-transform: uppercase;
     letter-spacing: 0.1ch;

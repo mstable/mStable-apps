@@ -54,7 +54,7 @@ const Content = styled.div`
 
 const Container = styled.div`
   * {
-    ${({ theme }) => theme.mixins.pixel};
+    ${({ theme }) => theme.mixins.mono};
   }
 
   font-size: 1.125rem;
