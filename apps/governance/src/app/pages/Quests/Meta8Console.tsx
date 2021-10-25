@@ -1,8 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import styled from 'styled-components'
-import useSound from 'use-sound'
-// @ts-ignore
-import startup from '../../../assets/startup.mp3'
 
 import { Meta8Logic } from './Meta8Logic'
 import { RealisticSwitch } from './RealisticSwitch'
@@ -95,20 +92,7 @@ const Container = styled.div`
 `
 
 export const Meta8Console: FC = () => {
-  const [isOn, setIsOn] = useState(false)
-  const [isBooted, setIsBooted] = useState(false)
-  const [playStartup] = useSound(startup)
-
-  useEffect(() => {
-    if (isOn) {
-      playStartup()
-      setTimeout(() => {
-        setIsBooted(true)
-      }, 4500)
-    } else {
-      setIsBooted(false)
-    }
-  }, [isOn, playStartup])
+  const [isOn, setIsOn] = useState(true)
 
   return (
     <Container>
@@ -117,7 +101,7 @@ export const Meta8Console: FC = () => {
           <div>
             {isOn && (
               <>
-                <Meta8Logic isBooted={isBooted} />
+                <Meta8Logic isBooted={true} />
                 <div className="scanlines" />
               </>
             )}
@@ -129,7 +113,6 @@ export const Meta8Console: FC = () => {
           <RealisticSwitch
             checked={isOn}
             onClick={() => {
-              if (isOn) setIsBooted(false)
               setIsOn(!isOn)
             }}
           />

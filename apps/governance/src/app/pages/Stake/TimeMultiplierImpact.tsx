@@ -103,8 +103,14 @@ const Container = styled.div`
   }
 `
 
+const formatMultiplier = (val: number) => `1.${val.toString().slice(0, 1)}`
+
 export const TimeMultiplierImpact: FC<{ isStaking: boolean; stakeDelta: BigNumber }> = ({ isStaking, stakeDelta }) => {
   const { timeMultiplier, simulatedTimeMultiplier } = useSimulatedTimeMultiplier(isStaking, stakeDelta)
+  const formattedMultiplier = formatMultiplier(timeMultiplier)
+
+  if (parseInt(formattedMultiplier) === 1) return null
+
   return (
     <Container>
       <h4>
@@ -113,11 +119,11 @@ export const TimeMultiplierImpact: FC<{ isStaking: boolean; stakeDelta: BigNumbe
       <div>
         <div>
           <div>Now</div>
-          <div>1.{timeMultiplier.toString().slice(0, 1)}</div>
+          <div>{formattedMultiplier}</div>
         </div>
         <div>
           <div>After</div>
-          <div>1.{simulatedTimeMultiplier.toString().slice(0, 1)}</div>
+          <div>{formatMultiplier(simulatedTimeMultiplier)}</div>
         </div>
       </div>
     </Container>

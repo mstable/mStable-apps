@@ -277,7 +277,7 @@ export const StakeBalances: FC = () => {
     return {
       stake: { amount: rawBD.simple + cooldown, symbol: data.stakedToken.stakingToken.symbol },
       votingPower: { amount: stakedToken?.balance?.simple, symbol: 'vMTA' },
-      rewardsEarned: { decimals: 4, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards },
+      rewardsEarned: { decimals: 2, symbol: data.stakedToken.stakingRewards.rewardsToken.symbol, amount: rewardsEarned.rewards },
       baseRewardsApy: { suffix: '%', amount: baseRewardsApy },
       userRewardsApy: { suffix: '%', amount: userRewardsApy },
       boost: scaledBalance?.simple / rawBD.simple,

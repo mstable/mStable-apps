@@ -2,7 +2,7 @@ import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { IPFSImg, Tooltip, UnstyledButton } from '@apps/components/core'
+import { Tooltip, UnstyledButton } from '@apps/components/core'
 import React, { ComponentProps, FC } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import styled from 'styled-components'
@@ -58,7 +58,7 @@ const QuestFeatures = styled.div`
 
 const QuestImage = styled.div`
   display: flex;
-  mix-blend-mode: lighten;
+  opacity: 0.9;
   position: absolute;
   top: 2rem;
   bottom: 0;
@@ -162,11 +162,7 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
         )}
       </Title>
       <QuestImage>
-        {questbookQuest ? (
-          <IPFSImg uri={questbookQuest.imageURI ?? 'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'} alt="Quest graphic" />
-        ) : (
-          <CardSkeleton height={128} width={128} />
-        )}
+        {questbookQuest ? <img src="/assets/astroboi.gif" alt="Quest graphic" key={questId} /> : <CardSkeleton height={128} width={128} />}
       </QuestImage>
       <QuestFeatures>
         <QuestMultiplier type={questType as never}>
@@ -187,7 +183,7 @@ const TimeMultiplierQuestCard: FC<Props> = ({ questId, onClick }) => (
       </Typist>
     </Title>
     <QuestImage>
-      <IPFSImg uri={'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'} alt="Quest graphic" />
+      <img src="/assets/astroboi.gif" alt="Quest graphic" key={questId} />
     </QuestImage>
     <QuestFeatures>
       <QuestMultiplier>1.2-1.6x</QuestMultiplier>
@@ -205,7 +201,7 @@ const DemocracyMaxiQuestCard: FC<Props> = ({ questId, onClick }) => (
       </Typist>
     </Title>
     <QuestImage>
-      <IPFSImg uri={'ipfs://QmZJWYtqb9xRYVLcPocEJmzbwe4BBJuPNcfb9ApAQ8hava'} alt="Quest graphic" />
+      <img src="/assets/astroboi.gif" alt="Quest graphic" key={questId} />
     </QuestImage>
     <QuestFeatures>
       <QuestSeason>SEASON 0</QuestSeason>

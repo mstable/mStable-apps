@@ -4,13 +4,12 @@ import styled from 'styled-components'
 import { ViewportWidth } from '@apps/base/theme'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { InfoBox, InfoButton, ThemedSkeleton } from '@apps/components/core'
-import { ReactComponent as SaveIcon } from '@apps/components/icons/circle/save.svg'
 import { useSelectedMassetState } from '@apps/hooks'
 
 import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 
-import { PageHeader } from '../PageHeader'
+import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { Save as SaveV2 } from './v2'
 import { SaveOverview } from './v2/SaveOverview'
 import { ToggleSave } from './ToggleSave'
@@ -88,7 +87,7 @@ export const EthereumSave: FC = () => {
   return (
     <RewardStreamsProvider vault={vault}>
       <OnboardingProvider>
-        <PageHeader title="Save" massetSwitcher icon={<SaveIcon />} />
+        <PageHeader title="Save" massetSwitcher />
         {massetState ? (
           <Container>
             <SaveOverview />

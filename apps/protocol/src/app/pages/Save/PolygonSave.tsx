@@ -4,11 +4,10 @@ import CountUp from 'react-countup'
 
 import { ViewportWidth } from '@apps/base/theme'
 import { ThemedSkeleton, Tooltip, TabCard } from '@apps/components/core'
-import { ReactComponent as SaveIcon } from '@apps/components/icons/circle/save.svg'
 import { useSelectedMassetState } from '@apps/hooks'
 
 import { DailyApys } from '../../components/stats/DailyApys'
-import { PageHeader } from '../PageHeader'
+import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { SaveRedeem } from './v2/SaveRedeem'
 import { SaveDeposit } from './v2/SaveDeposit'
 import { SaveStake } from './v2/SaveStake'
@@ -185,7 +184,7 @@ export const PolygonSave: FC = () => {
   return (
     <OnboardingProvider>
       <StakingRewardsProvider stakingTokenAddress={saveToken?.address}>
-        <PageHeader title="Save" massetSwitcher icon={<SaveIcon />} />
+        <PageHeader title="Save" massetSwitcher />
         {massetState ? (
           <Container>
             <Content>

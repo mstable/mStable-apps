@@ -7,10 +7,9 @@ import { FeederPoolState, MassetState } from '@apps/data-provider'
 import { useSelectedMassetConfig, MassetConfig, MASSET_CONFIG } from '@apps/masset-provider'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/base/theme'
-import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
 import { useSelectedMassetState } from '@apps/hooks'
 
-import { PageHeader } from '../PageHeader'
+import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { Card } from './cards/Card'
 import { OnboardingCard } from './cards/OnboardingCard'
 import { PoolType } from './types'
@@ -277,7 +276,7 @@ export const Pools: FC = () => {
   const massetState = useSelectedMassetState()
   return (
     <Container>
-      <PageHeader title="Pools" subtitle="Earn fees and ecosystem rewards" icon={<EarnIcon />} massetSwitcher />
+      <PageHeader title="Pools" subtitle="Earn fees and ecosystem rewards" massetSwitcher />
       {massetState ? <PoolsContent /> : <Skeleton height={500} />}
     </Container>
   )

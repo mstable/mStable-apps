@@ -6,11 +6,18 @@ import { useSetStakedToken, useStakedToken } from '../context/StakedTokenProvide
 
 const StyledDropdown = styled(Dropdown)`
   > *:first-child {
-    background: ${({ theme }) => theme.color.background[1]};
+    box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.1);
+    padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+    background: ${({ theme }) => !theme.isLight && theme.color.background[1]};
+    border: ${({ theme }) => !theme.isLight && `1px solid ${theme.color.defaultBorder}`};
   }
 
   > *:first-child:hover {
-    background: ${({ theme }) => theme.color.background[2]};
+    background: transparent;
+  }
+
+  > div:nth-child(2) > button {
+    padding: 0.375rem 0.5rem;
   }
 
   * {

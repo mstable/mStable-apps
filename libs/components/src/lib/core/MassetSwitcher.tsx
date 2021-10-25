@@ -1,27 +1,26 @@
 import React, { FC, useEffect, useMemo } from 'react'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
 import { useLocation } from 'react-use'
-
 import { useDataState } from '@apps/data-provider'
 import { useSelectedMasset, useSelectedMassetName, useSetSelectedMassetName } from '@apps/masset-provider'
 import { MassetName } from '@apps/types'
-import { ViewportWidth } from '@apps/base/theme'
-
 import { Dropdown } from './Dropdown'
 
 const StyledDropdown = styled(Dropdown)`
   > *:first-child {
-    background: ${({ theme }) => theme.color.background[1]};
+    box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.1);
+    padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+    background: ${({ theme }) => !theme.isLight && theme.color.background[1]};
+    border: ${({ theme }) => !theme.isLight && `1px solid ${theme.color.defaultBorder}`};
   }
 
   > *:first-child:hover {
-    background: ${({ theme }) => theme.color.background[2]};
+    background: transparent;
   }
 
-  img {
-    box-shadow: 0 0 8px ${({ theme }) => theme.color.background[3]};
-    border-radius: 1rem;
+  > div:nth-child(2) > button {
+    padding: 0.375rem 0.5rem;
   }
 
   * {
@@ -33,7 +32,7 @@ const StyledDropdown = styled(Dropdown)`
     display: none;
   }
 
-  @media (min-width: ${ViewportWidth.l}) {
+  @media (min-width: ${({ theme }) => theme.viewportWidth.l}) {
     > button > div {
       > div {
         display: flex;
@@ -49,7 +48,7 @@ const StyledDropdown = styled(Dropdown)`
   }
 `
 
-export const MassetDropdown: FC<{ className?: string }> = ({ className }) => {
+export const MassetSwitcher: FC<{ className?: string }> = ({ className }) => {
   const dataState = useDataState()
   const history = useHistory()
   const [selected, setMassetName] = useSelectedMasset()
