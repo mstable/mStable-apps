@@ -35,10 +35,10 @@
   resolved "https://registry.yarnpkg.com/@apocentre/alias-sampling/-/alias-sampling-0.5.3.tgz#897ff181b48ad7b2bcb4ecf29400214888244f08"
   integrity sha512-7UDWIIF9hIeJqfKXkNIzkVandlwLf1FWTSdrb9iXvOP8oF544JRXQjCbiTmCv2c9n44n/FIWtehhBfNuAx2CZA==
 
-"@apollo/client@^3.4.8":
-  version "3.4.8"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.4.8.tgz#66d06dc1784d07d46731b3bda546046f8c280b74"
-  integrity sha512-/cNqTSwc2Dw8q6FDDjdd30+yvhP7rI0Fvl3Hbro0lTtFuhzkevfNyQaI2jAiOrjU6Jc0RbanxULaNrX7UmvjSQ==
+"@apollo/client@^3.4.16":
+  version "3.4.16"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.4.16.tgz#67090d5655aa843fa64d26f1913315e384a5fa0f"
+  integrity sha512-iF4zEYwvebkri0BZQyv8zfavPfVEafsK0wkOofa6eC2yZu50J18uTutKtC174rjHZ2eyxZ8tV7NvAPKRT+OtZw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.0.0"
     "@wry/context" "^0.6.0"
@@ -51,7 +51,7 @@
     symbol-observable "^4.0.0"
     ts-invariant "^0.9.0"
     tslib "^2.3.0"
-    zen-observable-ts "^1.1.0"
+    zen-observable-ts "~1.1.0"
 
 "@apollo/client@latest":
   version "3.3.21"
@@ -3018,6 +3018,18 @@
     lodash "~4.17.0"
     tslib "~2.3.0"
 
+"@graphql-codegen/plugin-helpers@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-2.2.0.tgz#f74bbba009cd3685db33187880e980d609065420"
+  integrity sha512-7t3LFd6DHUWPh0f7qY7wde2r4KCsU8WDcTxQ0QuHuokTqZYnRk+UH3xNDUiyb+1LGTBUqIaKxLwQXh8EDyZK7A==
+  dependencies:
+    "@graphql-tools/utils" "^8.1.1"
+    change-case-all "1.0.14"
+    common-tags "1.8.0"
+    import-from "4.0.0"
+    lodash "~4.17.0"
+    tslib "~2.3.0"
+
 "@graphql-codegen/schema-ast@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/schema-ast/-/schema-ast-2.0.0.tgz#2c06186886ed3afa4db3cc72f7d1264aef471370"
@@ -3027,35 +3039,35 @@
     "@graphql-tools/utils" "^8.0.1"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript-apollo-client-helpers@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-apollo-client-helpers/-/typescript-apollo-client-helpers-2.0.0.tgz#fa09e4a8c4bcdd4c4a80213930729336a3d86caa"
-  integrity sha512-9yeixG/jyPR3kIdLpaLcr4fs2OO+T7OTmsJwynDksNNYBM1Oe9ep+sF4ig6pOeigGYprRhpo5dL4tqdREfLqdA==
+"@graphql-codegen/typescript-apollo-client-helpers@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-apollo-client-helpers/-/typescript-apollo-client-helpers-2.1.6.tgz#a5d1f4e73ab6f311d583d2431d729a59f003ca60"
+  integrity sha512-BgKKsPL7oAYNWrhTDpjg1kb2Je0R6g7Y8xKgXr4jLh1S89RCvqmGbdAR5x5nzsi5WdV8+jv25fqRcZGhRrxuZg==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "^2.0.0"
-    "@graphql-codegen/visitor-plugin-common" "2.0.0"
+    "@graphql-codegen/plugin-helpers" "^2.2.0"
+    "@graphql-codegen/visitor-plugin-common" "2.4.0"
     auto-bind "~4.0.0"
     change-case-all "1.0.14"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript-operations@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-2.0.1.tgz#e4e6ccafa7cb3b4c8b4820e26e470785748ad937"
-  integrity sha512-AY0iwqPjlxLsdUskQAP/vhpA9Kp+OZl35B6Pp2UOlQzs6eQ/8yHtlFFRdo5Pn9D+S3u4zQxLZvK03fV6lxxPrA==
+"@graphql-codegen/typescript-operations@^2.1.8":
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-2.1.8.tgz#07f0df130a5f04844188cea1b7f1a45ca28e68ad"
+  integrity sha512-doUN4Eaitzkuo2UVPOGfFvs8YuTJvHHTAd3q19KjaFKId1nNbfiDvrop1ZrHJpH+Sa6BcOvOPWHnCcMTSu6mww==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "^2.0.0"
-    "@graphql-codegen/typescript" "^2.0.0"
-    "@graphql-codegen/visitor-plugin-common" "2.0.0"
+    "@graphql-codegen/plugin-helpers" "^2.2.0"
+    "@graphql-codegen/typescript" "^2.2.4"
+    "@graphql-codegen/visitor-plugin-common" "2.4.0"
     auto-bind "~4.0.0"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript-react-apollo@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-3.0.0.tgz#8ec6e65a1a6cf177418b38c681d1376f81095093"
-  integrity sha512-acg2GArcdHYusLragNCqrDjLLbE3M2I9cUuckIoo8KiDtB3/PzQ9eCg3WRjgPYA5zaFpLaFS6QQlRJhD/j0Wgw==
+"@graphql-codegen/typescript-react-apollo@^3.1.6":
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-3.1.6.tgz#469c72ecefe528abd215c2159b378328ef975c71"
+  integrity sha512-/MI8LwFnZo8fz6Xy7ffUc7DjiLPWmd5YqvOieMMOaE2CClKaYxAYpitAK5BpoBMZ8xVo5YcLR2+0A5ztL0bfng==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "^2.0.0"
-    "@graphql-codegen/visitor-plugin-common" "2.0.0"
+    "@graphql-codegen/plugin-helpers" "^2.2.0"
+    "@graphql-codegen/visitor-plugin-common" "2.4.0"
     auto-bind "~4.0.0"
     change-case-all "1.0.14"
     tslib "~2.3.0"
@@ -3070,6 +3082,16 @@
     auto-bind "~4.0.0"
     tslib "~2.3.0"
 
+"@graphql-codegen/typescript@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-2.2.4.tgz#e7fef7e83f04e69e297ae7e4ed101803623db8ee"
+  integrity sha512-NTST7i1+Rot/t5hUJtnvIh1iqBlB9tyN2oD5XC1c2cMwz0cr7JaAgVYGfLO7XOQ5eG2IAw/D3umQ5JROa3cumw==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^2.2.0"
+    "@graphql-codegen/visitor-plugin-common" "2.4.0"
+    auto-bind "~4.0.0"
+    tslib "~2.3.0"
+
 "@graphql-codegen/visitor-plugin-common@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-2.0.0.tgz#4101a016f67dbf7eedc507b27518e9c84464f2c9"
@@ -3079,6 +3101,22 @@
     "@graphql-tools/optimize" "^1.0.1"
     "@graphql-tools/relay-operation-optimizer" "^6.3.3"
     array.prototype.flatmap "^1.2.4"
+    auto-bind "~4.0.0"
+    change-case-all "1.0.14"
+    dependency-graph "^0.11.0"
+    graphql-tag "^2.11.0"
+    parse-filepath "^1.0.2"
+    tslib "~2.3.0"
+
+"@graphql-codegen/visitor-plugin-common@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-2.4.0.tgz#a00441f1bbadac660905c4bc01fc443433bd09b9"
+  integrity sha512-wcUqpbvhLlOwsriyI+ZTuE0Fx7AIIbcL80+KjgNGrMjLZJLTyMJGpYwc87I876EPIcyC35+LO15nwy2cR2tbxQ==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^2.2.0"
+    "@graphql-tools/optimize" "^1.0.1"
+    "@graphql-tools/relay-operation-optimizer" "^6.3.7"
+    "@graphql-tools/utils" "^8.3.0"
     auto-bind "~4.0.0"
     change-case-all "1.0.14"
     dependency-graph "^0.11.0"
@@ -3260,6 +3298,15 @@
     relay-compiler "11.0.2"
     tslib "~2.3.0"
 
+"@graphql-tools/relay-operation-optimizer@^6.3.7":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/relay-operation-optimizer/-/relay-operation-optimizer-6.4.0.tgz#3ef4d7ec0620239f3a4e9b9acfa3c263636c5ad2"
+  integrity sha512-auNvHC8gHu9BHBPnLA5c8Iv5VAXQG866KZJz7ljhKpXPdlPevK4zjHlVJwqnF8H6clJ9NgZpizN4kNNCe/3R9g==
+  dependencies:
+    "@graphql-tools/utils" "^8.2.0"
+    relay-compiler "11.0.2"
+    tslib "~2.3.0"
+
 "@graphql-tools/schema@8.1.1", "@graphql-tools/schema@^8.0.2", "@graphql-tools/schema@^8.1.1":
   version "8.1.1"
   resolved "https://registry.yarnpkg.com/@graphql-tools/schema/-/schema-8.1.1.tgz#5de95a8f6cedaf91fa2f9e9e7fa9fae1d27a7c4f"
@@ -3308,6 +3355,13 @@
   version "8.1.1"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.1.1.tgz#2ef056a1d6e1e909085e1115d3bb48f890c2a2b6"
   integrity sha512-QbFNoBmBiZ+ej4y6mOv8Ba4lNhcrTEKXAhZ0f74AhdEXi7b9xbGUH/slO5JaSyp85sGQYIPmxjRPpXBjLklbmw==
+  dependencies:
+    tslib "~2.3.0"
+
+"@graphql-tools/utils@^8.1.1", "@graphql-tools/utils@^8.2.0", "@graphql-tools/utils@^8.3.0":
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.5.0.tgz#439487ac756d9458a33091e5e0435ddf8e794f3e"
+  integrity sha512-jMwLm6YdN+Vbqntg5GHqDvGLpLa/xPSpRs/c40d0rBuel77wo7AaQ8jHeBSpp9y+7kp7HrGSWff1u7yJ7F8ppw==
   dependencies:
     tslib "~2.3.0"
 
@@ -3760,10 +3814,21 @@
     google-protobuf "^3.7.0-rc.2"
     pbjs "^0.0.5"
 
-"@keystonehq/bc-ur-registry-eth@^0.6.8":
-  version "0.6.13"
-  resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-eth/-/bc-ur-registry-eth-0.6.13.tgz#c1680930b1d3fed14857336bd4fb47a484dfac32"
-  integrity sha512-sQQMMiKlacxMOIGeH8l/m/j3sL2VaM7Zid/xvf6cogZ5EZ5pa8Jow8cgY/t7krTOOBp81/GglCbwCGC8RIOLqA==
+"@keystonehq/base-eth-keyring@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@keystonehq/base-eth-keyring/-/base-eth-keyring-0.1.0.tgz#bebcf41763601fcffccc53a8de0e3715f8f03ff5"
+  integrity sha512-iJ5FtzWiMaEMBPucDz+qDNvCS/95kfmyojH/rt8u/ajVWYwHkwFypgVqcbsKoRjk9oNxdC/bQGxSSlVPXq0GXQ==
+  dependencies:
+    "@ethereumjs/tx" "3.0.0"
+    "@keystonehq/bc-ur-registry-eth" "^0.6.14"
+    ethereumjs-util "^7.0.8"
+    hdkey "^2.0.1"
+    uuid "^8.3.2"
+
+"@keystonehq/bc-ur-registry-eth@^0.6.14":
+  version "0.6.14"
+  resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-eth/-/bc-ur-registry-eth-0.6.14.tgz#4b8c34d653278524eb574a2879910072ee621ae0"
+  integrity sha512-Zr0VAUJuzz5zfH2263AucdWPUYuclpd93Pmi/VzbML72sQLv8l83kQWmQpI+7639uV5dHcOj6JnD8FhCPYPRFQ==
   dependencies:
     "@keystonehq/bc-ur-registry" "^0.4.4"
     ethereumjs-util "^7.0.8"
@@ -3779,23 +3844,25 @@
     base58check "^2.0.0"
     tslib "^2.3.0"
 
-"@keystonehq/eth-keyring@0.7.7":
-  version "0.7.7"
-  resolved "https://registry.yarnpkg.com/@keystonehq/eth-keyring/-/eth-keyring-0.7.7.tgz#c22612e40dbf45fee875c09bf0ee332b3d580cb0"
-  integrity sha512-BAfiUKu7vc8GlUpA+ZUA4nVOXGFx3CyO3sOrRdv5/wtTLE0SbcOYSQKrYUop2ERHbhcOilGOtuJfu/vwkOk1cA==
+"@keystonehq/eth-keyring@0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@keystonehq/eth-keyring/-/eth-keyring-0.9.0.tgz#cf364d62f8f764fe14a98410cabfe8ddf20bdc23"
+  integrity sha512-ceNi5LqhOg9vk/V90o79/hPMWmkp5SZor7Xk/DjrNUdNXd7v/nym8PTLNLUiToF+se/clazsa04zDEOtOg5t0w==
   dependencies:
     "@ethereumjs/tx" "3.0.0"
-    "@keystonehq/bc-ur-registry-eth" "^0.6.8"
-    "@keystonehq/sdk" "^0.7.8"
+    "@keystonehq/base-eth-keyring" "^0.1.0"
+    "@keystonehq/bc-ur-registry-eth" "^0.6.14"
+    "@keystonehq/sdk" "^0.7.14"
+    "@metamask/obs-store" "^7.0.0"
     bs58check "^2.1.2"
     ethereumjs-util "^7.0.8"
     hdkey "^2.0.1"
     uuid "^8.3.2"
 
-"@keystonehq/sdk@^0.7.8":
-  version "0.7.13"
-  resolved "https://registry.yarnpkg.com/@keystonehq/sdk/-/sdk-0.7.13.tgz#127c465735a5c942468c7e729f4a8f982de9a0ff"
-  integrity sha512-m4bDz2w94Q3qlt1Nq2kepbH2rEI/97lxbuak8wk1dzRDLpe+VLb/TCy/87EepOfnjJD+1h6q/c4ZMgE2YMFZyA==
+"@keystonehq/sdk@^0.7.14":
+  version "0.7.14"
+  resolved "https://registry.yarnpkg.com/@keystonehq/sdk/-/sdk-0.7.14.tgz#db0de74c5be1e46708a9b4ed1f282a40d019a95f"
+  integrity sha512-m6XtrA6cBQdek3T8zueMAOYRJ9ZuS4J5Qxi/qPDF2M1zaZ8Xgy2yNPbYUlBDoGFa9poh/hFoMQJSU6Gw9RGk7g==
   dependencies:
     "@ngraveio/bc-ur" "^1.0.0"
     qrcode.react "^1.0.1"
@@ -3910,6 +3977,14 @@
   dependencies:
     "@metamask/safe-event-emitter" "^2.0.0"
     readable-stream "^2.2.2"
+    through2 "^2.0.3"
+
+"@metamask/obs-store@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@metamask/obs-store/-/obs-store-7.0.0.tgz#6cae5f28306bb3e83a381bc9ae22682316095bd3"
+  integrity sha512-Tr61Uu9CGXkCg5CZwOYRMQERd+y6fbtrtLd/PzDTPHO5UJpmSbU+7MPcQK7d1DwZCOCeCIvhmZSUCvYliC8uGw==
+  dependencies:
+    "@metamask/safe-event-emitter" "^2.0.0"
     through2 "^2.0.3"
 
 "@metamask/post-message-stream@^4.0.0":
@@ -7583,9 +7658,9 @@ bnb-javascript-sdk-nobroadcast@^2.16.14:
     uuid "^3.3.2"
     websocket-stream "^5.5.0"
 
-bnc-onboard@JamesLefrere/onboard#remove-mew-dist:
-  version "1.35.1"
-  resolved "https://codeload.github.com/JamesLefrere/onboard/tar.gz/27e70eea4ab8004f9f4b7696f71ce6262c73dac9"
+bnc-onboard@JamesLefrere/onboard#fix/detected-preferred:
+  version "1.35.2"
+  resolved "https://codeload.github.com/JamesLefrere/onboard/tar.gz/945a0178b10900d800a6e9b9fd2f555e95dfbac8"
   dependencies:
     "@cvbb/eth-keyring" "^1.1.0"
     "@ensdomains/ensjs" "^2.0.1"
@@ -7593,7 +7668,7 @@ bnc-onboard@JamesLefrere/onboard#remove-mew-dist:
     "@ethereumjs/tx" "^3.0.0"
     "@gnosis.pm/safe-apps-provider" "^0.5.0"
     "@gnosis.pm/safe-apps-sdk" "^3.0.0"
-    "@keystonehq/eth-keyring" "0.7.7"
+    "@keystonehq/eth-keyring" "0.9.0"
     "@ledgerhq/hw-app-eth" "6.8.1"
     "@ledgerhq/hw-transport-u2f" "^5.21.0"
     "@ledgerhq/hw-transport-webusb" "6.7.0"
@@ -25401,7 +25476,7 @@ zen-observable-ts@^0.8.21:
     tslib "^1.9.3"
     zen-observable "^0.8.0"
 
-zen-observable-ts@^1.1.0:
+zen-observable-ts@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-1.1.0.tgz#2d1aa9d79b87058e9b75698b92791c1838551f83"
   integrity sha512-1h4zlLSqI2cRLPJUHJFL8bCWHhkpuXkF+dbGkRaWjgDIG26DmzyshUMrdV/rL3UnR+mhaX4fRq8LPouq0MYYIA==
