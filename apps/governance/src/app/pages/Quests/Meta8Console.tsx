@@ -1,8 +1,12 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import useSound from 'use-sound'
 
 import { Meta8Logic } from './Meta8Logic'
 import { RealisticSwitch } from './RealisticSwitch'
+
+// @ts-ignore
+import startup from '../../../assets/startup.mp3'
 
 const Display = styled.div<{ isOn: boolean }>`
   @keyframes scandown {
@@ -92,7 +96,20 @@ const Container = styled.div`
 `
 
 export const Meta8Console: FC = () => {
-  const [isOn, setIsOn] = useState(true)
+  const [isOn, setIsOn] = useState(false)
+  const [isBooted, setIsBooted] = useState(false)
+  const [playStartup] = useSound(startup)
+
+  useEffect(() => {
+    if (isOn) {
+      playStartup()
+      setTimeout(() => {
+        setIsBooted(true)
+      }, 3500)
+    } else {
+      setIsBooted(false)
+    }
+  }, [isOn, playStartup])
 
   return (
     <Container>
@@ -101,7 +118,7 @@ export const Meta8Console: FC = () => {
           <div>
             {isOn && (
               <>
-                <Meta8Logic isBooted={true} />
+                <Meta8Logic isBooted={isBooted} />
                 <div className="scanlines" />
               </>
             )}
