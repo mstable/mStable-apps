@@ -133,7 +133,7 @@ export interface EthereumMainnet
         stkBPT: string
       }
     },
-    GraphQLEndpoints<'feeders' | 'snapshot' | 'staking' | 'questbook'>
+    GraphQLEndpoints<'feeders' | 'snapshot' | 'staking' | 'questbook' | 'balancer'>
   > {
   chainId: ChainIds.EthereumMainnet
 }
@@ -236,6 +236,7 @@ const ETH_MAINNET: EthereumMainnet = {
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string)],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
+    balancer: [graphHostedEndpoint('balancer-labs', 'balancer-v2')],
   },
   addresses: {
     MTA: '0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2',
