@@ -163,7 +163,7 @@ export const createStakingRewardsContext = (): Readonly<
   const StakingRewardsProvider: FC<{ address?: string; stakingTokenAddress?: string }> = ({ address, stakingTokenAddress, children }) => {
     const clients = useApolloClients()
     const network = useNetwork()
-    const useFetchPrice = useFetchPriceCtx()
+    const { fetchPrices } = useFetchPriceCtx()
     const massetState = useSelectedMassetState()
     const account = useAccount()
 
@@ -201,10 +201,9 @@ export const createStakingRewardsContext = (): Readonly<
     // 3. Use StakingRewards for prices etc
     const stakingToken = useTokenSubscription(stakingRewardsContract?.stakingToken.address)
     // TODO find price of wrapped token on main chain rather than hardcode these:
-    // const rewardsPrice = useFetchPrice(stakingRewards?.rewardsToken.address)
-    // const platformRewardsPrice = useFetchPrice(stakingRewards?.platformRewards?.platformToken.address)
-    const rewardsPrice = useFetchPrice('0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2') // MTA (Eth mainnet)
-    const platformRewardsPrice = useFetchPrice('0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0') // MATIC (Eth mainnet)
+    const tokenPrices = fetchPrices(['0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2', '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0'])
+    const rewardsPrice = tokenPrices['0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2'] // MTA (Eth mainnet)
+    const platformRewardsPrice = tokenPrices['0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0'] // MATIC (Eth mainnet)
 
     // 4. Transform all into StakingRewardsExtended
     const value = useMemo<StakingRewardsExtended>(() => {
@@ -220,13 +219,12 @@ export const createStakingRewardsContext = (): Readonly<
       const stakingTokenPrice = 1 * exchangeRate.simple
 
       const rewardsApy =
-        calculateApy(stakingTokenPrice, rewardsPrice.value, stakingRewardsContract.rewardRate.simple, stakingRewardsContract.totalSupply) ??
-        0
+        calculateApy(stakingTokenPrice, rewardsPrice, stakingRewardsContract.rewardRate.simple, stakingRewardsContract.totalSupply) ?? 0
 
       const platformApy =
         calculateApy(
           stakingTokenPrice,
-          platformRewardsPrice.value,
+          platformRewardsPrice,
           stakingRewardsContract.platformRewards?.platformRewardRate.simple,
           stakingRewardsContract.totalSupply,
         ) ?? 0
@@ -302,7 +300,7 @@ export const createStakingRewardsContext = (): Readonly<
         hasStakedBalance: stakedBalance.exact.gt(0),
         hasUnstakedBalance: unstakedBalance.exact.gt(0),
       }
-    }, [stakingRewardsContract, massetState, stakingToken, platformRewardsPrice.value, rewardsPrice.value])
+    }, [stakingRewardsContract, massetState, stakingToken, platformRewardsPrice, rewardsPrice])
 
     return providerFactory(context, { value }, children)
   }

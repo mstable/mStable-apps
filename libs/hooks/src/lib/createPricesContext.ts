@@ -1,78 +1,114 @@
-import { createContext, useContext, FC, useRef } from 'react'
-
+import React, { useRef, FC, createContext, useContext, useCallback } from 'react'
+import { FetchState } from './useFetchState'
 import { providerFactory } from './utils'
 
-interface PriceFetchState {
-  fetching?: boolean
-  value?: number
-  error?: string
-  updatedAt?: number
-}
-
-interface Prices {
-  [address: string]: PriceFetchState
-}
-
-type UseFetchPrice = (address?: string) => PriceFetchState
-
-interface CoingeckoPrices {
-  [address: string]: { usd: number }
-}
-
-const fetchCoingeckoPrices = async (addresses: string[]): Promise<CoingeckoPrices> => {
+const fetchCoingeckoPrices = async (addresses: string[]): Promise<{ [address: string]: { usd: number } }> => {
   const result = await fetch(
     `https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${addresses.join(',')}&vs_currencies=USD`,
   )
   return result.json()
 }
 
-const TTL = 60 * 60 * 15 * 1000 // 15 mins
+interface State {
+  fetching?: boolean
+  value?: { [x: string]: number }
+  error?: string
+  updatedAt?: number
+}
 
-export const createPricesContext = (): Readonly<[() => UseFetchPrice, FC]> => {
-  const fetchPriceCtx = createContext<UseFetchPrice>(null as never)
-  const pricesCtx = createContext<Prices>(null as never)
+interface Dispatch {
+  fetchPrice(address?: string): FetchState<number>
+  fetchPrices(addresses?: string[]): { [x: string]: number }
+}
+
+export const createPricesContext = (): Readonly<[() => Dispatch, FC]> => {
+  const fetchPriceCtx = createContext<Dispatch>(null as never)
 
   const PricesProvider: FC = ({ children }) => {
-    const prices = useRef<Prices>({})
+    const state = useRef<State>({})
 
-    // TODO consider adding network; may need this for wrapped Matic
-    const useFetchPrice: UseFetchPrice = (address?: string) => {
-      if (!address) return {}
+    const fetchPrice = useCallback<Dispatch['fetchPrice']>(address => {
+      if (!address) return { error: 'No address found' }
 
-      const cached = prices.current[address]
-      if (cached && (cached.fetching || (cached.updatedAt && Date.now() - cached.updatedAt < TTL))) return cached
+      const cached = state.current
 
-      // This could be improved by grouping addresses to fetch
-      prices.current = { ...prices, [address]: { ...prices.current[address], fetching: true } }
+      if (cached?.value?.[address]) return { value: cached.value[address] }
+      if (cached.fetching) return { fetching: true }
+
+      state.current = { ...state.current, fetching: true }
+
       fetchCoingeckoPrices([address])
         .then(result => {
           const fetched = result?.[address]?.usd
 
-          prices.current = {
-            ...prices.current,
-            [address]: {
-              ...prices.current[address],
-              updatedAt: Date.now(),
-              value: fetched,
-              fetching: false,
-              error: fetched ? undefined : 'No price found',
+          state.current = {
+            ...state.current,
+            updatedAt: Date.now(),
+            value: {
+              ...state.current?.value,
+              [address]: fetched,
             },
+            fetching: false,
+            error: !!fetched ? undefined : 'No price found',
           }
         })
         .catch(error => {
           console.warn('Error fetching CoinGecko prices', error)
 
           // This could be improved by adding retries
-          prices.current = { ...prices.current, [address]: { ...prices.current[address], fetching: false, error, updatedAt: Date.now() } }
+          state.current = { ...state.current, fetching: false, error, updatedAt: Date.now() }
         })
 
-      return prices.current[address] ?? {}
-    }
+      return { value: state.current?.value?.[address] }
+    }, [])
 
-    return providerFactory(fetchPriceCtx, { value: useFetchPrice }, providerFactory(pricesCtx, { value: prices.current }, children))
+    const fetchPrices = useCallback<Dispatch['fetchPrices']>(_addresses => {
+      const addresses = _addresses?.filter(v => !!v)
+      if (!addresses?.length) return {}
+
+      const cached = state.current
+
+      if (!!cached.value) {
+        const matches = addresses.filter(v => !!cached?.value?.[v])
+        if (matches?.length === addresses?.length) return cached.value ?? {}
+      }
+      if (cached.fetching) return {}
+
+      state.current = { ...state.current, fetching: true }
+
+      fetchCoingeckoPrices(addresses)
+        .then(result => {
+          const value = Object.keys(result)
+            .map(k => ({
+              [k]: result?.[k]?.usd,
+            }))
+            .reduce((a, b) => ({ ...a, ...b }))
+
+          state.current = {
+            ...state.current,
+            updatedAt: Date.now(),
+            value: {
+              ...state.current?.value,
+              ...value,
+            },
+            fetching: false,
+            error: !!value?.length ? undefined : 'No price found',
+          }
+        })
+        .catch(error => {
+          console.warn('Error fetching CoinGecko prices', error)
+
+          // This could be improved by adding retries
+          state.current = { ...state.current, fetching: false, error, updatedAt: Date.now() }
+        })
+
+      return state.current?.value ?? {}
+    }, [])
+
+    return providerFactory(fetchPriceCtx, { value: { fetchPrice, fetchPrices } }, children)
   }
 
-  const useFetchPriceCtx = (): UseFetchPrice => {
+  const useFetchPriceCtx = (): Dispatch => {
     const useFetchPrice = useContext(fetchPriceCtx)
     if (useFetchPrice == null) {
       throw new Error(`useFetchPrice must be used inside a PricesProvider.`)
