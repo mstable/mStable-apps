@@ -104,9 +104,9 @@ const useSaveVaultAPY = (userBoost?: number): FetchState<BoostedCombinedAPY> => 
     },
   } = useSelectedMassetState() as MassetState
 
-  const useFetchPrice = useFetchPriceCtx()
+  const { fetchPrice } = useFetchPriceCtx()
   const massetPrice = useSelectedMassetPrice()
-  const rewardsTokenPrice = useFetchPrice(boostedSavingsVault?.rewardsToken.address)
+  const rewardsTokenPrice = fetchPrice(boostedSavingsVault?.rewardsToken.address)
 
   return useMemo(() => {
     if (!boostedSavingsVault || !massetPrice.value || !rewardsTokenPrice.value) return { fetching: true }
