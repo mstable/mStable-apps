@@ -5,7 +5,7 @@ import { isAddress } from 'ethers/lib/utils'
 import { ResolveENS } from '@apps/components/core'
 import { FetchState } from '@apps/hooks'
 
-import { DelegateePageHeader } from '../../components/GovernancePageHeader'
+import { DelegateePageHeader } from '../../components/DelegateePageHeader'
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 import { DelegateeProfile } from './DelegateeProfile'
 

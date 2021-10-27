@@ -20,7 +20,7 @@ import { DelegateSelectionAlt } from '../../components/DelegateSelectionAlt'
 import { BigDecimal } from '@apps/bigdecimal'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 
-const DOCS_URL = 'https://app.gitbook.com/@mstable/s/mstable-docs/'
+const DOCS_URL = 'https://docs.mstable.org/using-mstable/mta-staking/staking-v2'
 const SNAPSHOT_URL = 'https://snapshot.org/#/mstablegovernance.eth'
 
 const DelegationBox = styled(InfoBox)<{ isTitleAddress: boolean }>`

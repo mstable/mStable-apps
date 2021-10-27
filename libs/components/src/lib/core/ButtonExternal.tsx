@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes, ComponentProps, FC } from 'react'
+import styled from 'styled-components'
 import { Button } from './Button'
 
 interface Props extends ButtonHTMLAttributes<unknown> {
@@ -15,8 +16,16 @@ const External: FC<{ highlighted?: boolean }> = ({ highlighted }) => (
   </svg>
 )
 
+const StyledButton = styled(Button)`
+  svg {
+    path {
+      stroke: ${({ theme, highlighted }) => (highlighted ? 'white' : theme.color.body)};
+    }
+  }
+`
+
 export const ButtonExternal: FC<Props> = ({ onClick, children, highlighted }) => (
-  <Button onClick={onClick} highlighted={highlighted}>
+  <StyledButton onClick={onClick} highlighted={highlighted}>
     {children} <External highlighted={highlighted} />
-  </Button>
+  </StyledButton>
 )

@@ -54,7 +54,7 @@ const Content = styled.div`
 
 const Container = styled.div`
   * {
-    ${({ theme }) => theme.mixins.pixel};
+    ${({ theme }) => theme.mixins.mono};
   }
 
   font-size: 1.125rem;
@@ -218,9 +218,7 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
             <p>Meta-8 (c) 1991 mStable Entertainment Australia</p>
             <br />
             <p>Reticulating splines...</p>
-            <p>Depositing into Save...</p>
             <p>Aping into MTA...</p>
-            <p>Voting on Snapshot...</p>
             <p>Following @metaboi_...</p>
             <p>System startup complete.</p>
           </Typist>

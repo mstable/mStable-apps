@@ -74,19 +74,17 @@ const MigrationPanel = styled.div`
 `
 
 const Achievement = styled.div`
-  ${({ theme }) => theme.mixins.pixel};
+  ${({ theme }) => theme.mixins.mono};
 
   display: flex;
-  text-transform: uppercase;
-  letter-spacing: 0.2ch;
   justify-content: space-between;
-  font-size: 0.875rem;
   color: ${({ theme }) => theme.color.white};
   align-items: center;
   border-top: 1px solid ${({ theme }) => theme.color.whiteTransparenter};
   padding-top: 1.5rem;
 
   span {
+    ${({ theme }) => theme.mixins.numeric};
     background: linear-gradient(180deg, #4859f0 0%, #1929c0 100%);
     box-shadow: 0px 4px 10px 0px #1e2db9;
     border-radius: 1rem;

@@ -1,11 +1,12 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import useSound from 'use-sound'
-// @ts-ignore
-import startup from '../../../assets/startup.mp3'
 
 import { Meta8Logic } from './Meta8Logic'
 import { RealisticSwitch } from './RealisticSwitch'
+
+// @ts-ignore
+import startup from '../../../assets/startup.mp3'
 
 const Display = styled.div<{ isOn: boolean }>`
   @keyframes scandown {
@@ -104,7 +105,7 @@ export const Meta8Console: FC = () => {
       playStartup()
       setTimeout(() => {
         setIsBooted(true)
-      }, 4500)
+      }, 3500)
     } else {
       setIsBooted(false)
     }
@@ -129,7 +130,6 @@ export const Meta8Console: FC = () => {
           <RealisticSwitch
             checked={isOn}
             onClick={() => {
-              if (isOn) setIsBooted(false)
               setIsOn(!isOn)
             }}
           />

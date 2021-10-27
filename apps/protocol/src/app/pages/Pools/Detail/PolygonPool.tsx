@@ -6,12 +6,11 @@ import Skeleton from 'react-loading-skeleton'
 
 import type { FeederPoolState } from '@apps/data-provider'
 import { TabCard } from '@apps/components/core'
-import { ReactComponent as EarnIcon } from '@apps/components/icons/circle/earn.svg'
 import { useFeederPool } from '@apps/hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
-import { PageHeader } from '../../PageHeader'
+import { ProtocolPageHeader as PageHeader } from '../../ProtocolPageHeader'
 import { FeederPoolProvider, useSelectedFeederPoolState } from '../FeederPoolProvider'
 
 import { Deposit } from './Deposit'
@@ -78,7 +77,7 @@ const PoolDetailContent: FC = () => {
   return (
     <RewardStreamsProvider vault={vault}>
       <Container>
-        <PageHeader title="Pools" subtitle={title} icon={<EarnIcon />} massetSwitcher />
+        <PageHeader title="Pools" subtitle={title} massetSwitcher />
         <Inner>
           <FraxPoolDetailCard poolAddress={address} />
           <Exchange>

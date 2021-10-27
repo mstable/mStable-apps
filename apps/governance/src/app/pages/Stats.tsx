@@ -17,9 +17,15 @@ const StyledTooltip = styled(Tooltip)`
 `
 
 const Analytics = styled.div`
-  margin-bottom: 1rem;
   display: flex;
   justify-content: flex-start;
+  flex: 1;
+
+  > * {
+    width: 100%;
+    height: 100%;
+    min-height: 4rem;
+  }
 `
 
 const Box = styled.div`
@@ -60,6 +66,16 @@ const Container = styled.div`
     flex-wrap: wrap;
     gap: 0.5rem;
 
+    > * {
+      flex-basis: 100%;
+    }
+
+    @media (min-width: ${ViewportWidth.s}) {
+      > * {
+        flex-basis: calc(100% / 2 - 1rem / 2);
+      }
+    }
+
     @media (min-width: ${ViewportWidth.m}) {
       > * {
         flex-basis: calc(100% / 3 - 1rem / 3);
@@ -79,10 +95,6 @@ export const Stats: FC = () => {
   return (
     <Container>
       <GovernancePageHeader title="Stats" subtitle="Overview of the mStable Governance system" />
-      <Analytics>
-        <ButtonExternal onClick={() => window.open(ANALYTICS_URL)}>View Analytics</ButtonExternal>
-      </Analytics>
-
       <div>
         <StatsBox
           tip={`In the event of recollateratalisation, your staked balance will be slashed by ${slashingPercentage}%. This rate may vary depending on future governance proposals.`}
@@ -101,6 +113,9 @@ export const Stats: FC = () => {
           subtitle={`${unstakeWindow}d`}
         />
         <StatsBox tip="Quests are submitted as a batch once a week" title="Next queue update" subtitle={`${nextQueueUpdate}d`} />
+        <Analytics>
+          <ButtonExternal onClick={() => window.open(ANALYTICS_URL)}>View Analytics</ButtonExternal>
+        </Analytics>
       </div>
     </Container>
   )

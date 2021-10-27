@@ -165,9 +165,15 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
           <Warning highlight>It is generally not advisable to stake in both MTA and BPT because of increased gas costs.</Warning>
         )}
         <Warning>
-          Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.&nbsp;
+          Unstaking is subject to a cooldown period of {cooldown} days, followed by a {unstakeWindow} day withdrawable period.
         </Warning>
         <Warning>A redemption fee applies to all withdrawals. The longer you stake, the lower the redemption fee.</Warning>
+        <Warning>
+          In the event that the mStable protocol requires recollateralisation, you risk getting diluted{' '}
+          <a href="https://docs.mstable.org/using-mstable/mta-staking/staking-v2" target="_blank" rel="noopener noreferrer">
+            Learn More
+          </a>
+        </Warning>
       </Warnings>
       {isMigrating ? (
         <div>

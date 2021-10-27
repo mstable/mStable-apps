@@ -3,10 +3,9 @@ import styled from 'styled-components'
 
 import { ThemedSkeleton } from '@apps/components/core'
 // @ts-ignore
-import { ReactComponent as SwapIcon } from '@apps/components/icons/circle/swap.svg'
 import { ExchangeAction, useSelectedMassetState } from '@apps/hooks'
 import { MultiAssetExchangeProvider } from '@apps/components/forms'
-import { PageHeader } from '../PageHeader'
+import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { ExchangeStateProvider, useExchangeState } from '../Save/hooks'
 import { SwapLogic } from './SwapLogic'
 import { MintExactLogic } from './MintExactLogic'
@@ -42,9 +41,22 @@ const RecolMessage = styled.p`
 `
 
 const Card = styled.div`
-  ${({ theme }) => theme.mixins.card};
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  padding: 0.5rem;
+  border-radius: 1rem;
+
+  background: ${({ theme }) => theme.color.background[1]};
   width: 100%;
   max-width: 30rem;
+
+  > div {
+    background: ${({ theme }) => theme.color.background[0]};
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+  }
 `
 
 const Container = styled.div`
@@ -96,7 +108,7 @@ export const Exchange: FC = () => {
   return (
     <ExchangeStateProvider>
       <Container>
-        <PageHeader title="Swap" icon={<SwapIcon />} massetSwitcher />
+        <PageHeader title="Swap" massetSwitcher />
         <div>
           {undergoingRecol && (
             <>
