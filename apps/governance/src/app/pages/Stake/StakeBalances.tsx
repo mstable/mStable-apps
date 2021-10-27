@@ -11,6 +11,7 @@ import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenPr
 import { useRewardsEarned } from './context'
 import { useStakingStatus } from '../../context/StakingStatusProvider'
 import { BigDecimal } from '@apps/bigdecimal'
+import { useBPTBalApy } from '../../hooks/useBPTBalApy'
 
 const BALANCER_URL = 'https://app.balancer.fi/#/pool/0xe2469f47ab58cf9cf59f9822e3c5de4950a41c49000200000000000000000089'
 const MTA_URL = 'https://cowswap.exchange/#/swap?outputCurrency=0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2'
@@ -221,6 +222,7 @@ export const StakeBalances: FC = () => {
   const stakedToken = useTokenSubscription(data?.stakedToken?.token.address)
   const isBPT = options[selected]?.icon?.symbol === 'mBPT'
   const isDelegated = !!data?.stakedToken?.accounts?.[0]?.delegatee
+  const balAPY = useBPTBalApy()
 
   const values = useMemo<{
     baseRewardsApy?: Balance
@@ -299,10 +301,10 @@ export const StakeBalances: FC = () => {
       {!!values.stake || hasSelectedStakeOption ? (
         <DefaultWidget>
           <Group label="Earned" balance={values.rewardsEarned} loading={loading} />
-          <Group label="Base APY" balance={values.baseRewardsApy} loading={loading} />
-          {values.userRewardsApy && <Group label="My APY" balance={values.userRewardsApy} loading={loading} />}
-          {/* // TODO: - Add with BAL Apy */}
-          {/* {stakedToken?.symbol === 'stkBPT' && <Group label="BAL APY" placeholder="Soon!" loading={loading} />} */}
+          {stakedToken?.symbol === 'stkBPT' && balAPY && (
+            <Group label="BAL APY" balance={{ amount: balAPY?.value, suffix: '%' }} loading={loading} />
+          )}
+          <Group label="MTA APY" balance={values.userRewardsApy ? values.userRewardsApy : values.baseRewardsApy} loading={loading} />
         </DefaultWidget>
       ) : (
         <InfoWidget>

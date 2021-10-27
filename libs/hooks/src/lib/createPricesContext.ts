@@ -27,6 +27,12 @@ export const createPricesContext = (): Readonly<[() => Dispatch, FC]> => {
   const PricesProvider: FC = ({ children }) => {
     const state = useRef<State>({})
 
+    const catchError = (error: string) => {
+      // This could be improved by adding retries
+      console.warn('Error fetching CoinGecko prices', error)
+      state.current = { ...state.current, fetching: false, error, updatedAt: Date.now() }
+    }
+
     const fetchPrice = useCallback<Dispatch['fetchPrice']>(address => {
       if (!address) return { error: 'No address found' }
 
@@ -52,12 +58,7 @@ export const createPricesContext = (): Readonly<[() => Dispatch, FC]> => {
             error: !!fetched ? undefined : 'No price found',
           }
         })
-        .catch(error => {
-          console.warn('Error fetching CoinGecko prices', error)
-
-          // This could be improved by adding retries
-          state.current = { ...state.current, fetching: false, error, updatedAt: Date.now() }
-        })
+        .catch(catchError)
 
       return { value: state.current?.value?.[address] }
     }, [])
@@ -95,12 +96,7 @@ export const createPricesContext = (): Readonly<[() => Dispatch, FC]> => {
             error: !!value?.length ? undefined : 'No price found',
           }
         })
-        .catch(error => {
-          console.warn('Error fetching CoinGecko prices', error)
-
-          // This could be improved by adding retries
-          state.current = { ...state.current, fetching: false, error, updatedAt: Date.now() }
-        })
+        .catch(catchError)
 
       return state.current?.value ?? {}
     }, [])
