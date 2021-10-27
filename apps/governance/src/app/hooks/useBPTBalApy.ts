@@ -21,10 +21,10 @@ export const useBPTBalApy = (): FetchState<number> => {
 
   const query = useQuery<{ balancers: { pools: { tokens: { balance: string; address: string }[] }[] }[] }>(
     gql`
-      query BalancerData {
+      query BalancerData($id: string) {
         balancers {
           id
-          pools(where: { id: "0xe2469f47ab58cf9cf59f9822e3c5de4950a41c49000200000000000000000089" }) {
+          pools(where: { id: $id }) {
             tokens {
               balance
               address
@@ -33,7 +33,7 @@ export const useBPTBalApy = (): FetchState<number> => {
         }
       }
     `,
-    { fetchPolicy: 'cache-first', client },
+    { fetchPolicy: 'cache-first', client, variables: { id: POOL_ID } },
   )
 
   const mapped = (query.data?.balancers?.[0]?.pools?.[0]?.tokens ?? [])
