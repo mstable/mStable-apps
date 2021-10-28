@@ -11,16 +11,17 @@ import { useSelectedMassetPrice } from './useSelectedMassetPrice'
 const useFeederPoolApyVault = (poolAddress: string) => {
   const massetState = useSelectedMassetState()
   const massetPrice = useSelectedMassetPrice()
-  const useFetchPrice = useFetchPriceCtx()
+  const { fetchPrices } = useFetchPriceCtx()
   const vMTABalance = useVMTABalance()
 
   const pool = massetState?.feederPools[poolAddress]
   const vault = pool?.vault
 
-  const rewardsTokenPrice = useFetchPrice(vault?.rewardsToken.address)
-  const platformTokenPrice = useFetchPrice(vault?.platformRewardsToken?.address)
+  const tokenPrices = fetchPrices([vault?.rewardsToken.address, vault?.platformRewardsToken?.address])
+  const rewardsTokenPrice = tokenPrices[vault?.rewardsToken.address]
+  const platformTokenPrice = tokenPrices[vault?.platformRewardsToken?.address]
 
-  if (!pool || !vault || !massetPrice.value || rewardsTokenPrice.fetching) return { fetching: true }
+  if (!pool || !vault || !massetPrice.value || !rewardsTokenPrice) return { fetching: true }
 
   const rewardRateSimple = parseInt(vault.rewardRate.toString()) / 1e18
 
@@ -30,8 +31,8 @@ const useFeederPoolApyVault = (poolAddress: string) => {
 
   const stakingTokenPrice = pool.price.simple * massetPrice.value
 
-  const baseRewards = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, rewardRateSimple, vault.totalSupply) as number
-  const platformRewards = calculateApy(stakingTokenPrice, platformTokenPrice.value, platformRewardRateSimple, vault.totalRaw)
+  const baseRewards = calculateApy(stakingTokenPrice, rewardsTokenPrice, rewardRateSimple, vault.totalSupply) as number
+  const platformRewards = calculateApy(stakingTokenPrice, platformTokenPrice, platformRewardRateSimple, vault.totalRaw)
 
   const maxBoost = MAX_BOOST * baseRewards
 
@@ -43,8 +44,7 @@ const useFeederPoolApyVault = (poolAddress: string) => {
 
     if (boost) {
       const boostedRewardRate = rewardRateSimple * boost
-
-      userBoost = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, boostedRewardRate, vault.totalSupply) as number
+      userBoost = calculateApy(stakingTokenPrice, rewardsTokenPrice, boostedRewardRate, vault.totalSupply) as number
     }
   }
 

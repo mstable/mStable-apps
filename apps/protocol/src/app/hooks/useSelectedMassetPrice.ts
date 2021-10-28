@@ -8,7 +8,7 @@ const {
 
 export const useSelectedMassetPrice = (): FetchState<number> => {
   const massetState = useSelectedMassetState()
-  const useFetchPrice = useFetchPriceCtx()
-  const wbtcPrice = useFetchPrice(WBTC)
+  const { fetchPrice } = useFetchPriceCtx()
+  const wbtcPrice = fetchPrice(WBTC)
   return massetState?.token?.symbol === 'mBTC' ? wbtcPrice : { value: 1 }
 }
