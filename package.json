@@ -30,13 +30,17 @@
     "codegen:graphql": "yarn run graphql-codegen --config ./libs/artifacts/codegen.yml",
     "codegen:typechain:prepare": "cp ./node_modules/@mstable/protocol/abis/*.json ./libs/artifacts/src/abi/external && cp ./node_modules/@mstable/merkle-drop/build/contracts/MerkleDrop.sol/MerkleDrop.json ./libs/artifacts/src/abi/external/MerkleDrop.json",
     "codegen:typechain:generate": "yarn typechain --target ethers-v5 --out-dir ./libs/artifacts/src/typechain './libs/artifacts/src/abi/**/*.json'",
-    "codegen:typechain": "yarn codegen:typechain:prepare && yarn codegen:typechain:generate"
+    "codegen:typechain": "yarn codegen:typechain:prepare && yarn codegen:typechain:generate",
+    "commit": "commit"
   },
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.4.16",
     "@apollo/react-common": "^3.1.4",
     "@apollo/react-hooks": "^4.0.0",
+    "@commitlint/cli": "^14.1.0",
+    "@commitlint/config-conventional": "^14.1.0",
+    "@commitlint/prompt-cli": "^14.1.0",
     "@ethersproject/abi": "^5.4.0",
     "@ethersproject/abstract-provider": "^5.4.0",
     "@ethersproject/logger": "^5.4.0",
@@ -137,6 +141,7 @@
     "babel-jest": "26.2.2",
     "babel-plugin-styled-components": "1.10.7",
     "cypress": "^7.3.0",
+    "cz-conventional-changelog": "3.3.0",
     "dotenv": "10.0.0",
     "env-cmd": "^10.1.0",
     "eslint": "^7.30.0",
