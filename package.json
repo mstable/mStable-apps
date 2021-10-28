@@ -30,7 +30,8 @@
     "codegen:graphql": "yarn run graphql-codegen --config ./libs/artifacts/codegen.yml",
     "codegen:typechain:prepare": "cp ./node_modules/@mstable/protocol/abis/*.json ./libs/artifacts/src/abi/external",
     "codegen:typechain:generate": "yarn typechain --target ethers-v5 --out-dir ./libs/artifacts/src/typechain './libs/artifacts/src/abi/**/*.json'",
-    "codegen:typechain": "yarn codegen:typechain:prepare && yarn codegen:typechain:generate"
+    "codegen:typechain": "yarn codegen:typechain:prepare && yarn codegen:typechain:generate",
+    "commit": "cz"
   },
   "private": true,
   "dependencies": {
@@ -136,6 +137,7 @@
     "babel-jest": "26.2.2",
     "babel-plugin-styled-components": "1.10.7",
     "cypress": "^7.3.0",
+    "cz-conventional-changelog": "3.3.0",
     "dotenv": "10.0.0",
     "env-cmd": "^10.1.0",
     "eslint": "^7.30.0",
@@ -170,5 +172,10 @@
     "os": false,
     "stream": false,
     "crypto": false
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
