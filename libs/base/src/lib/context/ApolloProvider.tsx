@@ -106,7 +106,7 @@ export const ApolloProvider: FC = ({ children }) => {
         const preferred = endpoints.filter(endpoint => !failedEndpoints.split(',').includes(endpoint))[0]
         const fallback = endpoints[0] // There is always a fallback, even if it failed
         const endpoint = preferred ?? fallback
-        const timeoutLink = new ApolloLinkTimeout(5000)
+        const timeoutLink = new ApolloLinkTimeout(30000)
 
         const httpLink = new HttpLink({ uri: endpoint })
         const retryLink = new RetryLink({ delay: { initial: 1e3, max: 5e3, jitter: true }, attempts: { max: 1, retryIf } })
