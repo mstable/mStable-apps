@@ -312,6 +312,17 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
           {},
           tokens,
         )
+
+        let title = bassets
+          .map(b => transformTokenSymbol(b.token.symbol))
+          .sort(s => (s === 'mUSD' || s === 'mBTC' ? -1 : 1))
+          .join('/')
+
+        // fpMBTC/tBTCv2
+        if (address === '0xc3280306b6218031e61752d060b091278d45c329') {
+          title = `${title}v2`
+        }
+
         return [
           address,
           {
@@ -328,10 +339,7 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
             dailyApy: parseFloat(dailyAPY),
             price: new BigDecimal(price ?? 0),
             failed,
-            title: bassets
-              .map(b => transformTokenSymbol(b.token.symbol))
-              .sort(s => (s === 'mUSD' || s === 'mBTC' ? -1 : 1))
-              .join('/'),
+            title,
             undergoingRecol,
             vault: vault ? transformBoostedSavingsVault(vault) : undefined,
             account: accounts?.length ? transformFeederPoolAccountData(accounts[0]) : undefined,
