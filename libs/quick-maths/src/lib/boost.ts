@@ -44,6 +44,7 @@ export const getPriceCoeff = (vault: BoostedSavingsVaultState): number => {
 
     // All BTC
     case '0x760ea8cfdcc4e78d8b9ca3088ecd460246dc0731': // mbtc/tbtc
+    case '0x97e2a2f97a2e9a4cfb462a49ab7c8d205abb9ed9': // mbtc/tbtcv2
     case '0xf65d53aa6e2e4a5f4f026e73cb3e22c22d75e35c': // mbtc/hbtc
       return 48000
 
