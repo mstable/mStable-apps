@@ -83,7 +83,7 @@ export const TokenSubscriptionsUpdater = (): null => {
 
   // Clear all contracts and tokens if the account/chain changes.
   useEffect(() => {
-    if (prevAccount !== account || !account || chainId !== prevChainId) {
+    if (prevAccount !== account || chainId !== prevChainId) {
       reset()
     }
   }, [account, chainId, prevAccount, prevChainId, reset])
