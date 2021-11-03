@@ -1,17 +1,17 @@
 import { BigNumber } from 'ethers'
-import { parseUnits, keccak256, solidityKeccak256 } from 'ethers/lib/utils'
+import { keccak256, solidityKeccak256, formatUnits } from 'ethers/lib/utils'
 import { MerkleTree } from 'merkletreejs'
 
 import { MerkleClaim, MerkleClaimProof } from './types'
 
 const hashFn = (data: string) => keccak256(data).slice(2)
 
-const getProof = (balances: Record<string, string>, claimant: string): { balance: BigNumber; proof: string[] } => {
+const getProof = (balances: Record<string, string>, claimant: string): { balance: BigNumber; balanceSimple: number; proof: string[] } => {
   let claimantLeaf: string | undefined
   let claimantBalance: BigNumber | undefined
 
   const leaves = Object.entries(balances).map(([_account, _balance]) => {
-    const balance = parseUnits(_balance)
+    const balance = BigNumber.from(_balance)
     const leaf = solidityKeccak256(['address', 'uint256'], [_account, balance.toString()])
 
     if (!claimantLeaf && _account.toLowerCase() === claimant.toLowerCase()) {
@@ -27,7 +27,8 @@ const getProof = (balances: Record<string, string>, claimant: string): { balance
   const tree = new MerkleTree(leaves, hashFn, { sort: true })
   const proof = tree.getHexProof(claimantLeaf)
 
-  return { proof, balance: claimantBalance }
+  const balanceSimple = parseFloat(formatUnits(claimantBalance))
+  return { proof, balance: claimantBalance, balanceSimple }
 }
 
 export const createMerkleClaimProofs = async (claimant: string, { tranches }: MerkleClaim): Promise<MerkleClaimProof[]> => {
