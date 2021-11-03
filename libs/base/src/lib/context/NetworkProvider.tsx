@@ -132,8 +132,12 @@ export interface EthereumMainnet
         stkMTA: string
         stkBPT: string
       }
+      // MerkleDropMBPTBAL: string
     },
-    GraphQLEndpoints<'feeders' | 'snapshot' | 'staking' | 'questbook'>
+    GraphQLEndpoints<
+      'feeders' | 'snapshot' | 'staking' | 'questbook'
+      // | 'merkleDrop'
+    >
   > {
   chainId: ChainIds.EthereumMainnet
 }
@@ -143,7 +147,11 @@ export interface EthereumRopsten
   chainId: ChainIds.EthereumRopsten
 }
 
-export interface EthereumKovan extends Network<{ ERC20: { WETH: string } }, GraphQLEndpoints<'staking' | 'questbook' | 'snapshot'>> {
+export interface EthereumKovan
+  extends Network<
+    { ERC20: { WETH: string }; MerkleDropMBPTBAL: string },
+    GraphQLEndpoints<'staking' | 'questbook' | 'snapshot' | 'merkleDrop'>
+  > {
   chainId: ChainIds.EthereumKovan
 }
 
@@ -234,6 +242,7 @@ const ETH_MAINNET: EthereumMainnet = {
     ],
     staking: [graphHostedEndpoint('mstable', 'mstable-staking')],
     questbook: ['https://europe-west1-mstable-questbook.cloudfunctions.net/questbook'],
+    // merkleDrop: [graphHostedEndpoint('mstable', 'mstable-merkle-drop')],
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
       // Temporary preview URL because indexers haven't picked up the new version...
@@ -257,6 +266,7 @@ const ETH_MAINNET: EthereumMainnet = {
       stkMTA: '0x8f2326316ec696f6d023e37a9931c2b2c177a3d7',
       stkBPT: '0xefbe22085d9f29863cfb77eed16d3cc0d927b011',
     },
+    // MerkleDropMBPTBAL: '0x4912c0fa9ed21f8f5420bdfaa097220120610082',
   },
   getExplorerUrl: etherscanUrl(),
   supportedMassets: ['mbtc', 'musd'],
@@ -325,6 +335,7 @@ const ETH_KOVAN: EthereumKovan = {
     protocol: [graphHostedEndpoint('mstable', 'mstable-protocol-kovan')],
     staking: [graphHostedEndpoint('mstable', 'mstable-staking-kovan')],
     blocks: [graphHostedEndpoint('blocklytics', 'kovan-blocks')],
+    merkleDrop: [graphHostedEndpoint('mstable', 'mstable-merkle-drop-kovan')],
     snapshot: ['https://hub.snapshot.org/graphql'],
     questbook: ['https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook'],
   },
@@ -338,6 +349,7 @@ const ETH_KOVAN: EthereumKovan = {
     ERC20: {
       WETH: '0xE131AbCD2114bf457B1fBc5cE01593E06c435A63',
     },
+    MerkleDropMBPTBAL: '0x4912c0fa9ed21f8f5420bdfaa097220120610082',
   },
   getExplorerUrl: etherscanUrl('kovan'),
 }
@@ -558,7 +570,7 @@ export const useNetwork = (): Network<unknown, unknown> => useContext(networkCtx
 
 export const useNetworkPrices = (): FetchState<NetworkPrices> => useContext(networkPricesCtx)
 
-export const useNetworkAddresses = (): AllNetworks['addresses'] => useContext(networkCtx).addresses as AllNetworks['addresses']
+export const useNetworkAddresses = <T extends AllNetworks>(): T['addresses'] => useContext(networkCtx).addresses as T['addresses']
 
 export const useGetExplorerUrl = (): Network<unknown, unknown>['getExplorerUrl'] => useNetwork().getExplorerUrl
 
