@@ -1,3 +1,4 @@
+import { EthereumKovan, useNetworkAddresses } from '@apps/base/context/network'
 import { MerkleClaimForm, MerkleClaimsProvider } from '@apps/merkle-claim'
 import React, { FC } from 'react'
 import { useToggle } from 'react-use'
@@ -35,24 +36,25 @@ const StyledMultiRewards = styled(MultiRewards)`
   }
 `
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 2rem;
-  height: 100%;
-`
-
-export const ClaimForm: FC = () => {
-  const { data } = useStakedTokenQuery()
+const ClaimFormRewards: FC = () => {
   const rewardsEarned = useRewardsEarned()
-  const { selected: stakedTokenAddress, options } = useStakedToken()
-  const [isCompounding, toggleIsCompounding] = useToggle(false)
+  return <StyledMultiRewards rewardsEarned={{ rewards: [{ earned: BigDecimal.fromSimple(rewardsEarned?.rewards ?? 0), token: 'MTA' }] }} />
+}
 
+const MerkleDropBAL: FC = () => {
+  const addresses = useNetworkAddresses<EthereumKovan>()
+  return addresses.MerkleDropMBPTBAL ? (
+    <MerkleClaimsProvider>
+      <MerkleClaimForm merkleDropAddress={addresses.MerkleDropMBPTBAL} />
+    </MerkleClaimsProvider>
+  ) : null
+}
+
+const ClaimFormSend: FC<{ isCompounding: boolean }> = ({ isCompounding }) => {
+  const rewardsEarned = useRewardsEarned()
+  const { data } = useStakedTokenQuery()
   const stakedTokenContract = useStakedTokenContract()
   const propose = usePropose()
-
-  const stakedTokenSymbol = options[stakedTokenAddress]?.icon?.symbol
 
   const handleSend = () => {
     if (!stakedTokenContract || !data) return
@@ -73,10 +75,28 @@ export const ClaimForm: FC = () => {
       }),
     )
   }
+  return (
+    <SendButton valid={!!rewardsEarned?.rewards} title={isCompounding ? 'Compound Rewards' : 'Claim Rewards'} handleSend={handleSend} />
+  )
+}
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  height: 100%;
+`
+
+export const ClaimForm: FC = () => {
+  const { selected: stakedTokenAddress, options } = useStakedToken()
+  const [isCompounding, toggleIsCompounding] = useToggle(false)
+
+  const stakedTokenSymbol = options[stakedTokenAddress]?.icon?.symbol
 
   return (
     <Container>
-      <StyledMultiRewards rewardsEarned={{ rewards: [{ earned: BigDecimal.fromSimple(rewardsEarned?.rewards ?? 0), token: 'MTA' }] }} />
+      <ClaimFormRewards />
       {stakedTokenSymbol === 'MTA' && (
         <Compound>
           <div>
@@ -86,12 +106,8 @@ export const ClaimForm: FC = () => {
           <p>This will claim and re-stake your earned MTA in 1 transaction</p>
         </Compound>
       )}
-      {stakedTokenSymbol === 'mBPT' && (
-        <MerkleClaimsProvider>
-          <MerkleClaimForm merkleDropAddress="0x4912c0fa9ed21f8f5420bdfaa097220120610082" />
-        </MerkleClaimsProvider>
-      )}
-      <SendButton valid={!!rewardsEarned?.rewards} title={isCompounding ? 'Compound Rewards' : 'Claim Rewards'} handleSend={handleSend} />
+      <MerkleDropBAL />
+      <ClaimFormSend isCompounding={isCompounding} />
     </Container>
   )
 }
