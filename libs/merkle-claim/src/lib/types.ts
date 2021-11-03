@@ -1,11 +1,11 @@
 import { BigNumber } from 'ethers'
-import { BigDecimal } from '@apps/bigdecimal'
 
 export interface MerkleClaim {
   address: string
-  token: string
-  tranches: { trancheId: number; amount: BigDecimal; uri: string }[]
-  totalUnclaimed: BigDecimal
+  token: { address: string; symbol: string }
+  tranches: { trancheId: number; amount: BigNumber; uri: string }[]
+  totalUnclaimed: BigNumber
+  totalUnclaimedSimple: number
 }
 
 export interface MerkleClaims {
@@ -16,4 +16,5 @@ export interface MerkleClaimProof {
   trancheId: number
   proof: string[]
   balance: BigNumber
+  balanceSimple: number
 }

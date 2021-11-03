@@ -1,7 +1,8 @@
+import { BigNumber } from 'ethers'
+import { formatUnits } from 'ethers/lib/utils'
 import React, { createContext, FC, useMemo } from 'react'
 
 import { useApolloClients } from '@apps/base/context/apollo'
-import { BigDecimal } from '@apps/bigdecimal'
 import { FetchState } from '@apps/hooks'
 import { useAccount } from '@apps/base/context/account'
 import { useMerkleDropAccountsQuery } from '@apps/artifacts/graphql/merkle-drop'
@@ -16,32 +17,25 @@ export const MerkleClaimsProvider: FC = ({ children }) => {
   const query = useMerkleDropAccountsQuery({ variables: { account: account as string }, skip: !account, client })
 
   const merkleClaims = useMemo<FetchState<MerkleClaims>>(() => {
-    if (!query.data || query.loading) return { fetching: true }
+    if (!query.data) return { fetching: true }
 
     const value: MerkleClaims = Object.fromEntries(
-      query.data.accounts.map(
-        ({
-          merkleDrop: {
-            id: merkleDrop,
-            token: { address: token },
-          },
-          claims,
-        }) => {
-          const tranches = claims.map(({ amount, tranche: { trancheId, uri } }) => ({
-            amount: BigDecimal.parse(amount),
-            trancheId,
-            uri,
-          }))
+      query.data.accounts.map(({ merkleDrop: { id: merkleDrop, token }, claims }) => {
+        const tranches = claims.map(({ amount, tranche: { trancheId, uri } }) => ({
+          amount: BigNumber.from(amount),
+          trancheId,
+          uri,
+        }))
 
-          const totalUnclaimed = tranches.reduce((prev, { amount }) => prev.add(amount), BigDecimal.ZERO)
+        const totalUnclaimed = tranches.reduce((prev, { amount }) => prev.add(amount), BigNumber.from(0))
+        const totalUnclaimedSimple = parseFloat(formatUnits(totalUnclaimed))
 
-          return [merkleDrop, { address: merkleDrop, token, tranches, totalUnclaimed }]
-        },
-      ),
+        return [merkleDrop, { address: merkleDrop, token, tranches, totalUnclaimed, totalUnclaimedSimple }]
+      }),
     )
 
     return { value }
-  }, [query])
+  }, [query.data])
 
   return <merkleClaimsCtx.Provider value={merkleClaims}>{children}</merkleClaimsCtx.Provider>
 }
