@@ -226,7 +226,7 @@ export type _Meta_FieldPolicy = {
 	deployment?: FieldPolicy<any> | FieldReadFunction<any>,
 	hasIndexingErrors?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type TypedTypePolicies = TypePolicies & {
+export type StrictTypedTypePolicies = {
 	Account?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | AccountKeySpecifier | (() => undefined | AccountKeySpecifier),
 		fields?: AccountFieldPolicy,
@@ -300,3 +300,4 @@ export type TypedTypePolicies = TypePolicies & {
 		fields?: _Meta_FieldPolicy,
 	}
 };
+export type TypedTypePolicies = StrictTypedTypePolicies & TypePolicies;

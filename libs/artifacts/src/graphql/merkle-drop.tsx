@@ -124,7 +124,7 @@ export type Claim = {
   account: Account;
   merkleDrop: MerkleDrop;
   tranche: Tranche;
-  amount: Scalars['BigDecimal'];
+  amount: Scalars['BigInt'];
   claimed: Scalars['Boolean'];
   claimedAt: Scalars['Int'];
 };
@@ -180,14 +180,14 @@ export type Claim_Filter = {
   tranche_not_starts_with?: Maybe<Scalars['String']>;
   tranche_ends_with?: Maybe<Scalars['String']>;
   tranche_not_ends_with?: Maybe<Scalars['String']>;
-  amount?: Maybe<Scalars['BigDecimal']>;
-  amount_not?: Maybe<Scalars['BigDecimal']>;
-  amount_gt?: Maybe<Scalars['BigDecimal']>;
-  amount_lt?: Maybe<Scalars['BigDecimal']>;
-  amount_gte?: Maybe<Scalars['BigDecimal']>;
-  amount_lte?: Maybe<Scalars['BigDecimal']>;
-  amount_in?: Maybe<Array<Scalars['BigDecimal']>>;
-  amount_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  amount?: Maybe<Scalars['BigInt']>;
+  amount_not?: Maybe<Scalars['BigInt']>;
+  amount_gt?: Maybe<Scalars['BigInt']>;
+  amount_lt?: Maybe<Scalars['BigInt']>;
+  amount_gte?: Maybe<Scalars['BigInt']>;
+  amount_lte?: Maybe<Scalars['BigInt']>;
+  amount_in?: Maybe<Array<Scalars['BigInt']>>;
+  amount_not_in?: Maybe<Array<Scalars['BigInt']>>;
   claimed?: Maybe<Scalars['Boolean']>;
   claimed_not?: Maybe<Scalars['Boolean']>;
   claimed_in?: Maybe<Array<Scalars['Boolean']>>;
@@ -312,6 +312,7 @@ export type Query = {
 export type QueryTokenArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -322,12 +323,14 @@ export type QueryTokensArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Token_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type QueryTrancheArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -338,12 +341,14 @@ export type QueryTranchesArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Tranche_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type QueryClaimArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -354,12 +359,14 @@ export type QueryClaimsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Claim_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type QueryAccountArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -370,12 +377,14 @@ export type QueryAccountsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Account_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type QueryMerkleDropArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -386,6 +395,7 @@ export type QueryMerkleDropsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<MerkleDrop_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -412,6 +422,7 @@ export type Subscription = {
 export type SubscriptionTokenArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -422,12 +433,14 @@ export type SubscriptionTokensArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Token_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type SubscriptionTrancheArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -438,12 +451,14 @@ export type SubscriptionTranchesArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Tranche_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type SubscriptionClaimArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -454,12 +469,14 @@ export type SubscriptionClaimsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Claim_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type SubscriptionAccountArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -470,12 +487,14 @@ export type SubscriptionAccountsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Account_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type SubscriptionMerkleDropArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -486,6 +505,7 @@ export type SubscriptionMerkleDropsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<MerkleDrop_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -724,7 +744,7 @@ export type MerkleDropAccountsQueryVariables = Exact<{
 }>;
 
 
-export type MerkleDropAccountsQuery = { accounts: Array<{ id: string, lastClaimedTranche?: Maybe<{ id: string, trancheId: number }>, merkleDrop: { id: string, token: { address: string, symbol: string } }, claims: Array<{ id: string, amount: string, tranche: { id: string, trancheId: number, merkleRoot: string, expired: boolean, uri: string } }> }> };
+export type MerkleDropAccountsQuery = { accounts: Array<{ id: string, lastClaimedTranche?: { id: string, trancheId: number } | null | undefined, merkleDrop: { id: string, token: { address: string, symbol: string } }, claims: Array<{ id: string, amount: string, tranche: { id: string, trancheId: number, merkleRoot: string, expired: boolean, uri: string } }> }> };
 
 
 export const MerkleDropAccountsDocument = gql`

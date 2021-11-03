@@ -56,7 +56,7 @@ export type UserQuestObjectiveFieldPolicy = {
 	complete?: FieldPolicy<any> | FieldReadFunction<any>,
 	progress?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type TypedTypePolicies = TypePolicies & {
+export type StrictTypedTypePolicies = {
 	Mutation?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier),
 		fields?: MutationFieldPolicy,
@@ -90,3 +90,4 @@ export type TypedTypePolicies = TypePolicies & {
 		fields?: UserQuestObjectiveFieldPolicy,
 	}
 };
+export type TypedTypePolicies = StrictTypedTypePolicies & TypePolicies;
