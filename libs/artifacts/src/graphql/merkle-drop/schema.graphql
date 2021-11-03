@@ -104,7 +104,7 @@ type Claim {
   account: Account!
   merkleDrop: MerkleDrop!
   tranche: Tranche!
-  amount: BigDecimal!
+  amount: BigInt!
   claimed: Boolean!
   claimedAt: Int!
 }
@@ -160,14 +160,14 @@ input Claim_filter {
   tranche_not_starts_with: String
   tranche_ends_with: String
   tranche_not_ends_with: String
-  amount: BigDecimal
-  amount_not: BigDecimal
-  amount_gt: BigDecimal
-  amount_lt: BigDecimal
-  amount_gte: BigDecimal
-  amount_lte: BigDecimal
-  amount_in: [BigDecimal!]
-  amount_not_in: [BigDecimal!]
+  amount: BigInt
+  amount_not: BigInt
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  amount_not_in: [BigInt!]
   claimed: Boolean
   claimed_not: Boolean
   claimed_in: [Boolean!]
@@ -265,6 +265,8 @@ type Query {
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Token
   tokens(
     skip: Int = 0
@@ -274,11 +276,15 @@ type Query {
     where: Token_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Token!]!
   tranche(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Tranche
   tranches(
     skip: Int = 0
@@ -288,11 +294,15 @@ type Query {
     where: Tranche_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Tranche!]!
   claim(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Claim
   claims(
     skip: Int = 0
@@ -302,11 +312,15 @@ type Query {
     where: Claim_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Claim!]!
   account(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Account
   accounts(
     skip: Int = 0
@@ -316,11 +330,15 @@ type Query {
     where: Account_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Account!]!
   merkleDrop(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): MerkleDrop
   merkleDrops(
     skip: Int = 0
@@ -330,6 +348,8 @@ type Query {
     where: MerkleDrop_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [MerkleDrop!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
@@ -340,6 +360,8 @@ type Subscription {
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Token
   tokens(
     skip: Int = 0
@@ -349,11 +371,15 @@ type Subscription {
     where: Token_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Token!]!
   tranche(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Tranche
   tranches(
     skip: Int = 0
@@ -363,11 +389,15 @@ type Subscription {
     where: Tranche_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Tranche!]!
   claim(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Claim
   claims(
     skip: Int = 0
@@ -377,11 +407,15 @@ type Subscription {
     where: Claim_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Claim!]!
   account(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): Account
   accounts(
     skip: Int = 0
@@ -391,11 +425,15 @@ type Subscription {
     where: Account_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Account!]!
   merkleDrop(
     id: ID!
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): MerkleDrop
   merkleDrops(
     skip: Int = 0
@@ -405,6 +443,8 @@ type Subscription {
     where: MerkleDrop_filter
     """The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted."""
     block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
   ): [MerkleDrop!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_

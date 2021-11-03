@@ -327,7 +327,7 @@ export type VotesQueryVariables = Exact<{
 }>;
 
 
-export type VotesQuery = { votes?: Maybe<Array<Maybe<{ id: string, created: number, choice: any, proposal?: Maybe<{ title: string, link?: Maybe<string>, state?: Maybe<string>, choices: Array<Maybe<string>> }> }>>> };
+export type VotesQuery = { votes?: Array<{ id: string, created: number, choice: any, proposal?: { title: string, link?: string | null | undefined, state?: string | null | undefined, choices: Array<string | null | undefined> } | null | undefined } | null | undefined> | null | undefined };
 
 
 export const VotesDocument = gql`

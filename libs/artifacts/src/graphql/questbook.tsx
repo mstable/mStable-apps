@@ -132,7 +132,7 @@ export type UserQuestObjective = {
   progress?: Maybe<Scalars['Float']>;
 };
 
-export type QuestAllFragment = { id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> };
+export type QuestAllFragment = { id: string, ethereumId?: number | null | undefined, title: string, description: string, imageURI?: string | null | undefined, requiredPoints?: number | null | undefined, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: { id: string, signature?: string | null | undefined, complete: boolean, progress?: number | null | undefined, objectives?: Array<{ id: string, complete: boolean, progress?: number | null | undefined }> | null | undefined } | null | undefined };
 
 export type UserQueryVariables = Exact<{
   userId: Scalars['ID'];
@@ -147,7 +147,7 @@ export type QuestsQueryVariables = Exact<{
 }>;
 
 
-export type QuestsQuery = { quests: Array<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
+export type QuestsQuery = { quests: Array<{ id: string, ethereumId?: number | null | undefined, title: string, description: string, imageURI?: string | null | undefined, requiredPoints?: number | null | undefined, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: { id: string, signature?: string | null | undefined, complete: boolean, progress?: number | null | undefined, objectives?: Array<{ id: string, complete: boolean, progress?: number | null | undefined }> | null | undefined } | null | undefined }> };
 
 export type QuestQueryVariables = Exact<{
   questId: Scalars['ID'];
@@ -156,7 +156,7 @@ export type QuestQueryVariables = Exact<{
 }>;
 
 
-export type QuestQuery = { quest?: Maybe<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
+export type QuestQuery = { quest?: { id: string, ethereumId?: number | null | undefined, title: string, description: string, imageURI?: string | null | undefined, requiredPoints?: number | null | undefined, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: { id: string, signature?: string | null | undefined, complete: boolean, progress?: number | null | undefined, objectives?: Array<{ id: string, complete: boolean, progress?: number | null | undefined }> | null | undefined } | null | undefined } | null | undefined };
 
 export type UpdateQuestMutationVariables = Exact<{
   userId: Scalars['ID'];
@@ -165,7 +165,7 @@ export type UpdateQuestMutationVariables = Exact<{
 }>;
 
 
-export type UpdateQuestMutation = { updateQuest: { id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> } };
+export type UpdateQuestMutation = { updateQuest: { id: string, ethereumId?: number | null | undefined, title: string, description: string, imageURI?: string | null | undefined, requiredPoints?: number | null | undefined, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: { id: string, signature?: string | null | undefined, complete: boolean, progress?: number | null | undefined, objectives?: Array<{ id: string, complete: boolean, progress?: number | null | undefined }> | null | undefined } | null | undefined } };
 
 export type UpdateQuestsMutationVariables = Exact<{
   userId: Scalars['ID'];
@@ -173,7 +173,7 @@ export type UpdateQuestsMutationVariables = Exact<{
 }>;
 
 
-export type UpdateQuestsMutation = { updateQuests: Array<{ id: string, ethereumId?: Maybe<number>, title: string, description: string, imageURI?: Maybe<string>, requiredPoints?: Maybe<number>, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: Maybe<{ id: string, signature?: Maybe<string>, complete: boolean, progress?: Maybe<number>, objectives?: Maybe<Array<{ id: string, complete: boolean, progress?: Maybe<number> }>> }> }> };
+export type UpdateQuestsMutation = { updateQuests: Array<{ id: string, ethereumId?: number | null | undefined, title: string, description: string, imageURI?: string | null | undefined, requiredPoints?: number | null | undefined, objectives: Array<{ id: string, title: string, description: string, points: number }>, userQuest?: { id: string, signature?: string | null | undefined, complete: boolean, progress?: number | null | undefined, objectives?: Array<{ id: string, complete: boolean, progress?: number | null | undefined }> | null | undefined } | null | undefined }> };
 
 export type QueueOptInMutationVariables = Exact<{
   userId: Scalars['ID'];

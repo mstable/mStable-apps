@@ -75,7 +75,7 @@
       "extensions": {
         "endpoints": {
           "ropsten": {
-            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-ropsten\n",
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-kovan",
             "introspect": false
           }
         }

@@ -74,7 +74,7 @@ generates:
 
   ./libs/artifacts/src/graphql/merkle-drop/schema.graphql:
     overwrite: true
-    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-ropsten
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-kovan
     plugins:
       - 'schema-ast'
     config:
@@ -171,8 +171,7 @@ generates:
   ./libs/artifacts/src/graphql/merkle-drop.tsx:
     overwrite: true
     schema:
-      - https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-ropsten
-      - ./libs/artifacts/src/graphql/merkle-drop/client.graphql
+      - https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-kovan
     documents: 'libs/artifacts/src/graphql/merkle-drop/*.graphql'
     plugins:
       - 'fragment-matcher'

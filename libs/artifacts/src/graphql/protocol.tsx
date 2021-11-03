@@ -4760,7 +4760,7 @@ export enum _SubgraphErrorPolicy_ {
 
 export type TokenAllFragment = { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } };
 
-export type SavingsContractAllFragment = { id: string, dailyAPY: string, version: number, active: boolean, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: Maybe<{ rate: string, timestamp: number }> };
+export type SavingsContractAllFragment = { id: string, dailyAPY: string, version: number, active: boolean, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: { rate: string, timestamp: number } | null | undefined };
 
 type TransactionFields_BoostedSavingsVaultRewardAddedTransaction_Fragment = { id: string, hash: string, timestamp: string, block: number, sender: string };
 
@@ -4790,7 +4790,7 @@ export type TransactionFieldsFragment = TransactionFields_BoostedSavingsVaultRew
 
 export type MetricFieldsFragment = { id: string, exact: string, decimals: number, simple: string };
 
-export type BassetAllFragment = { id: string, isTransferFeeCharged: boolean, ratio: string, status: string, maxWeight?: Maybe<string>, vaultBalance: { id: string, exact: string, decimals: number, simple: string }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } };
+export type BassetAllFragment = { id: string, isTransferFeeCharged: boolean, ratio: string, status: string, maxWeight?: string | null | undefined, vaultBalance: { id: string, exact: string, decimals: number, simple: string }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } };
 
 export type MassetsQueryVariables = Exact<{
   account: Scalars['String'];
@@ -4798,7 +4798,7 @@ export type MassetsQueryVariables = Exact<{
 }>;
 
 
-export type MassetsQuery = { massets: Array<{ id: string, feeRate: string, redemptionFeeRate: string, invariantStartTime?: Maybe<number>, invariantStartingCap?: Maybe<string>, invariantCapFactor?: Maybe<string>, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }, basket: { failed: boolean, collateralisationRatio?: Maybe<string>, undergoingRecol: boolean, bassets: Array<{ id: string, isTransferFeeCharged: boolean, ratio: string, status: string, maxWeight?: Maybe<string>, vaultBalance: { id: string, exact: string, decimals: number, simple: string }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } }>, removedBassets: Array<{ id: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } }> }, currentSavingsContract?: Maybe<{ id: string }>, savingsContractsV1: Array<{ id: string, dailyAPY: string, version: number, active: boolean, totalCredits?: Maybe<{ id: string, exact: string, decimals: number, simple: string }>, creditBalances?: Maybe<Array<{ amount: string }>>, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: Maybe<{ rate: string, timestamp: number }> }>, savingsContractsV2: Array<{ id: string, dailyAPY: string, version: number, active: boolean, token?: Maybe<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }>, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: Maybe<{ rate: string, timestamp: number }> }> }> };
+export type MassetsQuery = { massets: Array<{ id: string, feeRate: string, redemptionFeeRate: string, invariantStartTime?: number | null | undefined, invariantStartingCap?: string | null | undefined, invariantCapFactor?: string | null | undefined, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }, basket: { failed: boolean, collateralisationRatio?: string | null | undefined, undergoingRecol: boolean, bassets: Array<{ id: string, isTransferFeeCharged: boolean, ratio: string, status: string, maxWeight?: string | null | undefined, vaultBalance: { id: string, exact: string, decimals: number, simple: string }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } }>, removedBassets: Array<{ id: string, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } }> }, currentSavingsContract?: { id: string } | null | undefined, savingsContractsV1: Array<{ id: string, dailyAPY: string, version: number, active: boolean, totalCredits?: { id: string, exact: string, decimals: number, simple: string } | null | undefined, creditBalances?: Array<{ amount: string }>, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: { rate: string, timestamp: number } | null | undefined }>, savingsContractsV2: Array<{ id: string, dailyAPY: string, version: number, active: boolean, token?: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } | null | undefined, totalSavings: { id: string, exact: string, decimals: number, simple: string }, latestExchangeRate?: { rate: string, timestamp: number } | null | undefined }> }> };
 
 export type V1SavingsBalanceQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -4807,7 +4807,7 @@ export type V1SavingsBalanceQueryVariables = Exact<{
 }>;
 
 
-export type V1SavingsBalanceQuery = { savingsContract?: Maybe<{ creditBalances: Array<{ amount: string }> }> };
+export type V1SavingsBalanceQuery = { savingsContract?: { creditBalances: Array<{ amount: string }> } | null | undefined };
 
 export type AllTokensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4819,7 +4819,7 @@ export type TokenQueryVariables = Exact<{
 }>;
 
 
-export type TokenQuery = { token?: Maybe<{ id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } }> };
+export type TokenQuery = { token?: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string } } | null | undefined };
 
 export type HistoricTransactionsQueryVariables = Exact<{
   account?: Maybe<Scalars['Bytes']>;
