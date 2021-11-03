@@ -79,7 +79,7 @@ export const createRewardsEarnedContext = (): Readonly<[() => RewardsEarned, FC,
         canClaim: summedRewards.gt(0),
         rewards: new BigDecimal(summedRewards).simple,
       })
-    }, 1e3)
+    }, 5e3)
 
     return providerFactory(context, { value }, children)
   }
