@@ -1,4 +1,5 @@
-import { FC, createContext, useState, useContext, useEffect } from 'react'
+import { FC, createContext, useState, useContext } from 'react'
+import { useAsync } from 'react-use'
 
 import { FetchState, providerFactory, useFetchState } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
@@ -41,17 +42,15 @@ export const StakingStatusProvider: FC = ({ children }) => {
   const account = useOwnAccount()
 
   // TODO: Query via graphql instead (?)
-  useEffect(() => {
+  useAsync(async () => {
     if (!signer || !account || !!lockedV1?.value) return
     setLockedV1.fetching()
-    ;(async () => {
-      const contract = IncentivisedVotingLockup__factory.connect(networkAddresses.vMTA, signer)
-      const data = await contract.locked(account)
-      const balance = new BigDecimal(data?.[0] ?? 0)
-      const end = data?.[1]?.toNumber() * 1e3
-      setLockedV1.value({ balance, end })
-    })()
-  }, [account, lockedV1?.value, networkAddresses.vMTA, setLockedV1, signer, state])
+    const contract = IncentivisedVotingLockup__factory.connect(networkAddresses.vMTA, signer)
+    const data = await contract.locked(account)
+    const balance = new BigDecimal(data?.amount ?? 0)
+    const end = (data?.end?.toNumber() ?? 0) * 1e3
+    setLockedV1.value({ balance, end })
+  }, [account, lockedV1, networkAddresses.vMTA, setLockedV1, signer])
 
   return providerFactory(
     dispatchContext,
