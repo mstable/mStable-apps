@@ -42,7 +42,7 @@
     "@ethersproject/logger": "^5.4.0",
     "@ethersproject/providers": "^5.4.1",
     "@mstable/delegatee-lists": "^0.1.0-alpha2",
-    "@mstable/merkle-drop": "file:.yalc/@mstable/merkle-drop",
+    "@mstable/merkle-drop": "https://github-registry-files.githubusercontent.com/290825372/595b3900-4098-11ec-8ca5-6d87c9f89d11?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20211108%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211108T124359Z&X-Amz-Expires=300&X-Amz-Signature=5e447e9191237f7ca86e50f4e1fb78cb5ccba35aae4a67d449051f061c12b3b4&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=290825372&response-content-disposition=filename%3Dmerkle-drop-1.0.0-npm.tgz&response-content-type=application%2Foctet-stream",
     "@mstable/protocol": "^2.2.2",
     "@types/date-fns": "^2.6.0",
     "@types/jest": "^26.0.20",
