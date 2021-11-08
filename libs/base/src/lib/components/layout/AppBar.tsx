@@ -1,10 +1,9 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-// FIXME
-import { ReactComponent as LogoSvg } from '../../../../../components/src/lib/icons/mstable-small.svg'
-
+import { ReactComponent as LogoSvg } from '@apps/components/icons/mstable-small.svg'
 import { UnstyledButton, ActivitySpinner } from '@apps/components/core'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { TokenIcon } from '@apps/components/icons'
