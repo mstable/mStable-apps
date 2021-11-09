@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { ExternalLink } from '@apps/components/core'
+import { ExternalLink } from '@apps/dumb-components'
 import { formatUnix } from '@apps/formatters'
 import { useVotesQuery, VotesQueryResult } from '@apps/artifacts/graphql/snapshot'
 

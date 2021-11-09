@@ -4,7 +4,7 @@ import { useQueueOptInMutation, useQueueOptOutMutation, useUserQuery } from '@ap
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useAddErrorNotification, useAddSuccessNotification } from '@apps/base/context/notifications'
-import { Button, Tooltip } from '@apps/components/core'
+import { Button, Tooltip } from '@apps/dumb-components'
 
 export const QueueOptInOutButton: FC = () => {
   const userId = useAccount() ?? ''

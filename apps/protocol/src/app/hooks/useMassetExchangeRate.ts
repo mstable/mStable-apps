@@ -1,9 +1,10 @@
-import { useSelectedMassetState } from '@apps/hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
 import type { MassetState } from '@apps/data-provider'
-import type { FetchState, BigDecimalInputValue, BigDecimalInputValues } from '@apps/hooks'
+import type { BigDecimalInputValue, BigDecimalInputValues } from '@apps/hooks'
+import type { FetchState } from '@apps/types'
 
 import { useSelectedFeederPoolState } from '../pages/Pools/FeederPoolProvider'
 

@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { truncateAddress } from '@apps/formatters'
-import { TableCell, IPFSImg, UserIcon } from '@apps/components/core'
 import { DelegateeInfo } from '@mstable/delegatee-lists'
+
+import { truncateAddress } from '@apps/formatters'
+import { IPFSImg, UserIcon } from '@apps/base/components/core'
+import { TableCell } from '@apps/dumb-components'
 
 const DisplayName = styled.div<{ isTitleAddress: boolean }>`
   ${({ isTitleAddress, theme }) => isTitleAddress && theme.mixins.numeric};
@@ -18,7 +20,6 @@ const StyledDelegateeCell = styled(TableCell)`
     height: 1.25rem;
     border-radius: 50%;
     margin-right: 1rem;
-    background: red;
     overflow: hidden;
     background-color: blueviolet;
     img {

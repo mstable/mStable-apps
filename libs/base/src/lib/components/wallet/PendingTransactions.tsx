@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { BigDecimal } from '@apps/bigdecimal'
-import { Amount, Button } from '@apps/components/core'
-import { TokenIcon } from '@apps/components/icons'
+import { Button } from '@apps/dumb-components'
 
 import { useTransactionsDispatch, useTransactionsState } from '../../context/TransactionsProvider'
 import { useNetworkPrices } from '../../context/NetworkProvider'
 import { useNativeToken } from '../../context/TokensProvider'
-
+import { Amount, TokenIcon } from '../core'
 import { GasStation } from './GasStation'
 import { useGas } from './TransactionGasProvider'
 

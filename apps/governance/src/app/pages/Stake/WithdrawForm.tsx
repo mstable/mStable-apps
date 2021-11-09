@@ -1,12 +1,12 @@
 import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { Warning } from '@apps/components/core'
+import { Warning } from '@apps/dumb-components'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { useBigDecimalInput, useFetchState } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { AssetInputSingle, SendButton } from '@apps/components/forms'
+import { AssetInputSingle, SendButton } from '@apps/base/components/forms'
 import { useBlockNow } from '@apps/base/context/block'
 import { BigDecimal } from '@apps/bigdecimal'
 

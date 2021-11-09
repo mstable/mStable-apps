@@ -1,8 +1,9 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ViewportWidth } from '@apps/base/theme'
-import { CountUp, Tooltip } from '@apps/components/core'
+import { ViewportWidth } from '@apps/theme'
+import { CountUp } from '@apps/dumb-components'
+import { Tooltip } from '@apps/dumb-components'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'

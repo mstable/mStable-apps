@@ -1,14 +1,15 @@
 import React, { FC } from 'react'
+import { useToggle } from 'react-use'
+import styled from 'styled-components'
 
 import { BoostedSavingsVaultState } from '@apps/data-provider'
-import { TransitionCard, Button } from '@apps/components/core'
+import { TransitionCard, Button } from '@apps/dumb-components'
+import { ChainIds, useNetwork } from '@apps/base/context/network'
+import { ViewportWidth } from '@apps/theme'
+
 import { BoostCalculator } from '../../../components/rewards/BoostCalculator'
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'
-import { ChainIds, useNetwork } from '@apps/base/context/network'
-import styled from 'styled-components'
-import { ViewportWidth } from '@apps/base/theme'
-import { useToggle } from 'react-use'
 
 const Card = styled.div`
   display: flex;

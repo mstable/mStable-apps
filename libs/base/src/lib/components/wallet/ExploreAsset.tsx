@@ -2,10 +2,11 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
 
-import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
-import { Table, TableCell, TableRow, Button, SendAsset } from '@apps/components/core'
+import { Table, TableCell, TableRow, Button } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
 
-import { ViewportWidth } from '../../theme'
+import { ChainIds, useChainIdCtx } from '../../context/NetworkProvider'
+import { SendAsset } from '../core'
 
 const Header = styled.div`
   padding: 0 1rem;

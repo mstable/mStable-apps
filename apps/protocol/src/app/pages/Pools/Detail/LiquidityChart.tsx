@@ -5,8 +5,8 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'rec
 import { format, getUnixTime } from 'date-fns'
 
 import { useApolloClients } from '@apps/base/context/apollo'
-import { useBlockTimesForDates } from '@apps/hooks'
-import { Color } from '@apps/base/theme'
+import { useBlockTimesForDates } from '@apps/base/hooks'
+import { Color } from '@apps/theme'
 import { getKeyTimestamp, periodFormatMapping, toK } from '@apps/formatters'
 
 import { useDateFilter, useMetricsState, Metrics, DateRange } from '../../../components/stats/Metrics'

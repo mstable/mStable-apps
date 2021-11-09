@@ -6,8 +6,9 @@ import styled from 'styled-components'
 
 import { usePropose } from '@apps/base/context/transactions'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { SendButton, ToggleInput } from '@apps/components/forms'
-import { MultiRewards } from '@apps/components/core'
+import { ToggleInput } from '@apps/dumb-components'
+import { SendButton } from '@apps/base/components/forms'
+import { MultiRewards } from '@apps/base/components/core'
 import { BigDecimal } from '@apps/bigdecimal'
 
 import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 
-import { TabCard, Flippable } from '@apps/components/core'
+import { TabCard, Flippable } from '@apps/dumb-components'
 
 import { useOnboarding } from '../hooks'
 import { SaveDeposit } from './SaveDeposit'

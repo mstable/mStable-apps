@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { useSelectedMassetName } from '@apps/masset-provider'
-import { ExternalLink } from '@apps/components/core'
+import { ExternalLink } from '@apps/dumb-components'
 
 import { ProtocolPageHeader as PageHeader } from './ProtocolPageHeader'
 

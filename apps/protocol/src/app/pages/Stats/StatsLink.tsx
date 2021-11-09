@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Color, FontSize } from '@apps/base/theme'
+import { Color, FontSize } from '@apps/theme'
 
 const Container = styled.div`
   padding: 4px 8px;

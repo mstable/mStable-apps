@@ -1,7 +1,7 @@
 import React, { createContext, FC, useContext, useMemo, useState } from 'react'
 import { useInterval } from 'react-use'
 import { subDays, subHours } from 'date-fns'
-import { useBlockTimesForDates } from '@apps/hooks'
+import { useBlockTimesForDates } from '@apps/base/hooks'
 
 import { useProvider, useIsIdle } from './AccountProvider'
 import { useNetwork } from './NetworkProvider'

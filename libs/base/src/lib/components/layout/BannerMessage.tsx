@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { useBannerMessage } from '../../context/AppProvider'
+import { useBannerMessage } from '../../context/BannerProvider'
 
 const Container = styled.div`
   display: flex;

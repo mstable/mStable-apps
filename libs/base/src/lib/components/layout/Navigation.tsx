@@ -1,12 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
-import { NavigationDropdown } from '@apps/components/core'
 
-import { useThemeMode } from '../../context/AppProvider'
+import { useToggleDarkTheme, colorTheme, ViewportWidth } from '@apps/theme'
 
-import { colorTheme, ViewportWidth } from '../../theme'
 import { useBaseCtx } from '../../BaseProviders'
+import { NavigationDropdown } from '../core'
 
 const Container = styled.nav`
   > :first-child {
@@ -53,12 +52,11 @@ const StyledNavLink = styled(NavLink)`
   white-space: nowrap;
   padding: 0.25rem 0.5rem;
   border-radius: 0.675rem;
-  position: relative;
 `
 
 export const Navigation: FC = () => {
   const [{ navItems }] = useBaseCtx()
-  const themeMode = useThemeMode()
+  const [isDarkTheme] = useToggleDarkTheme()
 
   return (
     <Container>
@@ -67,7 +65,7 @@ export const Navigation: FC = () => {
         {navItems.map(({ title, path }) => (
           <li key={path}>
             <StyledNavLink
-              activeStyle={{ color: colorTheme(themeMode).primary, background: colorTheme(themeMode).navItemActive, fontWeight: 500 }}
+              activeStyle={{ color: colorTheme(isDarkTheme).primary, background: colorTheme(isDarkTheme).navItemActive, fontWeight: 500 }}
               to={path}
               isActive={(match, location) => {
                 if (match?.path) return true

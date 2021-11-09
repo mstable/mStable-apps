@@ -5,9 +5,8 @@ import styled from 'styled-components'
 import { endOfDay, subDays, endOfHour, subHours, startOfDay, startOfHour } from 'date-fns'
 
 import { periodIntervalMapping, TimeMetricPeriod } from '@apps/formatters'
-import { ToggleInput } from '@apps/components/forms'
-import { TabsContainer, TabBtn, H3 } from '@apps/components/core'
-import { Color, FontSize, ViewportWidth } from '@apps/base/theme'
+import { TabsContainer, TabBtn, H3, ToggleInput } from '@apps/dumb-components'
+import { Color, FontSize, ViewportWidth } from '@apps/theme'
 
 export enum DateRange {
   Day,

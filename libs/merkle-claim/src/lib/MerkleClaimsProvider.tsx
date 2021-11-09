@@ -3,7 +3,7 @@ import { formatUnits } from 'ethers/lib/utils'
 import React, { createContext, FC, useMemo } from 'react'
 
 import { useApolloClients } from '@apps/base/context/apollo'
-import { FetchState } from '@apps/hooks'
+import { FetchState } from '@apps/types'
 import { useAccount } from '@apps/base/context/account'
 import { useMerkleDropAccountsQuery } from '@apps/artifacts/graphql/merkle-drop'
 

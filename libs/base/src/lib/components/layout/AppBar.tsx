@@ -3,14 +3,14 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import { ReactComponent as LogoSvg } from '@apps/components/icons/mstable-small.svg'
-import { UnstyledButton, ActivitySpinner } from '@apps/components/core'
+import { ReactComponent as LogoSvg } from '@apps/icons/mstable-small.svg'
+import { UnstyledButton, ActivitySpinner } from '@apps/dumb-components'
 import { TransactionStatus } from '@apps/transaction-manifest'
-import { TokenIcon } from '@apps/components/icons'
+import { TokenIcon } from '@apps/base/components/core'
+import { ViewportWidth } from '@apps/theme'
 
 import { useTransactionsState } from '../../context/TransactionsProvider'
 import { useNetwork } from '../../context/NetworkProvider'
-import { ViewportWidth } from '../../theme'
 
 import { Navigation } from './Navigation'
 import { SettingsButton } from './SettingsButton'

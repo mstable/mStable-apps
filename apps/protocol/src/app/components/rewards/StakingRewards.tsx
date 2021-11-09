@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import type { StakingRewardsExtended } from '@apps/hooks'
-import { Tooltip } from '@apps/components/core'
+
+import type { StakingRewardsExtended } from '@apps/base/hooks'
+import { Tooltip } from '@apps/dumb-components'
 
 interface Props {
   stakingRewards?: StakingRewardsExtended

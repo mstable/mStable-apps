@@ -5,14 +5,15 @@ import Skeleton from 'react-loading-skeleton'
 
 import { useSelectedMassetName } from '@apps/masset-provider'
 import { FeederPoolState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/base/theme'
-import { CountUp, Tooltip } from '@apps/components/core'
-import { TokenIcon, TokenPair } from '@apps/components/icons'
-import { useFeederPool } from '@apps/hooks'
+import { ViewportWidth } from '@apps/theme'
+import { CountUp, Tooltip } from '@apps/dumb-components'
+import { TokenIcon, TokenPair } from '@apps/base/components/core'
+import { useFeederPool } from '@apps/base/hooks'
+
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
+import { usePoolMetrics } from '../../../hooks/usePoolMetrics'
 import { assetColorMapping } from '../constants'
 import { Card } from './Card'
-import { usePoolMetrics } from '../../../hooks/usePoolMetrics'
 
 interface Props {
   className?: string

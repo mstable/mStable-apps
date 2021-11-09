@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import { useToggle } from 'react-use'
 import useOnClickOutside from 'use-onclickoutside'
 
-import { useThemeMode, useToggleThemeMode } from '@apps/base/context/app'
-import { UnstyledButton, NetworkDropdown } from '@apps/components/core'
+import { useToggleDarkTheme } from '@apps/theme'
+import { UnstyledButton } from '@apps/dumb-components'
+import { ReactComponent as SettingsSvg } from '@apps/icons/settings.svg'
 
-import { ReactComponent as SettingsSvg } from '../../../../../components/src/lib/icons/settings.svg'
+import { NetworkDropdown } from '../core'
 
 const Button = styled(UnstyledButton)`
   background: ${({ theme }) => theme.color.background[1]};
@@ -64,14 +65,13 @@ const Container = styled.div`
 export const SettingsButton: FC<{ className?: string }> = ({ children, className }) => {
   const [show, toggleShow] = useToggle(false)
   const container = useRef(null)
-  const toggleThemeMode = useToggleThemeMode()
-  const themeMode = useThemeMode()
+  const [isDarkTheme, toggleDarkTheme] = useToggleDarkTheme()
 
   useOnClickOutside(container, () => toggleShow(false))
 
   const handleThemeToggle = (): void => {
-    localStorage.setItem('themeMode', themeMode === 'light' ? 'dark' : 'light')
-    toggleThemeMode()
+    localStorage.setItem('themeMode', isDarkTheme.toString())
+    toggleDarkTheme()
   }
 
   return (
@@ -90,7 +90,7 @@ export const SettingsButton: FC<{ className?: string }> = ({ children, className
         </div>
         <div>
           <p>Theme</p>
-          <ThemeModeButton onClick={handleThemeToggle}>{themeMode === 'light' ? '☀️' : '🌙'}</ThemeModeButton>
+          <ThemeModeButton onClick={handleThemeToggle}>{isDarkTheme ? '🌙' : '☀️'}</ThemeModeButton>
         </div>
       </List>
     </Container>

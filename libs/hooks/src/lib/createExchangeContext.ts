@@ -1,6 +1,6 @@
 import { FC, createContext, Context, useState, Dispatch, SetStateAction } from 'react'
 
-import { createUseContextFn, providerFactory } from './utils'
+import { createUseContextFn, providerFactory } from '@apps/context-utils'
 
 export enum ExchangeAction {
   Default,

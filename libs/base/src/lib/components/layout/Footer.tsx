@@ -1,17 +1,16 @@
 import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import GitHubButton from 'react-github-btn'
 import { utils } from 'ethers'
 
-import { useIsMasquerading, useMasquerade } from '@apps/base/context/account'
-import { ViewportWidth } from '@apps/base/theme'
-import Medium from '@apps/components/icons/social/medium.svg'
-import Github from '@apps/components/icons/social/github.svg'
-import Discord from '@apps/components/icons/social/discord.svg'
-import Twitter from '@apps/components/icons/social/twitter.svg'
-import Email from '@apps/components/icons/social/email.svg'
-import { ChainIds, useNetwork } from '@apps/base/context/network'
+import { ViewportWidth } from '@apps/theme'
+import Medium from '@apps/icons/social/medium.svg'
+import Github from '@apps/icons/social/github.svg'
+import Discord from '@apps/icons/social/discord.svg'
+import Twitter from '@apps/icons/social/twitter.svg'
+import Email from '@apps/icons/social/email.svg'
+
+import { ChainIds, useNetwork } from '../../context/NetworkProvider'
+import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
 
 const Links = styled.ul`
   align-items: center;
