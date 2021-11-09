@@ -1,9 +1,8 @@
 import { MaticMainnet, useNetworkAddresses } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { FetchState, useSelectedMassetState } from '@apps/hooks'
-import { calculateApy, calculateBoost, getPriceCoeff, MAX_BOOST } from '@apps/quick-maths'
-import { BoostedCombinedAPY } from '@apps/types'
-import { useVMTABalance } from '@apps/hooks'
+import { calculateApy } from '@apps/quick-maths'
+import { useSelectedMassetState, calculateBoost, getPriceCoeff, MAX_BOOST, useVMTABalance } from '@apps/base/hooks'
+import { BoostedCombinedAPY, FetchState } from '@apps/types'
 
 import { useFraxStakingState } from '../context/FraxStakingProvider'
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'

@@ -1,4 +1,6 @@
-import { createRewardsEarnedContext, createStakingRewardsContext, createExchangeContext, createToggleContext } from '@apps/hooks'
+import { createExchangeContext } from '@apps/hooks'
+import { createRewardsEarnedContext, createStakingRewardsContext } from '@apps/base/hooks'
+import { createToggleContext } from '@apps/context-utils'
 
 export const [useOnboarding, OnboardingProvider] = createToggleContext(false)
 export const [useStakingRewards, StakingRewardsProvider, stakingRewardsCtx] = createStakingRewardsContext()

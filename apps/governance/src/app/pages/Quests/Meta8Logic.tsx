@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import useSound from 'use-sound'
 
-import { UnstyledButton } from '@apps/components/core'
+import { UnstyledButton } from '@apps/dumb-components'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useQuestsQuery as useStakingQuestsQuery, useAccountQuery } from '@apps/artifacts/graphql/staking'

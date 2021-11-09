@@ -2,7 +2,8 @@ import { useEffect, Reducer } from 'react'
 import { createReducerContext } from 'react-use'
 import { BaseProvider as Provider } from '@ethersproject/providers'
 
-import { useFetchState, FetchState } from '@apps/hooks'
+import { useFetchState } from '@apps/hooks'
+import { FetchState } from '@apps/types'
 
 import { useProvider } from './AccountProvider'
 

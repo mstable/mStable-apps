@@ -1,6 +1,6 @@
 import { FC, createContext, useState, useContext } from 'react'
 
-import { providerFactory } from '@apps/hooks'
+import { providerFactory } from '@apps/context-utils'
 
 export interface State {
   delegateSelection?: string

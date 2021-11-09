@@ -3,7 +3,7 @@ import { formatDistanceToNow } from 'date-fns'
 import styled from 'styled-components'
 
 import { QuestType } from '@apps/artifacts/graphql/staking'
-import { ThemedSkeleton } from '@apps/components/core'
+import { ThemedSkeleton } from '@apps/dumb-components'
 
 import { Typist } from './Typist'
 

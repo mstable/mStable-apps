@@ -11,8 +11,9 @@ import reset from 'styled-reset'
 import { TransitionGroup } from 'react-transition-group'
 import { ModalProvider } from 'react-modal-hook'
 
-import { Color, FontSize, Size, Spacing, ViewportWidth } from '@apps/base/theme'
-import { ReactTooltip, Tooltip } from '@apps/components/core'
+import { Color, FontSize, Size, Spacing, ViewportWidth } from '@apps/theme'
+import { ReactTooltip, Tooltip } from '@apps/dumb-components'
+
 import { ModalDataProvider } from '../../context/ModalDataProvider'
 
 import { Footer } from './Footer'

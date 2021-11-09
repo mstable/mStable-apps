@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { ExternalLink } from '@apps/components/core'
+import { ExternalLink } from '@apps/dumb-components'
 import { MassetConfig } from '@apps/masset-provider'
 
-import { BannerMessage } from '../../context/AppProvider'
+import { IBannerMessage } from '../../context/BannerProvider'
 
 interface Props {
-  recollat(massetConfig: MassetConfig): BannerMessage
-  polygon(): BannerMessage
+  recollat(massetConfig: MassetConfig): IBannerMessage
+  polygon(): IBannerMessage
 }
 
 export const MessageHandler: Props = {

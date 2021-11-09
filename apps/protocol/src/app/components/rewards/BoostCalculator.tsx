@@ -3,17 +3,18 @@ import styled from 'styled-components'
 
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BoostedSavingsVaultState } from '@apps/data-provider'
-
 import { useBigDecimalInput } from '@apps/hooks'
-import { ViewportWidth } from '@apps/base/theme'
-import { Button, DifferentialCountup, InfoMessage, Widget } from '@apps/components/core'
-import { AssetInput } from '@apps/components/forms'
-import { calculateBoost, calculateVMTAForMaxBoost, getPriceCoeff } from '@apps/quick-maths'
+import { ViewportWidth } from '@apps/theme'
+import { DifferentialCountup } from '@apps/dumb-components'
+import { Button, InfoMessage, Widget } from '@apps/dumb-components'
+import { AssetInput } from '@apps/base/components/forms'
+import { calculateBoost, calculateVMTAForMaxBoost, getPriceCoeff } from '@apps/base/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
-
-import { ReactComponent as ArrowsSvg } from '@apps/components/icons/double-arrow.svg'
-import { ReactComponent as GovSvg } from '@apps/components/icons/governance-icon.svg'
-import { useVMTABalance } from '@apps/hooks'
+// @ts-ignore
+import { ReactComponent as ArrowsSvg } from '@apps/icons/double-arrow.svg'
+// @ts-ignore
+import { ReactComponent as GovSvg } from '@apps/icons/governance-icon.svg'
+import { useVMTABalance } from '@apps/base/hooks'
 
 const GOVERNANCE_URL = 'https://staking.mstable.app/#/stake'
 

@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { useModal } from 'react-modal-hook'
 
-import { ViewportWidth } from '@apps/base/theme'
-import { TokenIcon } from '@apps/components/icons'
-import { Arrow, Tooltip, Modal, Button, ExternalLink } from '@apps/components/core'
+import { ViewportWidth } from '@apps/theme'
+import { TokenIcon } from '@apps/base/components/core'
+import { ExternalLink, Arrow, Tooltip, Modal, Button } from '@apps/dumb-components'
 
 const LargeTokenIcon = styled(TokenIcon)`
   img:first-child {

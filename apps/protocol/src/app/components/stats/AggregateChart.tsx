@@ -5,11 +5,11 @@ import { format, getUnixTime } from 'date-fns'
 
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
-import { ThemedSkeleton } from '@apps/components/core'
+import { ThemedSkeleton } from '@apps/dumb-components'
 import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
-import { useBlockTimesForDates } from '@apps/hooks'
+import { useBlockTimesForDates } from '@apps/base/hooks'
 import { periodFormatMapping, toK, getKeyTimestamp } from '@apps/formatters'
-import { Color } from '@apps/base/theme'
+import { Color } from '@apps/theme'
 
 import { useSelectedSavingsContractState } from '../../context/SelectedSaveVersionProvider'
 

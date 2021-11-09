@@ -1,10 +1,11 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ThemedSkeleton } from '@apps/components/core'
-// @ts-ignore
-import { ExchangeAction, useSelectedMassetState } from '@apps/hooks'
-import { MultiAssetExchangeProvider } from '@apps/components/forms'
+import { ThemedSkeleton } from '@apps/dumb-components'
+import { ExchangeAction } from '@apps/hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
+import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
+
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { ExchangeStateProvider, useExchangeState } from '../Save/hooks'
 import { SwapLogic } from './SwapLogic'

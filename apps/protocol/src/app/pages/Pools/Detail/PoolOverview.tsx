@@ -1,6 +1,7 @@
 import React, { FC, ReactElement, useCallback, useState } from 'react'
+import styled from 'styled-components'
 
-import { CountUp, DifferentialCountup, TransitionCard, Tooltip, CardContainer as Card, CardButton as Button } from '@apps/components/core'
+import { CountUp, DifferentialCountup, TransitionCard, Tooltip, CardContainer as Card, CardButton as Button } from '@apps/dumb-components'
 
 import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { UserBoost } from '../../../components/rewards/UserBoost'
@@ -11,7 +12,6 @@ import { Position } from './Position'
 import { UserRewards } from './UserRewards'
 import { LiquidityMessage } from './LiquidityMessage'
 import { PokeBoost } from '../../../components/PokeBoost'
-import styled from 'styled-components'
 
 enum Selection {
   Stake = 'stake',

@@ -1,9 +1,9 @@
 import { composedComponent } from '@apps/react-utils'
+import { ThemeProvider } from '@apps/theme'
 
-import { AppProvider } from './AppProvider'
+import { BannerProvider } from './BannerProvider'
 import { NotificationsProvider } from './NotificationsProvider'
 import { TransactionsProvider } from './TransactionsProvider'
-import { ThemeProvider } from './ThemeProvider'
 import { TokensProvider } from './TokensProvider'
 import { BlockProvider } from './BlockProvider'
 import { ApolloProvider } from './ApolloProvider'
@@ -22,8 +22,8 @@ const Providers = composedComponent(
   TokensProvider,
   PricesProvider,
   ENSProvider,
-  AppProvider,
   ThemeProvider,
+  BannerProvider,
 )
 
 export { Providers }

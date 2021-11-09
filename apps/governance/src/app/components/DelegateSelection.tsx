@@ -1,10 +1,13 @@
 import React, { FC } from 'react'
-import { Button, IPFSImg, UserIcon } from '@apps/components/core'
-import { truncateAddress } from '@apps/formatters'
 import styled from 'styled-components'
+
+import { IPFSImg, UserIcon } from '@apps/base/components/core'
+import { Button } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
+import { useModalData } from '@apps/base/context/modal-data'
+
 import { useDelegationModal } from '../hooks/useDelegationModal'
 import { useDelegateesAll } from '../context/DelegateeListsProvider'
-import { useModalData } from '@apps/base/context/ModalDataProvider'
 
 interface Props {
   className?: string

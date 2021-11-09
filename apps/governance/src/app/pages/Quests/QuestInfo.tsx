@@ -5,8 +5,9 @@ import { QuestObjective, useQuestQuery as useQuestbookQuestQuery, UserQuestObjec
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { ViewportWidth } from '@apps/base/theme'
-import { ThemedSkeleton } from '@apps/components/core'
+import { ViewportWidth } from '@apps/theme'
+import { ThemedSkeleton } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
 
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
@@ -15,7 +16,6 @@ import { QuestCard } from './QuestCard'
 import { QuestObjectiveProgress, QuestProgress, QuestTimeRemaining } from './QuestProgress'
 import { QueueOptInOutButton } from './QueueOptInOutButtons'
 import { Typist } from './Typist'
-import { truncateAddress } from '@apps/formatters'
 
 enum ProgressType {
   Personal,

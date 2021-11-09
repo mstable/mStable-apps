@@ -3,13 +3,9 @@ import { createStateContext, useInterval } from 'react-use'
 import { providers } from 'ethers'
 import type { Provider } from '@ethersproject/providers'
 
-// TODO fix circular dep
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { FetchState, useFetchState } from '@apps/hooks'
-
+import { useFetchState } from '@apps/hooks'
 import { composedComponent } from '@apps/react-utils'
-
-import { MassetName, DEAD_ADDRESS } from '@apps/types'
+import { FetchState, MassetName, DEAD_ADDRESS } from '@apps/types'
 
 interface NetworkPrices {
   nativeToken?: number

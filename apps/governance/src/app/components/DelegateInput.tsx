@@ -1,8 +1,9 @@
 import React, { FC } from 'react'
-import { Button } from '@apps/components/core'
-import { truncateAddress } from '@apps/formatters'
 import styled from 'styled-components'
-import { AddressInput } from '@apps/components/forms'
+
+import { Button } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
+import { AddressInput } from '@apps/dumb-components'
 
 interface Props {
   className?: string

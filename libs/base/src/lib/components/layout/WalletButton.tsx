@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+
 import { truncateAddress } from '@apps/formatters'
-import { UnstyledButton, UserIcon } from '@apps/components/core'
-import { Idle } from '@apps/components/icons'
+import { UnstyledButton } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
 
 import { ChainIds, getNetwork, useChainIdCtx } from '../../context/NetworkProvider'
 import { useConnect, useWalletAddress, useConnected, useInjectedChainIdCtx } from '../../context/AccountProvider'
 import { useAccountModal } from '../../hooks/useAccountModal'
-import { ViewportWidth } from '../../theme'
+import { UserIcon } from '../core'
 
 const ConnectText = styled.span`
   padding: 0 0.5rem;
@@ -104,9 +105,7 @@ export const WalletButton: FC = () => {
       ) : connected ? (
         <>
           <TruncatedAddress>{account && truncateAddress(account)}</TruncatedAddress>
-          <Idle>
-            <UserIcon />
-          </Idle>
+          <UserIcon />
         </>
       ) : (
         <ConnectText>Connect</ConnectText>

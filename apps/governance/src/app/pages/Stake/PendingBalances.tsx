@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { CountdownBar, Table, TableCell, TableRow, Tooltip } from '@apps/components/core'
+import { CountdownBar, Table, TableCell, TableRow, Tooltip } from '@apps/dumb-components'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { usePropose } from '@apps/base/context/transactions'
 import { useOwnAccount } from '@apps/base/context/account'

@@ -1,21 +1,14 @@
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { BoostedCombinedAPY } from '@apps/types'
+import { BoostedCombinedAPY, FetchState } from '@apps/types'
 import { MassetState } from '@apps/data-provider'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { FetchState, useCalculateUserBoost, useSelectedMassetState } from '@apps/hooks'
+import { useSelectedMassetState, useCalculateUserBoost } from '@apps/base/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { calculateApy } from '@apps/quick-maths'
-import {
-  TransitionCard,
-  CardContainer as TransitionContainer,
-  CardButton as Button,
-  CountUp,
-  DifferentialCountup,
-  ThemedSkeleton,
-  Tooltip,
-} from '@apps/components/core'
+import { CountUp, DifferentialCountup } from '@apps/dumb-components'
+import { TransitionCard, CardContainer as TransitionContainer, CardButton as Button, ThemedSkeleton, Tooltip } from '@apps/dumb-components'
 
 import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'

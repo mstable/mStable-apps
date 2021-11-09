@@ -4,12 +4,12 @@ import { format, getUnixTime } from 'date-fns'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { useApolloClients } from '@apps/base/context/apollo'
-import { Color } from '@apps/base/theme'
-import { useBlockTimesForDates, useSelectedMassetState } from '@apps/hooks'
+import { Color } from '@apps/theme'
+import { useBlockTimesForDates, useSelectedMassetState } from '@apps/base/hooks'
 import { periodFormatMapping, toK } from '@apps/formatters'
-import { ThemedSkeleton } from '@apps/components/core'
-
+import { ThemedSkeleton } from '@apps/dumb-components'
 import { getKeyTimestamp } from '@apps/formatters'
+
 import { RechartsContainer } from './RechartsContainer'
 import { DateRange, Metrics, useDateFilter, useMetricsState } from './Metrics'
 

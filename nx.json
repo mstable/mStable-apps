@@ -42,7 +42,7 @@
     "bigdecimal": {
       "tags": []
     },
-    "components": {
+    "dumb-components": {
       "tags": []
     },
     "data-provider": {
@@ -62,6 +62,9 @@
       "implicitDependencies": ["governance"]
     },
     "hooks": {
+      "tags": []
+    },
+    "icons": {
       "tags": []
     },
     "masset-provider": {

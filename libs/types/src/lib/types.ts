@@ -91,3 +91,9 @@ export interface BoostedCombinedAPY {
   platformRewards?: number
   base?: number
 }
+
+export interface FetchState<T> {
+  fetching?: boolean
+  value?: T
+  error?: string
+}

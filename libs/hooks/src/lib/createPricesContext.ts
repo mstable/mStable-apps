@@ -1,6 +1,7 @@
-import React, { useRef, FC, createContext, useContext, useCallback } from 'react'
-import { FetchState } from './useFetchState'
-import { providerFactory } from './utils'
+import { useRef, FC, createContext, useContext, useCallback } from 'react'
+
+import { FetchState } from '@apps/types'
+import { providerFactory } from '@apps/context-utils'
 
 const fetchCoingeckoPrices = async (addresses: string[]): Promise<{ [address: string]: { usd: number } }> => {
   const result = await fetch(

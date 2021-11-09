@@ -2,7 +2,8 @@ import { BaseProvider as Provider } from '@ethersproject/providers/lib/base-prov
 import { useEffect } from 'react'
 
 import { useProvider } from '@apps/base/context/account'
-import { FetchState, useFetchState } from '@apps/hooks'
+import { useFetchState } from '@apps/hooks'
+import { FetchState } from '@apps/types'
 
 import { useENSState, ActionType } from '../context/ENSProvider'
 

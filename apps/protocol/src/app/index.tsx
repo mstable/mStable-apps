@@ -5,8 +5,9 @@ import { useEffectOnce } from 'react-use'
 import { APP_NAME } from '@apps/types'
 import { useBaseCtx, MessageHandler } from '@apps/base'
 import { ChainIds, useChainIdCtx, useNetwork } from '@apps/base/context/network'
-import { BannerMessage, useBannerMessage } from '@apps/base/context/app'
-import { useSelectedMassetState, useURLQuery } from '@apps/hooks'
+import { IBannerMessage, useBannerMessage } from '@apps/base/context/banner'
+import { useURLQuery } from '@apps/hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/masset-provider'
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
@@ -89,7 +90,7 @@ export const ProtocolApp: FC = () => {
 
   // Handle message prioritisation:
   useLayoutEffect(() => {
-    let message: BannerMessage | undefined
+    let message: IBannerMessage | undefined
 
     if (undergoingRecol) {
       message = (undergoingRecol && MessageHandler.recollat(massetConfig)) || undefined
