@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import { ChainIds, useNetwork } from '../../context/NetworkProvider'
 
 const Container = styled.div`
-  background: #ffeeb4;
+  background: ${({theme}) => theme.color.yellowBorder};
   text-align: center;
   font-size: 0.75rem;
   line-height: 1.5rem;
-  border-bottom: 1px solid #f0dfa6;
+  border-bottom: 1px solid ${({theme}) => theme.color.yellowBorder};
   overflow-x: scroll;
   overflow-wrap: normal;
 
