@@ -11,7 +11,7 @@ jobs:
       - uses: c-hive/gha-yarn-cache@v2
       - run: yarn install
       - run: yarn codegen:typechain
-      - run: yarn nx affected:lint
+      - run: yarn nx run-many --all --parallel --target=lint
       - run: yarn nx run protocol:build --prod
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: c-hive/gha-yarn-cache@v2
       - run: yarn install
-      - run: yarn nx affected:lint
+      - run: yarn nx run-many --all --parallel --target=lint
       - run: yarn codegen:typechain
       - run: yarn nx run governance:build --prod
       - uses: FirebaseExtended/action-hosting-deploy@v0
