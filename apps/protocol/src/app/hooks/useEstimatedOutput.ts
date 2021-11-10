@@ -10,7 +10,7 @@ import { sanitizeMassetError } from '@apps/formatters'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { getPriceImpact, PriceImpact } from '@apps/quick-maths'
 import { BigDecimalInputValue, useFetchState } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 import { FetchState } from '@apps/types'
 
 type Contract = Masset | FeederPool

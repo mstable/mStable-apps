@@ -2,7 +2,8 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { useToggle } from 'react-use'
 
-import { Chevron, UnstyledButton } from '@apps/dumb-components'
+import { UnstyledButton } from './Button'
+import { Chevron } from './Chevron'
 
 const Content = styled.div<{ collapsed: boolean }>`
   overflow: hidden;

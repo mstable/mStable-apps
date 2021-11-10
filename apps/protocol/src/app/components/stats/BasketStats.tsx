@@ -14,7 +14,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { Color } from '@apps/theme'
 import { toK } from '@apps/formatters'
 import { ThemedSkeleton } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 
 import { RechartsContainer } from './RechartsContainer'
 

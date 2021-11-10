@@ -9,7 +9,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { AddressOption, Interfaces } from '@apps/types'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import { useBigDecimalInput } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 import { AssetExchange, SendButton } from '@apps/base/components/forms'
 
 import { SaveRoutesOut } from './types'

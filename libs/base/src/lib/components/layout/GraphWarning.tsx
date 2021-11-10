@@ -1,6 +1,7 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
-import { ChainIds, useNetwork } from '@apps/base/context/network'
+
+import { ChainIds, useNetwork } from '../../context/NetworkProvider'
 
 const Container = styled.div`
   background: #ffeeb4;

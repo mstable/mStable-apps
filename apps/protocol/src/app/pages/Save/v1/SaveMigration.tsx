@@ -5,7 +5,7 @@ import { useTransactionsState } from '@apps/base/context/transactions'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { ViewportWidth, gradientShift } from '@apps/theme'
 import { Steps } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 
 import { SaveMigrationProvider, useMigrationSteps } from './SaveMigrationProvider'
 
