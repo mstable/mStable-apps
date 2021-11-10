@@ -1,10 +1,10 @@
 import { BaseProvider as Provider } from '@ethersproject/providers/lib/base-provider'
 import { useEffect } from 'react'
 
-import { useProvider } from '@apps/base/context/account'
 import { useFetchState } from '@apps/hooks'
 import { FetchState } from '@apps/types'
 
+import { useProvider } from '../context/AccountProvider'
 import { useENSState, ActionType } from '../context/ENSProvider'
 
 export const useResolveENSName = (ensName: string): FetchState<string> => {

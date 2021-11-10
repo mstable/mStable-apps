@@ -9,7 +9,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { SendButton, OneToManyAssetExchange, useMultiAssetExchangeState } from '@apps/base/components/forms'
 import { useMaximumOutput } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'

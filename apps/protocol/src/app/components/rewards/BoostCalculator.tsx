@@ -8,13 +8,13 @@ import { ViewportWidth } from '@apps/theme'
 import { DifferentialCountup } from '@apps/dumb-components'
 import { Button, InfoMessage, Widget } from '@apps/dumb-components'
 import { AssetInput } from '@apps/base/components/forms'
-import { calculateBoost, calculateVMTAForMaxBoost, getPriceCoeff } from '@apps/base/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
+import { calculateBoost, calculateVMTAForMaxBoost, getPriceCoeff, useVMTABalance } from '@apps/boost'
+
 // @ts-ignore
 import { ReactComponent as ArrowsSvg } from '@apps/icons/double-arrow.svg'
 // @ts-ignore
 import { ReactComponent as GovSvg } from '@apps/icons/governance-icon.svg'
-import { useVMTABalance } from '@apps/base/hooks'
 
 const GOVERNANCE_URL = 'https://staking.mstable.app/#/stake'
 

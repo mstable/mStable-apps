@@ -2,10 +2,11 @@ import React, { createContext, FC, useContext, useEffect, useMemo, useState } fr
 import { Interface } from '@ethersproject/abi'
 import { pipe } from 'ts-pipe-compose'
 
-import { useApolloClients } from '@apps/base/context/apollo'
 import { FeederPoolsQueryResult, useFeederPoolsQuery } from '@apps/artifacts/graphql/feeders'
 import { MassetsQueryResult, useMassetsQuery } from '@apps/artifacts/graphql/protocol'
 import type { IMasset } from '@apps/artifacts/typechain'
+
+import { useApolloClients } from '@apps/base/context/apollo'
 import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
 import { useNetwork } from '@apps/base/context/network'
 import { Tokens, useTokensState } from '@apps/base/context/tokens'
@@ -147,7 +148,7 @@ const useVaultBalances = (massets: MassetsQueryResult['data']): RawData['vaultBa
         setVaultBalances(Object.fromEntries(result.flat()))
       })
       .catch(console.error)
-  }, [massetAddressesStr, provider])
+  }, [massetAddressesStr, provider, vaultBalances])
 
   return useMemo(() => {
     if (massets) {

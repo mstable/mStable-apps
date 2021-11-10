@@ -8,7 +8,7 @@ import { usePropose } from '@apps/base/context/transactions'
 import { ViewportWidth } from '@apps/theme'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { Button } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 
 interface Props {
   vault?: BoostedSavingsVaultState

@@ -1,8 +1,9 @@
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useTokens, useTokenSubscription } from '@apps/base/context/tokens'
 import { AddressOption } from '@apps/types'
+
+import { useTokens, useTokenSubscription } from '../../context/TokensProvider'
 
 import { AssetDropdown } from './AssetDropdown'
 

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { ThemedSkeleton } from '@apps/dumb-components'
 import { ExchangeAction } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
 
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'

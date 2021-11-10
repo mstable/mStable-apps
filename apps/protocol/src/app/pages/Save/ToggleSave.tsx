@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { SavingsContractState } from '@apps/data-provider'
 import { Toggle } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 
 import { SaveVersion, useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 

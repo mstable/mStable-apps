@@ -7,7 +7,7 @@ import { ViewportWidth } from '@apps/theme'
 import { CountUp, CountUpUSD, Tooltip } from '@apps/dumb-components'
 import { TokenIcon, TokenPair } from '@apps/base/components/core'
 import { toK } from '@apps/formatters'
-import { useFeederPool } from '@apps/base/hooks'
+import { useFeederPool } from '@apps/masset-hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'

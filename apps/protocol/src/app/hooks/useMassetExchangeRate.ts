@@ -1,4 +1,4 @@
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'

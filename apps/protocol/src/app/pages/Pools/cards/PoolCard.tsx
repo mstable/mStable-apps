@@ -8,7 +8,7 @@ import { FeederPoolState } from '@apps/data-provider'
 import { ViewportWidth } from '@apps/theme'
 import { CountUp, Tooltip } from '@apps/dumb-components'
 import { TokenIcon, TokenPair } from '@apps/base/components/core'
-import { useFeederPool } from '@apps/base/hooks'
+import { useFeederPool } from '@apps/masset-hooks'
 
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { usePoolMetrics } from '../../../hooks/usePoolMetrics'

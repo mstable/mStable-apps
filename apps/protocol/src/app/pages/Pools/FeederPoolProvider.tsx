@@ -9,7 +9,7 @@ import { useSigner } from '@apps/base/context/account'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { UseBigDecimalInputsArg } from '@apps/hooks'
-import { useSelectedMassetState, useFeederPool } from '@apps/base/hooks'
+import { useSelectedMassetState, useFeederPool } from '@apps/masset-hooks'
 
 interface PoolState {
   poolAddress: string

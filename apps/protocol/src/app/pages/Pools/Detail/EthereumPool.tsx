@@ -10,7 +10,7 @@ import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/theme'
 import { UserMasquerade } from '@apps/base/components/core'
 import { TabCard, Button, UnstyledButton, InfoBox } from '@apps/dumb-components'
-import { useFeederPool } from '@apps/base/hooks'
+import { useFeederPool } from '@apps/masset-hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
