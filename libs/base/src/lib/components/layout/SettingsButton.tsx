@@ -70,7 +70,7 @@ export const SettingsButton: FC<{ className?: string }> = ({ children, className
   useOnClickOutside(container, () => toggleShow(false))
 
   const handleThemeToggle = (): void => {
-    localStorage.setItem('themeMode', isDarkTheme.toString())
+    localStorage.setItem('themeMode', isDarkTheme ? 'dark' : 'light')
     toggleDarkTheme()
   }
 
