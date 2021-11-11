@@ -64,12 +64,6 @@ export const CountUp: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [end, isValid])
 
-  useEffect(() => {
-    if (!firstMount) {
-      pauseResume()
-    }
-  }, [firstMount, pauseResume, start])
-
   return (
     <Container className={className} highlight={highlight} highlightColor={highlightColor}>
       {prefix ? <PrefixOrSuffix>{prefix}</PrefixOrSuffix> : null}
