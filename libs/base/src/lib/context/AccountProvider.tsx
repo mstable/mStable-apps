@@ -140,7 +140,7 @@ const OnboardProvider: FC<{
         walletSelect: {
           agreement: {
             version: '0.1.0',
-            termsUrl: 'https://docs.mstable.org/appendix/app-usage-terms-and-conditions',
+            termsUrl: 'https://docs.mstable.org/advanced/app-usage-terms-and-conditions',
           },
           wallets: [
             {
