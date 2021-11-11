@@ -4,7 +4,6 @@ import { TokenAllFragment } from '@apps/artifacts/graphql/protocol'
 import { BoostedSavingsVaultAllFragment } from '@apps/artifacts/graphql/feeders'
 import { BigDecimal } from '@apps/bigdecimal'
 import type { MassetName, SubscribedToken } from '@apps/types'
-
 import type { Tokens } from '@apps/base/context/tokens'
 
 import type {

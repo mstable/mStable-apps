@@ -5,7 +5,7 @@ import { MassetState } from '@apps/data-provider'
 import { ViewportWidth } from '@apps/theme'
 import { BigDecimal } from '@apps/bigdecimal'
 import { CountUp } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'

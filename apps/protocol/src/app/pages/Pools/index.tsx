@@ -7,7 +7,7 @@ import { FeederPoolState, MassetState } from '@apps/data-provider'
 import { useSelectedMassetConfig, MassetConfig, MASSET_CONFIG } from '@apps/masset-provider'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/theme'
-import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { Card } from './cards/Card'

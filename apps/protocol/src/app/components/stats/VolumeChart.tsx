@@ -5,10 +5,10 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'rec
 
 import { useApolloClients } from '@apps/base/context/apollo'
 import { Color } from '@apps/theme'
-import { useBlockTimesForDates } from '@apps/base/hooks'
-import { useSelectedMassetState } from '@apps/masset-hooks'
-import { periodFormatMapping, toK, getKeyTimestamp } from '@apps/formatters'
+import { useBlockTimesForDates, useSelectedMassetState } from '@apps/base/hooks'
+import { periodFormatMapping, toK } from '@apps/formatters'
 import { ThemedSkeleton } from '@apps/dumb-components'
+import { getKeyTimestamp } from '@apps/formatters'
 
 import { RechartsContainer } from './RechartsContainer'
 import { DateRange, Metrics, useDateFilter, useMetricsState } from './Metrics'

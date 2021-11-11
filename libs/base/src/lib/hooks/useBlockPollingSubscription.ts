@@ -2,15 +2,19 @@ import { LazyQueryHookOptions, QueryTuple } from '@apollo/client'
 import { QueryResult } from '@apollo/react-common'
 import { useEffect, useRef } from 'react'
 
-import { useBlockNow } from '../context/BlockProvider'
-import { useNetwork } from '../context/NetworkProvider'
+import { useBlockNow } from '@apps/base/context/block'
+import { useNetwork } from '@apps/base/context/network'
 
 export const useBlockPollingSubscription = <TData, TVariables>(
-  lazyQuery: (query: unknown, options?: LazyQueryHookOptions<TData, TVariables>) => QueryTuple<TData, TVariables>,
+  lazyQuery: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    query: any,
+    options?: LazyQueryHookOptions<TData, TVariables>,
+  ) => QueryTuple<TData, TVariables>,
   baseOptions?: LazyQueryHookOptions<TData, TVariables>,
   skip?: boolean,
 ): QueryResult<TData, TVariables> => {
-  const errorRef = useRef<unknown>()
+  const errorRef = useRef<any>()
   const network = useNetwork()
   const blockNumber = useBlockNow()
   const hasBlock = !!blockNumber
@@ -21,7 +25,7 @@ export const useBlockPollingSubscription = <TData, TVariables>(
   const [run, query] = lazyQuery({
     ...baseOptions,
     errorPolicy: 'all',
-    onError: (error: unknown) => {
+    onError: (error: any) => {
       errorRef.current = error
     },
   })

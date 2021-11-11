@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
 import { useQuery } from '@apollo/client'
 
+import { useApolloClients } from '@apps/base/context/apollo'
 import { getKeyTimestamp } from '@apps/formatters'
 import { useBlockTimestampsDocument } from '@apps/hooks'
-
-import { useApolloClients } from '../context/ApolloProvider'
 
 interface BlockTime {
   timestamp: number

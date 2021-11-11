@@ -45,12 +45,3 @@ yarn nx run protocol:serve
 ```bash
 yarn nx run protocol:build
 ```
-
-### NX module boundaries
-
-To get the benefit of nx modules, it's important to avoid creating dependency cycles. ESlint is set up to catch this, so simply run:
-
-```bash
-yarn nx affected:lint
-```
-

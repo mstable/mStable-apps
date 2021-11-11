@@ -6,7 +6,7 @@ import Skeleton from 'react-loading-skeleton'
 
 import type { FeederPoolState } from '@apps/data-provider'
 import { TabCard } from '@apps/dumb-components'
-import { useFeederPool } from '@apps/masset-hooks'
+import { useFeederPool } from '@apps/base/hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'

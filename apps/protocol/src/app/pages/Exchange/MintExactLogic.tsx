@@ -10,7 +10,7 @@ import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { ManyToOneAssetExchange, useMultiAssetExchangeDispatch, useMultiAssetExchangeState, SendButton } from '@apps/base/components/forms'
 import { MassetState } from '@apps/data-provider'
 import { useMinimumOutput } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'

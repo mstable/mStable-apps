@@ -7,7 +7,7 @@ import { useSelectedMassetName } from '@apps/masset-provider'
 import { ViewportWidth } from '@apps/theme'
 import { ExternalLink, UnstyledButton, Tooltip, Arrow } from '@apps/dumb-components'
 import { TokenIcon } from '@apps/base/components/core'
-import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 
 import { useOnboarding } from '../hooks'
 

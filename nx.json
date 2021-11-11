@@ -42,13 +42,13 @@
     "bigdecimal": {
       "tags": []
     },
-    "boost": {
-      "tags": []
-    },
     "dumb-components": {
       "tags": []
     },
     "data-provider": {
+      "tags": []
+    },
+    "example": {
       "tags": []
     },
     "formatters": {
@@ -57,19 +57,17 @@
     "governance": {
       "tags": []
     },
+    "governance-e2e": {
+      "tags": [],
+      "implicitDependencies": ["governance"]
+    },
     "hooks": {
       "tags": []
     },
     "icons": {
       "tags": []
     },
-    "masset-hooks": {
-      "tags": []
-    },
     "masset-provider": {
-      "tags": []
-    },
-    "masset-switcher": {
       "tags": []
     },
     "merkle-claim": {
@@ -77,6 +75,10 @@
     },
     "protocol": {
       "tags": []
+    },
+    "protocol-e2e": {
+      "tags": [],
+      "implicitDependencies": ["protocol"]
     },
     "quick-maths": {
       "tags": []

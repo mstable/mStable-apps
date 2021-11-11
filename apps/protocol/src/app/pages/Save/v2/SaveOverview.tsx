@@ -4,19 +4,11 @@ import styled from 'styled-components'
 import { BoostedCombinedAPY, FetchState } from '@apps/types'
 import { MassetState } from '@apps/data-provider'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { useSelectedMassetState } from '@apps/masset-hooks'
-import { useCalculateUserBoost } from '@apps/boost'
+import { useSelectedMassetState, useCalculateUserBoost } from '@apps/base/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { calculateApy } from '@apps/quick-maths'
-import {
-  CountUp,
-  DifferentialCountup,
-  TransitionCard,
-  CardContainer as TransitionContainer,
-  CardButton as Button,
-  ThemedSkeleton,
-  Tooltip,
-} from '@apps/dumb-components'
+import { CountUp, DifferentialCountup } from '@apps/dumb-components'
+import { TransitionCard, CardContainer as TransitionContainer, CardButton as Button, ThemedSkeleton, Tooltip } from '@apps/dumb-components'
 
 import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'

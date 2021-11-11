@@ -111,28 +111,6 @@
         }
       }
     },
-    "boost": {
-      "root": "libs/boost",
-      "sourceRoot": "libs/boost/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/boost/**/*.ts"]
-          },
-          "outputs": ["{options.outputFile}"]
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/boost"],
-          "options": {
-            "jestConfig": "libs/boost/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "dumb-components": {
       "root": "libs/dumb-components",
       "sourceRoot": "libs/dumb-components/src",
@@ -172,6 +150,95 @@
           "outputs": ["coverage/libs/data-provider"],
           "options": {
             "jestConfig": "libs/data-provider/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "example": {
+      "root": "apps/example",
+      "sourceRoot": "apps/example/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "apps/example/dist",
+            "index": "apps/example/src/index.html",
+            "main": "apps/example/src/main.tsx",
+            "polyfills": "apps/example/src/polyfills.ts",
+            "tsConfig": "apps/example/tsconfig.app.json",
+            "progress": false,
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "apps/example/src/assets/",
+                "output": "./assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "libs/assets/",
+                "output": "./assets/"
+              },
+              "apps/example/src/favicon.ico",
+              "apps/example/src/manifest.json"
+            ],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "./webpack-config.js"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/example/src/environments/environment.ts",
+                  "with": "apps/example/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "example:build",
+            "port": 3100,
+            "hmr": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "example:build:production",
+              "hmr": false
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/example/**/*.{ts,tsx,js,jsx}"]
+          },
+          "outputs": ["{options.outputFile}"]
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/example"],
+          "options": {
+            "jestConfig": "apps/example/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -290,6 +357,33 @@
         }
       }
     },
+    "governance-e2e": {
+      "root": "apps/governance-e2e",
+      "sourceRoot": "apps/governance-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/governance-e2e/cypress.json",
+            "tsConfig": "apps/governance-e2e/tsconfig.e2e.json",
+            "devServerTarget": "governance:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "governance:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/governance-e2e/**/*.{js,ts}"]
+          },
+          "outputs": ["{options.outputFile}"]
+        }
+      }
+    },
     "hooks": {
       "root": "libs/hooks",
       "sourceRoot": "libs/hooks/src",
@@ -400,50 +494,6 @@
         }
       }
     },
-    "masset-switcher": {
-      "root": "libs/masset-switcher",
-      "sourceRoot": "libs/masset-switcher/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/masset-switcher/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/masset-switcher"],
-          "options": {
-            "jestConfig": "libs/masset-switcher/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "masset-hooks": {
-      "root": "libs/masset-hooks",
-      "sourceRoot": "libs/masset-hooks/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/masset-hooks/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/masset-hooks"],
-          "options": {
-            "jestConfig": "libs/masset-hooks/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "protocol": {
       "root": "apps/protocol",
       "sourceRoot": "apps/protocol/src",
@@ -538,6 +588,33 @@
           "options": {
             "cmd": "--help"
           }
+        }
+      }
+    },
+    "protocol-e2e": {
+      "root": "apps/protocol-e2e",
+      "sourceRoot": "apps/protocol-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/protocol-e2e/cypress.json",
+            "tsConfig": "apps/protocol-e2e/tsconfig.e2e.json",
+            "devServerTarget": "protocol:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "protocol:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/protocol-e2e/**/*.{js,ts}"]
+          },
+          "outputs": ["{options.outputFile}"]
         }
       }
     },

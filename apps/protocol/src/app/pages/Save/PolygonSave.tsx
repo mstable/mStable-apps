@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { ViewportWidth } from '@apps/theme'
 import { ThemedSkeleton, Tooltip, TabCard } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 
 import { DailyApys } from '../../components/stats/DailyApys'
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'

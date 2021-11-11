@@ -188,7 +188,7 @@ export const ExploreAsset: FC<{ symbol?: string; onRowClick?: () => void }> = ({
       {!!assetUses?.length && (
         <Table>
           {assetUses.map(val => {
-            if (!val) return null
+            if (!val) return
             const { title, subtitle, href } = val
             return (
               <TableRow key={title} buttonTitle="View" onClick={() => handleOnClick(href)}>

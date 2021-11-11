@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { ViewportWidth } from '@apps/theme'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { InfoBox, InfoButton, ThemedSkeleton } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 
 import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'

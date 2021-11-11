@@ -41,13 +41,7 @@ interface Theme {
   fontSize: typeof FontSize
   viewportWidth: typeof ViewportWidth
   isLight: boolean
-  mixins: {
-    numeric: string
-    roundedBorder: string
-    textAlign: string
-    mono: string
-    card: string
-  }
+  mixins: any
 }
 
 const Main = styled.main<{ marginTop?: boolean }>`

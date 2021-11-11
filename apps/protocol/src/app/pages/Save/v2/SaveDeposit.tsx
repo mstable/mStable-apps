@@ -9,7 +9,7 @@ import { useNetworkAddresses, useNetworkPrices } from '@apps/base/context/networ
 import { useNativeToken, useTokenSubscription } from '@apps/base/context/tokens'
 
 import { useSlippage, useBigDecimalInput } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetState } from '@apps/base/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { getPenaltyPercentage } from '@apps/quick-maths'
