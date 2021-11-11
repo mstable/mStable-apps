@@ -1,4 +1,3 @@
-apps/*/src/graphql/*
-apps/*/src/react-app-env.d.ts
-apps/*/dist/**
+apps/protocol/src/graphql/*
+apps/protocol/src/react-app-env.d.ts
 libs/artifacts/**/*

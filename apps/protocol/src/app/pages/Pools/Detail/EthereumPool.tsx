@@ -7,10 +7,10 @@ import Skeleton from 'react-loading-skeleton'
 
 import type { FeederPoolState } from '@apps/data-provider'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
-import { ViewportWidth } from '@apps/theme'
-import { UserMasquerade } from '@apps/base/components/core'
-import { TabCard, Button, UnstyledButton, InfoBox } from '@apps/dumb-components'
-import { useFeederPool } from '@apps/base/hooks'
+import { ViewportWidth } from '@apps/base/theme'
+import { TabCard, Button, UnstyledButton, InfoBox, UserMasquerade } from '@apps/components/core'
+// @ts-ignore
+import { useFeederPool } from '@apps/hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'

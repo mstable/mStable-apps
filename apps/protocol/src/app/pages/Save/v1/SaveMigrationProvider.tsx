@@ -8,8 +8,8 @@ import { useTokenAllowance } from '@apps/base/context/tokens'
 import { useSigner } from '@apps/base/context/account'
 import { Transaction, useTransactionsDispatch, useTransactionsState } from '@apps/base/context/transactions'
 import { TransactionManifest, TransactionStatus, Interfaces } from '@apps/transaction-manifest'
-import { StepProps } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { StepProps } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 

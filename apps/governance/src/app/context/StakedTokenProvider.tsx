@@ -3,7 +3,7 @@ import React, { createContext, Dispatch, FC, SetStateAction, useMemo, useState }
 
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { providerFactory, createUseContextFn } from '@apps/context-utils'
+import { providerFactory, createUseContextFn } from '@apps/hooks'
 import { useStakedTokenQuery as useStakedTokenQueryHook } from '@apps/artifacts/graphql/staking'
 
 import { useStakingQueryCtx } from './StakingProvider'

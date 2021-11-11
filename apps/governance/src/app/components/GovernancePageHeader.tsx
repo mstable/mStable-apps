@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 
-import { PageHeader } from '@apps/base/components/core'
-
+import { PageHeader } from '@apps/components/core'
 import { StakedTokenSwitcher } from './StakedTokenSwitcher'
 
 interface Props {

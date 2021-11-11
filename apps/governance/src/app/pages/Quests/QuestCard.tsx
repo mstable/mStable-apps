@@ -1,12 +1,11 @@
-import React, { ComponentProps, FC } from 'react'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import styled from 'styled-components'
-
 import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { Tooltip, UnstyledButton } from '@apps/dumb-components'
+import { Tooltip, UnstyledButton } from '@apps/components/core'
+import React, { ComponentProps, FC } from 'react'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import styled from 'styled-components'
 
 import { Typist } from './Typist'
 

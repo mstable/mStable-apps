@@ -4019,7 +4019,7 @@
   resolved "https://registry.yarnpkg.com/@mstable/delegatee-lists/-/delegatee-lists-0.1.0-alpha2.tgz#25054c51bc5ca7056133c563f73d3024d5231ad2"
   integrity sha512-pIMpYHTt+9BL+DHx68jjGdLh/w3gTlReUGpmZ0YuvUw9gMeARinpluVAT7vlqr+1G+7zip6o+HtUdc6VrrsuFg==
 
-"@mstable/merkle-drop@2.0.0":
+"@mstable/merkle-drop@1.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@mstable/merkle-drop/-/merkle-drop-2.0.0.tgz#b20e1b804b65e2e821c0d62453133aca8d368497"
   integrity sha512-BWBlIA78VMnbwRScGpM3bNOtLPmmVO17ee9L1zhlQfKzYUPqRWYt1Y0VZsKImgcI9wxs9sl+OrBEfgaGRqhdoA==
@@ -10650,6 +10650,11 @@ emojis-list@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
+
+emojisplosion@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/emojisplosion/-/emojisplosion-2.6.1.tgz#1e00c316f06469489cb34fe65746d7c91ed48196"
+  integrity sha512-a+yvHzHHP9R8qvt7ZeZS8yReuHjwXvbBbSxJHVMMWs4+sf0eOE/v/+Iz6fQq0CdF8G04jsJMF1MNDlrIBCC1pw==
 
 encodeurl@~1.0.2:
   version "1.0.2"

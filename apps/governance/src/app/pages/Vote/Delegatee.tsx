@@ -2,8 +2,8 @@ import React, { FC, useLayoutEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { isAddress } from 'ethers/lib/utils'
 
-import { ResolveENS } from '@apps/base/components/core'
-import { FetchState } from '@apps/types'
+import { ResolveENS } from '@apps/components/core'
+import { FetchState } from '@apps/hooks'
 
 import { DelegateePageHeader } from '../../components/DelegateePageHeader'
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'

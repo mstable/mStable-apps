@@ -35,7 +35,7 @@
         "@typescript-eslint/no-unused-vars": "off",
         "arrow-body-style": "off",
         "consistent-return": "off",
-        "import/no-default-export": "off",
+        "import/no-default-export": "error",
         "import/prefer-default-export": "off",
         "jsx-a11y/anchor-is-valid": "off",
         "no-console": ["error", { "allow": ["warn", "error"] }],

@@ -5,7 +5,7 @@ import { SavingsContractState } from '@apps/data-provider'
 import { useSelectedMassetName } from '@apps/masset-provider'
 import { useWalletAddress } from '@apps/base/context/account'
 import { useV1SavingsBalanceQuery } from '@apps/artifacts/graphql/protocol'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { useSelectedMassetState } from '@apps/hooks'
 
 export enum SaveVersion {
   V1 = 1,

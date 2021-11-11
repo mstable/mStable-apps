@@ -1,8 +1,8 @@
 import React, { Fragment, FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { CountUp, ThemedSkeleton, Table, TableCell, TableRow } from '@apps/dumb-components'
-import { ExplorerLink, TokenIcon as TokenIconBase } from '@apps/base/components/core'
+import { ExplorerLink, CountUp, ThemedSkeleton, Table, TableCell, TableRow } from '@apps/components/core'
+import { TokenIcon as TokenIconBase } from '@apps/components/icons'
 import { MassetState, useDataState } from '@apps/data-provider'
 import { ChainIds, useChainIdCtx, useNetworkAddresses } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'

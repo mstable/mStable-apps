@@ -1,8 +1,7 @@
 import React, { createContext, useEffect, FC, useContext } from 'react'
 import { DelegateeInfo, DelegateeList } from '@mstable/delegatee-lists'
 
-import { useFetchState } from '@apps/hooks'
-import { providerFactory } from '@apps/context-utils'
+import { providerFactory, useFetchState } from '@apps/hooks'
 import { useProvider } from '@apps/base/context/account'
 import { useNetwork } from '@apps/base/context/network'
 

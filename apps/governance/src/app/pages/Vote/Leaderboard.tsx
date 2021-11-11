@@ -5,8 +5,7 @@ import styled from 'styled-components'
 
 import { useLeaderboardQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { Table, TableCell, TableRow, UnstyledButton } from '@apps/dumb-components'
-
+import { Table, TableCell, TableRow, UnstyledButton } from '@apps/components/core'
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 import { DelegateCell } from '../../components/DelegateCell'
 

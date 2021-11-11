@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers'
 import { getUnixTime } from 'date-fns'
 
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
-import { Tooltip } from '@apps/dumb-components'
+import { Tooltip } from '@apps/components/core'
 
 const getTimeMultiplier = (hodlLengthSeconds: BigNumber) => {
   if (hodlLengthSeconds.lt(7862400)) return 0

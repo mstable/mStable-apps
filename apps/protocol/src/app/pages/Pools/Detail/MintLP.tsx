@@ -7,7 +7,8 @@ import { useWalletAddress } from '@apps/base/context/account'
 import { AddressOption } from '@apps/types'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { useBigDecimalInput, useSlippage, BigDecimalInputValue, useMinimumOutput } from '@apps/hooks'
-import { SendButton, AssetExchange, TransactionInfo } from '@apps/base/components/forms'
+import { SendButton, AssetExchange } from '@apps/components/forms'
+import { TransactionInfo } from '@apps/components/core'
 
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 import {

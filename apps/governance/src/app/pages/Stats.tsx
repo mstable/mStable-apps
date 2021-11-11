@@ -1,8 +1,7 @@
-import React, { FC } from 'react'
+import { ViewportWidth } from '@apps/base/theme'
+import { Tooltip, ButtonExternal } from '@apps/components/core'
+import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
-
-import { ViewportWidth } from '@apps/theme'
-import { Tooltip, ButtonExternal } from '@apps/dumb-components'
 
 import { GovernancePageHeader } from '../components/GovernancePageHeader'
 import { useStakedTokenQuery } from '../context/StakedTokenProvider'

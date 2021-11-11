@@ -9,12 +9,12 @@ import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 
 import DefaultTooltipContent from 'recharts/lib/component/DefaultTooltipContent'
 
 import { MassetState } from '@apps/data-provider'
-import { TokenIconSvg } from '@apps/base/components/core'
+import { TokenIconSvg } from '@apps/components/icons'
 import { BigDecimal } from '@apps/bigdecimal'
-import { Color } from '@apps/theme'
+import { Color } from '@apps/base/theme'
 import { toK } from '@apps/formatters'
-import { ThemedSkeleton } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { ThemedSkeleton } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { RechartsContainer } from './RechartsContainer'
 

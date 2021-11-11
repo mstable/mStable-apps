@@ -3,10 +3,10 @@ import { Area, XAxis, YAxis, Tooltip, AreaChart, ResponsiveContainer } from 'rec
 import styled from 'styled-components'
 import { format } from 'date-fns'
 
-import { Color } from '@apps/theme'
+import { Color } from '@apps/base/theme'
 import { percentageFormat, periodFormatMapping } from '@apps/formatters'
-import { ThemedSkeleton } from '@apps/dumb-components'
-import { useBlockTimesForDates } from '@apps/base/hooks'
+import { ThemedSkeleton } from '@apps/components/core'
+import { useBlockTimesForDates } from '@apps/hooks'
 
 import { useSelectedSavingsContractState } from '../../context/SelectedSaveVersionProvider'
 import { useDailyApysForBlockTimes } from '../../hooks/useDailyApysForBlockTimes'

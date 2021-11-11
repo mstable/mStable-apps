@@ -1,9 +1,7 @@
 import { FC, createContext, useState, useContext } from 'react'
 import { useAsync } from 'react-use'
 
-import { FetchState } from '@apps/types'
-import { useFetchState } from '@apps/hooks'
-import { providerFactory } from '@apps/context-utils'
+import { FetchState, providerFactory, useFetchState } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
 import { useNetworkAddresses } from '@apps/base/context/network'

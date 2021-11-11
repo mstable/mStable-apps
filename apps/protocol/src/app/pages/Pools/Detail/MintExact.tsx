@@ -6,7 +6,7 @@ import { SubscribedToken } from '@apps/types'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { useMinimumOutput, BigDecimalInputValue } from '@apps/hooks'
-import { SendButton, ManyToOneAssetExchange, useMultiAssetExchangeState, useMultiAssetExchangeDispatch } from '@apps/base/components/forms'
+import { SendButton, ManyToOneAssetExchange, useMultiAssetExchangeDispatch, useMultiAssetExchangeState } from '@apps/components/forms'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'

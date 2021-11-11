@@ -3,8 +3,8 @@ import React from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
-import { UnstyledButton } from '@apps/dumb-components'
-import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
+import { UnstyledButton } from '@apps/components/core'
+import { MultiAssetExchangeProvider } from '@apps/components/forms'
 
 import { useSelectedFeederPoolAssets, useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { RedeemExact } from './RedeemExact'

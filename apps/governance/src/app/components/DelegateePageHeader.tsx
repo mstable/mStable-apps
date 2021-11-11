@@ -1,12 +1,8 @@
 import React, { FC } from 'react'
-import styled from 'styled-components'
+import { ViewportWidth } from '@apps/base/theme'
+import { Address, BackLink, ExternalLink, IPFSImg, UserIcon } from '@apps/components/core'
 import { DelegateeInfo } from '@mstable/delegatee-lists'
-
-import { ViewportWidth } from '@apps/theme'
-import { IPFSImg, UserIcon } from '@apps/base/components/core'
-import { Address } from '@apps/base/components/core'
-import { BackLink, ExternalLink } from '@apps/dumb-components'
-
+import styled from 'styled-components'
 import { DelegateeToggle } from '../pages/Vote/DelegateeToggle'
 
 interface Props {

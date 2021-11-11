@@ -2,11 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { useModal } from 'react-modal-hook'
 
-import { Modal, Button } from '@apps/dumb-components'
-import { ViewportWidth } from '@apps/theme'
+import { Modal, Address, Button } from '@apps/components/core'
 
-import { Address } from '../components/core'
 import { useConnected, useReset, useWallet, useWalletAddress } from '../context/AccountProvider'
+import { ViewportWidth } from '../theme'
 import { useBaseCtx } from '../BaseProviders'
 import { useExploreAssetModal } from './useExploreAssetModal'
 

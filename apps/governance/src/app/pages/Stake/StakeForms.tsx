@@ -3,8 +3,8 @@ import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
 import { useURLQuery } from '@apps/hooks'
-import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/dumb-components'
-import { ViewportWidth } from '@apps/theme'
+import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/components/core'
+import { ViewportWidth } from '@apps/base/theme'
 
 import { useStakingStatus } from '../../context/StakingStatusProvider'
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'

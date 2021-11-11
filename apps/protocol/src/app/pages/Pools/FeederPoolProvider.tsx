@@ -8,8 +8,7 @@ import type { FeederPoolState, MassetState } from '@apps/data-provider'
 import { useSigner } from '@apps/base/context/account'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
-import { UseBigDecimalInputsArg } from '@apps/hooks'
-import { useSelectedMassetState, useFeederPool } from '@apps/base/hooks'
+import { UseBigDecimalInputsArg, useFeederPool, useSelectedMassetState } from '@apps/hooks'
 
 interface PoolState {
   poolAddress: string

@@ -8,9 +8,9 @@ import { BoostedSavingsVault__factory, BoostedSavingsVault } from '@apps/artifac
 import { usePropose } from '@apps/base/context/transactions'
 import { useIsMasquerading, useSigner } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { SendButton } from '@apps/base/components/forms'
-import { CountUp, Table, TableCell, TableRow, Button } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { SendButton } from '@apps/components/forms'
+import { CountUp, Table, TableCell, TableRow, Button } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 import { StreamType, useRewardStreams } from '../../../context/RewardStreamsProvider'

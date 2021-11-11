@@ -3,7 +3,7 @@ import React, { createContext, FC, useMemo } from 'react'
 import { QuestManager, QuestManager__factory } from '@apps/artifacts/typechain'
 import { useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { providerFactory, createUseContextFn } from '@apps/context-utils'
+import { providerFactory, createUseContextFn } from '@apps/hooks'
 import { useQuestsQuery } from '@apps/artifacts/graphql/staking'
 
 const questManagerContractCtx = createContext<QuestManager | undefined>(undefined)

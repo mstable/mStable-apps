@@ -2,13 +2,12 @@ import React, { FC } from 'react'
 import styled, { keyframes, css } from 'styled-components'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
-import { TransactionStatus } from '@apps/transaction-manifest'
-
-import { useNotificationsState } from '../../context/NotificationsProvider'
-import { useTransactionsState } from '../../context/TransactionsProvider'
 import { PendingTransaction } from '../wallet/PendingTransactions'
+import { useNotificationsState } from '../../context/NotificationsProvider'
+import { NotificationItem } from '../../../../../components/src/lib/core/NotificationItem'
+import { useTransactionsState } from '../../context/TransactionsProvider'
+import { TransactionStatus } from '@apps/transaction-manifest'
 import { TransactionGasProvider } from '../wallet/TransactionGasProvider'
-import { NotificationItem } from '../core'
 
 const slideIn = keyframes`
   0% {

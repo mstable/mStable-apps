@@ -1,6 +1,5 @@
 import * as ReactDOM from 'react-dom'
 
-import { ThemeProvider } from '@apps/theme'
 import { composedComponent } from '@apps/react-utils'
 import { BaseLayout, BaseProviders } from '@apps/base'
 
@@ -10,14 +9,7 @@ import { StakedTokenProvider } from './app/context/StakedTokenProvider'
 import { StakingProvider } from './app/context/StakingProvider'
 import { DelegateeListsProvider } from './app/context/DelegateeListsProvider'
 
-const Providers = composedComponent(
-  ThemeProvider,
-  BaseProviders,
-  QuestManagerProvider,
-  StakingProvider,
-  StakedTokenProvider,
-  DelegateeListsProvider,
-)
+const Providers = composedComponent(BaseProviders, QuestManagerProvider, StakingProvider, StakedTokenProvider, DelegateeListsProvider)
 
 ReactDOM.render(
   <Providers>

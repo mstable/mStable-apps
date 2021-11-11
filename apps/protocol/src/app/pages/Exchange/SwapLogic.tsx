@@ -5,12 +5,19 @@ import { FeederPool__factory, Masset__factory } from '@apps/artifacts/typechain'
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
-import { useBigDecimalInput, useMinimumOutput, BigDecimalInputValue, useSlippage, ExchangeAction } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import {
+  useBigDecimalInput,
+  useMinimumOutput,
+  BigDecimalInputValue,
+  useSlippage,
+  useSelectedMassetState,
+  ExchangeAction,
+} from '@apps/hooks'
 import { AddressOption } from '@apps/types'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { AssetSwap, SendButton, TransactionInfo } from '@apps/base/components/forms'
+import { AssetSwap, SendButton } from '@apps/components/forms'
 import { MassetState } from '@apps/data-provider'
+import { TransactionInfo } from '@apps/components/core'
 
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useEstimatedOutput } from '../../hooks/useEstimatedOutput'

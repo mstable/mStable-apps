@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import styled from 'styled-components'
 
-import { AddressInput } from '@apps/dumb-components'
+import { AddressInput } from '@apps/components/forms'
 
 interface Props {
   title: string

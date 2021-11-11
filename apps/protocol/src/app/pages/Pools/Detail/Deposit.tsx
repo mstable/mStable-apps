@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { useToggle } from 'react-use'
 
-import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
-import { UnstyledButton } from '@apps/dumb-components'
+import { MultiAssetExchangeProvider } from '@apps/components/forms'
+import { UnstyledButton } from '@apps/components/core'
 
 import { useSelectedFeederPoolAssets, useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { MintExact } from './MintExact'

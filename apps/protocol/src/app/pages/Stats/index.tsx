@@ -2,8 +2,8 @@ import React, { FC, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
-import { CountUp, H2, H3, ThemedSkeleton } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { H2, H3, CountUp, ThemedSkeleton } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { VolumeChart } from '../../components/stats/VolumeChart'
 import { AggregateChart } from '../../components/stats/AggregateChart'

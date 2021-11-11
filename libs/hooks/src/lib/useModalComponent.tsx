@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { useModal } from 'react-modal-hook'
 
-import { Modal } from '@apps/dumb-components'
+import { Modal } from '@apps/components/core'
 
 export const useModalComponent = ({
   title,

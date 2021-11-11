@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { ViewportWidth } from '@apps/theme'
+import { ViewportWidth } from '@apps/base/theme'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
-import { InfoBox, InfoButton, ThemedSkeleton } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { InfoBox, InfoButton, ThemedSkeleton } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'

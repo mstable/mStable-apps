@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Dropdown } from '@apps/base/components/core'
+import { Dropdown } from '@apps/components/core'
 import { useSetStakedToken, useStakedToken } from '../context/StakedTokenProvider'
 
 const StyledDropdown = styled(Dropdown)`

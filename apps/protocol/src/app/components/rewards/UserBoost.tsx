@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { CountUp, DifferentialCountup } from '@apps/dumb-components'
-import { ThemedSkeleton } from '@apps/dumb-components'
+import { ThemedSkeleton, CountUp, DifferentialCountup } from '@apps/components/core'
 import { BoostedSavingsVaultState } from '@apps/data-provider'
-import { BoostedCombinedAPY, FetchState } from '@apps/types'
+import { FetchState } from '@apps/hooks'
+import { BoostedCombinedAPY } from '@apps/types'
 
 import { Boost } from './Boost'
 

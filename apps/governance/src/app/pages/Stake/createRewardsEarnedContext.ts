@@ -5,7 +5,7 @@ import { BigNumber } from 'ethers'
 import { getUnixTime } from 'date-fns'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { createUseContextFn, providerFactory } from '@apps/context-utils'
+import { createUseContextFn, providerFactory } from '@apps/hooks'
 import { SCALE } from '@apps/types'
 
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'

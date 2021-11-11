@@ -6,9 +6,9 @@ import { MassetName, MASSETS } from '@apps/types'
 import { useDataState } from '@apps/data-provider'
 import { useConnected, useConnect } from '@apps/base/context/account'
 import { useSetSelectedMassetName } from '@apps/masset-provider'
-import { ViewportWidth } from '@apps/theme'
-import { UnstyledButton } from '@apps/dumb-components'
-import { TokenIcon } from '@apps/base/components/core'
+import { ViewportWidth } from '@apps/base/theme'
+import { UnstyledButton } from '@apps/components/core'
+import { TokenIcon } from '@apps/components/icons'
 
 import { ReactComponent as LogoImage } from '../icons/mstable.svg'
 

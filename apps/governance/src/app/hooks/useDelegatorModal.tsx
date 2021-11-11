@@ -1,13 +1,12 @@
 import React, { FC } from 'react'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { useModal } from 'react-modal-hook'
 
-import { ViewportWidth } from '@apps/theme'
-import { Modal, Table, TableRow } from '@apps/dumb-components'
-
+import { ViewportWidth } from '@apps/base/theme'
+import { Modal, Table, TableRow } from '@apps/components/core'
 import { DelegateCell } from '../components/DelegateCell'
 import { useDelegateesAll } from '../context/DelegateeListsProvider'
+import { useHistory } from 'react-router-dom'
 
 const Container = styled.div`
   max-height: 75vh;

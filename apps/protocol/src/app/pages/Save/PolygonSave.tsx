@@ -1,11 +1,10 @@
 import React, { FC, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import CountUp from 'react-countup'
 import styled from 'styled-components'
+import CountUp from 'react-countup'
 
-import { ViewportWidth } from '@apps/theme'
-import { ThemedSkeleton, Tooltip, TabCard } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { ViewportWidth } from '@apps/base/theme'
+import { ThemedSkeleton, Tooltip, TabCard } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { DailyApys } from '../../components/stats/DailyApys'
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
@@ -13,6 +12,7 @@ import { SaveRedeem } from './v2/SaveRedeem'
 import { SaveDeposit } from './v2/SaveDeposit'
 import { SaveStake } from './v2/SaveStake'
 import { OnboardingProvider, useStakingRewards, StakingRewardsProvider } from './hooks'
+import { Link } from 'react-router-dom'
 
 enum Tabs {
   Deposit = 'Deposit',

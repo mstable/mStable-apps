@@ -2,8 +2,7 @@ import type { FC, ChangeEventHandler } from 'react'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { useEffectOnce } from 'react-use'
-
-import { Button } from '@apps/dumb-components'
+import { Button } from '@apps/components/core'
 
 import { useNetworkPrices } from '../../context/NetworkProvider'
 

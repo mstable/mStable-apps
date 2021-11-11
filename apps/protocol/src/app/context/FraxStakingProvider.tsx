@@ -3,8 +3,7 @@ import React, { FC, createContext, useEffect, useRef, useMemo, useContext } from
 import { useEffectOnce } from 'react-use'
 
 import { ERC20, ERC20__factory, FraxCrossChainFarm, FraxCrossChainFarm__factory } from '@apps/artifacts/typechain'
-import { useFetchState } from '@apps/hooks'
-import { FetchState } from '@apps/types'
+import { FetchState, useFetchState } from '@apps/hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 
 import { MaticMainnet, useNetworkAddresses } from '@apps/base/context/network'

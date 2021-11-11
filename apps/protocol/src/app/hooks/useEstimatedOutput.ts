@@ -9,9 +9,7 @@ import { useSigner } from '@apps/base/context/account'
 import { sanitizeMassetError } from '@apps/formatters'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { getPriceImpact, PriceImpact } from '@apps/quick-maths'
-import { BigDecimalInputValue, useFetchState } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/base/hooks'
-import { FetchState } from '@apps/types'
+import { BigDecimalInputValue, FetchState, useFetchState, useSelectedMassetState } from '@apps/hooks'
 
 type Contract = Masset | FeederPool
 

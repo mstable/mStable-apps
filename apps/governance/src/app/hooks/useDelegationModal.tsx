@@ -2,11 +2,12 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { useModal } from 'react-modal-hook'
 
-import { ViewportWidth } from '@apps/theme'
-import { AddressInput, Modal } from '@apps/dumb-components'
-import { useModalDataDispatch } from '@apps/base/context/modal-data'
-
+import { ViewportWidth } from '@apps/base/theme'
+import { Modal } from '@apps/components/core'
+import { StakingStatusProvider } from '../context/StakingStatusProvider'
 import { Leaderboard } from '../pages/Vote/Leaderboard'
+import { AddressInput } from '@apps/components/forms'
+import { useModalDataDispatch } from '@apps/base/context/ModalDataProvider'
 
 const StyledAddressInput = styled(AddressInput)`
   background: ${({ theme }) => theme.color.background[0]};

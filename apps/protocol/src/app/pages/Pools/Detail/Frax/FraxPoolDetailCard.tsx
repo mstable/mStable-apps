@@ -3,17 +3,16 @@ import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
 import { FeederPoolState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/theme'
-import { CountUp, Button, ExternalLink, Tooltip } from '@apps/dumb-components'
-import { TokenIcon, TokenPair } from '@apps/base/components/core'
-import { useFeederPool } from '@apps/base/hooks'
+import { ViewportWidth } from '@apps/base/theme'
+import { Button, CountUp, ExternalLink, Tooltip } from '@apps/components/core'
+import { TokenIcon, TokenPair } from '@apps/components/icons'
+import { useFeederPool } from '@apps/hooks'
+import { assetColorMapping } from '../../constants'
+import { Card } from '../../cards/Card'
+import { useFraxStakingContract, useFraxStakingState } from '../../../../context/FraxStakingProvider'
 import { usePropose } from '@apps/base/context/transactions'
 import { Interfaces } from '@apps/types'
 import { TransactionManifest } from '@apps/transaction-manifest'
-
-import { useFraxStakingContract, useFraxStakingState } from '../../../../context/FraxStakingProvider'
-import { Card } from '../../cards/Card'
-import { assetColorMapping } from '../../constants'
 
 interface Props {
   className?: string

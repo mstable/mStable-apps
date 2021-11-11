@@ -3,9 +3,11 @@ import React, { FC, useMemo, useState } from 'react'
 import { usePropose } from '@apps/base/context/transactions'
 import { useWalletAddress } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { AssetExchange, SendButton, TransactionInfo } from '@apps/base/components/forms'
+import { AssetExchange, SendButton } from '@apps/components/forms'
 import { AddressOption } from '@apps/types'
 import { useBigDecimalInput, BigDecimalInputValue, useSlippage, useMinimumOutput } from '@apps/hooks'
+
+import { TransactionInfo } from '@apps/components/core'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'

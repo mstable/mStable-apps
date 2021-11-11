@@ -2,10 +2,10 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { MassetState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/theme'
+import { ViewportWidth } from '@apps/base/theme'
 import { BigDecimal } from '@apps/bigdecimal'
-import { CountUp } from '@apps/dumb-components'
-import { useSelectedMassetState } from '@apps/base/hooks'
+import { CountUp } from '@apps/components/core'
+import { useSelectedMassetState } from '@apps/hooks'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'

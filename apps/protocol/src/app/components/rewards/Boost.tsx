@@ -2,10 +2,9 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { BoostedSavingsVaultState } from '@apps/data-provider'
-import { useCalculateUserBoost } from '@apps/base/hooks'
-import { createToggleContext } from '@apps/context-utils'
-import { Widget, Button, ProgressBar } from '@apps/dumb-components'
-import { ViewportWidth } from '@apps/theme'
+import { useCalculateUserBoost, createToggleContext } from '@apps/hooks'
+import { Widget, Button, ProgressBar } from '@apps/components/core'
+import { ViewportWidth } from '@apps/base/theme'
 
 import { BoostCalculator } from './BoostCalculator'
 

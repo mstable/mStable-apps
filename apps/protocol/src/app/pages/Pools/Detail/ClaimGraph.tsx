@@ -3,7 +3,7 @@ import { format, fromUnixTime } from 'date-fns'
 import { Area, AreaChart, Label, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import styled from 'styled-components'
 
-import { Color, ViewportWidth } from '@apps/theme'
+import { Color, ViewportWidth } from '@apps/base/theme'
 import { toK } from '@apps/formatters'
 
 import { StreamType, useRewardStreams } from '../../../context/RewardStreamsProvider'

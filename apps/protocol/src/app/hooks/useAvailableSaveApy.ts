@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { eachDayOfInterval, endOfDay, subDays } from 'date-fns'
 
-import { useBlockTimesForDates } from '@apps/base/hooks'
+import { useBlockTimesForDates } from '@apps/hooks'
 
 import { useSelectedSavingsContractState } from '../context/SelectedSaveVersionProvider'
 import { useDailyApysForBlockTimes } from './useDailyApysForBlockTimes'

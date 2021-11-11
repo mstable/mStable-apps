@@ -1,15 +1,15 @@
+import { Button, CountUp } from '@apps/components/core'
+import { TokenIcon } from '@apps/components/icons'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { DelegateeInfo } from '@mstable/delegatee-lists'
 
-import { Button, CountUp } from '@apps/dumb-components'
-import { TokenIcon } from '@apps/base/components/core'
-import { ViewportWidth } from '@apps/theme'
-import { BigDecimal } from '@apps/bigdecimal'
-
 import { useAccountQuery } from '../../hooks/useAccountQuery'
-import { useDelegatorModal } from '../../hooks/useDelegatorModal'
+
 import { VotingHistory } from './VotingHistory'
+import { ViewportWidth } from '@apps/base/theme'
+import { useDelegatorModal } from '../../hooks/useDelegatorModal'
+import { BigDecimal } from '@apps/bigdecimal'
 
 const StyledTokenIcon = styled(TokenIcon)`
   width: 1.5rem;

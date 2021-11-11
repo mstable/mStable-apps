@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { ViewportWidth } from '@apps/theme'
-import { CountUp, Button, Tooltip } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/base/theme'
+import { Button, Tooltip, CountUp } from '@apps/components/core'
 import { useSelectedMassetName } from '@apps/masset-provider'
 
 import { useAvailableSaveApy } from '../../../hooks/useAvailableSaveApy'
@@ -188,11 +188,7 @@ export const OnboardingBanner: FC = () => {
           </ApyTitle>
           <Tooltip tip="Learn about how this is calculated" hideIcon>
             <InfoLink>
-              <a
-                href="https://docs.mstable.org/using-mstable/mstable-app/save#understanding-save"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://docs.mstable.org/using-mstable/mstable-app/save#understanding-save" target="_blank" rel="noopener noreferrer">
                 ↗
               </a>
             </InfoLink>

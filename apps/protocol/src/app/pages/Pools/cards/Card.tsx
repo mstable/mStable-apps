@@ -1,11 +1,11 @@
 import React, { FC, ReactElement } from 'react'
 import styled, { css } from 'styled-components'
 
-import { UnstyledButton } from '@apps/dumb-components'
+import { UnstyledButton } from '@apps/components/core'
 
-import { ReactComponent as CheckmarkIcon } from '@apps/icons/checkmark.svg'
-import { ReactComponent as ChevronIcon } from '@apps/icons/chevron-down.svg'
-import { ReactComponent as ExternalIcon } from '@apps/icons/external-link-arrow.svg'
+import { ReactComponent as CheckmarkIcon } from '@apps/components/icons/checkmark.svg'
+import { ReactComponent as ChevronIcon } from '@apps/components/icons/chevron-down.svg'
+import { ReactComponent as ExternalIcon } from '@apps/components/icons/external-link-arrow.svg'
 
 interface Props {
   className?: string

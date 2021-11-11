@@ -1,8 +1,8 @@
 import React, { FC, useLayoutEffect } from 'react'
-import { useHistory } from 'react-router-dom'
 
 import { Leaderboard } from './Leaderboard'
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
+import { useHistory } from 'react-router-dom'
 
 export const LeaderboardPage: FC = () => {
   useLayoutEffect(() => {

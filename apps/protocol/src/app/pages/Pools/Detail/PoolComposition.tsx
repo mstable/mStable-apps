@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 
-import { Color } from '@apps/theme'
+import { Color } from '@apps/base/theme'
 import { toK } from '@apps/formatters'
 
 import { RechartsContainer } from '../../../components/stats/RechartsContainer'

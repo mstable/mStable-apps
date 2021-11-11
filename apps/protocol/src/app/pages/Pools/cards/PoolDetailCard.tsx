@@ -3,17 +3,16 @@ import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
 import { FeederPoolState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/theme'
-import { CountUp, CountUpUSD, Tooltip } from '@apps/dumb-components'
-import { TokenIcon, TokenPair } from '@apps/base/components/core'
+import { ViewportWidth } from '@apps/base/theme'
+import { CountUp, CountUpUSD, Tooltip } from '@apps/components/core'
+import { TokenIcon, TokenPair } from '@apps/components/icons'
 import { toK } from '@apps/formatters'
-import { useFeederPool } from '@apps/base/hooks'
-
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
+import { useFeederPool } from '@apps/hooks'
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
-import { usePoolMetrics } from '../../../hooks/usePoolMetrics'
 import { assetColorMapping } from '../constants'
 import { Card } from './Card'
+import { usePoolMetrics } from '../../../hooks/usePoolMetrics'
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 
 interface Props {
   className?: string
