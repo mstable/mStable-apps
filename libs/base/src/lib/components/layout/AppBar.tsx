@@ -16,14 +16,6 @@ import { Navigation } from './Navigation'
 import { SettingsButton } from './SettingsButton'
 import { WalletButton } from './WalletButton'
 
-const NetworkButton = styled(SettingsButton)`
-  display: none;
-
-  @media (min-width: ${ViewportWidth.m}) {
-    display: inherit;
-  }
-`
-
 const Logo = styled(LogoSvg)`
   width: 1.75rem;
   height: 1.75rem;
@@ -144,9 +136,9 @@ export const AppBar: FC = () => {
           <WalletAndSpinner>
             <TransactionsSpinner />
             <WalletButton />
-            <NetworkButton>
+            <SettingsButton>
               <TokenIcon symbol={protocolName.toUpperCase()} />
-            </NetworkButton>
+            </SettingsButton>
           </WalletAndSpinner>
         </Inner>
       </Container>
