@@ -42,7 +42,7 @@ const List = styled.div`
   border-radius: 0.75rem;
   right: 0;
   top: 2.5rem;
-  width: 20rem;
+  width: 18rem;
   background: ${({ theme }) => theme.color.background[0]};
   border: 1px solid ${({ theme }) => theme.color.defaultBorder};
   min-width: 5.5rem;
