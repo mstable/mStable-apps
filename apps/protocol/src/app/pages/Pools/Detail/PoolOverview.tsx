@@ -94,7 +94,7 @@ export const PoolOverview: FC = () => {
               </div>
             </Button>
           )}
-          {apy.value?.base && (
+          {apy.value?.base > 0 && (
             <Button active={false} disabled>
               <h3>Base APY</h3>
               <div>
