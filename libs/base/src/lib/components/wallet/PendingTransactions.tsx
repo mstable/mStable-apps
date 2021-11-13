@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { TransactionStatus } from '@apps/transaction-manifest'
@@ -11,6 +11,10 @@ import { useNativeToken } from '../../context/TokensProvider'
 import { Amount, TokenIcon } from '../core'
 import { GasStation } from './GasStation'
 import { useGas } from './TransactionGasProvider'
+import { SIGN_MSG, StakeValidation } from './StakeValidation'
+import { useSigner } from '../../context/AccountProvider'
+import { Signer } from 'ethers'
+import { StakeSignatures, useStakeSignatures } from '../../hooks/useStakeSignatures'
 
 const Buttons = styled.div`
   display: flex;
@@ -89,18 +93,81 @@ const NativeTokenBalance: FC = () => {
   )
 }
 
+const signStake = async (
+  signer: Signer | undefined,
+  setStakeSignatures: React.Dispatch<React.SetStateAction<StakeSignatures>>,
+) => {
+  try {
+    const signature = await signer?.signMessage(SIGN_MSG)
+    const walletAddress = await signer?.getAddress()
+
+    if (!walletAddress || !signature) {
+      console.error('Missing wallet or signature', walletAddress, signature)
+      return false
+    }
+
+    const res = await fetch(`https://api.mstable.org/signature/${walletAddress}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ signature }),
+    })
+    if (res.status !== 201) {
+      console.error(await res.text())
+      return false
+    }
+    setStakeSignatures((prevSignatures) => ({
+      ...prevSignatures,
+      [walletAddress]: signature,
+    }))
+  } catch (e) {
+    console.error('failed to sign transaction', e)
+    return false
+  }
+  return true
+}
+
 export const PendingTransaction: FC<{
   id: string
 }> = ({ id }) => {
   const { [id]: transaction } = useTransactionsState()
+  const signer = useSigner()
   const { cancel, send } = useTransactionsDispatch()
   const { estimationError, gasLimit, gasPrice, insufficientBalance } = useGas()
+
+  const [stakeSignatures, setStakeSignatures] = useStakeSignatures()
+  const [isStakeSigned, setIsStakeSigned] = useState<boolean>(false)
+  const [isStakeSignedForm, setIsStakeSignedForm] = useState<boolean>(false)
+  const stakeSignedFunctions = ['compoundRewards', 'stake(uint256)']
+
+  useEffect(() => {
+    const fetchSignature = async () => {
+      const address = await signer?.getAddress()
+      if (!address) return
+
+      const walletAddress = await signer?.getAddress()
+      if (!walletAddress) return
+      setIsStakeSigned(stakeSignatures[walletAddress] ? true : false)
+    }
+    fetchSignature()
+  }, [signer, stakeSignatures])
 
   if (!transaction) {
     return null
   }
 
-  const disabled = !!(estimationError || !gasLimit || !gasPrice || insufficientBalance || transaction.status !== TransactionStatus.Pending)
+  const checkTransactionSignature = transaction.manifest.fn && stakeSignedFunctions.includes(transaction.manifest.fn)
+
+  const disabled = !!(
+    estimationError ||
+    !gasLimit ||
+    !gasPrice ||
+    insufficientBalance ||
+    transaction.status !== TransactionStatus.Pending ||
+    (checkTransactionSignature && (!isStakeSigned && (!isStakeSigned && !isStakeSignedForm)))
+  )
 
   return (
     <Container status={transaction.status}>
@@ -109,6 +176,9 @@ export const PendingTransaction: FC<{
         <NativeTokenBalance />
       </Purpose>
       {transaction.status === TransactionStatus.Pending && <GasStation />}
+      {!isStakeSigned && checkTransactionSignature && (
+        <StakeValidation isStakeSigned={isStakeSignedForm} setIsStakeSigned={setIsStakeSignedForm} />
+      )}
       {estimationError && (
         <TxError>
           <div>Error during estimation</div>
@@ -128,13 +198,18 @@ export const PendingTransaction: FC<{
           scale={0.7}
           highlighted={!disabled}
           disabled={disabled}
-          onClick={() => {
+          onClick={async () => {
             if (gasPrice && gasLimit) {
+              const cont = !isStakeSigned && checkTransactionSignature ? await signStake(signer, setStakeSignatures) : true
+              if (!cont) {
+                console.error('Message not signed')
+                return
+              }
               send(transaction.manifest, gasLimit, gasPrice)
             }
           }}
         >
-          Send transaction
+          {!isStakeSigned && checkTransactionSignature ? 'Sign and Send transaction' : 'Send transaction'}
         </Button>
       </Buttons>
     </Container>

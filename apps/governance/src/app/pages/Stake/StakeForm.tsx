@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 import { constants } from 'ethers'
@@ -9,6 +9,7 @@ import { Tooltip, Warning } from '@apps/dumb-components'
 import { useTokenAllowance, useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { useModalData } from '@apps/base/context/modal-data'
+import { useStakeSignatures } from '@apps/base/hooks'
 import { useBigDecimalInput } from '@apps/hooks'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetInputSingle, SendButton } from '@apps/base/components/forms'
@@ -80,6 +81,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const { hasWithdrawnV1Balance, lockedV1 } = useStakingStatus()
   const { setWithdrewV1Balance } = useStakingStatusDispatch()
   const stakingToken = useTokenSubscription(data?.stakedToken?.stakingToken.address)
+  const [stakeSignatures, setStakeSignatures] = useStakeSignatures()
 
   const propose = usePropose()
   const signer = useSigner()
@@ -137,6 +139,22 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
       }),
     )
   }
+
+  useEffect(() => {
+    const fetchSignature = async () => {
+      const address = await signer.getAddress()
+      if (!address) return
+
+      const signature = await fetch(`https://api.mstable.org/signature/${address}`)
+
+      const body = await signature.json()
+      setStakeSignatures(prevSignatures => ({
+        ...prevSignatures,
+        [address]: body.signature,
+      }))
+    }
+    fetchSignature()
+  }, [signer, setStakeSignatures])
 
   return (
     <Container className={className}>
