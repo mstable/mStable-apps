@@ -29,5 +29,5 @@ export const useExploreAssetModal = (hidePrevModal: () => void): [(symbol: strin
     actions.current?.[0]?.()
   }, [])
 
-  return [showModal, (actions_ as ReturnType<typeof useModal>)[1]]
+  return [showModal, (actions_ as ReturnType<typeof useModal>)?.[1]]
 }
