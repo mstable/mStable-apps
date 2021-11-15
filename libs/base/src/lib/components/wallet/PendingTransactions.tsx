@@ -144,9 +144,6 @@ export const PendingTransaction: FC<{
 
   useEffect(() => {
     const fetchSignature = async () => {
-      const address = await signer?.getAddress()
-      if (!address) return
-
       const walletAddress = await signer?.getAddress()
       if (!walletAddress) return
       setIsStakeSigned(!!stakeSignatures[walletAddress])
