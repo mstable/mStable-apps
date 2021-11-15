@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useCallback, useState } from 'react'
+import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { CountUp, DifferentialCountup, TransitionCard, Tooltip, CardContainer as Card, CardButton as Button } from '@apps/dumb-components'
@@ -53,8 +53,13 @@ export const PoolOverview: FC = () => {
   const userStakedAmount = vault?.account?.rawBalance.simple ?? 0
   const totalUserBalance = (userStakedAmount + userAmount) * fpTokenPrice
   const totalLocked = rewardStreams?.amounts.locked ?? 0
-  const totalEarned =
-    (rewardStreams?.amounts.earned.unlocked ?? 0) + (rewardStreams?.amounts.previewLocked ?? 0) + (rewardStreams?.amounts.locked ?? 0)
+
+  const totalEarned = useMemo(() => {
+    const { amounts } = rewardStreams ?? {}
+    if (!amounts) return 0
+    const { earned, previewLocked, locked, unlocked } = amounts
+    return earned?.unlocked + previewLocked + locked + unlocked
+  }, [rewardStreams])
 
   const showLiquidityMessage = totalEarned === 0 && totalLocked === 0
 
@@ -85,7 +90,7 @@ export const PoolOverview: FC = () => {
               <Tooltip tip={`${vault?.rewardsToken.symbol} rewards unlock over time`} />
             </div>
           </Button>
-          {apy.value?.platformRewards && (
+          {!!apy.value?.platformRewards && (
             <Button active={false} disabled>
               <h3>Platform APY</h3>
               <div>
@@ -94,7 +99,7 @@ export const PoolOverview: FC = () => {
               </div>
             </Button>
           )}
-          {apy.value?.base > 0 && (
+          {!!apy.value?.base && (
             <Button active={false} disabled>
               <h3>Base APY</h3>
               <div>
