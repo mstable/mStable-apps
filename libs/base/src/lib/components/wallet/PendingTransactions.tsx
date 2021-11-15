@@ -149,7 +149,7 @@ export const PendingTransaction: FC<{
 
       const walletAddress = await signer?.getAddress()
       if (!walletAddress) return
-      setIsStakeSigned(stakeSignatures[walletAddress] ? true : false)
+      setIsStakeSigned(!!stakeSignatures[walletAddress])
     }
     fetchSignature()
   }, [signer, stakeSignatures])
