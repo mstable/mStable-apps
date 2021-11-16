@@ -1,56 +1,36 @@
 import React, { FC } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useBannerMessage } from '../../context/BannerProvider'
+import { Color } from '@apps/theme'
 
-const Container = styled.div`
-  display: flex;
-  margin-bottom: 1.25rem;
-  border-radius: 1rem;
-  align-items: center;
-  padding: 1rem 1.5rem;
+const Container = styled.div<{ statusColor: string | undefined }>`
+  background: ${({ statusColor }) => statusColor};
+  text-align: center;
+  font-size: 0.75rem;
   line-height: 1.5rem;
-  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  border-bottom: 1px solid ${({ statusColor }) => statusColor};
+  overflow-x: scroll;
+  overflow-wrap: normal;
 
-  a {
-    border: none;
-    color: ${({ theme }) => theme.color.primary};
-    font-weight: 600;
+  p {
+    opacity: 0.75;
 
-    :hover,
-    :active {
-      color: ${({ theme }) => theme.color.gold};
+    a {
+      opacity: 1;
     }
-  }
-
-  span[role='img'] {
-    font-size: 1.5rem;
-    vertical-align: middle;
-    margin-right: 1rem;
   }
 `
 
 export const BannerMessage: FC = () => {
   const [bannerMessage] = useBannerMessage()
+  const { content, status } = bannerMessage ?? {}
+  const statusColor =
+    status &&
+    {
+      warning: Color.yellowTransparent,
+      info: Color.coolBlueTransparent,
+    }[status]
 
-  return bannerMessage?.title ? (
-    <Container>
-      <span role="img" aria-label="emoji">
-        {bannerMessage.emoji}
-      </span>
-      <div>
-        <b>{`${bannerMessage.title} `}</b>
-        {bannerMessage.subtitle && bannerMessage.subtitle}
-        {bannerMessage.url &&
-          (bannerMessage.url.startsWith('http') ? (
-            <a href={bannerMessage.url} target="_blank" rel="noopener noreferrer">
-              Learn more
-            </a>
-          ) : (
-            <Link to={bannerMessage.url}>Learn more</Link>
-          ))}
-      </div>
-    </Container>
-  ) : null
+  return !!bannerMessage ? <Container statusColor={statusColor}>{content}</Container> : null
 }

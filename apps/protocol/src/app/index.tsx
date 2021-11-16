@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useLayoutEffect } from 'react'
+import React, { FC, ReactElement, useEffect, useLayoutEffect } from 'react'
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 
@@ -73,7 +73,7 @@ export const ProtocolApp: FC = () => {
   const [bannerMessage, setBannerMessage] = useBannerMessage()
   const { undergoingRecol } = useSelectedMassetState() ?? {}
   const urlQuery = useURLQuery()
-  const [, setChainId] = useChainIdCtx()
+  const [chainId, setChainId] = useChainIdCtx()
   const [, setBaseCtx] = useBaseCtx()
 
   useEffect(() => {
@@ -91,15 +91,24 @@ export const ProtocolApp: FC = () => {
   // Handle message prioritisation:
   useLayoutEffect(() => {
     let message: IBannerMessage | undefined
+    const isPolygon = chainId === ChainIds.MaticMainnet
+    const isEthMainnet = chainId === ChainIds.EthereumMainnet
+
+    if (isPolygon) {
+      message = MessageHandler.graph
+    }
+
+    // Temporary, revert after some time.
+    if (isEthMainnet) {
+      message = MessageHandler.olympus
+    }
 
     if (undergoingRecol) {
       message = (undergoingRecol && MessageHandler.recollat(massetConfig)) || undefined
     }
 
-    if (bannerMessage?.title !== message?.title) {
-      setBannerMessage(message)
-    }
-  }, [bannerMessage, massetConfig, setBannerMessage, undergoingRecol])
+    setBannerMessage(message)
+  }, [chainId, massetConfig, setBannerMessage, undergoingRecol])
 
   useLayoutEffect(() => {
     const network = urlQuery.get('network')

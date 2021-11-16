@@ -19,7 +19,7 @@ import { ModalDataProvider } from '../../context/ModalDataProvider'
 import { Footer } from './Footer'
 import { AppBar } from './AppBar'
 import { Toasts } from './Toasts'
-import { GraphWarning } from './GraphWarning'
+import { BannerMessage } from './BannerMessage'
 
 interface Theme {
   color: typeof Color & {
@@ -254,7 +254,7 @@ export const Layout: FC = ({ children }) => {
     <ModalDataProvider>
       <ModalProvider rootComponent={TransitionGroup}>
         <Background />
-        <GraphWarning />
+        <BannerMessage />
         <AppBar />
         <Container>
           <Main>{children}</Main>

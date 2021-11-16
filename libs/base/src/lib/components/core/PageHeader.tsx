@@ -4,9 +4,6 @@ import styled from 'styled-components'
 import { ViewportWidth } from '@apps/theme'
 import { BackLink } from '@apps/dumb-components'
 
-import { BannerMessage } from '../layout/BannerMessage'
-import { useBannerMessage } from '../../context/BannerProvider'
-
 interface Props {
   title: string
   subtitle?: string
@@ -84,22 +81,17 @@ const Container = styled.div<{
 `
 
 export const PageHeader: FC<Props> = ({ children, title, subtitle, switcher, backTo, backTitle }) => {
-  const [bannerMessage] = useBannerMessage()
-
   return (
-    <div>
-      <Container>
-        <StyledBackLink to={backTo} title={backTitle} />
-        <Row hasBackLink={!!backTo}>
-          <h2>{title}</h2>
-          {switcher && switcher}
-        </Row>
-        <div>
-          {subtitle && <p>{subtitle}</p>}
-          {children && <ChildrenRow>{children}</ChildrenRow>}
-        </div>
-      </Container>
-      {!!bannerMessage && <BannerMessage />}
-    </div>
+    <Container>
+      <StyledBackLink to={backTo} title={backTitle} />
+      <Row hasBackLink={!!backTo}>
+        <h2>{title}</h2>
+        {switcher && switcher}
+      </Row>
+      <div>
+        {subtitle && <p>{subtitle}</p>}
+        {children && <ChildrenRow>{children}</ChildrenRow>}
+      </div>
+    </Container>
   )
 }

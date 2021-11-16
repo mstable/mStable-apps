@@ -6,8 +6,6 @@ import { createStateContext, useEffectOnce } from 'react-use'
 import { Providers } from './context'
 import { Updaters } from './updaters'
 
-export { BannerMessage } from './components/layout/BannerMessage'
-
 interface BaseContext {
   navItems: { path: string; title: string }[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
