@@ -128,12 +128,9 @@ export interface EthereumMainnet
         stkMTA: string
         stkBPT: string
       }
-      // MerkleDropMBPTBAL: string
+      MerkleDropMBPTBAL: string
     },
-    GraphQLEndpoints<
-      'feeders' | 'snapshot' | 'staking' | 'questbook'
-      // | 'merkleDrop'
-    >
+    GraphQLEndpoints<'feeders' | 'snapshot' | 'staking' | 'questbook' | 'merkleDrop'>
   > {
   chainId: ChainIds.EthereumMainnet
 }
@@ -238,7 +235,7 @@ const ETH_MAINNET: EthereumMainnet = {
     ],
     staking: [graphHostedEndpoint('mstable', 'mstable-staking')],
     questbook: ['https://europe-west1-mstable-questbook.cloudfunctions.net/questbook'],
-    // merkleDrop: [graphHostedEndpoint('mstable', 'mstable-merkle-drop')],
+    merkleDrop: [graphHostedEndpoint('mstable', 'mstable-merkle-drop')],
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
       // Temporary preview URL because indexers haven't picked up the new version...
@@ -262,7 +259,7 @@ const ETH_MAINNET: EthereumMainnet = {
       stkMTA: '0x8f2326316ec696f6d023e37a9931c2b2c177a3d7',
       stkBPT: '0xefbe22085d9f29863cfb77eed16d3cc0d927b011',
     },
-    // MerkleDropMBPTBAL: '0x4912c0fa9ed21f8f5420bdfaa097220120610082',
+    MerkleDropMBPTBAL: '0x783cc67242fd639a7621ea1a1c511e4c64d7c66d',
   },
   getExplorerUrl: etherscanUrl(),
   supportedMassets: ['mbtc', 'musd'],
