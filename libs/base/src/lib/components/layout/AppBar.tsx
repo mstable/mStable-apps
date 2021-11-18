@@ -112,7 +112,7 @@ const StickyHeader = styled.div`
   position: sticky;
   top: 0;
   width: 100%;
-  z-index: 3;
+  z-index: 2;
 
   grid-template-columns:
     1fr
