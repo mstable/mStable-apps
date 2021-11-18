@@ -53,7 +53,7 @@ export class BigDecimal {
     return BigDecimal.parse(simpleNumber.toFixed(decimals), decimals)
   }
 
-  static fromMetric({ decimals, exact }: { decimals: number; exact: string }): BigDecimal {
+  static fromMetric({ decimals, exact }: { decimals: number; exact: string } = { decimals: 18, exact: '0' }): BigDecimal {
     return new BigDecimal(exact, decimals)
   }
 
