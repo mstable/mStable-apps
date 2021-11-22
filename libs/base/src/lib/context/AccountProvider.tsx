@@ -9,6 +9,8 @@ import { composedComponent } from '@apps/react-utils'
 
 import { useAddInfoNotification } from './NotificationsProvider'
 import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
+import { useStakeSignatures } from '../hooks'
+import { API_ENDPOINT } from '../utils'
 
 export interface OnboardCtx {
   onboard?: API
@@ -24,6 +26,10 @@ interface UserAccountCtx {
   address?: string
   masqueradedAccount?: string
   idle: boolean
+}
+
+export interface StakeSignatures {
+  [x: string]: string
 }
 
 type Masquerade = (account?: string) => void
@@ -94,6 +100,7 @@ const OnboardProvider: FC<{
   const [balance, setBalance] = useState<string | undefined>(undefined)
   const [connected, setConnected] = useState<boolean>(false)
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined)
+  const [, setStakeSignatures] = useStakeSignatures()
 
   const [, setInjectedChainId] = useInjectedChainIdCtx()
   const [, setInjectedProvider] = useInjectedProviderCtx()
@@ -249,7 +256,42 @@ const OnboardProvider: FC<{
         console.error(error)
       })
     }
+
+    fetch(`${API_ENDPOINT}/signature`)
+      .then(resp => resp.json())
+      .then(json => {
+        setStakeSignatures(prevSignatures => ({
+          ...prevSignatures,
+          message: json.message,
+        }))
+      })
+      .catch(console.error)
   })
+
+  useEffect(() => {
+    const fetchSignature = async () => {
+      if (!address) return
+
+      fetch(`${API_ENDPOINT}/signature/${address}`)
+        .then(resp => resp.json())
+        .then(json => {
+          if (json.error) return
+          setStakeSignatures(prevSignatures => {
+            // TODO: I'm getting a weird race condition here with the library, this fix the issue
+            const prevHack = {
+              ...JSON.parse(localStorage.getItem('stakeSignatures') || '{}'),
+              ...prevSignatures,
+            }
+            return {
+              ...prevHack,
+              [address]: json.signature,
+            }
+          })
+        })
+        .catch(console.error)
+    }
+    fetchSignature()
+  }, [address, setStakeSignatures])
 
   return (
     <onboardCtx.Provider
