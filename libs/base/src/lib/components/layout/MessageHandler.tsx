@@ -32,7 +32,15 @@ export const MessageHandler: Props = {
     status: 'info',
     content: (
       <p>
-        We have recently launched MTA bonds on Olympus Pro.{' '}
+        We have recently partnered with{' '}
+        <a
+          href="https://pro.olympusdao.finance/?utm_source=mStable&utm_medium=affiliate&utm_campaign=op-affiliate"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Olympus Pro
+        </a>{' '}
+        to offer MTA bonds.{' '}
         <a
           href="https://medium.com/mstable/mstable-olympus-pro-treasury-bond-program-for-mstables-expansion-c2e6265e4fa9"
           target="_blank"
