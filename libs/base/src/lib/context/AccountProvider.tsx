@@ -269,28 +269,25 @@ const OnboardProvider: FC<{
   })
 
   useEffect(() => {
-    const fetchSignature = async () => {
-      if (!address) return
+    if (!address) return
 
-      fetch(`${API_ENDPOINT}/signature/${address}`)
-        .then(resp => resp.json())
-        .then(json => {
-          if (json.error) return
-          setStakeSignatures(prevSignatures => {
-            // TODO: I'm getting a weird race condition here with the library, this fix the issue
-            const prevHack = {
-              ...JSON.parse(localStorage.getItem('stakeSignatures') || '{}'),
-              ...prevSignatures,
-            }
-            return {
-              ...prevHack,
-              [address]: json.signature,
-            }
-          })
+    fetch(`${API_ENDPOINT}/signature/${address}`)
+      .then(resp => resp.json())
+      .then(json => {
+        if (json.error) return
+        setStakeSignatures(prevSignatures => {
+          // TODO: I'm getting a weird race condition here with the library, this fix the issue
+          const prevHack = {
+            ...JSON.parse(localStorage.getItem('stakeSignatures') || '{}'),
+            ...prevSignatures,
+          }
+          return {
+            ...prevHack,
+            [address]: json.signature,
+          }
         })
-        .catch(console.error)
-    }
-    fetchSignature()
+      })
+      .catch(console.warn)
   }, [address, setStakeSignatures])
 
   return (
