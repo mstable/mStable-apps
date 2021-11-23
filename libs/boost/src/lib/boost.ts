@@ -48,6 +48,10 @@ export const getPriceCoeff = (vault: BoostedSavingsVaultState): number | undefin
     case '0xf65d53aa6e2e4a5f4f026e73cb3e22c22d75e35c': // mbtc/hbtc
       return 48000
 
+    // NonPeggedFeederPool
+    case '0xF93e0ddE0F7C48108abbD880DB7697A86169f13b': // musd/rai
+      return 2
+
     // All imAssets
     case '0xf38522f63f40f9dd81abafd2b8efc2ec958a3016': // imbtc vault
       return 4800
