@@ -38,6 +38,7 @@ import FRAX, { ReactComponent as FraxSvg } from '@apps/icons/tokens/FRAX.svg'
 import FXS, { ReactComponent as FxsSvg } from '@apps/icons/tokens/FXS.svg'
 import ALUSD, { ReactComponent as AlusdSvg } from '@apps/icons/tokens/alUSD.svg'
 import ALCX, { ReactComponent as AlcxSvg } from '@apps/icons/tokens/ALCX.svg'
+import RAI, { ReactComponent as RaiSvg } from '@apps/icons/tokens/RAI.svg'
 import ETHEREUM, { ReactComponent as EthereumSvg } from '@apps/icons/networks/Ethereum.svg'
 import POLYGON, { ReactComponent as PolygonSvg } from '@apps/icons/networks/Polygon.svg'
 
@@ -105,6 +106,7 @@ export const TOKEN_ICONS: Record<string, string> = {
   FXS,
   ALUSD,
   ALCX,
+  RAI,
 }
 
 const SVG_ICONS: Record<string, SvgComponent> = {
@@ -154,6 +156,7 @@ const SVG_ICONS: Record<string, SvgComponent> = {
   FXS: FxsSvg as SvgComponent,
   ALUSD: AlusdSvg as SvgComponent,
   ALCX: AlcxSvg as SvgComponent,
+  RAI: RaiSvg as SvgComponent,
 }
 
 const IconContainer = styled.div<{ isLarge: boolean }>`
