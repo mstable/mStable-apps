@@ -93,10 +93,16 @@ export const WithdrawForm: FC = () => {
       {!!balanceV2?.simple && <TimeMultiplierImpact isStaking={false} stakeDelta={amount?.exact} />}
       <Warnings>
         <Warning>
-          During withdrawals, your voting power will be temporarily reduced. <a>Learn more</a>
+          During withdrawals, your voting power will be temporarily reduced.{' '}
+          <a href="https://docs.mstable.org/using-mstable/mta-staking/staking-v2" target="_blank" rel="noopener noreferrer">
+            Learn More
+          </a>
         </Warning>
         <Warning>
-          There is a cooldown period to unstake & a penalty if you have not staked long enough. <a>Learn more</a>
+          There is a cooldown period to unstake & a penalty if you have not staked long enough.{' '}
+          <a href="https://docs.mstable.org/using-mstable/mta-staking/staking-v2" target="_blank" rel="noopener noreferrer">
+            Learn More
+          </a>
         </Warning>
         <Fee>
           <div>Redemption Fee</div>
