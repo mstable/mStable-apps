@@ -98,7 +98,7 @@ export const ClaimForm: FC = () => {
   return (
     <Container>
       <ClaimFormRewards />
-      {stakedTokenSymbol === 'MTA' && (
+      {stakedTokenSymbol === 'MTA' ? (
         <Compound>
           <div>
             <h3>Compound rewards?</h3>
@@ -106,8 +106,9 @@ export const ClaimForm: FC = () => {
           </div>
           <p>This will claim and re-stake your earned MTA in 1 transaction</p>
         </Compound>
+      ) : (
+        <MerkleDropBAL />
       )}
-      <MerkleDropBAL />
       <ClaimFormSend isCompounding={isCompounding} />
     </Container>
   )
