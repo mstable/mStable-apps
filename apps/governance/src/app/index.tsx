@@ -10,6 +10,7 @@ import { Vote } from './pages/Vote'
 import { LeaderboardPage } from './pages/Vote/LeaderboardPage'
 import { Delegatee } from './pages/Vote/Delegatee'
 import { Stats } from './pages/Stats'
+import { Dials } from './pages/Dials'
 import { NotFound } from './pages/NotFound'
 
 const GovernanceRoutes: FC = () => {
@@ -23,6 +24,7 @@ const GovernanceRoutes: FC = () => {
       <Route exact path="/quests" component={Quests} />
       <Route exact path="/quests/:questId" component={Quests} />
       <Route exact path="/stats" component={Stats} />
+      <Route exact path="/dials" component={Dials} />
       <Route component={NotFound} />
     </Switch>
   )
@@ -36,6 +38,7 @@ export const GovernanceApp: FC = () => {
       { title: 'Stake', path: '/stake' },
       { title: 'Vote', path: '/vote' },
       { title: 'Quests', path: '/quests' },
+      { title: 'Dials', path: '/dials' },
       { title: 'Stats', path: '/stats' },
     ]
     const appName = APP_NAME.GOVERNANCE
