@@ -48,6 +48,7 @@
       "@apps/base/context/tokens": ["libs/base/src/lib/context/TokensProvider.tsx"],
       "@apps/base/context/transactions": ["libs/base/src/lib/context/TransactionsProvider.tsx"],
       "@apps/base/hooks": ["libs/base/src/lib/hooks/index.ts"],
+      "@apps/base/utils": ["libs/base/src/lib/utils/index.ts"],
       "@apps/bigdecimal": ["libs/bigdecimal/src/index.ts"],
       "@apps/boost": ["libs/boost/src/index.ts"],
       "@apps/context-utils": ["libs/context-utils/src/lib/index.ts"],

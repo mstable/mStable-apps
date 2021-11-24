@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 import { constants } from 'ethers'
