@@ -1,11 +1,18 @@
-import { Slider } from '@apps/dumb-components'
 import React, { FC, useState } from 'react'
 import styled from 'styled-components'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Label, LabelList } from 'recharts'
+import { format } from 'date-fns'
+
+import { UnstyledButton } from '@apps/dumb-components'
+import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
+import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
 
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
-import { Color } from '@apps/theme'
 import { DistributionBar } from './DistributionBar'
+import { DialsMockProvider, useMockDialsState } from './DialsMockProvider'
+
+const ArrowButton = styled(UnstyledButton)`
+  margin: 0 0.5rem;
+`
 
 const EpochInfo = styled.div`
   display: flex;
@@ -14,22 +21,6 @@ const EpochInfo = styled.div`
   padding: 1rem;
   border-radius: 0.75rem;
   gap: 1rem;
-
-  > :first-child {
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    justify-content: space-between;
-
-    h4 {
-      color: ${({ theme }) => theme.color.bodyAccent};
-    }
-
-    span {
-      ${({ theme }) => theme.mixins.numeric};
-      font-weight: 400;
-    }
-  }
 `
 
 const Widget = styled.div`
@@ -61,19 +52,36 @@ const Container = styled.div``
 
 export const Dials: FC = () => {
   return (
+    <DialsMockProvider>
+      <DialsContent />
+    </DialsMockProvider>
+  )
+}
+
+const DialsContent: FC = () => {
+  const { currentEpoch, dials, emission } = useMockDialsState()
+  const epochRange = [currentEpoch, currentEpoch + 86400 * 7000]
+
+  const [epoch, setEpoch] = useState(0)
+
+  return (
     <Container>
       <GovernancePageHeader title="Dials" subtitle="Vote on future MTA emissions" />
       <Widget>
         <div>
           <h3>Current Epoch</h3>
-          <span>18/11 - 25/11</span>
+          <div>
+            <ArrowButton onClick={() => setEpoch(epoch - 1)}>
+              <BackArrow />
+            </ArrowButton>
+            <span>{`(${format(epochRange[0], 'dd/MM')} - ${format(epochRange[1], 'dd/MM')})`}</span>
+            <ArrowButton onClick={() => setEpoch(epoch + 1)}>
+              <ForwardArrow />
+            </ArrowButton>
+          </div>
         </div>
         <EpochInfo>
-          <div>
-            <h4>Distribution</h4>
-            <span>2,300</span>
-          </div>
-          <DistributionBar />
+          <DistributionBar dials={dials} emission={emission} />
         </EpochInfo>
       </Widget>
     </Container>

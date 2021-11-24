@@ -193,8 +193,10 @@ export const ExploreAsset: FC<{ symbol?: string; onRowClick?: () => void }> = ({
             return (
               <TableRow key={title} buttonTitle="View" onClick={() => handleOnClick(href)}>
                 <TableCell width={75}>
-                  <h3>{title}</h3>
-                  <span>{subtitle}</span>
+                  <div>
+                    <h3>{title}</h3>
+                    <span>{subtitle}</span>
+                  </div>
                 </TableCell>
                 <TableCell>
                   <Button onClick={() => {}}>View</Button>
