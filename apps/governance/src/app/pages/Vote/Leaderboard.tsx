@@ -6,6 +6,8 @@ import styled from 'styled-components'
 import { useLeaderboardQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { Table, TableCell, TableRow, UnstyledButton } from '@apps/dumb-components'
+import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
+import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
 
 import { useDelegateesAll } from '../../context/DelegateeListsProvider'
 import { DelegateCell } from '../../components/DelegateCell'
@@ -15,24 +17,6 @@ interface Props {
   delegation?: boolean
   onClick: (id: string) => void
 }
-
-const BackArrow: FC = () => (
-  <svg width="17" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M.646 3.646a.5.5 0 000 .708l3.182 3.182a.5.5 0 00.708-.708L1.707 4l2.829-2.828a.5.5 0 10-.708-.708L.646 3.646zM17 3.5H1v1h16v-1z"
-      fill="#000"
-    />
-  </svg>
-)
-
-const ForwardArrow: FC = () => (
-  <svg width="17" height="8" viewBox="0 0 17 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M16.3536 4.35355C16.5488 4.15829 16.5488 3.84171 16.3536 3.64645L13.1716 0.464466C12.9763 0.269204 12.6597 0.269204 12.4645 0.464466C12.2692 0.659728 12.2692 0.976311 12.4645 1.17157L15.2929 4L12.4645 6.82843C12.2692 7.02369 12.2692 7.34027 12.4645 7.53553C12.6597 7.7308 12.9763 7.7308 13.1716 7.53553L16.3536 4.35355ZM0 4.5H16V3.5H0L0 4.5Z"
-      fill="#000"
-    />
-  </svg>
-)
 
 const StyledTable = styled(Table)`
   margin-top: 0.5rem;

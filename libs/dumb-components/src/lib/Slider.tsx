@@ -7,10 +7,11 @@ interface Props {
   min: number
   max: number
   value: number
-  onChange(value: number): void
+  onChange?(value: number): void
   step: number
   error?: string
   intervals?: number
+  className?: string
 }
 
 const StyledThumb = styled.div`
@@ -49,17 +50,18 @@ const renderThumb: FC = props => <StyledThumb {...props} />
 const renderTrack: FC = (props, state) => <StyledTrack {...props} index={state.index} />
 const renderMark: FC = props => <StyledMark {...props} />
 
-export const Slider: FC<Props> = ({ min, max, value, step, intervals = 5, onChange }) => {
+export const Slider: FC<Props> = ({ className, min, max, value, step, intervals = 5, onChange }) => {
   const rangeBound = max - min
   const interval = rangeBound / intervals
   const markRange = intervals ? Array.from(Array(intervals - 1).keys()).map(i => min + interval * (i + 1)) : undefined
   return (
     <StyledSlider
+      className={className}
       marks={markRange}
       renderTrack={renderTrack}
-      renderThumb={renderThumb}
+      renderThumb={(!!onChange && renderThumb) || undefined}
       renderMark={renderMark}
-      onChange={v => onChange(v as number)}
+      onChange={v => onChange?.(v as number)}
       min={min}
       max={max}
       step={step}
