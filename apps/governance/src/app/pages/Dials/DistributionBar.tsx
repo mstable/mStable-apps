@@ -5,18 +5,33 @@ import { titleCase } from 'title-case'
 
 import { CountUp } from '@apps/dumb-components'
 
-const COLORS = ['#087E8B', '#48284A', '#a1cda8', '#ff5a5f', '#3c3c3c', '#F2F3AE', '#e7e7e7', '#A3320B', '#C1839F']
+const COLORS = ['#087E8B', '#48284A', '#a1cda8', '#ff5a5f', '#3c3c3c', '#F2F3AE', '#A3320B', '#C1839F']
 
 interface Props {
   emission: number
   dials: { title: string; value: number; key: string }[]
 }
 
+const NetworkLabel = styled.p`
+  color: ${({ theme }) => theme.color.bodyAccent};
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  background: ${({ theme }) => theme.color.background[0]};
+  border-radius: 0.5rem;
+  padding: 0 0.5rem;
+`
+
 const Header = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
+
+  > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 1.5rem;
+  }
 
   h4 {
     color: ${({ theme }) => theme.color.bodyAccent};
@@ -76,10 +91,15 @@ export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
     return dialPercentage * _emission
   }, [_emission, activeBar])
 
+  const selectedDialNetwork = (!!activeBar && !!activeBar?.key?.includes('p-') ? 'Polygon' : 'Ethereum') ?? null
+
   return (
     <Container>
       <Header>
-        <h4>Distribution - {titleCase(activeBar?.title ?? 'All')}</h4>
+        <div>
+          <h4>Distribution - {titleCase(activeBar?.title ?? 'All')}</h4>
+          {activeBar && <NetworkLabel>{selectedDialNetwork}</NetworkLabel>}
+        </div>
         <CountUp end={emission} decimals={0} />
       </Header>
       <ResponsiveContainer height={24} width={'100%'}>
