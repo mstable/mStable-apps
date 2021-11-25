@@ -40,6 +40,7 @@ export const getPriceCoeff = (vault: BoostedSavingsVaultState): number | undefin
     case '0xd124b55f70d374f58455c8aedf308e52cf2a6207': // musd/busd
     case '0xadeedd3e5768f7882572ad91065f93ba88343c99': // musd/gusd
     case '0x0997dddc038c8a958a3a3d00425c16f8eca87deb': // alusd/gusd
+    case '0xD24099Eb4CD604198071958655E4f2D263a5539B': // mUSD/FEI
       return 1
 
     // All BTC
@@ -49,7 +50,7 @@ export const getPriceCoeff = (vault: BoostedSavingsVaultState): number | undefin
       return 48000
 
     // NonPeggedFeederPool
-    case '0xF93e0ddE0F7C48108abbD880DB7697A86169f13b': // musd/rai
+    case '0xf93e0dde0f7c48108abbd880db7697a86169f13b': // musd/rai
       return 2
 
     // All imAssets
