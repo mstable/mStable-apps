@@ -1,20 +1,14 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { DelegateeInfo } from '@mstable/delegatee-lists'
 
-import { Button, CountUp } from '@apps/dumb-components'
-import { TokenIcon } from '@apps/base/components/core'
+import { DelegateeInfo } from '@mstable/delegatee-lists'
+import { BalanceWidget, Button, CountUp } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 import { BigDecimal } from '@apps/bigdecimal'
 
 import { useAccountQuery } from '../../hooks/useAccountQuery'
 import { useDelegatorModal } from '../../hooks/useDelegatorModal'
 import { VotingHistory } from './VotingHistory'
-
-const StyledTokenIcon = styled(TokenIcon)`
-  width: 1.5rem;
-  height: auto;
-`
 
 const StyledCountUp = styled(CountUp)`
   font-size: 1.25rem;
@@ -112,23 +106,15 @@ const DelegateeBalances: FC<{
         const cooldownSimple = parseFloat(balance.cooldownUnits) / 1e18
         return (
           <React.Fragment key={id}>
-            <Widget>
-              <h4>Staked {stakingToken.symbol}</h4>
-              <div>
-                <StyledTokenIcon symbol={stakingToken.symbol} />
-                <StyledCountUp end={balance.rawBD.simple + cooldownSimple} />
-              </div>
-            </Widget>
+            <BalanceWidget
+              title={`Staked ${stakingToken.symbol}`}
+              token={stakingToken.symbol}
+              balance={balance.rawBD.simple + cooldownSimple}
+            />
           </React.Fragment>
         )
       })}
-      <Widget>
-        <h4>Voting Power</h4>
-        <div>
-          <StyledTokenIcon symbol="vMTA" />
-          <StyledCountUp end={votingPower} />
-        </div>
-      </Widget>
+      <BalanceWidget title="Voting Power" token="vMTA" balance={votingPower} />
     </DelegateeBalancesContainer>
   )
 }

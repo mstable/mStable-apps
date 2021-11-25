@@ -63,6 +63,7 @@ interface ColorTheme {
   disabledInput: string
   disabledButton: string
   defaultBorder: string
+  dashedBorder: string
   lightBorder: string
   defaultToggle: string
   onboardBackground: string
@@ -85,6 +86,7 @@ export const colorTheme = (isDark: boolean): ColorTheme & typeof Color => {
     disabledInput: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     disabledButton: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[1],
     defaultBorder: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
+    dashedBorder: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[4],
     yellowBorder: Color.yellowTransparent,
     lightBorder: isLight ? ColorNew.white[2] : ColorNew.spaceBlue[3],
     defaultToggle: isLight ? ColorNew.white[3] : ColorNew.spaceBlue[3],

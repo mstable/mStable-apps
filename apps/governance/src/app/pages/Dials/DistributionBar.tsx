@@ -18,6 +18,7 @@ const NetworkLabel = styled.p`
   background: ${({ theme }) => theme.color.background[0]};
   border-radius: 0.5rem;
   padding: 0 0.5rem;
+  font-size: 0.875rem;
 `
 
 const Header = styled.div`
@@ -34,10 +35,14 @@ const Header = styled.div`
   }
 
   h4 {
-    color: ${({ theme }) => theme.color.bodyAccent};
+    color: ${({ theme }) => theme.color.body};
+
+    > span {
+      font-weight: 500;
+    }
   }
 
-  span {
+  > span {
     ${({ theme }) => theme.mixins.numeric};
     font-weight: 400;
   }
@@ -65,19 +70,17 @@ const Container = styled.div`
   }
 `
 
+const renderRadius = (i: number, n: number) => {
+  if (i === 0) {
+    return [10, 0, 0, 10]
+  } else if (i === n - 1) {
+    return [0, 10, 10, 0]
+  }
+  return [0, 0, 0, 0]
+}
+
 export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
   const [activeBar, setActiveBar] = useState(null)
-  const dialCount = Object.keys(dials).length
-  const mappedData = [dials.map(v => ({ [v.key]: v.value })).reduce((a, b) => ({ ...a, ...b }))]
-
-  const renderRadius = (i: number, n: number) => {
-    if (i === 0) {
-      return [10, 0, 0, 10]
-    } else if (i === n - 1) {
-      return [0, 10, 10, 0]
-    }
-    return [0, 0, 0, 0]
-  }
 
   const handleLineHover = (key: string) => {
     if (key === activeBar?.key) return
@@ -87,9 +90,12 @@ export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
 
   const emission = useMemo(() => {
     if (!activeBar?.value) return _emission
-    const dialPercentage = activeBar.value / 100
-    return dialPercentage * _emission
+    return (activeBar.value / 100) * _emission
   }, [_emission, activeBar])
+
+  const dialCount = Object.keys(dials).length
+
+  const mappedData = [dials.map(v => ({ [v.key]: v.value })).reduce((a, b) => ({ ...a, ...b }))]
 
   const selectedDialNetwork = (!!activeBar && !!activeBar?.key?.includes('p-') ? 'Polygon' : 'Ethereum') ?? null
 
@@ -97,7 +103,9 @@ export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
     <Container>
       <Header>
         <div>
-          <h4>Distribution - {titleCase(activeBar?.title ?? 'All')}</h4>
+          <h4>
+            <span>{titleCase(activeBar?.title ?? 'Distribution')}</span>
+          </h4>
           {activeBar && <NetworkLabel>{selectedDialNetwork}</NetworkLabel>}
         </div>
         <CountUp end={emission} decimals={0} />
