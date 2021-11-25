@@ -1,7 +1,7 @@
 import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { usePrevious } from 'react-use'
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, NormalizedCacheObject } from '@apollo/client'
+import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, NormalizedCacheObject, Operation } from '@apollo/client'
 import { RetryLink } from '@apollo/client/link/retry'
 import { onError } from '@apollo/client/link/error'
 import { persistCache } from 'apollo-cache-persist'
@@ -38,10 +38,16 @@ export const ApolloProvider: FC = ({ children }) => {
       if (message.includes('Exhausted list of indexers')) return
 
       let sanitizedError: string = message
+      let body: string | undefined
       if (message.includes('Failed to query subgraph deployment')) {
-        sanitizedError = `The Graph: ${message.split(': ')[1] ?? message}`
+        sanitizedError = `Subgraph: ${message.split(': ')[1] ?? message}`
       }
-      addErrorNotification(sanitizedError)
+
+      if ((error as { operation?: Operation })?.operation?.operationName) {
+        body = `Subgraph: ${(error as { operation: Operation }).operation.operationName}`
+      }
+
+      addErrorNotification(sanitizedError, body)
     },
     [addErrorNotification],
   )
@@ -69,14 +75,13 @@ export const ApolloProvider: FC = ({ children }) => {
 
     // const _failedEndpoints = failedEndpoints.split(',')
 
-    const errorLink = onError(({ networkError, graphQLErrors, operation }) => {
-      // const ctx = operation.getContext()
-
+    const errorLink = onError(error => {
+      const { networkError, graphQLErrors } = error
       if (graphQLErrors) {
         graphQLErrors.forEach(({ message, ..._error }) => {
           // if (_failedEndpoints.includes(ctx.uri)) return
 
-          handleError(message, _error)
+          handleError(message, error)
 
           // On any GraphQL error, mark the endpoint as failed; this may be
           // excessive, but failed endpoints are merely deprioritised rather than
@@ -86,7 +91,7 @@ export const ApolloProvider: FC = ({ children }) => {
       }
 
       if (networkError) {
-        handleError(networkError.message)
+        handleError(networkError.message, error)
       }
       // setFailedEndpoints(_failedEndpoints.join(','))
     })

@@ -25,6 +25,10 @@ const Link = styled.a<{ nType: NotificationType }>`
   }
 `
 
+const Body = styled.div`
+  font-size: 0.75rem !important;
+`
+
 const Container = styled.div<Pick<Notification, 'type'> & { className?: string }>`
   background: ${({ theme, type }) =>
     type === NotificationType.Success ? theme.color.green : type === NotificationType.Info ? theme.color.primary : theme.color.red};
@@ -38,7 +42,7 @@ const Container = styled.div<Pick<Notification, 'type'> & { className?: string }
   > * {
     font-size: 0.85rem;
     &:not(:last-child) {
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.2rem;
     }
   }
 
@@ -60,7 +64,7 @@ export const NotificationItem: FC<{
   return (
     <Container type={type} onClick={handleClick} className={className}>
       <Title>{title}</Title>
-      {body && <div>{body}</div>}
+      {body && <Body>{body}</Body>}
       {link && (
         <Link nType={type} href={link.href} target="_blank" rel="noopener noreferrer">
           {link.title}
