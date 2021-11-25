@@ -96,7 +96,7 @@ const Content = styled.tbody<{ hiddenCellWidth?: number }>`
 
 const Header = styled.thead<{ isSelectable: boolean }>`
   display: flex;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0 1rem 0;
 
   th:not(:first-child) {
     justify-content: flex-end;

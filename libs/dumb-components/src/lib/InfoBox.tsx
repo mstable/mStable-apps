@@ -15,7 +15,9 @@ const Container = styled.div<{ highlight: boolean; dashed: boolean }>`
   gap: 0.75rem;
   border: 1px
     ${({ dashed, theme, highlight }) =>
-      `${dashed ? 'dashed' : 'solid'} ${highlight ? theme.color.yellowBorder : theme.color.defaultBorder}`};
+      `${dashed ? 'dashed' : 'solid'} ${
+        dashed ? theme.color.dashedBorder : highlight ? theme.color.yellowBorder : theme.color.defaultBorder
+      }`};
   border-radius: 1rem;
   padding: 1rem;
   color: ${({ theme, highlight }) => (highlight ? theme.color.offYellow : theme.color.bodyAccent)};
