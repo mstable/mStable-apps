@@ -13,7 +13,7 @@ interface State {
 const MOCK_DATA = {
   dials: [
     {
-      title: 'Polygon imUSD Vault',
+      title: 'imUSD Vault',
       value: 30,
       key: 'p-imusd',
     },

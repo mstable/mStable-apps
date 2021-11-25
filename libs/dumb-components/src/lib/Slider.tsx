@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FC } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import ReactSlider from 'react-slider'
 
@@ -12,6 +13,7 @@ interface Props {
   error?: string
   intervals?: number
   className?: string
+  disabled?: boolean
 }
 
 const StyledThumb = styled.div`
@@ -50,12 +52,23 @@ const renderThumb: FC = props => <StyledThumb {...props} />
 const renderTrack: FC = (props, state) => <StyledTrack {...props} index={state.index} />
 const renderMark: FC = props => <StyledMark {...props} />
 
-export const Slider: FC<Props> = ({ className, min, max, value, step, intervals = 5, onChange }) => {
+export const Slider: FC<Props> = ({ className, min, max, value = 0, step, intervals = 5, onChange, disabled }) => {
   const rangeBound = max - min
   const interval = rangeBound / intervals
   const markRange = intervals ? Array.from(Array(intervals - 1).keys()).map(i => min + interval * (i + 1)) : undefined
+  const ref = useRef<any>(null)
+
+  // Workaround for https://github.com/zillow/react-slider/issues/214
+  useEffect(() => {
+    if (!ref?.current) return
+    ref?.current?.handleResize?.()
+    return () => {}
+  }, [ref, onChange])
+
   return (
     <StyledSlider
+      ref={ref}
+      disabled={disabled}
       className={className}
       marks={markRange}
       renderTrack={renderTrack}
