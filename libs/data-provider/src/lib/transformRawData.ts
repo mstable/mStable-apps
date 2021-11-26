@@ -4,6 +4,7 @@ import { TokenAllFragment } from '@apps/artifacts/graphql/protocol'
 import { BoostedSavingsVaultAllFragment } from '@apps/artifacts/graphql/feeders'
 import { BigDecimal } from '@apps/bigdecimal'
 import type { MassetName, SubscribedToken } from '@apps/types'
+import { PoolType } from '@apps/types'
 
 import type { Tokens } from '@apps/base/context/tokens'
 
@@ -324,6 +325,18 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
           title = `${title}v2`
         }
 
+        let poolType: PoolType = PoolType.Active
+
+        // Hide FEI from the UI
+        if (address === '0x2f1423d27f9b20058d9d1843e342726fdf985eb4') {
+          poolType = PoolType.Hidden
+        }
+
+        // Put tBTC to deprecated
+        if (address === '0xb61a6f928b3f069a68469ddb670f20eeeb4921e0') {
+          poolType = PoolType.Deprecated
+        }
+
         return [
           address,
           {
@@ -337,13 +350,14 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
             feeRate: BigNumber.from(swapFeeRate),
             redemptionFeeRate: BigNumber.from(redemptionFeeRate),
             invariantK: BigNumber.from(invariantK),
-            dailyApy: parseFloat(dailyAPY),
+            dailyApy: poolType === PoolType.Deprecated ? 0 : parseFloat(dailyAPY),
             price: new BigDecimal(price ?? 0),
             failed,
             title,
             undergoingRecol,
             vault: vault ? transformBoostedSavingsVault(vault) : undefined,
             account: accounts?.length ? transformFeederPoolAccountData(accounts[0]) : undefined,
+            poolType,
           },
         ]
       },
