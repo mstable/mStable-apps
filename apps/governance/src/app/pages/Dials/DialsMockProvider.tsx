@@ -5,7 +5,7 @@ interface State {
     key: string
     title: string
     value: number
-    userValue: number
+    id: number
   }[]
   userDials: Record<string, number>
   emission: number
@@ -17,48 +17,48 @@ const MOCK_DATA = {
     {
       title: 'imUSD Vault',
       value: 30,
-      userValue: 40,
+      id: 0,
       key: 'p-imusd',
     },
     {
       title: 'MTA Stakers',
+      id: 1,
       value: 25,
-      userValue: 30,
       key: 'stk-mta',
     },
     {
       title: 'mBPT Stakers',
+      id: 2,
       value: 10,
-      userValue: 15,
       key: 'stk-bpt',
     },
     {
       title: 'OlympusPro Bonds',
+      id: 3,
       value: 5,
-      userValue: 5,
       key: 'olympus-bonds',
     },
     {
       title: 'RAI Pool',
+      id: 4,
       value: 10,
-      userValue: 10,
       key: 'f-rai',
     },
     {
       title: 'alUSD Pool',
+      id: 5,
       value: 10,
-      userValue: 10,
       key: 'f-alusd',
     },
     {
       title: 'FEI Pool',
+      id: 6,
       value: 10,
-      userValue: 10,
       key: 'f-fei',
     },
   ],
   userDials: {
-    'p-imusd': 40,
+    'p-imusd': 7,
     'stk-mta': 30,
     'stk-bpt': 15,
     'olympus-bonds': 5,

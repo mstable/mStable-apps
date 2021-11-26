@@ -99,12 +99,12 @@ const Sidebar = styled.div`
   flex-direction: column;
   gap: 0.75rem;
 
-  > div:first-child {
+  > div:first-child:not(:last-child) {
     border: 1px solid ${({ theme }) => theme.color.defaultBorder};
     border-radius: 1rem;
   }
 
-  > div:nth-child(2) {
+  > div:last-child {
     flex-direction: row;
   }
 `
@@ -194,6 +194,20 @@ const scaleUserDials = (dials: Record<string, number>): Record<string, number> =
   const scaledUserDials = Object.keys(dials)
     .map(k => ({ [k]: !!dials[k] ? Math.floor(dials[k] / weightMultiplier) : 0 }))
     .reduce((a, b) => ({ ...a, ...b }), {})
+
+  // remainder gets added to highest value
+  // TODO: Improve logic
+  const remainder = 100 - Object.values(scaledUserDials).reduce((a, b) => a + b)
+  if (remainder > 0) {
+    const values = Object.values(scaledUserDials)
+    const scaledHighestKey = Object.keys(scaledUserDials).find(k => scaledUserDials[k] === Math.max(...values))
+    const correctedForRemainder = Object.keys(scaledUserDials)
+      .map(k => ({
+        [k]: scaledUserDials[k] + (k === scaledHighestKey ? remainder : 0),
+      }))
+      .reduce((a, b) => ({ ...a, ...b }))
+    return correctedForRemainder
+  }
   return scaledUserDials
 }
 
@@ -219,7 +233,12 @@ const DialsContent: FC = () => {
   const handleWeightReset = () => setUserDials(_userDials)
 
   const handleSubmit = () => {
-    // submiteroo
+    // Might need to add lock to dials to make it more gas efficient,
+    // or add change buffer -> < ~5 change = no effect & subtract from the main dial change
+    const sum = Object.values(scaledDials).reduce((a, b) => a + b)
+    if (sum < 100) return
+    const filteredDialKeys = Object.keys(scaledDials).filter(k => scaledDials[k] !== _userDials[k])
+    const changedDials = filteredDialKeys.map(k => ({ dialId: dials.find(dial => dial.key === k).id, weight: scaledDials[k] * 2 }))
   }
 
   return (

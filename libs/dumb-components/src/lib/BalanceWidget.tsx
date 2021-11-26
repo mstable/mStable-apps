@@ -41,14 +41,13 @@ const Widget = styled.div`
   }
 `
 
-export const BalanceWidget: FC<Props> = ({ token, title, balance, className }) => (
-  <Widget className={className}>
-    <h4>{title}</h4>
-    {balance !== undefined && (
+export const BalanceWidget: FC<Props> = ({ token, title, balance, className }) =>
+  balance !== undefined ? (
+    <Widget className={className}>
+      <h4>{title}</h4>
       <div>
         <StyledTokenIcon symbol={token} />
         <StyledCountUp end={balance} />
       </div>
-    )}
-  </Widget>
-)
+    </Widget>
+  ) : null
