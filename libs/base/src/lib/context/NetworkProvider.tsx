@@ -238,9 +238,9 @@ const ETH_MAINNET: EthereumMainnet = {
     merkleDrop: [graphHostedEndpoint('mstable', 'mstable-merkle-drop')],
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
-      graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string),
       // Temporary preview URL because indexers haven't picked up the new version...
-      'https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.9',
+      'https://api.studio.thegraph.com/query/948/mstable-feeder-pools-and-vaults/v0.0.10',
+      graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string),
     ],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
   },
