@@ -14,6 +14,13 @@ export enum BassetStatus {
   Failed = 'Failed',
 }
 
+export enum PoolType {
+  User = 'user',
+  Active = 'active',
+  Deprecated = 'deprecated',
+  Hidden = 'hidden',
+}
+
 export interface BassetState {
   address: string
   balanceInMasset: BigDecimal
@@ -62,6 +69,7 @@ export interface FeederPoolState {
   redemptionFeeRate: BigNumber
   undergoingRecol: boolean
   account?: FeederPoolAccountState
+  poolType: PoolType
 }
 
 export interface MassetState {
