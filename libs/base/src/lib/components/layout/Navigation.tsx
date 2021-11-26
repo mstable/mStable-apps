@@ -80,7 +80,7 @@ export const Navigation: FC = () => {
                 return routeParts[2] === pathParts[2]
               }}
             >
-              <New hide={title !== 'Quests'}>New</New>
+              <New hide={title !== 'Dials'}>New</New>
               {title}
             </StyledNavLink>
           </li>
