@@ -17,6 +17,13 @@ import type { BigDecimal } from '@apps/bigdecimal'
 
 export type MassetName = 'musd' | 'mbtc'
 
+export enum PoolType {
+  User = 'user',
+  Active = 'active',
+  Deprecated = 'deprecated',
+  Hidden = 'hidden',
+}
+
 export interface Purpose {
   present: string
   past: string

@@ -12,7 +12,7 @@ import { useSelectedMassetState } from '@apps/masset-hooks'
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { Card } from './cards/Card'
 import { OnboardingCard } from './cards/OnboardingCard'
-import { PoolType } from './types'
+import { PoolType } from '@apps/types'
 import { PoolCard } from './cards/PoolCard'
 import { useHistory } from 'react-router-dom'
 
@@ -112,6 +112,7 @@ const Title: Record<PoolType, string> = {
   [PoolType.User]: 'Your Pools',
   [PoolType.Active]: 'Active Pools',
   [PoolType.Deprecated]: 'Deprecated Pools',
+  [PoolType.Hidden]: 'Hidden Pools',
 }
 
 const sections = [PoolType.User, PoolType.Active, PoolType.Deprecated]
@@ -169,6 +170,7 @@ const PoolsContent: FC = () => {
   const network = useNetwork()
   const massetConfig = useSelectedMassetConfig()
   const isEthereum = network.chainId === ChainIds.EthereumMainnet
+
   const pools = useMemo(
     () =>
       Object.values(feederPools).reduce<{
@@ -177,10 +179,15 @@ const PoolsContent: FC = () => {
         deprecated: FeederPoolState[]
       }>(
         (prev, current) => {
+          if (current.poolType === PoolType.Hidden) {
+            return { ...prev }
+          }
+          if (current.poolType === PoolType.Deprecated) {
+            return { ...prev, deprecated: [...prev.deprecated, current] }
+          }
           if (current.token.balance?.exact.gt(0) || current.vault?.account?.rawBalance.exact.gt(0)) {
             return { ...prev, user: [...prev.user, current] }
           }
-          // TODO determine deprecated somehow
           return { ...prev, active: [current, ...prev.active] }
         },
         {
