@@ -355,7 +355,7 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
             failed,
             title,
             undergoingRecol,
-            vault: vault ? transformBoostedSavingsVault(vault) : undefined,
+            vault: vault && poolType !== PoolType.Deprecated ? transformBoostedSavingsVault(vault) : undefined,
             account: accounts?.length ? transformFeederPoolAccountData(accounts[0]) : undefined,
             poolType,
           },
