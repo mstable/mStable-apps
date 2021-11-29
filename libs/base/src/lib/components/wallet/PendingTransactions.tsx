@@ -16,6 +16,8 @@ import { useSigner } from '../../context/AccountProvider'
 import { Signer } from 'ethers'
 import { StakeSignatures, useStakeSignatures } from '../../hooks/useStakeSignatures'
 import { API_ENDPOINT } from '../../utils/constants'
+import { useBaseCtx } from '../../BaseProviders'
+import { APP_NAME } from '@apps/types'
 
 const Buttons = styled.div`
   display: flex;
@@ -138,26 +140,32 @@ export const PendingTransaction: FC<{
   const signer = useSigner()
   const { cancel, send } = useTransactionsDispatch()
   const { estimationError, gasLimit, gasPrice, insufficientBalance } = useGas()
+  const [{ appName }] = useBaseCtx()
 
   const [stakeSignatures, setStakeSignatures] = useStakeSignatures()
   const [isStakeSigned, setIsStakeSigned] = useState<boolean>(false)
   const [isStakeSignedForm, setIsStakeSignedForm] = useState<boolean>(false)
   const stakeSignedFunctions = ['compoundRewards', 'stake(uint256)']
 
+  const isGovernance = appName === APP_NAME.GOVERNANCE
+
   useEffect(() => {
+    if (!isGovernance) return
+
     const fetchSignature = async () => {
       const walletAddress = (await signer?.getAddress())?.toLowerCase()
       if (!walletAddress) return
       setIsStakeSigned(!!stakeSignatures[walletAddress])
     }
     fetchSignature()
-  }, [signer, stakeSignatures])
+  }, [signer, stakeSignatures, isGovernance])
 
   if (!transaction) {
     return null
   }
 
-  const checkTransactionSignature = transaction.manifest.fn && stakeSignedFunctions.includes(transaction.manifest.fn) && stakeSignatures.message
+  const checkTransactionSignature =
+    isGovernance && transaction.manifest.fn && stakeSignedFunctions.includes(transaction.manifest.fn) && stakeSignatures.message
 
   const disabled = !!(
     estimationError ||

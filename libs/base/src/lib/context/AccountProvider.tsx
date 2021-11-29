@@ -11,6 +11,8 @@ import { useAddInfoNotification } from './NotificationsProvider'
 import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
 import { useStakeSignatures } from '../hooks'
 import { API_ENDPOINT } from '../utils'
+import { useBaseCtx } from '../BaseProviders'
+import { APP_NAME } from '@apps/types'
 
 export interface OnboardCtx {
   onboard?: API
@@ -101,6 +103,7 @@ const OnboardProvider: FC<{
   const [connected, setConnected] = useState<boolean>(false)
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined)
   const [, setStakeSignatures] = useStakeSignatures()
+  const [{ appName }] = useBaseCtx()
 
   const [, setInjectedChainId] = useInjectedChainIdCtx()
   const [, setInjectedProvider] = useInjectedProviderCtx()
@@ -109,6 +112,8 @@ const OnboardProvider: FC<{
 
   const network = useNetwork()
   const rpcUrl = network.rpcEndpoints[0]
+
+  const isGovernance = appName === APP_NAME.GOVERNANCE
 
   const onboard = useMemo(
     () =>
@@ -257,19 +262,21 @@ const OnboardProvider: FC<{
       })
     }
 
-    fetch(`${API_ENDPOINT}/signature`)
-      .then(resp => resp.json())
-      .then(json => {
-        setStakeSignatures(prevSignatures => ({
-          ...prevSignatures,
-          message: json.message,
-        }))
-      })
-      .catch(console.error)
+    if (isGovernance) {
+      fetch(`${API_ENDPOINT}/signature`)
+        .then(resp => resp.json())
+        .then(json => {
+          setStakeSignatures(prevSignatures => ({
+            ...prevSignatures,
+            message: json.message,
+          }))
+        })
+        .catch(console.error)
+    }
   })
 
   useEffect(() => {
-    if (!address) return
+    if (!address || !isGovernance) return
 
     fetch(`${API_ENDPOINT}/signature/${address}`)
       .then(resp => resp.json())
@@ -288,7 +295,7 @@ const OnboardProvider: FC<{
         })
       })
       .catch(console.warn)
-  }, [address, setStakeSignatures])
+  }, [address, setStakeSignatures, isGovernance])
 
   return (
     <onboardCtx.Provider
