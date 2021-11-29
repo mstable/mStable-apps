@@ -272,6 +272,7 @@ const OnboardProvider: FC<{
           }))
         })
         .catch(console.error)
+    }
   })
 
   useEffect(() => {
