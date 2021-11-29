@@ -83,6 +83,12 @@ const SubmitContainer = styled.div`
     gap: 0.25rem;
   }
 
+  > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
   h3 {
     font-size: 1rem;
     color: ${({ theme }) => theme.color.body};
@@ -188,6 +194,7 @@ export const Dials: FC = () => {
   )
 }
 
+// Scaled to retrieve values (progress bars are 0-100)
 const scaleUserDials = (dials: Record<string, number>): Record<string, number> => {
   const nonZeroDials = Object.values(dials).filter(v => !!v)
   const weightMultiplier = nonZeroDials.reduce((a, b) => a + b, 0) / 100
@@ -209,6 +216,25 @@ const scaleUserDials = (dials: Record<string, number>): Record<string, number> =
     return correctedForRemainder
   }
   return scaledUserDials
+}
+
+// Unsure how gas intensive the submit call is so this optionally reduces dial changes to ones that have had the largest change.
+// ie. 8 changed -> 3 changed => less loops in func call
+// scale data up -> optimize -> scale data back -> setUserDials()
+const optimizeUserDials = (oldDials: Record<string, number>, scaledDials: Record<string, number>) => {
+  const buffer = 5
+  console.log(oldDials, scaledDials)
+  const mappedDiffs = Object.keys(scaledDials).map(k =>
+    scaledDials[k] < oldDials[k] + buffer && scaledDials[k] > oldDials[k] - buffer ? 0 : scaledDials[k] - oldDials[k],
+  )
+  const nonZeroDiffIndices = mappedDiffs.map((v, i) => (v !== 0 ? i : undefined)).filter(v => !!v)
+  const splitRemainder = Math.floor(mappedDiffs.reduce((a, b) => a + b, 0) / nonZeroDiffIndices.length)
+  const mappedDials = Object.keys(oldDials)
+    .map((k, i) => ({ [k]: nonZeroDiffIndices.includes(i) ? scaledDials[k] + splitRemainder : oldDials[k] }))
+    .reduce((a, b) => ({ ...a, ...b }))
+  // console.log(mappedDials)
+
+  return mappedDials
 }
 
 const DialsContent: FC = () => {
@@ -307,6 +333,14 @@ const DialsContent: FC = () => {
                 <Button disabled={!hasUserDialChanged} highlighted={hasUserDialChanged} onClick={handleSubmit}>
                   Submit
                 </Button>
+                <div>
+                  <Button disabled={!hasUserDialChanged} onClick={handleOptimize}>
+                    Optimize
+                  </Button>
+                  <Button disabled={!hasUserDialChanged} highlighted={hasUserDialChanged} onClick={handleSubmit}>
+                    Submit
+                  </Button>
+                </div>
               </SubmitContainer>
             )}
           </DialContainer>
