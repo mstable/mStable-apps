@@ -262,7 +262,7 @@ const OnboardProvider: FC<{
       })
     }
 
-    isGovernance &&
+    if (isGovernance) {
       fetch(`${API_ENDPOINT}/signature`)
         .then(resp => resp.json())
         .then(json => {
