@@ -8,17 +8,21 @@ import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
 import { AddressOption, Interfaces } from '@apps/types'
 import { TransactionManifest } from '@apps/transaction-manifest'
-import { useBigDecimalInput } from '@apps/hooks'
+import { BigDecimalInputValue, useBigDecimalInput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { AssetExchange, SendButton } from '@apps/base/components/forms'
 
 import { SaveRoutesOut } from './types'
+import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 
 const formId = 'SaveRedeem'
 
 const titles = {
-  [SaveRoutesOut.Withdraw || SaveRoutesOut.WithdrawAndRedeem]: 'Withdraw',
-  [SaveRoutesOut.VaultWithdraw || SaveRoutesOut.VaultUnwrap || SaveRoutesOut.VaultUnwrapAndRedeem]: 'Withdraw from Vault',
+  [SaveRoutesOut.Withdraw]: 'Withdraw',
+  [SaveRoutesOut.WithdrawAndRedeem]: 'Withdraw',
+  [SaveRoutesOut.VaultWithdraw]: 'Withdraw from Vault',
+  [SaveRoutesOut.VaultUnwrap]: 'Withdraw from Vault',
+  [SaveRoutesOut.VaultUnwrapAndRedeem]: 'Withdraw from Vault',
 }
 
 const purposes = {
@@ -111,16 +115,42 @@ export const SaveRedeem: FC = () => {
     }
   }, [inputToken, inputAmount, saveRoute])
 
+  // MARK: Input as masset to calc swap exchange rate
+  const { exchangeRate: swapExchangeRate } = useEstimatedOutput(
+    {
+      address: massetAddress,
+      amount: inputAmount,
+    } as BigDecimalInputValue,
+    {
+      address: outputAddress === massetAddress ? undefined : outputAddress,
+    } as BigDecimalInputValue,
+  )
+
   const exchangeRate = useMemo(() => {
     if (saveRoute === SaveRoutesOut.VaultWithdraw) {
       return { value: BigDecimal.ONE }
     }
-    const value = saveExchangeRate ? saveExchangeRate.divPrecisely(BigDecimal.ONE) : undefined
-    return {
-      value,
-      fetching: !value,
+    if (saveRoute === SaveRoutesOut.Withdraw || saveRoute === SaveRoutesOut.VaultUnwrap) {
+      const value = saveExchangeRate ? saveExchangeRate.divPrecisely(BigDecimal.ONE) : undefined
+      return {
+        value,
+        fetching: !value,
+      }
     }
-  }, [saveExchangeRate, saveRoute])
+    if (saveRoute === SaveRoutesOut.WithdrawAndRedeem || saveRoute === SaveRoutesOut.VaultUnwrapAndRedeem) {
+      if (!swapExchangeRate?.value || !saveExchangeRate) return { value: undefined, fetching: true }
+
+      const outputDecimals = outputOptions.find(v => v.address === outputAddress)?.balance?.decimals
+      const SCALE = new BigDecimal((10 ** outputDecimals).toString())
+      const scaledSwapRate = swapExchangeRate.value.divPrecisely(SCALE)
+      const value = saveExchangeRate.divPrecisely(scaledSwapRate)
+
+      return {
+        value,
+        fetching: !value,
+      }
+    }
+  }, [outputAddress, outputOptions, saveExchangeRate, saveRoute, swapExchangeRate.value])
 
   const valid = !!(!error && inputAmount && inputAmount.simple > 0)
 
@@ -135,6 +165,7 @@ export const SaveRedeem: FC = () => {
       handleSetInputAddress={handleSetInputAddress}
       handleSetOutputAddress={handleSetOutputAddress}
       handleSetInputAmount={setInputFormValue}
+      isFetching={exchangeRate?.fetching}
       handleSetInputMax={() => {
         if (inputToken) {
           setInputFormValue(inputToken.balance.string)
