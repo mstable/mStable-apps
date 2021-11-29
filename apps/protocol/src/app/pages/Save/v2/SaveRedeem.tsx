@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 import { ISavingsContractV2__factory, BoostedSavingsVault__factory } from '@apps/artifacts/typechain'
 
 import { useSigner } from '@apps/base/context/account'
@@ -17,8 +17,8 @@ import { SaveRoutesOut } from './types'
 const formId = 'SaveRedeem'
 
 const titles = {
-  [SaveRoutesOut.Withdraw]: 'Withdraw',
-  [SaveRoutesOut.VaultWithdraw]: 'Withdraw from Vault',
+  [SaveRoutesOut.Withdraw || SaveRoutesOut.WithdrawAndRedeem]: 'Withdraw',
+  [SaveRoutesOut.VaultWithdraw || SaveRoutesOut.VaultUnwrap || SaveRoutesOut.VaultUnwrapAndRedeem]: 'Withdraw from Vault',
 }
 
 const purposes = {
@@ -36,10 +36,11 @@ export const SaveRedeem: FC = () => {
   const signer = useSigner()
   const propose = usePropose()
 
-  const massetState = useSelectedMassetState() as MassetState
-
   const {
     address: massetAddress,
+    token: massetToken,
+    bAssets,
+    fAssets,
     savingsContracts: {
       v2: {
         latestExchangeRate: { rate: saveExchangeRate } = {},
@@ -48,24 +49,10 @@ export const SaveRedeem: FC = () => {
         token: saveToken,
       },
     },
-  } = massetState
+  } = useSelectedMassetState() as MassetState
 
-  const [inputAmount, inputFormValue, setInputFormValue] = useBigDecimalInput()
-
-  const [inputAddress, setInputAddress] = useState<string | undefined>(saveAddress)
-
-  const inputToken = useTokenSubscription(inputAddress)
-
-  const error = useMemo<string | undefined>(() => {
-    if (inputAmount && inputToken && inputToken.balance.exact.lt(inputAmount.exact)) {
-      return 'Insufficient balance'
-    }
-  }, [inputToken, inputAmount])
-
-  const inputAddressOptions = useMemo<AddressOption[]>(() => {
-    if (!saveToken) return []
-    if (!vaultAddress) return [saveToken as AddressOption]
-    return [
+  const inputOptions = useMemo<AddressOption[]>(
+    () => [
       { address: saveAddress as string },
       {
         address: vaultAddress as string,
@@ -74,15 +61,55 @@ export const SaveRedeem: FC = () => {
         custom: true,
         symbol: `v-${saveToken.symbol}`,
       } as AddressOption,
+    ],
+    [account?.rawBalance, saveAddress, saveToken, vaultAddress],
+  )
+
+  const [inputAddress, setInputAddress] = useState<string | undefined>(inputOptions?.[0].address)
+  const inputToken = useTokenSubscription(inputAddress)
+  const [inputAmount, inputFormValue, setInputFormValue] = useBigDecimalInput()
+
+  const outputOptions = useMemo<AddressOption[]>(() => {
+    const outputs = [
+      massetToken,
+      ...(saveToken ? [saveToken] : []),
+      ...Object.values(bAssets).map(b => b.token),
+      ...Object.values(fAssets).map(b => b.token),
     ]
-  }, [saveAddress, vaultAddress, saveToken, account])
+    if (inputAddress === saveAddress) return outputs.filter(v => v.address !== saveAddress)
+    return outputs
+  }, [massetToken, saveToken, bAssets, fAssets, inputAddress, saveAddress])
 
-  const outputAddressOptions = useMemo<AddressOption[]>(() => {
-    if (inputAddress === vaultAddress) return [{ address: saveAddress }]
-    return [{ address: massetAddress as string }]
-  }, [inputAddress, vaultAddress, saveAddress, massetAddress])
+  const [outputAddress, setOutputAddress] = useState<string | undefined>(outputOptions?.[0].address)
 
-  const saveRoute = inputAddress === vaultAddress ? SaveRoutesOut.VaultWithdraw : SaveRoutesOut.Withdraw
+  const handleSetInputAddress = useCallback(
+    (address: string) => {
+      if (address === vaultAddress) setOutputAddress(saveAddress)
+      if (address === saveAddress) setOutputAddress(massetAddress)
+      setInputAddress(address)
+    },
+    [saveAddress, vaultAddress, massetAddress],
+  )
+
+  const handleSetOutputAddress = useCallback((address: string) => setOutputAddress(address), [])
+
+  const saveRoute = useMemo(() => {
+    if (inputAddress === vaultAddress) {
+      if (outputAddress === saveAddress) return SaveRoutesOut.VaultWithdraw
+      if (outputAddress === massetAddress) return SaveRoutesOut.VaultUnwrap
+      return SaveRoutesOut.VaultUnwrapAndRedeem
+    }
+    return outputAddress === massetAddress ? SaveRoutesOut.Withdraw : SaveRoutesOut.WithdrawAndRedeem
+  }, [inputAddress, massetAddress, outputAddress, saveAddress, vaultAddress])
+
+  const error = useMemo<string | undefined>(() => {
+    // TODO: - Remove this. Added for testing routes
+    return `${SaveRoutesOut[saveRoute]}`
+
+    if (inputAmount && inputToken && inputToken.balance.exact.lt(inputAmount.exact)) {
+      return 'Insufficient balance'
+    }
+  }, [inputToken, inputAmount, saveRoute])
 
   const exchangeRate = useMemo(() => {
     if (saveRoute === SaveRoutesOut.VaultWithdraw) {
@@ -99,13 +126,14 @@ export const SaveRedeem: FC = () => {
 
   return (
     <AssetExchange
-      inputAddressOptions={inputAddressOptions}
-      outputAddressOptions={outputAddressOptions}
+      inputAddressOptions={inputOptions}
+      outputAddressOptions={outputOptions}
       inputAddress={inputAddress}
       inputFormValue={inputFormValue}
-      outputAddress={outputAddressOptions?.[0].address}
+      outputAddress={outputAddress}
       exchangeRate={exchangeRate}
-      handleSetInputAddress={setInputAddress}
+      handleSetInputAddress={handleSetInputAddress}
+      handleSetOutputAddress={handleSetOutputAddress}
       handleSetInputAmount={setInputFormValue}
       handleSetInputMax={() => {
         if (inputToken) {
@@ -135,6 +163,15 @@ export const SaveRedeem: FC = () => {
                   formId,
                 ),
               )
+            case SaveRoutesOut.VaultUnwrap:
+              // imVault -> mAsset (Vault)
+              return {}
+            case SaveRoutesOut.VaultUnwrapAndRedeem:
+              // imVault -> bAsset / fAsset (Vault)
+              return {}
+            case SaveRoutesOut.WithdrawAndRedeem:
+              // imAsset -> bAsset / fAsset (Unwrapper)
+              return {}
             default:
               return propose<Interfaces.SavingsContract, 'redeemCredits'>(
                 new TransactionManifest(

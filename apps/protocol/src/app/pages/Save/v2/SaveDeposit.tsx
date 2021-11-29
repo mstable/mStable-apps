@@ -114,12 +114,10 @@ export const SaveDeposit: FC = () => {
   const [inputAddress, setInputAddress] = useState<string | undefined>(
     (() => {
       // Select the highest masset-denominated balance (ignore ETH)
-      const [[first]] = (
-        [
-          ...Object.values(bAssets).map(b => [b.address, b.token.balance.simple ?? 0]),
-          [massetAddress, massetToken.balance.simple ?? 0],
-        ] as [string, number][]
-      ).sort((a, b) => (b[1] as number) - (a[1] as number))
+      const inputs = [massetToken, ...Object.values(bAssets).map(b => b.token), ...Object.values(fAssets).map(b => b.token)]
+      const [[first]] = ([...inputs.map(b => [b.address, b.balance.simple ?? 0])] as [string, number][]).sort(
+        (a, b) => (b[1] as number) - (a[1] as number),
+      )
       return first
     })(),
   )

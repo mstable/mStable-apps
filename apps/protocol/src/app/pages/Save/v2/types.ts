@@ -15,7 +15,10 @@ export enum SaveRoutes {
 
 export enum SaveRoutesOut {
   Withdraw,
+  WithdrawAndRedeem,
   VaultWithdraw,
+  VaultUnwrap,
+  VaultUnwrapAndRedeem,
 }
 
 export interface SaveOutput {
