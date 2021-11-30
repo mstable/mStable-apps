@@ -14,6 +14,7 @@ import { AssetExchange, SendButton } from '@apps/base/components/forms'
 
 import { SaveRoutesOut } from './types'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
+import { useStakingRewards } from '../hooks'
 
 const formId = 'SaveRedeem'
 
@@ -39,6 +40,7 @@ const purposes = {
 export const SaveRedeem: FC = () => {
   const signer = useSigner()
   const propose = usePropose()
+  const stakingRewards = useStakingRewards()
 
   const {
     address: massetAddress,
@@ -49,24 +51,28 @@ export const SaveRedeem: FC = () => {
       v2: {
         latestExchangeRate: { rate: saveExchangeRate } = {},
         address: saveAddress,
-        boostedSavingsVault: { address: vaultAddress, account } = {},
+        boostedSavingsVault,
+        boostedSavingsVault: { account } = {},
         token: saveToken,
       },
     },
   } = useSelectedMassetState() as MassetState
 
+  const vaultAddress = boostedSavingsVault?.address ?? stakingRewards?.stakingRewardsContract?.address
+  const vaultBalance = account?.rawBalance ?? stakingRewards.stakedBalance
+
   const inputOptions = useMemo<AddressOption[]>(
     () => [
       { address: saveAddress as string },
       {
-        address: vaultAddress as string,
-        label: `${saveToken.symbol} Vault`,
-        balance: account?.rawBalance,
+        address: vaultAddress,
+        label: `Vault`,
+        balance: vaultBalance,
         custom: true,
         symbol: `v-${saveToken.symbol}`,
       } as AddressOption,
     ],
-    [account?.rawBalance, saveAddress, saveToken, vaultAddress],
+    [saveAddress, vaultAddress, vaultBalance, saveToken.symbol],
   )
 
   const [inputAddress, setInputAddress] = useState<string | undefined>(inputOptions?.[0].address)
@@ -88,6 +94,7 @@ export const SaveRedeem: FC = () => {
 
   const handleSetInputAddress = useCallback(
     (address: string) => {
+      console.log(address)
       if (address === vaultAddress) setOutputAddress(saveAddress)
       if (address === saveAddress) setOutputAddress(massetAddress)
       setInputAddress(address)
@@ -138,7 +145,10 @@ export const SaveRedeem: FC = () => {
       }
     }
     if (saveRoute === SaveRoutesOut.WithdrawAndRedeem || saveRoute === SaveRoutesOut.VaultUnwrapAndRedeem) {
-      if (!swapExchangeRate?.value || !saveExchangeRate) return { value: undefined, fetching: true }
+      if (!swapExchangeRate?.value || !saveExchangeRate) {
+        if (inputFormValue === '') return { value: undefined, fetching: false }
+        return { value: undefined, fetching: true }
+      }
 
       const outputDecimals = outputOptions.find(v => v.address === outputAddress)?.balance?.decimals
       const SCALE = new BigDecimal((10 ** outputDecimals).toString())
@@ -150,7 +160,7 @@ export const SaveRedeem: FC = () => {
         fetching: !value,
       }
     }
-  }, [outputAddress, outputOptions, saveExchangeRate, saveRoute, swapExchangeRate.value])
+  }, [outputAddress, outputOptions, saveExchangeRate, saveRoute, inputFormValue, swapExchangeRate.value])
 
   const valid = !!(!error && inputAmount && inputAmount.simple > 0)
 
