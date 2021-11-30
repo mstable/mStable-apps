@@ -49,7 +49,7 @@
     "@mstable/merkle-drop": "2.0.0",
     "@mstable/protocol": "^2.2.2",
     "@types/date-fns": "^2.6.0",
-    "@types/jest": "^26.0.20",
+    "@types/jest": "^27.0.3",
     "@types/lodash.assign": "^4.2.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/lossless-json": "^1.0.0",

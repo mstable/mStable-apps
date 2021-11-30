@@ -52,7 +52,7 @@ export const useExchangeRateForMassetInputs = (
 
 export const useExchangeRateForFPInputs = (
   poolAddress: string,
-  estimatedOutputAmount?: FetchState<BigDecimal>,
+  estimatedOutputAmount: FetchState<BigDecimal>,
   inputValues?: BigDecimalInputValues,
 ): FetchState<BigDecimal> => {
   const feederPool = useSelectedFeederPoolState()
@@ -60,37 +60,30 @@ export const useExchangeRateForFPInputs = (
   return useMemo(() => {
     if (!inputValues) return {}
 
-    const touched = Object.values(inputValues).filter(v => v.touched)
+    const touched = Object.values(inputValues).filter(v => v.touched && v.amount.exact.gt(0))
 
     if (!touched.length) return {}
-    if (estimatedOutputAmount?.error) return {}
-    if (!estimatedOutputAmount?.value) return { fetching: true }
+    if (estimatedOutputAmount.error) return {}
+    if (!estimatedOutputAmount.value) return { fetching: true }
 
-    // Scale asset via ratio
-    const scaleAssetValue = (input: BigDecimalInputValue): BigDecimal => {
-      const { amount } = input
-      if (!amount) return BigDecimal.ZERO
+    const inputAmount = Object.values(touched).reduce<BigDecimal>((prev, { address, amount }) => {
+      if (address === feederPool.masset.address) return prev.add(amount)
 
-      if (input.address === feederPool.masset.address) {
-        // The mAsset amount is not scaled
-        return amount
+      let scaledAmount = amount.mulRatioTruncate(feederPool.fasset.ratio).setDecimals(18)
+
+      if (feederPool.fasset.token.symbol === 'RAI') {
+        // For RAI, scale back down; the ratio is the relative price :)
+        scaledAmount = feederPool.fasset.price.divPrecisely(scaledAmount)
       }
 
-      // The fAsset amount can be scaled
-      return amount.mulRatioTruncate(feederPool.fasset.ratio)
+      return prev.add(scaledAmount)
+    }, BigDecimal.ZERO)
+
+    if (estimatedOutputAmount.value.exact.eq(0) || inputAmount.exact.eq(0)) {
+      return { error: 'Output amount must be greater than zero' }
     }
 
-    const totalAmount = Object.values(touched).reduce((prev, v) => prev.add(scaleAssetValue(v)), BigDecimal.ZERO)
-
-    if (totalAmount) {
-      if (estimatedOutputAmount.value.exact.eq(0) || totalAmount.exact.eq(0)) {
-        return { error: 'Output amount must be greater than zero' }
-      }
-
-      const value = estimatedOutputAmount.value.divPrecisely(totalAmount)
-      return { value }
-    }
-
-    return {}
-  }, [inputValues, estimatedOutputAmount, feederPool.masset.address, feederPool.fasset.ratio])
+    const value = estimatedOutputAmount.value.divPrecisely(inputAmount)
+    return { value }
+  }, [inputValues, estimatedOutputAmount.error, estimatedOutputAmount.value, feederPool])
 }

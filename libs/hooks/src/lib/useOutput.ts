@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { getPenaltyPercentage } from '@apps/quick-maths'
+import { getDistancePercentage } from '@apps/quick-maths'
 import { getPenaltyMessage } from '@apps/formatters'
 import { BigDecimal } from '@apps/bigdecimal'
 
@@ -41,7 +41,7 @@ const useOutput = (
 
   const penaltyBonus = useMemo(() => {
     const reverse = type === OutputType.Maximum
-    const percentage = getPenaltyPercentage(inputAmount, outputAmount, undefined, reverse)
+    const percentage = getDistancePercentage(inputAmount, outputAmount, undefined, reverse)
     const message = getPenaltyMessage(percentage)
 
     return { percentage, message }

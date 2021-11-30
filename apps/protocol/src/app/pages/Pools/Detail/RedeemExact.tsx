@@ -9,6 +9,8 @@ import { OneToManyAssetExchange, SendButton, useMultiAssetExchangeState } from '
 import { BigDecimal } from '@apps/bigdecimal'
 import { useMaximumOutput } from '@apps/hooks'
 
+import { useFPInputRatios } from '../../../hooks/useFPInputRatios'
+import { useScaledInput } from '../../../hooks/useScaledInput'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
@@ -28,18 +30,19 @@ export const RedeemExact: FC = () => {
 
   const [inputValues, slippage] = useMultiAssetExchangeState()
 
+  const touched = useMemo(() => Object.values(inputValues).filter(v => v.touched), [inputValues])
+
+  const inputRatios = useFPInputRatios()
+  const scaledInput = useScaledInput(inputValues, inputRatios)
+
   const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(
-    contract,
-    inputValues,
-    { price: feederPool.price, isInput: false },
     Route.Redeem,
+    scaledInput,
+    { price: feederPool.price, isInput: false },
+    contract,
   )
 
-  const { impactWarning } = priceImpact?.value ?? {}
-
   const exchangeRate = useExchangeRateForFPInputs(feederPool.address, estimatedOutputAmount, inputValues)
-
-  const touched = useMemo(() => Object.values(inputValues).filter(v => v.touched), [inputValues])
 
   const inputAmount = useMemo(() => {
     if (!touched.length) return
@@ -55,7 +58,7 @@ export const RedeemExact: FC = () => {
     return massetAmount ?? fassetAmount
   }, [feederPool, touched])
 
-  const { maxOutputAmount } = useMaximumOutput(slippage?.simple, inputAmount, estimatedOutputAmount.value)
+  const { maxOutputAmount } = useMaximumOutput(slippage.simple, inputAmount, estimatedOutputAmount.value)
 
   const outputOption = feederPool.token as AddressOption
 
@@ -113,7 +116,7 @@ export const RedeemExact: FC = () => {
     >
       <SendButton
         title={error ?? 'Redeem'}
-        warning={!error && impactWarning}
+        warning={!error && priceImpact.value?.showImpactWarning}
         valid={!error}
         handleSend={() => {
           if (!contract || !walletAddress || !maxOutputAmount) return

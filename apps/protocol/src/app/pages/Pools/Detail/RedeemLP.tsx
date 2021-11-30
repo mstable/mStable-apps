@@ -101,7 +101,7 @@ export const RedeemLP: FC = () => {
     shouldSkipEstimation,
   )
 
-  const { impactWarning } = priceImpact?.value ?? {}
+  const { showImpactWarning } = priceImpact?.value ?? {}
 
   const { minOutputAmount } = useMinimumOutput(slippageSimple, inputAmount, estimatedOutputAmount.value)
 
@@ -150,7 +150,7 @@ export const RedeemLP: FC = () => {
     >
       <SendButton
         title={error ?? 'Redeem'}
-        warning={!isUnstakingFromVault && !error && impactWarning}
+        warning={!isUnstakingFromVault && !error && showImpactWarning}
         valid={!error}
         handleSend={() => {
           if (!contracts || !walletAddress || !feederPool) return

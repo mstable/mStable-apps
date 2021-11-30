@@ -82,7 +82,7 @@ export const SwapLogic: FC = () => {
     priceImpact,
   } = useEstimatedOutput({ ...inputToken, amount: inputAmount } as BigDecimalInputValue, { ...outputToken } as BigDecimalInputValue)
 
-  const { impactWarning } = priceImpact?.value ?? {}
+  const { showImpactWarning } = priceImpact?.value ?? {}
 
   const error = useMemo<string | undefined>(() => {
     if (!inputAmount?.simple) return 'Enter an amount'
@@ -171,7 +171,7 @@ export const SwapLogic: FC = () => {
         valid={valid}
         title={error ?? buttonTitle}
         approve={approve}
-        warning={!error && !!impactWarning}
+        warning={!error && !!showImpactWarning}
         handleSend={() => {
           if (massetContract && walletAddress && inputAmount && minOutputAmount && inputAddress && outputAddress) {
             // mAsset mint

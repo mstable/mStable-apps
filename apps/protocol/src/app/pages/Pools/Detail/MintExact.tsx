@@ -8,6 +8,8 @@ import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { useMinimumOutput, BigDecimalInputValue } from '@apps/hooks'
 import { SendButton, ManyToOneAssetExchange, useMultiAssetExchangeState, useMultiAssetExchangeDispatch } from '@apps/base/components/forms'
 
+import { useFPInputRatios } from '../../../hooks/useFPInputRatios'
+import { useScaledInput } from '../../../hooks/useScaledInput'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
@@ -40,13 +42,6 @@ export const MintExact: FC = () => {
 
   const touched = useMemo(() => Object.values(inputValues).filter(v => v.touched), [inputValues])
 
-  const { estimatedOutputAmount, priceImpact } =
-    useEstimatedOutputMulti(contracts?.feederPool, inputValues, { price: feederPool.price, isInput: false }, Route.Mint) ?? {}
-
-  const { impactWarning } = priceImpact?.value ?? {}
-
-  const exchangeRate = useExchangeRateForFPInputs(feederPool.address, estimatedOutputAmount, inputValues)
-
   const inputAmount = useMemo(() => {
     if (!touched.length) return
 
@@ -60,6 +55,18 @@ export const MintExact: FC = () => {
 
     return massetAmount ?? fassetAmount
   }, [feederPool, touched])
+
+  const inputRatios = useFPInputRatios()
+  const scaledInput = useScaledInput(inputValues, inputRatios)
+
+  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(
+    Route.Mint,
+    scaledInput,
+    { price: feederPool.price, isInput: false },
+    contracts?.feederPool,
+  )
+
+  const exchangeRate = useExchangeRateForFPInputs(feederPool.address, estimatedOutputAmount, inputValues)
 
   const { minOutputAmount } = useMinimumOutput(slippage?.simple, inputAmount, estimatedOutputAmount.value)
 
@@ -156,7 +163,7 @@ export const MintExact: FC = () => {
     >
       <SendButton
         title={error ?? 'Deposit'}
-        warning={!error && impactWarning}
+        warning={!error && priceImpact.value?.showImpactWarning}
         valid={!error}
         handleSend={() => {
           if (!contracts || !walletAddress || !minOutputAmount) return

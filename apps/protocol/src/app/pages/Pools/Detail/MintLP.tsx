@@ -104,11 +104,14 @@ export const MintLP: FC = () => {
       amount: inputAmount,
     } as BigDecimalInputValue,
     { ...outputToken, address: feederPool.address } as BigDecimalInputValue,
-    { price: feederPool.price, isInput: false },
+    {
+      price: inputAddress === feederPool.fasset.address ? feederPool.price.divPrecisely(feederPool.fasset.price) : feederPool.price,
+      isInput: false,
+    },
     isStakingInVault,
   )
 
-  const { impactWarning } = priceImpact?.value ?? {}
+  const { showImpactWarning } = priceImpact.value ?? {}
 
   const { minOutputAmount } = useMinimumOutput(slippageSimple, inputAmount, estimatedOutputAmount.value)
 
@@ -160,7 +163,7 @@ export const MintLP: FC = () => {
       <SendButton
         title={error ?? title}
         approve={approve}
-        warning={!isStakingInVault && !error && impactWarning}
+        warning={!isStakingInVault && !error && showImpactWarning}
         valid={!error}
         handleSend={() => {
           if (!contracts || !walletAddress || !feederPool) return

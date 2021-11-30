@@ -1,2 +1,3 @@
 export * from './lib/calculateApy'
-export * from './lib/amm'
+export * from './lib/getPriceImpact'
+export * from './lib/getDistancePercentage'

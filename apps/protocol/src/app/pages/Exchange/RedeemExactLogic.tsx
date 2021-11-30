@@ -11,6 +11,7 @@ import { SendButton, OneToManyAssetExchange, useMultiAssetExchangeState } from '
 import { useMaximumOutput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 
+import { useScaledInput } from '../../hooks/useScaledInput'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
@@ -32,9 +33,11 @@ export const RedeemExactLogic: FC = () => {
 
   const masset = useMemo(() => (signer ? Masset__factory.connect(massetAddress, signer) : undefined), [massetAddress, signer])
 
-  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(masset, bassetAmounts, undefined, Route.Redeem)
+  const scaledInput = useScaledInput(bassetAmounts, bassetRatios)
 
-  const { impactWarning } = priceImpact?.value ?? {}
+  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(Route.Redeem, scaledInput, undefined, masset)
+
+  const { showImpactWarning } = priceImpact.value ?? {}
 
   const exchangeRate = useExchangeRateForMassetInputs(estimatedOutputAmount, bassetAmounts)
 
@@ -43,10 +46,7 @@ export const RedeemExactLogic: FC = () => {
   const inputAmount = useMemo(() => {
     if (!Object.keys(bassetAmounts).length || !touched.length) return
 
-    return Object.values(touched).reduce(
-      (prev, v) => prev.add((v.amount as BigDecimal).mulRatioTruncate(bassetRatios[v.address])),
-      BigDecimal.ZERO,
-    )
+    return Object.values(touched).reduce((prev, v) => prev.add(v.amount.mulRatioTruncate(bassetRatios[v.address])), BigDecimal.ZERO)
   }, [bassetAmounts, touched, bassetRatios])
 
   const { maxOutputAmount } = useMaximumOutput(slippage?.simple, inputAmount, estimatedOutputAmount.value)
@@ -93,7 +93,7 @@ export const RedeemExactLogic: FC = () => {
     >
       <SendButton
         valid={valid}
-        warning={!error && impactWarning}
+        warning={!error && showImpactWarning}
         title={error ?? 'Redeem'}
         handleSend={() => {
           if (masset && walletAddress && maxOutputAmount) {
