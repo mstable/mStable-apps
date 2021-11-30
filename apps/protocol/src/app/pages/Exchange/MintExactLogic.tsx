@@ -12,6 +12,7 @@ import { MassetState } from '@apps/data-provider'
 import { useMinimumOutput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 
+import { useScaledInput } from '../../hooks/useScaledInput'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
@@ -51,12 +52,6 @@ export const MintExactLogic: FC = () => {
 
   const touched = useMemo(() => Object.values(inputValues).filter(v => v.touched), [inputValues])
 
-  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(masset, inputValues, undefined, Route.Mint)
-
-  const { impactWarning } = priceImpact?.value ?? {}
-
-  const exchangeRate = useExchangeRateForMassetInputs(estimatedOutputAmount, inputValues)
-
   const inputAmount = useMemo(() => {
     if (!Object.keys(inputValues).length || !touched.length) return
 
@@ -65,6 +60,14 @@ export const MintExactLogic: FC = () => {
       BigDecimal.ZERO,
     )
   }, [inputValues, touched, bassetRatios])
+
+  const scaledInput = useScaledInput(inputValues, bassetRatios)
+
+  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(Route.Mint, scaledInput, undefined, masset)
+
+  const { showImpactWarning } = priceImpact?.value ?? {}
+
+  const exchangeRate = useExchangeRateForMassetInputs(estimatedOutputAmount, inputValues)
 
   const { minOutputAmount } = useMinimumOutput(slippage?.simple, inputAmount, estimatedOutputAmount.value)
 
@@ -131,7 +134,7 @@ export const MintExactLogic: FC = () => {
     >
       <SendButton
         valid={valid}
-        warning={!error && impactWarning}
+        warning={!error && showImpactWarning}
         title={error ?? 'Mint'}
         handleSend={() => {
           if (masset && walletAddress && minOutputAmount) {

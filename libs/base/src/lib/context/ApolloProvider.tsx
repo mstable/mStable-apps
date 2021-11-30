@@ -115,7 +115,7 @@ export const ApolloProvider: FC = ({ children }) => {
 
         const httpLink = new HttpLink({ uri: endpoint })
         const retryLink = new RetryLink({ delay: { initial: 1e3, max: 5e3, jitter: true }, attempts: { max: 1, retryIf } })
-        const link = ApolloLink.from([errorLink, retryLink, timeoutLink, httpLink])
+        const link = ApolloLink.from([retryLink, timeoutLink, errorLink, httpLink])
         const client = new ApolloClient<NormalizedCacheObject>({
           cache: caches[name],
           link,

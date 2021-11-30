@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers'
 import { Reducer, useMemo, useReducer } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'

@@ -8,10 +8,10 @@ import { MassetState } from '@apps/data-provider'
 import { useSigner } from '@apps/base/context/account'
 import { sanitizeMassetError } from '@apps/formatters'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
-import { getPriceImpact, PriceImpact } from '@apps/quick-maths'
+import { getPriceImpact } from '@apps/quick-maths'
 import { BigDecimalInputValue, useFetchState } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
-import { FetchState } from '@apps/types'
+import { FetchState, LPPriceAdjustment, PriceImpact } from '@apps/types'
 
 type Contract = Masset | FeederPool
 
@@ -39,7 +39,7 @@ const inputValuesAreEqual = (a?: BigDecimalInputValue, b?: BigDecimalInputValue)
 export const useEstimatedOutput = (
   inputValue?: BigDecimalInputValue,
   outputValue?: BigDecimalInputValue,
-  lpPriceAdjustment?: { price: BigDecimal; isInput: boolean },
+  lpPriceAdjustment?: LPPriceAdjustment,
   shouldSkip?: boolean,
 ): Output => {
   const inputValuePrev = usePrevious(inputValue)

@@ -53,7 +53,7 @@ export interface FeederPoolAccountState {
 
 export interface FeederPoolState {
   address: string
-  fasset: FassetState
+  fasset: FassetState & { price: BigDecimal }
   masset: FassetState
   token: SubscribedToken
   totalSupply: BigDecimal

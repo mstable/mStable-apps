@@ -294,7 +294,7 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
         basket: { bassets, failed, undergoingRecol },
         fasset: fassetToken,
         masset: massetToken,
-        price,
+        price: priceStr = 0,
         token,
         dailyAPY,
         governanceFeeRate,
@@ -314,6 +314,13 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
           {},
           tokens,
         )
+
+        const price = new BigDecimal(priceStr)
+
+        const massetPrice = BigDecimal.ONE
+
+        // Currently just for RAI
+        const fassetPrice = fasset.token.symbol === 'RAI' ? massetPrice.mulRatioTruncate(fasset.ratio) : massetPrice
 
         let title = bassets
           .map(b => transformTokenSymbol(b.token.symbol))
@@ -342,16 +349,16 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
           {
             address,
             masset: { ...masset, feederPoolAddress: address },
-            fasset: { ...fasset, feederPoolAddress: address },
+            fasset: { ...fasset, feederPoolAddress: address, price: fassetPrice },
             token: { ...token, ...tokens[address] } as SubscribedToken,
             totalSupply: BigDecimal.fromMetric(fassetToken.totalSupply),
             governanceFeeRate: BigNumber.from(governanceFeeRate),
-            liquidity: new BigDecimal(invariantK).mulTruncate(price),
+            liquidity: new BigDecimal(invariantK).mulTruncate(price.exact),
             feeRate: BigNumber.from(swapFeeRate),
             redemptionFeeRate: BigNumber.from(redemptionFeeRate),
             invariantK: BigNumber.from(invariantK),
             dailyApy: poolType === PoolType.Deprecated ? 0 : parseFloat(dailyAPY),
-            price: new BigDecimal(price ?? 0),
+            price,
             failed,
             title,
             undergoingRecol,

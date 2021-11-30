@@ -3,12 +3,11 @@ import { useEffect, useMemo } from 'react'
 import { useDebounce } from 'react-use'
 import { BigNumber } from 'ethers'
 
-import { useSelectedMassetConfig } from '@apps/masset-provider'
-import { getPriceImpact, PriceImpact } from '@apps/quick-maths'
+import { getPriceImpact } from '@apps/quick-maths'
 import { sanitizeMassetError } from '@apps/formatters'
 import { BigDecimal } from '@apps/bigdecimal'
-import { BigDecimalInputValues, useFetchState } from '@apps/hooks'
-import { FetchState } from '@apps/types'
+import { useFetchState } from '@apps/hooks'
+import { FetchState, LPPriceAdjustment, PriceImpact, ScaledInput } from '@apps/types'
 
 type MintableContract = Masset | FeederPool
 
@@ -37,52 +36,48 @@ interface Output {
  * This hook is designed for use with contracts that support mint & mintMulti, redeemExact
  */
 export const useEstimatedOutputMulti = (
+  route: Route,
+  scaledInput: ScaledInput,
+  lpPriceAdjustment?: LPPriceAdjustment,
   contract?: MintableContract,
-  inputValues?: BigDecimalInputValues,
-  lpPriceAdjustment?: { price: BigDecimal; isInput: boolean },
-  route?: Route,
 ): Output => {
   const [estimatedOutputRange, setEstimatedOutputRange] = useFetchState<[BigDecimal, BigDecimal]>()
-  const massetConfig = useSelectedMassetConfig()
-
-  const touched = Object.values(inputValues ?? {}).filter(v => v.touched)
 
   const priceImpact = useMemo<FetchState<PriceImpact>>(() => {
-    if (estimatedOutputRange.fetching || !estimatedOutputRange.value) return { fetching: true }
+    if (estimatedOutputRange.fetching) return { fetching: true }
 
-    if (!touched.length) return {}
+    if (scaledInput.scaledHighTotal.exact.eq(0) || !estimatedOutputRange.value) return {}
 
-    const totalInputLow = touched.reduce(prev => prev.add(massetConfig.lowInputValue), BigDecimal.ZERO)
-    const scaledInputHigh = touched.reduce((prev, v) => (v.amount ? prev.add(v.amount.scale()) : prev), BigDecimal.ZERO)
-
-    if (!scaledInputHigh.exact.gt(0)) return { fetching: true }
-
-    const value = getPriceImpact([totalInputLow, scaledInputHigh], estimatedOutputRange.value, lpPriceAdjustment, route === Route.Redeem)
+    const value = getPriceImpact(
+      [scaledInput.scaledLowTotal, scaledInput.scaledHighTotal],
+      estimatedOutputRange.value,
+      lpPriceAdjustment,
+      route === Route.Redeem,
+    )
 
     return { value }
-  }, [estimatedOutputRange.fetching, estimatedOutputRange.value, touched, route, lpPriceAdjustment, massetConfig.lowInputValue])
+  }, [estimatedOutputRange.fetching, estimatedOutputRange.value, scaledInput, lpPriceAdjustment, route])
 
   const [update] = useDebounce(
     () => {
-      if (!contract || !touched.length) return {}
+      if (!contract || Object.values(scaledInput.values).length === 0) return {}
 
       setEstimatedOutputRange.fetching()
-      if (!route) return setEstimatedOutputRange.value()
 
-      const addresses = touched.map(v => v.address)
-      const scaledInputsLow = touched.map(({ decimals }) => massetConfig.lowInputValue.scale(decimals).exact)
-      const amounts = touched.map(v => (v.amount as BigDecimal).exact)
+      const addresses = Object.keys(scaledInput.values)
+      const lowAmounts = addresses.map(address => scaledInput.values[address].low.exact)
+      const highAmounts = addresses.map(address => scaledInput.values[address].high.exact)
 
       const paths = ((): Promise<BigNumber>[] => {
         switch (route) {
           case Route.Mint: {
-            const outputLow = contract.getMintMultiOutput(addresses, scaledInputsLow)
-            const outputHigh = contract.getMintMultiOutput(addresses, amounts)
+            const outputLow = contract.getMintMultiOutput(addresses, lowAmounts)
+            const outputHigh = contract.getMintMultiOutput(addresses, highAmounts)
             return [outputLow, outputHigh]
           }
           case Route.Redeem: {
-            const outputLow = contract.getRedeemExactBassetsOutput(addresses, scaledInputsLow)
-            const outputHigh = contract.getRedeemExactBassetsOutput(addresses, amounts)
+            const outputLow = contract.getRedeemExactBassetsOutput(addresses, lowAmounts)
+            const outputHigh = contract.getRedeemExactBassetsOutput(addresses, highAmounts)
             return [outputLow, outputHigh]
           }
           default:
@@ -102,19 +97,21 @@ export const useEstimatedOutputMulti = (
         })
     },
     2500,
-    [contract, inputValues],
+    [contract, scaledInput],
   )
 
+  const amountIsSet = scaledInput.highTotal.exact.gt(0)
+
   useEffect(() => {
-    if (contract) {
-      if (touched.length) {
-        setEstimatedOutputRange.fetching()
-        update()
-      } else {
-        setEstimatedOutputRange.value()
-      }
+    if (!contract) return
+
+    if (amountIsSet) {
+      setEstimatedOutputRange.fetching()
+      update()
+    } else {
+      setEstimatedOutputRange.value()
     }
-  }, [contract, setEstimatedOutputRange, touched.length, update])
+  }, [contract, setEstimatedOutputRange, amountIsSet, update])
 
   return useMemo(
     () => ({

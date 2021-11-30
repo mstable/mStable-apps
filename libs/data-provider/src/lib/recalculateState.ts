@@ -80,6 +80,7 @@ export const recalculateMasset = (masset: MassetState): MassetState => {
         ...feederPool,
         fasset: {
           ...recalculateBasset(feederPool.token.decimals, feederPool.liquidity, feederPool.fasset),
+          price: feederPool.fasset.price,
           feederPoolAddress,
         },
         masset: {

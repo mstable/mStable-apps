@@ -14,6 +14,8 @@ import type {
 } from '@apps/artifacts/typechain'
 
 import type { BigDecimal } from '@apps/bigdecimal'
+import { BigDecimalInputValue, BigDecimalInputValues } from '@apps/hooks'
+import { BigNumber } from 'ethers'
 
 export type MassetName = 'musd' | 'mbtc'
 
@@ -103,4 +105,27 @@ export interface FetchState<T> {
   fetching?: boolean
   value?: T
   error?: string
+}
+
+export interface LPPriceAdjustment {
+  price: BigDecimal
+  isInput: boolean
+}
+
+export interface PriceImpact {
+  distancePercentage?: number
+  impactPercentage: number
+  showImpactWarning: boolean
+}
+
+export interface InputRatios {
+  [address: string]: BigNumber
+}
+
+export interface ScaledInput {
+  values: { [address: string]: { low: BigDecimal; high: BigDecimal; scaledLow: BigDecimal; scaledHigh: BigDecimal } }
+  lowTotal: BigDecimal
+  highTotal: BigDecimal
+  scaledHighTotal: BigDecimal
+  scaledLowTotal: BigDecimal
 }

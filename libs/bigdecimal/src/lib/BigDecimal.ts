@@ -14,6 +14,10 @@ export class BigDecimal {
 
   static ONE = new BigDecimal((1e18).toString())
 
+  static sum(...values: BigDecimal[]): BigDecimal {
+    return values.reduce((prev, current) => prev.add(current), BigDecimal.ZERO)
+  }
+
   /**
    * Parse a BigDecimal from the given amount string (e.g. "12.32") and decimals
    * @param amountStr

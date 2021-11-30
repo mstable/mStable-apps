@@ -2,8 +2,8 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { PriceImpact } from '@apps/quick-maths'
 import { CollapseBox, Tooltip } from '@apps/dumb-components'
+import { PriceImpact } from '@apps/types'
 
 import { SlippageInput } from './SlippageInput'
 
@@ -19,6 +19,7 @@ interface Props {
   saveExchangeRate?: BigDecimal
   price?: number
   priceImpact?: PriceImpact
+  fetching?: boolean
 }
 
 const Impact = styled.span<{ warning: boolean }>`
@@ -67,7 +68,7 @@ export const TransactionInfo: FC<Props> = ({
   slippageFormValue,
   saveExchangeRate,
   price,
-  priceImpact: { impactPercentage, impactWarning = false, distancePercentage } = {},
+  priceImpact: { impactPercentage, showImpactWarning = false, distancePercentage } = {},
 }) => {
   const showAdditionalInfo = feeAmount || minOutputAmount || maxOutputAmount || impactPercentage || distancePercentage
 
@@ -155,7 +156,7 @@ export const TransactionInfo: FC<Props> = ({
               <p>
                 <Tooltip tip="The difference between the current rate and estimated rate due to trade size">Price impact</Tooltip>
               </p>
-              <Impact warning={impactWarning}>{impactPercentage < 0.01 ? `<0.01%` : `${impactPercentage?.toFixed(2)}%`}</Impact>
+              <Impact warning={showImpactWarning}>{impactPercentage < 0.01 ? `<0.01%` : `${impactPercentage?.toFixed(2)}%`}</Impact>
             </Info>
           )}
           {formattedDistancePercentage && (

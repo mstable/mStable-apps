@@ -12,7 +12,7 @@ import { useSlippage, useBigDecimalInput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { getPenaltyPercentage } from '@apps/quick-maths'
+import { getDistancePercentage } from '@apps/quick-maths'
 import { getPenaltyMessage } from '@apps/formatters'
 import { AddressOption, DEAD_ADDRESS } from '@apps/types'
 import { AssetExchange, SendButton, TransactionInfo } from '@apps/base/components/forms'
@@ -188,7 +188,7 @@ export const SaveDeposit: FC = () => {
 
   const saveOutput = useSaveOutput(saveRoute, inputAddress, inputAmount)
 
-  const { priceImpact, priceImpact: { impactWarning = false } = {} } = saveOutput?.value ?? {}
+  const { priceImpact, priceImpact: { showImpactWarning = false } = {} } = saveOutput?.value ?? {}
 
   const [slippageSimple, slippageFormValue, handleSetSlippage] = useSlippage()
 
@@ -277,7 +277,7 @@ export const SaveDeposit: FC = () => {
     // Rate == output in imAsset/input in mAsset
     const _exchangeRate = outputImasset.divPrecisely(inputMasset)
 
-    const percentage = getPenaltyPercentage(inputImasset, outputImasset)
+    const percentage = getDistancePercentage(inputImasset, outputImasset)
     const message = getPenaltyMessage(percentage)
 
     return {
@@ -353,7 +353,7 @@ export const SaveDeposit: FC = () => {
     >
       <SendButton
         approve={approve}
-        warning={!error && hasSlippage && impactWarning}
+        warning={!error && hasSlippage && showImpactWarning}
         valid={!error}
         title={error ?? titles[saveRoute]}
         handleSend={() => {
