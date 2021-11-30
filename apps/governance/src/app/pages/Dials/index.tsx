@@ -22,6 +22,7 @@ import { DistributionBar } from './DistributionBar'
 import { DialsMockProvider, useMockDialsState } from './DialsMockProvider'
 import { useToggle } from 'react-use'
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { ViewportWidth } from '@apps/theme'
 
 const DOCS_URL = 'https://docs.mstable.org/using-mstable/mta-staking'
 const FORUM_URL = 'https://forum.mstable.org/'
@@ -44,8 +45,12 @@ const Buttons = styled.div`
   display: flex;
   position: absolute;
   right: 0.75rem;
-  top: 0.75rem;
+  top: -2.5rem;
   gap: 0.25rem;
+
+  @media (min-width: ${ViewportWidth.s}) {
+    top: 0.75rem;
+  }
 `
 
 const StyledButton = styled(Button)`
@@ -99,13 +104,33 @@ const Sidebar = styled.div`
   flex-direction: column;
   gap: 0.75rem;
 
+  > div {
+    flex: 1;
+  }
+
+  > div:last-child {
+    flex-direction: column;
+  }
+
   > div:first-child:not(:last-child) {
     border: 1px solid ${({ theme }) => theme.color.defaultBorder};
     border-radius: 1rem;
   }
 
-  > div:last-child {
+  @media (min-width: ${ViewportWidth.s}) {
     flex-direction: row;
+
+    > div:last-child {
+      flex-direction: row;
+    }
+  }
+
+  @media (min-width: ${ViewportWidth.l}) {
+    flex-direction: column;
+
+    > div {
+      flex: initial;
+    }
   }
 `
 
@@ -117,6 +142,7 @@ const DialContainer = styled.div`
   gap: 0.5rem;
   background: ${({ theme }) => theme.color.background[1]};
   padding: 0.75rem;
+  margin-top: 2rem;
 
   tbody {
     background: ${({ theme }) => theme.color.background[0]};
@@ -131,6 +157,10 @@ const DialContainer = styled.div`
       font-weight: 300;
     }
   }
+
+  @media (min-width: ${ViewportWidth.s}) {
+    margin-top: 0;
+  }
 `
 
 const EpochContainer = styled.div`
@@ -143,7 +173,9 @@ const EpochContainer = styled.div`
 
   > :first-child {
     display: flex;
-    flex-direction: row;
+    gap: 0.5rem;
+    flex-direction: column;
+    text-align: center;
     justify-content: space-between;
     margin: 0.25rem 0.875rem 0.75rem;
 
@@ -157,18 +189,33 @@ const EpochContainer = styled.div`
       font-weight: 500;
     }
   }
+
+  @media (min-width: ${ViewportWidth.s}) {
+    > :first-child {
+      flex-direction: row;
+      text-align: left;
+      gap: 0;
+    }
+  }
 `
 
 const DialAndSidebar = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 1rem;
+  flex-direction: column-reverse;
 
-  > div:first-child {
-    flex-basis: calc(70% - 0.5rem);
-  }
+  @media (min-width: ${ViewportWidth.l}) {
+    gap: 0;
+    justify-content: space-between;
+    flex-direction: row;
 
-  > div:last-child {
-    flex-basis: calc(30% - 0.5rem);
+    > div:first-child {
+      flex-basis: calc(70% - 0.5rem);
+    }
+
+    > div:last-child {
+      flex-basis: calc(30% - 0.5rem);
+    }
   }
 `
 
