@@ -11,6 +11,7 @@ import { TransactionManifest } from '@apps/transaction-manifest'
 import { BigDecimalInputValue, useBigDecimalInput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { AssetExchange, SendButton } from '@apps/base/components/forms'
+import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
 
 import { SaveRoutesOut } from './types'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
@@ -41,6 +42,8 @@ export const SaveRedeem: FC = () => {
   const signer = useSigner()
   const propose = usePropose()
   const stakingRewards = useStakingRewards()
+  const [chainId] = useChainIdCtx()
+  const isPolygon = chainId === ChainIds.MaticMainnet
 
   const {
     address: massetAddress,
@@ -80,21 +83,25 @@ export const SaveRedeem: FC = () => {
   const [inputAmount, inputFormValue, setInputFormValue] = useBigDecimalInput()
 
   const outputOptions = useMemo<AddressOption[]>(() => {
-    const outputs = [
-      massetToken,
-      ...(saveToken ? [saveToken] : []),
-      ...Object.values(bAssets).map(b => b.token),
-      ...Object.values(fAssets).map(b => b.token),
-    ]
-    if (inputAddress === saveAddress) return outputs.filter(v => v.address !== saveAddress)
-    return outputs
-  }, [massetToken, saveToken, bAssets, fAssets, inputAddress, saveAddress])
+    if (isPolygon) {
+      const outputs = [
+        massetToken,
+        ...(saveToken ? [saveToken] : []),
+        ...Object.values(bAssets).map(b => b.token),
+        ...Object.values(fAssets).map(b => b.token),
+      ]
+      if (inputAddress === saveAddress) return outputs.filter(v => v.address !== saveAddress)
+      return outputs
+    }
+    // TODO: Delete below when upgraded on mainnet
+    if (inputAddress === vaultAddress) return [{ address: saveAddress }]
+    return [{ address: massetAddress as string }]
+  }, [isPolygon, inputAddress, vaultAddress, saveAddress, massetAddress, massetToken, saveToken, bAssets, fAssets])
 
   const [outputAddress, setOutputAddress] = useState<string | undefined>(outputOptions?.[0].address)
 
   const handleSetInputAddress = useCallback(
     (address: string) => {
-      console.log(address)
       if (address === vaultAddress) setOutputAddress(saveAddress)
       if (address === saveAddress) setOutputAddress(massetAddress)
       setInputAddress(address)
@@ -114,13 +121,10 @@ export const SaveRedeem: FC = () => {
   }, [inputAddress, massetAddress, outputAddress, saveAddress, vaultAddress])
 
   const error = useMemo<string | undefined>(() => {
-    // TODO: - Remove this. Added for testing routes
-    return `${SaveRoutesOut[saveRoute]}`
-
     if (inputAmount && inputToken && inputToken.balance.exact.lt(inputAmount.exact)) {
       return 'Insufficient balance'
     }
-  }, [inputToken, inputAmount, saveRoute])
+  }, [inputToken, inputAmount])
 
   // MARK: Input as masset to calc swap exchange rate
   const { exchangeRate: swapExchangeRate } = useEstimatedOutput(
