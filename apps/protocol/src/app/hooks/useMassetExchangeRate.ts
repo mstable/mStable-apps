@@ -35,7 +35,7 @@ export const useExchangeRateForMassetInputs = (
       return amount
     }
 
-    const totalAmount = Object.values(touched).reduce((prev, v) => prev.add(scaleAssetValue(v)), BigDecimal.ZERO)
+    const totalAmount = BigDecimal.sum(...Object.values(touched).map(scaleAssetValue))
 
     if (totalAmount) {
       if (estimatedOutputAmount.value.exact.eq(0) || totalAmount.exact.eq(0)) {

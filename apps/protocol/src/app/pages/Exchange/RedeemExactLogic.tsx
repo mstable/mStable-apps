@@ -46,7 +46,7 @@ export const RedeemExactLogic: FC = () => {
   const inputAmount = useMemo(() => {
     if (!Object.keys(bassetAmounts).length || !touched.length) return
 
-    return Object.values(touched).reduce((prev, v) => prev.add(v.amount.mulRatioTruncate(bassetRatios[v.address])), BigDecimal.ZERO)
+    return BigDecimal.sum(...Object.values(touched).map(v => v.amount.mulRatioTruncate(bassetRatios[v.address])))
   }, [bassetAmounts, touched, bassetRatios])
 
   const { maxOutputAmount } = useMaximumOutput(slippage?.simple, inputAmount, estimatedOutputAmount.value)
