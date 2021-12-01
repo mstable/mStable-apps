@@ -156,12 +156,11 @@ const PoolDetailContent: FC = () => {
   const color = assetColorMapping[title]
   const isLowLiquidity = massetPrice ? liquidity.simple * (massetPrice.value ?? 0) < 100000 : false
 
-  // FIXME REVERT!
   const tabs = useMemo(
     () => ({
       Deposit: {
         title: 'Deposit',
-        component: <Deposit isLowLiquidity={false} />,
+        component: <Deposit isLowLiquidity={isLowLiquidity} />,
       },
       Withdraw: {
         title: 'Withdraw',
