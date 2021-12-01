@@ -14,7 +14,6 @@ import type {
 } from '@apps/artifacts/typechain'
 
 import type { BigDecimal } from '@apps/bigdecimal'
-import { BigDecimalInputValue, BigDecimalInputValues } from '@apps/hooks'
 import { BigNumber } from 'ethers'
 
 export type MassetName = 'musd' | 'mbtc'
