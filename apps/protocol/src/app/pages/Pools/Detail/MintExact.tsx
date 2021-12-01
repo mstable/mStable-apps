@@ -19,6 +19,7 @@ import {
   useFPVaultAddressOptions,
   useFPAssetAddressOptions,
 } from '../FeederPoolProvider'
+import { scaleFassetAmount } from '../utils'
 
 const formId = 'DepositLP'
 
@@ -52,17 +53,14 @@ export const MintExact: FC = () => {
 
     const fassetAmount = touched.find(({ address }) => address === feederPool.fasset.address)?.amount
 
-    const scaledFassetAmount =
-      (!!Object.keys(inputRatios)?.length && fassetAmount
-        ? fassetAmount.mulRatioTruncate(inputRatios[Object.keys(inputRatios).find(k => !!inputRatios[k])]).setDecimals(18)
-        : undefined) ?? fassetAmount
+    const scaledFassetAmount = scaleFassetAmount(fassetAmount, inputRatios)
 
     if (scaledFassetAmount && massetAmount) {
       return scaledFassetAmount.add(massetAmount).setDecimals(18)
     }
 
     return massetAmount ?? fassetAmount
-  }, [feederPool.fasset.address, feederPool.masset.address, inputRatios, touched])
+  }, [feederPool, inputRatios, touched])
 
   const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(
     Route.Mint,
@@ -125,9 +123,9 @@ export const MintExact: FC = () => {
 
       if (touchedOptions.length !== Object.keys(inputValues).length) return 'Assets must be deposited in pairs'
 
-      const isInRatio = !!touched.find(v => (v.amount?.simple ?? 0) < minAssetSimple)
+      const isInRatio = !touched.find(v => scaleFassetAmount(v.amount, inputRatios)?.simple < minAssetSimple)
 
-      if (isInRatio) return 'Assets must be deposited at a minimum 40/60 ratio'
+      if (!isInRatio) return 'Assets must be deposited at a minimum 40/60 ratio'
     }
 
     if (!contractAddress || !touchedOptions.every(opt => opt.balance)) {
@@ -147,7 +145,17 @@ export const MintExact: FC = () => {
     if (estimatedOutputAmount.fetching) return 'Validating…'
 
     return estimatedOutputAmount.error
-  }, [assetAddressOptions, estimatedOutputAmount, outputAddress, contractAddress, touched, inputAmount, isLowLiquidity, inputValues])
+  }, [
+    touched,
+    outputAddress,
+    assetAddressOptions,
+    isLowLiquidity,
+    contractAddress,
+    estimatedOutputAmount,
+    inputAmount,
+    inputValues,
+    inputRatios,
+  ])
 
   return (
     <ManyToOneAssetExchange
