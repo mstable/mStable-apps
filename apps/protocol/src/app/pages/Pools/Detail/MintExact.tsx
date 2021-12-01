@@ -42,6 +42,9 @@ export const MintExact: FC = () => {
 
   const touched = useMemo(() => Object.values(inputValues).filter(v => v.touched), [inputValues])
 
+  const inputRatios = useFPInputRatios()
+  const scaledInput = useScaledInput(inputValues, inputRatios)
+
   const inputAmount = useMemo(() => {
     if (!touched.length) return
 
@@ -49,15 +52,17 @@ export const MintExact: FC = () => {
 
     const fassetAmount = touched.find(({ address }) => address === feederPool.fasset.address)?.amount
 
-    if (fassetAmount && massetAmount) {
-      return fassetAmount.mulRatioTruncate(feederPool.fasset.ratio).add(massetAmount).setDecimals(18)
+    const scaledFassetAmount =
+      (!!Object.keys(inputRatios)?.length && fassetAmount
+        ? fassetAmount.mulRatioTruncate(inputRatios[Object.keys(inputRatios).find(k => !!inputRatios[k])]).setDecimals(18)
+        : undefined) ?? fassetAmount
+
+    if (scaledFassetAmount && massetAmount) {
+      return scaledFassetAmount.add(massetAmount).setDecimals(18)
     }
 
     return massetAmount ?? fassetAmount
-  }, [feederPool, touched])
-
-  const inputRatios = useFPInputRatios()
-  const scaledInput = useScaledInput(inputValues, inputRatios)
+  }, [feederPool.fasset.address, feederPool.masset.address, inputRatios, touched])
 
   const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(
     Route.Mint,
@@ -118,13 +123,11 @@ export const MintExact: FC = () => {
     if (isLowLiquidity) {
       const minAssetSimple = (inputAmount?.simple ?? 0) * 0.4
 
-      if (touchedOptions.length !== Object.keys(inputValues).length) {
-        return 'Assets must be deposited in pairs'
-      }
+      if (touchedOptions.length !== Object.keys(inputValues).length) return 'Assets must be deposited in pairs'
 
-      if (touched.find(v => (v.amount?.simple ?? 0) < minAssetSimple)) {
-        return 'Assets must be deposited at a minimum 40/60 ratio'
-      }
+      const isInRatio = !!touched.find(v => (v.amount?.simple ?? 0) < minAssetSimple)
+
+      if (isInRatio) return 'Assets must be deposited at a minimum 40/60 ratio'
     }
 
     if (!contractAddress || !touchedOptions.every(opt => opt.balance)) {
