@@ -32,6 +32,6 @@ export const useScaledInput = createMemo((inputValues: BigDecimalInputValues, in
         values: { ...prev.values, [address]: { low, high, scaledLow, scaledHigh } },
       } as ScaledInput
     },
-    { highTotal, scaledHighTotal, scaledLowTotal: BigDecimal.ZERO, lowTotal: BigDecimal.ZERO } as ScaledInput,
+    { highTotal, scaledHighTotal, scaledLowTotal: BigDecimal.ZERO, lowTotal: BigDecimal.ZERO, values: {} } as ScaledInput,
   )
 })
