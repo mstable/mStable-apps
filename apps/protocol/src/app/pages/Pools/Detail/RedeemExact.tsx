@@ -15,6 +15,7 @@ import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import { useSelectedFeederPoolContract, useSelectedFeederPoolState } from '../FeederPoolProvider'
+import { scaleFassetAmount } from '../utils'
 
 const formId = 'RedeemExact'
 
@@ -51,12 +52,14 @@ export const RedeemExact: FC = () => {
 
     const fassetAmount = touched.find(({ address }) => address === feederPool.fasset.address)?.amount
 
-    if (fassetAmount && massetAmount) {
-      return fassetAmount.mulRatioTruncate(feederPool.fasset.ratio).add(massetAmount).setDecimals(18)
+    const scaledFassetAmount = scaleFassetAmount(fassetAmount, inputRatios)
+
+    if (scaledFassetAmount && massetAmount) {
+      return scaledFassetAmount.add(massetAmount).setDecimals(18)
     }
 
     return massetAmount ?? fassetAmount
-  }, [feederPool, touched])
+  }, [feederPool, inputRatios, touched])
 
   const { maxOutputAmount } = useMaximumOutput(slippage.simple, inputAmount, estimatedOutputAmount.value)
 
@@ -83,13 +86,11 @@ export const RedeemExact: FC = () => {
     if (isLowLiquidity) {
       const minAssetSimple = (inputAmount?.simple ?? 0) * 0.4
 
-      if (touched.length !== Object.keys(inputValues).length) {
-        return 'Assets must be withdrawn in pairs'
-      }
+      if (touched.length !== Object.keys(inputValues).length) return 'Assets must be withdrawn in pairs'
 
-      if (touched.find(v => (v.amount?.simple ?? 0) < minAssetSimple)) {
-        return 'Assets must be withdrawn at a minimum 40/60 ratio'
-      }
+      const isInRatio = !touched.find(v => scaleFassetAmount(v.amount, inputRatios)?.simple < minAssetSimple)
+
+      if (!isInRatio) return 'Assets must be withdrawn at a minimum 40/60 ratio'
     }
 
     if (estimatedOutputAmount.error) return estimatedOutputAmount.error
@@ -101,7 +102,7 @@ export const RedeemExact: FC = () => {
     if (estimatedOutputAmount.fetching) return 'Validating…'
 
     return estimatedOutputAmount.error
-  }, [estimatedOutputAmount, feederPool, touched, isLowLiquidity, inputValues, inputAmount])
+  }, [touched, isLowLiquidity, estimatedOutputAmount, feederPool, inputAmount, inputValues, inputRatios])
 
   return (
     <OneToManyAssetExchange
