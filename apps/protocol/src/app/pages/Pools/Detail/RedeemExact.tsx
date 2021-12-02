@@ -52,7 +52,7 @@ export const RedeemExact: FC = () => {
 
     const fassetAmount = touched.find(({ address }) => address === feederPool.fasset.address)?.amount
 
-    const scaledFassetAmount = scaleFassetAmount(fassetAmount, inputRatios)
+    const scaledFassetAmount = scaleFassetAmount(fassetAmount, feederPool.fasset.address, inputRatios)
 
     if (scaledFassetAmount && massetAmount) {
       return scaledFassetAmount.add(massetAmount).setDecimals(18)
@@ -88,7 +88,7 @@ export const RedeemExact: FC = () => {
 
       if (touched.length !== Object.keys(inputValues).length) return 'Assets must be withdrawn in pairs'
 
-      const isInRatio = !touched.find(v => scaleFassetAmount(v.amount, inputRatios)?.simple < minAssetSimple)
+      const isInRatio = !touched.find(v => scaleFassetAmount(v.amount, v.address, inputRatios)?.simple < minAssetSimple)
 
       if (!isInRatio) return 'Assets must be withdrawn at a minimum 40/60 ratio'
     }
