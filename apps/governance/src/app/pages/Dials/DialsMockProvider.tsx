@@ -75,5 +75,6 @@ const stateCtx = createContext<State>(MOCK_DATA)
 export const useMockDialsState = (): State => useContext(stateCtx)
 
 export const DialsMockProvider: FC = ({ children }) => {
+  const query = useEmissionsQuery()
   return <stateCtx.Provider value={useMemo(() => MOCK_DATA, [])}>{children}</stateCtx.Provider>
 }

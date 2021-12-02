@@ -1,0 +1,14 @@
+query Emissions {
+  tokens(first: 5) {
+    id
+    address
+    decimals
+    name
+  }
+  metrics(first: 5) {
+    id
+    exact
+    decimals
+    simple
+  }
+}
