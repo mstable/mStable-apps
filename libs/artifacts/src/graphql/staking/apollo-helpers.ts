@@ -1,5 +1,5 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type AccountKeySpecifier = ('completedQuests' | 'delegators' | 'id' | 'lastAction' | 'permMultiplier' | 'permMultiplierSimple' | 'rewardPaidTransactions' | 'seasonMultiplier' | 'seasonMultiplierSimple' | 'stakedTokenAccounts' | 'totalVotesAll' | 'totalVotesAllBD' | 'totalVotesBPT' | 'totalVotesBPTBD' | 'totalVotesMTA' | 'totalVotesMTABD' | AccountKeySpecifier)[];
+export type AccountKeySpecifier = ('completedQuests' | 'delegators' | 'id' | 'lastAction' | 'permMultiplier' | 'permMultiplierSimple' | 'seasonMultiplier' | 'seasonMultiplierSimple' | 'stakedTokenAccounts' | 'totalVotesAll' | 'totalVotesAllBD' | 'totalVotesBPT' | 'totalVotesBPTBD' | 'totalVotesMTA' | 'totalVotesMTABD' | AccountKeySpecifier)[];
 export type AccountFieldPolicy = {
 	completedQuests?: FieldPolicy<any> | FieldReadFunction<any>,
 	delegators?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -7,7 +7,6 @@ export type AccountFieldPolicy = {
 	lastAction?: FieldPolicy<any> | FieldReadFunction<any>,
 	permMultiplier?: FieldPolicy<any> | FieldReadFunction<any>,
 	permMultiplierSimple?: FieldPolicy<any> | FieldReadFunction<any>,
-	rewardPaidTransactions?: FieldPolicy<any> | FieldReadFunction<any>,
 	seasonMultiplier?: FieldPolicy<any> | FieldReadFunction<any>,
 	seasonMultiplierSimple?: FieldPolicy<any> | FieldReadFunction<any>,
 	stakedTokenAccounts?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -86,16 +85,15 @@ export type QuestManagerFieldPolicy = {
 	questMaster?: FieldPolicy<any> | FieldReadFunction<any>,
 	questSigner?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type RewardPaidTransactionKeySpecifier = ('id' | 'hash' | 'account' | 'stakedTokenAccount' | 'sender' | 'block' | 'timestamp' | 'amount' | RewardPaidTransactionKeySpecifier)[];
+export type RewardPaidTransactionKeySpecifier = ('id' | 'hash' | 'sender' | 'block' | 'timestamp' | 'amount' | 'stakingRewards' | RewardPaidTransactionKeySpecifier)[];
 export type RewardPaidTransactionFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	hash?: FieldPolicy<any> | FieldReadFunction<any>,
-	account?: FieldPolicy<any> | FieldReadFunction<any>,
-	stakedTokenAccount?: FieldPolicy<any> | FieldReadFunction<any>,
 	sender?: FieldPolicy<any> | FieldReadFunction<any>,
 	block?: FieldPolicy<any> | FieldReadFunction<any>,
 	timestamp?: FieldPolicy<any> | FieldReadFunction<any>,
-	amount?: FieldPolicy<any> | FieldReadFunction<any>
+	amount?: FieldPolicy<any> | FieldReadFunction<any>,
+	stakingRewards?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type SeasonKeySpecifier = ('id' | 'seasonNumber' | 'startedAt' | 'endedAt' | 'quests' | SeasonKeySpecifier)[];
 export type SeasonFieldPolicy = {
@@ -121,7 +119,7 @@ export type StakedTokenFieldPolicy = {
 	isStakedTokenMTA?: FieldPolicy<any> | FieldReadFunction<any>,
 	accounts?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type StakedTokenAccountKeySpecifier = ('id' | 'account' | 'stakedToken' | 'balance' | 'delegatee' | 'rewardPerTokenPaid' | 'rewards' | 'rewardPaidTransactions' | StakedTokenAccountKeySpecifier)[];
+export type StakedTokenAccountKeySpecifier = ('id' | 'account' | 'stakedToken' | 'balance' | 'delegatee' | 'rewardPerTokenPaid' | 'rewards' | StakedTokenAccountKeySpecifier)[];
 export type StakedTokenAccountFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	account?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -129,10 +127,9 @@ export type StakedTokenAccountFieldPolicy = {
 	balance?: FieldPolicy<any> | FieldReadFunction<any>,
 	delegatee?: FieldPolicy<any> | FieldReadFunction<any>,
 	rewardPerTokenPaid?: FieldPolicy<any> | FieldReadFunction<any>,
-	rewards?: FieldPolicy<any> | FieldReadFunction<any>,
-	rewardPaidTransactions?: FieldPolicy<any> | FieldReadFunction<any>
+	rewards?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type StakedTokenBalanceKeySpecifier = ('account' | 'cooldownTimestamp' | 'cooldownUnits' | 'id' | 'questMultiplier' | 'questMultiplierSimple' | 'raw' | 'rawBD' | 'stakedToken' | 'timeMultiplier' | 'timeMultiplierSimple' | 'votes' | 'votesBD' | 'weightedTimestamp' | StakedTokenBalanceKeySpecifier)[];
+export type StakedTokenBalanceKeySpecifier = ('account' | 'cooldownTimestamp' | 'cooldownUnits' | 'id' | 'questMultiplier' | 'questMultiplierSimple' | 'raw' | 'rawBD' | 'stakedToken' | 'timeMultiplier' | 'timeMultiplierSimple' | 'userPriceCoefficient' | 'votes' | 'votesBD' | 'weightedTimestamp' | StakedTokenBalanceKeySpecifier)[];
 export type StakedTokenBalanceFieldPolicy = {
 	account?: FieldPolicy<any> | FieldReadFunction<any>,
 	cooldownTimestamp?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -145,11 +142,12 @@ export type StakedTokenBalanceFieldPolicy = {
 	stakedToken?: FieldPolicy<any> | FieldReadFunction<any>,
 	timeMultiplier?: FieldPolicy<any> | FieldReadFunction<any>,
 	timeMultiplierSimple?: FieldPolicy<any> | FieldReadFunction<any>,
+	userPriceCoefficient?: FieldPolicy<any> | FieldReadFunction<any>,
 	votes?: FieldPolicy<any> | FieldReadFunction<any>,
 	votesBD?: FieldPolicy<any> | FieldReadFunction<any>,
 	weightedTimestamp?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type StakingRewardsKeySpecifier = ('id' | 'periodFinish' | 'lastUpdateTime' | 'rewardRate' | 'rewardPerTokenStored' | 'rewardsToken' | 'rewardsTokenVendor' | 'rewardsDistributor' | 'pendingAdditionalReward' | 'DURATION' | StakingRewardsKeySpecifier)[];
+export type StakingRewardsKeySpecifier = ('id' | 'periodFinish' | 'lastUpdateTime' | 'rewardRate' | 'rewardPerTokenStored' | 'rewardsToken' | 'rewardsTokenVendor' | 'rewardsDistributor' | 'pendingAdditionalReward' | 'DURATION' | 'rewardPaidTransactions' | StakingRewardsKeySpecifier)[];
 export type StakingRewardsFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	periodFinish?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -160,7 +158,8 @@ export type StakingRewardsFieldPolicy = {
 	rewardsTokenVendor?: FieldPolicy<any> | FieldReadFunction<any>,
 	rewardsDistributor?: FieldPolicy<any> | FieldReadFunction<any>,
 	pendingAdditionalReward?: FieldPolicy<any> | FieldReadFunction<any>,
-	DURATION?: FieldPolicy<any> | FieldReadFunction<any>
+	DURATION?: FieldPolicy<any> | FieldReadFunction<any>,
+	rewardPaidTransactions?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type SubscriptionKeySpecifier = ('token' | 'tokens' | 'metric' | 'metrics' | 'counter' | 'counters' | 'stakedTokenBalance' | 'stakedTokenBalances' | 'quest' | 'quests' | 'season' | 'seasons' | 'completedQuest' | 'completedQuests' | 'stakedToken' | 'stakedTokens' | 'stakingRewards' | 'account' | 'accounts' | 'stakedTokenAccount' | 'stakedTokenAccounts' | 'questManager' | 'questManagers' | 'rewardPaidTransaction' | 'rewardPaidTransactions' | 'transaction' | 'transactions' | '_meta' | SubscriptionKeySpecifier)[];
 export type SubscriptionFieldPolicy = {

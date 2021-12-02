@@ -106,6 +106,12 @@ export type Proposal = {
   snapshot?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   link?: Maybe<Scalars['String']>;
+  scores?: Maybe<Array<Maybe<Scalars['Float']>>>;
+  scores_by_strategy?: Maybe<Scalars['Any']>;
+  scores_state?: Maybe<Scalars['String']>;
+  scores_total?: Maybe<Scalars['Float']>;
+  scores_updated?: Maybe<Scalars['Int']>;
+  votes?: Maybe<Scalars['Int']>;
 };
 
 export type ProposalWhere = {
@@ -119,6 +125,8 @@ export type ProposalWhere = {
   author_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   network?: Maybe<Scalars['String']>;
   network_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  type?: Maybe<Scalars['String']>;
+  type_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   created?: Maybe<Scalars['Int']>;
   created_in?: Maybe<Array<Maybe<Scalars['Int']>>>;
   created_gt?: Maybe<Scalars['Int']>;
@@ -137,6 +145,8 @@ export type ProposalWhere = {
   end_gte?: Maybe<Scalars['Int']>;
   end_lt?: Maybe<Scalars['Int']>;
   end_lte?: Maybe<Scalars['Int']>;
+  scores_state?: Maybe<Scalars['String']>;
+  scores_state_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   state?: Maybe<Scalars['String']>;
 };
 
@@ -243,6 +253,8 @@ export type Space = {
   filters?: Maybe<SpaceFilters>;
   plugins?: Maybe<Scalars['Any']>;
   voting?: Maybe<SpaceVoting>;
+  categories?: Maybe<Array<Maybe<Scalars['String']>>>;
+  validation?: Maybe<Strategy>;
 };
 
 export type SpaceFilters = {
@@ -255,6 +267,8 @@ export type SpaceVoting = {
   period?: Maybe<Scalars['Int']>;
   type?: Maybe<Scalars['String']>;
   quorum?: Maybe<Scalars['Float']>;
+  blind?: Maybe<Scalars['Boolean']>;
+  hideAbstain?: Maybe<Scalars['Boolean']>;
 };
 
 export type SpaceWhere = {
@@ -301,6 +315,9 @@ export type Vote = {
   proposal?: Maybe<Proposal>;
   choice: Scalars['Any'];
   metadata?: Maybe<Scalars['Any']>;
+  vp?: Maybe<Scalars['Float']>;
+  vp_by_strategy?: Maybe<Array<Maybe<Scalars['Float']>>>;
+  vp_state?: Maybe<Scalars['String']>;
 };
 
 export type VoteWhere = {
@@ -320,6 +337,14 @@ export type VoteWhere = {
   created_gte?: Maybe<Scalars['Int']>;
   created_lt?: Maybe<Scalars['Int']>;
   created_lte?: Maybe<Scalars['Int']>;
+  vp?: Maybe<Scalars['Float']>;
+  vp_in?: Maybe<Array<Maybe<Scalars['Float']>>>;
+  vp_gt?: Maybe<Scalars['Float']>;
+  vp_gte?: Maybe<Scalars['Float']>;
+  vp_lt?: Maybe<Scalars['Float']>;
+  vp_lte?: Maybe<Scalars['Float']>;
+  vp_state?: Maybe<Scalars['String']>;
+  vp_state_in?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type VotesQueryVariables = Exact<{

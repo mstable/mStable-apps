@@ -82,6 +82,12 @@ type Proposal {
   snapshot: String
   state: String
   link: String
+  scores: [Float]
+  scores_by_strategy: Any
+  scores_state: String
+  scores_total: Float
+  scores_updated: Int
+  votes: Int
 }
 
 input ProposalWhere {
@@ -95,6 +101,8 @@ input ProposalWhere {
   author_in: [String]
   network: String
   network_in: [String]
+  type: String
+  type_in: [String]
   created: Int
   created_in: [Int]
   created_gt: Int
@@ -113,6 +121,8 @@ input ProposalWhere {
   end_gte: Int
   end_lt: Int
   end_lte: Int
+  scores_state: String
+  scores_state_in: [String]
   state: String
 }
 
@@ -150,6 +160,8 @@ type Space {
   filters: SpaceFilters
   plugins: Any
   voting: SpaceVoting
+  categories: [String]
+  validation: Strategy
 }
 
 type SpaceFilters {
@@ -162,6 +174,8 @@ type SpaceVoting {
   period: Int
   type: String
   quorum: Float
+  blind: Boolean
+  hideAbstain: Boolean
 }
 
 input SpaceWhere {
@@ -208,6 +222,9 @@ type Vote {
   proposal: Proposal
   choice: Any!
   metadata: Any
+  vp: Float
+  vp_by_strategy: [Float]
+  vp_state: String
 }
 
 input VoteWhere {
@@ -227,4 +244,12 @@ input VoteWhere {
   created_gte: Int
   created_lt: Int
   created_lte: Int
+  vp: Float
+  vp_in: [Float]
+  vp_gt: Float
+  vp_gte: Float
+  vp_lt: Float
+  vp_lte: Float
+  vp_state: String
+  vp_state_in: [String]
 }

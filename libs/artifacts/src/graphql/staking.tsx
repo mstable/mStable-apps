@@ -46,7 +46,6 @@ export type Account = {
   lastAction: Scalars['Int'];
   permMultiplier: Scalars['Int'];
   permMultiplierSimple: Scalars['Float'];
-  rewardPaidTransactions: Array<RewardPaidTransaction>;
   seasonMultiplier: Scalars['Int'];
   seasonMultiplierSimple: Scalars['Float'];
   stakedTokenAccounts: Array<StakedTokenAccount>;
@@ -74,15 +73,6 @@ export type AccountDelegatorsArgs = {
   orderBy?: Maybe<StakedTokenAccount_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<StakedTokenAccount_Filter>;
-};
-
-
-export type AccountRewardPaidTransactionsArgs = {
-  skip?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<RewardPaidTransaction_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<RewardPaidTransaction_Filter>;
 };
 
 
@@ -163,8 +153,7 @@ export enum Account_OrderBy {
   SeasonMultiplier = 'seasonMultiplier',
   CompletedQuests = 'completedQuests',
   StakedTokenAccounts = 'stakedTokenAccounts',
-  Delegators = 'delegators',
-  RewardPaidTransactions = 'rewardPaidTransactions'
+  Delegators = 'delegators'
 }
 
 
@@ -173,6 +162,7 @@ export enum Account_OrderBy {
 export type Block_Height = {
   hash?: Maybe<Scalars['Bytes']>;
   number?: Maybe<Scalars['Int']>;
+  number_gte?: Maybe<Scalars['Int']>;
 };
 
 
@@ -750,12 +740,11 @@ export enum Quest_OrderBy {
 export type RewardPaidTransaction = Transaction & {
   id: Scalars['ID'];
   hash: Scalars['Bytes'];
-  account: Account;
-  stakedTokenAccount: StakedTokenAccount;
   sender: Scalars['Bytes'];
   block: Scalars['Int'];
   timestamp: Scalars['BigInt'];
   amount: Scalars['BigInt'];
+  stakingRewards: StakingRewards;
 };
 
 export type RewardPaidTransaction_Filter = {
@@ -773,34 +762,6 @@ export type RewardPaidTransaction_Filter = {
   hash_not_in?: Maybe<Array<Scalars['Bytes']>>;
   hash_contains?: Maybe<Scalars['Bytes']>;
   hash_not_contains?: Maybe<Scalars['Bytes']>;
-  account?: Maybe<Scalars['String']>;
-  account_not?: Maybe<Scalars['String']>;
-  account_gt?: Maybe<Scalars['String']>;
-  account_lt?: Maybe<Scalars['String']>;
-  account_gte?: Maybe<Scalars['String']>;
-  account_lte?: Maybe<Scalars['String']>;
-  account_in?: Maybe<Array<Scalars['String']>>;
-  account_not_in?: Maybe<Array<Scalars['String']>>;
-  account_contains?: Maybe<Scalars['String']>;
-  account_not_contains?: Maybe<Scalars['String']>;
-  account_starts_with?: Maybe<Scalars['String']>;
-  account_not_starts_with?: Maybe<Scalars['String']>;
-  account_ends_with?: Maybe<Scalars['String']>;
-  account_not_ends_with?: Maybe<Scalars['String']>;
-  stakedTokenAccount?: Maybe<Scalars['String']>;
-  stakedTokenAccount_not?: Maybe<Scalars['String']>;
-  stakedTokenAccount_gt?: Maybe<Scalars['String']>;
-  stakedTokenAccount_lt?: Maybe<Scalars['String']>;
-  stakedTokenAccount_gte?: Maybe<Scalars['String']>;
-  stakedTokenAccount_lte?: Maybe<Scalars['String']>;
-  stakedTokenAccount_in?: Maybe<Array<Scalars['String']>>;
-  stakedTokenAccount_not_in?: Maybe<Array<Scalars['String']>>;
-  stakedTokenAccount_contains?: Maybe<Scalars['String']>;
-  stakedTokenAccount_not_contains?: Maybe<Scalars['String']>;
-  stakedTokenAccount_starts_with?: Maybe<Scalars['String']>;
-  stakedTokenAccount_not_starts_with?: Maybe<Scalars['String']>;
-  stakedTokenAccount_ends_with?: Maybe<Scalars['String']>;
-  stakedTokenAccount_not_ends_with?: Maybe<Scalars['String']>;
   sender?: Maybe<Scalars['Bytes']>;
   sender_not?: Maybe<Scalars['Bytes']>;
   sender_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -831,17 +792,30 @@ export type RewardPaidTransaction_Filter = {
   amount_lte?: Maybe<Scalars['BigInt']>;
   amount_in?: Maybe<Array<Scalars['BigInt']>>;
   amount_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  stakingRewards?: Maybe<Scalars['String']>;
+  stakingRewards_not?: Maybe<Scalars['String']>;
+  stakingRewards_gt?: Maybe<Scalars['String']>;
+  stakingRewards_lt?: Maybe<Scalars['String']>;
+  stakingRewards_gte?: Maybe<Scalars['String']>;
+  stakingRewards_lte?: Maybe<Scalars['String']>;
+  stakingRewards_in?: Maybe<Array<Scalars['String']>>;
+  stakingRewards_not_in?: Maybe<Array<Scalars['String']>>;
+  stakingRewards_contains?: Maybe<Scalars['String']>;
+  stakingRewards_not_contains?: Maybe<Scalars['String']>;
+  stakingRewards_starts_with?: Maybe<Scalars['String']>;
+  stakingRewards_not_starts_with?: Maybe<Scalars['String']>;
+  stakingRewards_ends_with?: Maybe<Scalars['String']>;
+  stakingRewards_not_ends_with?: Maybe<Scalars['String']>;
 };
 
 export enum RewardPaidTransaction_OrderBy {
   Id = 'id',
   Hash = 'hash',
-  Account = 'account',
-  StakedTokenAccount = 'stakedTokenAccount',
   Sender = 'sender',
   Block = 'block',
   Timestamp = 'timestamp',
-  Amount = 'amount'
+  Amount = 'amount',
+  StakingRewards = 'stakingRewards'
 }
 
 export type Season = {
@@ -937,16 +911,6 @@ export type StakedTokenAccount = {
   delegatee?: Maybe<Account>;
   rewardPerTokenPaid?: Maybe<Scalars['BigInt']>;
   rewards?: Maybe<Scalars['BigInt']>;
-  rewardPaidTransactions: Array<RewardPaidTransaction>;
-};
-
-
-export type StakedTokenAccountRewardPaidTransactionsArgs = {
-  skip?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<RewardPaidTransaction_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<RewardPaidTransaction_Filter>;
 };
 
 export type StakedTokenAccount_Filter = {
@@ -1039,8 +1003,7 @@ export enum StakedTokenAccount_OrderBy {
   Balance = 'balance',
   Delegatee = 'delegatee',
   RewardPerTokenPaid = 'rewardPerTokenPaid',
-  Rewards = 'rewards',
-  RewardPaidTransactions = 'rewardPaidTransactions'
+  Rewards = 'rewards'
 }
 
 export type StakedTokenBalance = {
@@ -1055,6 +1018,7 @@ export type StakedTokenBalance = {
   stakedToken: StakedToken;
   timeMultiplier: Scalars['Int'];
   timeMultiplierSimple: Scalars['Float'];
+  userPriceCoefficient: Scalars['BigInt'];
   votes: Scalars['BigInt'];
   votesBD: Scalars['MstableBigDecimal'];
   weightedTimestamp: Scalars['Int'];
@@ -1153,6 +1117,14 @@ export type StakedTokenBalance_Filter = {
   votes_lte?: Maybe<Scalars['BigInt']>;
   votes_in?: Maybe<Array<Scalars['BigInt']>>;
   votes_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  userPriceCoefficient?: Maybe<Scalars['BigInt']>;
+  userPriceCoefficient_not?: Maybe<Scalars['BigInt']>;
+  userPriceCoefficient_gt?: Maybe<Scalars['BigInt']>;
+  userPriceCoefficient_lt?: Maybe<Scalars['BigInt']>;
+  userPriceCoefficient_gte?: Maybe<Scalars['BigInt']>;
+  userPriceCoefficient_lte?: Maybe<Scalars['BigInt']>;
+  userPriceCoefficient_in?: Maybe<Array<Scalars['BigInt']>>;
+  userPriceCoefficient_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum StakedTokenBalance_OrderBy {
@@ -1165,7 +1137,8 @@ export enum StakedTokenBalance_OrderBy {
   TimeMultiplier = 'timeMultiplier',
   CooldownTimestamp = 'cooldownTimestamp',
   CooldownUnits = 'cooldownUnits',
-  Votes = 'votes'
+  Votes = 'votes',
+  UserPriceCoefficient = 'userPriceCoefficient'
 }
 
 export type StakedToken_Filter = {
@@ -1310,6 +1283,16 @@ export type StakingRewards = {
   rewardsDistributor: Scalars['Bytes'];
   pendingAdditionalReward: Scalars['BigInt'];
   DURATION?: Maybe<Scalars['Int']>;
+  rewardPaidTransactions: Array<RewardPaidTransaction>;
+};
+
+
+export type StakingRewardsRewardPaidTransactionsArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<RewardPaidTransaction_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<RewardPaidTransaction_Filter>;
 };
 
 export type StakingRewards_Filter = {
@@ -1407,7 +1390,8 @@ export enum StakingRewards_OrderBy {
   RewardsTokenVendor = 'rewardsTokenVendor',
   RewardsDistributor = 'rewardsDistributor',
   PendingAdditionalReward = 'pendingAdditionalReward',
-  Duration = 'DURATION'
+  Duration = 'DURATION',
+  RewardPaidTransactions = 'rewardPaidTransactions'
 }
 
 export type Subscription = {
