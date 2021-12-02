@@ -21,6 +21,7 @@
       "@apps/artifacts/graphql/feeders": ["libs/artifacts/src/graphql/feeders.tsx"],
       "@apps/artifacts/graphql/merkle-drop": ["libs/artifacts/src/graphql/merkle-drop.tsx"],
       "@apps/artifacts/graphql/protocol": ["libs/artifacts/src/graphql/protocol.tsx"],
+      "@apps/artifacts/graphql/emissions": ["libs/artifacts/src/graphql/emissions.tsx"],
       "@apps/artifacts/graphql/questbook": ["libs/artifacts/src/graphql/questbook.tsx"],
       "@apps/artifacts/graphql/questbook/apollo-helpers": ["libs/artifacts/src/graphql/questbook/apollo-helpers.ts"],
       "@apps/artifacts/graphql/shared": ["libs/artifacts/src/graphql/shared.tsx"],
