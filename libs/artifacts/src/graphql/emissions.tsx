@@ -1370,25 +1370,40 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type EmissionsQueryVariables = Exact<{ [key: string]: never; }>;
+export type EmissionsQueryVariables = Exact<{
+  userId: Scalars['Bytes'];
+}>;
 
 
-export type EmissionsQuery = { tokens: Array<{ id: string, address: string, decimals: number, name: string }>, metrics: Array<{ id: string, exact: string, decimals: number, simple: string }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, preferences: Array<{ weight: number }>, dialVotes?: Array<{ votes: string }> | null | undefined }> }>, voters: Array<{ id: string, address: string, preferences: Array<{ weight: number, dial: { dialId: number } }> }> };
 
 
 export const EmissionsDocument = gql`
-    query Emissions {
-  tokens(first: 5) {
+    query Emissions($userId: Bytes!) {
+  emissionsControllers {
+    id
+    stakingContracts
+    dials {
+      id
+      dialId
+      preferences {
+        weight
+      }
+      dialVotes {
+        votes
+      }
+      recipient
+    }
+  }
+  voters(where: {address: $userId}) {
     id
     address
-    decimals
-    name
-  }
-  metrics(first: 5) {
-    id
-    exact
-    decimals
-    simple
+    preferences {
+      weight
+      dial {
+        dialId
+      }
+    }
   }
 }
     `;
@@ -1405,10 +1420,11 @@ export const EmissionsDocument = gql`
  * @example
  * const { data, loading, error } = useEmissionsQuery({
  *   variables: {
+ *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useEmissionsQuery(baseOptions?: Apollo.QueryHookOptions<EmissionsQuery, EmissionsQueryVariables>) {
+export function useEmissionsQuery(baseOptions: Apollo.QueryHookOptions<EmissionsQuery, EmissionsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<EmissionsQuery, EmissionsQueryVariables>(EmissionsDocument, options);
       }

@@ -17,6 +17,7 @@ import type {
   IncentivisedVotingLockup,
   QuestManager,
   MerkleDrop,
+  EmissionsController,
 } from '@apps/artifacts/typechain'
 
 export interface Purpose {
@@ -41,6 +42,7 @@ export enum Interfaces {
   IncentivisedVotingLockup,
   QuestManager,
   MerkleDrop,
+  EmissionsController,
 }
 
 export interface Instances {
@@ -59,6 +61,7 @@ export interface Instances {
   [Interfaces.IncentivisedVotingLockup]: IncentivisedVotingLockup
   [Interfaces.QuestManager]: QuestManager
   [Interfaces.MerkleDrop]: MerkleDrop
+  [Interfaces.EmissionsController]: EmissionsController
 }
 
 const calculateGasMargin = (value: BigNumber, margin = 1000): BigNumber => {

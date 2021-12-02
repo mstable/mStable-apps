@@ -9,7 +9,7 @@ const COLORS = ['#087E8B', '#48284A', '#a1cda8', '#ff5a5f', '#3c3c3c', '#F2F3AE'
 
 interface Props {
   emission: number
-  dials: { title: string; value: number; key: string }[]
+  dials?: { title: string; value: number; key: string }[]
 }
 
 const NetworkLabel = styled.p`
@@ -84,7 +84,7 @@ export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
 
   const handleLineHover = (key: string) => {
     if (key === activeBar?.key) return
-    const match = dials.find(v => v.key === key)
+    const match = dials?.find(v => v.key === key)
     setActiveBar(match)
   }
 
@@ -93,11 +93,13 @@ export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
     return (activeBar.value / 100) * _emission
   }, [_emission, activeBar])
 
-  const dialCount = Object.keys(dials).length
+  const dialCount = Object.keys(dials ?? []).length
 
-  const mappedData = [dials.map(v => ({ [v.key]: v.value })).reduce((a, b) => ({ ...a, ...b }))]
+  const mappedData = [dials?.map(v => ({ [v.key]: v.value })).reduce((a, b) => ({ ...a, ...b }))]
 
   const selectedDialNetwork = (!!activeBar && !!activeBar?.key?.includes('p-') ? 'Polygon' : 'Ethereum') ?? null
+
+  if (!dials) return <p>Loading</p>
 
   return (
     <Container>
@@ -114,7 +116,7 @@ export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
         <BarChart layout="vertical" stackOffset={'none'} data={mappedData} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
           <XAxis hide type="number" />
           <YAxis hide type="category" />
-          {dials.map(({ key }, i) => (
+          {dials?.map(({ key }, i) => (
             <Bar
               key={key}
               dataKey={key}

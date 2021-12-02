@@ -1,4 +1,5 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
+import type { FC } from 'react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 
@@ -19,10 +20,12 @@ import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
 
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
 import { DistributionBar } from './DistributionBar'
-import { DialsMockProvider, useMockDialsState } from './DialsMockProvider'
+import { DialsProvider, useEmissionDialsContract, useEmissionDialsState } from './DialsProvider'
 import { useToggle } from 'react-use'
 import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { ViewportWidth } from '@apps/theme'
+import { usePropose } from '@apps/base/context/transactions'
+import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 
 const DOCS_URL = 'https://docs.mstable.org/using-mstable/mta-staking'
 const FORUM_URL = 'https://forum.mstable.org/'
@@ -229,13 +232,14 @@ const Container = styled.div``
 
 export const Dials: FC = () => {
   return (
-    <DialsMockProvider>
+    <DialsProvider>
       <DialsContent />
-    </DialsMockProvider>
+    </DialsProvider>
   )
 }
 
 const scaleUserDials = (dials: Record<string, number>): Record<string, number> => {
+  if (!Object.values(dials ?? {}).length) return {}
   const nonZeroDials = Object.values(dials).filter(v => !!v)
   const weightMultiplier = nonZeroDials.reduce((a, b) => a + b, 0) / 100
   const scaledUserDials = Object.keys(dials)
@@ -259,13 +263,28 @@ const scaleUserDials = (dials: Record<string, number>): Record<string, number> =
 }
 
 const DialsContent: FC = () => {
-  const { data } = useStakedTokenQuery()
-  const { currentEpoch, dials, userDials: _userDials, emission } = useMockDialsState()
+  const { data: staking } = useStakedTokenQuery()
+  const { data: dials } = useEmissionDialsState()
+  const contract = useEmissionDialsContract()
+  const propose = usePropose()
+
+  const {
+    currentEpoch,
+    dials: _systemDials,
+    userDials: _userDials,
+    emission,
+  } = dials ?? {
+    currentEpoch: 0,
+    dials: [],
+    userDials: {},
+    emission: 0,
+  }
+
   const [epoch, setEpoch] = useState(0)
   const [userDials, setUserDials] = useState<Record<string, number>>(_userDials)
   const [isSystemView, toggleView] = useToggle(true)
 
-  const votingPower = data?.stakedToken?.accounts?.[0]?.balance?.rawBD?.simple
+  const votingPower = staking?.stakedToken?.accounts?.[0]?.balance?.rawBD?.simple
 
   const epochRange = [currentEpoch, currentEpoch + 86400 * 7000]
 
@@ -280,13 +299,29 @@ const DialsContent: FC = () => {
   const handleWeightReset = () => setUserDials(_userDials)
 
   const handleSubmit = () => {
+    if (!contract) return
     // Might need to add lock to dials to make it more gas efficient,
     // or add change buffer -> < ~5 change = no effect & subtract from the main dial change
     const sum = Object.values(scaledDials).reduce((a, b) => a + b)
     if (sum < 100) return
     const filteredDialKeys = Object.keys(scaledDials).filter(k => scaledDials[k] !== _userDials[k])
-    const changedDials = filteredDialKeys.map(k => ({ dialId: dials.find(dial => dial.key === k).id, weight: scaledDials[k] * 2 }))
+    const changedDials = filteredDialKeys.map(k => ({ dialId: _systemDials.find(dial => dial.key === k).id, weight: scaledDials[k] * 2 }))
+    if (!changedDials.length) return
+    // console.log(changedDials.toString())
+
+    // propose<Interfaces.FeederPool, 'setVoterDialWeights(tuple[])'>(
+    //   new TransactionManifest(contract, 'setVoterDialWeights', changedDials, { past: 'Gello', present: 'gee' }),
+    // )
+    propose<Interfaces.EmissionsController, 'setVoterDialWeights'>(
+      new TransactionManifest(contract, 'setVoterDialWeights', [changedDials], {
+        present: 'Voting for weights',
+        past: 'Voted on weights',
+      }),
+    )
+
+    // [(0, 100), (1, 100)]
   }
+  const hasUserDials = true // !!Object.values(userDials ?? {}).length
 
   return (
     <Container>
@@ -306,7 +341,7 @@ const DialsContent: FC = () => {
             </div>
           </div>
           <DistributionContainer>
-            <DistributionBar dials={dials} emission={emission} />
+            <DistributionBar dials={_systemDials} emission={emission} />
           </DistributionContainer>
         </EpochContainer>
         <DialAndSidebar>
@@ -322,7 +357,7 @@ const DialsContent: FC = () => {
               </StyledButton>
             </Buttons>
             <Table headerTitles={headerTitles} widths={TABLE_CELL_WIDTHS}>
-              {dials.map(({ title, value, key }) => (
+              {_systemDials?.map(({ title, value, key }) => (
                 <TableRow key={key}>
                   <TableCell width={TABLE_CELL_WIDTHS[0]}>
                     <h3>{title}</h3>
@@ -336,7 +371,7 @@ const DialsContent: FC = () => {
                       min={0}
                       max={100}
                       step={1}
-                      value={isSystemView ? value : userDials[key]}
+                      value={isSystemView ? value : userDials?.[key] ?? 0}
                       disabled={isSystemView}
                       onChange={v => handleSliderChange(key, v)}
                     />
