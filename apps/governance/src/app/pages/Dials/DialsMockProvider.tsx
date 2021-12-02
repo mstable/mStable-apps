@@ -1,4 +1,7 @@
 import React, { FC, createContext, useMemo, useContext } from 'react'
+import { useEmissionsLazyQuery, useEmissionsQuery } from '@apps/artifacts/graphql/emissions'
+import { useApolloClients } from '@apps/base/context/apollo'
+import { useAccount } from '@apps/base/context/account'
 
 interface State {
   dials: {
@@ -75,6 +78,20 @@ const stateCtx = createContext<State>(MOCK_DATA)
 export const useMockDialsState = (): State => useContext(stateCtx)
 
 export const DialsMockProvider: FC = ({ children }) => {
-  const query = useEmissionsQuery()
+  const clients = useApolloClients()
+  const account = useAccount()
+
+  const emissions = useMemo<Parameters<typeof useEmissionsLazyQuery>[0]>(() => {
+    return {
+      // variables: { userId: account ?? '', hasUser: !!account },
+      client: clients.emissions,
+      pollInterval: 60e3,
+    }
+  }, [clients])
+
+  const { data } = useEmissionsQuery(emissions)
+
+  console.log(data)
+
   return <stateCtx.Provider value={useMemo(() => MOCK_DATA, [])}>{children}</stateCtx.Provider>
 }
