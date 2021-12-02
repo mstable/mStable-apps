@@ -79,6 +79,14 @@ generates:
       - 'schema-ast'
     config:
       includeDirectives: true
+  
+  ./libs/artifacts/src/graphql/emissions/schema.graphql:
+    overwrite: true
+    schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-emissions-ropsten
+    plugins:
+      - 'schema-ast'
+    config:
+      includeDirectives: true
 
   ./libs/artifacts/src/graphql/staking/apollo-helpers.ts:
     overwrite: true
@@ -173,6 +181,17 @@ generates:
     schema:
       - https://api.thegraph.com/subgraphs/name/mstable/mstable-merkle-drop-kovan
     documents: 'libs/artifacts/src/graphql/merkle-drop/*.graphql'
+    plugins:
+      - 'fragment-matcher'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+      
+  ./libs/artifacts/src/graphql/emissions.tsx:
+    overwrite: true
+    schema: 
+      - https://api.thegraph.com/subgraphs/name/mstable/mstable-emissions-ropsten
+    documents: 'libs/artifacts/src/graphql/emissions/*.graphql'
     plugins:
       - 'fragment-matcher'
       - 'typescript'

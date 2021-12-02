@@ -1,0 +1,1384 @@
+schema {
+  query: Query
+  subscription: Subscription
+}
+
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+directive @entity on OBJECT
+
+directive @subgraphId(id: String) on OBJECT
+
+scalar BigDecimal
+
+scalar BigInt
+
+scalar BigNumber
+
+input Block_height {
+  hash: Bytes
+  number: Int
+  number_gte: Int
+}
+
+scalar Bytes
+
+type Counter {
+  id: ID!
+  """
+  Value of the counter; should be positive
+  
+  """
+  value: BigInt!
+}
+
+input Counter_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  value: BigInt
+  value_not: BigInt
+  value_gt: BigInt
+  value_lt: BigInt
+  value_gte: BigInt
+  value_lte: BigInt
+  value_in: [BigInt!]
+  value_not_in: [BigInt!]
+}
+
+enum Counter_orderBy {
+  id
+  value
+}
+
+type Dial {
+  """
+  ID: {emissionsController.id}.{dialId}
+  
+  """
+  id: ID!
+  """
+  Numeric dial ID (array position on EmissionsController dials)
+  
+  """
+  dialId: Int!
+  """
+  Emissions Controller this Dial is part of
+  
+  """
+  emissionsController: EmissionsController!
+  """
+  If true, no rewards are distributed to the dial
+  recipient and any votes on this dial are ignored
+  
+  """
+  disabled: Boolean!
+  """
+  Cap on distribution % where 1% = 1
+  
+  """
+  cap: Int!
+  """
+  Dial rewards that are waiting to be distributed to recipient
+  
+  """
+  balance: BigInt!
+  """
+  Account rewards are distributed to
+  
+  """
+  recipient: Bytes!
+  """
+  Current Preferences for this Dial
+  
+  """
+  preferences(skip: Int = 0, first: Int = 100, orderBy: Preference_orderBy, orderDirection: OrderDirection, where: Preference_filter): [Preference!]!
+  """
+  DialVotesForEpoch for this Dial; see "HistoricVotes" struct
+  
+  """
+  dialVotes(skip: Int = 0, first: Int = 100, orderBy: DialVotesForEpoch_orderBy, orderDirection: OrderDirection, where: DialVotesForEpoch_filter): [DialVotesForEpoch!]
+}
+
+type DialVotesForEpoch {
+  """
+  ID: {dial.id}.{epoch.id}
+  
+  """
+  id: ID!
+  dial: Dial!
+  epoch: Epoch!
+  """
+  Number of votes directed to this Dial for this Epoch
+  
+  """
+  votes: BigInt!
+}
+
+input DialVotesForEpoch_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  dial: String
+  dial_not: String
+  dial_gt: String
+  dial_lt: String
+  dial_gte: String
+  dial_lte: String
+  dial_in: [String!]
+  dial_not_in: [String!]
+  dial_contains: String
+  dial_not_contains: String
+  dial_starts_with: String
+  dial_not_starts_with: String
+  dial_ends_with: String
+  dial_not_ends_with: String
+  epoch: String
+  epoch_not: String
+  epoch_gt: String
+  epoch_lt: String
+  epoch_gte: String
+  epoch_lte: String
+  epoch_in: [String!]
+  epoch_not_in: [String!]
+  epoch_contains: String
+  epoch_not_contains: String
+  epoch_starts_with: String
+  epoch_not_starts_with: String
+  epoch_ends_with: String
+  epoch_not_ends_with: String
+  votes: BigInt
+  votes_not: BigInt
+  votes_gt: BigInt
+  votes_lt: BigInt
+  votes_gte: BigInt
+  votes_lte: BigInt
+  votes_in: [BigInt!]
+  votes_not_in: [BigInt!]
+}
+
+enum DialVotesForEpoch_orderBy {
+  id
+  dial
+  epoch
+  votes
+}
+
+input Dial_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  dialId: Int
+  dialId_not: Int
+  dialId_gt: Int
+  dialId_lt: Int
+  dialId_gte: Int
+  dialId_lte: Int
+  dialId_in: [Int!]
+  dialId_not_in: [Int!]
+  emissionsController: String
+  emissionsController_not: String
+  emissionsController_gt: String
+  emissionsController_lt: String
+  emissionsController_gte: String
+  emissionsController_lte: String
+  emissionsController_in: [String!]
+  emissionsController_not_in: [String!]
+  emissionsController_contains: String
+  emissionsController_not_contains: String
+  emissionsController_starts_with: String
+  emissionsController_not_starts_with: String
+  emissionsController_ends_with: String
+  emissionsController_not_ends_with: String
+  disabled: Boolean
+  disabled_not: Boolean
+  disabled_in: [Boolean!]
+  disabled_not_in: [Boolean!]
+  cap: Int
+  cap_not: Int
+  cap_gt: Int
+  cap_lt: Int
+  cap_gte: Int
+  cap_lte: Int
+  cap_in: [Int!]
+  cap_not_in: [Int!]
+  balance: BigInt
+  balance_not: BigInt
+  balance_gt: BigInt
+  balance_lt: BigInt
+  balance_gte: BigInt
+  balance_lte: BigInt
+  balance_in: [BigInt!]
+  balance_not_in: [BigInt!]
+  recipient: Bytes
+  recipient_not: Bytes
+  recipient_in: [Bytes!]
+  recipient_not_in: [Bytes!]
+  recipient_contains: Bytes
+  recipient_not_contains: Bytes
+}
+
+enum Dial_orderBy {
+  id
+  dialId
+  emissionsController
+  disabled
+  cap
+  balance
+  recipient
+  preferences
+  dialVotes
+}
+
+type EmissionsController {
+  """
+  The ID is the address
+  
+  """
+  id: ID!
+  address: Bytes!
+  """
+  Address of rewards token. i.e. MTA token
+  
+  """
+  rewardToken: Token!
+  """
+  List of staking contract addresses used to determine voting power
+  
+  """
+  stakingContracts: [Bytes!]!
+  """
+  First weekly Epoch of this contract.
+  
+  """
+  startEpoch: Epoch!
+  """
+  The last weekly Epoch to have rewards distributed.
+  
+  """
+  lastEpoch: Epoch!
+  """
+  Dials for this Emissions Controller
+  
+  """
+  dials(skip: Int = 0, first: Int = 100, orderBy: Dial_orderBy, orderDirection: OrderDirection, where: Dial_filter): [Dial!]!
+  """
+  Voters for this Emissions Controller
+  
+  """
+  voters(skip: Int = 0, first: Int = 100, orderBy: Voter_orderBy, orderDirection: OrderDirection, where: Voter_filter): [Voter!]!
+  """
+  Epochs for this Emissions Controller
+  
+  """
+  epochs(skip: Int = 0, first: Int = 100, orderBy: Epoch_orderBy, orderDirection: OrderDirection, where: Epoch_filter): [Epoch!]!
+}
+
+input EmissionsController_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  rewardToken: String
+  rewardToken_not: String
+  rewardToken_gt: String
+  rewardToken_lt: String
+  rewardToken_gte: String
+  rewardToken_lte: String
+  rewardToken_in: [String!]
+  rewardToken_not_in: [String!]
+  rewardToken_contains: String
+  rewardToken_not_contains: String
+  rewardToken_starts_with: String
+  rewardToken_not_starts_with: String
+  rewardToken_ends_with: String
+  rewardToken_not_ends_with: String
+  stakingContracts: [Bytes!]
+  stakingContracts_not: [Bytes!]
+  stakingContracts_contains: [Bytes!]
+  stakingContracts_not_contains: [Bytes!]
+  startEpoch: String
+  startEpoch_not: String
+  startEpoch_gt: String
+  startEpoch_lt: String
+  startEpoch_gte: String
+  startEpoch_lte: String
+  startEpoch_in: [String!]
+  startEpoch_not_in: [String!]
+  startEpoch_contains: String
+  startEpoch_not_contains: String
+  startEpoch_starts_with: String
+  startEpoch_not_starts_with: String
+  startEpoch_ends_with: String
+  startEpoch_not_ends_with: String
+  lastEpoch: String
+  lastEpoch_not: String
+  lastEpoch_gt: String
+  lastEpoch_lt: String
+  lastEpoch_gte: String
+  lastEpoch_lte: String
+  lastEpoch_in: [String!]
+  lastEpoch_not_in: [String!]
+  lastEpoch_contains: String
+  lastEpoch_not_contains: String
+  lastEpoch_starts_with: String
+  lastEpoch_not_starts_with: String
+  lastEpoch_ends_with: String
+  lastEpoch_not_ends_with: String
+}
+
+enum EmissionsController_orderBy {
+  id
+  address
+  rewardToken
+  stakingContracts
+  startEpoch
+  lastEpoch
+  dials
+  voters
+  epochs
+}
+
+type Epoch {
+  """
+  {emissionsController.id}.{weekNumber}
+  
+  """
+  id: ID!
+  """
+  EmissionsController this Epoch belongs to
+  
+  """
+  emissionsController: EmissionsController!
+  """
+  UNIX week number
+  
+  """
+  weekNumber: Int!
+  """
+  Voters who last voted in this epoch
+  
+  """
+  voters(skip: Int = 0, first: Int = 100, orderBy: Voter_orderBy, orderDirection: OrderDirection, where: Voter_filter): [Voter!]!
+  """
+  Total number of votes cast in this Epoch across all Dials
+  
+  """
+  totalVotes: BigInt!
+  """
+  Total from the top-level emissions for this Epoch
+  
+  """
+  emission: BigInt!
+  """
+  DialVotesForEpoch for this Epoch; see "HistoricVotes" struct
+  
+  """
+  dialVotes(skip: Int = 0, first: Int = 100, orderBy: DialVotesForEpoch_orderBy, orderDirection: OrderDirection, where: DialVotesForEpoch_filter): [DialVotesForEpoch!]!
+}
+
+input Epoch_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  emissionsController: String
+  emissionsController_not: String
+  emissionsController_gt: String
+  emissionsController_lt: String
+  emissionsController_gte: String
+  emissionsController_lte: String
+  emissionsController_in: [String!]
+  emissionsController_not_in: [String!]
+  emissionsController_contains: String
+  emissionsController_not_contains: String
+  emissionsController_starts_with: String
+  emissionsController_not_starts_with: String
+  emissionsController_ends_with: String
+  emissionsController_not_ends_with: String
+  weekNumber: Int
+  weekNumber_not: Int
+  weekNumber_gt: Int
+  weekNumber_lt: Int
+  weekNumber_gte: Int
+  weekNumber_lte: Int
+  weekNumber_in: [Int!]
+  weekNumber_not_in: [Int!]
+  totalVotes: BigInt
+  totalVotes_not: BigInt
+  totalVotes_gt: BigInt
+  totalVotes_lt: BigInt
+  totalVotes_gte: BigInt
+  totalVotes_lte: BigInt
+  totalVotes_in: [BigInt!]
+  totalVotes_not_in: [BigInt!]
+  emission: BigInt
+  emission_not: BigInt
+  emission_gt: BigInt
+  emission_lt: BigInt
+  emission_gte: BigInt
+  emission_lte: BigInt
+  emission_in: [BigInt!]
+  emission_not_in: [BigInt!]
+}
+
+enum Epoch_orderBy {
+  id
+  emissionsController
+  weekNumber
+  voters
+  totalVotes
+  emission
+  dialVotes
+}
+
+type Metric {
+  id: ID!
+  """
+  Exact value of the metric, i.e. in base units as an integer
+  
+  """
+  exact: BigInt!
+  """
+  Decimals used for the exact value (default: 18)
+  
+  """
+  decimals: Int!
+  """
+  Simple value of the metric, i.e. the exact value represented as a decimal
+  
+  """
+  simple: BigDecimal!
+}
+
+input Metric_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  exact: BigInt
+  exact_not: BigInt
+  exact_gt: BigInt
+  exact_lt: BigInt
+  exact_gte: BigInt
+  exact_lte: BigInt
+  exact_in: [BigInt!]
+  exact_not_in: [BigInt!]
+  decimals: Int
+  decimals_not: Int
+  decimals_gt: Int
+  decimals_lt: Int
+  decimals_gte: Int
+  decimals_lte: Int
+  decimals_in: [Int!]
+  decimals_not_in: [Int!]
+  simple: BigDecimal
+  simple_not: BigDecimal
+  simple_gt: BigDecimal
+  simple_lt: BigDecimal
+  simple_gte: BigDecimal
+  simple_lte: BigDecimal
+  simple_in: [BigDecimal!]
+  simple_not_in: [BigDecimal!]
+}
+
+enum Metric_orderBy {
+  id
+  exact
+  decimals
+  simple
+}
+
+scalar MstableBigDecimal
+
+enum OrderDirection {
+  asc
+  desc
+}
+
+type Preference {
+  """
+  {voter.id}.{dial.id}
+  
+  """
+  id: ID!
+  voter: Voter!
+  dial: Dial!
+  """
+  % weight applied to this dial, where 200 = 100% and 1 = 0.5%
+  
+  """
+  weight: Int!
+}
+
+input Preference_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  voter: String
+  voter_not: String
+  voter_gt: String
+  voter_lt: String
+  voter_gte: String
+  voter_lte: String
+  voter_in: [String!]
+  voter_not_in: [String!]
+  voter_contains: String
+  voter_not_contains: String
+  voter_starts_with: String
+  voter_not_starts_with: String
+  voter_ends_with: String
+  voter_not_ends_with: String
+  dial: String
+  dial_not: String
+  dial_gt: String
+  dial_lt: String
+  dial_gte: String
+  dial_lte: String
+  dial_in: [String!]
+  dial_not_in: [String!]
+  dial_contains: String
+  dial_not_contains: String
+  dial_starts_with: String
+  dial_not_starts_with: String
+  dial_ends_with: String
+  dial_not_ends_with: String
+  weight: Int
+  weight_not: Int
+  weight_gt: Int
+  weight_lt: Int
+  weight_gte: Int
+  weight_lte: Int
+  weight_in: [Int!]
+  weight_not_in: [Int!]
+}
+
+enum Preference_orderBy {
+  id
+  voter
+  dial
+  weight
+}
+
+type Query {
+  token(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Token
+  tokens(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Token_orderBy
+    orderDirection: OrderDirection
+    where: Token_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Token!]!
+  metric(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Metric
+  metrics(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Metric_orderBy
+    orderDirection: OrderDirection
+    where: Metric_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Metric!]!
+  counter(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Counter
+  counters(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Counter_orderBy
+    orderDirection: OrderDirection
+    where: Counter_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Counter!]!
+  emissionsController(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): EmissionsController
+  emissionsControllers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: EmissionsController_orderBy
+    orderDirection: OrderDirection
+    where: EmissionsController_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [EmissionsController!]!
+  epoch(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Epoch
+  epoches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Epoch_orderBy
+    orderDirection: OrderDirection
+    where: Epoch_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Epoch!]!
+  dial(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Dial
+  dials(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Dial_orderBy
+    orderDirection: OrderDirection
+    where: Dial_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Dial!]!
+  dialVotesForEpoch(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): DialVotesForEpoch
+  dialVotesForEpoches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: DialVotesForEpoch_orderBy
+    orderDirection: OrderDirection
+    where: DialVotesForEpoch_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [DialVotesForEpoch!]!
+  voter(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Voter
+  voters(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Voter_orderBy
+    orderDirection: OrderDirection
+    where: Voter_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Voter!]!
+  preference(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Preference
+  preferences(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Preference_orderBy
+    orderDirection: OrderDirection
+    where: Preference_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Preference!]!
+  transaction(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Transaction
+  transactions(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Transaction_orderBy
+    orderDirection: OrderDirection
+    where: Transaction_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Transaction!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+type Subscription {
+  token(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Token
+  tokens(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Token_orderBy
+    orderDirection: OrderDirection
+    where: Token_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Token!]!
+  metric(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Metric
+  metrics(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Metric_orderBy
+    orderDirection: OrderDirection
+    where: Metric_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Metric!]!
+  counter(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Counter
+  counters(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Counter_orderBy
+    orderDirection: OrderDirection
+    where: Counter_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Counter!]!
+  emissionsController(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): EmissionsController
+  emissionsControllers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: EmissionsController_orderBy
+    orderDirection: OrderDirection
+    where: EmissionsController_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [EmissionsController!]!
+  epoch(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Epoch
+  epoches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Epoch_orderBy
+    orderDirection: OrderDirection
+    where: Epoch_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Epoch!]!
+  dial(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Dial
+  dials(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Dial_orderBy
+    orderDirection: OrderDirection
+    where: Dial_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Dial!]!
+  dialVotesForEpoch(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): DialVotesForEpoch
+  dialVotesForEpoches(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: DialVotesForEpoch_orderBy
+    orderDirection: OrderDirection
+    where: DialVotesForEpoch_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [DialVotesForEpoch!]!
+  voter(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Voter
+  voters(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Voter_orderBy
+    orderDirection: OrderDirection
+    where: Voter_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Voter!]!
+  preference(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Preference
+  preferences(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Preference_orderBy
+    orderDirection: OrderDirection
+    where: Preference_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Preference!]!
+  transaction(
+    id: ID!
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Transaction
+  transactions(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Transaction_orderBy
+    orderDirection: OrderDirection
+    where: Transaction_filter
+    """The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted."""
+    block: Block_height
+    """Set to `allow` to receive data even if the subgraph has skipped over errors while syncing."""
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Transaction!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+"""
+An ERC20-compatible token
+
+"""
+type Token {
+  id: ID!
+  """
+  Token address
+  
+  """
+  address: Bytes!
+  """
+  Token decimals
+  
+  """
+  decimals: Int!
+  """
+  Token name
+  
+  """
+  name: String!
+  """
+  Token symbol
+  
+  """
+  symbol: String!
+  """
+  Total supply of the token
+  
+  """
+  totalSupply: Metric!
+  """
+  Total quantity of tokens burned
+  
+  """
+  totalBurned: Metric!
+  """
+  Total quantity of tokens minted
+  
+  """
+  totalMinted: Metric!
+  """
+  Count of transfer transactions
+  
+  """
+  totalTransfers: Counter!
+  """
+  Count of transfer transactions that minted the token
+  
+  """
+  totalMints: Counter!
+  """
+  Count of transfer transactions that burned the token
+  
+  """
+  totalBurns: Counter!
+}
+
+input Token_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  decimals: Int
+  decimals_not: Int
+  decimals_gt: Int
+  decimals_lt: Int
+  decimals_gte: Int
+  decimals_lte: Int
+  decimals_in: [Int!]
+  decimals_not_in: [Int!]
+  name: String
+  name_not: String
+  name_gt: String
+  name_lt: String
+  name_gte: String
+  name_lte: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  symbol: String
+  symbol_not: String
+  symbol_gt: String
+  symbol_lt: String
+  symbol_gte: String
+  symbol_lte: String
+  symbol_in: [String!]
+  symbol_not_in: [String!]
+  symbol_contains: String
+  symbol_not_contains: String
+  symbol_starts_with: String
+  symbol_not_starts_with: String
+  symbol_ends_with: String
+  symbol_not_ends_with: String
+  totalSupply: String
+  totalSupply_not: String
+  totalSupply_gt: String
+  totalSupply_lt: String
+  totalSupply_gte: String
+  totalSupply_lte: String
+  totalSupply_in: [String!]
+  totalSupply_not_in: [String!]
+  totalSupply_contains: String
+  totalSupply_not_contains: String
+  totalSupply_starts_with: String
+  totalSupply_not_starts_with: String
+  totalSupply_ends_with: String
+  totalSupply_not_ends_with: String
+  totalBurned: String
+  totalBurned_not: String
+  totalBurned_gt: String
+  totalBurned_lt: String
+  totalBurned_gte: String
+  totalBurned_lte: String
+  totalBurned_in: [String!]
+  totalBurned_not_in: [String!]
+  totalBurned_contains: String
+  totalBurned_not_contains: String
+  totalBurned_starts_with: String
+  totalBurned_not_starts_with: String
+  totalBurned_ends_with: String
+  totalBurned_not_ends_with: String
+  totalMinted: String
+  totalMinted_not: String
+  totalMinted_gt: String
+  totalMinted_lt: String
+  totalMinted_gte: String
+  totalMinted_lte: String
+  totalMinted_in: [String!]
+  totalMinted_not_in: [String!]
+  totalMinted_contains: String
+  totalMinted_not_contains: String
+  totalMinted_starts_with: String
+  totalMinted_not_starts_with: String
+  totalMinted_ends_with: String
+  totalMinted_not_ends_with: String
+  totalTransfers: String
+  totalTransfers_not: String
+  totalTransfers_gt: String
+  totalTransfers_lt: String
+  totalTransfers_gte: String
+  totalTransfers_lte: String
+  totalTransfers_in: [String!]
+  totalTransfers_not_in: [String!]
+  totalTransfers_contains: String
+  totalTransfers_not_contains: String
+  totalTransfers_starts_with: String
+  totalTransfers_not_starts_with: String
+  totalTransfers_ends_with: String
+  totalTransfers_not_ends_with: String
+  totalMints: String
+  totalMints_not: String
+  totalMints_gt: String
+  totalMints_lt: String
+  totalMints_gte: String
+  totalMints_lte: String
+  totalMints_in: [String!]
+  totalMints_not_in: [String!]
+  totalMints_contains: String
+  totalMints_not_contains: String
+  totalMints_starts_with: String
+  totalMints_not_starts_with: String
+  totalMints_ends_with: String
+  totalMints_not_ends_with: String
+  totalBurns: String
+  totalBurns_not: String
+  totalBurns_gt: String
+  totalBurns_lt: String
+  totalBurns_gte: String
+  totalBurns_lte: String
+  totalBurns_in: [String!]
+  totalBurns_not_in: [String!]
+  totalBurns_contains: String
+  totalBurns_not_contains: String
+  totalBurns_starts_with: String
+  totalBurns_not_starts_with: String
+  totalBurns_ends_with: String
+  totalBurns_not_ends_with: String
+}
+
+enum Token_orderBy {
+  id
+  address
+  decimals
+  name
+  symbol
+  totalSupply
+  totalBurned
+  totalMinted
+  totalTransfers
+  totalMints
+  totalBurns
+}
+
+interface Transaction {
+  """
+  Transaction hash + log index
+  
+  """
+  id: ID!
+  """
+  Transaction hash
+  
+  """
+  hash: Bytes!
+  """
+  Block number the transaction is in
+  
+  """
+  block: Int!
+  """
+  Timestamp of the block the transaction is in
+  
+  """
+  timestamp: BigInt!
+  """
+  Address of the sender of the transaction
+  
+  """
+  sender: Bytes!
+}
+
+input Transaction_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  hash: Bytes
+  hash_not: Bytes
+  hash_in: [Bytes!]
+  hash_not_in: [Bytes!]
+  hash_contains: Bytes
+  hash_not_contains: Bytes
+  block: Int
+  block_not: Int
+  block_gt: Int
+  block_lt: Int
+  block_gte: Int
+  block_lte: Int
+  block_in: [Int!]
+  block_not_in: [Int!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  sender: Bytes
+  sender_not: Bytes
+  sender_in: [Bytes!]
+  sender_not_in: [Bytes!]
+  sender_contains: Bytes
+  sender_not_contains: Bytes
+}
+
+enum Transaction_orderBy {
+  id
+  hash
+  block
+  timestamp
+  sender
+}
+
+type Voter {
+  """
+  ID: emissionsController.address
+  
+  """
+  id: ID!
+  address: Bytes!
+  emissionsController: EmissionsController!
+  """
+  Latest tally of votes cast by this voter
+  
+  """
+  votesCast: BigInt!
+  """
+  Last time balance was looked up across all staking contracts
+  
+  """
+  lastSourcePoke: Int!
+  """
+  The last Epoch the Voter set Preferences for
+  
+  """
+  lastEpoch: Epoch
+  """
+  Preferences set by this Voter
+  
+  """
+  preferences(skip: Int = 0, first: Int = 100, orderBy: Preference_orderBy, orderDirection: OrderDirection, where: Preference_filter): [Preference!]!
+}
+
+input Voter_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  emissionsController: String
+  emissionsController_not: String
+  emissionsController_gt: String
+  emissionsController_lt: String
+  emissionsController_gte: String
+  emissionsController_lte: String
+  emissionsController_in: [String!]
+  emissionsController_not_in: [String!]
+  emissionsController_contains: String
+  emissionsController_not_contains: String
+  emissionsController_starts_with: String
+  emissionsController_not_starts_with: String
+  emissionsController_ends_with: String
+  emissionsController_not_ends_with: String
+  votesCast: BigInt
+  votesCast_not: BigInt
+  votesCast_gt: BigInt
+  votesCast_lt: BigInt
+  votesCast_gte: BigInt
+  votesCast_lte: BigInt
+  votesCast_in: [BigInt!]
+  votesCast_not_in: [BigInt!]
+  lastSourcePoke: Int
+  lastSourcePoke_not: Int
+  lastSourcePoke_gt: Int
+  lastSourcePoke_lt: Int
+  lastSourcePoke_gte: Int
+  lastSourcePoke_lte: Int
+  lastSourcePoke_in: [Int!]
+  lastSourcePoke_not_in: [Int!]
+  lastEpoch: String
+  lastEpoch_not: String
+  lastEpoch_gt: String
+  lastEpoch_lt: String
+  lastEpoch_gte: String
+  lastEpoch_lte: String
+  lastEpoch_in: [String!]
+  lastEpoch_not_in: [String!]
+  lastEpoch_contains: String
+  lastEpoch_not_contains: String
+  lastEpoch_starts_with: String
+  lastEpoch_not_starts_with: String
+  lastEpoch_ends_with: String
+  lastEpoch_not_ends_with: String
+}
+
+enum Voter_orderBy {
+  id
+  address
+  emissionsController
+  votesCast
+  lastSourcePoke
+  lastEpoch
+  preferences
+}
+
+type _Block_ {
+  """The hash of the block"""
+  hash: Bytes
+  """The block number"""
+  number: Int!
+}
+
+"""The type for the top-level _meta field"""
+type _Meta_ {
+  """
+  Information about a specific subgraph block. The hash of the block
+  will be null if the _meta field has a block constraint that asks for
+  a block number. It will be filled if the _meta field has no block constraint
+  and therefore asks for the latest  block
+  
+  """
+  block: _Block_!
+  """The deployment ID"""
+  deployment: String!
+  """If `true`, the subgraph encountered indexing errors at some past block"""
+  hasIndexingErrors: Boolean!
+}
+
+enum _SubgraphErrorPolicy_ {
+  """Data will be returned even if the subgraph has indexing errors"""
+  allow
+  """If the subgraph has indexing errors, data will be omitted. The default."""
+  deny
+}

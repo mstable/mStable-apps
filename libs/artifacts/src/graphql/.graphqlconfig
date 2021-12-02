@@ -91,6 +91,17 @@
           }
         }
       }
+    },
+    "emissions": {
+      "includes": ["./shared/*", "./emissions/*"],
+      "extensions": {
+        "endpoints": {
+          "ropsten": {
+            "url": "https://api.thegraph.com/subgraphs/name/mstable/mstable-emissions-ropsten",
+            "introspect": false
+          }
+        }
+      }
     }
   }
 }
