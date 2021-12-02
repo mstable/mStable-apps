@@ -12,7 +12,7 @@ import { MassetState } from '@apps/data-provider'
 import { useMinimumOutput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 
-import { useScaledInput } from '../../hooks/useScaledInput'
+import { useScaledInputs } from '../../hooks/useScaledInputs'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
@@ -58,9 +58,9 @@ export const MintExactLogic: FC = () => {
     return BigDecimal.sum(...Object.values(touched).map(v => v.amount.mulRatioTruncate(bassetRatios[v.address])))
   }, [inputValues, touched, bassetRatios])
 
-  const scaledInput = useScaledInput(inputValues, bassetRatios)
+  const scaledInputs = useScaledInputs(inputValues, bassetRatios)
 
-  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(Route.Mint, scaledInput, undefined, masset)
+  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(Route.Mint, scaledInputs, undefined, masset)
 
   const { showImpactWarning } = priceImpact?.value ?? {}
 

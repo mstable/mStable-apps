@@ -122,7 +122,14 @@ export interface InputRatios {
 }
 
 export interface ScaledInput {
-  values: { [address: string]: { low: BigDecimal; high: BigDecimal; scaledLow: BigDecimal; scaledHigh: BigDecimal } }
+  low: BigDecimal
+  high: BigDecimal
+  scaledLow: BigDecimal
+  scaledHigh: BigDecimal
+}
+
+export interface ScaledInputs {
+  values: { [address: string]: ScaledInput }
   lowTotal: BigDecimal
   highTotal: BigDecimal
   scaledHighTotal: BigDecimal

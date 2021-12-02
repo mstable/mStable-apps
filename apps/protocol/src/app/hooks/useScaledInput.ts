@@ -1,37 +1,36 @@
-import { createMemo } from 'react-use'
-import { BigDecimal } from '@apps/bigdecimal'
-import { BigDecimalInputValues } from '@apps/hooks'
+import { useMemo } from 'react'
+
+import { BigDecimalInputValue } from '@apps/hooks'
+import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { InputRatios, ScaledInput } from '@apps/types'
 
-export const useScaledInput = createMemo((inputValues: BigDecimalInputValues, inputRatios: InputRatios): ScaledInput => {
-  const touched = Object.values(inputValues).filter(value => value.touched && value.amount.exact.gt(0))
+const RAI = '0x03ab458634910aad20ef5f1c8ee96f1d6ac54919'
 
-  const highAmounts = touched.map(value => value.amount)
-  const highTotal = BigDecimal.sum(...highAmounts)
+export const useScaledInput = (
+  inputValue?: BigDecimalInputValue,
+  outputValue?: BigDecimalInputValue,
+  inputRatios?: InputRatios,
+): ScaledInput | undefined => {
+  const massetConfig = useSelectedMassetConfig()
 
-  const scaledHighAmounts = touched.map(({ amount, address }) =>
-    // Only scale with a ratio; massets are not scaled
-    inputRatios[address] ? amount.mulRatioTruncate(inputRatios[address]).setDecimals(18) : amount,
-  )
-  const scaledHighTotal = BigDecimal.sum(...scaledHighAmounts)
+  return useMemo(() => {
+    if (!inputValue || !inputValue.amount || !outputValue || !inputRatios) return undefined
 
-  return touched.reduce<ScaledInput>(
-    (prev, { amount: high, address }, idx) => {
-      const scaledHigh = scaledHighAmounts[idx]
+    const high = inputValue.amount
+    const low = massetConfig.lowInputValue
 
-      const low = high.divPrecisely(highTotal)
-      const lowTotal = prev.lowTotal.add(low)
+    const ratio = inputRatios[inputValue.address]
+    let scaledHigh = ratio ? high.mulRatioTruncate(ratio).setDecimals(18) : high
+    let scaledLow = low
 
-      const scaledLow = scaledHigh.divPrecisely(highTotal)
-      const scaledLowTotal = prev.scaledLowTotal.add(scaledLow)
+    if (inputValue.address === RAI) {
+      scaledLow = low.mulRatioTruncate(ratio)
+    } else if (outputValue.address === RAI) {
+      const raiRatio = inputRatios[outputValue.address]
+      scaledLow = low.divRatioPrecisely(raiRatio)
+      scaledHigh = high.divRatioPrecisely(raiRatio)
+    }
 
-      return {
-        ...prev,
-        lowTotal,
-        scaledLowTotal,
-        values: { ...prev.values, [address]: { low, high, scaledLow, scaledHigh } },
-      } as ScaledInput
-    },
-    { highTotal, scaledHighTotal, scaledLowTotal: BigDecimal.ZERO, lowTotal: BigDecimal.ZERO, values: {} } as ScaledInput,
-  )
-})
+    return { low, high, scaledHigh, scaledLow }
+  }, [inputRatios, inputValue, outputValue, massetConfig.lowInputValue])
+}

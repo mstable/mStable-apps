@@ -11,7 +11,7 @@ import { SendButton, OneToManyAssetExchange, useMultiAssetExchangeState } from '
 import { useMaximumOutput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 
-import { useScaledInput } from '../../hooks/useScaledInput'
+import { useScaledInputs } from '../../hooks/useScaledInputs'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
@@ -33,9 +33,9 @@ export const RedeemExactLogic: FC = () => {
 
   const masset = useMemo(() => (signer ? Masset__factory.connect(massetAddress, signer) : undefined), [massetAddress, signer])
 
-  const scaledInput = useScaledInput(bassetAmounts, bassetRatios)
+  const scaledInputs = useScaledInputs(bassetAmounts, bassetRatios)
 
-  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(Route.Redeem, scaledInput, undefined, masset)
+  const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(Route.Redeem, scaledInputs, undefined, masset)
 
   const { showImpactWarning } = priceImpact.value ?? {}
 

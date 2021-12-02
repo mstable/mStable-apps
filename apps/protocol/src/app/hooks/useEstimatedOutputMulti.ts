@@ -7,7 +7,7 @@ import { getPriceImpact } from '@apps/quick-maths'
 import { sanitizeMassetError } from '@apps/formatters'
 import { BigDecimal } from '@apps/bigdecimal'
 import { useFetchState } from '@apps/hooks'
-import { FetchState, LPPriceAdjustment, PriceImpact, ScaledInput } from '@apps/types'
+import { FetchState, LPPriceAdjustment, PriceImpact, ScaledInputs } from '@apps/types'
 
 type MintableContract = Masset | FeederPool
 
@@ -37,7 +37,7 @@ interface Output {
  */
 export const useEstimatedOutputMulti = (
   route: Route,
-  scaledInput: ScaledInput,
+  scaledInputs: ScaledInputs,
   lpPriceAdjustment?: LPPriceAdjustment,
   contract?: MintableContract,
 ): Output => {
@@ -46,27 +46,27 @@ export const useEstimatedOutputMulti = (
   const priceImpact = useMemo<FetchState<PriceImpact>>(() => {
     if (estimatedOutputRange.fetching) return { fetching: true }
 
-    if (scaledInput.scaledHighTotal.exact.eq(0) || !estimatedOutputRange.value) return {}
+    if (scaledInputs.scaledHighTotal.exact.eq(0) || !estimatedOutputRange.value) return {}
 
     const value = getPriceImpact(
-      [scaledInput.scaledLowTotal, scaledInput.scaledHighTotal],
+      [scaledInputs.scaledLowTotal, scaledInputs.scaledHighTotal],
       estimatedOutputRange.value,
       lpPriceAdjustment,
       route === Route.Redeem,
     )
 
     return { value }
-  }, [estimatedOutputRange.fetching, estimatedOutputRange.value, scaledInput, lpPriceAdjustment, route])
+  }, [estimatedOutputRange.fetching, estimatedOutputRange.value, scaledInputs, lpPriceAdjustment, route])
 
   const [update] = useDebounce(
     () => {
-      if (!contract || Object.values(scaledInput.values).length === 0) return {}
+      if (!contract || Object.values(scaledInputs.values).length === 0) return {}
 
       setEstimatedOutputRange.fetching()
 
-      const addresses = Object.keys(scaledInput.values)
-      const lowAmounts = addresses.map(address => scaledInput.values[address].low.exact)
-      const highAmounts = addresses.map(address => scaledInput.values[address].high.exact)
+      const addresses = Object.keys(scaledInputs.values)
+      const lowAmounts = addresses.map(address => scaledInputs.values[address].low.exact)
+      const highAmounts = addresses.map(address => scaledInputs.values[address].high.exact)
 
       const paths = ((): Promise<BigNumber>[] => {
         switch (route) {
@@ -97,10 +97,10 @@ export const useEstimatedOutputMulti = (
         })
     },
     2500,
-    [contract, scaledInput],
+    [contract, scaledInputs],
   )
 
-  const amountIsSet = scaledInput.highTotal.exact.gt(0)
+  const amountIsSet = scaledInputs.highTotal.exact.gt(0)
 
   useEffect(() => {
     if (!contract) return
