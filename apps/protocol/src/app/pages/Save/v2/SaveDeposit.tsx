@@ -4,7 +4,7 @@ import { BoostedSavingsVault__factory, ISavingsContractV2__factory, SaveWrapper_
 
 import { useSigner } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
-import { MassetState } from '@apps/data-provider'
+import { FeederPoolState, MassetState } from '@apps/data-provider'
 import { useNetworkAddresses, useNetworkPrices } from '@apps/base/context/network'
 import { useNativeToken, useTokenSubscription } from '@apps/base/context/tokens'
 
@@ -131,7 +131,10 @@ export const SaveDeposit: FC = () => {
       massetToken,
       ...(saveToken ? [saveToken] : []),
       ...Object.values(bAssets).map(b => b.token),
-      ...Object.values(fAssets).map(b => b.token),
+      // TODO reinstate FEI
+      ...Object.values(fAssets)
+        .filter(f => f.token.symbol !== 'FEI')
+        .map(b => b.token),
       nativeToken,
     ]
 
@@ -256,18 +259,25 @@ export const SaveDeposit: FC = () => {
     // Apply slippage
     const minOutputMasset = BigDecimal.fromSimple(outputMasset.simple * (1 - slippageSimple / 100), outputMasset.decimals)
 
-    // Scale input to mAsset units, if necessary
     const inputBasset = bAssets[inputAddress]
-    const inputFasset = feederPoolAddress && fAssets[feederPoolAddress]
-    const inputMasset =
-      inputBasset || inputFasset ? inputAmount.mulRatioTruncate((inputBasset || inputFasset).ratio).setDecimals(18) : inputAmount
+    const inputFasset = feederPoolAddress && (fAssets[feederPoolAddress] as FeederPoolState['fasset'] | undefined)
 
-    // If coming from ETH, convert to mAsset value
-    const nativeTokenPriceExact = BigDecimal.fromSimple(nativeTokenPrice).exact
-    const inputMassetValue =
-      withNativeToken.has(saveRoute) && massetPrice.value
-        ? inputAmount.mulTruncate(nativeTokenPriceExact).divPrecisely(BigDecimal.fromSimple(massetPrice.value))
-        : inputMasset
+    // Scale input to mAsset units, if necessary
+    let inputMasset = inputAmount
+    if (inputBasset) {
+      inputMasset = inputAmount.mulRatioTruncate(inputBasset.ratio).setDecimals(18)
+    } else if (inputFasset && inputFasset.token.symbol !== 'RAI') {
+      inputMasset = inputAmount.mulRatioTruncate(inputFasset.ratio).setDecimals(18)
+    }
+
+    // Convert to mAsset value; could be mAsset, bAsset, fAsset, or native token
+    let inputMassetValue = inputMasset
+    if (withNativeToken.has(saveRoute) && massetPrice.value) {
+      const nativeTokenPriceExact = BigDecimal.fromSimple(nativeTokenPrice).exact
+      inputMassetValue = inputAmount.mulTruncate(nativeTokenPriceExact).divPrecisely(BigDecimal.fromSimple(massetPrice.value))
+    } else if (inputFasset) {
+      inputMassetValue = inputMassetValue.mulRatioTruncate(inputFasset.price.exact)
+    }
 
     // Scale amounts to imAsset value
     const inputImasset = inputMassetValue.divPrecisely(saveExchangeRate)

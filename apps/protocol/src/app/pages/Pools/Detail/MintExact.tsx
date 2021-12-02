@@ -9,7 +9,7 @@ import { useMinimumOutput, BigDecimalInputValue } from '@apps/hooks'
 import { SendButton, ManyToOneAssetExchange, useMultiAssetExchangeState, useMultiAssetExchangeDispatch } from '@apps/base/components/forms'
 
 import { useFPInputRatios } from '../../../hooks/useFPInputRatios'
-import { useScaledInput } from '../../../hooks/useScaledInput'
+import { useScaledInputs } from '../../../hooks/useScaledInputs'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
@@ -44,7 +44,7 @@ export const MintExact: FC = () => {
   const touched = useMemo(() => Object.values(inputValues).filter(v => v.touched), [inputValues])
 
   const inputRatios = useFPInputRatios()
-  const scaledInput = useScaledInput(inputValues, inputRatios)
+  const scaledInputs = useScaledInputs(inputValues, inputRatios)
 
   const inputAmount = useMemo(() => {
     if (!touched.length) return
@@ -64,7 +64,7 @@ export const MintExact: FC = () => {
 
   const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(
     Route.Mint,
-    scaledInput,
+    scaledInputs,
     { price: feederPool.price, isInput: false },
     contracts?.feederPool,
   )

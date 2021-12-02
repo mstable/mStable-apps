@@ -11,8 +11,8 @@ export const getPriceImpact = (
   lpPriceAdjustment?: LPPriceAdjustment,
   reverse = false,
 ): PriceImpact => {
-  const startRate = outputLow.divPrecisely(inputLow).simple
-  const endRate = outputHigh.divPrecisely(inputHigh).simple
+  const startRate = outputLow.simple / inputLow.simple
+  const endRate = outputHigh.simple / inputHigh.simple
 
   const impact = Math.abs(startRate - endRate)
   const showImpactWarning = impact > IMPACT_WARNING_THRESHOLD

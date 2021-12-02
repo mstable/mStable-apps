@@ -10,7 +10,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { useMaximumOutput } from '@apps/hooks'
 
 import { useFPInputRatios } from '../../../hooks/useFPInputRatios'
-import { useScaledInput } from '../../../hooks/useScaledInput'
+import { useScaledInputs } from '../../../hooks/useScaledInputs'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
@@ -34,11 +34,12 @@ export const RedeemExact: FC = () => {
   const touched = useMemo(() => Object.values(inputValues).filter(v => v.touched), [inputValues])
 
   const inputRatios = useFPInputRatios()
-  const scaledInput = useScaledInput(inputValues, inputRatios)
+
+  const scaledInputs = useScaledInputs(inputValues, inputRatios)
 
   const { estimatedOutputAmount, priceImpact } = useEstimatedOutputMulti(
     Route.Redeem,
-    scaledInput,
+    scaledInputs,
     { price: feederPool.price, isInput: false },
     contract,
   )

@@ -7,11 +7,13 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { MassetState } from '@apps/data-provider'
 import { useSigner } from '@apps/base/context/account'
 import { sanitizeMassetError } from '@apps/formatters'
-import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { getPriceImpact } from '@apps/quick-maths'
 import { BigDecimalInputValue, useFetchState } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { FetchState, LPPriceAdjustment, PriceImpact } from '@apps/types'
+
+import { useMassetInputRatios } from './useMassetInputRatios'
+import { useScaledInput } from './useScaledInput'
 
 type Contract = Masset | FeederPool
 
@@ -51,7 +53,6 @@ export const useEstimatedOutput = (
 
   const signer = useSigner()
   const massetState = useSelectedMassetState() as MassetState
-  const massetConfig = useSelectedMassetConfig()
   const { address: massetAddress, fAssets, bAssets, feeRate: swapFeeRate, redemptionFeeRate } = massetState
 
   const poolAddress = Object.values(fAssets).find(
@@ -61,6 +62,9 @@ export const useEstimatedOutput = (
       f.address === inputValue?.address ||
       f.address === outputValue?.address,
   )?.feederPoolAddress
+
+  const inputRatios = useMassetInputRatios()
+  const scaledInput = useScaledInput(inputValue, outputValue, inputRatios)
 
   const contract: Contract | undefined = useMemo(() => {
     if (!signer) return
@@ -78,21 +82,17 @@ export const useEstimatedOutput = (
     if (shouldSkip) return {}
 
     if (estimatedOutputRange.fetching) return { fetching: true }
-    if (!inputValue?.amount || !outputValue) return {}
-
-    const { amount: inputAmount } = inputValue
-
-    if (!estimatedOutputRange.value || !inputAmount) return {}
+    if (!scaledInput?.scaledHigh || !outputValue || !estimatedOutputRange.value) return {}
 
     const [, high] = estimatedOutputRange.value
 
-    if (!high.exact.gt(0) || !inputAmount.exact.gt(0)) {
+    if (!high.exact.gt(0) || !scaledInput.scaledHigh.exact.gt(0)) {
       return { error: 'Amount must be greater than zero' }
     }
 
-    const value = high.scale().divPrecisely(inputAmount.scale())
+    const value = high.scale().divPrecisely(scaledInput.scaledHigh)
     return { value }
-  }, [estimatedOutputRange, inputValue, outputValue, shouldSkip])
+  }, [estimatedOutputRange, scaledInput, outputValue, shouldSkip])
 
   const feeRate = useMemo<FetchState<BigDecimal>>(() => {
     if (shouldSkip || !withFee.has(action) || !estimatedOutputRange.value?.[1]) return {}
@@ -110,16 +110,14 @@ export const useEstimatedOutput = (
   }, [action, estimatedOutputRange, swapFeeRate, redemptionFeeRate, shouldSkip])
 
   const priceImpact = useMemo<FetchState<PriceImpact>>(() => {
-    if (estimatedOutputRange.fetching || !estimatedOutputRange.value || !inputValue) return { fetching: true }
+    if (estimatedOutputRange.fetching || !estimatedOutputRange.value) return { fetching: true }
 
-    if (!inputValue.amount) return {}
+    if (!scaledInput || !scaledInput.high.exact.gt(0)) return {}
 
-    if (!inputValue.amount.exact.gt(0)) return { fetching: true }
-
-    const value = getPriceImpact([massetConfig.lowInputValue, inputValue.amount.scale()], estimatedOutputRange.value, lpPriceAdjustment)
+    const value = getPriceImpact([scaledInput.scaledLow, scaledInput.scaledHigh], estimatedOutputRange.value, lpPriceAdjustment)
 
     return { value }
-  }, [estimatedOutputRange.fetching, estimatedOutputRange.value, inputValue, massetConfig.lowInputValue, lpPriceAdjustment])
+  }, [estimatedOutputRange.fetching, estimatedOutputRange.value, lpPriceAdjustment, scaledInput])
 
   /*
    * |------------------------------------------------------|
@@ -141,9 +139,9 @@ export const useEstimatedOutput = (
 
   const [update] = useDebounce(
     () => {
-      if (!inputValue || !outputValue || shouldSkip || !contract) return
+      if (!scaledInput || !outputValue || shouldSkip || !contract) return
 
-      const { address: inputAddress, amount: inputAmount, decimals: inputDecimals } = inputValue
+      const { address: inputAddress, decimals: inputDecimals } = inputValue
       const { address: outputAddress, decimals: outputDecimals } = outputValue
 
       const isLPRedeem = contract.address === inputAddress
@@ -152,31 +150,29 @@ export const useEstimatedOutput = (
       const isBassetSwap = [inputAddress, outputAddress].filter(address => bAssets[address]?.address).length === 2
       const isInvalid = inputAddress === outputAddress
 
-      if (!inputAmount?.exact.gt(0)) return
+      if (!scaledInput.high.exact.gt(0)) return
 
       // same -> same; fallback to input value 1:1
       if (isInvalid) {
-        setEstimatedOutputRange.value([massetConfig.lowInputValue, inputAmount])
+        setEstimatedOutputRange.value([scaledInput.scaledLow, scaledInput.high])
         return
       }
-
-      const scaledInputLow = massetConfig.lowInputValue.scale(inputDecimals)
 
       let outputLowPromise: Promise<BigNumber> | undefined
       let outputHighPromise: Promise<BigNumber> | undefined
 
       if (isMassetMint || isLPMint) {
         setAction(Action.MINT)
-        outputLowPromise = contract.getMintOutput(inputAddress, scaledInputLow.exact)
-        outputHighPromise = contract.getMintOutput(inputAddress, (inputAmount as BigDecimal).exact)
+        outputLowPromise = contract.getMintOutput(inputAddress, scaledInput.low.scale(inputDecimals).exact)
+        outputHighPromise = contract.getMintOutput(inputAddress, scaledInput.high.exact)
       } else if ((isFeederPool || isBassetSwap) && !isLPRedeem) {
         setAction(Action.SWAP)
-        outputLowPromise = contract.getSwapOutput(inputAddress, outputAddress, scaledInputLow.exact)
-        outputHighPromise = contract.getSwapOutput(inputAddress, outputAddress, inputAmount.exact)
+        outputLowPromise = contract.getSwapOutput(inputAddress, outputAddress, scaledInput.low.scale(inputDecimals).exact)
+        outputHighPromise = contract.getSwapOutput(inputAddress, outputAddress, scaledInput.high.exact)
       } else if (!isFeederPool || isLPRedeem) {
         setAction(Action.REDEEM)
-        outputLowPromise = contract.getRedeemOutput(outputAddress, scaledInputLow.exact)
-        outputHighPromise = contract.getRedeemOutput(outputAddress, inputAmount.exact)
+        outputLowPromise = contract.getRedeemOutput(outputAddress, scaledInput.low.scale(inputDecimals).exact)
+        outputHighPromise = contract.getRedeemOutput(outputAddress, scaledInput.high.exact)
       }
 
       if (outputLowPromise && outputHighPromise) {
@@ -204,15 +200,15 @@ export const useEstimatedOutput = (
   useEffect(() => {
     if (shouldSkip) return
 
-    if (!eq && contract && inputValue && outputValue) {
-      if (inputValue.amount?.exact.gt(0)) {
+    if (!eq && contract && scaledInput && outputValue) {
+      if (scaledInput.high.exact.gt(0)) {
         setEstimatedOutputRange.fetching()
         update()
       } else {
         setEstimatedOutputRange.value()
       }
     }
-  }, [eq, contract, setEstimatedOutputRange, update, inputValue, outputValue, shouldSkip])
+  }, [eq, contract, setEstimatedOutputRange, update, scaledInput, outputValue, shouldSkip])
 
   return useMemo(
     () => ({
