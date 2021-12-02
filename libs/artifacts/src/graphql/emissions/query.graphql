@@ -1,14 +1,27 @@
-query Emissions {
-  tokens(first: 5) {
+query Emissions($userId: Bytes!) {
+  emissionsControllers {
+    id
+    stakingContracts
+    dials {
+      id
+      dialId
+      preferences {
+        weight
+      }
+      dialVotes {
+        votes
+      }
+      recipient
+    }
+  }
+  voters (where: { address: $userId }) {
     id
     address
-    decimals
-    name
-  }
-  metrics(first: 5) {
-    id
-    exact
-    decimals
-    simple
+    preferences {
+    	weight
+      dial {
+        dialId
+      }
+    }
   }
 }
