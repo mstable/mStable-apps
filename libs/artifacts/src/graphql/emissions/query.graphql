@@ -17,6 +17,13 @@ query Emissions($account: Bytes!, $hasAccount: Boolean!) {
       id
       weekNumber
       emission
+      dialVotes {
+        dial {
+          id
+          dialId
+        }
+        votes
+      }
     }
   }
   voters (where: { address: $account }) @include(if: $hasAccount) {

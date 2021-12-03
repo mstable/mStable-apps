@@ -8,7 +8,7 @@ import { CountUp } from '@apps/dumb-components'
 const COLORS = ['#087E8B', '#48284A', '#a1cda8', '#ff5a5f', '#3c3c3c', '#F2F3AE', '#A3320B', '#C1839F']
 
 interface Props {
-  emission: number
+  emission?: number
   dials?: { title: string; value: number; key: string }[]
 }
 
@@ -79,7 +79,7 @@ const renderRadius = (i: number, n: number) => {
   return [0, 0, 0, 0]
 }
 
-export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
+export const DistributionBar: FC<Props> = ({ dials, emission: _emission = 1000 }) => {
   const [activeBar, setActiveBar] = useState(null)
 
   const handleLineHover = (key: string) => {

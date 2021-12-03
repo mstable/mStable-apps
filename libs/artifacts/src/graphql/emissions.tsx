@@ -1365,7 +1365,7 @@ export type EmissionsQueryVariables = Exact<{
 }>;
 
 
-export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, preferences: Array<{ weight: number }>, dialVotes?: Array<{ votes: string }> | null | undefined }>, epochs: Array<{ id: string, weekNumber: number, emission: string }> }>, voters?: Array<{ id: string, address: string, preferences: Array<{ weight: number, dial: { dialId: number, recipient: string } }> }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, preferences: Array<{ weight: number }>, dialVotes?: Array<{ votes: string }> | null | undefined }>, epochs: Array<{ id: string, weekNumber: number, emission: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }> }>, voters?: Array<{ id: string, address: string, preferences: Array<{ weight: number, dial: { dialId: number, recipient: string } }> }> };
 
 
 export const EmissionsDocument = gql`
@@ -1388,6 +1388,13 @@ export const EmissionsDocument = gql`
       id
       weekNumber
       emission
+      dialVotes {
+        dial {
+          id
+          dialId
+        }
+        votes
+      }
     }
   }
   voters(where: {address: $account}) @include(if: $hasAccount) {
