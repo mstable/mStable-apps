@@ -359,7 +359,7 @@ const DialsContent: FC = () => {
               </ArrowButton>
             </div>
           </div>
-          {!_systemDials ? (
+          {!_systemDials?.length ? (
             <StyledSkeleton height={100} />
           ) : (
             <DistributionContainer>
