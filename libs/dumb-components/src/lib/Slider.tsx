@@ -29,8 +29,9 @@ const StyledThumb = styled.div`
   border: 1px solid ${({ theme }) => theme.color.bodyAccent[3]};
 `
 
-const StyledTrack = styled.div<{ index: number }>`
+const StyledTrack = styled.div<{ index: number; value?: number }>`
   height: 1rem;
+  display: ${({ index, value }) => value === 0 && index === 0 && 'none'};
   background: ${({ index, theme }) => (index === 1 ? theme.color.background[2] : theme.color.blue)};
   border-radius: 0.5rem;
 `
@@ -49,7 +50,7 @@ const StyledSlider = styled(ReactSlider)`
 `
 
 const renderThumb: FC = props => <StyledThumb {...props} />
-const renderTrack: FC = (props, state) => <StyledTrack {...props} index={state.index} />
+const renderTrack: FC = (props, state) => <StyledTrack {...props} index={state.index} value={state.value} />
 const renderMark: FC = props => <StyledMark {...props} />
 
 export const Slider: FC<Props> = ({ className, min, max, value = 0, step, intervals = 5, onChange, disabled = false }) => {

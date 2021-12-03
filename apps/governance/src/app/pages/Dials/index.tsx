@@ -14,6 +14,7 @@ import {
   BalanceWidget,
   InfoBox,
   ButtonExternal,
+  ThemedSkeleton,
 } from '@apps/dumb-components'
 import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
 import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
@@ -26,6 +27,7 @@ import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { ViewportWidth } from '@apps/theme'
 import { usePropose } from '@apps/base/context/transactions'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
+import { useEffect } from 'react'
 
 const DOCS_URL = 'https://docs.mstable.org/using-mstable/mta-staking'
 const FORUM_URL = 'https://forum.mstable.org/'
@@ -36,11 +38,29 @@ const StyledSlider = styled(Slider)`
   height: 1rem;
 `
 
+const StyledSkeleton = styled(ThemedSkeleton)`
+  width: 100%;
+  border-radius: 1rem;
+  > div {
+    width: 100%;
+    line-height: 0;
+  }
+`
+
 const ArrowButton = styled(UnstyledButton)`
   svg {
     path {
       fill: ${({ theme }) => theme.color.body};
     }
+  }
+`
+
+const LoadingRow = styled(TableRow)`
+  width: 100%;
+  padding: 0;
+  > * {
+    padding: 0;
+    width: 100%;
   }
 `
 
@@ -240,14 +260,20 @@ export const Dials: FC = () => {
 
 const scaleUserDials = (dials: Record<string, number>): Record<string, number> => {
   if (!Object.values(dials ?? {}).length) return {}
+
   const nonZeroDials = Object.values(dials).filter(v => !!v)
-  const weightMultiplier = nonZeroDials.reduce((a, b) => a + b, 0) / 100
+  const cumulativeWeight = nonZeroDials.reduce((a, b) => a + b, 0)
+
+  // Scale only if total > 100
+  if (cumulativeWeight <= 100) return dials
+
+  const weightMultiplier = cumulativeWeight / 100
   const scaledUserDials = Object.keys(dials)
     .map(k => ({ [k]: !!dials[k] ? Math.floor(dials[k] / weightMultiplier) : 0 }))
     .reduce((a, b) => ({ ...a, ...b }), {})
 
-  // remainder gets added to highest value
   // TODO: Improve logic
+  // remainder gets added to highest value
   const remainder = 100 - Object.values(scaledUserDials).reduce((a, b) => a + b)
   if (remainder > 0) {
     const values = Object.values(scaledUserDials)
@@ -268,17 +294,7 @@ const DialsContent: FC = () => {
   const contract = useEmissionDialsContract()
   const propose = usePropose()
 
-  const {
-    currentEpoch,
-    dials: _systemDials,
-    userDials: _userDials,
-    emission,
-  } = dials ?? {
-    currentEpoch: 0,
-    dials: [],
-    userDials: {},
-    emission: 0,
-  }
+  const { currentEpoch, dials: _systemDials, userDials: _userDials, emission } = dials
 
   const [epoch, setEpoch] = useState(0)
   const [userDials, setUserDials] = useState<Record<string, number>>(_userDials)
@@ -307,21 +323,19 @@ const DialsContent: FC = () => {
     const filteredDialKeys = Object.keys(scaledDials).filter(k => scaledDials[k] !== _userDials[k])
     const changedDials = filteredDialKeys.map(k => ({ dialId: _systemDials.find(dial => dial.key === k).id, weight: scaledDials[k] * 2 }))
     if (!changedDials.length) return
-    // console.log(changedDials.toString())
 
-    // propose<Interfaces.FeederPool, 'setVoterDialWeights(tuple[])'>(
-    //   new TransactionManifest(contract, 'setVoterDialWeights', changedDials, { past: 'Gello', present: 'gee' }),
-    // )
     propose<Interfaces.EmissionsController, 'setVoterDialWeights'>(
       new TransactionManifest(contract, 'setVoterDialWeights', [changedDials], {
         present: 'Voting for weights',
         past: 'Voted on weights',
       }),
     )
-
-    // [(0, 100), (1, 100)]
   }
-  const hasUserDials = true // !!Object.values(userDials ?? {}).length
+
+  // FIXME:
+  useEffect(() => {
+    setUserDials(_userDials)
+  }, [_userDials])
 
   return (
     <Container>
@@ -340,9 +354,13 @@ const DialsContent: FC = () => {
               </ArrowButton>
             </div>
           </div>
-          <DistributionContainer>
-            <DistributionBar dials={_systemDials} emission={emission} />
-          </DistributionContainer>
+          {!_systemDials ? (
+            <StyledSkeleton height={100} />
+          ) : (
+            <DistributionContainer>
+              <DistributionBar dials={_systemDials} emission={emission} />
+            </DistributionContainer>
+          )}
         </EpochContainer>
         <DialAndSidebar>
           <DialContainer>
@@ -357,27 +375,35 @@ const DialsContent: FC = () => {
               </StyledButton>
             </Buttons>
             <Table headerTitles={headerTitles} widths={TABLE_CELL_WIDTHS}>
-              {_systemDials?.map(({ title, value, key }) => (
-                <TableRow key={key}>
-                  <TableCell width={TABLE_CELL_WIDTHS[0]}>
-                    <h3>{title}</h3>
+              {!_systemDials?.length ? (
+                <LoadingRow>
+                  <TableCell>
+                    <StyledSkeleton height={100} />
                   </TableCell>
-                  <TableCell width={TABLE_CELL_WIDTHS[1]}>
-                    <span>{isSystemView ? value : scaledDials[key]}%</span>
-                  </TableCell>
-                  <TableCell width={TABLE_CELL_WIDTHS[2]}>
-                    <StyledSlider
-                      intervals={0}
-                      min={0}
-                      max={100}
-                      step={1}
-                      value={isSystemView ? value : userDials?.[key] ?? 0}
-                      disabled={isSystemView}
-                      onChange={v => handleSliderChange(key, v)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+                </LoadingRow>
+              ) : (
+                _systemDials?.map(({ title, value, key }) => (
+                  <TableRow key={key}>
+                    <TableCell width={TABLE_CELL_WIDTHS[0]}>
+                      <h3>{title}</h3>
+                    </TableCell>
+                    <TableCell width={TABLE_CELL_WIDTHS[1]}>
+                      <span>{isSystemView ? value : scaledDials[key] ?? 0}%</span>
+                    </TableCell>
+                    <TableCell width={TABLE_CELL_WIDTHS[2]}>
+                      <StyledSlider
+                        intervals={0}
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={isSystemView ? value : userDials?.[key]}
+                        disabled={isSystemView}
+                        onChange={v => handleSliderChange(key, v)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </Table>
             {!isSystemView && (
               <SubmitContainer>
