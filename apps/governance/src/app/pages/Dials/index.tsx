@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState } from 'react'
 import type { FC } from 'react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
@@ -289,18 +289,15 @@ const scaleUserDials = (dials: Record<string, number>): Record<string, number> =
 }
 
 const DialsContent: FC = () => {
-  const { data: staking } = useStakedTokenQuery()
   const { data: dials } = useEmissionDialsState()
   const contract = useEmissionDialsContract()
   const propose = usePropose()
 
-  const { currentEpoch, dials: _systemDials, userDials: _userDials, emission } = dials
+  const { currentEpoch, dials: _systemDials, userDials: _userDials, emission, userVotePower } = dials
 
   const [epoch, setEpoch] = useState(0)
   const [userDials, setUserDials] = useState<Record<string, number>>(_userDials)
   const [isSystemView, toggleView] = useToggle(true)
-
-  const votingPower = staking?.stakedToken?.accounts?.[0]?.balance?.rawBD?.simple
 
   const epochRange = [currentEpoch, currentEpoch + 86400 * 7000]
 
@@ -339,7 +336,7 @@ const DialsContent: FC = () => {
 
   return (
     <Container>
-      <GovernancePageHeader title="Dials" subtitle="Vote on future MTA emissions" stakedTokenSwitcher />
+      <GovernancePageHeader title="Dials" subtitle="Vote on future MTA emissions" />
       <Inner>
         <EpochContainer>
           <div>
@@ -408,18 +405,27 @@ const DialsContent: FC = () => {
             {!isSystemView && (
               <SubmitContainer>
                 <Warning />
-                <div>
-                  <h3>Changes will take effect from the next epoch</h3>
-                  <p>Your preferences will continue for future epochs until changed</p>
-                </div>
-                <Button disabled={!hasUserDialChanged} highlighted={hasUserDialChanged} onClick={handleSubmit}>
-                  Submit
-                </Button>
+                {!!userVotePower ? (
+                  <>
+                    <div>
+                      <h3>Changes will take effect from the next epoch</h3>
+                      <p>Your preferences will continue for future epochs until changed</p>
+                    </div>
+                    <Button disabled={!hasUserDialChanged} highlighted={hasUserDialChanged} onClick={handleSubmit}>
+                      Submit
+                    </Button>
+                  </>
+                ) : (
+                  <div>
+                    <h3>No voting power found</h3>
+                    <p>Stake in governance and delegate to yourself to participate actively</p>
+                  </div>
+                )}
               </SubmitContainer>
             )}
           </DialContainer>
           <Sidebar>
-            <BalanceWidget title="Voting Power" token="vMTA" balance={votingPower} />
+            <BalanceWidget title="Voting Power" token="vMTA" balance={userVotePower?.simple} />
             <InfoBox>
               <ButtonExternal onClick={() => window.open(DOCS_URL)}>Docs</ButtonExternal>
               <ButtonExternal onClick={() => window.open(FORUM_URL)}>Forum</ButtonExternal>

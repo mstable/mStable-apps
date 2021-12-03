@@ -4,6 +4,8 @@ import { useApolloClients } from '@apps/base/context/apollo'
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { truncateAddress } from '@apps/formatters'
 import { EmissionsController, EmissionsController__factory } from '@apps/artifacts/typechain'
+import { useAccountLazyQuery, useAccountQuery } from '@apps/artifacts/graphql/staking'
+import { BigDecimal } from '@apps/bigdecimal'
 
 interface State {
   data?: {
@@ -13,6 +15,7 @@ interface State {
       value: number
       id: number
     }[]
+    userVotePower?: BigDecimal
     userDials: Record<string, number>
     emission: number
     currentEpoch: number
@@ -96,21 +99,33 @@ export const DialsProvider: FC = ({ children }) => {
   const account = useAccount()
   const signer = useSigner()
 
-  const emissions = useMemo<Parameters<typeof useEmissionsLazyQuery>[0]>(() => {
+  const options = useMemo<{
+    emissions: Parameters<typeof useEmissionsLazyQuery>[0]
+    staking: Parameters<typeof useAccountLazyQuery>[0]
+  }>(() => {
     return {
-      client: clients.emissions,
-      variables: { userId: account ?? '' },
-      pollInterval: 60e3,
+      emissions: {
+        client: clients.emissions,
+        variables: { userId: account ?? '' },
+        pollInterval: 60e3,
+      },
+      staking: {
+        client: clients.staking,
+        variables: { id: account ?? '', skip: !account },
+        pollInterval: 60e3,
+      },
     }
-  }, [account, clients.emissions])
+  }, [account, clients])
 
-  const { data, loading } = useEmissionsQuery(emissions)
+  const { data: stakingData } = useAccountQuery(options.staking)
+
+  const { data: emissionsData } = useEmissionsQuery(options.emissions)
 
   const dialsContract = useRef<EmissionsController | undefined>(undefined)
 
-  const controller = data?.emissionsControllers?.[0]
+  const controller = emissionsData?.emissionsControllers?.[0]
 
-  const voters = data?.voters?.[0]
+  const voters = emissionsData?.voters?.[0]
 
   const dials = controller?.dials?.map((v, i) => ({
     title: MAPPING[v.dialId]?.title ?? truncateAddress(v.recipient),
@@ -124,16 +139,19 @@ export const DialsProvider: FC = ({ children }) => {
     [voters?.preferences],
   )
 
+  const userVotePower: BigDecimal | undefined = useMemo(() => stakingData?.account?.totalVotesAllBD, [stakingData])
+
   const finalData = useMemo(
     () => ({
       data: {
         dials,
         userDials,
+        userVotePower,
         emission: 1000,
         currentEpoch: 1637768286000,
       },
     }),
-    [dials, userDials],
+    [dials, userDials, userVotePower],
   )
 
   useEffect(() => {
