@@ -127,6 +127,10 @@ export const DialsProvider: FC = ({ children }) => {
 
   const voters = emissionsData?.voters?.[0]
 
+  const emission = parseFloat(controller?.epochs?.[0]?.emission)
+
+  const currentEpoch = controller?.epochs?.[0]?.weekNumber * 604800 * 1000
+
   const dials = controller?.dials?.map((v, i) => ({
     title: MAPPING[v.dialId]?.title ?? truncateAddress(v.recipient),
     value: (v.preferences?.[0]?.weight ?? 0) / 2,
@@ -147,11 +151,11 @@ export const DialsProvider: FC = ({ children }) => {
         dials,
         userDials,
         userVotePower,
-        emission: 1000,
-        currentEpoch: 1637768286000,
+        emission,
+        currentEpoch,
       },
     }),
-    [dials, userDials, userVotePower],
+    [dials, userDials, userVotePower, emission, currentEpoch],
   )
 
   useEffect(() => {

@@ -13,6 +13,11 @@ query Emissions($userId: Bytes!) {
       }
       recipient
     }
+    epochs { 
+      id
+      weekNumber
+      emission
+    }
   }
   voters (where: { address: $userId }) {
     id

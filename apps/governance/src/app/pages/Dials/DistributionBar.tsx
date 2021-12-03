@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 import { titleCase } from 'title-case'
