@@ -316,13 +316,13 @@ const DialsContent: FC = () => {
 
   const handleSubmit = () => {
     if (!contract) return
-    // Might need to add lock to dials to make it more gas efficient,
-    // or add change buffer -> < ~5 change = no effect & subtract from the main dial change
-    const sum = Object.values(scaledDials).reduce((a, b) => a + b)
-    if (sum < 100) return
-    const filteredDialKeys = Object.keys(scaledDials).filter(k => scaledDials[k] !== _userDials[k])
-    const changedDials = filteredDialKeys.map(k => ({ dialId: _systemDials.find(dial => dial.key === k).id, weight: scaledDials[k] * 2 }))
-    if (!changedDials.length) return
+    const keys = Object.keys(scaledDials)
+    if (!keys.length) return
+
+    const changedDials = keys.map(k => ({
+      dialId: _systemDials.find(dial => dial.key === k).id,
+      weight: scaledDials[k] * 2,
+    }))
 
     propose<Interfaces.EmissionsController, 'setVoterDialWeights'>(
       new TransactionManifest(contract, 'setVoterDialWeights', [changedDials], {
