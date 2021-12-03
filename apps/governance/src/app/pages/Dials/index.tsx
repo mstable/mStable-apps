@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import type { FC } from 'react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
@@ -23,7 +23,6 @@ import { GovernancePageHeader } from '../../components/GovernancePageHeader'
 import { DistributionBar } from './DistributionBar'
 import { DialsProvider, useEmissionDialsContract, useEmissionDialsState } from './DialsProvider'
 import { useToggle } from 'react-use'
-import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
 import { ViewportWidth } from '@apps/theme'
 import { usePropose } from '@apps/base/context/transactions'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
@@ -33,6 +32,7 @@ const DOCS_URL = 'https://docs.mstable.org/using-mstable/mta-staking'
 const FORUM_URL = 'https://forum.mstable.org/'
 
 const TABLE_CELL_WIDTHS = [30, 25, 35]
+const WEEK = 604800
 
 const StyledSlider = styled(Slider)`
   height: 1rem;
@@ -292,24 +292,44 @@ const scaleUserDials = (dials: Record<string, number>): Record<string, number> =
   return scaledUserDials
 }
 
+const convertEpochToTimestamp = (epoch: number) => {
+  // TODO revert
+  // const distributionPeriod = 604800
+  const distributionPeriod = 3600
+  return epoch * distributionPeriod * 1000
+}
+
 const DialsContent: FC = () => {
   const { data: dials } = useEmissionDialsState()
   const contract = useEmissionDialsContract()
   const propose = usePropose()
 
-  const { currentEpoch, dials: _systemDials, userDials: _userDials, emission, userVotePower } = dials
+  const { currentEpochId, dials: _systemDials, userDials: _userDials, emission, userVotePower, epochs } = dials
 
-  const [epoch, setEpoch] = useState(0)
+  const [epochId, setEpochId] = useState(currentEpochId)
   const [userDials, setUserDials] = useState<Record<string, number>>(_userDials)
   const [isSystemView, toggleView] = useToggle(true)
 
-  const epochRange = !!currentEpoch && [currentEpoch - 604800 * 1000, currentEpoch]
+  const epochLength = 1
+  const epochRange = [convertEpochToTimestamp(epochId - epochLength), convertEpochToTimestamp(epochId)]
+
+  const currentDials = _systemDials[epochId]
 
   const headerTitles = isSystemView ? ['Dial', 'System %', ''].map(t => ({ title: t })) : ['Dial', 'User %', ''].map(t => ({ title: t }))
 
   const hasUserDialChanged = JSON.stringify(_userDials) !== JSON.stringify(userDials)
 
   const scaledDials = useMemo(() => scaleUserDials(userDials), [userDials])
+
+  const incrementEpoch = useCallback(
+    () => !!Object.keys(epochs).find(k => parseInt(k) === epochId + epochLength) && setEpochId(epochId + epochLength),
+    [epochId, epochs],
+  )
+
+  const decrementEpoch = useCallback(
+    () => !!Object.keys(epochs).find(k => parseInt(k) === epochId - epochLength) && setEpochId(epochId - epochLength),
+    [epochId, epochs],
+  )
 
   const handleSliderChange = (k: string, v: number) => setUserDials({ ...userDials, [k]: v })
 
@@ -321,7 +341,7 @@ const DialsContent: FC = () => {
     if (!keys.length) return
 
     const changedDials = keys.map(k => ({
-      dialId: _systemDials.find(dial => dial.key === k).id,
+      dialId: currentDials.find(dial => dial.key === k).id,
       weight: scaledDials[k] * 2,
     }))
 
@@ -346,7 +366,7 @@ const DialsContent: FC = () => {
           <div>
             <h3>Current Epoch</h3>
             <div>
-              <ArrowButton onClick={() => setEpoch(epoch - 1)}>
+              <ArrowButton onClick={decrementEpoch}>
                 <BackArrow />
               </ArrowButton>
               {!epochRange ? (
@@ -354,16 +374,16 @@ const DialsContent: FC = () => {
               ) : (
                 <span>{`(${format(epochRange[0], 'dd/MM')} - ${format(epochRange[1], 'dd/MM')})`}</span>
               )}
-              <ArrowButton onClick={() => setEpoch(epoch + 1)}>
+              <ArrowButton onClick={incrementEpoch}>
                 <ForwardArrow />
               </ArrowButton>
             </div>
           </div>
-          {!_systemDials?.length ? (
+          {!currentDials?.length ? (
             <StyledSkeleton height={100} />
           ) : (
             <DistributionContainer>
-              <DistributionBar dials={_systemDials} emission={emission} />
+              <DistributionBar dials={currentDials} />
             </DistributionContainer>
           )}
         </EpochContainer>
@@ -380,14 +400,14 @@ const DialsContent: FC = () => {
               </StyledButton>
             </Buttons>
             <Table headerTitles={headerTitles} widths={TABLE_CELL_WIDTHS}>
-              {!_systemDials?.length ? (
+              {!currentDials?.length ? (
                 <LoadingRow>
                   <TableCell>
                     <StyledSkeleton height={100} />
                   </TableCell>
                 </LoadingRow>
               ) : (
-                _systemDials?.map(({ title, value, key }) => (
+                currentDials?.map(({ title, value, key }) => (
                   <TableRow key={key}>
                     <TableCell width={TABLE_CELL_WIDTHS[0]}>
                       <h3>{title}</h3>

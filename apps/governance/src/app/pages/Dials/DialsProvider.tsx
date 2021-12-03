@@ -6,68 +6,75 @@ import { truncateAddress } from '@apps/formatters'
 import { EmissionsController, EmissionsController__factory } from '@apps/artifacts/typechain'
 import { useAccountQuery } from '@apps/artifacts/graphql/staking'
 import { BigDecimal } from '@apps/bigdecimal'
+import { EMISSIONS_MAPPING } from './utils'
 
 interface State {
   data?: {
-    dials: {
-      key: string
-      title: string
-      value: number
-      id: number
-    }[]
+    dials: Record<
+      number,
+      {
+        key: string
+        title: string
+        value: number
+        id: number
+      }[]
+    >
     userVotePower?: BigDecimal
     userDials: Record<string, number>
     emission: number
-    currentEpoch: number
+    currentEpochId: number
+    epochs: Record<number, Record<number, number>>
   }
 }
 
 const MOCK_DATA = {
   data: {
-    dials: [
-      {
-        title: 'imUSD Vault',
-        value: 30,
-        id: 0,
-        key: 'p-imusd',
-      },
-      {
-        title: 'MTA Stakers',
-        id: 1,
-        value: 25,
-        key: 'stk-mta',
-      },
-      {
-        title: 'mBPT Stakers',
-        id: 2,
-        value: 10,
-        key: 'stk-bpt',
-      },
-      {
-        title: 'OlympusPro Bonds',
-        id: 3,
-        value: 5,
-        key: 'olympus-bonds',
-      },
-      {
-        title: 'RAI Pool',
-        id: 4,
-        value: 10,
-        key: 'f-rai',
-      },
-      {
-        title: 'alUSD Pool',
-        id: 5,
-        value: 10,
-        key: 'f-alusd',
-      },
-      {
-        title: 'FEI Pool',
-        id: 6,
-        value: 10,
-        key: 'f-fei',
-      },
-    ],
+    dials: {
+      100: [
+        {
+          title: 'imUSD Vault',
+          value: 30,
+          id: 0,
+          key: 'p-imusd',
+        },
+        {
+          title: 'MTA Stakers',
+          id: 1,
+          value: 25,
+          key: 'stk-mta',
+        },
+        {
+          title: 'mBPT Stakers',
+          id: 2,
+          value: 10,
+          key: 'stk-bpt',
+        },
+        {
+          title: 'OlympusPro Bonds',
+          id: 3,
+          value: 5,
+          key: 'olympus-bonds',
+        },
+        {
+          title: 'RAI Pool',
+          id: 4,
+          value: 10,
+          key: 'f-rai',
+        },
+        {
+          title: 'alUSD Pool',
+          id: 5,
+          value: 10,
+          key: 'f-alusd',
+        },
+        {
+          title: 'FEI Pool',
+          id: 6,
+          value: 10,
+          key: 'f-fei',
+        },
+      ],
+    },
     userDials: {
       'p-imusd': 7,
       'stk-mta': 30,
@@ -78,7 +85,12 @@ const MOCK_DATA = {
       'f-fei': 10,
     },
     emission: 50000,
-    currentEpoch: 1637768286000,
+    currentEpochId: 12320,
+    epochs: {
+      12320: {
+        0: 100,
+      },
+    },
   },
 }
 
@@ -87,13 +99,6 @@ const stateCtx = createContext<State>(MOCK_DATA)
 
 export const useEmissionDialsContract = (): EmissionsController | undefined => useContext(contractCtx)
 export const useEmissionDialsState = (): State => useContext(stateCtx)
-
-const MAPPING = [
-  { title: 'MTA Staking', key: 'stk-mta' },
-  { title: 'mBPT Staking', key: 'stk-bpt' },
-  { title: 'imUSD Vault', key: 'imusd-vault' },
-  { title: 'imBTC Vault', key: 'imbtc-vault' },
-]
 
 export const DialsProvider: FC = ({ children }) => {
   const clients = useApolloClients()
@@ -134,32 +139,42 @@ export const DialsProvider: FC = ({ children }) => {
     if (!controller) {
       return {
         data: {
-          dials: [],
+          dials: { 100: [] },
           userDials: {},
           emission: 0,
-          currentEpoch: 0,
+          currentEpochId: 0,
+          epochs: [],
         },
       }
     }
 
-    const dials = controller.dials.map((v, i) => ({
-      title: MAPPING[v.dialId]?.title ?? truncateAddress(v.recipient),
-      value: (v.preferences?.[0]?.weight ?? 0) / 2,
-      id: i,
-      key: MAPPING[v.dialId]?.key ?? truncateAddress(v.recipient),
-    }))
+    const epochs = controller.epochs
+      ?.map(v => ({
+        [v.weekNumber]: v.dialVotes?.map(x => ({ [x.dial.dialId]: parseFloat(x.votes) / 1e18 }))?.reduce((a, b) => ({ ...a, ...b })),
+      }))
+      .reduce((a, b) => ({ ...a, ...b }))
+
+    const dials = Object.keys(epochs)
+      .map(epochId => ({
+        [epochId]: Object.keys(epochs[epochId]).map(dialId => ({
+          title: EMISSIONS_MAPPING[dialId]?.title,
+          value: epochs[epochId][dialId] ?? 0,
+          id: parseInt(dialId),
+          key: EMISSIONS_MAPPING[dialId]?.key,
+        })),
+      }))
+      .reduce((a, b) => ({ ...a, ...b }))
 
     const userDials = Object.fromEntries(
-      (voters?.preferences ?? []).map(v => [MAPPING[v.dial.dialId]?.key ?? truncateAddress(v.dial.recipient), (v.weight ?? 0) / 2]),
+      (voters?.preferences ?? []).map(v => [
+        EMISSIONS_MAPPING[v.dial.dialId]?.key ?? truncateAddress(v.dial.recipient),
+        (v.weight ?? 0) / 2,
+      ]),
     )
 
     const emission = parseFloat(controller.epochs[0]?.emission)
 
-    // TODO revert
-    // const distributionPeriod = 604800
-    const distributionPeriod = 3600
-
-    const currentEpoch = controller.epochs[0]?.weekNumber * distributionPeriod * 1000
+    const currentEpochId = controller.epochs[controller.epochs.length - 1]?.weekNumber
 
     return {
       data: {
@@ -167,7 +182,8 @@ export const DialsProvider: FC = ({ children }) => {
         userDials,
         userVotePower,
         emission,
-        currentEpoch,
+        currentEpochId,
+        epochs,
       },
     }
   }, [controller, voters, userVotePower])
