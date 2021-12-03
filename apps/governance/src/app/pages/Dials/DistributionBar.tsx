@@ -93,13 +93,13 @@ export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
     return (activeBar.value / 100) * _emission
   }, [_emission, activeBar])
 
-  const dialCount = Object.keys(dials ?? []).length
+  const dialCount = dials?.filter(v => !!v.value).length
 
   const mappedData = [dials?.map(v => ({ [v.key]: v.value })).reduce((a, b) => ({ ...a, ...b }))]
 
   const selectedDialNetwork = (!!activeBar && !!activeBar?.key?.includes('p-') ? 'Polygon' : 'Ethereum') ?? null
 
-  if (!dials) return <p>Loading</p>
+  if (!dials) return null
 
   return (
     <Container>
@@ -116,17 +116,19 @@ export const DistributionBar: FC<Props> = ({ emission: _emission, dials }) => {
         <BarChart layout="vertical" stackOffset={'none'} data={mappedData} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
           <XAxis hide type="number" />
           <YAxis hide type="category" />
-          {dials?.map(({ key }, i) => (
-            <Bar
-              key={key}
-              dataKey={key}
-              fill={COLORS[i]}
-              stackId="bar"
-              radius={renderRadius(i, dialCount)}
-              onMouseEnter={e => handleLineHover(key)}
-              onMouseLeave={() => setActiveBar(null)}
-            />
-          ))}
+          {dials
+            ?.filter(({ value }) => !!value)
+            ?.map(({ key }, i) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                fill={COLORS[i]}
+                stackId="bar"
+                radius={renderRadius(i, dialCount)}
+                onMouseEnter={e => handleLineHover(key)}
+                onMouseLeave={() => setActiveBar(null)}
+              />
+            ))}
         </BarChart>
       </ResponsiveContainer>
     </Container>

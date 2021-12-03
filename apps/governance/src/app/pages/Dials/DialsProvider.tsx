@@ -116,26 +116,24 @@ export const DialsProvider: FC = ({ children }) => {
     title: MAPPING[v.dialId]?.title ?? truncateAddress(v.recipient),
     value: (v.preferences?.[0]?.weight ?? 0) / 2,
     id: i,
-    key: MAPPING[v.dialId]?.key,
+    key: MAPPING[v.dialId]?.key ?? truncateAddress(v.recipient),
   }))
 
-  const userDials: Record<string, number> = voters?.preferences
-    ?.map(v => ({ [MAPPING[v.dial.dialId].key]: (v.weight ?? 0) / 2 }))
-    .reduce((a, b) => ({ ...a, ...b }))
+  const userDials: Record<string, number> = useMemo(
+    () => voters?.preferences?.map(v => ({ [MAPPING[v.dial.dialId].key]: (v.weight ?? 0) / 2 })).reduce((a, b) => ({ ...a, ...b })),
+    [voters?.preferences],
+  )
 
   const finalData = useMemo(
-    () =>
-      !loading
-        ? {
-            ...MOCK_DATA,
-            data: {
-              ...MOCK_DATA.data,
-              dials,
-              userDials,
-            },
-          }
-        : MOCK_DATA,
-    [dials, userDials, loading],
+    () => ({
+      data: {
+        dials,
+        userDials,
+        emission: 1000,
+        currentEpoch: 1637768286000,
+      },
+    }),
+    [dials, userDials],
   )
 
   useEffect(() => {
