@@ -384,8 +384,6 @@ export type Epoch = {
   weekNumber: Scalars['Int'];
   /** Voters who last voted in this epoch */
   voters: Array<Voter>;
-  /** Total number of votes cast in this Epoch across all Dials */
-  totalVotes: Scalars['BigInt'];
   /** Total from the top-level emissions for this Epoch */
   emission: Scalars['BigInt'];
   /** DialVotesForEpoch for this Epoch; see "HistoricVotes" struct */
@@ -441,14 +439,6 @@ export type Epoch_Filter = {
   weekNumber_lte?: Maybe<Scalars['Int']>;
   weekNumber_in?: Maybe<Array<Scalars['Int']>>;
   weekNumber_not_in?: Maybe<Array<Scalars['Int']>>;
-  totalVotes?: Maybe<Scalars['BigInt']>;
-  totalVotes_not?: Maybe<Scalars['BigInt']>;
-  totalVotes_gt?: Maybe<Scalars['BigInt']>;
-  totalVotes_lt?: Maybe<Scalars['BigInt']>;
-  totalVotes_gte?: Maybe<Scalars['BigInt']>;
-  totalVotes_lte?: Maybe<Scalars['BigInt']>;
-  totalVotes_in?: Maybe<Array<Scalars['BigInt']>>;
-  totalVotes_not_in?: Maybe<Array<Scalars['BigInt']>>;
   emission?: Maybe<Scalars['BigInt']>;
   emission_not?: Maybe<Scalars['BigInt']>;
   emission_gt?: Maybe<Scalars['BigInt']>;
@@ -464,7 +454,6 @@ export enum Epoch_OrderBy {
   EmissionsController = 'emissionsController',
   WeekNumber = 'weekNumber',
   Voters = 'voters',
-  TotalVotes = 'totalVotes',
   Emission = 'emission',
   DialVotes = 'dialVotes'
 }
@@ -1371,15 +1360,16 @@ export enum _SubgraphErrorPolicy_ {
 }
 
 export type EmissionsQueryVariables = Exact<{
-  userId: Scalars['Bytes'];
+  account: Scalars['Bytes'];
+  hasAccount: Scalars['Boolean'];
 }>;
 
 
-export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, preferences: Array<{ weight: number }>, dialVotes?: Array<{ votes: string }> | null | undefined }>, epochs: Array<{ id: string, weekNumber: number, totalVotes: string, emission: string }> }>, voters: Array<{ id: string, address: string, preferences: Array<{ weight: number, dial: { dialId: number } }> }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, preferences: Array<{ weight: number }>, dialVotes?: Array<{ votes: string }> | null | undefined }>, epochs: Array<{ id: string, weekNumber: number, emission: string }> }>, voters?: Array<{ id: string, address: string, preferences: Array<{ weight: number, dial: { dialId: number, recipient: string } }> }> };
 
 
 export const EmissionsDocument = gql`
-    query Emissions($userId: Bytes!) {
+    query Emissions($account: Bytes!, $hasAccount: Boolean!) {
   emissionsControllers {
     id
     stakingContracts
@@ -1397,17 +1387,17 @@ export const EmissionsDocument = gql`
     epochs {
       id
       weekNumber
-      totalVotes
       emission
     }
   }
-  voters(where: {address: $userId}) {
+  voters(where: {address: $account}) @include(if: $hasAccount) {
     id
     address
     preferences {
       weight
       dial {
         dialId
+        recipient
       }
     }
   }
@@ -1426,7 +1416,8 @@ export const EmissionsDocument = gql`
  * @example
  * const { data, loading, error } = useEmissionsQuery({
  *   variables: {
- *      userId: // value for 'userId'
+ *      account: // value for 'account'
+ *      hasAccount: // value for 'hasAccount'
  *   },
  * });
  */

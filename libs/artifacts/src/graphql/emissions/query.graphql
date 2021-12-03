@@ -1,4 +1,4 @@
-query Emissions($userId: Bytes!) {
+query Emissions($account: Bytes!, $hasAccount: Boolean!) {
   emissionsControllers {
     id
     stakingContracts
@@ -13,19 +13,20 @@ query Emissions($userId: Bytes!) {
       }
       recipient
     }
-    epochs { 
+    epochs {
       id
       weekNumber
       emission
     }
   }
-  voters (where: { address: $userId }) {
+  voters (where: { address: $account }) @include(if: $hasAccount) {
     id
     address
     preferences {
     	weight
       dial {
         dialId
+        recipient
       }
     }
   }

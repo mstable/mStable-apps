@@ -386,11 +386,6 @@ type Epoch {
   """
   voters(skip: Int = 0, first: Int = 100, orderBy: Voter_orderBy, orderDirection: OrderDirection, where: Voter_filter): [Voter!]!
   """
-  Total number of votes cast in this Epoch across all Dials
-  
-  """
-  totalVotes: BigInt!
-  """
   Total from the top-level emissions for this Epoch
   
   """
@@ -433,14 +428,6 @@ input Epoch_filter {
   weekNumber_lte: Int
   weekNumber_in: [Int!]
   weekNumber_not_in: [Int!]
-  totalVotes: BigInt
-  totalVotes_not: BigInt
-  totalVotes_gt: BigInt
-  totalVotes_lt: BigInt
-  totalVotes_gte: BigInt
-  totalVotes_lte: BigInt
-  totalVotes_in: [BigInt!]
-  totalVotes_not_in: [BigInt!]
   emission: BigInt
   emission_not: BigInt
   emission_gt: BigInt
@@ -456,7 +443,6 @@ enum Epoch_orderBy {
   emissionsController
   weekNumber
   voters
-  totalVotes
   emission
   dialVotes
 }
