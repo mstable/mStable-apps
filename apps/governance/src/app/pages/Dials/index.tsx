@@ -202,6 +202,10 @@ const EpochContainer = styled.div`
     justify-content: space-between;
     margin: 0.25rem 0.875rem 0.75rem;
 
+    > div {
+      display: flex;
+    }
+
     span {
       ${({ theme }) => theme.mixins.numeric};
     }
@@ -299,7 +303,7 @@ const DialsContent: FC = () => {
   const [userDials, setUserDials] = useState<Record<string, number>>(_userDials)
   const [isSystemView, toggleView] = useToggle(true)
 
-  const epochRange = [currentEpoch, currentEpoch + 86400 * 7000]
+  const epochRange = !!currentEpoch && [currentEpoch - 604800 * 1000, currentEpoch]
 
   const headerTitles = isSystemView ? ['Dial', 'System %', ''].map(t => ({ title: t })) : ['Dial', 'User %', ''].map(t => ({ title: t }))
 
@@ -345,7 +349,11 @@ const DialsContent: FC = () => {
               <ArrowButton onClick={() => setEpoch(epoch - 1)}>
                 <BackArrow />
               </ArrowButton>
-              <span>{`(${format(epochRange[0], 'dd/MM')} - ${format(epochRange[1], 'dd/MM')})`}</span>
+              {!epochRange ? (
+                <ThemedSkeleton height={20} width={100} />
+              ) : (
+                <span>{`(${format(epochRange[0], 'dd/MM')} - ${format(epochRange[1], 'dd/MM')})`}</span>
+              )}
               <ArrowButton onClick={() => setEpoch(epoch + 1)}>
                 <ForwardArrow />
               </ArrowButton>
