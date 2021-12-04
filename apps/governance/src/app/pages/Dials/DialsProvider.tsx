@@ -6,7 +6,7 @@ import { truncateAddress } from '@apps/formatters'
 import { EmissionsController, EmissionsController__factory } from '@apps/artifacts/typechain'
 import { useAccountQuery } from '@apps/artifacts/graphql/staking'
 import { BigDecimal } from '@apps/bigdecimal'
-import { EMISSIONS_MAPPING } from './utils'
+import { mapIdToDial } from './utils'
 
 interface State {
   data?: {
@@ -157,18 +157,18 @@ export const DialsProvider: FC = ({ children }) => {
     const dials = Object.keys(epochs)
       .map(epochId => ({
         [epochId]: Object.keys(epochs[epochId]).map(dialId => ({
-          title: EMISSIONS_MAPPING[dialId]?.title,
+          title: mapIdToDial(parseInt(dialId))?.title,
           value: epochs[epochId][dialId] ?? 0,
           id: parseInt(dialId),
-          key: EMISSIONS_MAPPING[dialId]?.key,
+          key: mapIdToDial(parseInt(dialId))?.key,
         })),
       }))
       .reduce((a, b) => ({ ...a, ...b }))
 
     const userDials = Object.fromEntries(
-      (voters?.preferences ?? []).map(v => [
-        EMISSIONS_MAPPING[v.dial.dialId]?.key ?? truncateAddress(v.dial.recipient),
-        (v.weight ?? 0) / 2,
+      (voters?.preferences ?? []).map(({ dial, weight }) => [
+        mapIdToDial(dial.dialId)?.key ?? truncateAddress(dial.recipient),
+        (weight ?? 0) / 2,
       ]),
     )
 

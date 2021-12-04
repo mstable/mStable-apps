@@ -4,6 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 import { titleCase } from 'title-case'
 
 import { CountUp } from '@apps/dumb-components'
+import { scaleDials } from './utils'
 
 const COLORS = ['#087E8B', '#48284A', '#a1cda8', '#ff5a5f', '#3c3c3c', '#F2F3AE', '#A3320B', '#C1839F']
 
@@ -95,7 +96,9 @@ export const DistributionBar: FC<Props> = ({ dials, emission: _emission = 1000 }
 
   const dialCount = dials?.filter(v => !!v.value).length
 
-  const mappedData = [dials?.map(v => ({ [v.key]: v.value })).reduce((a, b) => ({ ...a, ...b }))]
+  const scaledDials = scaleDials(dials)
+
+  const scaledMappedData = [scaledDials?.map(v => ({ [v.key]: v.value })).reduce((a, b) => ({ ...a, ...b }))]
 
   const selectedDialNetwork = (!!activeBar && !!activeBar?.key?.includes('p-') ? 'Polygon' : 'Ethereum') ?? null
 
@@ -113,7 +116,7 @@ export const DistributionBar: FC<Props> = ({ dials, emission: _emission = 1000 }
         <CountUp end={emission} decimals={0} />
       </Header>
       <ResponsiveContainer height={24} width={'100%'}>
-        <BarChart layout="vertical" stackOffset={'none'} data={mappedData} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
+        <BarChart layout="vertical" stackOffset={'none'} data={scaledMappedData} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
           <XAxis hide type="number" />
           <YAxis hide type="category" />
           {dials

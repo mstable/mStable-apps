@@ -27,12 +27,12 @@ import { ViewportWidth } from '@apps/theme'
 import { usePropose } from '@apps/base/context/transactions'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { useEffect } from 'react'
+import { scaleUserDials } from './utils'
 
 const DOCS_URL = 'https://docs.mstable.org/using-mstable/mta-staking'
 const FORUM_URL = 'https://forum.mstable.org/'
 
 const TABLE_CELL_WIDTHS = [30, 25, 35]
-const WEEK = 604800
 
 const StyledSlider = styled(Slider)`
   height: 1rem;
@@ -260,36 +260,6 @@ export const Dials: FC = () => {
       <DialsContent />
     </DialsProvider>
   )
-}
-
-const scaleUserDials = (dials: Record<string, number>): Record<string, number> => {
-  if (!Object.values(dials ?? {}).length) return {}
-
-  const nonZeroDials = Object.values(dials).filter(v => !!v)
-  const cumulativeWeight = nonZeroDials.reduce((a, b) => a + b, 0)
-
-  // Scale only if total > 100
-  if (cumulativeWeight <= 100) return dials
-
-  const weightMultiplier = cumulativeWeight / 100
-  const scaledUserDials = Object.keys(dials)
-    .map(k => ({ [k]: !!dials[k] ? Math.floor(dials[k] / weightMultiplier) : 0 }))
-    .reduce((a, b) => ({ ...a, ...b }), {})
-
-  // TODO: Improve logic
-  // remainder gets added to highest value
-  const remainder = 100 - Object.values(scaledUserDials).reduce((a, b) => a + b)
-  if (remainder > 0) {
-    const values = Object.values(scaledUserDials)
-    const scaledHighestKey = Object.keys(scaledUserDials).find(k => scaledUserDials[k] === Math.max(...values))
-    const correctedForRemainder = Object.keys(scaledUserDials)
-      .map(k => ({
-        [k]: scaledUserDials[k] + (k === scaledHighestKey ? remainder : 0),
-      }))
-      .reduce((a, b) => ({ ...a, ...b }))
-    return correctedForRemainder
-  }
-  return scaledUserDials
 }
 
 const convertEpochToTimestamp = (epoch: number) => {
