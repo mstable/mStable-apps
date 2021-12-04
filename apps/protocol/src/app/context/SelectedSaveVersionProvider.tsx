@@ -6,6 +6,7 @@ import { useSelectedMassetName } from '@apps/masset-provider'
 import { useWalletAddress } from '@apps/base/context/account'
 import { useV1SavingsBalanceQuery } from '@apps/artifacts/graphql/protocol'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { MassetName } from '@apps/types'
 
 export enum SaveVersion {
   V1 = 1,
@@ -68,8 +69,8 @@ export const SelectedSaveVersionProvider: FC = ({ children }) => {
 
 export const useSelectedSaveVersion = (): SelectedSaveVersionCtx => useContext(ctx)
 
-export const useSelectedSavingsContractState = (): SavingsContractState | undefined => {
-  const massetState = useSelectedMassetState()
+export const useSelectedSavingsContractState = (mAssetName?: MassetName): SavingsContractState | undefined => {
+  const massetState = useSelectedMassetState(mAssetName)
   const [selectedSaveVersion] = useSelectedSaveVersion()
   return massetState?.savingsContracts?.[`v${selectedSaveVersion}` as 'v1' | 'v2']
 }

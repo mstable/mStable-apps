@@ -3,14 +3,14 @@ import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { calculateApy } from '@apps/quick-maths'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { calculateBoost, getPriceCoeff, MAX_BOOST, useVMTABalance } from '@apps/boost'
-import { BoostedCombinedAPY, FetchState } from '@apps/types'
+import { BoostedCombinedAPY, FetchState, MassetName } from '@apps/types'
 
 import { useFraxStakingState } from '../context/FraxStakingProvider'
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'
 
-const useFeederPoolApyVault = (poolAddress: string) => {
-  const massetState = useSelectedMassetState()
-  const massetPrice = useSelectedMassetPrice()
+const useFeederPoolApyVault = (poolAddress: string, mAssetName?: MassetName) => {
+  const massetState = useSelectedMassetState(mAssetName)
+  const massetPrice = useSelectedMassetPrice(mAssetName)
   const { fetchPrices } = useFetchPriceCtx()
   const vMTABalance = useVMTABalance()
 
@@ -55,8 +55,8 @@ const useFeederPoolApyVault = (poolAddress: string) => {
   }
 }
 
-const useFeederPoolApyFrax = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
-  const massetState = useSelectedMassetState()
+const useFeederPoolApyFrax = (poolAddress: string, mAssetName?: MassetName): FetchState<BoostedCombinedAPY> => {
+  const massetState = useSelectedMassetState(mAssetName)
   const feederPool = massetState?.feederPools[poolAddress]
 
   const { rewards } = useFraxStakingState()
@@ -68,10 +68,10 @@ const useFeederPoolApyFrax = (poolAddress: string): FetchState<BoostedCombinedAP
   }
 }
 
-export const useFeederPoolApy = (poolAddress: string): FetchState<BoostedCombinedAPY> => {
+export const useFeederPoolApy = (poolAddress: string, mAssetName?: MassetName): FetchState<BoostedCombinedAPY> => {
   const networkAddresses = useNetworkAddresses()
-  const feederPoolApyFrax = useFeederPoolApyFrax(poolAddress)
-  const feederPoolApyVault = useFeederPoolApyVault(poolAddress)
+  const feederPoolApyFrax = useFeederPoolApyFrax(poolAddress, mAssetName)
+  const feederPoolApyVault = useFeederPoolApyVault(poolAddress, mAssetName)
   if (poolAddress && (networkAddresses as MaticMainnet['addresses']).FRAX?.feederPool === poolAddress) {
     return feederPoolApyFrax
   }
