@@ -8,10 +8,9 @@ import { toK } from '@apps/formatters'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { calculateApy } from '@apps/quick-maths'
 import { BoostedCombinedAPY, FetchState, MassetName } from '@apps/types'
-import React, { FC, useEffect, useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
-import { useSetDeposit } from './BalanceProvider'
 import { DashNameTableCell, DashTableCell, DashTableRow } from './Styled'
 
 const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number): FetchState<BoostedCombinedAPY> => {
@@ -55,7 +54,6 @@ export const VaultRow: FC<{ mAssetName: MassetName }> = ({ mAssetName }) => {
   const massetState = useSelectedMassetState(mAssetName)
   const massetPrice = useSelectedMassetPrice(mAssetName)
   const [selectedSaveVersion] = useSelectedSaveVersion()
-  const setDeposit = useSetDeposit()
 
   const {
     savingsContracts: {
@@ -76,10 +74,6 @@ export const VaultRow: FC<{ mAssetName: MassetName }> = ({ mAssetName }) => {
 
   const userBoost = useCalculateUserBoost(boostedSavingsVault)
   const apy = useSaveVaultAPY(mAssetName, userBoost)
-
-  useEffect(() => {
-    setDeposit(`vault-${mAssetName}`, balance)
-  }, [balance, mAssetName, setDeposit])
 
   return (
     <DashTableRow>
