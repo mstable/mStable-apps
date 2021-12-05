@@ -1,6 +1,5 @@
 import { TokenIcon } from '@apps/base/components/core'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { BigDecimal } from '@apps/bigdecimal'
 import { useCalculateUserBoost } from '@apps/boost'
 import { MassetState } from '@apps/data-provider'
 import { CountUp, CountUpUSD, DifferentialCountup } from '@apps/dumb-components'
@@ -12,6 +11,7 @@ import React, { FC, useMemo } from 'react'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { DashNameTableCell, DashTableCell, DashTableRow } from './Styled'
+import { getVaultDeposited } from './utils'
 
 const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number): FetchState<BoostedCombinedAPY> => {
   const {
@@ -50,30 +50,18 @@ const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number): FetchState
   }, [userBoost, rewardsTokenPrice, boostedSavingsVault, massetPrice, latestExchangeRate])
 }
 
-export const VaultRow: FC<{ mAssetName: MassetName }> = ({ mAssetName }) => {
-  const massetState = useSelectedMassetState(mAssetName)
+export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
+  const mAssetName = massetState.token.symbol.toLowerCase() as MassetName
   const massetPrice = useSelectedMassetPrice(mAssetName)
   const [selectedSaveVersion] = useSelectedSaveVersion()
 
   const {
-    savingsContracts: {
-      v1: { savingsBalance: saveV1Balance } = {},
-      v2: { boostedSavingsVault, token: saveToken, latestExchangeRate: { rate: saveExchangeRate } = {} },
-    },
+    savingsContracts: { v2: { boostedSavingsVault } = {} },
   } = massetState as MassetState
-
-  const balance = useMemo(() => {
-    if (selectedSaveVersion === 1) return saveV1Balance?.balance
-
-    return (
-      (boostedSavingsVault?.account?.rawBalance ?? BigDecimal.ZERO)
-        .add(saveToken?.balance ?? BigDecimal.ZERO)
-        .mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact) ?? BigDecimal.ZERO
-    )
-  }, [boostedSavingsVault, saveToken, saveExchangeRate, selectedSaveVersion, saveV1Balance])
 
   const userBoost = useCalculateUserBoost(boostedSavingsVault)
   const apy = useSaveVaultAPY(mAssetName, userBoost)
+  const balance = useMemo(() => getVaultDeposited(selectedSaveVersion, massetState), [massetState, selectedSaveVersion])
 
   return (
     <DashTableRow>

@@ -2,7 +2,6 @@ import { TokenPair } from '@apps/base/components/core'
 import { FeederPoolState } from '@apps/data-provider'
 import { CountUp, CountUpUSD } from '@apps/dumb-components'
 import { toK } from '@apps/formatters'
-import { useFeederPool } from '@apps/masset-hooks'
 import { MassetName } from '@apps/types'
 import React, { FC } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -10,9 +9,9 @@ import { useFeederPoolApy } from '../../hooks/useFeederPoolApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { DashNameTableCell, DashTableCell, DashTableRow } from './Styled'
 
-export const PoolRow: FC<{ address: string; mAssetName: MassetName }> = ({ address, mAssetName, ...rest }) => {
-  const feederPool = useFeederPool(address, mAssetName) as FeederPoolState
-  const feederPoolApy = useFeederPoolApy(address, mAssetName)
+export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...rest }) => {
+  const mAssetName = feederPool.masset.token.symbol.toLowerCase() as MassetName
+  const feederPoolApy = useFeederPoolApy(feederPool.address, mAssetName)
   const massetPrice = useSelectedMassetPrice(mAssetName)
 
   const { vault, token, price } = feederPool
