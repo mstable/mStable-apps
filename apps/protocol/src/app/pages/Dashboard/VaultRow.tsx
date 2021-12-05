@@ -10,6 +10,7 @@ import { BoostedCombinedAPY, FetchState, MassetName } from '@apps/types'
 import React, { FC, useMemo } from 'react'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
+import { useSubscribeRewardStream } from './RewardsContext'
 import { DashNameTableCell, DashTableCell, DashTableRow } from './Styled'
 import { getVaultDeposited } from './utils'
 
@@ -54,6 +55,7 @@ export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
   const mAssetName = massetState.token.symbol.toLowerCase() as MassetName
   const massetPrice = useSelectedMassetPrice(mAssetName)
   const [selectedSaveVersion] = useSelectedSaveVersion()
+  useSubscribeRewardStream(`reward-${mAssetName}`)
 
   const {
     savingsContracts: { v2: { boostedSavingsVault } = {} },
@@ -61,7 +63,10 @@ export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
 
   const userBoost = useCalculateUserBoost(boostedSavingsVault)
   const apy = useSaveVaultAPY(mAssetName, userBoost)
-  const balance = useMemo(() => getVaultDeposited(selectedSaveVersion, massetState), [massetState, selectedSaveVersion])
+  const balance = useMemo(
+    () => getVaultDeposited(selectedSaveVersion, massetState, massetPrice.value),
+    [massetPrice.value, massetState, selectedSaveVersion],
+  )
 
   return (
     <DashTableRow>
@@ -81,7 +86,7 @@ export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
         )}
       </DashTableCell>
       <DashTableCell>
-        <CountUp end={(balance?.simple ?? 0) * (massetPrice.value ?? 0)} prefix="$" />
+        <CountUp end={balance.simple} prefix="$" />
       </DashTableCell>
       <DashTableCell>
         <CountUpUSD end={massetState.token.totalSupply.simple} price={massetPrice.value} formattingFn={toK} />

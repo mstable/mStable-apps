@@ -1,5 +1,6 @@
 import { FeederPoolState, PoolType, useDataState } from '@apps/data-provider'
 import React, { useMemo } from 'react'
+import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
 import { PoolRow } from './PoolRow'
 import { Card, DashTable, Title } from './Styled'
 import { sortPoolsByDepositedDesc } from './utils'
@@ -24,9 +25,15 @@ export const Pools = () => {
       <Title>Pools</Title>
       <Card>
         <DashTable headerTitles={headerTitles}>
-          {pools.map((feederPool: FeederPoolState) => (
-            <PoolRow key={feederPool.address} feederPool={feederPool} />
-          ))}
+          {pools.map((feederPool: FeederPoolState) => {
+            const { address, vault } = feederPool
+
+            return (
+              <RewardStreamsProvider key={address} vault={vault}>
+                <PoolRow feederPool={feederPool} />
+              </RewardStreamsProvider>
+            )
+          })}
         </DashTable>
       </Card>
     </div>

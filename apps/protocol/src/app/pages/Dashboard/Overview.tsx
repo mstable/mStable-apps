@@ -1,12 +1,11 @@
+import { MassetState, useDataState } from '@apps/data-provider'
 import { CountUp } from '@apps/dumb-components'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { ChainIds, getNetwork } from '@apps/base/context/network'
-import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { MassetState, useDataState } from '@apps/data-provider'
-import { BigDecimal } from '@apps/bigdecimal'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
+import { useTotalRewards } from './RewardsContext'
 import { Card, Panel, Title } from './Styled'
+import { getPoolDeposited, getVaultDeposited, useWBTCPrice } from './utils'
 
 export const Item = styled.div`
   display: flex;
@@ -18,44 +17,17 @@ export const Item = styled.div`
   }
 `
 
-const {
-  addresses: { WBTC },
-} = getNetwork(ChainIds.EthereumMainnet)
-
 const useDeposits = () => {
   const dataState = useDataState()
-  const { fetchPrice } = useFetchPriceCtx()
-  const wbtcPrice = fetchPrice(WBTC)
+  const wbtcPrice = useWBTCPrice()
   const [selectedSaveVersion] = useSelectedSaveVersion()
 
   return useMemo(
     () =>
       Object.values(dataState).reduce((acc, curr: MassetState) => {
-        const {
-          savingsContracts: {
-            v1: { savingsBalance: saveV1Balance } = {},
-            v2: { boostedSavingsVault, token: saveToken, latestExchangeRate: { rate: saveExchangeRate } = {} },
-          },
-          feederPools,
-        } = curr
         const mPrice = curr?.token?.symbol === 'mBTC' ? wbtcPrice.value : 1
-
-        const vaults =
-          (selectedSaveVersion === 1
-            ? saveV1Balance?.balance
-            : (boostedSavingsVault?.account?.rawBalance ?? BigDecimal.ZERO)
-                .add(saveToken?.balance ?? BigDecimal.ZERO)
-                .mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact) ?? BigDecimal.ZERO
-          ).simple * mPrice
-
-        const pools = Object.values(feederPools).reduce((ac, { vault, token, price }) => {
-          const fpTokenPrice = price.simple * mPrice
-          const userAmount = token.balance?.simple ?? 0
-          const userStakedAmount = vault?.account?.rawBalance.simple ?? 0
-          const totalUserBalance = (userStakedAmount + userAmount) * fpTokenPrice
-
-          return ac + totalUserBalance
-        }, 0)
+        const vaults = getVaultDeposited(selectedSaveVersion, curr, mPrice).simple
+        const pools = Object.values(curr.feederPools).reduce((ac, cu) => ac + getPoolDeposited(cu, mPrice), 0)
 
         return acc + vaults + pools
       }, 0),
@@ -65,6 +37,7 @@ const useDeposits = () => {
 
 export const Overview = () => {
   const deposits = useDeposits()
+  const { total, claimed, pending } = useTotalRewards()
 
   return (
     <div>
@@ -77,15 +50,15 @@ export const Overview = () => {
           </Item>
           <Item>
             <span>Pending rewards</span>
-            <CountUp end={50.1} suffix="MTA" />
+            <CountUp end={pending} suffix="MTA" />
           </Item>
           <Item>
             <span>Claimed rewards</span>
-            <CountUp end={195.9} suffix="MTA" />
+            <CountUp end={claimed} suffix="MTA" />
           </Item>
           <Item>
             <span>Total rewards</span>
-            <CountUp end={246.0} suffix="MTA" />
+            <CountUp end={total} suffix="MTA" />
           </Item>
         </Panel>
       </Card>

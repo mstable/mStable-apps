@@ -3,26 +3,23 @@ import { FeederPoolState } from '@apps/data-provider'
 import { CountUp, CountUpUSD } from '@apps/dumb-components'
 import { toK } from '@apps/formatters'
 import { MassetName } from '@apps/types'
-import React, { FC } from 'react'
-import Skeleton from 'react-loading-skeleton'
+import React, { FC, useMemo } from 'react'
 import { useFeederPoolApy } from '../../hooks/useFeederPoolApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
+import { useSubscribeRewardStream } from './RewardsContext'
 import { DashNameTableCell, DashTableCell, DashTableRow } from './Styled'
+import { getPoolDeposited } from './utils'
 
 export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...rest }) => {
   const mAssetName = feederPool.masset.token.symbol.toLowerCase() as MassetName
   const feederPoolApy = useFeederPoolApy(feederPool.address, mAssetName)
   const massetPrice = useSelectedMassetPrice(mAssetName)
-
-  const { vault, token, price } = feederPool
-
-  const fpTokenPrice = price.simple * (massetPrice.value ?? 1)
-  const userAmount = token.balance?.simple ?? 0
-  const userStakedAmount = vault?.account?.rawBalance.simple ?? 0
-  const totalUserBalance = (userStakedAmount + userAmount) * fpTokenPrice
-  const tvlPrice = massetPrice.value ? massetPrice.value * feederPool.price.simple : undefined
-
-  if (!feederPool) return <Skeleton height={200} />
+  const deposited = useMemo(() => getPoolDeposited(feederPool, massetPrice.value), [feederPool, massetPrice.value])
+  const tvlPrice = useMemo(
+    () => (massetPrice.value ? massetPrice.value * feederPool.price.simple : undefined),
+    [feederPool.price.simple, massetPrice.value],
+  )
+  useSubscribeRewardStream(`pool-${feederPool.address}`)
 
   return (
     <DashTableRow {...rest}>
@@ -31,7 +28,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...re
         {feederPool.title}
       </DashNameTableCell>
       <DashTableCell>
-        {totalUserBalance > 0 ? (
+        {deposited > 0 ? (
           <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />
         ) : feederPoolApy.value ? (
           <>
@@ -42,7 +39,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...re
         ) : null}
       </DashTableCell>
       <DashTableCell>
-        <CountUp end={totalUserBalance} prefix="$" />
+        <CountUp end={deposited} prefix="$" />
       </DashTableCell>
       <DashTableCell>
         <CountUpUSD end={feederPool.liquidity.simple} price={tvlPrice} formattingFn={toK} />

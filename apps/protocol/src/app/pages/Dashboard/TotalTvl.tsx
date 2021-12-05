@@ -1,9 +1,8 @@
-import { ChainIds, getNetwork } from '@apps/base/context/network'
-import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { useDataState } from '@apps/data-provider'
 import { CountUp } from '@apps/dumb-components'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
+import { useWBTCPrice } from './utils'
 
 const Stack = styled.div`
   display: flex;
@@ -20,14 +19,9 @@ const BigCountUp = styled(CountUp)`
   padding: 2rem 0;
 `
 
-const {
-  addresses: { WBTC },
-} = getNetwork(ChainIds.EthereumMainnet)
-
 export const TotalTvl: FC = () => {
   const dataState = useDataState()
-  const { fetchPrice } = useFetchPriceCtx()
-  const wbtcPrice = fetchPrice(WBTC)
+  const wbtcPrice = useWBTCPrice()
 
   const tvl = useMemo(
     () =>
