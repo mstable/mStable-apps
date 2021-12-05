@@ -21,7 +21,7 @@ export const RewardsProvider: FC = ({ children }) => {
 
   const upsertStream = useCallback(
     (id: string, stream: RewardStreams) => {
-      if (stream && !streams[id] && !isStreamEqual(streams[id], stream)) {
+      if (stream && (!streams[id] || !isStreamEqual(streams[id], stream))) {
         setStreams({ ...streams, [id]: stream })
       }
     },
