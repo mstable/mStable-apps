@@ -33,7 +33,7 @@ const StyledTrack = styled.div<{ index: number; value?: number }>`
   height: 1rem;
   display: ${({ index, value }) => value === 0 && index === 0 && 'none'};
   background: ${({ index, theme }) => (index === 1 ? theme.color.background[2] : theme.color.blue)};
-  border-radius: 0.5rem;
+  border-radius: ${({ index }) => (index === 0 ? '0.5rem 0 0 0.5rem' : '0 0.5rem 0.5rem 0')};
 `
 
 const StyledMark = styled.div`
