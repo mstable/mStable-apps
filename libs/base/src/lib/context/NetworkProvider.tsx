@@ -499,13 +499,12 @@ const NetworkPricesProvider: FC = ({ children }) => {
       }
       // eth testnet
     } else if ([ChainIds.EthereumGoerli, ChainIds.EthereumKovan, ChainIds.EthereumRopsten].includes(network.chainId)) {
-      const gasStationResponse = await fetch(network.gasStationEndpoint)
-      const gasRes: GasPoaNetwork = await gasStationResponse.json()
+      // Testnets should use low gas
       gas = {
-        standard: gasRes.standard,
-        fast: gasRes.fast,
-        slow: gasRes.slow,
-        instant: gasRes.instant,
+        standard: 3,
+        fast: 3,
+        slow: 3,
+        instant: 3,
       }
       // Matic Mainnet + Mumbai
     } else {
