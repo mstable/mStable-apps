@@ -75,13 +75,13 @@ export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
         {massetState.token.symbol}
       </DashNameTableCell>
       <DashTableCell>
-        {userBoost > 1 && apy.value?.rewards.userBoost ? (
-          <DifferentialCountup prev={apy.value?.rewards.base} end={apy.value.rewards.userBoost} suffix="%" />
+        {userBoost > 1 && apy.value?.rewards?.userBoost ? (
+          <DifferentialCountup prev={apy.value?.rewards?.base || 0} end={apy?.value?.rewards?.userBoost || 0} suffix="%" />
         ) : (
           <>
-            <CountUp end={apy.value?.rewards.base ?? 0} />
+            <CountUp end={apy?.value?.rewards?.base || 0} />
             &nbsp;-&nbsp;
-            <CountUp end={apy.value?.rewards.maxBoost ?? 0} suffix="%" />
+            <CountUp end={apy?.value?.rewards?.maxBoost || 0} suffix="%" />
           </>
         )}
       </DashTableCell>

@@ -29,12 +29,12 @@ export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...re
       </DashNameTableCell>
       <DashTableCell>
         {deposited > 0 ? (
-          <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />
+          <CountUp end={feederPoolApy?.value?.rewards?.maxBoost || 0} suffix="%" />
         ) : feederPoolApy.value ? (
           <>
-            <CountUp end={feederPoolApy.value?.rewards.base ?? 0} />
+            <CountUp end={feederPoolApy?.value?.rewards?.base || 0} />
             &nbsp;-&nbsp;
-            <CountUp end={feederPoolApy.value?.rewards.maxBoost ?? 0} suffix="%" />
+            <CountUp end={feederPoolApy?.value?.rewards?.maxBoost || 0} suffix="%" />
           </>
         ) : null}
       </DashTableCell>
