@@ -1,3 +1,12 @@
+fragment DialPreferences on Preference {
+  id
+  weight
+  voter {
+    id
+    address
+  }
+}
+
 query Emissions($account: Bytes!, $hasAccount: Boolean!) {
   emissionsControllers {
     id
@@ -5,15 +14,10 @@ query Emissions($account: Bytes!, $hasAccount: Boolean!) {
     dials {
       id
       dialId
-      preferences {
-        weight
-      }
-      dialVotes {
-        votes
-      }
       recipient
+      balance
     }
-    epochs {
+    lastEpoch {
       id
       weekNumber
       emission
@@ -25,16 +29,51 @@ query Emissions($account: Bytes!, $hasAccount: Boolean!) {
         votes
       }
     }
-  }
-  voters (where: { address: $account }) @include(if: $hasAccount) {
-    id
-    address
-    preferences {
-    	weight
-      dial {
-        dialId
-        recipient
+    startEpoch {
+      id
+      weekNumber
+    }
+    voters(where: { address: $account }) @include(if: $hasAccount) {
+      id
+      lastEpoch {
+        id
+        weekNumber
+      }
+      lastSourcePoke
+      preferences {
+        id
+        weight
+        dial {
+          id
+          dialId
+        }
       }
     }
+  }
+}
+
+fragment EpochAll on Epoch {
+  id
+  weekNumber
+  emission
+  dialVotes {
+    id
+    votes
+    dial {
+      id
+      dialId
+      preferences(first: 64, skip: $skip, orderBy: weight, orderDirection: desc) {
+        ...DialPreferences
+      }
+    }
+  }
+}
+
+query Epoch($weekNumber: Int!, $hasWeekNumber: Boolean! $skip: Int!) {
+  selectedEpoch: epoches(where: { weekNumber: $weekNumber }, first: 1) @include(if: $hasWeekNumber) {
+    ...EpochAll
+  }
+  lastEpoch: epoches(orderBy: weekNumber, orderDirection: desc, first: 1) @skip(if: $hasWeekNumber) {
+    ...EpochAll
   }
 }
