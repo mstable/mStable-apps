@@ -47,8 +47,7 @@
         "react-hooks/rules-of-hooks": "error",
         "react/jsx-no-useless-fragment": "off",
         "react/no-unescaped-entities": "off",
-        "react/prop-types": "off",
-        "@nrwl/nx/enforce-module-boundaries": "off"
+        "react/prop-types": "off"
       }
     },
     {
