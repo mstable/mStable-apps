@@ -1359,15 +1359,55 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
+export type DialPreferencesFragment = { id: string, weight: number, voter: { id: string, address: string } };
+
 export type EmissionsQueryVariables = Exact<{
   account: Scalars['Bytes'];
   hasAccount: Scalars['Boolean'];
 }>;
 
 
-export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, preferences: Array<{ weight: number }>, dialVotes?: Array<{ votes: string }> | null | undefined }>, epochs: Array<{ id: string, weekNumber: number, emission: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }> }>, voters?: Array<{ id: string, address: string, preferences: Array<{ weight: number, dial: { dialId: number, recipient: string } }> }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string }>, lastEpoch: { id: string, weekNumber: number, emission: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, lastSourcePoke: number, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: number, dial: { id: string, dialId: number } }> }> }> };
+
+export type EpochAllFragment = { id: string, weekNumber: number, emission: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> };
+
+export type EpochQueryVariables = Exact<{
+  weekNumber: Scalars['Int'];
+  hasWeekNumber: Scalars['Boolean'];
+  skip: Scalars['Int'];
+}>;
 
 
+export type EpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> }> };
+
+export const DialPreferencesFragmentDoc = gql`
+    fragment DialPreferences on Preference {
+  id
+  weight
+  voter {
+    id
+    address
+  }
+}
+    `;
+export const EpochAllFragmentDoc = gql`
+    fragment EpochAll on Epoch {
+  id
+  weekNumber
+  emission
+  dialVotes {
+    id
+    votes
+    dial {
+      id
+      dialId
+      preferences(first: 64, skip: $skip, orderBy: weight, orderDirection: desc) {
+        ...DialPreferences
+      }
+    }
+  }
+}
+    ${DialPreferencesFragmentDoc}`;
 export const EmissionsDocument = gql`
     query Emissions($account: Bytes!, $hasAccount: Boolean!) {
   emissionsControllers {
@@ -1376,15 +1416,10 @@ export const EmissionsDocument = gql`
     dials {
       id
       dialId
-      preferences {
-        weight
-      }
-      dialVotes {
-        votes
-      }
       recipient
+      balance
     }
-    epochs {
+    lastEpoch {
       id
       weekNumber
       emission
@@ -1396,15 +1431,24 @@ export const EmissionsDocument = gql`
         votes
       }
     }
-  }
-  voters(where: {address: $account}) @include(if: $hasAccount) {
-    id
-    address
-    preferences {
-      weight
-      dial {
-        dialId
-        recipient
+    startEpoch {
+      id
+      weekNumber
+    }
+    voters(where: {address: $account}) @include(if: $hasAccount) {
+      id
+      lastEpoch {
+        id
+        weekNumber
+      }
+      lastSourcePoke
+      preferences {
+        id
+        weight
+        dial {
+          id
+          dialId
+        }
       }
     }
   }
@@ -1439,3 +1483,43 @@ export function useEmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type EmissionsQueryHookResult = ReturnType<typeof useEmissionsQuery>;
 export type EmissionsLazyQueryHookResult = ReturnType<typeof useEmissionsLazyQuery>;
 export type EmissionsQueryResult = Apollo.QueryResult<EmissionsQuery, EmissionsQueryVariables>;
+export const EpochDocument = gql`
+    query Epoch($weekNumber: Int!, $hasWeekNumber: Boolean!, $skip: Int!) {
+  selectedEpoch: epoches(where: {weekNumber: $weekNumber}, first: 1) @include(if: $hasWeekNumber) {
+    ...EpochAll
+  }
+  lastEpoch: epoches(orderBy: weekNumber, orderDirection: desc, first: 1) @skip(if: $hasWeekNumber) {
+    ...EpochAll
+  }
+}
+    ${EpochAllFragmentDoc}`;
+
+/**
+ * __useEpochQuery__
+ *
+ * To run a query within a React component, call `useEpochQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEpochQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEpochQuery({
+ *   variables: {
+ *      weekNumber: // value for 'weekNumber'
+ *      hasWeekNumber: // value for 'hasWeekNumber'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useEpochQuery(baseOptions: Apollo.QueryHookOptions<EpochQuery, EpochQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EpochQuery, EpochQueryVariables>(EpochDocument, options);
+      }
+export function useEpochLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EpochQuery, EpochQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EpochQuery, EpochQueryVariables>(EpochDocument, options);
+        }
+export type EpochQueryHookResult = ReturnType<typeof useEpochQuery>;
+export type EpochLazyQueryHookResult = ReturnType<typeof useEpochLazyQuery>;
+export type EpochQueryResult = Apollo.QueryResult<EpochQuery, EpochQueryVariables>;
