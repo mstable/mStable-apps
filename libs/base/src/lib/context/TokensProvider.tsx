@@ -81,6 +81,18 @@ type Action =
 const stateCtx = createContext<State>(null as never)
 const dispatchCtx = createContext<Dispatch>(null as never)
 
+const renameSymbol = (symbol: string, address: string): string => {
+  let newSymbol = symbol.replace(/(\(pos\) mstable usd)|(mstable usd \(polygon pos\))/i, 'mUSD').replace(/^PoS-/, '')
+
+  if (address === '0x8daebade922df735c38c80c7ebd708af50815faa') {
+    newSymbol = 'TBTC'
+  } else if (address === '0x18084fba666a33d37592fa2633fd49a74dd93a88') (
+    newSymbol = 'tBTCv2'
+  )
+
+  return newSymbol
+}
+
 const reducer: Reducer<State, Action> = (state, action) => {
   switch (action.type) {
     case Actions.SetFetched: {
@@ -93,7 +105,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
             [address]: {
               address,
               decimals,
-              symbol: symbol.replace(/(\(pos\) mstable usd)|(mstable usd \(polygon pos\))/i, 'mUSD').replace(/^PoS-/, ''),
+              symbol: renameSymbol(symbol, address),
               balance: new BigDecimal(0, decimals),
               allowances: {},
               totalSupply: totalSupply as unknown as BigDecimal,
