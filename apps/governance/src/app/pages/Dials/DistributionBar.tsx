@@ -1,17 +1,17 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useState } from 'react'
+import { createMemo } from 'react-use'
 import styled from 'styled-components'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
-import { titleCase } from 'title-case'
 
+import { TokenIcon } from '@apps/base/components/core'
 import { CountUp } from '@apps/dumb-components'
-import { scaleDials } from './utils'
 
+import { useEmissionsData } from './context/EmissionsContext'
+import { useEpochData } from './context/EpochContext'
+import { EpochDialVotes } from './types'
+
+// TODO need at least 16 of these
 const COLORS = ['#087E8B', '#48284A', '#a1cda8', '#ff5a5f', '#3c3c3c', '#F2F3AE', '#A3320B', '#C1839F']
-
-interface Props {
-  emission?: number
-  dials?: { title: string; value: number; key: string }[]
-}
 
 const NetworkLabel = styled.p`
   color: ${({ theme }) => theme.color.bodyAccent};
@@ -28,7 +28,7 @@ const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
 
-  > div:first-child {
+  > div {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -46,6 +46,12 @@ const Header = styled.div`
   > span {
     ${({ theme }) => theme.mixins.numeric};
     font-weight: 400;
+  }
+`
+
+const StyledTokenIcon = styled(TokenIcon)`
+  img {
+    height: 1.3rem;
   }
 `
 
@@ -71,65 +77,71 @@ const Container = styled.div`
   }
 `
 
-const renderRadius = (i: number, n: number) => {
-  if (i === 0) {
-    return [10, 0, 0, 10]
-  } else if (i === n - 1) {
-    return [0, 10, 10, 0]
-  }
+const renderRadius = (idx: number, count: number) => {
+  if (idx === 0) return [10, 0, 0, 10]
+  if (idx === count - 1) return [0, 10, 10, 0]
   return [0, 0, 0, 0]
 }
 
-export const DistributionBar: FC<Props> = ({ dials, emission: _emission = 1000 }) => {
-  const [activeBar, setActiveBar] = useState(null)
+const useScaledMappedData = createMemo((dialVotes?: EpochDialVotes): [{ [dialId: number]: number }] => {
+  if (!dialVotes) return [{}]
 
-  const handleLineHover = (key: string) => {
-    if (key === activeBar?.key) return
-    const match = dials?.find(v => v.key === key)
-    setActiveBar(match)
-  }
+  const totalVotes = Object.values(dialVotes).reduce((prev, current) => prev + current.votes, 0)
 
-  const emission = useMemo(() => {
-    if (!activeBar?.value) return _emission
-    return (activeBar.value / 100) * _emission
-  }, [_emission, activeBar])
+  const weightMultiplier = 100 / totalVotes
 
-  const dialCount = dials?.filter(v => !!v.value).length
+  const entries = Object.entries(dialVotes).map(([dialId, dialVote]) => [dialId, dialVote.votes * weightMultiplier])
 
-  const scaledDials = scaleDials(dials)
+  return [Object.fromEntries(entries)]
+})
 
-  const scaledMappedData = [scaledDials?.map(v => ({ [v.key]: v.value })).reduce((a, b) => ({ ...a, ...b }))]
+export const DistributionBar: FC = () => {
+  const [emissionsData] = useEmissionsData()
+  const [epochData] = useEpochData()
 
-  const selectedDialNetwork = (!!activeBar && !!activeBar?.key?.includes('p-') ? 'Polygon' : 'Ethereum') ?? null
+  const [activeDialId, setActiveDialId] = useState<number | undefined>(undefined)
 
-  if (!dials) return null
+  const activeDialData = typeof activeDialId == 'number' && emissionsData ? emissionsData.dials[activeDialId] : undefined
+  const activeDialVote = typeof activeDialId == 'number' && epochData ? epochData.dialVotes[activeDialId] : undefined
+
+  const emission =
+    epochData?.emission && activeDialVote?.votes ? (activeDialVote.votes / 100) * epochData.emission : epochData?.emission ?? 0
+
+  const scaledMappedData = useScaledMappedData(epochData?.dialVotes)
 
   return (
     <Container>
       <Header>
         <div>
           <h4>
-            <span>{titleCase(activeBar?.title ?? 'Distribution')}</span>
+            <span>{activeDialData?.metadata.title ?? 'Distribution'}</span>
           </h4>
-          {activeBar && <NetworkLabel>{selectedDialNetwork}</NetworkLabel>}
+          {activeDialData && <NetworkLabel>{activeDialData.metadata.network}</NetworkLabel>}
         </div>
-        <CountUp end={emission} decimals={0} />
+        <div>
+          <CountUp end={emission} decimals={0} duration={0.3} />
+          <StyledTokenIcon symbol="MTA" />
+        </div>
       </Header>
-      <ResponsiveContainer height={24} width={'100%'}>
-        <BarChart layout="vertical" stackOffset={'none'} data={scaledMappedData} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
+      <ResponsiveContainer height={24} width="100%">
+        <BarChart layout="vertical" stackOffset="none" data={scaledMappedData} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
           <XAxis hide type="number" />
           <YAxis hide type="category" />
-          {dials
-            ?.filter(({ value }) => !!value)
-            ?.map(({ key }, i) => (
+          {Object.values(epochData?.dialVotes ?? {})
+            .filter(dialVote => dialVote.votes > 0)
+            .map(({ dialId }, idx, arr) => (
               <Bar
-                key={key}
-                dataKey={key}
-                fill={COLORS[i]}
+                key={dialId}
+                dataKey={dialId}
+                fill={COLORS[idx]}
                 stackId="bar"
-                radius={renderRadius(i, dialCount)}
-                onMouseEnter={e => handleLineHover(key)}
-                onMouseLeave={() => setActiveBar(null)}
+                radius={renderRadius(idx, arr.length)}
+                onMouseEnter={() => {
+                  setActiveDialId(dialId)
+                }}
+                onMouseLeave={() => {
+                  setActiveDialId(undefined)
+                }}
               />
             ))}
         </BarChart>
