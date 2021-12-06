@@ -5,7 +5,7 @@ import { useToggle } from 'react-use'
 import styled from 'styled-components'
 import Skeleton from 'react-loading-skeleton'
 
-import type { FeederPoolState } from '@apps/data-provider'
+import { FeederPoolState, PoolType } from '@apps/data-provider'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/theme'
 import { UserMasquerade } from '@apps/base/components/core'
@@ -146,7 +146,7 @@ const Container = styled.div`
 `
 
 const PoolDetailContent: FC = () => {
-  const { address, title, liquidity, vault } = useSelectedFeederPoolState() as FeederPoolState
+  const { address, title, liquidity, vault, poolType } = useSelectedFeederPoolState() as FeederPoolState
   const massetPrice = useSelectedMassetPrice()
   const network = useNetwork()
 
@@ -156,8 +156,8 @@ const PoolDetailContent: FC = () => {
   const color = assetColorMapping[title]
   const isLowLiquidity = massetPrice ? liquidity.simple * (massetPrice.value ?? 0) < 100000 : false
 
-  const tabs = useMemo(
-    () => ({
+  const tabs = useMemo(() => {
+    const tabs = {
       Deposit: {
         title: 'Deposit',
         component: <Deposit isLowLiquidity={isLowLiquidity} />,
@@ -166,11 +166,15 @@ const PoolDetailContent: FC = () => {
         title: 'Withdraw',
         component: <Withdraw isLowLiquidity={isLowLiquidity} />,
       },
-    }),
-    [isLowLiquidity],
-  )
+    }
+    if (poolType === PoolType.Deprecated) {
+      delete tabs['Deposit']
+    }
 
-  const [activeTab, setActiveTab] = useState<string>('Deposit')
+    return tabs
+  }, [isLowLiquidity, poolType])
+
+  const [activeTab, setActiveTab] = useState<string>(poolType === PoolType.Deprecated ? 'Withdraw' : 'Deposit')
 
   return (
     <RewardStreamsProvider vault={vault}>
