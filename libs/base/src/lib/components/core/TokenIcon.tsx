@@ -31,7 +31,6 @@ import CREAM, { ReactComponent as CreamSvg } from '@apps/icons/tokens/Cream.svg'
 import FAKE, { ReactComponent as FakeSvg } from '@apps/icons/tokens/FAKE.svg'
 import HBTC, { ReactComponent as HbtcSvg } from '@apps/icons/tokens/HBTC.svg'
 import TBTC, { ReactComponent as TbtcSvg } from '@apps/icons/tokens/tBTC.svg'
-import TBTCv2, { ReactComponent as Tbtcv2Svg } from '@apps/icons/tokens/tBTC.svg'
 import VAULT, { ReactComponent as VaultSvg } from '@apps/icons/tokens/vault.svg'
 import IMBTCMTA, { ReactComponent as ImbtcmtaSvg } from '@apps/icons/tokens/imbtc-mta.svg'
 import FRAX, { ReactComponent as FraxSvg } from '@apps/icons/tokens/FRAX.svg'
@@ -95,7 +94,7 @@ export const TOKEN_ICONS: Record<string, string> = {
   GUSD,
   HBTC,
   TBTC,
-  TBTCv2,
+  TBTCV2: TBTC,
   FPMUSD: MUSD,
   FPMBTC: MUSD,
   VAULT,
@@ -149,7 +148,7 @@ const SVG_ICONS: Record<string, SvgComponent> = {
   GUSD: GusdSvg as SvgComponent,
   HBTC: HbtcSvg as SvgComponent,
   TBTC: TbtcSvg as SvgComponent,
-  TBTCv2: Tbtcv2Svg as SvgComponent,
+  TBTCV2: TbtcSvg as SvgComponent,
   VAULT: VaultSvg as SvgComponent,
   ETHEREUM: EthereumSvg as SvgComponent,
   POLYGON: PolygonSvg as SvgComponent,
