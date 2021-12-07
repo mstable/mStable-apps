@@ -35,6 +35,7 @@ query Emissions($account: Bytes!, $hasAccount: Boolean!) {
     }
     voters(where: { address: $account }) @include(if: $hasAccount) {
       id
+      address
       lastEpoch {
         id
         weekNumber

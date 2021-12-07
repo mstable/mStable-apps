@@ -30,6 +30,8 @@ export interface UserDialPreferences {
 }
 
 export interface EmissionsUser {
+  address: string
+  isDelegatee: boolean
   dialPreferences: UserDialPreferences
   votePower?: BigDecimal
   lastSourcePoke?: number

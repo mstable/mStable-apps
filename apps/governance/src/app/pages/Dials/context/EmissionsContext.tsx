@@ -2,7 +2,6 @@ import { FC, useEffect } from 'react'
 import { createStateContext } from 'react-use'
 
 import { EmissionsController, EmissionsController__factory } from '@apps/artifacts/typechain'
-import { BigDecimal } from '@apps/bigdecimal'
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useEmissionsQuery } from '@apps/artifacts/graphql/emissions'
@@ -18,16 +17,18 @@ const EmissionsDataUpdater: FC = () => {
   const account = useAccount()
   const [, setEmissionsData] = useEmissionsData()
 
-  const emissionsQuery = useEmissionsQuery({
-    variables: { account: account ?? '', hasAccount: !!account },
-    client: clients.emissions,
-    pollInterval: 60e3,
-  })
-
   const accountQuery = useAccountQuery({
     variables: { id: account as string },
     skip: !account,
     client: clients.staking,
+    pollInterval: 60e3,
+  })
+
+  const delegatee = accountQuery.data?.account?.stakedTokenAccounts.find(sta => !!sta.delegatee)?.delegatee
+  const delegateeOrAccount = delegatee?.id ?? account
+  const emissionsQuery = useEmissionsQuery({
+    variables: { account: delegateeOrAccount ?? '', hasAccount: !!delegateeOrAccount },
+    client: clients.emissions,
     pollInterval: 60e3,
   })
 
@@ -63,9 +64,20 @@ const EmissionsDataUpdater: FC = () => {
     const [voter] = controller.voters ?? []
     if (voter) {
       user = {
+        address: voter.address,
+        isDelegatee: voter.address !== account,
         lastSourcePoke: voter.lastSourcePoke,
-        votePower: BigDecimal.parse(accountQuery.data?.account?.totalVotesAll ?? '0'),
+        votePower: accountQuery.data?.account?.totalVotesAllBD,
         dialPreferences: Object.fromEntries(voter.preferences.map(({ dial: { dialId }, weight }) => [dialId, weight / 2])),
+      }
+    } else if (delegatee) {
+      // If the delegatee hasn't voted yet, there won't be a voter, but we can still show a user
+      user = {
+        address: delegatee.id,
+        isDelegatee: true,
+        lastSourcePoke: 0,
+        votePower: delegatee.totalVotesAllBD,
+        dialPreferences: {},
       }
     }
 
@@ -78,7 +90,7 @@ const EmissionsDataUpdater: FC = () => {
       user,
     }
     setEmissionsData(emissionsData)
-  }, [setEmissionsData, emissionsQuery.data, accountQuery.data])
+  }, [setEmissionsData, emissionsQuery.data, accountQuery.data, account])
 
   return null
 }

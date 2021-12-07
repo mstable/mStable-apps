@@ -5,6 +5,7 @@ import { BalanceWidget, ButtonExternal, InfoBox } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 
 import { useEmissionsData } from './context/EmissionsContext'
+import { DialDelegatee } from './DialDelegatee'
 
 const Sidebar = styled.div`
   display: flex;
@@ -46,9 +47,11 @@ const FORUM_URL = 'https://forum.mstable.org/'
 
 export const DialSidebar: FC = () => {
   const [emissionsData] = useEmissionsData()
+  const user = emissionsData?.user
   return (
     <Sidebar>
-      <BalanceWidget title="Voting Power" token="vMTA" balance={emissionsData?.user?.votePower.simple} />
+      <BalanceWidget title="Voting Power" token="vMTA" balance={user?.votePower.simple} />
+      {user?.isDelegatee && <DialDelegatee address={user.address} />}
       <InfoBox>
         <ButtonExternal
           onClick={() => {

@@ -1367,7 +1367,7 @@ export type EmissionsQueryVariables = Exact<{
 }>;
 
 
-export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string }>, lastEpoch: { id: string, weekNumber: number, emission: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, lastSourcePoke: number, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: number, dial: { id: string, dialId: number } }> }> }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string }>, lastEpoch: { id: string, weekNumber: number, emission: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: number, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: number, dial: { id: string, dialId: number } }> }> }> };
 
 export type EpochAllFragment = { id: string, weekNumber: number, emission: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> };
 
@@ -1437,6 +1437,7 @@ export const EmissionsDocument = gql`
     }
     voters(where: {address: $account}) @include(if: $hasAccount) {
       id
+      address
       lastEpoch {
         id
         weekNumber
