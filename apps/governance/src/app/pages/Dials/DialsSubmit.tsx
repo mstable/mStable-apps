@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { usePreviousDistinct } from 'react-use'
 import styled from 'styled-components'
 
 import { usePropose } from '@apps/base/context/transactions'
@@ -39,10 +38,7 @@ const SubmitContainer = styled.div`
 export const DialsSubmit: FC = () => {
   const propose = usePropose()
   const [emissionsController] = useEmissionsController()
-
   const [userDialPreferences] = useUserDialPreferences()
-  const userDialPreferencesPrev = usePreviousDistinct(userDialPreferences.changes)
-  const preferencesChanged = JSON.stringify(userDialPreferences) !== JSON.stringify(userDialPreferencesPrev)
 
   return (
     <SubmitContainer>
@@ -54,8 +50,8 @@ export const DialsSubmit: FC = () => {
             <p>Your preferences will continue for future epochs until changed</p>
           </div>
           <Button
-            disabled={!preferencesChanged}
-            highlighted={preferencesChanged}
+            disabled={!userDialPreferences.touched}
+            highlighted={userDialPreferences.touched}
             onClick={() => {
               if (!emissionsController || !Object.keys(userDialPreferences.changes).length) return
 

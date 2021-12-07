@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { ViewportWidth } from '@apps/theme'
 import { Button } from '@apps/dumb-components'
+import { useEmissionsData } from './context/EmissionsContext'
 
 import { useSystemView, useUserDialPreferences } from './context/UserDialsContext'
 import { DialTable } from './DialTable'
@@ -31,9 +32,11 @@ const StyledButton = styled(Button)`
 const DialButtons: FC = () => {
   const [isSystemView, toggleSystemView] = useSystemView()
   const [, dispatchUserDialPreferences] = useUserDialPreferences()
+  const [emissionsData] = useEmissionsData()
+  const isDelegating = emissionsData?.user?.isDelegatee
   return (
     <Buttons>
-      {!isSystemView && (
+      {!isSystemView && !isDelegating && (
         <StyledButton
           scale={0.875}
           highlighted={isSystemView}
@@ -45,7 +48,7 @@ const DialButtons: FC = () => {
         </StyledButton>
       )}
       <StyledButton scale={0.875} highlighted={isSystemView} onClick={toggleSystemView}>
-        {isSystemView ? `Vote on weights` : `Back`}
+        {isSystemView ? (isDelegating ? 'Delegatee weights' : 'Vote on weights') : 'Back'}
       </StyledButton>
     </Buttons>
   )
@@ -82,11 +85,12 @@ const Container = styled.div`
 
 export const DialView: FC = () => {
   const [isSystemView] = useSystemView()
+  const [emissionsData] = useEmissionsData()
   return (
     <Container>
       <DialButtons />
       <DialTable />
-      {!isSystemView && <DialsSubmit />}
+      {!isSystemView && !emissionsData?.user?.isDelegatee && <DialsSubmit />}
     </Container>
   )
 }

@@ -96,6 +96,8 @@ export const DialTable: FC = () => {
   const [userDialPreferences, dispatchUserDialPreferences] = useUserDialPreferences()
   const scaledUserDialPreferences = useScaleUserDialPreferences(userDialPreferences)
 
+  const isDelegating = emissionsData?.user?.isDelegatee
+
   return (
     <Table headerTitles={isSystemView ? SYSTEM_VIEW_HEADER_TITLES : DEFAULT_HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
       {!(epochData && epochData.dialVotes && emissionsData) ? (
@@ -123,7 +125,7 @@ export const DialTable: FC = () => {
                   max={100}
                   step={1}
                   value={isSystemView ? votes : scaledUserDialPreferences.pending[dialId] ?? 0}
-                  disabled={isSystemView}
+                  disabled={isSystemView || isDelegating}
                   onChange={value => {
                     dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId, value } })
                   }}

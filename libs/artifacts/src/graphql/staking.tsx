@@ -1968,7 +1968,7 @@ export type AccountQueryVariables = Exact<{
 }>;
 
 
-export type AccountQuery = { account?: { id: string, lastAction: number, seasonMultiplier: number, permMultiplier: number, totalVotesAll: string, totalVotesMTA: string, totalVotesBPT: string, totalVotesBPTBD: BigDecimal, totalVotesMTABD: BigDecimal, totalVotesAllBD: BigDecimal, seasonMultiplierSimple: number, permMultiplierSimple: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number } }> } | null | undefined };
+export type AccountQuery = { account?: { id: string, lastAction: number, seasonMultiplier: number, permMultiplier: number, totalVotesAll: string, totalVotesMTA: string, totalVotesBPT: string, totalVotesBPTBD: BigDecimal, totalVotesMTABD: BigDecimal, totalVotesAllBD: BigDecimal, seasonMultiplierSimple: number, permMultiplierSimple: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, delegatee?: { id: string, totalVotesAll: string, totalVotesAllBD: BigDecimal } | null | undefined, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number } }> } | null | undefined };
 
 export type StakedTokenQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -2178,6 +2178,11 @@ export const AccountDocument = gql`
         stakingToken {
           symbol
         }
+      }
+      delegatee {
+        id
+        totalVotesAll
+        totalVotesAllBD @client
       }
       balance {
         raw
