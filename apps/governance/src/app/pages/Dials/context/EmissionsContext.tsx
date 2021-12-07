@@ -51,11 +51,17 @@ const EmissionsDataUpdater: FC = () => {
       }),
     )
 
+    const totalVotes = parseInt(controller.lastEpoch.totalVotes) / 1e18
     const lastEpoch: EmissionsData['lastEpoch'] = {
+      totalVotes,
       emission: parseInt(controller.lastEpoch.emission) / 1e18,
       dialVotes: Object.fromEntries(
         // User preferences could be loaded here if needed
-        controller.lastEpoch.dialVotes.map(dialVote => [dialVote.dial.dialId, { votes: parseInt(dialVote.votes) / 1e18, preferences: {} }]),
+        controller.lastEpoch.dialVotes.map(dialVote => {
+          const votes = parseInt(dialVote.votes) / 1e18
+          const voteShare = parseFloat(((votes / totalVotes) * 100).toFixed(2))
+          return [dialVote.dial.dialId, { votes, voteShare, preferences: {} }]
+        }),
       ),
       weekNumber: controller.lastEpoch.weekNumber,
     }

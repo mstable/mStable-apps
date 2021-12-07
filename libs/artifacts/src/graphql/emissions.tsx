@@ -265,6 +265,8 @@ export type EmissionsController = {
   startEpoch: Epoch;
   /** The last weekly Epoch to have rewards distributed. */
   lastEpoch: Epoch;
+  /** The highest dialId set */
+  highestDialId: Scalars['Int'];
   /** Dials for this Emissions Controller */
   dials: Array<Dial>;
   /** Voters for this Emissions Controller */
@@ -361,6 +363,14 @@ export type EmissionsController_Filter = {
   lastEpoch_not_starts_with?: Maybe<Scalars['String']>;
   lastEpoch_ends_with?: Maybe<Scalars['String']>;
   lastEpoch_not_ends_with?: Maybe<Scalars['String']>;
+  highestDialId?: Maybe<Scalars['Int']>;
+  highestDialId_not?: Maybe<Scalars['Int']>;
+  highestDialId_gt?: Maybe<Scalars['Int']>;
+  highestDialId_lt?: Maybe<Scalars['Int']>;
+  highestDialId_gte?: Maybe<Scalars['Int']>;
+  highestDialId_lte?: Maybe<Scalars['Int']>;
+  highestDialId_in?: Maybe<Array<Scalars['Int']>>;
+  highestDialId_not_in?: Maybe<Array<Scalars['Int']>>;
 };
 
 export enum EmissionsController_OrderBy {
@@ -370,6 +380,7 @@ export enum EmissionsController_OrderBy {
   StakingContracts = 'stakingContracts',
   StartEpoch = 'startEpoch',
   LastEpoch = 'lastEpoch',
+  HighestDialId = 'highestDialId',
   Dials = 'dials',
   Voters = 'voters',
   Epochs = 'epochs'
@@ -386,6 +397,8 @@ export type Epoch = {
   voters: Array<Voter>;
   /** Total from the top-level emissions for this Epoch */
   emission: Scalars['BigInt'];
+  /** Total votes across all Dials in this Epoch */
+  totalVotes: Scalars['BigInt'];
   /** DialVotesForEpoch for this Epoch; see "HistoricVotes" struct */
   dialVotes: Array<DialVotesForEpoch>;
 };
@@ -447,6 +460,14 @@ export type Epoch_Filter = {
   emission_lte?: Maybe<Scalars['BigInt']>;
   emission_in?: Maybe<Array<Scalars['BigInt']>>;
   emission_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  totalVotes?: Maybe<Scalars['BigInt']>;
+  totalVotes_not?: Maybe<Scalars['BigInt']>;
+  totalVotes_gt?: Maybe<Scalars['BigInt']>;
+  totalVotes_lt?: Maybe<Scalars['BigInt']>;
+  totalVotes_gte?: Maybe<Scalars['BigInt']>;
+  totalVotes_lte?: Maybe<Scalars['BigInt']>;
+  totalVotes_in?: Maybe<Array<Scalars['BigInt']>>;
+  totalVotes_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum Epoch_OrderBy {
@@ -455,6 +476,7 @@ export enum Epoch_OrderBy {
   WeekNumber = 'weekNumber',
   Voters = 'voters',
   Emission = 'emission',
+  TotalVotes = 'totalVotes',
   DialVotes = 'dialVotes'
 }
 
@@ -1367,9 +1389,9 @@ export type EmissionsQueryVariables = Exact<{
 }>;
 
 
-export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string }>, lastEpoch: { id: string, weekNumber: number, emission: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: number, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: number, dial: { id: string, dialId: number } }> }> }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string }>, lastEpoch: { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: number, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: number, dial: { id: string, dialId: number } }> }> }> };
 
-export type EpochAllFragment = { id: string, weekNumber: number, emission: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> };
+export type EpochAllFragment = { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> };
 
 export type EpochQueryVariables = Exact<{
   weekNumber: Scalars['Int'];
@@ -1378,7 +1400,7 @@ export type EpochQueryVariables = Exact<{
 }>;
 
 
-export type EpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> }> };
+export type EpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> }> };
 
 export const DialPreferencesFragmentDoc = gql`
     fragment DialPreferences on Preference {
@@ -1395,6 +1417,7 @@ export const EpochAllFragmentDoc = gql`
   id
   weekNumber
   emission
+  totalVotes
   dialVotes {
     id
     votes
@@ -1423,6 +1446,7 @@ export const EmissionsDocument = gql`
       id
       weekNumber
       emission
+      totalVotes
       dialVotes {
         dial {
           id

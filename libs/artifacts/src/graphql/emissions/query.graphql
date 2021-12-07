@@ -21,6 +21,7 @@ query Emissions($account: Bytes!, $hasAccount: Boolean!) {
       id
       weekNumber
       emission
+      totalVotes
       dialVotes {
         dial {
           id
@@ -57,6 +58,7 @@ fragment EpochAll on Epoch {
   id
   weekNumber
   emission
+  totalVotes
   dialVotes {
     id
     votes

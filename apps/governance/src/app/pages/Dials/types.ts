@@ -16,12 +16,13 @@ export interface Dial {
 }
 
 export interface EpochDialVotes {
-  [dialId: number]: { votes: number; preferences: { [voter: string]: number } }
+  [dialId: number]: { votes: number; voteShare: number; preferences: { [voter: string]: number } }
 }
 
 export interface Epoch {
   weekNumber: number
   emission: number
+  totalVotes: number
   dialVotes?: EpochDialVotes
 }
 

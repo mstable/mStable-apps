@@ -104,7 +104,7 @@ export const DialTable: FC = () => {
         <LoadingRow />
       ) : (
         // TODO consider using dialVotes[i].preferences to show all preferences for the dial in this epoch
-        Object.entries(epochData.dialVotes).map(([dialId_, { votes }]) => {
+        Object.entries(epochData.dialVotes).map(([dialId_, { voteShare }]) => {
           const dialId = parseInt(dialId_)
 
           const dial = emissionsData.dials[dialId]
@@ -116,7 +116,7 @@ export const DialTable: FC = () => {
                 <h3>{dial.metadata.title}</h3>
               </TableCell>
               <TableCell width={TABLE_CELL_WIDTHS[1]}>
-                <span>{isSystemView ? votes : scaledUserDialPreferences.scaled[dialId] ?? 0}%</span>
+                <span>{isSystemView ? voteShare : scaledUserDialPreferences.scaled[dialId] ?? 0}%</span>
               </TableCell>
               <TableCell width={TABLE_CELL_WIDTHS[2]}>
                 <StyledSlider
@@ -124,7 +124,7 @@ export const DialTable: FC = () => {
                   min={0}
                   max={100}
                   step={1}
-                  value={isSystemView ? votes : scaledUserDialPreferences.pending[dialId] ?? 0}
+                  value={isSystemView ? voteShare : scaledUserDialPreferences.pending[dialId] ?? 0}
                   disabled={isSystemView || isDelegating}
                   onChange={value => {
                     dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId, value } })
