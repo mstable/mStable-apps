@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { TokenIcon } from '@apps/base/components/core'
-import { CountUp } from './CountUp'
+import { CountUp } from '@apps/dumb-components'
+import { TokenIcon } from './TokenIcon'
 
 interface Props {
   token: string

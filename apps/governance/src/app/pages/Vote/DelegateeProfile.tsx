@@ -2,7 +2,8 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { DelegateeInfo } from '@mstable/delegatee-lists'
-import { BalanceWidget, Button, CountUp } from '@apps/dumb-components'
+import { Button, CountUp } from '@apps/dumb-components'
+import { BalanceWidget } from '@apps/base/components/core'
 import { ViewportWidth } from '@apps/theme'
 import { BigDecimal } from '@apps/bigdecimal'
 

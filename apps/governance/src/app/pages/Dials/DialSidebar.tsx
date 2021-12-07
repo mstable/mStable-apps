@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { BalanceWidget, ButtonExternal, InfoBox } from '@apps/dumb-components'
+import { ButtonExternal, InfoBox } from '@apps/dumb-components'
+import { BalanceWidget } from '@apps/base/components/core'
 import { ViewportWidth } from '@apps/theme'
 
 import { useEmissionsData } from './context/EmissionsContext'

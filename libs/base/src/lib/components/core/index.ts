@@ -1,5 +1,6 @@
 export * from './Address'
 export * from './Amount'
+export * from './BalanceWidget'
 export * from './Dropdown'
 export * from './ExplorerLink'
 export * from './IPFSImg'
