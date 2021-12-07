@@ -36,20 +36,27 @@ const EpochUpdater: FC = () => {
       return
     }
 
+    const totalVotes = parseInt(epoch.totalVotes) / 1e18
+
     const dialVotes: EpochDialVotes = Object.fromEntries(
-      epoch.dialVotes.map(({ votes, dial: { dialId, preferences } }) => [
-        dialId,
-        {
+      epoch.dialVotes.map(({ votes: votes_, dial: { dialId, preferences } }) => {
+        const votes = parseInt(votes_) / 1e18
+        return [
           dialId,
-          votes: parseInt(votes) / 1e18,
-          preferences: Object.fromEntries(preferences.map(({ voter: { address: voter }, weight }) => [voter, (weight ?? 0) / 2])),
-        },
-      ]),
+          {
+            dialId,
+            votes,
+            voteShare: parseFloat(((votes / totalVotes) * 100).toFixed(2)),
+            preferences: Object.fromEntries(preferences.map(({ voter: { address: voter }, weight }) => [voter, (weight ?? 0) / 2])),
+          },
+        ]
+      }),
     )
 
     setEpochData({
       emission: parseInt(epoch.emission) / 1e18,
       weekNumber: epoch.weekNumber,
+      totalVotes,
       dialVotes,
     })
   }, [setEpochData, epochQuery.data])

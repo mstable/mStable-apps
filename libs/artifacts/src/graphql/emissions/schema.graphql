@@ -273,6 +273,11 @@ type EmissionsController {
   """
   lastEpoch: Epoch!
   """
+  The highest dialId set
+  
+  """
+  highestDialId: Int!
+  """
   Dials for this Emissions Controller
   
   """
@@ -350,6 +355,14 @@ input EmissionsController_filter {
   lastEpoch_not_starts_with: String
   lastEpoch_ends_with: String
   lastEpoch_not_ends_with: String
+  highestDialId: Int
+  highestDialId_not: Int
+  highestDialId_gt: Int
+  highestDialId_lt: Int
+  highestDialId_gte: Int
+  highestDialId_lte: Int
+  highestDialId_in: [Int!]
+  highestDialId_not_in: [Int!]
 }
 
 enum EmissionsController_orderBy {
@@ -359,6 +372,7 @@ enum EmissionsController_orderBy {
   stakingContracts
   startEpoch
   lastEpoch
+  highestDialId
   dials
   voters
   epochs
@@ -390,6 +404,11 @@ type Epoch {
   
   """
   emission: BigInt!
+  """
+  Total votes across all Dials in this Epoch
+  
+  """
+  totalVotes: BigInt!
   """
   DialVotesForEpoch for this Epoch; see "HistoricVotes" struct
   
@@ -436,6 +455,14 @@ input Epoch_filter {
   emission_lte: BigInt
   emission_in: [BigInt!]
   emission_not_in: [BigInt!]
+  totalVotes: BigInt
+  totalVotes_not: BigInt
+  totalVotes_gt: BigInt
+  totalVotes_lt: BigInt
+  totalVotes_gte: BigInt
+  totalVotes_lte: BigInt
+  totalVotes_in: [BigInt!]
+  totalVotes_not_in: [BigInt!]
 }
 
 enum Epoch_orderBy {
@@ -444,6 +471,7 @@ enum Epoch_orderBy {
   weekNumber
   voters
   emission
+  totalVotes
   dialVotes
 }
 
