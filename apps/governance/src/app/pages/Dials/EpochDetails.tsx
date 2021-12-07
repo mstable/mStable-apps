@@ -92,7 +92,7 @@ const formatEpoch = (weekNumber: number): string => format(convertEpochToTimesta
 export const EpochDetails: FC = () => {
   const [epochData] = useEpochData()
   const [emissionsData] = useEmissionsData()
-  const [epochWeekNumber = emissionsData?.startEpochWeekNumber, setEpochWeekNumber] = useEpochWeekNumber()
+  const [epochWeekNumber = emissionsData?.lastEpochWeekNumber, setEpochWeekNumber] = useEpochWeekNumber()
 
   const isStartEpoch = epochWeekNumber === emissionsData?.startEpochWeekNumber
   const isLastEpoch = epochWeekNumber === emissionsData?.lastEpochWeekNumber
