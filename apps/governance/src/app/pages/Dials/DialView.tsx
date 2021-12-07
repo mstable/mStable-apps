@@ -5,7 +5,8 @@ import { ViewportWidth } from '@apps/theme'
 import { Button } from '@apps/dumb-components'
 import { useEmissionsData } from './context/EmissionsContext'
 
-import { useSystemView, useUserDialPreferences } from './context/UserDialsContext'
+import { useSystemView } from './context/ViewOptionsContext'
+import { useUserDialPreferences } from './context/UserDialsContext'
 import { DialTable } from './DialTable'
 import { DialsSubmit } from './DialsSubmit'
 

@@ -4,7 +4,8 @@ import styled from 'styled-components'
 
 import { Slider, Table, TableCell, TableRow, ThemedSkeleton } from '@apps/dumb-components'
 
-import { useSystemView, useUserDialPreferences } from './context/UserDialsContext'
+import { useSelectedDialId, useSystemView } from './context/ViewOptionsContext'
+import { useUserDialPreferences } from './context/UserDialsContext'
 import { useEmissionsData } from './context/EmissionsContext'
 import { useEpochData } from './context/EpochContext'
 
@@ -32,7 +33,7 @@ const useScaleUserDialPreferences = createMemo(
     const weightMultiplier = totalWeight > 0 ? 100 / totalWeight : 1
 
     const dialIds = Object.keys(pending)
-    const scaledWeights = dialIds.map(dialId => Math.round(pending[dialId] * weightMultiplier))
+    const scaledWeights = dialIds.map(dialId => pending[dialId] * weightMultiplier)
 
     let scaled = Object.fromEntries(dialIds.map((dialId, idx) => [dialId, scaledWeights[idx]]))
 
@@ -84,14 +85,24 @@ const LoadingRow: FC = () => (
   </StyledLoadingRow>
 )
 
+const StyledTable = styled(Table)`
+  h3 {
+    cursor: pointer;
+    &:hover {
+      color: ${({ theme }) => theme.color.gold};
+    }
+  }
+`
+
 const TABLE_CELL_WIDTHS = [30, 25, 35]
-const DEFAULT_HEADER_TITLES = ['Dial', 'User %', ''].map(title => ({ title }))
-const SYSTEM_VIEW_HEADER_TITLES = ['Dial', 'System %', ''].map(title => ({ title }))
+const DEFAULT_HEADER_TITLES = ['Dial', 'User weight', ''].map(title => ({ title }))
+const SYSTEM_VIEW_HEADER_TITLES = ['Dial', 'System weight', ''].map(title => ({ title }))
 
 export const DialTable: FC = () => {
   const [emissionsData] = useEmissionsData()
   const [epochData] = useEpochData()
   const [isSystemView] = useSystemView()
+  const [, setSelectedDialId] = useSelectedDialId()
 
   const [userDialPreferences, dispatchUserDialPreferences] = useUserDialPreferences()
   const scaledUserDialPreferences = useScaleUserDialPreferences(userDialPreferences)
@@ -99,7 +110,7 @@ export const DialTable: FC = () => {
   const isDelegating = emissionsData?.user?.isDelegatee
 
   return (
-    <Table headerTitles={isSystemView ? SYSTEM_VIEW_HEADER_TITLES : DEFAULT_HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
+    <StyledTable headerTitles={isSystemView ? SYSTEM_VIEW_HEADER_TITLES : DEFAULT_HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
       {!(epochData && epochData.dialVotes && emissionsData) ? (
         <LoadingRow />
       ) : (
@@ -113,10 +124,16 @@ export const DialTable: FC = () => {
           return (
             <TableRow key={dialId}>
               <TableCell width={TABLE_CELL_WIDTHS[0]}>
-                <h3>{dial.metadata.title}</h3>
+                <h3
+                  onClick={() => {
+                    setSelectedDialId(dialId)
+                  }}
+                >
+                  {dial.metadata.title}
+                </h3>
               </TableCell>
               <TableCell width={TABLE_CELL_WIDTHS[1]}>
-                <span>{isSystemView ? voteShare : scaledUserDialPreferences.scaled[dialId] ?? 0}%</span>
+                <span>{parseFloat((isSystemView ? voteShare : scaledUserDialPreferences.scaled[dialId] ?? 0).toFixed(2))}%</span>
               </TableCell>
               <TableCell width={TABLE_CELL_WIDTHS[2]}>
                 <StyledSlider
@@ -135,6 +152,6 @@ export const DialTable: FC = () => {
           )
         })
       )}
-    </Table>
+    </StyledTable>
   )
 }

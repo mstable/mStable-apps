@@ -4,6 +4,7 @@ fragment DialPreferences on Preference {
   voter {
     id
     address
+    votesCast
   }
 }
 
@@ -42,6 +43,7 @@ query Emissions($account: Bytes!, $hasAccount: Boolean!) {
         weekNumber
       }
       lastSourcePoke
+      votesCast
       preferences {
         id
         weight

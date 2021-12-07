@@ -16,7 +16,7 @@ export interface Dial {
 }
 
 export interface EpochDialVotes {
-  [dialId: number]: { votes: number; voteShare: number; preferences: { [voter: string]: number } }
+  [dialId: number]: { votes: number; voteShare: number; preferences: { [voter: string]: { weight: number; votesCast: number } } }
 }
 
 export interface Epoch {
@@ -45,4 +45,9 @@ export interface EmissionsData {
   lastEpoch: Epoch
   lastEpochWeekNumber: number
   startEpochWeekNumber: number
+}
+
+export interface ActiveDial {
+  dialVotes: EpochDialVotes[number]
+  dial: Dial
 }

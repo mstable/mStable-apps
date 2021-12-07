@@ -4,9 +4,8 @@ import styled from 'styled-components'
 import { ViewportWidth } from '@apps/theme'
 
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
-import { EmissionsContext } from './context/EmissionsContext'
-import { EpochContext } from './context/EpochContext'
-import { UserDialsContext } from './context/UserDialsContext'
+
+import { DialsContext } from './context'
 import { DialSidebar } from './DialSidebar'
 import { DialView } from './DialView'
 import { EpochDetails } from './EpochDetails'
@@ -37,25 +36,17 @@ const Inner = styled.div`
   gap: 1rem;
 `
 
-const DialsContent: FC = () => (
-  <div>
-    <GovernancePageHeader title="Dials" subtitle="Vote on future MTA emissions" />
-    <Inner>
-      <EpochDetails />
-      <DialAndSidebar>
-        <DialView />
-        <DialSidebar />
-      </DialAndSidebar>
-    </Inner>
-  </div>
-)
-
 export const Dials: FC = () => (
-  <EmissionsContext>
-    <EpochContext>
-      <UserDialsContext>
-        <DialsContent />
-      </UserDialsContext>
-    </EpochContext>
-  </EmissionsContext>
+  <DialsContext>
+    <div>
+      <GovernancePageHeader title="Dials" subtitle="Vote on future MTA emissions" />
+      <Inner>
+        <EpochDetails />
+        <DialAndSidebar>
+          <DialView />
+          <DialSidebar />
+        </DialAndSidebar>
+      </Inner>
+    </div>
+  </DialsContext>
 )

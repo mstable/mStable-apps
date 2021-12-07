@@ -1,8 +1,6 @@
 import { FC, Reducer, useEffect } from 'react'
 import { createReducerContext } from 'react-use'
 
-import { createToggleContext } from '@apps/context-utils'
-
 import { UserDialPreferences } from '../types'
 import { useEmissionsData } from './EmissionsContext'
 
@@ -17,8 +15,6 @@ type UserDialsPreferencesAction =
     }
   | { type: 'RESET' }
 
-const [useSystemView, SystemViewProvider] = createToggleContext(true)
-
 const userDialPreferencesReducer: Reducer<
   { current: UserDialPreferences; changes: UserDialPreferences; touched: boolean },
   UserDialsPreferencesAction
@@ -32,7 +28,7 @@ const userDialPreferencesReducer: Reducer<
       return { ...state, changes, touched }
     }
     case 'CURRENT':
-      return { ...state, current: action.payload }
+      return { ...state, current: action.payload, changes: state.touched ? state.changes : action.payload }
     default:
       return state
   }
@@ -63,13 +59,11 @@ const UserDialPreferencesUpdater: FC = () => {
 
 const UserDialsContext: FC = ({ children }) => {
   return (
-    <SystemViewProvider>
-      <UserDialPreferencesProvider>
-        {children}
-        <UserDialPreferencesUpdater />
-      </UserDialPreferencesProvider>
-    </SystemViewProvider>
+    <UserDialPreferencesProvider>
+      {children}
+      <UserDialPreferencesUpdater />
+    </UserDialPreferencesProvider>
   )
 }
 
-export { UserDialsContext, useSystemView, useUserDialPreferences }
+export { UserDialsContext, useUserDialPreferences }
