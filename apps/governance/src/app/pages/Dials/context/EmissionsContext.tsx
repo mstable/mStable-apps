@@ -90,7 +90,7 @@ const EmissionsDataUpdater: FC = () => {
       user,
     }
     setEmissionsData(emissionsData)
-  }, [setEmissionsData, emissionsQuery.data, accountQuery.data, account])
+  }, [setEmissionsData, emissionsQuery.data, accountQuery.data, account, delegatee])
 
   return null
 }
