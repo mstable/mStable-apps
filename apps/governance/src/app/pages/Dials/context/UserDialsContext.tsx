@@ -19,15 +19,18 @@ type UserDialsPreferencesAction =
 
 const [useSystemView, SystemViewProvider] = createToggleContext(true)
 
-const userDialPreferencesReducer: Reducer<{ current: UserDialPreferences; changes: UserDialPreferences }, UserDialsPreferencesAction> = (
-  state,
-  action,
-) => {
+const userDialPreferencesReducer: Reducer<
+  { current: UserDialPreferences; changes: UserDialPreferences; touched: boolean },
+  UserDialsPreferencesAction
+> = (state, action) => {
   switch (action.type) {
     case 'RESET':
-      return { ...state, changes: state.current }
-    case 'SET_DIAL':
-      return { ...state, changes: { ...state.changes, [action.payload.dialId]: action.payload.value } }
+      return { ...state, changes: state.current, touched: false }
+    case 'SET_DIAL': {
+      const changes = { ...state.changes, [action.payload.dialId]: action.payload.value }
+      const touched = JSON.stringify(changes) !== JSON.stringify(state.changes)
+      return { ...state, changes, touched }
+    }
     case 'CURRENT':
       return { ...state, current: action.payload }
     default:
@@ -35,7 +38,11 @@ const userDialPreferencesReducer: Reducer<{ current: UserDialPreferences; change
   }
 }
 
-const [useUserDialPreferences, UserDialPreferencesProvider] = createReducerContext(userDialPreferencesReducer, { current: {}, changes: {} })
+const [useUserDialPreferences, UserDialPreferencesProvider] = createReducerContext(userDialPreferencesReducer, {
+  current: {},
+  changes: {},
+  touched: false,
+})
 
 const UserDialPreferencesUpdater: FC = () => {
   const [emissionsData] = useEmissionsData()
