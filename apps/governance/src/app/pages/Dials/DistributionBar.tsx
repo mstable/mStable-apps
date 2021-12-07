@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useRef } from 'react'
 import { createMemo } from 'react-use'
 import styled from 'styled-components'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
@@ -6,9 +6,10 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 import { TokenIcon } from '@apps/base/components/core'
 import { CountUp } from '@apps/dumb-components'
 
-import { useEmissionsData } from './context/EmissionsContext'
+import { useHoveredDial, useHoveredDialId, useSelectedDial, useSelectedDialId } from './context/ViewOptionsContext'
 import { useEpochData } from './context/EpochContext'
-import { EpochDialVotes } from './types'
+import { DialPreferencesTable } from './DialPreferencesTable'
+import { EpochDialVotes, ActiveDial } from './types'
 
 // TODO need at least 16 of these
 const COLORS = ['#087E8B', '#48284A', '#a1cda8', '#ff5a5f', '#3c3c3c', '#F2F3AE', '#A3320B', '#C1839F']
@@ -35,14 +36,6 @@ const Header = styled.div`
     min-height: 1.5rem;
   }
 
-  h4 {
-    color: ${({ theme }) => theme.color.body};
-
-    > span {
-      font-weight: 500;
-    }
-  }
-
   > span {
     ${({ theme }) => theme.mixins.numeric};
     font-weight: 400;
@@ -59,6 +52,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  h4 {
+    color: ${({ theme }) => theme.color.body};
+    font-weight: 500;
+  }
 
   .recharts-tooltip-wrapper {
     .recharts-tooltip-label {
@@ -83,12 +81,13 @@ const renderRadius = (idx: number, count: number) => {
   return [0, 0, 0, 0]
 }
 
-const useScaledMappedData = createMemo((dialVotes?: EpochDialVotes): [{ [dialId: number]: number }] => {
+const useScaledDialVotes = createMemo((dialVotes?: EpochDialVotes): [{ [dialId: number]: number }] => {
   if (!dialVotes) return [{}]
 
-  const totalVotes = Object.values(dialVotes).reduce((prev, current) => prev + current.votes, 0)
+  const totalVotes = Object.values(dialVotes).reduce((prev, dialVote) => prev + dialVote.votes, 0)
 
-  const weightMultiplier = 100 / totalVotes
+  // TODO improve; >100 total breaks the chart
+  const weightMultiplier = 99.9 / totalVotes
 
   const entries = Object.entries(dialVotes).map(([dialId, dialVote]) => [dialId, dialVote.votes * weightMultiplier])
 
@@ -96,27 +95,28 @@ const useScaledMappedData = createMemo((dialVotes?: EpochDialVotes): [{ [dialId:
 })
 
 export const DistributionBar: FC = () => {
-  const [emissionsData] = useEmissionsData()
   const [epochData] = useEpochData()
+  const ref = useRef(null)
 
-  const [activeDialId, setActiveDialId] = useState<number | undefined>(undefined)
+  const hoveredDial = useHoveredDial()
+  const selectedDial = useSelectedDial()
+  const activeDial = hoveredDial ?? selectedDial
 
-  const activeDialData = typeof activeDialId == 'number' && emissionsData ? emissionsData.dials[activeDialId] : undefined
-  const activeDialVote = typeof activeDialId == 'number' && epochData ? epochData.dialVotes[activeDialId] : undefined
+  const [, setSelectedDialId] = useSelectedDialId()
+  const [, setHoveredDialId] = useHoveredDialId()
 
-  const emission =
-    epochData?.emission && activeDialVote?.votes ? (activeDialVote.votes / 100) * epochData.emission : epochData?.emission ?? 0
+  const scaledDialVotes = useScaledDialVotes(epochData?.dialVotes)
 
-  const scaledMappedData = useScaledMappedData(epochData?.dialVotes)
+  const emission = activeDial && epochData ? (activeDial.dialVotes.voteShare / 100) * epochData.emission : epochData?.emission
 
   return (
-    <Container>
+    <Container ref={ref}>
       <Header>
         <div>
           <h4>
-            <span>{activeDialData?.metadata.title ?? 'Distribution'}</span>
+            <span>{(hoveredDial ?? selectedDial)?.dial.metadata.title ?? 'Distribution'}</span>
           </h4>
-          {activeDialData && <NetworkLabel>{activeDialData.metadata.network}</NetworkLabel>}
+          {(hoveredDial ?? selectedDial) && <NetworkLabel>{(hoveredDial ?? selectedDial)?.dial.metadata.network}</NetworkLabel>}
         </div>
         <div>
           <CountUp end={emission} decimals={0} duration={0.3} />
@@ -124,7 +124,7 @@ export const DistributionBar: FC = () => {
         </div>
       </Header>
       <ResponsiveContainer height={24} width="100%">
-        <BarChart layout="vertical" stackOffset="none" data={scaledMappedData} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
+        <BarChart layout="vertical" stackOffset="none" data={scaledDialVotes} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
           <XAxis hide type="number" />
           <YAxis hide type="category" />
           {Object.values(epochData?.dialVotes ?? {})
@@ -136,16 +136,20 @@ export const DistributionBar: FC = () => {
                 fill={COLORS[idx]}
                 stackId="bar"
                 radius={renderRadius(idx, arr.length)}
+                onClick={() => {
+                  setSelectedDialId(dialId)
+                }}
                 onMouseEnter={() => {
-                  setActiveDialId(dialId)
+                  setHoveredDialId(dialId)
                 }}
                 onMouseLeave={() => {
-                  setActiveDialId(undefined)
+                  setHoveredDialId(undefined)
                 }}
               />
             ))}
         </BarChart>
       </ResponsiveContainer>
+      {selectedDial && <DialPreferencesTable />}
     </Container>
   )
 }

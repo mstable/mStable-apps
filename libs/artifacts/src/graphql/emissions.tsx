@@ -1381,7 +1381,7 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type DialPreferencesFragment = { id: string, weight: number, voter: { id: string, address: string } };
+export type DialPreferencesFragment = { id: string, weight: number, voter: { id: string, address: string, votesCast: string } };
 
 export type EmissionsQueryVariables = Exact<{
   account: Scalars['Bytes'];
@@ -1389,9 +1389,9 @@ export type EmissionsQueryVariables = Exact<{
 }>;
 
 
-export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string }>, lastEpoch: { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: number, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: number, dial: { id: string, dialId: number } }> }> }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string }>, lastEpoch: { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: number, votesCast: string, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: number, dial: { id: string, dialId: number } }> }> }> };
 
-export type EpochAllFragment = { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> };
+export type EpochAllFragment = { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string, votesCast: string } }> } }> };
 
 export type EpochQueryVariables = Exact<{
   weekNumber: Scalars['Int'];
@@ -1400,7 +1400,7 @@ export type EpochQueryVariables = Exact<{
 }>;
 
 
-export type EpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string } }> } }> }> };
+export type EpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string, votesCast: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string, votesCast: string } }> } }> }> };
 
 export const DialPreferencesFragmentDoc = gql`
     fragment DialPreferences on Preference {
@@ -1409,6 +1409,7 @@ export const DialPreferencesFragmentDoc = gql`
   voter {
     id
     address
+    votesCast
   }
 }
     `;
@@ -1467,6 +1468,7 @@ export const EmissionsDocument = gql`
         weekNumber
       }
       lastSourcePoke
+      votesCast
       preferences {
         id
         weight

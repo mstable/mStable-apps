@@ -5,6 +5,7 @@ import { useApolloClients } from '@apps/base/context/apollo'
 import { useEpochQuery } from '@apps/artifacts/graphql/emissions'
 
 import { EpochDialVotes, Epoch } from '../types'
+import { useHoveredDialId, useSelectedDialId } from './ViewOptionsContext'
 
 const [useEpochData, EpochDataProvider] = createStateContext<Epoch | undefined>(undefined)
 
@@ -14,6 +15,8 @@ const EpochUpdater: FC = () => {
   const clients = useApolloClients()
   const [weekNumber] = useEpochWeekNumber()
   const [, setEpochData] = useEpochData()
+  const [, setHoveredDialId] = useHoveredDialId()
+  const [, setSelectedDialId] = useSelectedDialId()
 
   // TODO pagination
   const skip = 0
@@ -47,7 +50,15 @@ const EpochUpdater: FC = () => {
             dialId,
             votes,
             voteShare: parseFloat(((votes / totalVotes) * 100).toFixed(2)),
-            preferences: Object.fromEntries(preferences.map(({ voter: { address: voter }, weight }) => [voter, (weight ?? 0) / 2])),
+            preferences: Object.fromEntries(
+              preferences.map(preference => {
+                const weight = (preference.weight ?? 0) / 2
+                const votesCast = parseInt(preference.voter.votesCast) / 1e18
+                // if (preference.id.includes('0x91A0D548E3b233A2e850C5C7A42BE97d6E48f0d0'.toLowerCase()))
+                //   console.log(preference.id, votesCast)
+                return [preference.voter.address, { weight, votesCast }]
+              }),
+            ),
           },
         ]
       }),
@@ -60,6 +71,11 @@ const EpochUpdater: FC = () => {
       dialVotes,
     })
   }, [setEpochData, epochQuery.data])
+
+  useEffect(() => {
+    setHoveredDialId(undefined)
+    setSelectedDialId(undefined)
+  }, [setHoveredDialId, setSelectedDialId, weekNumber])
 
   return null
 }
