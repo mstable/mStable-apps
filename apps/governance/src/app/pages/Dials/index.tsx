@@ -41,11 +41,11 @@ export const Dials: FC = () => (
     <div>
       <GovernancePageHeader title="Dials" subtitle="Vote on future MTA emissions" />
       <Inner>
+        <EpochDetails />
         <DialAndSidebar>
           <DialView />
           <DialSidebar />
         </DialAndSidebar>
-        <EpochDetails />
       </Inner>
     </div>
   </DialsContext>

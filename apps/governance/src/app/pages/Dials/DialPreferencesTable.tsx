@@ -3,28 +3,23 @@ import styled from 'styled-components'
 
 import { Table, TableCell, TableRow } from '@apps/dumb-components'
 
-import { useEpochData } from './context/EpochContext'
-import { useSelectedDialId } from './context/ViewOptionsContext'
+import { useActiveDial } from './context/ViewOptionsContext'
 import { MiniDelegateeProfile } from './DialDelegatee'
 
 const useDialPreferencesData = (): [string, number, number][] => {
-  const [epochData] = useEpochData()
-  const [selectedDialId] = useSelectedDialId()
-  const selectedDial = epochData?.dialVotes[selectedDialId]
+  const activeDial = useActiveDial()
 
   return useMemo(() => {
-    if (!selectedDial) return []
+    if (!activeDial) return []
 
-    const totalVotes = Object.values(selectedDial.preferences).reduce((prev, preference) => prev + preference.votesCast, 0)
-
-    const entries: [string, number, number][] = Object.entries(selectedDial.preferences).map(([voterAddress, preference]) => [
+    const entries: [string, number, number][] = Object.entries(activeDial.dialVotes.preferences).map(([voterAddress, preference]) => [
       voterAddress,
-      (preference.votesCast / totalVotes) * 100,
+      preference.votesCast,
       preference.weight,
     ])
 
     return entries.sort((a, b) => b[1] - a[1])
-  }, [selectedDial])
+  }, [activeDial])
 }
 
 const StyledMiniDelegateeProfile = styled(MiniDelegateeProfile)`
@@ -48,27 +43,28 @@ const StyledMiniDelegateeProfile = styled(MiniDelegateeProfile)`
   }
 `
 
-const TABLE_CELL_WIDTHS = [40, 30, 30]
-const HEADER_TITLES = ['User', 'Vote share', 'Weight'].map(title => ({ title }))
+const StyledTable = styled(Table)`
+  margin-top: 1rem;
+`
+
+const TABLE_CELL_WIDTHS = [50, 50]
+const HEADER_TITLES = ['User', 'Weight'].map(title => ({ title }))
 
 export const DialPreferencesTable: FC = () => {
   const dialPreferencesData = useDialPreferencesData()
 
-  return (
-    <Table headerTitles={HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
-      {dialPreferencesData.map(([voterAddress, voteShare, weight]) => (
+  return dialPreferencesData.length ? (
+    <StyledTable headerTitles={HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
+      {dialPreferencesData.map(([voterAddress, , weight]) => (
         <TableRow key={voterAddress}>
           <TableCell width={TABLE_CELL_WIDTHS[0]}>
             <StyledMiniDelegateeProfile address={voterAddress} />
-          </TableCell>
-          <TableCell width={TABLE_CELL_WIDTHS[1]}>
-            <span>{voteShare.toFixed(2)}%</span>
           </TableCell>
           <TableCell width={TABLE_CELL_WIDTHS[1]}>
             <span>{weight}%</span>
           </TableCell>
         </TableRow>
       ))}
-    </Table>
-  )
+    </StyledTable>
+  ) : null
 }

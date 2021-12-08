@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 import { createStateContext } from 'react-use'
 
 import { createToggleContext } from '@apps/context-utils'
@@ -28,7 +28,7 @@ const useHoveredDial = (): ActiveDial | undefined => {
   const [epochData] = useEpochData()
   const [hoveredDialId] = useHoveredDialId()
 
-  return epochData && emissionsData && typeof hoveredDialId == 'number'
+  return epochData && emissionsData
     ? {
         dial: emissionsData.dials[hoveredDialId],
         dialVotes: epochData.dialVotes[hoveredDialId],
@@ -36,14 +36,42 @@ const useHoveredDial = (): ActiveDial | undefined => {
     : undefined
 }
 
+const useActiveDial = (): ActiveDial | undefined => {
+  const [emissionsData] = useEmissionsData()
+  const [epochData] = useEpochData()
+  const [hoveredDialId] = useHoveredDialId()
+  const [selectedDialId] = useSelectedDialId()
+  const activeDialId = hoveredDialId ?? selectedDialId ?? 0
+
+  return epochData && emissionsData
+    ? {
+        dial: emissionsData.dials[activeDialId],
+        dialVotes: epochData.dialVotes[activeDialId],
+      }
+    : undefined
+}
+
 const [useSystemView, SystemViewProvider] = createToggleContext(true)
+
+const [useShowVotesTable, ShowVotesTableProvider] = createToggleContext(false)
 
 const ViewOptionsContext: FC = ({ children }) => (
   <SystemViewProvider>
-    <SelectedDialIdProvider>
-      <HoveredDialIdProvider>{children}</HoveredDialIdProvider>
-    </SelectedDialIdProvider>
+    <ShowVotesTableProvider>
+      <SelectedDialIdProvider>
+        <HoveredDialIdProvider>{children}</HoveredDialIdProvider>
+      </SelectedDialIdProvider>
+    </ShowVotesTableProvider>
   </SystemViewProvider>
 )
 
-export { ViewOptionsContext, useSystemView, useHoveredDialId, useSelectedDialId, useHoveredDial, useSelectedDial }
+export {
+  ViewOptionsContext,
+  useSystemView,
+  useShowVotesTable,
+  useActiveDial,
+  useHoveredDialId,
+  useSelectedDialId,
+  useHoveredDial,
+  useSelectedDial,
+}
