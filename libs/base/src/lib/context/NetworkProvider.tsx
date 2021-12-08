@@ -130,7 +130,7 @@ export interface EthereumMainnet
       }
       MerkleDropMBPTBAL: string
     },
-    GraphQLEndpoints<'feeders' | 'snapshot' | 'staking' | 'questbook' | 'merkleDrop'>
+    GraphQLEndpoints<'feeders' | 'snapshot' | 'staking' | 'questbook' | 'merkleDrop' | 'emissions'>
   > {
   chainId: ChainIds.EthereumMainnet
 }
@@ -243,6 +243,7 @@ const ETH_MAINNET: EthereumMainnet = {
       graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string),
     ],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
+    emissions: [graphHostedEndpoint('mstable', 'mstable-dials')],
   },
   addresses: {
     MTA: '0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2',
