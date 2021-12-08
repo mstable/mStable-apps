@@ -65,7 +65,7 @@ export const DialPreferencesTable: FC = () => {
             <span>{voteShare.toFixed(2)}%</span>
           </TableCell>
           <TableCell width={TABLE_CELL_WIDTHS[1]}>
-            <span>{weight.toFixed(2)}%</span>
+            <span>{weight}%</span>
           </TableCell>
         </TableRow>
       ))}

@@ -98,6 +98,11 @@ const TABLE_CELL_WIDTHS = [30, 25, 35]
 const DEFAULT_HEADER_TITLES = ['Dial', 'User weight', ''].map(title => ({ title }))
 const SYSTEM_VIEW_HEADER_TITLES = ['Dial', 'System weight', ''].map(title => ({ title }))
 
+const roundUserWeight = (weight: number): number => {
+  const [whole, decimal] = weight.toFixed(1).split('.')
+  return parseFloat(`${whole}.${parseInt(decimal) >= 5 ? '5' : '0'}`)
+}
+
 export const DialTable: FC = () => {
   const [emissionsData] = useEmissionsData()
   const [epochData] = useEpochData()
@@ -114,7 +119,6 @@ export const DialTable: FC = () => {
       {!(epochData && epochData.dialVotes && emissionsData) ? (
         <LoadingRow />
       ) : (
-        // TODO consider using dialVotes[i].preferences to show all preferences for the dial in this epoch
         Object.entries(epochData.dialVotes).map(([dialId_, { voteShare }]) => {
           const dialId = parseInt(dialId_)
 
@@ -133,7 +137,9 @@ export const DialTable: FC = () => {
                 </h3>
               </TableCell>
               <TableCell width={TABLE_CELL_WIDTHS[1]}>
-                <span>{parseFloat((isSystemView ? voteShare : scaledUserDialPreferences.scaled[dialId] ?? 0).toFixed(2))}%</span>
+                <span>
+                  {isSystemView ? voteShare.toFixed(2) : roundUserWeight(scaledUserDialPreferences.scaled[dialId] ?? 0).toFixed(1)}%
+                </span>
               </TableCell>
               <TableCell width={TABLE_CELL_WIDTHS[2]}>
                 <StyledSlider

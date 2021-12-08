@@ -9,10 +9,28 @@ import { CountUp } from '@apps/dumb-components'
 import { useHoveredDial, useHoveredDialId, useSelectedDial, useSelectedDialId } from './context/ViewOptionsContext'
 import { useEpochData } from './context/EpochContext'
 import { DialPreferencesTable } from './DialPreferencesTable'
-import { EpochDialVotes, ActiveDial } from './types'
+import { EpochDialVotes } from './types'
 
 // TODO need at least 16 of these
-const COLORS = ['#087E8B', '#48284A', '#a1cda8', '#ff5a5f', '#3c3c3c', '#F2F3AE', '#A3320B', '#C1839F']
+const COLORS = [
+  '#087E8B',
+  '#48284A',
+  '#a1cda8',
+  '#ff5a5f',
+  '#3c3c3c',
+  '#F2F3AE',
+  '#A3320B',
+  '#C1839F',
+  '#723476',
+  '#57c0b7',
+  '#876187',
+  '#c29e80',
+  '#b7e21a',
+  '#08392c',
+  '#c22069',
+  '#2b8e39',
+  '#0079ff',
+]
 
 const NetworkLabel = styled.p`
   color: ${({ theme }) => theme.color.bodyAccent};

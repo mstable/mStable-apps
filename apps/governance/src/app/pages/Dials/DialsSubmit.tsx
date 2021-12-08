@@ -61,7 +61,7 @@ export const DialsSubmit: FC = () => {
               const voterDialWeights = Object.entries(userDialPreferences.changes)
                 .filter(([, weight]) => weight > 0)
                 .map(([dialId, weight]) => {
-                  const scaledWeight = Math.floor(weight * weightMultiplier)
+                  const scaledWeight = Math.floor(weight * weightMultiplier).toString()
                   return { dialId, weight: scaledWeight }
                 })
 
