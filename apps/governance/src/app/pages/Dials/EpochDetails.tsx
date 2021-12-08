@@ -29,16 +29,6 @@ const StyledSkeleton = styled(ThemedSkeleton)`
   }
 `
 
-const DistributionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-  background: ${({ theme }) => theme.color.background[0]};
-  padding: 1rem;
-  border-radius: 0.75rem;
-  gap: 1rem;
-`
-
 const EpochContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -129,13 +119,7 @@ export const EpochDetails: FC = () => {
           </ArrowButton>
         </div>
       </div>
-      {!(epochData && epochData.dialVotes) ? (
-        <StyledSkeleton height={100} />
-      ) : (
-        <DistributionContainer>
-          <DistributionBar />
-        </DistributionContainer>
-      )}
+      {!(epochData && epochData.dialVotes) ? <StyledSkeleton height={100} /> : <DistributionBar />}
     </EpochContainer>
   )
 }
