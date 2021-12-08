@@ -1,8 +1,8 @@
-import { truncateAddress } from '@apps/formatters'
 import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 import { useClipboard } from 'use-clipboard-copy'
 
+import { truncateAddress } from '@apps/formatters'
 import { UnstyledButton } from '@apps/dumb-components'
 
 import { ExplorerLink } from './ExplorerLink'
@@ -13,6 +13,7 @@ interface Props {
   copyable?: boolean
   truncate?: boolean
   link?: boolean
+  chainId?: number
 }
 
 const Copy: FC<{ onClick(): void }> = ({ onClick }) => (
@@ -30,7 +31,7 @@ const Container = styled.div`
   font-family: 'DM Mono', monospace;
 `
 
-export const Address: FC<Props> = ({ address, type, truncate = true, link = true, copyable }) => {
+export const Address: FC<Props> = ({ address, type, truncate = true, link = true, copyable, chainId }) => {
   const { copy, copied } = useClipboard({ copiedTimeout: 1500 })
 
   const handleCopy = useCallback(() => {
@@ -39,7 +40,13 @@ export const Address: FC<Props> = ({ address, type, truncate = true, link = true
 
   return (
     <Container>
-      {link ? <ExplorerLink data={address} type={type} showData truncate={truncate} /> : truncate ? truncateAddress(address) : address}
+      {link ? (
+        <ExplorerLink data={address} type={type} showData truncate={truncate} chainId={chainId} />
+      ) : truncate ? (
+        truncateAddress(address)
+      ) : (
+        address
+      )}
       {copyable ? <Copy onClick={handleCopy}>{copied ? 'Copied!' : 'Copy'}</Copy> : null}
     </Container>
   )
