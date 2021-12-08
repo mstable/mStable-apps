@@ -552,6 +552,11 @@ type Preference {
   voter: Voter!
   dial: Dial!
   """
+  Voter's votes cast at the time of voting; useful for determining historical voting power
+  
+  """
+  votesCast: BigInt!
+  """
   % weight applied to this dial, where 200 = 100% and 1 = 0.5%
   
   """
@@ -595,6 +600,14 @@ input Preference_filter {
   dial_not_starts_with: String
   dial_ends_with: String
   dial_not_ends_with: String
+  votesCast: BigInt
+  votesCast_not: BigInt
+  votesCast_gt: BigInt
+  votesCast_lt: BigInt
+  votesCast_gte: BigInt
+  votesCast_lte: BigInt
+  votesCast_in: [BigInt!]
+  votesCast_not_in: [BigInt!]
   weight: Int
   weight_not: Int
   weight_gt: Int
@@ -609,6 +622,7 @@ enum Preference_orderBy {
   id
   voter
   dial
+  votesCast
   weight
 }
 

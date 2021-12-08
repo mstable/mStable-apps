@@ -24,7 +24,9 @@ const EmissionsDataUpdater: FC = () => {
     pollInterval: 60e3,
   })
 
+  // Known issue: if the user has a delegatee in multiple staked tokens, this will only select one
   const delegatee = accountQuery.data?.account?.stakedTokenAccounts.find(sta => !!sta.delegatee)?.delegatee
+
   const delegateeOrAccount = delegatee?.id ?? account
   const emissionsQuery = useEmissionsQuery({
     variables: { account: delegateeOrAccount ?? '', hasAccount: !!delegateeOrAccount },

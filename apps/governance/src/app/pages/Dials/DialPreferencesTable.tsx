@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Table, TableCell, TableRow } from '@apps/dumb-components'
@@ -12,17 +12,19 @@ const useDialPreferencesData = (): [string, number, number][] => {
   const [selectedDialId] = useSelectedDialId()
   const selectedDial = epochData?.dialVotes[selectedDialId]
 
-  if (!selectedDial || !epochData) return []
+  return useMemo(() => {
+    if (!selectedDial) return []
 
-  const entries: [string, number, number][] = Object.entries(selectedDial.preferences).map(([voterAddress, preference]) => [
-    voterAddress,
-    // FIXME doesn't work for past epochs; votesCast is *present* data
-    // Either need to calculate this another way, or add more entities, or use a block filter and another query
-    (preference.votesCast / epochData.totalVotes) * 100,
-    preference.weight,
-  ])
+    const totalVotes = Object.values(selectedDial.preferences).reduce((prev, preference) => prev + preference.votesCast, 0)
 
-  return entries.sort((a, b) => b[1] - a[1])
+    const entries: [string, number, number][] = Object.entries(selectedDial.preferences).map(([voterAddress, preference]) => [
+      voterAddress,
+      (preference.votesCast / totalVotes) * 100,
+      preference.weight,
+    ])
+
+    return entries.sort((a, b) => b[1] - a[1])
+  }, [selectedDial])
 }
 
 const StyledMiniDelegateeProfile = styled(MiniDelegateeProfile)`
@@ -47,7 +49,7 @@ const StyledMiniDelegateeProfile = styled(MiniDelegateeProfile)`
 `
 
 const TABLE_CELL_WIDTHS = [40, 30, 30]
-const HEADER_TITLES = ['User', 'Voting Power', 'Weight'].map(title => ({ title }))
+const HEADER_TITLES = ['User', 'Vote share', 'Weight'].map(title => ({ title }))
 
 export const DialPreferencesTable: FC = () => {
   const dialPreferencesData = useDialPreferencesData()
