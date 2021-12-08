@@ -18,20 +18,27 @@ interface Props {
 
 const StyledThumb = styled.div`
   height: 1.25rem;
-  width: 1.25rem;
-  margin-top: -2px;
-  text-align: center;
-  background: white;
-  border-radius: 50%;
-  cursor: grab;
+  width: 0.25rem;
   z-index: 2;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
-  border: 1px solid ${({ theme }) => theme.color.bodyAccent[3]};
+  &:after {
+    position: absolute;
+    left: -0.5rem;
+    margin-top: -2px;
+    text-align: center;
+    background: white;
+    cursor: grab;
+    border-radius: 50%;
+    content: '';
+    width: 1.25rem;
+    height: 1.25rem;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid ${({ theme }) => theme.color.bodyAccent[3]};
+  }
 `
 
 const StyledTrack = styled.div<{ index: number; value?: number }>`
   height: 1rem;
-  display: ${({ index, value }) => value === 0 && index === 0 && 'none'};
+  display: ${({ index, value }) => (value === 0 && index === 0 ? 'none' : 'block')};
   background: ${({ index, theme }) => (index === 1 ? theme.color.background[2] : theme.color.blue)};
   border-radius: ${({ index }) => (index === 0 ? '0.5rem 0 0 0.5rem' : '0 0.5rem 0.5rem 0')};
 `
