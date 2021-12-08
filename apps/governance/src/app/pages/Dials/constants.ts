@@ -12,12 +12,12 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   7: { network: Networks.Ethereum, title: 'gUSD fPool', key: 'gUsdFPool' },
   8: { network: Networks.Ethereum, title: 'hBTC fPool', key: 'hBtcFPool' },
   9: { network: Networks.Ethereum, title: 'tBTC fPool (v2)', key: 'tBtcFPoolv2' },
-  11: { network: Networks.Ethereum, title: 'Visor finance', key: 'visorFinance' },
-  12: { network: Networks.Polygon, title: 'p-imUSD Vault', key: 'pImUsdVault' },
-  13: { network: Networks.Polygon, title: 'p-FRAX fPool', key: 'pFraxFPool' },
-  14: { network: Networks.Polygon, title: 'p-Balancer MTA/WETH/Matic pool', key: 'pBalancerMtaWethMaticPool' },
-  15: { network: Networks.Ethereum, title: 'RAI fPool', key: 'raiFPool' },
-  16: { network: Networks.Ethereum, title: 'FEI fPool', key: 'feiFPool' },
+  10: { network: Networks.Ethereum, title: 'Visor finance', key: 'visorFinance' },
+  11: { network: Networks.Polygon, title: 'p-imUSD Vault', key: 'pImUsdVault' },
+  12: { network: Networks.Polygon, title: 'p-FRAX fPool', key: 'pFraxFPool' },
+  13: { network: Networks.Polygon, title: 'p-Balancer MTA/WETH/Matic pool', key: 'pBalancerMtaWethMaticPool' },
+  14: { network: Networks.Ethereum, title: 'RAI fPool', key: 'raiFPool' },
+  15: { network: Networks.Ethereum, title: 'FEI fPool', key: 'feiFPool' },
 })
 
 export const ALL_POSSIBLE_DIAL_IDS = Array.from({ length: 255 }).map((_, dialId) => dialId)
