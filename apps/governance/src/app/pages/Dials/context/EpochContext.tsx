@@ -17,6 +17,8 @@ const useBlockNumberForWeekNumber = (): number | undefined => {
   const clients = useApolloClients()
   const [weekNumber] = useEpochWeekNumber()
 
+  // TODO revert
+  // const distributionPeriod = 43200
   const distributionPeriod = 604800
 
   // Get the next week, i.e. the end of this epoch

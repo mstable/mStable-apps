@@ -80,12 +80,14 @@ const EpochContainer = styled.div`
 `
 
 const convertEpochToTimestamp = (weekNumber: number) => {
+  // TODO revert
+  // const distributionPeriod = 43200
   const distributionPeriod = 604800
 
   return weekNumber * distributionPeriod * 1000
 }
 
-const formatEpoch = (weekNumber: number): string => format(convertEpochToTimestamp(weekNumber), 'dd/MM')
+const formatEpoch = (weekNumber: number): string => format(convertEpochToTimestamp(weekNumber), 'HH:mm dd/MM')
 
 export const EpochDetails: FC = () => {
   const [epochData] = useEpochData()
@@ -113,7 +115,7 @@ export const EpochDetails: FC = () => {
           {!emissionsData ? (
             <ThemedSkeleton height={20} width={100} />
           ) : (
-            <span>{`(${formatEpoch(epochWeekNumber - 1)}—${formatEpoch(epochWeekNumber)})`}</span>
+            <span>{`${formatEpoch(epochWeekNumber)} – ${formatEpoch(epochWeekNumber + 1)}`}</span>
           )}
           <ArrowButton
             disabled={isLastEpoch}
