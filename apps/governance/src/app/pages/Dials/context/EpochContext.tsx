@@ -2,17 +2,39 @@ import { FC, useEffect } from 'react'
 import { createStateContext } from 'react-use'
 
 import { useApolloClients } from '@apps/base/context/apollo'
-import { useEpochQuery } from '@apps/artifacts/graphql/emissions'
+import { useSelectedEpochQuery } from '@apps/artifacts/graphql/emissions'
+import { useBlockTimestampQuery } from '@apps/artifacts/graphql/blocks'
 
 import { EpochDialVotes, Epoch } from '../types'
+import { useEmissionsData } from './EmissionsContext'
 import { useHoveredDialId, useSelectedDialId } from './ViewOptionsContext'
 
 const [useEpochData, EpochDataProvider] = createStateContext<Epoch | undefined>(undefined)
 
 const [useEpochWeekNumber, EpochWeekNumberProvider] = createStateContext<number | undefined>(undefined)
 
+const useBlockNumberForWeekNumber = (): number | undefined => {
+  const clients = useApolloClients()
+  const [weekNumber] = useEpochWeekNumber()
+
+  const distributionPeriod = 604800
+
+  // Get the next week, i.e. the end of this epoch
+  const start = (weekNumber + 1) * distributionPeriod
+
+  const blockTimestampQuery = useBlockTimestampQuery({
+    client: clients.blocks,
+    variables: { start: start.toString(), end: (start + 1000).toString() },
+    skip: !weekNumber,
+  })
+
+  const blockNumber = blockTimestampQuery.data?.blocks[0]?.number
+  return blockNumber ? parseInt(blockNumber) : undefined
+}
+
 const EpochUpdater: FC = () => {
   const clients = useApolloClients()
+  const [emissionsData] = useEmissionsData()
   const [weekNumber] = useEpochWeekNumber()
   const [, setEpochData] = useEpochData()
   const [, setHoveredDialId] = useHoveredDialId()
@@ -21,19 +43,26 @@ const EpochUpdater: FC = () => {
   // TODO pagination
   const skip = 0
 
-  const epochQuery = useEpochQuery({
-    variables: { weekNumber: weekNumber ?? 0, hasWeekNumber: !!weekNumber, skip },
+  const blockNumber = useBlockNumberForWeekNumber()
+
+  const selectedEpochQuery = useSelectedEpochQuery({
+    variables: {
+      weekNumber: weekNumber ?? 0,
+      blockNumber: blockNumber ?? 0,
+      isSelectedEpoch: !!weekNumber && !!blockNumber && weekNumber !== emissionsData?.lastEpochWeekNumber,
+      skip,
+    },
     client: clients.emissions,
     pollInterval: 60e3,
   })
 
   useEffect(() => {
-    if (!epochQuery.data || (!epochQuery.data.selectedEpoch?.[0] && !epochQuery.data.lastEpoch?.[0])) {
+    if (!selectedEpochQuery.data || (!selectedEpochQuery.data.selectedEpoch?.[0] && !selectedEpochQuery.data.lastEpoch?.[0])) {
       setEpochData(undefined)
       return
     }
 
-    const epoch = epochQuery.data.selectedEpoch?.[0] ?? epochQuery.data.lastEpoch?.[0]
+    const epoch = selectedEpochQuery.data.selectedEpoch?.[0] ?? selectedEpochQuery.data.lastEpoch?.[0]
     if (!epoch) {
       setEpochData(undefined)
       return
@@ -54,8 +83,6 @@ const EpochUpdater: FC = () => {
               preferences.map(preference => {
                 const weight = (preference.weight ?? 0) / 2
                 const votesCast = parseInt(preference.voter.votesCast) / 1e18
-                // if (preference.id.includes('0x91A0D548E3b233A2e850C5C7A42BE97d6E48f0d0'.toLowerCase()))
-                //   console.log(preference.id, votesCast)
                 return [preference.voter.address, { weight, votesCast }]
               }),
             ),
@@ -70,7 +97,7 @@ const EpochUpdater: FC = () => {
       totalVotes,
       dialVotes,
     })
-  }, [setEpochData, epochQuery.data])
+  }, [setEpochData, selectedEpochQuery.data])
 
   useEffect(() => {
     setHoveredDialId(undefined)

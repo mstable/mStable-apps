@@ -74,11 +74,11 @@ fragment EpochAll on Epoch {
   }
 }
 
-query Epoch($weekNumber: Int!, $hasWeekNumber: Boolean! $skip: Int!) {
-  selectedEpoch: epoches(where: { weekNumber: $weekNumber }, first: 1) @include(if: $hasWeekNumber) {
+query SelectedEpoch($weekNumber: Int!, $blockNumber: Int!, $isSelectedEpoch: Boolean! $skip: Int!) {
+  selectedEpoch: epoches(where: { weekNumber: $weekNumber }, first: 1, block: { number: $blockNumber }) @include(if: $isSelectedEpoch) {
     ...EpochAll
   }
-  lastEpoch: epoches(orderBy: weekNumber, orderDirection: desc, first: 1) @skip(if: $hasWeekNumber) {
+  lastEpoch: epoches(orderBy: weekNumber, orderDirection: desc, first: 1) @skip(if: $isSelectedEpoch) {
     ...EpochAll
   }
 }

@@ -40,6 +40,11 @@ const Header = styled.div`
     ${({ theme }) => theme.mixins.numeric};
     font-weight: 400;
   }
+
+  .vote-share {
+    color: ${({ theme }) => theme.color.bodyTransparent};
+    font-size: 0.8rem;
+  }
 `
 
 const StyledTokenIcon = styled(TokenIcon)`
@@ -108,7 +113,6 @@ export const DistributionBar: FC = () => {
   const scaledDialVotes = useScaledDialVotes(epochData?.dialVotes)
 
   const emission = activeDial && epochData ? (activeDial.dialVotes.voteShare / 100) * epochData.emission : epochData?.emission
-
   return (
     <Container ref={ref}>
       <Header>
@@ -119,6 +123,15 @@ export const DistributionBar: FC = () => {
           {(hoveredDial ?? selectedDial) && <NetworkLabel>{(hoveredDial ?? selectedDial)?.dial.metadata.network}</NetworkLabel>}
         </div>
         <div>
+          {(hoveredDial ?? selectedDial) && (
+            <CountUp
+              end={(hoveredDial ?? selectedDial).dialVotes.voteShare}
+              decimals={0}
+              duration={0.3}
+              suffix="% "
+              className="vote-share"
+            />
+          )}
           <CountUp end={emission} decimals={0} duration={0.3} />
           <StyledTokenIcon symbol="MTA" />
         </div>
