@@ -2,7 +2,6 @@ import { Networks } from '@apps/base/context/network'
 import { BigDecimal } from '@apps/bigdecimal'
 
 export interface DialMetadata {
-  key: string
   title: string
   network: Networks
 }
