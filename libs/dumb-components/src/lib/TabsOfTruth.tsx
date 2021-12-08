@@ -89,8 +89,9 @@ const TabsContainer = styled.div`
 export const TabsOfTruth: FC<
   State & {
     setActiveIndex(index: number): void
+    className?: string
   }
-> = ({ tabs, setActiveIndex, activeTabIndex }) => {
+> = ({ tabs, setActiveIndex, activeTabIndex, className }) => {
   const container = useRef<HTMLDivElement>(undefined as never)
   const prevActiveTabIndex = usePrevious(activeTabIndex)
   const [activePos, setActivePos] = useState<[number, number]>([0, 0])
@@ -101,7 +102,7 @@ export const TabsOfTruth: FC<
   }, [activeTabIndex])
 
   return (
-    <TabsContainer ref={container}>
+    <TabsContainer ref={container} className={className}>
       <Transition in={activeTabIndex !== prevActiveTabIndex} appear timeout={250} unmountOnExit={false}>
         {className => <ActiveTab pos={activePos} className={className} />}
       </Transition>
