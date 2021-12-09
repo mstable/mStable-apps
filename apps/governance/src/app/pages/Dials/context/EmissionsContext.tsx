@@ -68,7 +68,13 @@ const EmissionsDataUpdater: FC = () => {
       weekNumber: controller.lastEpoch.weekNumber,
     }
 
-    let user: EmissionsUser | undefined = undefined
+    let user: EmissionsUser = {
+      address: account,
+      isDelegatee: false,
+      lastSourcePoke: 0,
+      votePower: accountQuery.data?.account?.totalVotesAllBD,
+      dialPreferences: {},
+    }
     const [voter] = controller.voters ?? []
     if (voter) {
       user = {
