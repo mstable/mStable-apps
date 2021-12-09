@@ -8,7 +8,7 @@ interface Props {
   min: number
   max: number
   value: number
-  onChange?(value: number): void
+  onChange(value: number): void
   step: number
   error?: string
   intervals?: number
@@ -82,7 +82,7 @@ export const Slider: FC<Props> = ({ className, min, max, value = 0, step, interv
       renderTrack={renderTrack}
       renderThumb={(!disabled && renderThumb) || undefined}
       renderMark={renderMark}
-      onChange={v => onChange?.(v as number)}
+      onChange={v => onChange(v as number)}
       min={min}
       max={max}
       step={step}
