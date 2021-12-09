@@ -1,5 +1,5 @@
 import { useDataState } from '@apps/data-provider'
-import { CountUp } from '@apps/dumb-components'
+import { CountUp, Tooltip } from '@apps/dumb-components'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import { useWBTCPrice } from './utils'
@@ -11,10 +11,9 @@ const Stack = styled.div`
   background: ${({ theme }) => `linear-gradient(180deg, rgba(74,161,255, 0.3) 0%, ${theme.color.background[0]} 100%)`};
   border-radius: 1rem;
   padding: 1.5rem;
-  margin-left: 1rem;
 `
 
-const BigCountUp = styled(CountUp)`
+const TooltipWrapper = styled(Tooltip)`
   font-size: 3rem;
   padding: 2rem 0;
 `
@@ -34,8 +33,10 @@ export const TotalTvl: FC = () => {
 
   return (
     <Stack>
-      <BigCountUp end={tvl} prefix="$" decimals={0} />
-      <p>Deposits in mStable</p>
+      <TooltipWrapper tip="Total supply amount in all supported vaults" hideIcon>
+        <CountUp end={tvl} prefix="$" decimals={0} />
+      </TooltipWrapper>
+      <p>total value deposited in mStable in USD</p>
     </Stack>
   )
 }

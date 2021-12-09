@@ -13,10 +13,7 @@ export const Vaults = () => {
   const [selectedSaveVersion] = useSelectedSaveVersion()
 
   const vaults = useMemo(
-    () =>
-      Object.values(dataState)
-        .reduce((acc, curr) => [...acc, curr], [])
-        .sort(sortVaultsByDepositedDesc(selectedSaveVersion)),
+    () => Object.values(dataState).sort(sortVaultsByDepositedDesc(selectedSaveVersion)),
     [dataState, selectedSaveVersion],
   )
 

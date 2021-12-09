@@ -9,6 +9,7 @@ import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useSubscribeRewardStream } from './RewardsContext'
 import { DashNameTableCell, DashTableCell, DashTableRow } from './Styled'
 import { getPoolDeposited } from './utils'
+import { Link } from 'react-router-dom'
 
 export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...rest }) => {
   const mAssetName = feederPool.masset.token.symbol.toLowerCase() as MassetName
@@ -24,8 +25,8 @@ export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...re
   return (
     <DashTableRow {...rest}>
       <DashNameTableCell>
-        <TokenPair symbols={[feederPool.masset.token.symbol, feederPool.fasset.token.symbol]} isLarge={false} />
-        {feederPool.title}
+        <TokenPair symbols={[feederPool.masset.token.symbol, feederPool.fasset.token.symbol]} isLarge={false} reverseBkg />
+        {deposited > 0 ? <Link to={`/${mAssetName}/pools/${feederPool.address}`}>{feederPool.title}</Link> : feederPool.title}
       </DashNameTableCell>
       <DashTableCell>
         {deposited > 0 ? (

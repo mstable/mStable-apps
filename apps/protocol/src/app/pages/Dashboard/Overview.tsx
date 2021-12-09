@@ -1,3 +1,4 @@
+import { useAccount } from '@apps/base/context/account'
 import { MassetState, useDataState } from '@apps/data-provider'
 import { CountUp } from '@apps/dumb-components'
 import React, { useMemo } from 'react'
@@ -36,29 +37,32 @@ const useDeposits = () => {
 }
 
 export const Overview = () => {
+  const account = useAccount()
   const deposits = useDeposits()
   const { total, claimed, pending } = useTotalRewards()
 
+  if (!account) return null
+
   return (
     <div>
-      <Title>Overview</Title>
+      <Title>My Deposits</Title>
       <Card>
         <Panel>
           <Item>
-            <span>My deposits</span>
+            <span>Total deposits</span>
             <CountUp end={deposits} prefix="$" />
           </Item>
           <Item>
             <span>Pending rewards</span>
-            <CountUp end={pending} suffix="MTA" />
+            <CountUp end={pending} suffix="MTA" spaced />
           </Item>
           <Item>
             <span>Claimed rewards</span>
-            <CountUp end={claimed} suffix="MTA" />
+            <CountUp end={claimed} suffix="MTA" spaced />
           </Item>
           <Item>
             <span>Total rewards</span>
-            <CountUp end={total} suffix="MTA" />
+            <CountUp end={total} suffix="MTA" spaced />
           </Item>
         </Panel>
       </Card>

@@ -2,12 +2,13 @@ import { TokenIcon } from '@apps/base/components/core'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { useCalculateUserBoost } from '@apps/boost'
 import { MassetState } from '@apps/data-provider'
-import { CountUp, CountUpUSD, DifferentialCountup } from '@apps/dumb-components'
+import { CountUp, CountUpUSD, DifferentialCountup, Tooltip } from '@apps/dumb-components'
 import { toK } from '@apps/formatters'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { calculateApy } from '@apps/quick-maths'
 import { BoostedCombinedAPY, FetchState, MassetName } from '@apps/types'
 import React, { FC, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useSubscribeRewardStream } from './RewardsContext'
@@ -67,12 +68,13 @@ export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
     () => getVaultDeposited(selectedSaveVersion, massetState, massetPrice.value),
     [massetPrice.value, massetState, selectedSaveVersion],
   )
+  const btcTooltip = useMemo(() => (mAssetName === 'mbtc' ? 'Dollar value of BTC' : null), [mAssetName])
 
   return (
     <DashTableRow>
       <DashNameTableCell>
         <TokenIcon symbol={massetState.token.symbol} />
-        {massetState.token.symbol}
+        <Link to={`/${mAssetName}/save`}>{massetState.token.symbol}</Link>
       </DashNameTableCell>
       <DashTableCell>
         {userBoost > 1 && apy.value?.rewards?.userBoost ? (
@@ -86,7 +88,9 @@ export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
         )}
       </DashTableCell>
       <DashTableCell>
-        <CountUp end={balance.simple} prefix="$" />
+        <Tooltip tip={btcTooltip} hideIcon>
+          <CountUp end={balance.simple} prefix="$" />
+        </Tooltip>
       </DashTableCell>
       <DashTableCell>
         <CountUpUSD end={massetState.token.totalSupply.simple} price={massetPrice.value} formattingFn={toK} />

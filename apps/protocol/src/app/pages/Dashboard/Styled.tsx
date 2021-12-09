@@ -18,7 +18,6 @@ export const Title = styled.h2`
 
 export const Card = styled.div`
   ${({ theme }) => theme.mixins.card}
-  margin-left: 1rem;
   display: flex;
 `
 
