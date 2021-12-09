@@ -7,7 +7,7 @@ import { Slider, Table, TableCell, TableRow, ThemedSkeleton } from '@apps/dumb-c
 import { useSelectedDialId, useSystemView } from './context/ViewOptionsContext'
 import { useUserDialPreferences } from './context/UserDialsContext'
 import { useEmissionsData } from './context/EmissionsContext'
-import { useEpochData } from './context/EpochContext'
+import { useEpochData, useEpochWeekNumber } from './context/EpochContext'
 
 import { ALL_POSSIBLE_DIAL_IDS } from './constants'
 import { UserDialPreferences } from './types'
@@ -108,11 +108,13 @@ export const DialTable: FC = () => {
   const [epochData] = useEpochData()
   const [isSystemView] = useSystemView()
   const [, setSelectedDialId] = useSelectedDialId()
+  const [epochWeekNumber] = useEpochWeekNumber()
 
   const [userDialPreferences, dispatchUserDialPreferences] = useUserDialPreferences()
   const scaledUserDialPreferences = useScaleUserDialPreferences(userDialPreferences)
 
   const isDelegating = emissionsData?.user?.isDelegatee
+  const isPreviousEpoch = epochWeekNumber !== emissionsData?.lastEpochWeekNumber
 
   return (
     <StyledTable headerTitles={isSystemView ? SYSTEM_VIEW_HEADER_TITLES : DEFAULT_HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
@@ -148,7 +150,7 @@ export const DialTable: FC = () => {
                   max={100}
                   step={1}
                   value={isSystemView ? voteShare : scaledUserDialPreferences.pending[dialId] ?? 0}
-                  disabled={isSystemView || isDelegating}
+                  disabled={isSystemView || isDelegating || isPreviousEpoch}
                   onChange={value => {
                     dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId, value } })
                   }}

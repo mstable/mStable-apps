@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ViewportWidth } from '@apps/theme'
 import { Button } from '@apps/dumb-components'
 import { useEmissionsData } from './context/EmissionsContext'
+import { useEpochWeekNumber } from './context/EpochContext'
 
 import { useSystemView } from './context/ViewOptionsContext'
 import { useUserDialPreferences } from './context/UserDialsContext'
@@ -86,12 +87,13 @@ const Container = styled.div`
 
 export const DialView: FC = () => {
   const [isSystemView] = useSystemView()
+  const [epochWeekNumber] = useEpochWeekNumber()
   const [emissionsData] = useEmissionsData()
   return (
     <Container>
       <DialButtons />
       <DialTable />
-      {!isSystemView && !emissionsData?.user?.isDelegatee && <DialsSubmit />}
+      {!isSystemView && epochWeekNumber === emissionsData?.lastEpochWeekNumber && !emissionsData?.user?.isDelegatee && <DialsSubmit />}
     </Container>
   )
 }
