@@ -5,6 +5,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   0: {
     network: Networks.Ethereum,
     title: 'Staking MTA',
+    color: '#087E8B',
     description: 'MTA can be distributed to MTA Stakers',
     link: 'https://staking.mstable.org/#/stake',
     linkTitle: 'Stake MTA',
@@ -12,6 +13,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   1: {
     network: Networks.Ethereum,
     title: 'Staking mBPT',
+    color: '#48284A',
     description: 'MTA can be distributed to mBPT Stakers',
     link: 'https://staking.mstable.org/#/stake',
     linkTitle: 'Stake mBPT',
@@ -19,6 +21,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   2: {
     network: Networks.Ethereum,
     title: 'imUSD Vault',
+    color: '#a1cda8',
     description: 'MTA can be distributed to stakers in the imUSD Boosted Vault',
     link: 'https://app.mstable.org/#/musd/save',
     linkTitle: 'Save (mUSD)',
@@ -26,6 +29,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   3: {
     network: Networks.Ethereum,
     title: 'imBTC Vault',
+    color: '#ff5a5f',
     description: 'MTA can be distributed to stakers in the imBTC Boosted Vault',
     link: 'https://app.mstable.org/#/mbtc/save',
     linkTitle: 'Save (mBTC)',
@@ -33,6 +37,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   4: {
     network: Networks.Ethereum,
     title: 'GUSD fPool',
+    color: '#3c3c3c',
     description: 'MTA can be distributed to stakers in the GUSD Feeder Pool Vault',
     link: 'https://app.mstable.org/#/musd/pools/0x4fb30c5a3ac8e85bc32785518633303c4590752d',
     linkTitle: 'Pool',
@@ -40,6 +45,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   5: {
     network: Networks.Ethereum,
     title: 'BUSD fPool',
+    color: '#F2F3AE',
     description: 'MTA can be distributed to stakers in the BUSD Feeder Pool Vault',
     link: 'https://app.mstable.org/#/musd/pools/0xfe842e95f8911dcc21c943a1daa4bd641a1381c6',
     linkTitle: 'Pool',
@@ -47,6 +53,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   6: {
     network: Networks.Ethereum,
     title: 'alUSD fPool',
+    color: '#A3320B',
     description: 'MTA can be distributed to stakers in the alUSD Feeder Pool Vault',
     link: 'https://app.mstable.org/#/musd/pools/0x4eaa01974b6594c0ee62ffd7fee56cf11e6af936',
     linkTitle: 'Pool',
@@ -54,6 +61,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   7: {
     network: Networks.Ethereum,
     title: 'RAI fPool',
+    color: '#C1839F',
     description: 'MTA can be distributed to stakers in the RAI Feeder Pool Vault',
     link: 'https://app.mstable.org/#/musd/pools/0x36f944b7312eac89381bd78326df9c84691d8a5b',
     linkTitle: 'Pool',
@@ -61,6 +69,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   8: {
     network: Networks.Ethereum,
     title: 'FEI fPool',
+    color: '#cb4dd2',
     description: 'MTA can be distributed to stakers in the FEI Feeder Pool Vault',
     // link: 'https://app.mstable.org/#/musd/pools/0x2f1423d27f9b20058d9d1843e342726fdf985eb4',
     linkTitle: 'Pool',
@@ -68,6 +77,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   9: {
     network: Networks.Ethereum,
     title: 'HBTC fPool',
+    color: '#57c0b7',
     description: 'MTA can be distributed to stakers in the HBTC Feeder Pool Vault',
     link: 'https://app.mstable.org/#/mbtc/pools/0x48c59199da51b7e30ea200a74ea07974e62c4ba7',
     linkTitle: 'Pool',
@@ -75,6 +85,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   10: {
     network: Networks.Ethereum,
     title: 'tBTC fPool (v2)',
+    color: '#40777c',
     description: 'MTA can be distributed to stakers in the tBTC (v2) Feeder Pool Vault',
     link: 'https://app.mstable.org/#/mbtc/pools/0xc3280306b6218031e61752d060b091278d45c329',
     linkTitle: 'Pool',
@@ -82,6 +93,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   11: {
     network: Networks.Polygon,
     title: 'imUSD Vault',
+    color: '#c29e80',
     description: 'MTA can be distributed to stakers in the imUSD Vault',
     link: 'https://app.mstable.org/#/musd/save?network=polygon',
     linkTitle: 'Save (mUSD)',
@@ -89,6 +101,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   12: {
     network: Networks.Polygon,
     title: 'FRAX fPool',
+    color: '#b7e21a',
     description: 'MTA can be distributed to stakers in the imUSD Vault',
     link: 'https://app.mstable.org/#/musd/pools/0xb30a907084ac8a0d25dddab4e364827406fd09f0?network=polygon',
     linkTitle: 'Pool',
@@ -96,14 +109,21 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   13: {
     network: Networks.Polygon,
     title: 'BPT',
+    color: '#08392c',
     description: 'MTA can be distributed to LPs in the Balancer MTA/MATIC/WETH pool',
     link: 'https://polygon.balancer.fi/#/pool/0x614b5038611729ed49e0ded154d8a5d3af9d1d9e00010000000000000000001d',
     linkTitle: 'Balancer Pool',
   },
-  14: { network: Networks.Polygon, title: 'TreasuryDAO', description: 'MTA can be sent to the mStable TreasuryDAO' },
+  14: {
+    network: Networks.Polygon,
+    title: 'TreasuryDAO',
+    color: '#5800ff',
+    description: 'MTA can be sent to the mStable TreasuryDAO',
+  },
   15: {
     network: Networks.Polygon,
     title: 'Votium Bribe',
+    color: '#2b8e39',
     description: 'MTA can be sent directly to Votium to incentivise liquidity in the mUSD 3pool on Curve',
     link: 'https://votium.app/',
     linkTitle: 'Votium',
@@ -111,6 +131,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
   16: {
     network: Networks.Polygon,
     title: 'Visor',
+    color: '#4b9fff',
     description: 'MTA can be sent to a Visor Finance strategy to grow the treasury',
     link: 'https://www.visor.finance/',
     linkTitle: 'Visor Finance',

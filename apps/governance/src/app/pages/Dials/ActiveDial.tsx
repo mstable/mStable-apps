@@ -37,6 +37,21 @@ const Content = styled.div`
   }
 `
 
+const DialTitle = styled.div<{ fill?: string }>`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  &:before {
+    content: '';
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    margin-top: -2px;
+    border-radius: 100%;
+    background-color: ${({ fill }) => fill ?? '#ccc'};
+  }
+`
+
 const Header = styled.div`
   display: flex;
   flex: 1;
@@ -95,7 +110,7 @@ export const ActiveDial: FC = () => {
     <Container>
       <Header>
         <div className="title">
-          <h4>{activeDial?.dial.metadata.title}</h4>
+          <DialTitle fill={activeDial?.dial.metadata.color}>{activeDial?.dial.metadata.title}</DialTitle>
           <NetworkLabel>{activeDial?.dial.metadata.network}</NetworkLabel>
         </div>
         <div>
