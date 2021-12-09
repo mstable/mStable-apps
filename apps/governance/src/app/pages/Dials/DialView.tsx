@@ -89,13 +89,14 @@ const Container = styled.div`
 
 export const DialView: FC = () => {
   const [isSystemView] = useSystemView()
-  const [epochWeekNumber] = useEpochWeekNumber()
   const [emissionsData] = useEmissionsData()
+  const [epochWeekNumber = emissionsData?.lastEpochWeekNumber] = useEpochWeekNumber()
+  const isPreviousEpoch = epochWeekNumber !== emissionsData?.lastEpochWeekNumber
   return (
     <Container>
       <DialButtons />
       <DialTable />
-      {!isSystemView && epochWeekNumber === emissionsData?.lastEpochWeekNumber && !emissionsData?.user?.isDelegatee && <DialsSubmit />}
+      {!isSystemView && !isPreviousEpoch && !emissionsData?.user?.isDelegatee && <DialsSubmit />}
     </Container>
   )
 }
