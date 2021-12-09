@@ -2,14 +2,15 @@ import React, { FC } from 'react'
 import { createMemo } from 'react-use'
 import styled from 'styled-components'
 
-import { Slider, Table, TableCell, TableRow, ThemedSkeleton } from '@apps/dumb-components'
+import { Slider, Table, TableCell, TableRow, ThemedSkeleton, Tooltip } from '@apps/dumb-components'
 
-import { useSelectedDialId, useSystemView } from './context/ViewOptionsContext'
+import { useSystemView } from './context/ViewOptionsContext'
 import { useUserDialPreferences } from './context/UserDialsContext'
 import { useEmissionsData } from './context/EmissionsContext'
 import { useEpochData, useEpochWeekNumber } from './context/EpochContext'
 
 import { ALL_POSSIBLE_DIAL_IDS } from './constants'
+import { DialTitle } from './DialTitle'
 import { UserDialPreferences } from './types'
 
 const useScaleUserDialPreferences = createMemo(
@@ -85,15 +86,6 @@ const LoadingRow: FC = () => (
   </StyledLoadingRow>
 )
 
-const StyledTable = styled(Table)`
-  h3 {
-    cursor: pointer;
-    &:hover {
-      color: ${({ theme }) => theme.color.gold};
-    }
-  }
-`
-
 const TABLE_CELL_WIDTHS = [30, 25, 35]
 const DEFAULT_HEADER_TITLES = ['Dial', 'User weight', ''].map(title => ({ title }))
 const SYSTEM_VIEW_HEADER_TITLES = ['Dial', 'System weight', ''].map(title => ({ title }))
@@ -103,11 +95,22 @@ const roundUserWeight = (weight: number): number => {
   return parseFloat(`${whole}.${parseInt(decimal) >= 5 ? '5' : '0'}`)
 }
 
+const StyledDialTitle = styled(DialTitle)`
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  align-items: flex-start;
+`
+
+const NumericCell = styled(TableCell)`
+  font-family: 'DM Mono', monospace !important;
+  text-align: right;
+`
+
 export const DialTable: FC = () => {
   const [emissionsData] = useEmissionsData()
   const [epochData] = useEpochData()
   const [isSystemView] = useSystemView()
-  const [, setSelectedDialId] = useSelectedDialId()
   const [epochWeekNumber = emissionsData?.lastEpochWeekNumber] = useEpochWeekNumber()
 
   const [userDialPreferences, dispatchUserDialPreferences] = useUserDialPreferences()
@@ -117,7 +120,7 @@ export const DialTable: FC = () => {
   const isPreviousEpoch = epochWeekNumber !== emissionsData?.lastEpochWeekNumber
 
   return (
-    <StyledTable headerTitles={isSystemView ? SYSTEM_VIEW_HEADER_TITLES : DEFAULT_HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
+    <Table headerTitles={isSystemView ? SYSTEM_VIEW_HEADER_TITLES : DEFAULT_HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
       {!(epochData && epochData.dialVotes && emissionsData) ? (
         <LoadingRow />
       ) : (
@@ -130,19 +133,19 @@ export const DialTable: FC = () => {
           return (
             <TableRow key={dialId}>
               <TableCell width={TABLE_CELL_WIDTHS[0]}>
-                <h3
-                  onClick={() => {
-                    setSelectedDialId(dialId)
-                  }}
-                >
-                  {dial.metadata.title}
-                </h3>
+                <Tooltip tip={dial.metadata.description} hideIcon>
+                  <StyledDialTitle dialMetadata={dial.metadata} />
+                </Tooltip>
               </TableCell>
-              <TableCell width={TABLE_CELL_WIDTHS[1]}>
-                <span>
-                  {isSystemView ? voteShare.toFixed(2) : roundUserWeight(scaledUserDialPreferences.scaled[dialId] ?? 0).toFixed(1)}%
-                </span>
-              </TableCell>
+              <NumericCell width={TABLE_CELL_WIDTHS[1]}>
+                {isSystemView && voteShare && dial.cap && voteShare > dial.cap ? (
+                  <Tooltip tip={`This dial is capped at ${dial.cap.toFixed(1)}% maximum`}>{dial.cap.toFixed(1)}%</Tooltip>
+                ) : isSystemView ? (
+                  `${voteShare.toFixed(1)}%`
+                ) : (
+                  `${roundUserWeight(scaledUserDialPreferences.scaled[dialId] ?? 0).toFixed(1)}%`
+                )}
+              </NumericCell>
               <TableCell width={TABLE_CELL_WIDTHS[2]}>
                 <StyledSlider
                   intervals={0}
@@ -160,6 +163,6 @@ export const DialTable: FC = () => {
           )
         })
       )}
-    </StyledTable>
+    </Table>
   )
 }

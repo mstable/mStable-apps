@@ -10,19 +10,6 @@ import { useEpochData } from './EpochContext'
 const [useHoveredDialId, HoveredDialIdProvider] = createStateContext<number | undefined>(undefined)
 const [useSelectedDialId, SelectedDialIdProvider] = createStateContext<number | undefined>(undefined)
 
-const useSelectedDial = (): ActiveDial | undefined => {
-  const [emissionsData] = useEmissionsData()
-  const [epochData] = useEpochData()
-  const [selectedDialId] = useSelectedDialId()
-
-  return epochData && emissionsData && typeof selectedDialId == 'number'
-    ? {
-        dial: emissionsData.dials[selectedDialId],
-        dialVotes: epochData.dialVotes[selectedDialId],
-      }
-    : undefined
-}
-
 const useHoveredDial = (): ActiveDial | undefined => {
   const [emissionsData] = useEmissionsData()
   const [epochData] = useEpochData()
@@ -65,13 +52,4 @@ const ViewOptionsContext: FC = ({ children }) => (
   </SystemViewProvider>
 )
 
-export {
-  ViewOptionsContext,
-  useSystemView,
-  useShowVotesTable,
-  useActiveDial,
-  useHoveredDialId,
-  useSelectedDialId,
-  useHoveredDial,
-  useSelectedDial,
-}
+export { ViewOptionsContext, useSystemView, useShowVotesTable, useActiveDial, useHoveredDialId, useSelectedDialId, useHoveredDial }

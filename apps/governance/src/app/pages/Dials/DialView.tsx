@@ -74,12 +74,6 @@ const Container = styled.div`
     h3 {
       font-weight: 500;
     }
-
-    span {
-      ${({ theme }) => theme.mixins.numeric};
-      color: ${({ theme }) => theme.color.body};
-      font-weight: 300;
-    }
   }
 
   @media (min-width: ${ViewportWidth.s}) {

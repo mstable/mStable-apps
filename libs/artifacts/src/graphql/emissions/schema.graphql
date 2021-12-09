@@ -552,15 +552,10 @@ type Preference {
   voter: Voter!
   dial: Dial!
   """
-  Voter's votes cast at the time of voting; useful for determining historical voting power
-  
-  """
-  votesCast: BigInt!
-  """
   % weight applied to this dial, where 200 = 100% and 1 = 0.5%
   
   """
-  weight: Int!
+  weight: BigInt!
 }
 
 input Preference_filter {
@@ -600,29 +595,20 @@ input Preference_filter {
   dial_not_starts_with: String
   dial_ends_with: String
   dial_not_ends_with: String
-  votesCast: BigInt
-  votesCast_not: BigInt
-  votesCast_gt: BigInt
-  votesCast_lt: BigInt
-  votesCast_gte: BigInt
-  votesCast_lte: BigInt
-  votesCast_in: [BigInt!]
-  votesCast_not_in: [BigInt!]
-  weight: Int
-  weight_not: Int
-  weight_gt: Int
-  weight_lt: Int
-  weight_gte: Int
-  weight_lte: Int
-  weight_in: [Int!]
-  weight_not_in: [Int!]
+  weight: BigInt
+  weight_not: BigInt
+  weight_gt: BigInt
+  weight_lt: BigInt
+  weight_gte: BigInt
+  weight_lte: BigInt
+  weight_in: [BigInt!]
+  weight_not_in: [BigInt!]
 }
 
 enum Preference_orderBy {
   id
   voter
   dial
-  votesCast
   weight
 }
 
@@ -1297,7 +1283,7 @@ type Voter {
   Last time balance was looked up across all staking contracts
   
   """
-  lastSourcePoke: Int!
+  lastSourcePoke: BigInt!
   """
   The last Epoch the Voter set Preferences for
   
@@ -1347,14 +1333,14 @@ input Voter_filter {
   votesCast_lte: BigInt
   votesCast_in: [BigInt!]
   votesCast_not_in: [BigInt!]
-  lastSourcePoke: Int
-  lastSourcePoke_not: Int
-  lastSourcePoke_gt: Int
-  lastSourcePoke_lt: Int
-  lastSourcePoke_gte: Int
-  lastSourcePoke_lte: Int
-  lastSourcePoke_in: [Int!]
-  lastSourcePoke_not_in: [Int!]
+  lastSourcePoke: BigInt
+  lastSourcePoke_not: BigInt
+  lastSourcePoke_gt: BigInt
+  lastSourcePoke_lt: BigInt
+  lastSourcePoke_gte: BigInt
+  lastSourcePoke_lte: BigInt
+  lastSourcePoke_in: [BigInt!]
+  lastSourcePoke_not_in: [BigInt!]
   lastEpoch: String
   lastEpoch_not: String
   lastEpoch_gt: String
