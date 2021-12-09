@@ -51,7 +51,7 @@ export const DialSidebar: FC = () => {
   const user = emissionsData?.user
   return (
     <Sidebar>
-      <BalanceWidget title="Voting Power" token="vMTA" balance={user?.votePower?.simple} />
+      <BalanceWidget title="Voting Power" token="vMTA" balance={user?.votePower?.simple ?? 0} />
       {user?.isDelegatee && <DialDelegatee address={user.address} />}
       <InfoBox>
         <ButtonExternal
