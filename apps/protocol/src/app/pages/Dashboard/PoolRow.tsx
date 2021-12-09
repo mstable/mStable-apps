@@ -25,7 +25,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...re
   return (
     <DashTableRow {...rest}>
       <DashNameTableCell>
-        <TokenPair symbols={[feederPool.masset.token.symbol, feederPool.fasset.token.symbol]} isLarge={false} reverseBkg />
+        <TokenPair symbols={[feederPool.masset.token.symbol, feederPool.fasset.token.symbol]} isLarge={false} />
         {deposited > 0 ? <Link to={`/${mAssetName}/pools/${feederPool.address}`}>{feederPool.title}</Link> : feederPool.title}
       </DashNameTableCell>
       <DashTableCell>
