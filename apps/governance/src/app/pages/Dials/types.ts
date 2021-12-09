@@ -4,6 +4,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 export interface DialMetadata {
   title: string
   network: Networks
+  color: string
   description?: string
   link?: string
   linkTitle?: string
