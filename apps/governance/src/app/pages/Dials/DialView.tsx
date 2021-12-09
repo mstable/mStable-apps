@@ -36,9 +36,11 @@ const DialButtons: FC = () => {
   const [, dispatchUserDialPreferences] = useUserDialPreferences()
   const [emissionsData] = useEmissionsData()
   const isDelegating = emissionsData?.user?.isDelegatee
+  const [epochWeekNumber = emissionsData?.lastEpochWeekNumber] = useEpochWeekNumber()
+  const isPreviousEpoch = epochWeekNumber !== emissionsData?.lastEpochWeekNumber
   return (
     <Buttons>
-      {!isSystemView && !isDelegating && (
+      {!isSystemView && !isDelegating && !isPreviousEpoch && (
         <StyledButton
           scale={0.875}
           highlighted={isSystemView}
@@ -50,7 +52,7 @@ const DialButtons: FC = () => {
         </StyledButton>
       )}
       <StyledButton scale={0.875} highlighted={isSystemView} onClick={toggleSystemView}>
-        {isSystemView ? (isDelegating ? 'Delegatee weights' : 'Vote on weights') : 'Back'}
+        {isSystemView ? (isDelegating ? 'Delegatee weight' : isPreviousEpoch ? 'View user weight' : 'Vote on weight') : 'Back'}
       </StyledButton>
     </Buttons>
   )
