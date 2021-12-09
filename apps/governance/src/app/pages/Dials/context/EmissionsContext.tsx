@@ -49,7 +49,7 @@ const EmissionsDataUpdater: FC = () => {
         const votes = parseInt(controller.lastEpoch.dialVotes.find(dialVote => dialVote.dial.id === dial.id)?.votes ?? '0') / 1e18
         const balance = parseInt(dial.balance) / 1e18
 
-        return [dialId, { dialId, votes, recipient, balance, metadata: DIALS_METADATA[dialId] }]
+        return [dialId, { dialId, votes, recipient, cap: dial.cap, balance, metadata: DIALS_METADATA[dialId] }]
       }),
     )
 
@@ -80,9 +80,9 @@ const EmissionsDataUpdater: FC = () => {
       user = {
         address: voter.address,
         isDelegatee: voter.address !== account,
-        lastSourcePoke: voter.lastSourcePoke,
+        lastSourcePoke: parseInt(voter.lastSourcePoke),
         votePower: accountQuery.data?.account?.totalVotesAllBD,
-        dialPreferences: Object.fromEntries(voter.preferences.map(({ dial: { dialId }, weight }) => [dialId, weight / 2])),
+        dialPreferences: Object.fromEntries(voter.preferences.map(({ dial: { dialId }, weight }) => [dialId, parseInt(weight ?? '0') / 2])),
       }
     } else if (delegatee) {
       // If the delegatee hasn't voted yet, there won't be a voter, but we can still show a user

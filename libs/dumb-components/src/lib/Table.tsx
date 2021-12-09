@@ -26,9 +26,6 @@ const Cell = styled.td<{ width?: number }>`
   h3 {
     margin-bottom: 0.25rem;
   }
-  span {
-    color: ${({ theme }) => theme.color.bodyAccent};
-  }
 `
 
 const HeaderCell = styled.th<{ width?: number; align?: 'left' | 'right' | 'center' }>`
@@ -129,6 +126,7 @@ const Container = styled.table<{ minWidth?: number }>`
   overflow-y: hidden;
   overflow-x: auto;
   padding: 0;
+  user-select: none;
 
   > * {
     min-width: ${({ minWidth }) => minWidth && `${minWidth}rem`};

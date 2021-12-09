@@ -16,6 +16,7 @@ export interface Dial {
   balance: number
   votes: number
   recipient: string
+  cap?: number
 }
 
 export interface EpochDialVotes {

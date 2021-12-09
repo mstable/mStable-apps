@@ -543,10 +543,8 @@ export type Preference = {
   id: Scalars['ID'];
   voter: Voter;
   dial: Dial;
-  /** Voter's votes cast at the time of voting; useful for determining historical voting power */
-  votesCast: Scalars['BigInt'];
   /** % weight applied to this dial, where 200 = 100% and 1 = 0.5% */
-  weight: Scalars['Int'];
+  weight: Scalars['BigInt'];
 };
 
 export type Preference_Filter = {
@@ -586,29 +584,20 @@ export type Preference_Filter = {
   dial_not_starts_with?: Maybe<Scalars['String']>;
   dial_ends_with?: Maybe<Scalars['String']>;
   dial_not_ends_with?: Maybe<Scalars['String']>;
-  votesCast?: Maybe<Scalars['BigInt']>;
-  votesCast_not?: Maybe<Scalars['BigInt']>;
-  votesCast_gt?: Maybe<Scalars['BigInt']>;
-  votesCast_lt?: Maybe<Scalars['BigInt']>;
-  votesCast_gte?: Maybe<Scalars['BigInt']>;
-  votesCast_lte?: Maybe<Scalars['BigInt']>;
-  votesCast_in?: Maybe<Array<Scalars['BigInt']>>;
-  votesCast_not_in?: Maybe<Array<Scalars['BigInt']>>;
-  weight?: Maybe<Scalars['Int']>;
-  weight_not?: Maybe<Scalars['Int']>;
-  weight_gt?: Maybe<Scalars['Int']>;
-  weight_lt?: Maybe<Scalars['Int']>;
-  weight_gte?: Maybe<Scalars['Int']>;
-  weight_lte?: Maybe<Scalars['Int']>;
-  weight_in?: Maybe<Array<Scalars['Int']>>;
-  weight_not_in?: Maybe<Array<Scalars['Int']>>;
+  weight?: Maybe<Scalars['BigInt']>;
+  weight_not?: Maybe<Scalars['BigInt']>;
+  weight_gt?: Maybe<Scalars['BigInt']>;
+  weight_lt?: Maybe<Scalars['BigInt']>;
+  weight_gte?: Maybe<Scalars['BigInt']>;
+  weight_lte?: Maybe<Scalars['BigInt']>;
+  weight_in?: Maybe<Array<Scalars['BigInt']>>;
+  weight_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum Preference_OrderBy {
   Id = 'id',
   Voter = 'voter',
   Dial = 'dial',
-  VotesCast = 'votesCast',
   Weight = 'weight'
 }
 
@@ -1276,7 +1265,7 @@ export type Voter = {
   /** Latest tally of votes cast by this voter */
   votesCast: Scalars['BigInt'];
   /** Last time balance was looked up across all staking contracts */
-  lastSourcePoke: Scalars['Int'];
+  lastSourcePoke: Scalars['BigInt'];
   /** The last Epoch the Voter set Preferences for */
   lastEpoch?: Maybe<Epoch>;
   /** Preferences set by this Voter */
@@ -1329,14 +1318,14 @@ export type Voter_Filter = {
   votesCast_lte?: Maybe<Scalars['BigInt']>;
   votesCast_in?: Maybe<Array<Scalars['BigInt']>>;
   votesCast_not_in?: Maybe<Array<Scalars['BigInt']>>;
-  lastSourcePoke?: Maybe<Scalars['Int']>;
-  lastSourcePoke_not?: Maybe<Scalars['Int']>;
-  lastSourcePoke_gt?: Maybe<Scalars['Int']>;
-  lastSourcePoke_lt?: Maybe<Scalars['Int']>;
-  lastSourcePoke_gte?: Maybe<Scalars['Int']>;
-  lastSourcePoke_lte?: Maybe<Scalars['Int']>;
-  lastSourcePoke_in?: Maybe<Array<Scalars['Int']>>;
-  lastSourcePoke_not_in?: Maybe<Array<Scalars['Int']>>;
+  lastSourcePoke?: Maybe<Scalars['BigInt']>;
+  lastSourcePoke_not?: Maybe<Scalars['BigInt']>;
+  lastSourcePoke_gt?: Maybe<Scalars['BigInt']>;
+  lastSourcePoke_lt?: Maybe<Scalars['BigInt']>;
+  lastSourcePoke_gte?: Maybe<Scalars['BigInt']>;
+  lastSourcePoke_lte?: Maybe<Scalars['BigInt']>;
+  lastSourcePoke_in?: Maybe<Array<Scalars['BigInt']>>;
+  lastSourcePoke_not_in?: Maybe<Array<Scalars['BigInt']>>;
   lastEpoch?: Maybe<Scalars['String']>;
   lastEpoch_not?: Maybe<Scalars['String']>;
   lastEpoch_gt?: Maybe<Scalars['String']>;
@@ -1392,7 +1381,7 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type DialPreferencesFragment = { id: string, weight: number, voter: { id: string, address: string, votesCast: string } };
+export type DialPreferencesFragment = { id: string, weight: string, voter: { id: string, address: string, votesCast: string } };
 
 export type EmissionsQueryVariables = Exact<{
   account: Scalars['Bytes'];
@@ -1400,9 +1389,9 @@ export type EmissionsQueryVariables = Exact<{
 }>;
 
 
-export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string }>, lastEpoch: { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: number, votesCast: string, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: number, dial: { id: string, dialId: number } }> }> }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string, cap: number }>, lastEpoch: { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number, cap: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: string, votesCast: string, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: string, dial: { id: string, dialId: number } }> }> }> };
 
-export type EpochAllFragment = { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string, votesCast: string } }> } }> };
+export type EpochAllFragment = { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> };
 
 export type SelectedEpochQueryVariables = Exact<{
   weekNumber: Scalars['Int'];
@@ -1412,7 +1401,7 @@ export type SelectedEpochQueryVariables = Exact<{
 }>;
 
 
-export type SelectedEpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string, votesCast: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, preferences: Array<{ id: string, weight: number, voter: { id: string, address: string, votesCast: string } }> } }> }> };
+export type SelectedEpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }> };
 
 export const DialPreferencesFragmentDoc = gql`
     fragment DialPreferences on Preference {
@@ -1437,6 +1426,7 @@ export const EpochAllFragmentDoc = gql`
     dial {
       id
       dialId
+      cap
       preferences(first: 64, skip: $skip, orderBy: weight, orderDirection: desc) {
         ...DialPreferences
       }
@@ -1454,6 +1444,7 @@ export const EmissionsDocument = gql`
       dialId
       recipient
       balance
+      cap
     }
     lastEpoch {
       id
@@ -1464,6 +1455,7 @@ export const EmissionsDocument = gql`
         dial {
           id
           dialId
+          cap
         }
         votes
       }

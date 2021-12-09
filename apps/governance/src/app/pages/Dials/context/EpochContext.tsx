@@ -83,7 +83,7 @@ const EpochUpdater: FC = () => {
             voteShare: parseFloat(((votes / totalVotes) * 100).toFixed(2)),
             preferences: Object.fromEntries(
               preferences.map(preference => {
-                const weight = (preference.weight ?? 0) / 2
+                const weight = parseInt(preference.weight ?? '0') / 2
                 const votesCast = parseInt(preference.voter.votesCast) / 1e18
                 return [preference.voter.address, { weight, votesCast }]
               }),
