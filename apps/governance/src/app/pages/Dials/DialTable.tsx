@@ -108,7 +108,7 @@ export const DialTable: FC = () => {
   const [epochData] = useEpochData()
   const [isSystemView] = useSystemView()
   const [, setSelectedDialId] = useSelectedDialId()
-  const [epochWeekNumber] = useEpochWeekNumber()
+  const [epochWeekNumber = emissionsData?.lastEpochWeekNumber] = useEpochWeekNumber()
 
   const [userDialPreferences, dispatchUserDialPreferences] = useUserDialPreferences()
   const scaledUserDialPreferences = useScaleUserDialPreferences(userDialPreferences)
