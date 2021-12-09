@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useRef } from 'react'
 import { useCountUp, CountUpProps } from 'react-countup'
 import styled from 'styled-components'
-import { useFirstMountState } from 'react-use'
 
 import { useToggleDarkTheme, Color } from '@apps/theme'
 
@@ -9,6 +8,7 @@ interface Props extends CountUpProps {
   container?: FC
   highlight?: boolean
   highlightColor?: Color
+  spaced?: boolean
 }
 
 const DEFAULT_DECIMALS = 2
@@ -21,6 +21,14 @@ const StyledSpan = styled.span<Pick<Props, 'highlight' | 'highlightColor'>>`
 
 const PrefixOrSuffix = styled.span`
   font-family: 'Poppins', sans-serif;
+`
+
+const Prefix = styled(PrefixOrSuffix)<{ spaced: boolean }>`
+  margin-right: ${({ spaced }) => (spaced ? '0.5rem' : 0)};
+`
+
+const Suffix = styled(PrefixOrSuffix)<{ spaced: boolean }>`
+  margin-left: ${({ spaced }) => (spaced ? '0.5rem' : 0)};
 `
 
 const Number = styled.span`
@@ -39,11 +47,11 @@ export const CountUp: FC<Props> = ({
   separator = ',',
   duration = DEFAULT_DURATION,
   formattingFn,
+  spaced = false,
 }) => {
   // eslint-disable-next-line no-restricted-globals
   const isValid = typeof end === 'number' && !isNaN(end)
   const prevEnd = useRef(isValid ? end : 0)
-  const firstMount = useFirstMountState()
 
   const { countUp, update, pauseResume, start } = useCountUp({
     decimals,
@@ -66,9 +74,9 @@ export const CountUp: FC<Props> = ({
 
   return (
     <Container className={className} highlight={highlight} highlightColor={highlightColor}>
-      {prefix ? <PrefixOrSuffix>{prefix}</PrefixOrSuffix> : null}
+      {prefix ? <Prefix spaced={spaced}>{prefix}</Prefix> : null}
       <Number>{isValid && countUp !== 'NaN' ? (typeof countUp === 'number' ? countUp.toFixed(decimals) : countUp) : '–'}</Number>
-      {suffix ? <PrefixOrSuffix>{suffix}</PrefixOrSuffix> : null}
+      {suffix ? <Suffix spaced={spaced}>{suffix}</Suffix> : null}
     </Container>
   )
 }
