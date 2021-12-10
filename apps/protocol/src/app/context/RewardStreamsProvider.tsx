@@ -1,8 +1,10 @@
-import React, { createContext, FC, useContext, useMemo, useState } from 'react'
+import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useInterval } from 'react-use'
 import { getUnixTime } from 'date-fns'
 import { BigNumber } from 'ethers'
 
+import { BoostedSavingsVault, BoostedSavingsVault__factory } from '@apps/artifacts/typechain'
+import { useAccount, useSigner } from '@apps/base/context/account'
 import { BoostedSavingsVaultAccountState, BoostedSavingsVaultState } from '@apps/data-provider'
 import { SCALE } from '@apps/types'
 
@@ -121,6 +123,34 @@ export const RewardStreamsProvider: FC<{
   vault?: BoostedSavingsVaultState
 }> = ({ children, refreshInterval = 15e3, vault }) => {
   const [currentTime, setCurrentTime] = useState<number>(nowUnix)
+  const account = useAccount()
+  const signer = useSigner()
+  const claimRange = useRef<[number, number] | undefined>(undefined)
+  const vaultContract = useRef<BoostedSavingsVault>()
+
+  useEffect(() => {
+    if (claimRange.current || !signer || !account || !vault) {
+      return
+    }
+
+    if (!vaultContract.current) {
+      vaultContract.current = BoostedSavingsVault__factory.connect(vault.address, signer)
+    }
+
+    vaultContract.current
+      .unclaimedRewards(account)
+      .catch(error => {
+        console.error(error)
+      })
+      .then(result => {
+        if (result) {
+          const { first, last } = result
+          claimRange.current = [first.toNumber(), last.toNumber()]
+        } else {
+          claimRange.current = [0, 0]
+        }
+      })
+  }, [signer, vault, account])
 
   useInterval(() => {
     setCurrentTime(getUnixTime(Date.now()))
@@ -225,9 +255,6 @@ export const RewardStreamsProvider: FC<{
       //     : earnedStream.start,
       //   finish: currentTime,
 
-      const idxs = unlockedStreams.length ? unlockedStreams.map(stream => stream.index as number).sort() : [0, 0] // Initialisation case
-      const claimRange = [idxs[0], idxs[idxs.length - 1]] as [number, number]
-
       const chartData: ChartData = [earnedStream, ...unlockedStreams, ...lockedStreams, previewStream]
         .filter(stream => stream.start > 0)
         .flatMap(({ start, finish, amount }) => [
@@ -246,16 +273,22 @@ export const RewardStreamsProvider: FC<{
           },
         ])
 
+      if (!claimRange.current) {
+        return
+      }
+
+      const amounts = {
+        earned,
+        locked,
+        previewLocked,
+        unlocked,
+        total,
+      }
+
       return {
-        amounts: {
-          earned,
-          locked,
-          previewLocked,
-          unlocked,
-          total,
-        },
+        amounts,
         chartData,
-        claimRange,
+        claimRange: claimRange.current,
         currentTime,
         nextUnlock: lockedStreams[0]?.start,
         previewStream,
