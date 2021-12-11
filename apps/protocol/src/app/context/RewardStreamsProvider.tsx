@@ -125,12 +125,12 @@ export const RewardStreamsProvider: FC<{
   const [currentTime, setCurrentTime] = useState<number>(nowUnix)
   const account = useAccount()
   const signer = useSigner()
-  const claimRange = useRef<[number, number] | undefined>(undefined)
+  const [claimRange, setClaimRange] = useState<[number, number] | undefined>(undefined)
   const vaultContract = useRef<BoostedSavingsVault>()
 
   useEffect(() => {
-    if (claimRange.current || !signer || !account || !vault) {
-      return
+    if (!signer || !account || !vault) {
+        return
     }
 
     if (!vaultContract.current) {
@@ -145,12 +145,12 @@ export const RewardStreamsProvider: FC<{
       .then(result => {
         if (result) {
           const { first, last } = result
-          claimRange.current = [first.toNumber(), last.toNumber()]
+          setClaimRange([first.toNumber(), last.toNumber()])
         } else {
-          claimRange.current = [0, 0]
+          setClaimRange([0, 0])
         }
       })
-  }, [signer, vault, account])
+  }, [signer, vault, account, setClaimRange])
 
   useInterval(() => {
     setCurrentTime(getUnixTime(Date.now()))
@@ -273,7 +273,7 @@ export const RewardStreamsProvider: FC<{
           },
         ])
 
-      if (!claimRange.current) {
+      if (!claimRange) {
         return
       }
 
@@ -288,14 +288,14 @@ export const RewardStreamsProvider: FC<{
       return {
         amounts,
         chartData,
-        claimRange: claimRange.current,
+        claimRange: claimRange,
         currentTime,
         nextUnlock: lockedStreams[0]?.start,
         previewStream,
         lockedStreams: [...lockedStreams, previewStream],
       } as RewardStreams
     }
-  }, [currentTime, vault])
+  }, [currentTime, vault, claimRange])
 
   return <ctx.Provider value={rewardStreams}>{children}</ctx.Provider>
 }
