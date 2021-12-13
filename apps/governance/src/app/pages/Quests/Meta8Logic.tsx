@@ -13,6 +13,7 @@ import { useQuestsQuery as useQuestbookQuestsQuery, useUpdateQuestsMutation } fr
 import bleep26 from '../../../assets/bleeps_26.mp3'
 // @ts-ignore
 import bleep27 from '../../../assets/bleeps_27.mp3'
+import { StakedTokenSwitcher } from '../../components/StakedTokenSwitcher'
 import { useStakedToken } from '../../context/StakedTokenProvider'
 
 import { Typist } from './Typist'
@@ -95,8 +96,25 @@ const Container = styled.div`
   }
 `
 
+const StyledStakedTokenSwitcher = styled(StakedTokenSwitcher)`
+  > :first-child,
+  > :last-child {
+    border-color: rgb(201, 252, 213);
+    background: rgb(62, 78, 66);
+  }
+
+  > :first-child:hover,
+  > :last-child button:hover {
+    background: rgb(122, 170, 134);
+  }
+`
+
+const Meta8AccountContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+`
+
 const Meta8Account: FC = () => {
-  // TODO make sure we have the staked token switcher on Quests
   const stakedToken = useStakedToken()
 
   const account = useAccount()
@@ -111,16 +129,19 @@ const Meta8Account: FC = () => {
 
   const accountData = accountQuery.data?.account
 
-  return accountData ? (
-    <>
-      <div>Permanent: {(1 + accountData.permMultiplierSimple * 0.1).toFixed(2)}x</div>
-      <div>Season 0: {(1 + accountData.seasonMultiplierSimple * 0.1).toFixed(2)}x</div>
+  return (
+    <Meta8AccountContainer>
+      <StyledStakedTokenSwitcher />
       <div>
-        Hodl time:{' '}
-        {(accountData.stakedTokenAccounts.find(st => st.id === stakedToken.selected)?.balance?.timeMultiplierSimple ?? 1).toFixed(2)}x
+        <div>Permanent: {(1 + (accountData?.permMultiplierSimple ?? 0) * 0.1).toFixed(2)}x</div>
+        <div>Season 0: {(1 + (accountData?.seasonMultiplierSimple ?? 0) * 0.1).toFixed(2)}x</div>
+        <div>
+          Hodl time:{' '}
+          {(accountData?.stakedTokenAccounts.find(st => st.id === stakedToken.selected)?.balance?.timeMultiplierSimple ?? 1).toFixed(2)}x
+        </div>
       </div>
-    </>
-  ) : null
+    </Meta8AccountContainer>
+  )
 }
 
 export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
