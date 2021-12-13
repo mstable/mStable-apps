@@ -24,6 +24,7 @@ const userDialPreferencesReducer: Reducer<
       return { ...state, changes: state.current, touched: false }
     case 'SET_DIAL': {
       const changes = { ...state.changes, [action.payload.dialId]: action.payload.value }
+      if (Object.keys(changes).length > 16) return { ...state }
       const touched = JSON.stringify(changes) !== JSON.stringify(state.changes)
       return { ...state, changes, touched }
     }
