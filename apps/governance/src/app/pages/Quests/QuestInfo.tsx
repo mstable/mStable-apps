@@ -345,7 +345,7 @@ export const TimeMultiplierQuestInfo: FC<Props> = ({ questId }) => {
 
     const balance = stakedTokenQuery.data?.stakedToken?.accounts?.[0]?.balance
 
-    if (!balance) {
+    if (!balance || balance.weightedTimestamp === 0) {
       return { objectives, progress: 0, currentProgress: 0, currentTitle: objectives[0].objective.title, complete: false }
     }
 
