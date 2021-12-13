@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { TokenIcon } from '@apps/base/components/core'
-import { CountUp, ToggleInput } from '@apps/dumb-components'
+import { CountUp } from '@apps/dumb-components'
 
 import { useEpochData } from './context/EpochContext'
 import { useActiveDial, useShowVotesTable } from './context/ViewOptionsContext'

@@ -95,13 +95,6 @@ const roundUserWeight = (weight: number): number => {
   return parseFloat(`${whole}.${parseInt(decimal) >= 5 ? '5' : '0'}`)
 }
 
-const StyledDialTitle = styled(DialTitle)`
-  flex-direction: column;
-  justify-content: center;
-  gap: 0;
-  align-items: flex-start;
-`
-
 const NumericCell = styled(TableCell)`
   font-family: 'DM Mono', monospace !important;
   text-align: right;
@@ -134,7 +127,7 @@ export const DialTable: FC = () => {
             <TableRow key={dialId}>
               <TableCell width={TABLE_CELL_WIDTHS[0]}>
                 <Tooltip tip={dial.metadata.description} hideIcon>
-                  <StyledDialTitle dialMetadata={dial.metadata} />
+                  <DialTitle isRow={false} dialMetadata={dial.metadata} />
                 </Tooltip>
               </TableCell>
               <NumericCell width={TABLE_CELL_WIDTHS[1]}>

@@ -5,40 +5,53 @@ import { DialMetadata } from './types'
 
 const NetworkLabel = styled.div`
   color: ${({ theme }) => theme.color.bodyAccent};
-  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-  background: ${({ theme }) => theme.color.background[0]};
-  border-radius: 0.5rem;
-  padding: 0 0.5rem;
   font-size: 0.875rem;
 `
 
-const Title = styled.h3<{ fill?: string }>`
+const Title = styled.h3`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
+`
 
-  &:before {
-    content: '';
-    display: block;
-    width: 1rem;
-    height: 1rem;
-    margin-top: -2px;
-    border-radius: 100%;
-    background-color: ${({ fill }) => fill ?? '#ccc'};
+const Circle = styled.div<{ fill?: string }>`
+  content: '';
+  display: block;
+  min-width: 1rem;
+  height: 1rem;
+  margin-top: -2px;
+  border-radius: 100%;
+  background-color: ${({ fill }) => fill ?? '#ccc'};
+`
+
+const Container = styled.div<{ isRow: boolean }>`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.5rem;
+  min-height: 1.5rem;
+
+  > div:last-child {
+    display: flex;
+    gap: ${({ isRow }) => (isRow ? '0.5rem' : '0')};
+    flex-direction: ${({ isRow }) => (isRow ? 'row' : 'column')};
+    margin-left: 0.5rem;
+
+    h3 {
+      margin-bottom: 0;
+    }
   }
 `
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 1.5rem;
-`
-
-export const DialTitle: FC<{ dialMetadata?: DialMetadata; className?: string }> = ({ dialMetadata, className }) => (
-  <Container className={className}>
-    <Title fill={dialMetadata?.color}>{dialMetadata?.title}</Title>
-    <NetworkLabel>{dialMetadata?.network}</NetworkLabel>
+export const DialTitle: FC<{ dialMetadata?: DialMetadata; isRow?: boolean; className?: string }> = ({
+  dialMetadata,
+  className,
+  isRow = true,
+}) => (
+  <Container isRow={isRow} className={className}>
+    <Circle fill={dialMetadata?.color} />
+    <div>
+      <Title>{dialMetadata?.title}</Title>
+      {dialMetadata?.network === 'Polygon' && <NetworkLabel>{dialMetadata?.network}</NetworkLabel>}
+    </div>
   </Container>
 )
