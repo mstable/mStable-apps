@@ -76,7 +76,7 @@ const Container = styled.div<{
   }
 
   @media (min-width: ${ViewportWidth.s}) {
-    padding: 3rem 0;
+    padding: 2rem 0;
   }
 `
 

@@ -86,7 +86,7 @@ const Masquerade: FC<{}> = () => {
 }
 
 const Inner = styled.div`
-  padding: 2rem 1rem;
+  padding: 1rem;
 
   > div {
     width: 100%;
