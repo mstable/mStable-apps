@@ -45,9 +45,9 @@ const StyledDropdown = styled(Dropdown)`
   }
 `
 
-export const StakedTokenSwitcher: FC = () => {
+export const StakedTokenSwitcher: FC<{ className?: string }> = ({ className }) => {
   const { selected, options } = useStakedToken()
   const setStakedToken = useSetStakedToken()
 
-  return <StyledDropdown onChange={setStakedToken} options={options} defaultOption={selected} />
+  return <StyledDropdown className={className} onChange={setStakedToken} options={options} defaultOption={selected} />
 }
