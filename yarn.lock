@@ -4018,6 +4018,11 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.3.tgz#e45e384e4b8ec16bce2fd903af78450f6bf7ec98"
   integrity sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==
 
+"@jameslefrere/react-apollo-network-status@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@jameslefrere/react-apollo-network-status/-/react-apollo-network-status-5.1.0.tgz#ad5467888634171a5705444c00757acc210b79a9"
+  integrity sha512-Y1tMxPWuXUhimPSL/LJNSqcAc6nM5E1wWuA7a3Ud9htilPTKGz/U7CHohZVTeSAPJqXxaW4Vmm9/ycnSTk8Gsw==
+
 "@jest/console@^26.6.2":
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-26.6.2.tgz#4e04bc464014358b03ab4937805ee36a0aeb98f2"
@@ -21396,6 +21401,11 @@ rc@^1.2.8:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-apollo-network-status@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-apollo-network-status/-/react-apollo-network-status-5.1.0.tgz#c74159e55f6b3e4ce7e06d727cdf3075e31a74f8"
+  integrity sha512-/YL9BqWdhDZxndD9lrRMA/ywLn5UdgAUrZcXx38Ff4sh9rmVBmJyOLA4Aq0PJJDBRLAr3IQ/ufoIeVgqSwgM/g==
 
 react-app-polyfill@^2.0.0:
   version "2.0.0"
