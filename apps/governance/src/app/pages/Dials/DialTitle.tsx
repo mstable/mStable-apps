@@ -18,7 +18,6 @@ const Circle = styled.div<{ fill?: string }>`
   display: block;
   min-width: 1rem;
   height: 1rem;
-  margin-top: -2px;
   border-radius: 100%;
   background-color: ${({ fill }) => fill ?? '#ccc'};
 `

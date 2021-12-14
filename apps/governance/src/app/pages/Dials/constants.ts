@@ -7,7 +7,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
     title: 'Staking MTA',
     color: '#087E8B',
     description:
-      'Voting for this dial will direct MTA emissions to staking rewards for MTA governors who staked MTA tokens. Please note the amount of rewards that can go to stakers has a hard cap on it to ensure governors incentivise other parts of the mStable ecosystem.',
+      'Voting for this dial will direct MTA emissions to staking rewards for MTA governors who staked MTA tokens. Please note the amount of rewards that can go to stakers has a hard cap on it to ensure governors incentivise other parts of the mStable ecosystem. 10% of all system revenue will be directed toward stakers.',
     link: 'https://staking.mstable.org/#/stake',
     linkTitle: 'Stake MTA',
   },
@@ -16,7 +16,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
     title: 'Staking mBPT',
     color: '#48284A',
     description:
-      'Voting for this dial will direct MTA emissions to staking rewards for MTA governors who staked 80/20 MTA/WETH Balancer Pool Tokens. Please note the amount of rewards that can go to stakers has a hard cap on it to ensure governors incentivise other parts of the mStable ecosystem.',
+      'Voting for this dial will direct MTA emissions to staking rewards for MTA governors who staked 80/20 MTA/WETH Balancer Pool Tokens. Please note the amount of rewards that can go to stakers has a hard cap on it to ensure governors incentivise other parts of the mStable ecosystem. 10% of all system revenue will be directed toward stakers.',
     link: 'https://staking.mstable.org/#/stake',
     linkTitle: 'Stake mBPT',
   },
