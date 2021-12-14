@@ -6,6 +6,13 @@ import { RetryLink } from '@apollo/client/link/retry'
 import { onError } from '@apollo/client/link/error'
 import { persistCache } from 'apollo-cache-persist'
 import ApolloLinkTimeout from 'apollo-link-timeout'
+import {
+  createNetworkStatusNotifier,
+  NetworkStatus,
+  NetworkStatusAction,
+  reducer,
+  initialState,
+} from '@jameslefrere/react-apollo-network-status'
 
 import { caches } from './apolloCaches'
 import { useAddErrorNotification } from './NotificationsProvider'
@@ -17,6 +24,8 @@ const apolloClientsCtx = createContext<ApolloClients>(null as never)
 
 // For networks without a given endpoint, use a dummy client; no data will be found
 const dummyClient = new ApolloClient<NormalizedCacheObject>({ cache: new InMemoryCache() })
+
+const { link: networkStatusLink, useApolloNetworkStatusReducer } = createNetworkStatusNotifier()
 
 export const useApolloClients = () => useContext(apolloClientsCtx)
 
@@ -113,9 +122,13 @@ export const ApolloProvider: FC = ({ children }) => {
         const endpoint = preferred ?? fallback
         const timeoutLink = new ApolloLinkTimeout(30000)
 
+        const endpointNameLink = new ApolloLink((operation, forward) => {
+          operation.extensions.endpointName = name
+          return forward(operation)
+        })
         const httpLink = new HttpLink({ uri: endpoint })
         const retryLink = new RetryLink({ delay: { initial: 1e3, max: 5e3, jitter: true }, attempts: { max: 1, retryIf } })
-        const link = ApolloLink.from([retryLink, timeoutLink, errorLink, httpLink])
+        const link = ApolloLink.from([endpointNameLink, networkStatusLink, retryLink, timeoutLink, errorLink, httpLink])
         const client = new ApolloClient<NormalizedCacheObject>({
           cache: caches[name],
           link,
@@ -154,3 +167,15 @@ export const ApolloProvider: FC = ({ children }) => {
 
   return apollo.ready ? <apolloClientsCtx.Provider value={apollo.clients}>{children}</apolloClientsCtx.Provider> : <Skeleton />
 }
+
+type NetworkStatusState = Partial<Record<AllGqlEndpoints, NetworkStatus>>
+
+const networkStatusReducer = (state: NetworkStatusState, action: NetworkStatusAction): NetworkStatusState => ({
+  ...state,
+  [action.payload.operation.extensions.endpointName]: reducer(
+    state[action.payload.operation.extensions.endpointName as keyof NetworkStatusState] ?? initialState,
+    action,
+  ),
+})
+
+export const useNetworkStatus = () => useApolloNetworkStatusReducer(networkStatusReducer, {})

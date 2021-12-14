@@ -14,6 +14,7 @@ import { useNetwork } from '../../context/NetworkProvider'
 import { Navigation } from './Navigation'
 import { SettingsButton } from './SettingsButton'
 import { WalletButton } from './WalletButton'
+import { GraphButton } from './GraphButton'
 
 const Logo = styled(LogoSvg)`
   width: 1.75rem;
@@ -143,6 +144,7 @@ export const AppBar: FC = () => {
           <WalletAndSpinner>
             <TransactionsSpinner />
             <WalletButton />
+            <GraphButton />
             <SettingsButton>
               <TokenIcon symbol={protocolName.toUpperCase()} />
             </SettingsButton>
