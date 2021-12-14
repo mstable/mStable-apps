@@ -65,7 +65,7 @@ export const DialPreferencesTable: FC = () => {
             <StyledMiniDelegateeProfile address={voterAddress} />
           </TableCell>
           <TableCell width={TABLE_CELL_WIDTHS[1]}>
-            <span>{weight}%</span>
+            <span>{weight === 100 ? `🦍 ${weight}` : `${weight}`}%</span>
           </TableCell>
         </TableRow>
       ))}
