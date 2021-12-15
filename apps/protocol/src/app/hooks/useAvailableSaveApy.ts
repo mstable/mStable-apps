@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { eachDayOfInterval, endOfDay, subDays } from 'date-fns'
 
 import { useBlockTimesForDates } from '@apps/base/hooks'
+import { MassetName } from '@apps/types'
 
 import { useSelectedSavingsContractState } from '../context/SelectedSaveVersionProvider'
 import { useDailyApysForBlockTimes } from './useDailyApysForBlockTimes'
@@ -14,14 +15,16 @@ const timestampsForMonth = eachDayOfInterval({
   .map(endOfDay)
   .concat(now)
 
-export const useAvailableSaveApy = (): {
+export const useAvailableSaveApy = (
+  mAssetName?: MassetName,
+): {
   value: number
   v1Apy: number
   days?: number
   type: 'live' | 'average' | 'inactive' | 'fetching' | 'bootstrapping'
 } => {
   const v1Apy = 0
-  const savingsContract = useSelectedSavingsContractState()
+  const savingsContract = useSelectedSavingsContractState(mAssetName)
   const liveAPY = savingsContract?.dailyAPY
 
   const blockTimes = useBlockTimesForDates(timestampsForMonth)

@@ -7,7 +7,6 @@ import { ReactComponent as LogoSvg } from '@apps/icons/mstable-small.svg'
 import { UnstyledButton, ActivitySpinner } from '@apps/dumb-components'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { TokenIcon } from '@apps/base/components/core'
-import { ViewportWidth } from '@apps/theme'
 
 import { useTransactionsState } from '../../context/TransactionsProvider'
 import { useNetwork } from '../../context/NetworkProvider'
@@ -128,7 +127,7 @@ export const AppBar: FC = () => {
       <Container>
         <Inner>
           <LogoAndMasset>
-            <Link to="/" title="Home">
+            <Link to="/" title="Dashboard">
               <Logo />
             </Link>
           </LogoAndMasset>

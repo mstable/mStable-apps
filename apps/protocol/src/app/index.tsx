@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useLayoutEffect } from 'react'
+import React, { FC, useEffect, useLayoutEffect } from 'react'
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 
@@ -13,6 +13,7 @@ import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
 
 import { Balances } from './components/Balances'
+import { Dashboard } from './pages/Dashboard'
 import { Save } from './pages/Save'
 import { NotFound } from './pages/NotFound'
 import { Stats } from './pages/Stats'
@@ -45,7 +46,8 @@ const ProtocolRoutes: FC = () => {
       <Route exact path="/:massetName/pools" component={Pools} />
       <Route exact path="/:massetName/swap" component={Exchange} />
       <Route exact path="/:massetName/pools/:poolAddress" component={PoolDetail} />
-      <Redirect exact path="/" to="/musd/save" />
+      <Route exact path="/dashboard" component={Dashboard} />
+      <Redirect exact path="/" to="/dashboard" />
       <Redirect exact path="/analytics" to="/musd/stats" />
       <Redirect exact path="/save" to="/musd/save" />
       <Redirect exact path="/earn" to="/musd/earn" />

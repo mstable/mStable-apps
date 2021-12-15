@@ -164,16 +164,23 @@ const SVG_ICONS: Record<string, SvgComponent> = {
   FEI: FeiSvg as SvgComponent,
 }
 
-const IconContainer = styled.div<{ isLarge: boolean }>`
+const IconContainer = styled.div<{ isLarge: boolean; reverseBkg?: boolean }>`
   display: flex;
 
   img {
     height: ${({ isLarge }) => (isLarge ? `2.5rem` : `2rem`)};
     width: ${({ isLarge }) => (isLarge ? `2.5rem` : `2rem`)};
+    border-radius: 50%;
+    background-color: #fff;
+  }
+
+  > div:first-child {
+    z-index: 1;
   }
 
   > div:last-child {
     margin-left: -0.7rem;
+    z-index: ${({ reverseBkg }) => (reverseBkg ? 0 : 2)};
   }
 `
 
@@ -245,10 +252,11 @@ export const TokenPair: FC<{
   symbols?: string[]
   className?: string
   isLarge?: boolean
-}> = ({ className, symbols, isLarge = false }) => {
+  reverseBkg?: boolean
+}> = ({ className, symbols, isLarge = false, reverseBkg = false }) => {
   if (!symbols || (symbols?.length ?? 0) < 2) return null
   return (
-    <IconContainer isLarge={isLarge} className={className}>
+    <IconContainer isLarge={isLarge} className={className} reverseBkg={reverseBkg}>
       <TokenIcon symbol={symbols[0]} />
       <TokenIcon symbol={symbols[1]} />
     </IconContainer>

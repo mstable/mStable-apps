@@ -13,7 +13,7 @@ import {
   StakingRewardsForStakingTokenQueryVariables,
 } from '@apps/artifacts/graphql/staking-rewards'
 import { BigDecimal } from '@apps/bigdecimal'
-import { Token } from '@apps/types'
+import { MassetName, Token } from '@apps/types'
 import { calculateApy } from '@apps/quick-maths'
 import { createUseContextFn, providerFactory } from '@apps/context-utils'
 import { useApolloClients } from '@apps/base/context/apollo'
@@ -156,15 +156,24 @@ const transform = (
 }
 
 export const createStakingRewardsContext = (): Readonly<
-  [() => StakingRewardsExtended, FC<{ address?: string; stakingTokenAddress?: string }>, Context<StakingRewardsExtended>]
+  [
+    () => StakingRewardsExtended,
+    FC<{ address?: string; stakingTokenAddress?: string; mAssetName?: MassetName }>,
+    Context<StakingRewardsExtended>,
+  ]
 > => {
   const context = createContext<StakingRewardsExtended>({})
 
-  const StakingRewardsProvider: FC<{ address?: string; stakingTokenAddress?: string }> = ({ address, stakingTokenAddress, children }) => {
+  const StakingRewardsProvider: FC<{ address?: string; stakingTokenAddress?: string; mAssetName?: MassetName }> = ({
+    address,
+    stakingTokenAddress,
+    mAssetName,
+    children,
+  }) => {
     const clients = useApolloClients()
     const network = useNetwork()
     const { fetchPrices } = useFetchPriceCtx()
-    const massetState = useSelectedMassetState()
+    const massetState = useSelectedMassetState(mAssetName)
     const account = useAccount()
 
     const options = useMemo(
