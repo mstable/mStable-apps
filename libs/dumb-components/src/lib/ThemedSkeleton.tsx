@@ -2,10 +2,11 @@
 import React, { ComponentProps, FC } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
-import { useToggleDarkTheme, colorTheme } from '@apps/theme'
+import { useIsDarkMode } from '@apps/browser-settings'
+import { colorTheme } from '@apps/theme'
 
 export const ThemedSkeleton: FC<ComponentProps<typeof Skeleton> & { className?: string }> = props => {
-  const [isDarkTheme] = useToggleDarkTheme()
+  const isDarkTheme = useIsDarkMode()
   const theme = colorTheme(isDarkTheme)
   const { className } = props
   return (
