@@ -55,12 +55,14 @@ const StyledNavLink = styled(NavLink)`
 `
 
 export const Navigation: FC = () => {
-  const [{ navItems }] = useBaseCtx()
+  const [{ navItems: _navItems }] = useBaseCtx()
   const [isDarkTheme] = useToggleDarkTheme()
+
+  const navItems = _navItems.filter(({ path }) => path !== '/')
 
   return (
     <Container>
-      <NavigationDropdown navItems={navItems} />
+      <NavigationDropdown navItems={_navItems} />
       <ul>
         {navItems.map(({ title, path }) => (
           <li key={path}>

@@ -11,7 +11,7 @@ import { DashNameTableCell, DashTableCell, DashTableRow } from './Styled'
 import { getPoolDeposited } from './utils'
 import { Link } from 'react-router-dom'
 
-export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...rest }) => {
+export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> = ({ feederPool, showBalance, ...rest }) => {
   const mAssetName = feederPool.masset.token.symbol.toLowerCase() as MassetName
   const feederPoolApy = useFeederPoolApy(feederPool.address, mAssetName)
   const massetPrice = useSelectedMassetPrice(mAssetName)
@@ -39,9 +39,11 @@ export const PoolRow: FC<{ feederPool: FeederPoolState }> = ({ feederPool, ...re
           </>
         ) : null}
       </DashTableCell>
-      <DashTableCell>
-        <CountUp end={deposited} prefix="$" />
-      </DashTableCell>
+      {showBalance && (
+        <DashTableCell>
+          <CountUp end={deposited} prefix="$" />
+        </DashTableCell>
+      )}
       <DashTableCell>
         <CountUpUSD end={feederPool.liquidity.simple} price={tvlPrice} formattingFn={toK} />
       </DashTableCell>

@@ -115,7 +115,7 @@ const getAssetUse = (symbol: string, isEthereum: boolean): { title: string; subt
       return [
         {
           title: 'mStable Governance',
-          subtitle: 'Lock up MTA to vote in governance',
+          subtitle: 'Stake MTA to vote in governance',
           href: 'https://staking.mstable.app/',
         },
         {

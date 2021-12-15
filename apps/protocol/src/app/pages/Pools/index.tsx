@@ -77,7 +77,7 @@ const Row = styled.div`
 
   h2 {
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   > div {
@@ -140,18 +140,6 @@ const customEarnCard = (massetConfig: MassetConfig): CustomAssetCardProps => ({
   component: <CustomContent>Earn pools are available here</CustomContent>,
 })
 
-const customPoolCard = (massetConfig: MassetConfig): CustomAssetCardProps => {
-  const reversedMasset = massetConfig.massetName === 'musd' ? 'mbtc' : 'musd'
-  const formattedReverse = MASSET_CONFIG[reversedMasset].formattedName
-  return {
-    isCustomAssetCard: true,
-    key: 'mpool',
-    title: `${formattedReverse} Pools`,
-    url: `/${massetConfig.massetName === 'musd' ? 'mbtc' : 'musd'}/pools`,
-    component: <CustomContent>More pools available for {formattedReverse}</CustomContent>,
-  }
-}
-
 const customNoPoolsCard = (massetConfig: MassetConfig, protocolName: string): CustomAssetCardProps => ({
   isCustomAssetCard: true,
   key: 'noPools',
@@ -194,7 +182,7 @@ const PoolsContent: FC = () => {
           user: [],
           active: hasFeederPools
             ? isEthereum
-              ? [customEarnCard(massetConfig), customPoolCard(massetConfig)]
+              ? [customEarnCard(massetConfig)]
               : []
             : [customNoPoolsCard(massetConfig, network.protocolName)],
           deprecated: [],

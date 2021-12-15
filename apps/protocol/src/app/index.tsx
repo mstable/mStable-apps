@@ -46,8 +46,7 @@ const ProtocolRoutes: FC = () => {
       <Route exact path="/:massetName/pools" component={Pools} />
       <Route exact path="/:massetName/swap" component={Exchange} />
       <Route exact path="/:massetName/pools/:poolAddress" component={PoolDetail} />
-      <Route exact path="/dashboard" component={Dashboard} />
-      <Redirect exact path="/" to="/dashboard" />
+      <Route exact path="/" component={Dashboard} />
       <Redirect exact path="/analytics" to="/musd/stats" />
       <Redirect exact path="/save" to="/musd/save" />
       <Redirect exact path="/earn" to="/musd/earn" />
@@ -72,7 +71,7 @@ export const ProtocolApp: FC = () => {
   const massetName = useSelectedMassetName()
   const massetConfig = useSelectedMassetConfig()
   const hasFeederPools = massetState?.hasFeederPools
-  const [bannerMessage, setBannerMessage] = useBannerMessage()
+  const [, setBannerMessage] = useBannerMessage()
   const { undergoingRecol } = useSelectedMassetState() ?? {}
   const urlQuery = useURLQuery()
   const [chainId, setChainId] = useChainIdCtx()
@@ -80,6 +79,7 @@ export const ProtocolApp: FC = () => {
 
   useEffect(() => {
     const navItems = [
+      { title: 'Home', path: '/' },
       { title: 'Save', path: `/${massetName}/save` },
       ...(hasFeederPools ? [{ title: 'Pools', path: `/${massetName}/pools` }] : []),
       { title: 'Swap', path: `/${massetName}/swap` },

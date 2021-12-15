@@ -1,23 +1,14 @@
 import { Table, TableCell, TableRow } from '@apps/dumb-components'
 import styled from 'styled-components'
 
-export const VStack = styled.div<{ spacing?: number }>`
-  display: flex;
-  flex-direction: column;
-
-  > *:not(:last-child) {
-    margin-bottom: ${({ spacing = 0 }) => spacing}rem;
-  }
-`
-
 export const Title = styled.h2`
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 1rem;
+  position: absolute;
 `
 
 export const Card = styled.div`
-  ${({ theme }) => theme.mixins.card}
   display: flex;
 `
 

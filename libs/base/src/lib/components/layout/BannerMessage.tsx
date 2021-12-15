@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { useBannerMessage } from '../../context/BannerProvider'
-import { Color } from '@apps/theme'
+import { Color, ViewportWidth } from '@apps/theme'
 
 const Container = styled.div<{ statusColor: string | undefined }>`
   background: ${({ statusColor }) => statusColor};
@@ -11,6 +11,7 @@ const Container = styled.div<{ statusColor: string | undefined }>`
   line-height: 1.5rem;
   border-bottom: 1px solid ${({ statusColor }) => statusColor};
   overflow-wrap: normal;
+  display: none;
 
   p {
     opacity: 0.75;
@@ -18,6 +19,10 @@ const Container = styled.div<{ statusColor: string | undefined }>`
     a {
       opacity: 1;
     }
+  }
+
+  @media (min-width: ${ViewportWidth.s}) {
+    display: inherit;
   }
 `
 

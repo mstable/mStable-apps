@@ -9,7 +9,6 @@ import { VolumeChart } from '../../components/stats/VolumeChart'
 import { AggregateChart } from '../../components/stats/AggregateChart'
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { DailyApys } from '../../components/stats/DailyApys'
-import { ToggleSave } from '../Save/ToggleSave'
 import { SimpleMassetStats } from '../../components/stats/SimpleMassetStats'
 
 const Section = styled.section`
@@ -77,8 +76,7 @@ const StatsContent: FC = () => (
   <>
     <Section id="save">
       <ToggleContainer>
-        <H2>SAVE</H2>
-        <ToggleSave />
+        <H2>Save</H2>
       </ToggleContainer>
       <DailyApys />
     </Section>

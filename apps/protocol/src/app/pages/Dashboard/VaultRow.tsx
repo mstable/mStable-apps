@@ -51,7 +51,7 @@ const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number) => {
   }, [userBoost, rewardsTokenPrice, boostedSavingsVault, massetPrice, latestExchangeRate])
 }
 
-export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
+export const VaultRow: FC<{ massetState: MassetState; showBalance: boolean }> = ({ massetState, showBalance }) => {
   const mAssetName = massetState.token.symbol.toLowerCase() as MassetName
   const massetPrice = useSelectedMassetPrice(mAssetName)
   const [selectedSaveVersion] = useSelectedSaveVersion()
@@ -100,11 +100,13 @@ export const VaultRow: FC<{ massetState: MassetState }> = ({ massetState }) => {
           </>
         )}
       </DashTableCell>
-      <DashTableCell>
-        <Tooltip tip={btcTooltip} hideIcon>
-          <CountUp end={deposits.simple} prefix="$" />
-        </Tooltip>
-      </DashTableCell>
+      {showBalance && (
+        <DashTableCell>
+          <Tooltip tip={btcTooltip} hideIcon>
+            <CountUp end={deposits.simple} prefix="$" />
+          </Tooltip>
+        </DashTableCell>
+      )}
       <DashTableCell>
         <CountUpUSD end={massetState.token.totalSupply.simple} price={massetPrice.value} formattingFn={toK} />
       </DashTableCell>

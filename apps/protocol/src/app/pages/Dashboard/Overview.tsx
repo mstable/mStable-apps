@@ -1,20 +1,54 @@
+import React, { useMemo } from 'react'
 import { useAccount } from '@apps/base/context/account'
 import { MassetState, useDataState } from '@apps/data-provider'
 import { CountUp } from '@apps/dumb-components'
-import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useTotalRewards } from './RewardsContext'
-import { Card, Panel, Title } from './Styled'
 import { getPoolDeposited, getVaultDeposited, useWBTCPrice } from './utils'
+import { ViewportWidth } from '@apps/theme'
 
 export const Item = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
+  background: ${({ theme }) => theme.color.background[0]};
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  border-radius: 1rem;
+  padding: 1.25rem 1rem;
+  text-align: center;
 
-  > *:first-child {
-    min-width: 20ch;
+  h3 {
+    font-size: 1rem;
+    font-weight: 400;
+    color: ${({ theme }) => theme.color.bodyAccent};
+    margin-bottom: 0.75rem;
+  }
+
+  span {
+    font-size: 1.125rem;
+    color: ${({ theme }) => theme.color.body};
+    font-weight: 400;
+  }
+`
+
+const Items = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+  > * {
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: ${ViewportWidth.s}) {
+    flex-direction: row;
+
+    > * {
+      flex-basis: calc(50% - 0.5rem);
+      margin-bottom: 0;
+    }
   }
 `
 
@@ -39,33 +73,20 @@ const useDeposits = () => {
 export const Overview = () => {
   const account = useAccount()
   const deposits = useDeposits()
-  const { total, claimed, pending } = useTotalRewards()
+  const { pending } = useTotalRewards()
 
   if (!account) return null
 
   return (
-    <div>
-      <Title>My Deposits</Title>
-      <Card>
-        <Panel>
-          <Item>
-            <span>Total deposits</span>
-            <CountUp end={deposits} prefix="$" />
-          </Item>
-          <Item>
-            <span>Pending rewards</span>
-            <CountUp end={pending} suffix="MTA" spaced />
-          </Item>
-          <Item>
-            <span>Claimed rewards</span>
-            <CountUp end={claimed} suffix="MTA" spaced />
-          </Item>
-          <Item>
-            <span>Total rewards</span>
-            <CountUp end={total} suffix="MTA" spaced />
-          </Item>
-        </Panel>
-      </Card>
-    </div>
+    <Items>
+      <Item>
+        <h3>Your deposits</h3>
+        <CountUp end={deposits} prefix="$" />
+      </Item>
+      <Item>
+        <h3>Claimable rewards</h3>
+        <CountUp end={pending} suffix="MTA" spaced />
+      </Item>
+    </Items>
   )
 }

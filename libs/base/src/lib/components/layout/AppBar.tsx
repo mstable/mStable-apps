@@ -34,6 +34,14 @@ const LogoAndMasset = styled.div<{ inverted?: boolean }>`
     rect {
       fill: ${({ theme, inverted }) => (inverted ? theme.color.white : theme.color.body)};
     }
+
+    &:hover {
+      path,
+      rect {
+        transition: fill 0.4s ease;
+        fill: ${({ theme }) => theme.color.gold};
+      }
+    }
   }
 `
 

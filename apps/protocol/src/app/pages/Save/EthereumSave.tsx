@@ -101,7 +101,7 @@ export const EthereumSave: FC = () => {
                 )}
                 <InfoButton
                   title="Stake MTA"
-                  content="Lock up MTA to participate in Governance and boost your rewards on Vault deposits."
+                  content="Stake MTA to participate in Governance and boost your rewards on Vault deposits."
                   onClick={handleGovernanceClick}
                 />
                 <InfoBox highlight subtitle="Using mStable Save">

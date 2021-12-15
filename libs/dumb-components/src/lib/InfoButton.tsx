@@ -51,7 +51,7 @@ const Container = styled(UnstyledButton)`
 
     span {
       font-size: 1.5rem;
-      color: ${({ theme }) => theme.color.bodyAccent};
+      color: ${({ theme }) => theme.color.body};
       ${({ theme }) => theme.mixins.numeric};
       margin-top: -0.5rem;
     }
