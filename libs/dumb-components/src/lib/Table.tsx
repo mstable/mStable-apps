@@ -149,7 +149,6 @@ export const TableRow: FC<{ className?: string; onClick?: () => void; buttonTitl
 }) => {
   const handleOnClick = (e: MouseEvent<HTMLButtonElement | HTMLTableRowElement>): void => {
     e?.stopPropagation()
-    e?.preventDefault()
     onClick?.()
   }
   return (

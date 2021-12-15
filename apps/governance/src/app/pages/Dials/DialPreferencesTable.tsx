@@ -5,6 +5,7 @@ import { Table, TableCell, TableRow } from '@apps/dumb-components'
 
 import { useActiveDial } from './context/ViewOptionsContext'
 import { MiniDelegateeProfile } from './DialDelegatee'
+import { useHistory } from 'react-router-dom'
 
 const useDialPreferencesData = (): [string, number, number][] => {
   const activeDial = useActiveDial()
@@ -52,16 +53,19 @@ const HEADER_TITLES = ['User', 'Weight'].map(title => ({ title }))
 
 export const DialPreferencesTable: FC = () => {
   const dialPreferencesData = useDialPreferencesData()
+  const history = useHistory()
+
+  const handleRowClick = (id: string) => history.push(`/vote/${id}`)
 
   return dialPreferencesData.length ? (
     <StyledTable headerTitles={HEADER_TITLES} widths={TABLE_CELL_WIDTHS}>
       {dialPreferencesData.map(([voterAddress, , weight]) => (
-        <TableRow key={voterAddress}>
+        <TableRow key={voterAddress} onClick={() => handleRowClick(voterAddress)} buttonTitle="View profile">
           <TableCell width={TABLE_CELL_WIDTHS[0]}>
             <StyledMiniDelegateeProfile address={voterAddress} />
           </TableCell>
           <TableCell width={TABLE_CELL_WIDTHS[1]}>
-            <span>{weight}%</span>
+            <span>{weight === 100 ? `🦍 ${weight}` : `${weight}`}%</span>
           </TableCell>
         </TableRow>
       ))}

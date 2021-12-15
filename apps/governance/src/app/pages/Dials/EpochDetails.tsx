@@ -11,6 +11,8 @@ import { useEpochData, useEpochWeekNumber } from './context/EpochContext'
 import { useEmissionsData } from './context/EmissionsContext'
 import { DistributionBar } from './DistributionBar'
 
+const EPOCH_LENGTH = 604800
+
 const ArrowButton = styled(UnstyledButton)<{ disabled?: boolean }>`
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   svg {
@@ -49,6 +51,11 @@ const EpochContainer = styled.div`
       display: flex;
     }
 
+    p {
+      font-size: 0.875rem;
+      padding: 0 0.5rem;
+    }
+
     span {
       ${({ theme }) => theme.mixins.numeric};
     }
@@ -69,15 +76,9 @@ const EpochContainer = styled.div`
   }
 `
 
-const convertEpochToTimestamp = (weekNumber: number) => {
-  // TODO revert
-  // const distributionPeriod = 43200
-  const distributionPeriod = 604800
+const convertEpochToTimestamp = (weekNumber: number) => weekNumber * EPOCH_LENGTH * 1000
 
-  return weekNumber * distributionPeriod * 1000
-}
-
-const formatEpoch = (weekNumber: number): string => format(convertEpochToTimestamp(weekNumber), 'HH:mm dd/MM')
+const formatEpoch = (weekNumber: number): string => format(convertEpochToTimestamp(weekNumber), 'dd/MM')
 
 export const EpochDetails: FC = () => {
   const [epochData] = useEpochData()
@@ -105,7 +106,10 @@ export const EpochDetails: FC = () => {
           {!emissionsData ? (
             <ThemedSkeleton height={20} width={100} />
           ) : (
-            <span>{`${formatEpoch(epochWeekNumber)} – ${formatEpoch(epochWeekNumber + 1)}`}</span>
+            <p>
+              Week beginning:
+              <span>{` ${formatEpoch(epochWeekNumber)}`}</span>
+            </p>
           )}
           <ArrowButton
             disabled={isLastEpoch}
