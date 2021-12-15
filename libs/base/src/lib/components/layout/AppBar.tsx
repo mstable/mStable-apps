@@ -1,4 +1,5 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
+import { useShowSubgraphStatus } from '@apps/browser-settings'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
@@ -129,6 +130,7 @@ const StickyHeader = styled.div`
 `
 
 export const AppBar: FC = () => {
+  const showSubgraphStatus = useShowSubgraphStatus()
   const { protocolName } = useNetwork()
 
   return (
@@ -144,7 +146,7 @@ export const AppBar: FC = () => {
           <WalletAndSpinner>
             <TransactionsSpinner />
             <WalletButton />
-            <GraphButton />
+            {showSubgraphStatus && <GraphButton />}
             <SettingsButton>
               <TokenIcon symbol={protocolName.toUpperCase()} />
             </SettingsButton>

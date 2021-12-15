@@ -5,10 +5,10 @@ import { BaseLayout, BaseProviders } from '@apps/base'
 import { DataProvider } from '@apps/data-provider'
 import { MassetProvider } from '@apps/masset-provider'
 import { ThemeProvider } from '@apps/theme'
+import { BrowserSettingsProvider } from '@apps/browser-settings'
 
 import { ProtocolApp } from './app'
-
-const ProtocolContext = composedComponent(ThemeProvider, BaseProviders, DataProvider, MassetProvider)
+const ProtocolContext = composedComponent(BrowserSettingsProvider, ThemeProvider, BaseProviders, DataProvider, MassetProvider)
 
 ReactDOM.render(
   <ProtocolContext>

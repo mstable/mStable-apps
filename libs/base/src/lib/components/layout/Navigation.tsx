@@ -2,7 +2,8 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 
-import { useToggleDarkTheme, colorTheme, ViewportWidth } from '@apps/theme'
+import { useIsDarkMode } from '@apps/browser-settings'
+import { colorTheme, ViewportWidth } from '@apps/theme'
 
 import { useBaseCtx } from '../../BaseProviders'
 import { NavigationDropdown } from '../core'
@@ -56,7 +57,7 @@ const StyledNavLink = styled(NavLink)`
 
 export const Navigation: FC = () => {
   const [{ navItems: _navItems }] = useBaseCtx()
-  const [isDarkTheme] = useToggleDarkTheme()
+  const isDarkTheme = useIsDarkMode()
 
   const navItems = _navItems.filter(({ path }) => path !== '/')
 

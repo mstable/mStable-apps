@@ -1,9 +1,9 @@
 import { FC, useRef } from 'react'
-import { NetworkStatus } from 'react-apollo-network-status'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
+import { NetworkStatus } from '@jameslefrere/react-apollo-network-status'
 
-import { Tooltip, UnstyledButton } from '@apps/dumb-components'
+import { UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as GraphQLIcon } from '@apps/icons/graphql.svg'
 
 import { useNetworkStatus } from '../../context/ApolloProvider'
@@ -15,6 +15,8 @@ const Container = styled.div<{ open: boolean; pending: boolean; error: boolean }
   user-select: none;
 
   button {
+    position: relative;
+    top: 1px;
     border-radius: 50%;
     padding: 4px;
     width: 28px;
@@ -32,7 +34,7 @@ const Container = styled.div<{ open: boolean; pending: boolean; error: boolean }
   .badge {
     transition: background-color 0.2s;
     background-color: ${({ error, theme, pending }) =>
-      error ? theme.color.redTransparent : pending ? theme.color.blueTransparent : 'transparent'};
+      error ? theme.color.redTransparent : pending ? 'rgba(0, 92, 222, 0.7)' : 'transparent'};
     position: absolute;
     top: -2px;
     right: -2px;
@@ -111,15 +113,13 @@ export const GraphButton: FC = () => {
     <Container
       ref={container}
       open={show}
-      pending={Object.values(networkStatus).some(status => status.numPendingQueries)}
-      error={Object.values(networkStatus).some(status => status.queryError)}
+      pending={Object.values(networkStatus).some(status => status.numPendingQueries || status.numPendingMutations)}
+      error={Object.values(networkStatus).some(status => status.queryError || status.mutationError)}
     >
-      <Tooltip tip="Subgraph status (this shows data fetched to support the app, and can help to resolve problems)" hideIcon>
-        <UnstyledButton onClick={toggleShow}>
-          <GraphQLIcon />
-          <div className="badge" />
-        </UnstyledButton>
-      </Tooltip>
+      <UnstyledButton onClick={toggleShow}>
+        <GraphQLIcon />
+        <div className="badge" />
+      </UnstyledButton>
       <div className="items">
         {items.length
           ? items.map(([endpointName, status]) => <EndpointStatus endpointName={endpointName} status={status} key={endpointName} />)

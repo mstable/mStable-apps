@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { useToggleDarkTheme, colorTheme } from '@apps/theme'
+import { useIsDarkMode } from '@apps/browser-settings'
+import { colorTheme } from '@apps/theme'
 
 interface Props {
   value?: number
@@ -24,7 +25,7 @@ const Container = styled.svg`
 `
 
 export const ProgressBar: FC<Props> = ({ max = 1, min = 0, value = min, hue = 90, lightness = 50 }) => {
-  const [isDarkTheme] = useToggleDarkTheme()
+  const isDarkTheme = useIsDarkMode()
   const scaledValue = (value - min) / (max - min)
   const progressWidth = Math.max(scaledValue * WIDTH, HEIGHT * 2)
   return (

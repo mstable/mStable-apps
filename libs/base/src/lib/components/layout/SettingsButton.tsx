@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { useToggle } from 'react-use'
 import useOnClickOutside from 'use-onclickoutside'
 
-import { useToggleDarkTheme } from '@apps/theme'
-import { UnstyledButton } from '@apps/dumb-components'
+import { useIsDarkMode, useToggleDarkTheme, useShowSubgraphStatus, useToggleSubgraphStatus } from '@apps/browser-settings'
+import { Tooltip, UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as SettingsSvg } from '@apps/icons/settings.svg'
 
 import { NetworkDropdown } from '../core'
@@ -65,14 +65,13 @@ const Container = styled.div`
 export const SettingsButton: FC<{ className?: string }> = ({ children, className }) => {
   const [show, toggleShow] = useToggle(false)
   const container = useRef(null)
-  const [isDarkTheme, toggleDarkTheme] = useToggleDarkTheme()
+
+  const isDarkTheme = useIsDarkMode()
+  const handleThemeToggle = useToggleDarkTheme()
+  const showSubgraphStatus = useShowSubgraphStatus()
+  const handleSubgraphToggle = useToggleSubgraphStatus()
 
   useOnClickOutside(container, () => toggleShow(false))
-
-  const handleThemeToggle = (): void => {
-    localStorage.setItem('themeMode', isDarkTheme ? 'dark' : 'light')
-    toggleDarkTheme()
-  }
 
   return (
     <Container ref={container} className={className}>
@@ -91,6 +90,12 @@ export const SettingsButton: FC<{ className?: string }> = ({ children, className
         <div>
           <p>Theme</p>
           <ThemeModeButton onClick={handleThemeToggle}>{isDarkTheme ? '🌙' : '☀️'}</ThemeModeButton>
+        </div>
+        <div>
+          <Tooltip tip="Enabling this will show data fetched to support the app, and can help to resolve problems">
+            <p>Subgraph status</p>
+          </Tooltip>
+          <ThemeModeButton onClick={handleSubgraphToggle}>{showSubgraphStatus ? '🤓' : '🔇'}</ThemeModeButton>
         </div>
       </List>
     </Container>

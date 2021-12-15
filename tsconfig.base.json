@@ -52,6 +52,7 @@
       "@apps/base/utils": ["libs/base/src/lib/utils/index.ts"],
       "@apps/bigdecimal": ["libs/bigdecimal/src/index.ts"],
       "@apps/boost": ["libs/boost/src/index.ts"],
+      "@apps/browser-settings": ["libs/browser-settings/src/lib/index.ts"],
       "@apps/context-utils": ["libs/context-utils/src/lib/index.ts"],
       "@apps/data-provider": ["libs/data-provider/src/index.ts"],
       "@apps/dumb-components": ["libs/dumb-components/src/lib/index.ts"],
