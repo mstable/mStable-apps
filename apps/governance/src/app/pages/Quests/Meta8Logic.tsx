@@ -14,7 +14,7 @@ import bleep26 from '../../../assets/bleeps_26.mp3'
 // @ts-ignore
 import bleep27 from '../../../assets/bleeps_27.mp3'
 import { StakedTokenSwitcher } from '../../components/StakedTokenSwitcher'
-import { useStakedToken } from '../../context/StakedTokenProvider'
+import { useStakedToken } from '../../context/StakedToken'
 
 import { Typist } from './Typist'
 import { QuestCard } from './QuestCard'

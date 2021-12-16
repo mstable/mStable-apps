@@ -8,7 +8,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { createUseContextFn, providerFactory } from '@apps/context-utils'
 import { SCALE } from '@apps/types'
 
-import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakedTokenQuery } from '../../context/StakedToken'
 
 export interface RewardsEarned {
   canClaim?: boolean

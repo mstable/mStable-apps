@@ -8,8 +8,8 @@ import { TokenIcon } from '@apps/base/components/core'
 import { ViewportWidth } from '@apps/theme'
 import { BigDecimal } from '@apps/bigdecimal'
 
-import { useStakedToken, useStakedTokenQuery } from '../../context/StakedTokenProvider'
-import { useStakingStatus } from '../../context/StakingStatusProvider'
+import { useStakedToken, useStakedTokenQuery } from '../../context/StakedToken'
+import { useStakingStatus } from '../../context/StakingStatus'
 import { useBPTBalApy } from '../../hooks/useBPTBalApy'
 import { useRewardsEarned } from './context'
 

@@ -7,7 +7,7 @@ import { StakeForms } from './StakeForms'
 import { StakeBalances } from './StakeBalances'
 import { PendingBalances } from './PendingBalances'
 import { RewardsEarnedProvider } from './context'
-import { StakingStatusProvider } from '../../context/StakingStatusProvider'
+import { StakingStatusProvider } from '../../context/StakingStatus'
 
 const Container = styled.div`
   > div:last-child {

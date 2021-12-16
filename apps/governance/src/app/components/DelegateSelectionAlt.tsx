@@ -8,7 +8,7 @@ import { useModalData } from '@apps/base/context/modal-data'
 import { ViewportWidth } from '@apps/theme'
 
 import { useDelegationModal } from '../hooks/useDelegationModal'
-import { useDelegateesAll } from '../context/DelegateeListsProvider'
+import { useDelegateesAll } from '../context/DelegateeLists'
 import { StakedTokenToggle } from './StakedTokenToggle'
 
 interface Props {

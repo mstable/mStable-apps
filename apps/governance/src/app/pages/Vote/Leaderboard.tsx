@@ -8,8 +8,9 @@ import { useApolloClients } from '@apps/base/context/apollo'
 import { Table, TableCell, TableRow, UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
 import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
+import { useStakingQuery } from '../../context'
 
-import { useDelegateesAll } from '../../context/DelegateeListsProvider'
+import { useDelegateesAll } from '../../context/DelegateeLists'
 import { DelegateCell } from '../../components/DelegateCell'
 
 interface Props {
@@ -50,14 +51,21 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const [skip, setSkip] = useState<number>(0)
 
   const delegateesAll = useDelegateesAll()
-  const { staking: client } = useApolloClients()
+  const clients = useApolloClients()
 
-  const leaderboardQuery = useLeaderboardQuery({ client, variables: { count, skip } })
+  const leaderboardQuery = useLeaderboardQuery({
+    client: clients.staking,
+    variables: { count, skip },
+    pollInterval: 60e3,
+  })
+  const stakingQuery = useStakingQuery()
 
   const leaderboardItems = useMemo<{ id: string; votes: number; share: number }[]>(() => {
     // TODO could do this on subgraph
-    const totalVotingToken =
-      leaderboardQuery.data?.stakedTokens.reduce((_total, st) => st.token.totalSupply.bigDecimal.simple + _total, 0) ?? 0
+    const totalVotingToken = stakingQuery.data?.stakedTokens.reduce(
+      (_total, st) => (st.token?.totalSupply ? st.token.totalSupply.bigDecimal.simple + _total : 0),
+      0,
+    )
 
     const stakers = leaderboardQuery.data?.accounts ?? []
     const hasStaked = new Set(stakers.map(a => a.id))
@@ -70,7 +78,7 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
         share: totalVotingToken ? ((totalVotesAllBD.simple ?? 0) / totalVotingToken) * 100 : 0,
       }))
       .slice(0, count)
-  }, [leaderboardQuery.data, delegateesAll, count])
+  }, [leaderboardQuery, stakingQuery, delegateesAll, count])
 
   const buttonTitle = delegation ? 'Delegate' : 'View profile'
   const cellWidths = delegation ? [70, 30] : [33, 33, 33]
@@ -88,15 +96,12 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
           <NumericCell width={cellWidths[cellWidths.length - 1]}>{votes.toFixed(2)}</NumericCell>
         </TableRow>
       ))}
-      {preview && (
-        <ViewLeaderboardRow>
+      <ViewLeaderboardRow>
+        {preview ? (
           <TableCell width={100}>
             <Link to="/vote/leaderboard">View Leaderboard</Link>
           </TableCell>
-        </ViewLeaderboardRow>
-      )}
-      {!preview && (
-        <ViewLeaderboardRow>
+        ) : (
           <NavigationCell>
             <UnstyledButton onClick={() => setSkip(skip - count <= 0 ? 0 : skip - count)}>
               <BackArrow />
@@ -106,8 +111,8 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
               <ForwardArrow />
             </UnstyledButton>
           </NavigationCell>
-        </ViewLeaderboardRow>
-      )}
+        )}
+      </ViewLeaderboardRow>
     </StyledTable>
   )
 }

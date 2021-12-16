@@ -8,8 +8,8 @@ import { ReactComponent as BPTIcon } from '@apps/icons/tokens/BPT-MTA-ETH.svg'
 import { ReactComponent as CheckmarkIcon } from '@apps/icons/checkmark.svg'
 import { useNetworkAddresses } from '@apps/base/context/network'
 
-import { useSetStakedToken, useStakedToken } from '../../context/StakedTokenProvider'
-import { useStakingStatusDispatch } from '../../context/StakingStatusProvider'
+import { useSetStakedToken, useStakedToken } from '../../context/StakedToken'
+import { useStakingStatusDispatch } from '../../context/StakingStatus'
 
 enum Selection {
   MTA,

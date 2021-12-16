@@ -7,7 +7,7 @@ import { truncateAddress } from '@apps/formatters'
 import { useModalData } from '@apps/base/context/modal-data'
 
 import { useDelegationModal } from '../hooks/useDelegationModal'
-import { useDelegateesAll } from '../context/DelegateeListsProvider'
+import { useDelegateesAll } from '../context/DelegateeLists'
 
 interface Props {
   className?: string

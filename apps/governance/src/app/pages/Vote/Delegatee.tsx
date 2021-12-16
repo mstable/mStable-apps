@@ -6,7 +6,7 @@ import { ResolveENS } from '@apps/base/components/core'
 import { FetchState } from '@apps/types'
 
 import { DelegateePageHeader } from '../../components/DelegateePageHeader'
-import { useDelegateesAll } from '../../context/DelegateeListsProvider'
+import { useDelegateesAll } from '../../context/DelegateeLists'
 import { DelegateeProfile } from './DelegateeProfile'
 
 const Content: FC<{ address?: string; addressOrENSName: string; resolvedENSName?: FetchState<string | null> }> = ({

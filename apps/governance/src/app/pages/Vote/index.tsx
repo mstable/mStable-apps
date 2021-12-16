@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { constants } from 'ethers'
 
@@ -12,10 +12,10 @@ import { ViewportWidth } from '@apps/theme'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { truncateAddress } from '@apps/formatters'
 
-import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedToken'
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
 import { UserLookup } from '../../components/UserLookup'
-import { useDelegateesAll } from '../../context/DelegateeListsProvider'
+import { useDelegateesAll } from '../../context/DelegateeLists'
 import { DelegateSelectionAlt } from '../../components/DelegateSelectionAlt'
 import { Leaderboard } from './Leaderboard'
 
@@ -148,7 +148,8 @@ const Container = styled.div`
 
 export const Vote: FC = () => {
   const { selected: stakedTokenAddress, options } = useStakedToken()
-  const { data } = useStakedTokenQuery()
+  // const { data } = useStakedTokenQuery()
+  const data = {} as any
 
   const history = useHistory()
   const account = useOwnAccount()
@@ -161,16 +162,12 @@ export const Vote: FC = () => {
   const displayName = delegateesAll[delegateeId]?.displayName
   const isSelfDelegated = delegateeId?.toLowerCase() === account?.toLowerCase()
 
-  const { delegatedPower } = useMemo<{ delegatedPower?: number }>(() => {
-    const account = data?.stakedToken?.accounts?.[0]
-    if (!data || !account) {
-      return {}
-    }
-
-    return { delegatedPower: stakedToken?.balance?.simple }
-  }, [data, stakedToken])
-
-  const handleRowClick = (id: string) => history.push(`/vote/${id}`)
+  const handleRowClick = useCallback(
+    (id: string) => {
+      history.push(`/vote/${id}`)
+    },
+    [history],
+  )
 
   const handleDelegate = (address: string) => {
     if (!stakedTokenContract || !data || address === constants.AddressZero) return
@@ -220,7 +217,7 @@ export const Vote: FC = () => {
                 <div>
                   Delegated &nbsp;
                   <TokenIcon symbol={options[stakedTokenAddress]?.icon.symbol} />
-                  <span>{delegatedPower?.toFixed(2)}</span>
+                  <span>{stakedToken?.balance?.simple?.toFixed(2)}</span>
                 </div>
               )}
             </div>

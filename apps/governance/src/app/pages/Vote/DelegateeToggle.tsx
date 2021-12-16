@@ -10,7 +10,7 @@ import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 import { Button, ThemedSkeleton } from '@apps/dumb-components'
 
 import { StakedTokenSwitcher } from '../../components/StakedTokenSwitcher'
-import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
+import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedToken'
 
 const Check: FC = () => (
   <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">

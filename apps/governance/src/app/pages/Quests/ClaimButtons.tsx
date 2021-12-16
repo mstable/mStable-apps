@@ -11,7 +11,7 @@ import { usePropose } from '@apps/base/context/transactions'
 import { Button, Tooltip } from '@apps/dumb-components'
 import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 
-import { useQuestManagerContract } from '../../context/QuestManagerProvider'
+import { useQuestManagerContract } from '../../context/QuestManager'
 
 // @ts-ignore
 import bleep28 from '../../../assets/bleeps_28.mp3'

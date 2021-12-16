@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Color } from '@apps/theme'
 import styled from 'styled-components'
-import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakedTokenQuery } from '../../context/StakedToken'
 
 const WEEK = 604800
 

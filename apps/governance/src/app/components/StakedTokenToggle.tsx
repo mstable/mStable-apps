@@ -5,7 +5,7 @@ import { TokenIcon } from '@apps/base/components/core'
 import { UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as SwitchIcon } from '@apps/icons/switch-icon.svg'
 
-import { useSetStakedToken, useStakedToken } from '../context/StakedTokenProvider'
+import { useSetStakedToken, useStakedToken } from '../context/StakedToken'
 
 const Icon = styled(TokenIcon)`
   width: 1.75rem;

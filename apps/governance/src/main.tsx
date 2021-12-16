@@ -3,21 +3,12 @@ import * as ReactDOM from 'react-dom'
 import { ThemeProvider } from '@apps/theme'
 import { composedComponent } from '@apps/react-utils'
 import { BaseLayout, BaseProviders } from '@apps/base'
+import { BrowserSettingsProvider } from '@apps/browser-settings'
 
 import { GovernanceApp } from './app'
-import { QuestManagerProvider } from './app/context/QuestManagerProvider'
-import { StakedTokenProvider } from './app/context/StakedTokenProvider'
-import { StakingProvider } from './app/context/StakingProvider'
-import { DelegateeListsProvider } from './app/context/DelegateeListsProvider'
+import { GovernanceContext } from './app/context'
 
-const Providers = composedComponent(
-  ThemeProvider,
-  BaseProviders,
-  QuestManagerProvider,
-  StakingProvider,
-  StakedTokenProvider,
-  DelegateeListsProvider,
-)
+const Providers = composedComponent(BrowserSettingsProvider, ThemeProvider, BaseProviders, GovernanceContext)
 
 ReactDOM.render(
   <Providers>

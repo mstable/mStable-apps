@@ -6,6 +6,9 @@ query Staking {
     stakingToken {
       ...TokenAll
     }
+    token {
+      ...TokenAll
+    }
   }
 }
 
@@ -16,13 +19,6 @@ query Tokens {
 }
 
 query Leaderboard($count: Int!, $skip: Int!) {
-  stakedTokens {
-    token {
-      totalSupply {
-        ...MetricFields
-      }
-    }
-  }
   accounts(first: $count, skip: $skip, orderBy: totalVotesAll, orderDirection: desc) {
     id
     totalVotesAll
