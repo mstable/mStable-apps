@@ -39,6 +39,7 @@ import ALUSD, { ReactComponent as AlusdSvg } from '@apps/icons/tokens/alUSD.svg'
 import ALCX, { ReactComponent as AlcxSvg } from '@apps/icons/tokens/ALCX.svg'
 import RAI, { ReactComponent as RaiSvg } from '@apps/icons/tokens/RAI.svg'
 import FEI, { ReactComponent as FeiSvg } from '@apps/icons/tokens/FEI.svg'
+import FLX, { ReactComponent as FlxSvg } from '@apps/icons/tokens/FLX.svg'
 import ETHEREUM, { ReactComponent as EthereumSvg } from '@apps/icons/networks/Ethereum.svg'
 import POLYGON, { ReactComponent as PolygonSvg } from '@apps/icons/networks/Polygon.svg'
 
@@ -107,6 +108,7 @@ export const TOKEN_ICONS: Record<string, string> = {
   ALUSD,
   ALCX,
   RAI,
+  FLX,
   FEI,
 }
 
@@ -158,6 +160,7 @@ const SVG_ICONS: Record<string, SvgComponent> = {
   ALUSD: AlusdSvg as SvgComponent,
   ALCX: AlcxSvg as SvgComponent,
   RAI: RaiSvg as SvgComponent,
+  FLX: FlxSvg as SvgComponent,
   FEI: FeiSvg as SvgComponent,
 }
 

@@ -40,7 +40,7 @@ export const getPriceCoeff = (vault: BoostedSavingsVaultState): number | undefin
     case '0xd124b55f70d374f58455c8aedf308e52cf2a6207': // musd/busd
     case '0xadeedd3e5768f7882572ad91065f93ba88343c99': // musd/gusd
     case '0x0997dddc038c8a958a3a3d00425c16f8eca87deb': // alusd/gusd
-    case '0xD24099Eb4CD604198071958655E4f2D263a5539B': // mUSD/FEI
+    case '0xd24099eb4cd604198071958655e4f2d263a5539b': // mUSD/FEI
       return 1
 
     // All BTC
