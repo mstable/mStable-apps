@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import type { FC } from 'react'
 import { useAccount } from '@apps/base/context/account'
 import { MassetState, useDataState } from '@apps/data-provider'
 import { CountUp } from '@apps/dumb-components'
@@ -52,7 +53,7 @@ const Items = styled.div`
   }
 `
 
-const useDeposits = () => {
+const useDeposits = (tab: 'Pools' | 'Save') => {
   const dataState = useDataState()
   const wbtcPrice = useWBTCPrice()
   const [selectedSaveVersion] = useSelectedSaveVersion()
@@ -61,19 +62,19 @@ const useDeposits = () => {
     () =>
       Object.values(dataState).reduce((acc, curr: MassetState) => {
         const mPrice = curr?.token?.symbol === 'mBTC' ? wbtcPrice.value : 1
-        const vaults = getVaultDeposited(selectedSaveVersion, curr, mPrice).simple
+        const save = getVaultDeposited(selectedSaveVersion, curr, mPrice).simple
         const pools = Object.values(curr.feederPools).reduce((ac, cu) => ac + getPoolDeposited(cu, mPrice), 0)
-
-        return acc + vaults + pools
+        if (tab === 'Pools') return acc + pools
+        return acc + save
       }, 0),
-    [dataState, selectedSaveVersion, wbtcPrice.value],
+    [dataState, selectedSaveVersion, wbtcPrice.value, tab],
   )
 }
 
-export const Overview = () => {
+export const Overview: FC<{ tab: 'Pools' | 'Save' }> = ({ tab }) => {
   const account = useAccount()
-  const deposits = useDeposits()
-  const { total } = useTotalRewards()
+  const deposits = useDeposits(tab)
+  const { unlocked } = useTotalRewards()
 
   if (!account) return null
 
@@ -84,8 +85,8 @@ export const Overview = () => {
         <CountUp end={deposits} prefix="$" />
       </Item>
       <Item>
-        <h3>MTA rewards</h3>
-        <CountUp end={total} suffix="MTA" spaced />
+        <h3>Claimable rewards</h3>
+        <CountUp end={unlocked} suffix="MTA" spaced />
       </Item>
     </Items>
   )

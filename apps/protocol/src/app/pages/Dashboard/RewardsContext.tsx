@@ -1,7 +1,7 @@
 import { createContext, Dispatch, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { RewardStreams, useRewardStreams } from '../../context/RewardStreamsProvider'
+import { RewardStreams } from '../../context/RewardStreamsProvider'
 
-type TotalRewards = { pending: number; claimed: number; total: number }
+type TotalRewards = { total: number; unlocked: number }
 
 type UpsertStream = (id: string, stream: RewardStreams) => void
 
@@ -20,8 +20,9 @@ export const RewardsProvider: FC = ({ children }) => {
   const [streams, setStreams] = useState<Record<string, RewardStreams>>({})
 
   const upsertStream = useCallback(
-    (id: string, stream: RewardStreams) => {
-      if (stream && (!streams[id] || !isStreamEqual(streams[id], stream))) {
+    (id: string, stream) => {
+      if (stream && !streams[id]) {
+        // || !isStreamEqual(streams[id], stream)
         setStreams({ ...streams, [id]: stream })
       }
     },
@@ -48,33 +49,22 @@ export const RewardsProvider: FC = ({ children }) => {
         (acc, curr) => {
           const { amounts } = curr
           if (!amounts) return acc
-          const { earned, locked, total } = amounts
+          const { earned, total, unlocked } = amounts
 
           return {
-            pending: acc.pending + locked || 0,
-            claimed: acc.claimed + earned?.total || 0,
             total: acc.total + total || 0,
+            unlocked: unlocked + earned?.unlocked || 0,
           }
         },
         {
-          pending: 0,
-          claimed: 0,
           total: 0,
+          unlocked: 0,
         },
       ),
     [streams],
   )
 
   return <ctx.Provider value={{ totalRewards, upsertStream, deleteStream, reset }}>{children}</ctx.Provider>
-}
-
-export const useSubscribeRewardStream = (id: string) => {
-  const rewards = useRewardStreams()
-  const { upsertStream } = useContext(ctx)
-
-  useEffect(() => {
-    upsertStream(id, rewards)
-  }, [id, rewards, upsertStream])
 }
 
 export const useTotalRewards = (): TotalRewards => useContext(ctx).totalRewards

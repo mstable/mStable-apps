@@ -5,11 +5,11 @@ import { InfoButton, TabsLeftAlign } from '@apps/dumb-components'
 import Skeleton from 'react-loading-skeleton'
 import styled from 'styled-components'
 import { Overview } from './Overview'
-import { Pools } from './Pools'
+import { PoolsTable } from './PoolsTable'
 import { RewardsProvider, useReset } from './RewardsContext'
 import { Illustration } from './Illustration'
 import { TotalTvl } from './TotalTvl'
-import { Vaults } from './Vaults'
+import { SaveTable } from './SaveTable'
 import { ViewportWidth } from '@apps/theme'
 import { useHistory } from 'react-router-dom'
 import { useSelectedMasset } from '@apps/masset-provider'
@@ -22,11 +22,11 @@ enum Tabs {
 const tabs = {
   [Tabs.Save]: {
     title: `Save`,
-    component: <Vaults />,
+    component: <SaveTable />,
   },
   [Tabs.Pools]: {
     title: `Pools`,
-    component: <Pools />,
+    component: <PoolsTable />,
   },
 }
 
@@ -37,11 +37,11 @@ const DashboardContent: FC = () => {
 
   useEffect(() => {
     reset()
-  }, [address, reset])
+  }, [address, reset, activeTab])
 
   return (
     <TabsLeftAlign tabs={tabs} active={activeTab} onClick={setActiveTab}>
-      <Overview />
+      <Overview tab={activeTab as 'Pools' | 'Save'} />
     </TabsLeftAlign>
   )
 }
@@ -121,7 +121,7 @@ export const Dashboard: FC = () => {
             onClick={() => handleButtonClick(0)}
           />
           <InfoButton
-            title="Earn MTA"
+            title="Staking"
             content="Stake MTA to participate in Governance and boost your rewards on Vault deposits"
             onClick={() => handleButtonClick(1)}
           />

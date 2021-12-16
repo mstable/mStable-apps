@@ -10,7 +10,7 @@ const headerTitles = ['Asset', 'APY', 'Balance', 'TVL'].map(t => ({ title: t }))
 
 const isValidPool = (fp: FeederPoolState): boolean => ![PoolType.Hidden, PoolType.Deprecated].includes(fp.poolType)
 
-export const Pools = () => {
+export const PoolsTable = () => {
   const dataState = useDataState()
   const account = useAccount()
 
@@ -30,7 +30,6 @@ export const Pools = () => {
         <DashTable headerTitles={filteredHeaderTitles} width={48}>
           {pools.map((feederPool: FeederPoolState) => {
             const { address, vault } = feederPool
-
             return (
               <RewardStreamsProvider key={address} vault={vault}>
                 <PoolRow feederPool={feederPool} showBalance={!!account} />

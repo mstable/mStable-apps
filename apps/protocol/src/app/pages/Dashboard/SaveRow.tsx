@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { TokenIcon } from '@apps/base/components/core'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { useCalculateUserBoost } from '@apps/boost'
@@ -12,9 +12,10 @@ import { useHistory } from 'react-router-dom'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useAvailableSaveApy } from '../../hooks/useAvailableSaveApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
-import { useSubscribeRewardStream } from './RewardsContext'
+import { useUpsertStream } from './RewardsContext'
 import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './Styled'
 import { getVaultDeposited } from './utils'
+import { useRewardStreams } from '../../context/RewardStreamsProvider'
 
 const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number) => {
   const {
@@ -51,12 +52,13 @@ const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number) => {
   }, [userBoost, rewardsTokenPrice, boostedSavingsVault, massetPrice, latestExchangeRate])
 }
 
-export const VaultRow: FC<{ massetState: MassetState; showBalance: boolean }> = ({ massetState, showBalance }) => {
+export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = ({ massetState, showBalance }) => {
   const history = useHistory()
   const mAssetName = massetState.token.symbol.toLowerCase() as MassetName
   const massetPrice = useSelectedMassetPrice(mAssetName)
   const [selectedSaveVersion] = useSelectedSaveVersion()
-  useSubscribeRewardStream(`reward-${mAssetName}`)
+  const rewards = useRewardStreams()
+  const upsertStream = useUpsertStream()
 
   const {
     savingsContracts: { v2: { boostedSavingsVault } = {} },
@@ -74,10 +76,21 @@ export const VaultRow: FC<{ massetState: MassetState; showBalance: boolean }> = 
   const userBoostAPY = saveApy?.value + vaultApy?.userBoost || 0
   const baseAPY = saveApy?.value + vaultApy?.base || 0
   const maxAPY = saveApy?.value + vaultApy?.maxBoost || 0
-  const userBoostTip = `Combined APY<br>Save: ${saveApy?.value?.toFixed(2) || 0}%<br>Vault Rewards: ${(userBoostAPY || 0).toFixed(2)}%`
-  const apyTip = `Combined APY<br>Save: ${saveApy?.value?.toFixed(2) || 0}%<br>Vault Rewards:<br>${baseAPY?.toFixed(2)}-${maxAPY?.toFixed(
-    2,
-  )}%`
+
+  const userBoostTip = `
+    Save: ${saveApy?.value?.toFixed(2) || 0}%<br />
+    Vault Rewards: ${(userBoostAPY || 0).toFixed(2)}%
+  `
+  const apyTip = `
+    Save: ${saveApy?.value?.toFixed(2) || 0}%<br />
+    Vault Rewards:<br />
+    ${baseAPY?.toFixed(2)}-${maxAPY?.toFixed(2)}%
+  `
+
+  useEffect(() => {
+    if (!rewards?.amounts?.earned?.unlocked) return
+    upsertStream(`reward-${mAssetName}`, rewards)
+  }, [mAssetName, rewards, rewards?.amounts?.earned?.unlocked, upsertStream])
 
   return (
     <DashTableRow onClick={() => history.push(`/${mAssetName}/save`)} buttonTitle="Explore">

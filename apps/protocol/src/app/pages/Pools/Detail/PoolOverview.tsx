@@ -103,15 +103,6 @@ export const PoolOverview: FC = () => {
               </div>
             </Button>
           )}
-          {!!apy.value?.base && (
-            <Button active={false} disabled>
-              <h3>Base APY</h3>
-              <div>
-                <CountUp end={apy.value.base} suffix="%" />
-                <Tooltip tip="Base APY represents the increase in the value of the pool token over time" />
-              </div>
-            </Button>
-          )}
         </Card>
       </TransitionCard>
       <PokeBoost apy={apy} vault={vault} />

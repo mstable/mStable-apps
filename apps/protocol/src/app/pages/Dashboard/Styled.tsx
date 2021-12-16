@@ -42,6 +42,7 @@ export const DashTableCell = styled(TableCell)`
   display: flex;
   align-items: center;
   width: 25%;
+  padding: 0.75rem 1rem;
 `
 
 export const DashNameTableCell = styled(DashTableCell)`
@@ -61,7 +62,7 @@ export const RewardsApy = styled.div<{ active?: boolean }>`
 
   span {
     margin-top: 1px;
-    color: ${({ theme, active }) => active && theme.color.green};
+    color: ${({ theme, active }) => (active && theme.color.green) || theme.color.bodyAccent};
   }
 
   div:last-child {

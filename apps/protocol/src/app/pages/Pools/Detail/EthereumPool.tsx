@@ -8,7 +8,6 @@ import Skeleton from 'react-loading-skeleton'
 import { FeederPoolState, PoolType } from '@apps/data-provider'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/theme'
-import { UserMasquerade } from '@apps/base/components/core'
 import { TabCard, Button, UnstyledButton, InfoBox } from '@apps/dumb-components'
 import { useFeederPool } from '@apps/masset-hooks'
 
@@ -211,7 +210,6 @@ const PoolDetailContent: FC = () => {
             )}
           </InfoBox>
         </Exchange>
-        <UserMasquerade />
       </Container>
     </RewardStreamsProvider>
   )

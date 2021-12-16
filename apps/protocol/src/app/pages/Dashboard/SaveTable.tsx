@@ -5,11 +5,11 @@ import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { Card, DashTable } from './Styled'
 import { sortVaultsByDepositedDesc } from './utils'
-import { VaultRow } from './VaultRow'
+import { SaveRow } from './SaveRow'
 
 const headerTitles = ['Asset', 'APY', 'Balance', 'TVL'].map(t => ({ title: t }))
 
-export const Vaults = () => {
+export const SaveTable = () => {
   const dataState = useDataState()
   const [selectedSaveVersion] = useSelectedSaveVersion()
   const account = useAccount()
@@ -33,7 +33,7 @@ export const Vaults = () => {
 
             return (
               <RewardStreamsProvider key={address} vault={boostedSavingsVault}>
-                <VaultRow massetState={massetState} showBalance={!!account} />
+                <SaveRow massetState={massetState} showBalance={!!account} />
               </RewardStreamsProvider>
             )
           })}
