@@ -334,11 +334,6 @@ const transformFeederPoolsData = (feederPools: NonNullableFeederPools, tokens: T
 
         let poolType: PoolType = PoolType.Active
 
-        // Hide FEI from the UI
-        if (address === '0x2f1423d27f9b20058d9d1843e342726fdf985eb4') {
-          poolType = PoolType.Hidden
-        }
-
         // Put tBTC to deprecated
         if (address === '0xb61a6f928b3f069a68469ddb670f20eeeb4921e0') {
           poolType = PoolType.Deprecated
