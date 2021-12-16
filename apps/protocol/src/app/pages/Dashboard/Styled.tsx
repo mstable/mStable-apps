@@ -26,6 +26,14 @@ export const DashTable = styled(Table).attrs(() => ({ widths: [25, 25, 25, 25] }
   img {
     width: 2rem;
   }
+
+  tr:not(:first-child):nth-child(even) {
+    background: ${({ theme }) => theme.color.backgroundTransparent};
+  }
+
+  tr:not(:first-child):hover {
+    background: ${({ theme }) => theme.color.background[1]};
+  }
 `
 
 export const DashTableRow = styled(TableRow)``
@@ -41,5 +49,25 @@ export const DashNameTableCell = styled(DashTableCell)`
 
   > :first-child {
     margin-right: 0.5rem;
+  }
+`
+
+export const RewardsApy = styled.div<{ active?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 0.875rem;
+
+  span {
+    margin-top: 1px;
+    color: ${({ theme, active }) => active && theme.color.green};
+  }
+
+  div:last-child {
+    margin-left: 0.25rem;
+    height: 1.25rem;
+    width: 1.25rem;
+    min-width: inherit;
+    min-height: inherit;
   }
 `

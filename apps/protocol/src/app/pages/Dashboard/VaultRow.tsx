@@ -1,3 +1,4 @@
+import React, { FC, useMemo } from 'react'
 import { TokenIcon } from '@apps/base/components/core'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { useCalculateUserBoost } from '@apps/boost'
@@ -7,13 +8,12 @@ import { toK } from '@apps/formatters'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { calculateApy } from '@apps/quick-maths'
 import { MassetName } from '@apps/types'
-import React, { FC, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useAvailableSaveApy } from '../../hooks/useAvailableSaveApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useSubscribeRewardStream } from './RewardsContext'
-import { DashNameTableCell, DashTableCell, DashTableRow } from './Styled'
+import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './Styled'
 import { getVaultDeposited } from './utils'
 
 const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number) => {
@@ -52,6 +52,7 @@ const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number) => {
 }
 
 export const VaultRow: FC<{ massetState: MassetState; showBalance: boolean }> = ({ massetState, showBalance }) => {
+  const history = useHistory()
   const mAssetName = massetState.token.symbol.toLowerCase() as MassetName
   const massetPrice = useSelectedMassetPrice(mAssetName)
   const [selectedSaveVersion] = useSelectedSaveVersion()
@@ -62,7 +63,7 @@ export const VaultRow: FC<{ massetState: MassetState; showBalance: boolean }> = 
   } = massetState as MassetState
 
   const userBoost = useCalculateUserBoost(boostedSavingsVault)
-  const apy = useSaveVaultAPY(mAssetName, userBoost)
+  const vaultApy = useSaveVaultAPY(mAssetName, userBoost)
   const saveApy = useAvailableSaveApy(mAssetName)
   const deposits = useMemo(
     () => getVaultDeposited(selectedSaveVersion, massetState, massetPrice.value),
@@ -70,34 +71,39 @@ export const VaultRow: FC<{ massetState: MassetState; showBalance: boolean }> = 
   )
 
   const btcTooltip = mAssetName === 'mbtc' ? 'Dollar value of BTC' : null
-  const userBoostAPY = saveApy?.value + apy?.userBoost || 0
-  const baseAPY = saveApy?.value + apy?.base || 0
-  const maxAPY = saveApy?.value + apy?.maxBoost || 0
-  const userBoostTip = `Combined APY<br>Vault: ${saveApy?.value?.toFixed(2) || 0}%<br>Rewards: ${apy?.userBoost?.toFixed(2) || 0}%`
-  const baseAPYTip = `Base APY<br>Vault: ${saveApy?.value?.toFixed(2) || 0}%<br>Rewards: ${apy?.base?.toFixed(2) || 0}%`
-  const maxAPYTip = `Maximum APY<br>Vault: ${saveApy?.value?.toFixed(2) || 0}%<br>Rewards: ${apy?.maxBoost?.toFixed(2) || 0}%`
+  const userBoostAPY = saveApy?.value + vaultApy?.userBoost || 0
+  const baseAPY = saveApy?.value + vaultApy?.base || 0
+  const maxAPY = saveApy?.value + vaultApy?.maxBoost || 0
+  const userBoostTip = `Combined APY<br>Save: ${saveApy?.value?.toFixed(2) || 0}%<br>Vault Rewards: ${(userBoostAPY || 0).toFixed(2)}%`
+  const apyTip = `Combined APY<br>Save: ${saveApy?.value?.toFixed(2) || 0}%<br>Vault Rewards:<br>${baseAPY?.toFixed(2)}-${maxAPY?.toFixed(
+    2,
+  )}%`
 
   return (
-    <DashTableRow>
+    <DashTableRow onClick={() => history.push(`/${mAssetName}/save`)} buttonTitle="Explore">
       <DashNameTableCell>
         <TokenIcon symbol={massetState.token.symbol} />
-        <Link to={`/${mAssetName}/save`}>{massetState.token.symbol}</Link>
+        {massetState.token.symbol}
       </DashNameTableCell>
       <DashTableCell>
-        {userBoost > 1 && apy?.userBoost ? (
+        {deposits.simple > 0 ? (
           <Tooltip hideIcon tip={userBoostTip}>
-            <CountUp end={userBoostAPY} suffix="%" />
+            <CountUp end={saveApy?.value} suffix="%" />
+            <RewardsApy active>
+              <CountUp end={userBoostAPY} suffix="%" />
+              <TokenIcon symbol="MTA" />
+            </RewardsApy>
           </Tooltip>
         ) : (
-          <>
-            <Tooltip hideIcon tip={baseAPYTip}>
+          <Tooltip hideIcon tip={apyTip}>
+            <CountUp end={saveApy?.value} suffix="%" />
+            <RewardsApy>
               <CountUp end={baseAPY} />
-            </Tooltip>
-            &nbsp;-&nbsp;
-            <Tooltip hideIcon tip={maxAPYTip}>
+              &nbsp;-&nbsp;
               <CountUp end={maxAPY} suffix="%" />
-            </Tooltip>
-          </>
+              <TokenIcon symbol="MTA" />
+            </RewardsApy>
+          </Tooltip>
         )}
       </DashTableCell>
       {showBalance && (

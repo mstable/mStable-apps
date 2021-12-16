@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
+import React, { FC, ReactElement, useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { CountUp, DifferentialCountup, TransitionCard, Tooltip, CardContainer as Card, CardButton as Button } from '@apps/dumb-components'
@@ -64,6 +64,10 @@ export const PoolOverview: FC = () => {
   const showLiquidityMessage = totalEarned === 0 && totalLocked === 0
 
   const handleSelection = useCallback((newValue?: Selection) => setSelection(selection === newValue ? undefined : newValue), [selection])
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0 })
+  }, [])
 
   return showLiquidityMessage ? (
     <LiquidityMessage />
