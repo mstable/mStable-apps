@@ -32,7 +32,13 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   const userBoostApy = feederPoolApy?.value?.rewards?.userBoost || 0
   const platformRewardsApy = feederPoolApy?.value?.platformRewards || 0
 
-  const userBoostTip = `Combined APY<br>Pool: ${baseApy.toFixed(2)}%<br>Vault Rewards: ${userBoostApy.toFixed(2)}%`
+  const userBoostTip = `
+    Combined APY<br>
+    Pool: ${baseApy.toFixed(2)}%<br>
+    Vault Rewards:<br> 
+    ${userBoostApy.toFixed(2)}% MTA
+    ${platformRewardsApy > 0 && `<br>${platformRewardsApy.toFixed(2)}% ${platformRewardsToken?.symbol}`}
+  `
 
   const handleRowClick = () => {
     setSelectedMassetName(mAssetName)
@@ -54,6 +60,12 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
               <CountUp end={userBoostApy} suffix="%" />
               <TokenIcon symbol="MTA" />
             </RewardsApy>
+            {!!feederPoolApy?.value?.platformRewards && (
+              <RewardsApy>
+                <CountUp end={platformRewardsApy} suffix="%" />
+                <TokenIcon symbol={platformRewardsToken?.symbol} />
+              </RewardsApy>
+            )}
           </Tooltip>
         ) : feederPoolApy.value ? (
           <div>
@@ -66,7 +78,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
             </RewardsApy>
             {!!feederPoolApy?.value?.platformRewards && (
               <RewardsApy>
-                <CountUp end={platformRewardsApy} />
+                <CountUp end={platformRewardsApy} suffix="%" />
                 <TokenIcon symbol={platformRewardsToken?.symbol} />
               </RewardsApy>
             )}

@@ -18,7 +18,7 @@ interface Props {
 }
 
 const Cell = styled.td<{ width?: number }>`
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
 
   flex-basis: ${({ width }) => width && `${width}%`};

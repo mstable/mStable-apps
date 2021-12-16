@@ -57,6 +57,7 @@ export const RewardsApy = styled.div<{ active?: boolean }>`
   align-items: center;
   justify-content: flex-end;
   font-size: 0.875rem;
+  margin: 0.25rem 0;
 
   span {
     margin-top: 1px;

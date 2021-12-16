@@ -11,6 +11,8 @@ import { Illustration } from './Illustration'
 import { TotalTvl } from './TotalTvl'
 import { Vaults } from './Vaults'
 import { ViewportWidth } from '@apps/theme'
+import { useHistory } from 'react-router-dom'
+import { useSelectedMasset } from '@apps/masset-provider'
 
 enum Tabs {
   Save = 'Save',
@@ -92,7 +94,19 @@ export const Dashboard: FC = () => {
   useLayoutEffect(() => {
     window.scrollTo({ top: 0 })
   }, [])
+  const [massetName] = useSelectedMasset()
+  const history = useHistory()
   const dataState = useDataState()
+
+  const handleButtonClick = (index: number) => {
+    switch (index) {
+      case 0:
+        history.push(`${massetName}/save`)
+        break
+      default:
+        window.open('https://staking.mstable.app/', '_blank')
+    }
+  }
 
   return (
     <Container>
@@ -100,11 +114,16 @@ export const Dashboard: FC = () => {
       <UserCapture>
         <Illustration />
         <ActionCallouts>
-          <InfoButton title="Deposit" content="Deposit your assets and begin earning interest" onClick={() => {}} />
+          <InfoButton
+            title="Deposit"
+            content="Deposit your assets to Save and begin earning interest"
+            icon="tokens"
+            onClick={() => handleButtonClick(0)}
+          />
           <InfoButton
             title="Earn MTA"
             content="Stake MTA to participate in Governance and boost your rewards on Vault deposits"
-            onClick={() => {}}
+            onClick={() => handleButtonClick(1)}
           />
         </ActionCallouts>
       </UserCapture>

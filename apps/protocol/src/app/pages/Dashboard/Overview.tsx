@@ -73,7 +73,7 @@ const useDeposits = () => {
 export const Overview = () => {
   const account = useAccount()
   const deposits = useDeposits()
-  const { pending } = useTotalRewards()
+  const { total } = useTotalRewards()
 
   if (!account) return null
 
@@ -84,8 +84,8 @@ export const Overview = () => {
         <CountUp end={deposits} prefix="$" />
       </Item>
       <Item>
-        <h3>Claimable rewards</h3>
-        <CountUp end={pending} suffix="MTA" spaced />
+        <h3>MTA rewards</h3>
+        <CountUp end={total} suffix="MTA" spaced />
       </Item>
     </Items>
   )
