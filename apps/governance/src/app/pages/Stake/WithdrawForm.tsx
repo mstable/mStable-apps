@@ -10,7 +10,7 @@ import { AssetInputSingle, SendButton } from '@apps/base/components/forms'
 import { useBlockNow } from '@apps/base/context/block'
 import { BigDecimal } from '@apps/bigdecimal'
 
-import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
+import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedToken'
 import { TimeMultiplierImpact } from './TimeMultiplierImpact'
 import { getRedemptionFee } from '../../utils'
 

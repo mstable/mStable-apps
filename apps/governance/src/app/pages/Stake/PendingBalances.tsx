@@ -7,7 +7,7 @@ import { usePropose } from '@apps/base/context/transactions'
 import { useOwnAccount } from '@apps/base/context/account'
 import { BigDecimal } from '@apps/bigdecimal'
 
-import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
+import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedToken'
 
 const TABLE_WIDTHS = [33, 33, 33]
 

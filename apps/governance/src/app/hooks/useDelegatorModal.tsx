@@ -7,7 +7,7 @@ import { ViewportWidth } from '@apps/theme'
 import { Modal, Table, TableRow } from '@apps/dumb-components'
 
 import { DelegateCell } from '../components/DelegateCell'
-import { useDelegateesAll } from '../context/DelegateeListsProvider'
+import { useDelegateesAll } from '../context/DelegateeLists'
 
 const Container = styled.div`
   max-height: 75vh;

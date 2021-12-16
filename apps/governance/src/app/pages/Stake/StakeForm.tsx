@@ -16,10 +16,10 @@ import { ToggleInput } from '@apps/dumb-components'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { truncateAddress } from '@apps/formatters'
 
-import { useStakedToken, useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedTokenProvider'
-import { useStakingQueryCtx } from '../../context/StakingProvider'
+import { useStakingQuery } from '../../context'
+import { useStakedToken, useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedToken'
 import { DelegateSelection } from '../../components/DelegateSelection'
-import { useStakingStatus, useStakingStatusDispatch } from '../../context/StakingStatusProvider'
+import { useStakingStatus, useStakingStatusDispatch } from '../../context/StakingStatus'
 import { TimeMultiplierImpact } from './TimeMultiplierImpact'
 
 const DAY = 86400
@@ -73,7 +73,7 @@ const Container = styled.div`
 
 export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
   const { data, loading } = useStakedTokenQuery()
-  const stakingQuery = useStakingQueryCtx()
+  const stakingQuery = useStakingQuery()
   const { selected: stakedTokenAddress } = useStakedToken()
   const networkAddresses = useNetworkAddresses()
   const { delegateSelection: delegate } = useModalData()

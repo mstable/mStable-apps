@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { BigNumber } from 'ethers'
 import { getUnixTime } from 'date-fns'
 
-import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakedTokenQuery } from '../../context/StakedToken'
 import { Tooltip } from '@apps/dumb-components'
 
 const getTimeMultiplier = (hodlLengthSeconds: BigNumber) => {

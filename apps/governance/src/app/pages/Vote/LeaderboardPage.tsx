@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect } from 'react'
+import React, { FC, useCallback, useLayoutEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { Leaderboard } from './Leaderboard'
@@ -9,7 +9,12 @@ export const LeaderboardPage: FC = () => {
     window.scrollTo({ top: 0 })
   }, [])
   const history = useHistory()
-  const handleRowClick = (id: string) => history.push(`/vote/${id}`)
+  const handleRowClick = useCallback(
+    (id: string) => {
+      history.push(`/vote/${id}`)
+    },
+    [history],
+  )
 
   return (
     <div>

@@ -4,9 +4,7 @@ import React, { createContext, Dispatch, FC, SetStateAction, useMemo, useState }
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { providerFactory, createUseContextFn } from '@apps/context-utils'
-import { useStakedTokenQuery as useStakedTokenQueryHook } from '@apps/artifacts/graphql/staking'
-
-import { useStakingQueryCtx } from './StakingProvider'
+import { useStakedTokenQuery as useStakedTokenQueryHook, useStakingQuery } from '@apps/artifacts/graphql/staking'
 
 interface State {
   options: { [address: string]: { asset: { address: string }; icon: { symbol: string } } }
@@ -25,8 +23,14 @@ const ContractProvider: FC = ({ children }) => {
 }
 
 export const StakedTokenProvider: FC = ({ children }) => {
+  const clients = useApolloClients()
+  const stakingQuery = useStakingQuery({
+    client: clients.staking,
+    fetchPolicy: 'cache-only',
+    nextFetchPolicy: 'cache-only',
+  })
+
   const [selected, setSelected] = useState<string>()
-  const stakingQuery = useStakingQueryCtx()
 
   return providerFactory(
     dispatchCtx,
@@ -36,6 +40,8 @@ export const StakedTokenProvider: FC = ({ children }) => {
       {
         value: useMemo<State>(() => {
           const data = stakingQuery.data?.stakedTokens ?? []
+          if (!data.every(st => st?.stakingToken?.symbol)) return { options: {} }
+
           const options = Object.fromEntries(
             data.map(({ id: address, stakingToken: { symbol } }) => [address, { icon: { symbol }, asset: { address, symbol } }]),
           )
@@ -49,6 +55,22 @@ export const StakedTokenProvider: FC = ({ children }) => {
   )
 }
 
+export const StakedTokenQueryUpdater: FC = () => {
+  const clients = useApolloClients()
+  const account = useAccount()
+  const { selected } = useStakedToken()
+
+  // Poll and cache
+  useStakedTokenQueryHook({
+    client: clients.staking,
+    variables: { id: selected, account: account ?? '', hasAccount: !!account },
+    skip: !selected,
+    pollInterval: 30e3,
+  })
+
+  return null
+}
+
 export const useStakedTokenContract = createUseContextFn(stakedTokenContractCtx)
 
 export const useStakedToken = createUseContextFn(stateCtx)
@@ -56,15 +78,16 @@ export const useStakedToken = createUseContextFn(stateCtx)
 export const useSetStakedToken = createUseContextFn(dispatchCtx)
 
 export const useStakedTokenQuery = () => {
-  const { staking: client } = useApolloClients()
+  const clients = useApolloClients()
   const account = useAccount()
 
   const { selected } = useStakedToken()
 
-  const options = useMemo(
-    () => ({ client, variables: { id: selected, account: account ?? '', hasAccount: !!account }, skip: !selected, pollInterval: 15e3 }),
-    [account, client, selected],
-  )
-
-  return useStakedTokenQueryHook(options)
+  return useStakedTokenQueryHook({
+    client: clients.staking,
+    variables: { id: selected, account: account ?? '', hasAccount: !!account },
+    skip: !selected,
+    fetchPolicy: 'cache-only',
+    nextFetchPolicy: 'cache-only',
+  })
 }

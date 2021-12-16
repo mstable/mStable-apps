@@ -7,7 +7,7 @@ import { ViewportWidth } from '@apps/theme'
 import { Address, IPFSImg, UserIcon } from '@apps/base/components/core'
 import { ExternalLink, Tooltip } from '@apps/dumb-components'
 
-import { useDelegateesAll } from '../../context/DelegateeListsProvider'
+import { useDelegateesAll } from '../../context/DelegateeLists'
 
 const MiniDelegateeProfileContainer = styled.div`
   display: flex;

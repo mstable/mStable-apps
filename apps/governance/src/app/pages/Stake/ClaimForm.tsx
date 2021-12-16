@@ -11,7 +11,7 @@ import { SendButton } from '@apps/base/components/forms'
 import { MultiRewards } from '@apps/base/components/core'
 import { BigDecimal } from '@apps/bigdecimal'
 
-import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedToken'
 import { useRewardsEarned } from './context'
 
 const Compound = styled.div`

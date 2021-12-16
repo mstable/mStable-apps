@@ -1948,7 +1948,7 @@ export type TokenAllFragment = { id: string, address: string, decimals: number, 
 export type StakingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StakingQuery = { stakedTokens: Array<{ id: string, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }> };
+export type StakingQuery = { stakedTokens: Array<{ id: string, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }> };
 
 export type TokensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1961,7 +1961,7 @@ export type LeaderboardQueryVariables = Exact<{
 }>;
 
 
-export type LeaderboardQuery = { stakedTokens: Array<{ token: { totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }>, accounts: Array<{ id: string, totalVotesAll: string, totalVotesAllBD: BigDecimal }> };
+export type LeaderboardQuery = { accounts: Array<{ id: string, totalVotesAll: string, totalVotesAllBD: BigDecimal }> };
 
 export type AccountQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -2032,6 +2032,9 @@ export const StakingDocument = gql`
     stakingToken {
       ...TokenAll
     }
+    token {
+      ...TokenAll
+    }
   }
 }
     ${TokenAllFragmentDoc}`;
@@ -2098,13 +2101,6 @@ export type TokensLazyQueryHookResult = ReturnType<typeof useTokensLazyQuery>;
 export type TokensQueryResult = Apollo.QueryResult<TokensQuery, TokensQueryVariables>;
 export const LeaderboardDocument = gql`
     query Leaderboard($count: Int!, $skip: Int!) {
-  stakedTokens {
-    token {
-      totalSupply {
-        ...MetricFields
-      }
-    }
-  }
   accounts(
     first: $count
     skip: $skip
@@ -2116,7 +2112,7 @@ export const LeaderboardDocument = gql`
     totalVotesAllBD @client
   }
 }
-    ${MetricFieldsFragmentDoc}`;
+    `;
 
 /**
  * __useLeaderboardQuery__

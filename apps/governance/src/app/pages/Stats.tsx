@@ -5,7 +5,7 @@ import { ViewportWidth } from '@apps/theme'
 import { Tooltip, ButtonExternal } from '@apps/dumb-components'
 
 import { GovernancePageHeader } from '../components/GovernancePageHeader'
-import { useStakedTokenQuery } from '../context/StakedTokenProvider'
+import { useStakedTokenQuery } from '../context/StakedToken'
 import { getDaysUntilQueueUpdate } from '../utils'
 
 const DAY = 86400

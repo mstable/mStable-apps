@@ -6,8 +6,8 @@ import { useURLQuery } from '@apps/hooks'
 import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 
-import { useStakingStatus } from '../../context/StakingStatusProvider'
-import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakingStatus } from '../../context/StakingStatus'
+import { useStakedTokenQuery } from '../../context/StakedToken'
 
 import { ClaimForm } from './ClaimForm'
 import { ClaimGraph } from './ClaimGraph'

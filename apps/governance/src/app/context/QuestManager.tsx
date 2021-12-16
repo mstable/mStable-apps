@@ -10,8 +10,8 @@ const questManagerContractCtx = createContext<QuestManager | undefined>(undefine
 
 export const QuestManagerProvider: FC = ({ children }) => {
   const signer = useSigner()
-  const { staking: client } = useApolloClients()
-  const questsQuery = useQuestsQuery({ client, pollInterval: 60e3 })
+  const clients = useApolloClients()
+  const questsQuery = useQuestsQuery({ client: clients.staking, canonizeResults: true })
 
   const questManagerAddress = questsQuery.data?.questManagers[0]?.id
 
