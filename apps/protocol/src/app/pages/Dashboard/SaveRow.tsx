@@ -92,13 +92,15 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
     upsertStream(`reward-${mAssetName}`, rewards)
   }, [mAssetName, rewards, rewards?.amounts?.earned?.unlocked, upsertStream])
 
+  const hasRewards = ((rewards?.amounts?.earned?.unlocked ?? 0) + rewards?.amounts?.unlocked ?? 0) > 0
+
   return (
     <DashTableRow onClick={() => history.push(`/${mAssetName}/save`)} buttonTitle="Explore">
       <DashNameTableCell>
         <TokenIcon symbol={`i${massetState.token.symbol}`} />
         {`i${massetState.token.symbol}`}
       </DashNameTableCell>
-      <DashTableCell>
+      <DashTableCell hasRewards={hasRewards}>
         {deposits.total.simple > 0 ? (
           <Tooltip hideIcon tip={userBoostTip}>
             <CountUp end={saveApy?.value} suffix="%" />

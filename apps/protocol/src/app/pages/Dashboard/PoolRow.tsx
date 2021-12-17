@@ -65,13 +65,15 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
     upsertStream(`pool-${feederPool.address}`, rewards)
   }, [feederPool.address, rewards, rewards?.amounts?.earned?.unlocked, upsertStream])
 
+  const hasRewards = ((rewards?.amounts?.earned?.unlocked ?? 0) + rewards?.amounts?.unlocked ?? 0) > 0
+
   return (
     <DashTableRow {...rest} onClick={handleRowClick} buttonTitle="Explore">
       <DashNameTableCell>
         <TokenPair symbols={[feederPool.masset.token.symbol, feederPool.fasset.token.symbol]} isLarge={false} />
         {feederPool.title}
       </DashNameTableCell>
-      <DashTableCell>
+      <DashTableCell hasRewards={hasRewards}>
         {deposits.total > 0 ? (
           <Tooltip hideIcon tip={userBoostTip}>
             <CountUp end={baseApy || 0} suffix="%" />

@@ -38,11 +38,24 @@ export const DashTable = styled(Table).attrs(() => ({ widths: [25, 25, 25, 25] }
 
 export const DashTableRow = styled(TableRow)``
 
-export const DashTableCell = styled(TableCell)`
+export const DashTableCell = styled(TableCell)<{ hasRewards?: boolean }>`
   display: flex;
   align-items: center;
   width: 25%;
   padding: 0.75rem 1rem;
+  position: relative;
+
+  &:before {
+    position: absolute;
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    background: ${({ theme }) => theme.color.gold};
+    right: -0.5rem;
+    top: calc(50% - 0.25rem);
+    display: ${({ hasRewards }) => (hasRewards ? 'inherit' : 'none')};
+    border-radius: 0.25rem;
+  }
 `
 
 export const DashNameTableCell = styled(DashTableCell)`
