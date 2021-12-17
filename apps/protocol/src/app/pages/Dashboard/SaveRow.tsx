@@ -95,8 +95,8 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
   return (
     <DashTableRow onClick={() => history.push(`/${mAssetName}/save`)} buttonTitle="Explore">
       <DashNameTableCell>
-        <TokenIcon symbol={massetState.token.symbol} />
-        {massetState.token.symbol}
+        <TokenIcon symbol={`i${massetState.token.symbol}`} />
+        {`i${massetState.token.symbol}`}
       </DashNameTableCell>
       <DashTableCell>
         {deposits.simple > 0 ? (

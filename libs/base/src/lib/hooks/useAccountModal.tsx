@@ -7,8 +7,6 @@ import { ViewportWidth } from '@apps/theme'
 
 import { Address } from '../components/core'
 import { useConnected, useReset, useWallet, useWalletAddress } from '../context/AccountProvider'
-import { useBaseCtx } from '../BaseProviders'
-import { useExploreAssetModal } from './useExploreAssetModal'
 
 const DisconnectButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};
@@ -51,9 +49,7 @@ const Container = styled.div`
   padding: 0 1rem;
 
   > div:first-child {
-    border-bottom: 1px ${({ theme }) => theme.color.defaultBorder} solid;
     padding: 1rem 1rem 2rem 1rem;
-    margin-bottom: 1rem;
 
     h3 {
       font-size: 1rem;
@@ -73,24 +69,16 @@ export const useAccountModal = (): [() => void, () => void] => {
   const [showModal, hideModal] = useModal(({ onExited, in: open }) => {
     // "Modals are also functional components and can use react hooks themselves"
     /* eslint-disable react-hooks/rules-of-hooks */
-    const [showExploreModal] = useExploreAssetModal(hideModal)
     const reset = useReset()
     const address = useWalletAddress()
     const connected = useConnected()
     const wallet = useWallet()
-    const [{ AccountModalContent }] = useBaseCtx()
-    /* eslint-enable react-hooks/rules-of-hooks */
 
     const handleClick = (): void => {
       if (reset) {
         reset()
         hideModal()
       }
-    }
-
-    // Handled here to allow reuse of Balance w/o conflating modal & balance logic
-    const handleRowClick = (symbol: string): void => {
-      showExploreModal(symbol)
     }
 
     return (
@@ -106,7 +94,6 @@ export const useAccountModal = (): [() => void, () => void] => {
                 </DisconnectButton>
               </AddressGroup>
             </div>
-            <div>{AccountModalContent && <AccountModalContent onRowClick={handleRowClick} />}</div>
           </Container>
         )}
       </Modal>

@@ -12,7 +12,6 @@ import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } fro
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
 
-import { Balances } from './components/Balances'
 import { Dashboard } from './pages/Dashboard'
 import { Save } from './pages/Save'
 import { NotFound } from './pages/NotFound'
@@ -87,7 +86,7 @@ export const ProtocolApp: FC = () => {
     ]
     const appName = APP_NAME.PROTOCOL
 
-    setBaseCtx({ navItems, AccountModalContent: Balances, appName })
+    setBaseCtx({ navItems, appName })
   }, [hasFeederPools, setBaseCtx, massetName])
 
   // Handle message prioritisation:

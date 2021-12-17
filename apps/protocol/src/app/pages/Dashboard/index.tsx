@@ -6,6 +6,7 @@ import Skeleton from 'react-loading-skeleton'
 import styled from 'styled-components'
 import { Overview } from './Overview'
 import { PoolsTable } from './PoolsTable'
+import { WalletTable } from './WalletTable'
 import { RewardsProvider, useReset } from './RewardsContext'
 import { Illustration } from './Illustration'
 import { TotalTvl } from './TotalTvl'
@@ -17,6 +18,7 @@ import { useSelectedMasset } from '@apps/masset-provider'
 enum Tabs {
   Save = 'Save',
   Pools = 'Pools',
+  Wallet = 'Wallet',
 }
 
 const tabs = {
@@ -27,6 +29,10 @@ const tabs = {
   [Tabs.Pools]: {
     title: `Pools`,
     component: <PoolsTable />,
+  },
+  [Tabs.Wallet]: {
+    title: `Wallet`,
+    component: <WalletTable />,
   },
 }
 
@@ -39,9 +45,16 @@ const DashboardContent: FC = () => {
     reset()
   }, [address, reset, activeTab])
 
+  const filteredTabs = Object.keys(tabs)
+    .filter(key => (!address ? key !== 'Wallet' : true))
+    .reduce((obj, key) => {
+      obj[key] = tabs[key]
+      return obj
+    }, {})
+
   return (
-    <TabsLeftAlign tabs={tabs} active={activeTab} onClick={setActiveTab}>
-      <Overview tab={activeTab as 'Pools' | 'Save'} />
+    <TabsLeftAlign tabs={filteredTabs} active={activeTab} onClick={setActiveTab}>
+      {activeTab !== 'Wallet' && <Overview tab={activeTab as 'Pools' | 'Save'} />}
     </TabsLeftAlign>
   )
 }

@@ -5,21 +5,18 @@ import { useHistory } from 'react-router-dom'
 import { Table, TableCell, TableRow, Button } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 
-import { ChainIds, useChainIdCtx } from '../../context/NetworkProvider'
-import { SendAsset } from '../core'
+import { useChainIdCtx } from '../../context/NetworkProvider'
 
 const Header = styled.div`
   padding: 0 1rem;
 
   h3 {
     font-size: 1.25rem;
-    font-weight: 600;
     color: ${({ theme }) => theme.color.body};
     margin-bottom: 0.75rem;
   }
 
   p {
-    color: ${({ theme }) => theme.color.bodyAccent};
     font-size: 0.875rem;
   }
 `
@@ -31,6 +28,15 @@ const Container = styled.div`
 
   > *:last-child {
     margin-top: 1rem;
+  }
+
+  h3 {
+    font-weight: 500;
+  }
+
+  p,
+  span {
+    color: ${({ theme }) => theme.color.bodyAccent};
   }
 
   td {
@@ -46,69 +52,44 @@ const Container = styled.div`
   }
 `
 
-const getAssetUse = (symbol: string, isEthereum: boolean): { title: string; subtitle: string; href?: string }[] => {
+const getAssetUse = (symbol: string, type?: 'masset' | 'fasset' | 'basset'): { title: string; subtitle: string; href?: string }[] => {
+  const isBtc = symbol.includes('BTC')
+  const massetName = isBtc ? 'mbtc' : 'musd'
+  const formattedName = {
+    musd: 'mUSD',
+    mbtc: 'mBTC',
+  }
+
   switch (symbol) {
     case 'mUSD Save v1':
       return [
         {
           title: `Migrate`,
           subtitle: 'Migrate your Save balance',
-          href: `/musd/save`,
+          href: `/${massetName}/save`,
         },
       ]
     case 'mBTC':
+    case 'mUSD':
       return [
         {
-          title: `Save (imBTC)`,
+          title: `Save (i${formattedName[massetName]})`,
           subtitle: 'Earn a native interest rate',
-          href: `/mbtc/save`,
+          href: `/${massetName}/save`,
         },
         {
           title: 'Pools',
           subtitle: 'Earn MTA rewards',
-          href: `/mbtc/pools`,
+          href: `/${massetName}/pools`,
         },
-      ]
-    case 'mUSD':
-      return [
-        {
-          title: `Save (imUSD)`,
-          subtitle: 'Earn a native interest rate',
-          href: `/musd/save`,
-        },
-        ...(isEthereum
-          ? [
-              {
-                title: 'Pools',
-                subtitle: 'Earn MTA rewards',
-                href: `/musd/pools`,
-              },
-            ]
-          : []),
-        ...(isEthereum
-          ? [
-              {
-                title: 'Rari Capital',
-                subtitle: 'Earn interest on your mUSD',
-                href: 'https://app.rari.capital/',
-              },
-            ]
-          : []),
       ]
     case 'imUSD':
-      return [
-        {
-          title: 'Save Vault (imUSD Vault)',
-          subtitle: 'Earn MTA rewards',
-          href: `/musd/save`,
-        },
-      ]
     case 'imBTC':
       return [
         {
-          title: 'Save Vault (imBTC Vault)',
+          title: `Save Vault (i${formattedName[massetName]} Vault)`,
           subtitle: 'Earn MTA rewards',
-          href: `/mbtc/save`,
+          href: `/${massetName}/save`,
         },
       ]
     case 'MTA':
@@ -119,47 +100,34 @@ const getAssetUse = (symbol: string, isEthereum: boolean): { title: string; subt
           href: 'https://staking.mstable.app/',
         },
         {
-          title: 'Cream Finance',
-          subtitle: 'Use as collateral for loans',
-          href: 'https://app.cream.finance/',
-        },
-        {
           title: 'Unit Protocol',
           subtitle: 'Use as collateral for loans',
           href: 'https://unit.xyz/',
         },
       ]
-    case 'DAI':
-    case 'USDC':
-    case 'USDT':
-    case 'sUSD':
-      return [
-        {
-          title: `Save (imUSD)`,
-          subtitle: 'Earn a native interest rate',
-          href: `/musd/save`,
-        },
-      ]
-    case 'renBTC':
-    case 'WBTC':
-    case 'sBTC':
-      return [
-        {
-          title: `Save (imBTC)`,
-          subtitle: 'Earn a native interest rate',
-          href: `/mbtc/save`,
-        },
-      ]
     default:
-      return []
+      return [
+        {
+          title: `Save (i${formattedName[massetName]})`,
+          subtitle: 'Earn a native interest rate',
+          href: `/${massetName}/save`,
+        },
+        {
+          title: 'Pools',
+          subtitle: 'Earn MTA rewards',
+          href: `/${massetName}/pools`,
+        },
+      ]
   }
 }
 
-export const ExploreAsset: FC<{ symbol?: string; onRowClick?: () => void }> = ({ symbol, onRowClick }) => {
-  const [chainId] = useChainIdCtx()
-  const assetUses = getAssetUse(symbol ?? '', chainId === ChainIds.EthereumMainnet)
+export const ExploreAsset: FC<{ symbol?: string; onRowClick?: () => void; type?: 'masset' | 'fasset' | 'basset' }> = ({
+  symbol,
+  type,
+  onRowClick,
+}) => {
+  const assetUses = getAssetUse(symbol ?? '', type)
   const history = useHistory()
-  const showSendAsset = symbol && ['mUSD', 'imUSD', 'mBTC', 'imBTC'].includes(symbol)
 
   const handleOnClick = (href?: string): void => {
     if (!href) return
@@ -173,39 +141,29 @@ export const ExploreAsset: FC<{ symbol?: string; onRowClick?: () => void }> = ({
 
   return (
     <Container>
-      {showSendAsset && (
-        <>
-          <Header>
-            <h3>Send</h3>
-          </Header>
-          {symbol && <SendAsset symbol={symbol} />}
-        </>
-      )}
       <Header>
         <h3>Explore</h3>
         <p>Explore options to deposit your idle {symbol}</p>
       </Header>
-      {!!assetUses?.length && (
-        <Table>
-          {assetUses.map(val => {
-            if (!val) return null
-            const { title, subtitle, href } = val
-            return (
-              <TableRow key={title} buttonTitle="View" onClick={() => handleOnClick(href)}>
-                <TableCell width={75}>
-                  <div>
-                    <h3>{title}</h3>
-                    <span>{subtitle}</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Button onClick={() => {}}>View</Button>
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </Table>
-      )}
+      <Table>
+        {assetUses.map(val => {
+          if (!val) return null
+          const { title, subtitle, href } = val
+          return (
+            <TableRow key={title} buttonTitle="View" onClick={() => handleOnClick(href)}>
+              <TableCell width={75}>
+                <div>
+                  <h3>{title}</h3>
+                  <span>{subtitle}</span>
+                </div>
+              </TableCell>
+              <TableCell>
+                <Button onClick={() => {}}>View</Button>
+              </TableCell>
+            </TableRow>
+          )
+        })}
+      </Table>
     </Container>
   )
 }
