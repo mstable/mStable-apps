@@ -12,6 +12,7 @@ import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './St
 import { getPoolDeposited } from './utils'
 import { useSetSelectedMassetName } from '@apps/masset-provider'
 import { useRewardStreams } from '../../context/RewardStreamsProvider'
+import { useTokenSubscription } from '@apps/base/context/tokens'
 
 export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> = ({ feederPool, showBalance, ...rest }) => {
   const history = useHistory()
@@ -20,7 +21,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   const platformRewardsToken = feederPool.vault?.platformRewardsToken
   const feederPoolApy = useFeederPoolApy(feederPool.address, mAssetName)
   const massetPrice = useSelectedMassetPrice(mAssetName)
-  const deposited = useMemo(() => getPoolDeposited(feederPool, massetPrice.value), [feederPool, massetPrice.value])
+  const deposits = useMemo(() => getPoolDeposited(feederPool, massetPrice.value), [feederPool, massetPrice.value])
   const tvlPrice = useMemo(
     () => (massetPrice.value ? massetPrice.value * feederPool.price.simple : undefined),
     [feederPool.price.simple, massetPrice.value],
@@ -28,12 +29,18 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   const rewards = useRewardStreams()
   const upsertStream = useUpsertStream()
 
+  useTokenSubscription(feederPool?.fasset?.address)
+
   const baseApy = feederPoolApy?.value?.base || 0
   const rewardsBaseApy = feederPoolApy?.value?.rewards?.base || 0
   const rewardsMaxApy = feederPoolApy?.value?.rewards?.maxBoost || 0
   const userBoostApy = feederPoolApy?.value?.rewards?.userBoost || 0
   const platformRewardsApy = feederPoolApy?.value?.platformRewards || 0
 
+  const balanceToolTip = `
+    Pool: $${deposits.pool.toFixed(2)}<br />
+    Vault: $${deposits.vault.toFixed(2)}
+  `
   const userBoostTip = `
     Pool: ${baseApy.toFixed(2)}%<br />
     Vault Rewards:<br /> 
@@ -65,7 +72,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
         {feederPool.title}
       </DashNameTableCell>
       <DashTableCell>
-        {deposited > 0 ? (
+        {deposits.total > 0 ? (
           <Tooltip hideIcon tip={userBoostTip}>
             <CountUp end={baseApy || 0} suffix="%" />
             <RewardsApy active>
@@ -99,7 +106,9 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
       </DashTableCell>
       {showBalance && (
         <DashTableCell>
-          <CountUp end={deposited} prefix="$" />
+          <Tooltip tip={balanceToolTip} hideIcon>
+            <CountUp end={deposits.total} prefix="$" />
+          </Tooltip>
         </DashTableCell>
       )}
       <DashTableCell>

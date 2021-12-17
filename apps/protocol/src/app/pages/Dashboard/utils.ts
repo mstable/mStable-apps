@@ -2,7 +2,6 @@ import { ChainIds, getNetwork } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { BigDecimal } from '@apps/bigdecimal'
 import { FeederPoolState, MassetState } from '@apps/data-provider'
-import { SaveVersion } from '../../context/SelectedSaveVersionProvider'
 
 const {
   addresses: { WBTC },
@@ -14,33 +13,52 @@ export const useWBTCPrice = () => {
   return fetchPrice(WBTC)
 }
 
-export const getPoolDeposited = ({ token, vault, price }: FeederPoolState, mAssetPrice = 1) => {
+export const getPoolDeposited = ({ token, vault: _vault, price }: FeederPoolState, mAssetPrice = 1) => {
   const fpTokenPrice = (price?.simple || 1) * mAssetPrice
-  const userAmount = token?.balance?.simple ?? 0
-  const userStakedAmount = vault?.account?.rawBalance?.simple ?? 0
+  const pool = (token?.balance?.simple ?? 0) * fpTokenPrice
+  const vault = (_vault?.account?.rawBalance?.simple ?? 0) * fpTokenPrice
+  const total = pool + vault
 
-  return (userStakedAmount + userAmount) * fpTokenPrice
+  return {
+    total,
+    pool,
+    vault,
+  }
 }
 
 export const sortPoolsByDepositedDesc = (a: FeederPoolState, b: FeederPoolState): number =>
   getPoolDeposited(a) > getPoolDeposited(b) ? -1 : 1
 
-export const getVaultDeposited = (selectedSaveVersion: SaveVersion, massetState: MassetState, mAssetPrice = 1): BigDecimal => {
+export const getSaveDeposited = (massetState: MassetState, mAssetPrice = 1): { total: BigDecimal; save: BigDecimal; vault: BigDecimal } => {
   const {
     savingsContracts: {
-      v1: { savingsBalance: saveV1Balance } = {},
       v2: { boostedSavingsVault, token: saveToken, latestExchangeRate: { rate: saveExchangeRate } = {} },
     },
   } = massetState
 
-  return (
-    selectedSaveVersion === 1
-      ? saveV1Balance?.balance ?? BigDecimal.ZERO
-      : (boostedSavingsVault?.account?.rawBalance ?? BigDecimal.ZERO)
-          .add(saveToken?.balance ?? BigDecimal.ZERO)
-          .mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact) ?? BigDecimal.ZERO
-  ).mulTruncate(BigDecimal.fromSimple(mAssetPrice).exact)
+  if (!massetState)
+    return {
+      total: BigDecimal.ZERO,
+      save: BigDecimal.ZERO,
+      vault: BigDecimal.ZERO,
+    }
+
+  const save = (saveToken?.balance ?? BigDecimal.ZERO)
+    .mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact)
+    .mulTruncate(BigDecimal.fromSimple(mAssetPrice).exact)
+
+  const vault = (boostedSavingsVault?.account?.rawBalance ?? BigDecimal.ZERO)
+    .mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact)
+    .mulTruncate(BigDecimal.fromSimple(mAssetPrice).exact)
+
+  const total = save.add(vault)
+
+  return {
+    total,
+    save,
+    vault,
+  }
 }
 
-export const sortVaultsByDepositedDesc = (selectedSaveVersion: SaveVersion) => (a: MassetState, b: MassetState) =>
-  getVaultDeposited(selectedSaveVersion, a).simple > getVaultDeposited(selectedSaveVersion, b).simple ? -1 : 1
+export const sortSaveByDepositedDesc = () => (a: MassetState, b: MassetState) =>
+  getSaveDeposited(a).total.simple > getSaveDeposited(b).total.simple ? -1 : 1

@@ -2,24 +2,19 @@ import React, { useMemo } from 'react'
 import { useAccount } from '@apps/base/context/account'
 import { MassetState, useDataState } from '@apps/data-provider'
 import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
-import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { Card, DashTable } from './Styled'
-import { sortVaultsByDepositedDesc } from './utils'
+import { sortSaveByDepositedDesc } from './utils'
 import { SaveRow } from './SaveRow'
 
 const headerTitles = ['Asset', 'APY', 'Balance', 'TVL'].map(t => ({ title: t }))
 
 export const SaveTable = () => {
   const dataState = useDataState()
-  const [selectedSaveVersion] = useSelectedSaveVersion()
   const account = useAccount()
 
   const filteredHeaderTitles = !!account ? headerTitles : headerTitles.filter(({ title }) => title !== 'Balance')
 
-  const vaults = useMemo(
-    () => Object.values(dataState).sort(sortVaultsByDepositedDesc(selectedSaveVersion)),
-    [dataState, selectedSaveVersion],
-  )
+  const vaults = useMemo(() => Object.values(dataState).sort(sortSaveByDepositedDesc()), [dataState])
 
   return (
     <div>

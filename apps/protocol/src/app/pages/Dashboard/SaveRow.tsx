@@ -9,15 +9,15 @@ import { useSelectedMassetState } from '@apps/masset-hooks'
 import { calculateApy } from '@apps/quick-maths'
 import { MassetName } from '@apps/types'
 import { useHistory } from 'react-router-dom'
-import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useAvailableSaveApy } from '../../hooks/useAvailableSaveApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useUpsertStream } from './RewardsContext'
 import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './Styled'
-import { getVaultDeposited } from './utils'
 import { useRewardStreams } from '../../context/RewardStreamsProvider'
+import { useTokenSubscription } from '@apps/base/context/tokens'
+import { getSaveDeposited } from './utils'
 
-const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number) => {
+const useSaveVaultAPY = (mAssetName: MassetName, massetPrice?: number, userBoost?: number) => {
   const {
     savingsContracts: {
       v2: { boostedSavingsVault, latestExchangeRate },
@@ -25,11 +25,10 @@ const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number) => {
   } = useSelectedMassetState(mAssetName) as MassetState
 
   const { fetchPrice } = useFetchPriceCtx()
-  const massetPrice = useSelectedMassetPrice(mAssetName)
   const rewardsTokenPrice = fetchPrice(boostedSavingsVault?.rewardsToken.address)
 
   return useMemo(() => {
-    if (!boostedSavingsVault || !massetPrice.value || !rewardsTokenPrice.value)
+    if (!boostedSavingsVault || !massetPrice || !rewardsTokenPrice.value)
       return {
         base: 0,
         maxBoost: 0,
@@ -38,7 +37,7 @@ const useSaveVaultAPY = (mAssetName: MassetName, userBoost?: number) => {
 
     const { totalSupply, rewardRate } = boostedSavingsVault
 
-    const stakingTokenPrice = latestExchangeRate.rate.simple * massetPrice.value
+    const stakingTokenPrice = latestExchangeRate.rate.simple * massetPrice
 
     const rewardRateSimple = parseInt(rewardRate.toString()) / 1e18
     const base = calculateApy(stakingTokenPrice, rewardsTokenPrice.value, rewardRateSimple, totalSupply)
@@ -56,27 +55,28 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
   const history = useHistory()
   const mAssetName = massetState.token.symbol.toLowerCase() as MassetName
   const massetPrice = useSelectedMassetPrice(mAssetName)
-  const [selectedSaveVersion] = useSelectedSaveVersion()
   const rewards = useRewardStreams()
   const upsertStream = useUpsertStream()
 
   const {
-    savingsContracts: { v2: { boostedSavingsVault } = {} },
+    savingsContracts: { v2: { boostedSavingsVault, token: saveToken } = {} },
   } = massetState as MassetState
 
-  const userBoost = useCalculateUserBoost(boostedSavingsVault)
-  const vaultApy = useSaveVaultAPY(mAssetName, userBoost)
-  const saveApy = useAvailableSaveApy(mAssetName)
-  const deposits = useMemo(
-    () => getVaultDeposited(selectedSaveVersion, massetState, massetPrice.value),
-    [massetPrice.value, massetState, selectedSaveVersion],
-  )
+  useTokenSubscription(saveToken?.address)
 
-  const btcTooltip = mAssetName === 'mbtc' ? 'Dollar value of BTC' : null
+  const userBoost = useCalculateUserBoost(boostedSavingsVault)
+  const vaultApy = useSaveVaultAPY(mAssetName, massetPrice?.value, userBoost)
+  const deposits = getSaveDeposited(massetState, massetPrice?.value)
+  const saveApy = useAvailableSaveApy(mAssetName)
+
   const userBoostAPY = saveApy?.value + vaultApy?.userBoost || 0
   const baseAPY = saveApy?.value + vaultApy?.base || 0
   const maxAPY = saveApy?.value + vaultApy?.maxBoost || 0
 
+  const balanceToolTip = `
+    Save: $${(deposits.save.simple || 0).toFixed(2)}<br />
+    Vault: $${(deposits.vault.simple || 0).toFixed(2)}
+  `
   const userBoostTip = `
     Save: ${saveApy?.value?.toFixed(2) || 0}%<br />
     Vault Rewards: ${(userBoostAPY || 0).toFixed(2)}%
@@ -99,7 +99,7 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
         {`i${massetState.token.symbol}`}
       </DashNameTableCell>
       <DashTableCell>
-        {deposits.simple > 0 ? (
+        {deposits.total.simple > 0 ? (
           <Tooltip hideIcon tip={userBoostTip}>
             <CountUp end={saveApy?.value} suffix="%" />
             <RewardsApy active>
@@ -121,8 +121,8 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
       </DashTableCell>
       {showBalance && (
         <DashTableCell>
-          <Tooltip tip={btcTooltip} hideIcon>
-            <CountUp end={deposits.simple} prefix="$" />
+          <Tooltip tip={balanceToolTip} hideIcon>
+            <CountUp end={deposits.total.simple} prefix="$" />
           </Tooltip>
         </DashTableCell>
       )}

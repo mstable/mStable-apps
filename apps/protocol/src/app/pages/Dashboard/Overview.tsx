@@ -6,7 +6,7 @@ import { CountUp } from '@apps/dumb-components'
 import styled from 'styled-components'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useTotalRewards } from './RewardsContext'
-import { getPoolDeposited, getVaultDeposited, useWBTCPrice } from './utils'
+import { getPoolDeposited, getSaveDeposited, useWBTCPrice } from './utils'
 import { ViewportWidth } from '@apps/theme'
 
 export const Item = styled.div`
@@ -56,18 +56,17 @@ const Items = styled.div`
 const useDeposits = (tab: 'Pools' | 'Save') => {
   const dataState = useDataState()
   const wbtcPrice = useWBTCPrice()
-  const [selectedSaveVersion] = useSelectedSaveVersion()
 
   return useMemo(
     () =>
       Object.values(dataState).reduce((acc, curr: MassetState) => {
         const mPrice = curr?.token?.symbol === 'mBTC' ? wbtcPrice.value : 1
-        const save = getVaultDeposited(selectedSaveVersion, curr, mPrice).simple
-        const pools = Object.values(curr.feederPools).reduce((ac, cu) => ac + getPoolDeposited(cu, mPrice), 0)
+        const save = getSaveDeposited(curr, mPrice).total.simple
+        const pools = Object.values(curr.feederPools).reduce((ac, cu) => ac + getPoolDeposited(cu, mPrice).total, 0)
         if (tab === 'Pools') return acc + pools
         return acc + save
       }, 0),
-    [dataState, selectedSaveVersion, wbtcPrice.value, tab],
+    [dataState, wbtcPrice.value, tab],
   )
 }
 
