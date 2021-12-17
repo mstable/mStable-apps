@@ -88,7 +88,6 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
   `
 
   useEffect(() => {
-    if (!rewards?.amounts?.earned?.unlocked) return
     upsertStream(`reward-${mAssetName}`, rewards)
   }, [mAssetName, rewards, rewards?.amounts?.earned?.unlocked, upsertStream])
 

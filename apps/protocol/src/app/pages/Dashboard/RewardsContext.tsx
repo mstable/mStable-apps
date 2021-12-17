@@ -14,15 +14,12 @@ interface RewardsContext {
 
 const ctx = createContext<RewardsContext>(null)
 
-const isStreamEqual = (a: RewardStreams, b: RewardStreams): boolean => a?.amounts?.total === b?.amounts?.total
-
 export const RewardsProvider: FC = ({ children }) => {
   const [streams, setStreams] = useState<Record<string, RewardStreams>>({})
 
   const upsertStream = useCallback(
     (id: string, stream) => {
       if (stream && !streams[id]) {
-        // || !isStreamEqual(streams[id], stream)
         setStreams({ ...streams, [id]: stream })
       }
     },
@@ -48,7 +45,6 @@ export const RewardsProvider: FC = ({ children }) => {
       Object.values(streams).reduce(
         (acc, curr) => {
           const { amounts } = curr
-          if (!amounts) return acc
           const { earned, total, unlocked } = amounts
 
           return {

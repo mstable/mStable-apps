@@ -61,9 +61,8 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   }
 
   useEffect(() => {
-    if (!rewards?.amounts?.earned?.unlocked) return
     upsertStream(`pool-${feederPool.address}`, rewards)
-  }, [feederPool.address, rewards, rewards?.amounts?.earned?.unlocked, upsertStream])
+  }, [feederPool.address, rewards, rewards?.amounts?.unlocked, upsertStream])
 
   const hasRewards = ((rewards?.amounts?.earned?.unlocked ?? 0) + rewards?.amounts?.unlocked ?? 0) > 0
 
