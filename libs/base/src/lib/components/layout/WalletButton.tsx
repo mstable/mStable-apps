@@ -6,9 +6,9 @@ import { UnstyledButton } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 
 import { ChainIds, getNetwork, useChainIdCtx } from '../../context/NetworkProvider'
-import { useConnect, useWalletAddress, useConnected, useInjectedChainIdCtx } from '../../context/AccountProvider'
+import { useConnect, useWalletAddress, useEnsName, useConnected, useInjectedChainIdCtx, useEnsAvatar } from '../../context/AccountProvider'
 import { useAccountModal } from '../../hooks/useAccountModal'
-import { UserIcon } from '../core'
+import { UserIcon, UserIconContainer } from '../core'
 
 const ConnectText = styled.span`
   padding: 0 0.5rem;
@@ -70,6 +70,8 @@ const Container = styled(AccountButton)`
 export const WalletButton: FC = () => {
   const connected = useConnected()
   const account = useWalletAddress()
+  const ensName = useEnsName()
+  const ensAvatar = useEnsAvatar()
   const [injectedChainId] = useInjectedChainIdCtx()
   const [chainId] = useChainIdCtx()
 
@@ -104,8 +106,18 @@ export const WalletButton: FC = () => {
         </>
       ) : connected ? (
         <>
-          <TruncatedAddress>{account && truncateAddress(account)}</TruncatedAddress>
-          <UserIcon />
+          { ensName ? (
+            <TruncatedAddress>{ensName}</TruncatedAddress>
+          ) : (
+            <TruncatedAddress>{account && truncateAddress(account)}</TruncatedAddress>
+          )}
+          { ensAvatar ? (
+            <UserIconContainer>
+              <img src={ensAvatar} width={20} alt="Account"/>
+            </UserIconContainer>
+          ) : (
+            <UserIcon />
+          )}
         </>
       ) : (
         <ConnectText>Connect</ConnectText>

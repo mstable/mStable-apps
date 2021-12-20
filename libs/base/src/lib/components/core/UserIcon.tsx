@@ -2,12 +2,13 @@ import React, { FC, useEffect, useRef } from 'react'
 import Jazzicon from 'jazzicon'
 import styled from 'styled-components'
 
-import { useWalletAddress } from '../../context/AccountProvider'
+import { useWalletAddress, useEnsAvatar } from '../../context/AccountProvider'
 
-const Container = styled.div`
+export const UserIconContainer = styled.div`
   height: 1.25rem;
   width: 1.25rem;
   border-radius: 0.75rem;
+  overflow: hidden;
 `
 
 export const UserIcon: FC<{ address?: string }> = ({ address }) => {
@@ -22,5 +23,5 @@ export const UserIcon: FC<{ address?: string }> = ({ address }) => {
     }
   }, [userAddress])
 
-  return <Container ref={ref} />
+  return <UserIconContainer ref={ref} />
 }
