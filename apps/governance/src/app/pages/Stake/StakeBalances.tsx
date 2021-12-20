@@ -260,7 +260,7 @@ export const StakeBalances: FC = () => {
       stakedToken: {
         accounts: [
           {
-            balance: { rawBD, cooldownUnits },
+            balance: { rawBD, cooldownUnits, userPriceCoefficient },
           },
         ],
       },
@@ -268,9 +268,8 @@ export const StakeBalances: FC = () => {
 
     const cooldown = parseFloat(cooldownUnits) / 1e18
 
-    // TODO: - Change priceCoefficient -> userPriceCoefficient
     const scaledBalance = isBPT
-      ? new BigDecimal(stakedToken?.balance?.exact?.div(priceCoefficient).mul(1e4).toString())
+      ? new BigDecimal(stakedToken?.balance?.exact?.div(userPriceCoefficient).mul(1e4).toString())
       : stakedToken?.balance
 
     const baseRewardsApy = calculateStakingApy(priceCoefficient, rewardRate, rawBD?.exact, rawBD?.exact, totalSupply?.exact)
@@ -290,12 +289,11 @@ export const StakeBalances: FC = () => {
     <Container>
       <DefaultWidget>
         <Group label="My Stake" balance={values.stake} loading={loading} />
-        {/* // TODO: - On priceCoeff change, enable multiplier for BPT */}
         <Group
           label={isDelegated ? 'Delegated Vote Power' : 'My Voting Power'}
           balance={values.votingPower}
           loading={loading}
-          boost={!isBPT && values.boost}
+          boost={values.boost}
         />
       </DefaultWidget>
       {!!values.stake || hasSelectedStakeOption ? (

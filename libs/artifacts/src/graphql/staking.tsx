@@ -1968,7 +1968,7 @@ export type AccountQueryVariables = Exact<{
 }>;
 
 
-export type AccountQuery = { account?: { id: string, lastAction: number, seasonMultiplier: number, permMultiplier: number, totalVotesAll: string, totalVotesMTA: string, totalVotesBPT: string, totalVotesBPTBD: BigDecimal, totalVotesMTABD: BigDecimal, totalVotesAllBD: BigDecimal, seasonMultiplierSimple: number, permMultiplierSimple: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, delegatee?: { id: string, totalVotesAll: string, totalVotesAllBD: BigDecimal } | null | undefined, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number } }> } | null | undefined };
+export type AccountQuery = { account?: { id: string, lastAction: number, seasonMultiplier: number, permMultiplier: number, totalVotesAll: string, totalVotesMTA: string, totalVotesBPT: string, totalVotesBPTBD: BigDecimal, totalVotesMTABD: BigDecimal, totalVotesAllBD: BigDecimal, seasonMultiplierSimple: number, permMultiplierSimple: number, completedQuests: Array<{ id: string, completedAt: number, quest: { id: string } }>, delegators: Array<{ id: string }>, stakedTokenAccounts: Array<{ id: string, stakedToken: { id: string, stakingToken: { symbol: string } }, delegatee?: { id: string, totalVotesAll: string, totalVotesAllBD: BigDecimal } | null | undefined, balance: { raw: string, votes: string, timeMultiplier: number, questMultiplier: number, cooldownTimestamp: number, weightedTimestamp: number, cooldownUnits: string, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number, userPriceCoefficient: string } }> } | null | undefined };
 
 export type StakedTokenQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1977,7 +1977,7 @@ export type StakedTokenQueryVariables = Exact<{
 }>;
 
 
-export type StakedTokenQuery = { stakedToken?: { id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, priceCoefficient?: string | null | undefined, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: number | null | undefined, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Array<{ id: string, rewardPerTokenPaid?: string | null | undefined, rewards?: string | null | undefined, delegatee?: { id: string } | null | undefined, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: string, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number } }> } | null | undefined };
+export type StakedTokenQuery = { stakedToken?: { id: string, UNSTAKE_WINDOW: string, COOLDOWN_SECONDS: string, collateralisationRatio: string, slashingPercentage: string, priceCoefficient?: string | null | undefined, token: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } }, stakingRewards: { DURATION?: number | null | undefined, periodFinish: number, lastUpdateTime: number, rewardRate: string, rewardPerTokenStored: string, rewardsTokenVendor: string, rewardsDistributor: string, pendingAdditionalReward: string, rewardsToken: { id: string, address: string, decimals: number, symbol: string, totalSupply: { id: string, exact: string, decimals: number, simple: string, bigDecimal: BigDecimal } } }, accounts?: Array<{ id: string, rewardPerTokenPaid?: string | null | undefined, rewards?: string | null | undefined, delegatee?: { id: string } | null | undefined, balance: { timeMultiplier: number, cooldownTimestamp: number, cooldownUnits: string, questMultiplier: number, raw: string, votes: string, weightedTimestamp: number, rawBD: BigDecimal, votesBD: BigDecimal, timeMultiplierSimple: number, questMultiplierSimple: number, userPriceCoefficient: string } }> } | null | undefined };
 
 export type QuestAllFragment = { id: string, expiry: number, multiplier: number, status: QuestStatus, type: QuestType, season?: { id: string } | null | undefined };
 
@@ -2196,6 +2196,7 @@ export const AccountDocument = gql`
         votesBD @client
         timeMultiplierSimple @client
         questMultiplierSimple @client
+        userPriceCoefficient
       }
     }
   }
@@ -2276,6 +2277,7 @@ export const StakedTokenDocument = gql`
         votesBD @client
         timeMultiplierSimple @client
         questMultiplierSimple @client
+        userPriceCoefficient
       }
     }
   }
