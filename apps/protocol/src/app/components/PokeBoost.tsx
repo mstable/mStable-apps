@@ -109,14 +109,19 @@ export const PokeBoost: FC<Props> = ({ apy, vault }) => {
   const userBoost = useCalculateUserBoost(vault)
   const rewardStreams = useRewardStreams()
 
-  const boostNeedsPoke = !!account?.boostMultiplier && (account.boostMultiplier ?? 0) < (userBoost ?? 0)
-  // FIXME: - Subgraph needs updating
-  const boostNeedsDirector = false
-  // const boostNeedsDirector = boostNeedsPoke && account?.boostMultiplier === 1
+  const isUserBoostActive = !!account?.boostMultiplier
+  const isUserBalanceNonZero = !!account?.rawBalance?.simple
+  const isUserBoostLessThanCalc = (account?.boostMultiplier ?? 0) < (userBoost ?? 0)
+  const showBoostPoke = isUserBoostActive && isUserBalanceNonZero && isUserBoostLessThanCalc
+  const showBoostDirector = false
+
+  // FIXME: - Subgraph needs updating; restore after.
+  // const showBoostDirector = boostNeedsPoke && account?.boostMultiplier === 1
+
   const message = isImusd ? 'Claim rewards to update your reward rate.' : 'Poke the contract or claim rewards to update your reward rate.'
 
-  if (boostNeedsDirector) return <SelectBoost vault={vault} />
-  if (!boostNeedsPoke) return null
+  if (showBoostDirector) return <SelectBoost vault={vault} />
+  if (!showBoostPoke) return null
 
   return (
     <Container>
