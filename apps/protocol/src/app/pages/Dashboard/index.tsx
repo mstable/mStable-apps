@@ -9,11 +9,12 @@ import { PoolsTable } from './PoolsTable'
 import { WalletTable } from './WalletTable'
 import { RewardsProvider, useReset } from './RewardsContext'
 import { Illustration } from './Illustration'
-import { TotalTvl } from './TotalTvl'
 import { SaveTable } from './SaveTable'
 import { ViewportWidth } from '@apps/theme'
 import { useHistory } from 'react-router-dom'
 import { useSelectedMasset } from '@apps/masset-provider'
+import { ReactComponent as Logo } from '@apps/icons/mstable.svg'
+import { NetworkSwitcher } from './NetworkSwitcher'
 
 enum Tabs {
   Save = 'Save',
@@ -85,6 +86,18 @@ const UserCapture = styled.div`
   }
 `
 
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem 0;
+
+  svg {
+    width: 12rem;
+    fill: ${({ theme }) => theme.color.body};
+  }
+`
+
 const ActionCallouts = styled.div`
   display: flex;
   flex-direction: column;
@@ -123,7 +136,10 @@ export const Dashboard: FC = () => {
 
   return (
     <Container>
-      <TotalTvl />
+      <LogoContainer>
+        <Logo />
+        <NetworkSwitcher />
+      </LogoContainer>
       <UserCapture>
         <Illustration />
         <ActionCallouts>
