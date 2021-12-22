@@ -135,9 +135,7 @@ const OnboardProvider: FC<{
             }
           },
           ens: ens => {
-            if (ens) {
-              setEnsName(ens.name)
-            }
+            setEnsName(ens?.name)
           },
           network: setInjectedChainId,
           balance: setBalance,
