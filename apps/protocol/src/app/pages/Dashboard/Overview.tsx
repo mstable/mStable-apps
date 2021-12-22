@@ -43,6 +43,23 @@ const Items = styled.div`
     margin-bottom: 1rem;
   }
 
+  > *:last-child {
+    h3 {
+      position: relative;
+    }
+
+    h3:before {
+      position: absolute;
+      content: '';
+      width: 0.5rem;
+      height: 0.5rem;
+      background: ${({ theme }) => theme.color.gold};
+      right: -1rem;
+      top: calc(50% - 0.25rem);
+      border-radius: 0.25rem;
+    }
+  }
+
   @media (min-width: ${ViewportWidth.s}) {
     flex-direction: row;
 
