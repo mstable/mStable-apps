@@ -49,7 +49,7 @@ export const RewardsProvider: FC = ({ children }) => {
 
           return {
             total: acc.total + total || 0,
-            unlocked: unlocked + earned?.unlocked || 0,
+            unlocked: acc.unlocked + (unlocked + earned?.unlocked || 0),
           }
         },
         {
