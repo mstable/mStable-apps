@@ -6,16 +6,18 @@ import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifact
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { ViewportWidth } from '@apps/theme'
-import { ThemedSkeleton } from '@apps/dumb-components'
+import { Button, ThemedSkeleton, Tooltip } from '@apps/dumb-components'
 import { truncateAddress } from '@apps/formatters'
 
-import { useStakedTokenQuery } from '../../context/StakedTokenProvider'
+import { useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedTokenProvider'
 
 import { ClaimButtons } from './ClaimButtons'
 import { QuestCard } from './QuestCard'
 import { QuestObjectiveProgress, QuestProgress, QuestTimeRemaining } from './QuestProgress'
 import { QueueOptInOutButton } from './QueueOptInOutButtons'
 import { Typist } from './Typist'
+import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
+import { usePropose } from '@apps/base/context/transactions'
 
 enum ProgressType {
   Personal,
@@ -157,6 +159,10 @@ const Bottom = styled.div`
       margin-right: 1.5rem;
     }
   }
+
+  button svg path {
+    fill: white;
+  }
 `
 
 const Inner = styled.div`
@@ -291,7 +297,9 @@ interface TimeMultiplierQuestObjective {
 
 export const TimeMultiplierQuestInfo: FC<Props> = ({ questId }) => {
   const stakedTokenQuery = useStakedTokenQuery()
+  const stakedTokenContract = useStakedTokenContract()
   const account = useAccount()
+  const propose = usePropose()
 
   const quest = useMemo<{
     objectives: TimeMultiplierQuestObjective[]
@@ -311,7 +319,7 @@ export const TimeMultiplierQuestInfo: FC<Props> = ({ questId }) => {
       },
       {
         id: '2',
-        title: `Congratulations ${account ? truncateAddress(account) : 'ANON METANAUT'} 😎 You are the staker of the week`,
+        title: `Staker of the week 😎`,
         description: 'Staked for 6 months: 1.3x',
         seconds: 15724800,
       },
@@ -369,6 +377,17 @@ export const TimeMultiplierQuestInfo: FC<Props> = ({ questId }) => {
     return { objectives, progress, currentProgress, currentTitle, complete: progress === 1 }
   }, [account, stakedTokenQuery.data?.stakedToken?.accounts])
 
+  const handleTimeClaim = () => {
+    if (!stakedTokenContract || !account) return
+
+    propose<Interfaces.StakedToken, 'reviewTimestamp'>(
+      new TransactionManifest(stakedTokenContract, 'reviewTimestamp', [account], {
+        present: `Updating timestamp for ${truncateAddress(account)} `,
+        past: `Updated timestamp for ${truncateAddress(account)}`,
+      }),
+    )
+  }
+
   return (
     <Container>
       <QuestCard questId={questId} />
@@ -412,7 +431,13 @@ export const TimeMultiplierQuestInfo: FC<Props> = ({ questId }) => {
               questType={QuestType.Permanent}
             />
           </Progress>
-          <div />
+          <Actions>
+            <Button highlighted onClick={handleTimeClaim}>
+              <Tooltip tip="Claiming for Time Multiplier automatically occurs at intervals. Call claim to manually update your timestamp">
+                Claim
+              </Tooltip>
+            </Button>
+          </Actions>
         </Bottom>
       </Inner>
     </Container>
