@@ -22,6 +22,8 @@ export interface OnboardCtx {
   address?: string
   balance?: string
   wallet?: Wallet
+  ensName?: string
+  ensAvatar?: string
 }
 
 interface UserAccountCtx {
@@ -63,6 +65,10 @@ export const useProvider = (): Provider | undefined => useSignerCtx()[0]?.provid
 
 export const useWalletAddress = (): OnboardCtx['address'] => useContext(onboardCtx)?.address
 
+export const useEnsName = (): OnboardCtx['ensName'] => useContext(onboardCtx)?.ensName
+
+export const useEnsAvatar = (): OnboardCtx['ensAvatar'] => useContext(onboardCtx)?.ensAvatar
+
 export const useConnect = (): OnboardCtx['connect'] => useContext(onboardCtx).connect
 
 export const useSigner = (): ethers.Signer | undefined => useSignerCtx()[0]?.signer
@@ -99,6 +105,8 @@ const OnboardProvider: FC<{
   chainId: ChainIds
 }> = ({ children, chainId }) => {
   const [address, setAddress] = useState<string | undefined>(undefined)
+  const [ensName, setEnsName] = useState<string | undefined>(undefined)
+  const [ensAvatar, setEnsAvatar] = useState<string | undefined>(undefined)
   const [balance, setBalance] = useState<string | undefined>(undefined)
   const [connected, setConnected] = useState<boolean>(false)
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined)
@@ -106,7 +114,7 @@ const OnboardProvider: FC<{
   const [{ appName }] = useBaseCtx()
 
   const [, setInjectedChainId] = useInjectedChainIdCtx()
-  const [, setInjectedProvider] = useInjectedProviderCtx()
+  const [injectedProvider, setInjectedProvider] = useInjectedProviderCtx()
 
   const addInfoNotification = useAddInfoNotification()
 
@@ -126,6 +134,9 @@ const OnboardProvider: FC<{
               setAddress(account.toLowerCase())
             }
           },
+          ens: ens => {
+            setEnsName(ens?.name)
+          },
           network: setInjectedChainId,
           balance: setBalance,
           wallet: walletInstance => {
@@ -134,6 +145,8 @@ const OnboardProvider: FC<{
               setInjectedProvider(undefined)
               setConnected(false)
               setAddress(undefined)
+              setEnsName(undefined)
+              setEnsAvatar(undefined)
               return
             }
 
@@ -297,19 +310,29 @@ const OnboardProvider: FC<{
       .catch(console.warn)
   }, [address, setStakeSignatures, isGovernance])
 
+  useEffect(() => {
+    if (!ensName || !injectedProvider) {
+      setEnsAvatar(undefined)
+      return
+    }
+    injectedProvider.getAvatar(ensName).then(result => setEnsAvatar(result || undefined))
+  }, [ensName, injectedProvider])
+
   return (
     <onboardCtx.Provider
       value={useMemo(
         () => ({
           onboard,
           address,
+          ensName,
+          ensAvatar,
           balance,
           wallet,
           connected,
           connect,
           reset,
         }),
-        [onboard, address, balance, wallet, connected, connect, reset],
+        [onboard, address, ensName, ensAvatar, balance, wallet, connected, connect, reset],
       )}
     >
       {children}
