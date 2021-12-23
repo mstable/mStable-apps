@@ -75,7 +75,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
       <DashTableCell hasRewards={hasRewards}>
         {deposits.total > 0 ? (
           <Tooltip hideIcon tip={userBoostTip}>
-            <CountUp end={baseApy || 0} suffix="%" />
+            <CountUp end={baseApy || 0} suffix="%" prefix="+" />
             <RewardsApy active>
               <CountUp end={userBoostApy} suffix="%" prefix="+" />
               <TokenIcon symbol="MTA" />
@@ -91,8 +91,8 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
           <Tooltip hideIcon tip={apyTip}>
             <CountUp end={baseApy} suffix="%" />
             <RewardsApy>
-              <CountUp end={rewardsBaseApy} prefix="+" />
-              &nbsp;-&nbsp;
+              <CountUp end={rewardsBaseApy} prefix="+" suffix="%" />
+              &nbsp;→&nbsp;
               <CountUp end={rewardsMaxApy} suffix="%" />
               <TokenIcon symbol="MTA" />
             </RewardsApy>

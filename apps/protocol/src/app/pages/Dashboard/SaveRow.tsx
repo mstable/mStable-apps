@@ -69,9 +69,9 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
   const deposits = getSaveDeposited(massetState, massetPrice?.value)
   const saveApy = useAvailableSaveApy(mAssetName)
 
-  const userBoostAPY = saveApy?.value + vaultApy?.userBoost || 0
-  const baseAPY = saveApy?.value + vaultApy?.base || 0
-  const maxAPY = saveApy?.value + vaultApy?.maxBoost || 0
+  const userBoostAPY = vaultApy?.userBoost || 0
+  const baseAPY = vaultApy?.base || 0
+  const maxAPY = vaultApy?.maxBoost || 0
 
   const balanceToolTip = `
     Save: $${(deposits.save.simple || 0).toFixed(2)}<br />
@@ -104,7 +104,7 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
           <Tooltip hideIcon tip={userBoostTip}>
             <CountUp end={saveApy?.value} suffix="%" />
             <RewardsApy active>
-              <CountUp end={userBoostAPY} suffix="%" />
+              <CountUp end={userBoostAPY} suffix="%" prefix="+" />
               <TokenIcon symbol="MTA" />
             </RewardsApy>
           </Tooltip>
@@ -112,8 +112,8 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
           <Tooltip hideIcon tip={apyTip}>
             <CountUp end={saveApy?.value} suffix="%" />
             <RewardsApy>
-              <CountUp end={baseAPY} />
-              &nbsp;-&nbsp;
+              <CountUp end={baseAPY} prefix="+" suffix="%" />
+              &nbsp;→&nbsp;
               <CountUp end={maxAPY} suffix="%" />
               <TokenIcon symbol="MTA" />
             </RewardsApy>
