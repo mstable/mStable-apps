@@ -16,6 +16,7 @@ import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './St
 import { useRewardStreams } from '../../context/RewardStreamsProvider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { getSaveDeposited } from './utils'
+import { useStakingRewards } from '../Save/hooks'
 
 const useSaveVaultAPY = (mAssetName: MassetName, massetPrice?: number, userBoost?: number) => {
   const {
@@ -57,6 +58,7 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
   const massetPrice = useSelectedMassetPrice(mAssetName)
   const rewards = useRewardStreams()
   const upsertStream = useUpsertStream()
+  const polygonRewards = useStakingRewards()
 
   const {
     savingsContracts: { v2: { boostedSavingsVault, token: saveToken } = {} },
@@ -64,12 +66,19 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
 
   useTokenSubscription(saveToken?.address)
 
+  const isPolygon = !!Object.keys(polygonRewards).length
   const userBoost = useCalculateUserBoost(boostedSavingsVault)
   const vaultApy = useSaveVaultAPY(mAssetName, massetPrice?.value, userBoost)
-  const deposits = getSaveDeposited(massetState, massetPrice?.value)
-  const saveApy = useAvailableSaveApy(mAssetName)
+  const deposits = getSaveDeposited(massetState, massetPrice?.value, polygonRewards)
 
-  const userBoostAPY = vaultApy?.userBoost || 0
+  const ethSaveApy = useAvailableSaveApy(mAssetName)?.value
+  const polygonSaveApy = polygonRewards?.rewards?.find(v => v.id === 'yieldRewards')?.apy || 0
+  const saveApy = isPolygon ? polygonSaveApy : ethSaveApy
+
+  const polygonRewardsApy = polygonRewards?.rewards?.find(v => v.id === 'rewards')?.apy || 0
+  const ethRewardsApy = vaultApy?.userBoost || 0
+  const userBoostAPY = isPolygon ? polygonRewardsApy : ethRewardsApy
+
   const baseAPY = vaultApy?.base || 0
   const maxAPY = vaultApy?.maxBoost || 0
 
@@ -78,11 +87,11 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
     Vault: $${(deposits.vault.simple || 0).toFixed(2)}
   `
   const userBoostTip = `
-    Save: ${saveApy?.value?.toFixed(2) || 0}%<br />
+    Save: ${saveApy?.toFixed(2) || 0}%<br />
     Vault Rewards: ${(userBoostAPY || 0).toFixed(2)}%
   `
   const apyTip = `
-    Save: ${saveApy?.value?.toFixed(2) || 0}%<br />
+    Save: ${saveApy?.toFixed(2) || 0}%<br />
     Vault Rewards:<br />
     ${baseAPY?.toFixed(2)}-${maxAPY?.toFixed(2)}%
   `
@@ -102,7 +111,7 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
       <DashTableCell hasRewards={hasRewards}>
         {deposits.total.simple > 0 ? (
           <Tooltip hideIcon tip={userBoostTip}>
-            <CountUp end={saveApy?.value} suffix="%" />
+            <CountUp end={saveApy} suffix="%" />
             <RewardsApy active>
               <CountUp end={userBoostAPY} suffix="%" prefix="+" />
               <TokenIcon symbol="MTA" />
@@ -110,11 +119,17 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
           </Tooltip>
         ) : (
           <Tooltip hideIcon tip={apyTip}>
-            <CountUp end={saveApy?.value} suffix="%" />
+            <CountUp end={saveApy} suffix="%" />
             <RewardsApy>
-              <CountUp end={baseAPY} prefix="+" suffix="%" />
-              &nbsp;→&nbsp;
-              <CountUp end={maxAPY} suffix="%" />
+              {isPolygon ? (
+                <CountUp end={polygonRewardsApy} prefix="+" suffix="%" />
+              ) : (
+                <>
+                  <CountUp end={baseAPY} prefix="+" suffix="%" />
+                  &nbsp;→&nbsp;
+                  <CountUp end={maxAPY} suffix="%" />
+                </>
+              )}
               <TokenIcon symbol="MTA" />
             </RewardsApy>
           </Tooltip>

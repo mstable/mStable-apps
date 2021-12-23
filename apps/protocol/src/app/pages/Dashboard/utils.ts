@@ -2,6 +2,8 @@ import { ChainIds, getNetwork } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { BigDecimal } from '@apps/bigdecimal'
 import { FeederPoolState, MassetState } from '@apps/data-provider'
+import { StakingRewardsExtended } from '@apps/masset-hooks'
+import { StakeData } from '../../context/FraxStakingProvider'
 
 const {
   addresses: { WBTC },
@@ -11,6 +13,23 @@ export const useWBTCPrice = () => {
   const { fetchPrice } = useFetchPriceCtx()
 
   return fetchPrice(WBTC)
+}
+
+export const getFraxRewards = (accountData?: StakeData) => {
+  if (!accountData) return
+  return accountData?.earned?.find(v => v?.symbol === 'MTA')?.amount?.simple ?? 0
+}
+
+export const getFraxDeposited = (accountData?: StakeData) => {
+  if (!accountData) return
+  const pool = accountData?.poolBalance?.simple || 0
+  const vault = accountData?.lockedStakes?.reduce((a, b) => a + b?.liquidity?.simple, 0) || 0
+  const total = pool + vault
+  return {
+    pool,
+    vault,
+    total,
+  }
 }
 
 export const getPoolDeposited = ({ token, vault: _vault, price }: FeederPoolState, mAssetPrice = 1) => {
@@ -29,7 +48,11 @@ export const getPoolDeposited = ({ token, vault: _vault, price }: FeederPoolStat
 export const sortPoolsByDepositedDesc = (a: FeederPoolState, b: FeederPoolState): number =>
   getPoolDeposited(a) > getPoolDeposited(b) ? -1 : 1
 
-export const getSaveDeposited = (massetState: MassetState, mAssetPrice = 1): { total: BigDecimal; save: BigDecimal; vault: BigDecimal } => {
+export const getSaveDeposited = (
+  massetState: MassetState,
+  mAssetPrice = 1,
+  stakingRewards?: StakingRewardsExtended,
+): { total: BigDecimal; save: BigDecimal; vault: BigDecimal } => {
   const {
     savingsContracts: {
       v2: { boostedSavingsVault, token: saveToken, latestExchangeRate: { rate: saveExchangeRate } = {} },
@@ -47,9 +70,15 @@ export const getSaveDeposited = (massetState: MassetState, mAssetPrice = 1): { t
     .mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact)
     .mulTruncate(BigDecimal.fromSimple(mAssetPrice).exact)
 
-  const vault = (boostedSavingsVault?.account?.rawBalance ?? BigDecimal.ZERO)
-    .mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact)
-    .mulTruncate(BigDecimal.fromSimple(mAssetPrice).exact)
+  const vault = (() => {
+    const polygonVault = stakingRewards?.stakedBalance?.mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact)
+
+    const ethVault = (boostedSavingsVault?.account?.rawBalance ?? BigDecimal.ZERO)
+      .mulTruncate(saveExchangeRate?.exact ?? BigDecimal.ONE.exact)
+      .mulTruncate(BigDecimal.fromSimple(mAssetPrice).exact)
+
+    return polygonVault ?? ethVault
+  })()
 
   const total = save.add(vault)
 

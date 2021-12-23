@@ -15,6 +15,8 @@ import { useHistory } from 'react-router-dom'
 import { useSelectedMasset } from '@apps/masset-provider'
 import { ReactComponent as Logo } from '@apps/icons/mstable.svg'
 import { NetworkSwitcher } from './NetworkSwitcher'
+import { RewardsEarnedProvider, StakingRewardsProvider } from '../Save/hooks'
+import { FraxStakingProvider } from '../../context/FraxStakingProvider'
 
 enum Tabs {
   Save = 'Save',
@@ -156,10 +158,17 @@ export const Dashboard: FC = () => {
           />
         </ActionCallouts>
       </UserCapture>
+      {/* TODO: Tidy this */}
       {dataState ? (
-        <RewardsProvider>
-          <DashboardContent />
-        </RewardsProvider>
+        <StakingRewardsProvider stakingTokenAddress={dataState?.musd?.savingsContracts?.v2?.token?.address}>
+          <RewardsEarnedProvider>
+            <RewardsProvider>
+              <FraxStakingProvider>
+                <DashboardContent />
+              </FraxStakingProvider>
+            </RewardsProvider>
+          </RewardsEarnedProvider>
+        </StakingRewardsProvider>
       ) : (
         <Skeleton height={500} />
       )}

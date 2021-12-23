@@ -6,8 +6,10 @@ import { CountUp } from '@apps/dumb-components'
 import styled from 'styled-components'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useTotalRewards } from './RewardsContext'
-import { getPoolDeposited, getSaveDeposited, useWBTCPrice } from './utils'
+import { getFraxDeposited, getFraxRewards, getPoolDeposited, getSaveDeposited, useWBTCPrice } from './utils'
 import { ViewportWidth } from '@apps/theme'
+import { useRewardsEarned, useStakingRewards } from '../Save/hooks'
+import { useFraxStakingState } from '../../context/FraxStakingProvider'
 
 export const Item = styled.div`
   display: flex;
@@ -73,24 +75,45 @@ const Items = styled.div`
 const useDeposits = (tab: 'Pools' | 'Save') => {
   const dataState = useDataState()
   const wbtcPrice = useWBTCPrice()
+  const polygonRewards = useStakingRewards()
+  const { subscribedData: fraxSubscribedData } = useFraxStakingState()
+
+  const frax = useMemo(() => getFraxDeposited(fraxSubscribedData?.value?.accountData), [fraxSubscribedData?.value])
 
   return useMemo(
     () =>
       Object.values(dataState).reduce((acc, curr: MassetState) => {
         const mPrice = curr?.token?.symbol === 'mBTC' ? wbtcPrice.value : 1
-        const save = getSaveDeposited(curr, mPrice).total.simple
+        const save = getSaveDeposited(curr, mPrice, polygonRewards).total.simple
         const pools = Object.values(curr.feederPools).reduce((ac, cu) => ac + getPoolDeposited(cu, mPrice).total, 0)
-        if (tab === 'Pools') return acc + pools
+        if (tab === 'Pools') return acc + pools + (frax?.total ?? 0)
         return acc + save
       }, 0),
-    [dataState, wbtcPrice.value, tab],
+    [dataState, wbtcPrice.value, polygonRewards, frax, tab],
   )
 }
 
 export const Overview: FC<{ tab: 'Pools' | 'Save' }> = ({ tab }) => {
   const account = useAccount()
   const deposits = useDeposits(tab)
-  const { unlocked } = useTotalRewards()
+  const { unlocked: _unlocked } = useTotalRewards()
+  const rewardsEarned = useRewardsEarned()
+  const { subscribedData: fraxSubscribedData } = useFraxStakingState()
+
+  const unlocked = (() => {
+    const ethUnlocked = _unlocked
+
+    const polygonUnlocked = (() => {
+      let unlocked = rewardsEarned?.rewards?.find(v => v?.token === 'MTA')?.earned?.simple
+      const fraxUnlocked = getFraxRewards(fraxSubscribedData?.value?.accountData)
+      if (tab === 'Pools' && fraxUnlocked) {
+        unlocked += fraxUnlocked
+      }
+      return unlocked
+    })()
+
+    return (polygonUnlocked ?? ethUnlocked) || 0
+  })()
 
   if (!account) return null
 

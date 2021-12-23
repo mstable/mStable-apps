@@ -9,10 +9,11 @@ import { useFeederPoolApy } from '../../hooks/useFeederPoolApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useUpsertStream } from './RewardsContext'
 import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './Styled'
-import { getPoolDeposited } from './utils'
+import { getFraxDeposited, getFraxRewards, getPoolDeposited } from './utils'
 import { useSetSelectedMassetName } from '@apps/masset-provider'
 import { useRewardStreams } from '../../context/RewardStreamsProvider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
+import { useFraxStakingState } from '../../context/FraxStakingProvider'
 
 export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> = ({ feederPool, showBalance, ...rest }) => {
   const history = useHistory()
@@ -21,7 +22,9 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   const platformRewardsToken = feederPool.vault?.platformRewardsToken
   const feederPoolApy = useFeederPoolApy(feederPool.address, mAssetName)
   const massetPrice = useSelectedMassetPrice(mAssetName)
-  const deposits = useMemo(() => getPoolDeposited(feederPool, massetPrice.value), [feederPool, massetPrice.value])
+  const { subscribedData: fraxSubscribedData } = useFraxStakingState()
+  const frax = useMemo(() => getFraxDeposited(fraxSubscribedData?.value?.accountData), [fraxSubscribedData?.value])
+  const poolDeposits = useMemo(() => getPoolDeposited(feederPool, massetPrice.value), [feederPool, massetPrice.value])
   const tvlPrice = useMemo(
     () => (massetPrice.value ? massetPrice.value * feederPool.price.simple : undefined),
     [feederPool.price.simple, massetPrice.value],
@@ -31,6 +34,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
 
   useTokenSubscription(feederPool?.fasset?.address)
 
+  const deposits = frax ?? poolDeposits
   const baseApy = feederPoolApy?.value?.base || 0
   const rewardsBaseApy = feederPoolApy?.value?.rewards?.base || 0
   const rewardsMaxApy = feederPoolApy?.value?.rewards?.maxBoost || 0
@@ -44,7 +48,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   const userBoostTip = `
     Pool: ${baseApy.toFixed(2)}%<br />
     Vault Rewards:<br /> 
-    ${userBoostApy.toFixed(2)}% MTA
+    ${!!userBoostApy ? `${userBoostApy.toFixed(2)}%` : ''} MTA
     ${(platformRewardsApy > 0 && `<br />${platformRewardsApy.toFixed(2)}% ${platformRewardsToken?.symbol}`) || ''}
   `
   const apyTip = `
@@ -64,7 +68,8 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
     upsertStream(`pool-${feederPool.address}`, rewards)
   }, [feederPool.address, rewards, rewards?.amounts?.unlocked, upsertStream])
 
-  const hasRewards = ((rewards?.amounts?.earned?.unlocked ?? 0) + rewards?.amounts?.unlocked ?? 0) > 0
+  const fraxRewards = getFraxRewards(fraxSubscribedData?.value?.accountData)
+  const hasRewards = (rewards?.amounts?.earned?.unlocked ?? 0) + (rewards?.amounts?.unlocked ?? 0) + (fraxRewards ?? 0) > 0
 
   return (
     <DashTableRow {...rest} onClick={handleRowClick} buttonTitle="Explore">
@@ -77,7 +82,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
           <Tooltip hideIcon tip={userBoostTip}>
             <CountUp end={baseApy || 0} suffix="%" prefix="+" />
             <RewardsApy active>
-              <CountUp end={userBoostApy} suffix="%" prefix="+" />
+              {!!userBoostApy && <CountUp end={userBoostApy} suffix="%" prefix="+" />}
               <TokenIcon symbol="MTA" />
             </RewardsApy>
             {!!feederPoolApy?.value?.platformRewards && (
