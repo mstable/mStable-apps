@@ -1,7 +1,7 @@
 import { ChainIds, getNetwork } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { BigDecimal } from '@apps/bigdecimal'
-import { FeederPoolState, MassetState } from '@apps/data-provider'
+import { FeederPoolState, MassetState, PoolType } from '@apps/data-provider'
 import { StakingRewardsExtended } from '@apps/masset-hooks'
 import { StakeData } from '../../context/FraxStakingProvider'
 
@@ -89,5 +89,21 @@ export const getSaveDeposited = (
   }
 }
 
+export const filterByDeposited = (state: { massetState?: MassetState; feederState?: FeederPoolState; fraxState?: StakeData }) => {
+  const { massetState, feederState, fraxState } = state
+  if (massetState) return getSaveDeposited(massetState).total.simple > 0
+  if (feederState) {
+    const pools = getPoolDeposited(feederState)
+    if (fraxState) {
+      const frax = getFraxDeposited(fraxState)
+      return pools.total + frax.total > 0
+    }
+    return pools.total > 0
+  }
+  return true
+}
+
 export const sortSaveByDepositedDesc = () => (a: MassetState, b: MassetState) =>
   getSaveDeposited(a).total.simple > getSaveDeposited(b).total.simple ? -1 : 1
+
+export const isValidFeederPool = (fp: FeederPoolState): boolean => ![PoolType.Hidden, PoolType.Deprecated].includes(fp.poolType)

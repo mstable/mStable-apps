@@ -4,12 +4,12 @@ import { useAccount } from '@apps/base/context/account'
 import { MassetState, useDataState } from '@apps/data-provider'
 import { CountUp } from '@apps/dumb-components'
 import styled from 'styled-components'
-import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
 import { useTotalRewards } from './RewardsContext'
-import { getFraxDeposited, getFraxRewards, getPoolDeposited, getSaveDeposited, useWBTCPrice } from './utils'
+import { getFraxDeposited, getFraxRewards, getPoolDeposited, getSaveDeposited, isValidFeederPool, useWBTCPrice } from './utils'
 import { ViewportWidth } from '@apps/theme'
 import { useRewardsEarned, useStakingRewards } from '../Save/hooks'
 import { useFraxStakingState } from '../../context/FraxStakingProvider'
+import { DashboardFilter as DF } from './types'
 
 export const Item = styled.div`
   display: flex;
@@ -72,28 +72,36 @@ const Items = styled.div`
   }
 `
 
-const useDeposits = (tab: 'Pools' | 'Save') => {
+const useDeposits = (tab: DF) => {
   const dataState = useDataState()
   const wbtcPrice = useWBTCPrice()
   const polygonRewards = useStakingRewards()
   const { subscribedData: fraxSubscribedData } = useFraxStakingState()
-
-  const frax = useMemo(() => getFraxDeposited(fraxSubscribedData?.value?.accountData), [fraxSubscribedData?.value])
 
   return useMemo(
     () =>
       Object.values(dataState).reduce((acc, curr: MassetState) => {
         const mPrice = curr?.token?.symbol === 'mBTC' ? wbtcPrice.value : 1
         const save = getSaveDeposited(curr, mPrice, polygonRewards).total.simple
-        const pools = Object.values(curr.feederPools).reduce((ac, cu) => ac + getPoolDeposited(cu, mPrice).total, 0)
-        if (tab === 'Pools') return acc + pools + (frax?.total ?? 0)
-        return acc + save
+        const frax = getFraxDeposited(fraxSubscribedData?.value?.accountData)
+        const pools = Object.values(curr.feederPools)
+          .filter(isValidFeederPool)
+          .reduce((ac, cu) => ac + getPoolDeposited(cu, mPrice).total, 0)
+
+        switch (tab) {
+          case DF.Save:
+            return acc + save
+          case DF.Pools:
+            return acc + pools + (frax?.total ?? 0)
+          default:
+            return acc + save + pools + (frax?.total ?? 0)
+        }
       }, 0),
-    [dataState, wbtcPrice.value, polygonRewards, frax, tab],
+    [dataState, wbtcPrice.value, polygonRewards, tab],
   )
 }
 
-export const Overview: FC<{ tab: 'Pools' | 'Save' }> = ({ tab }) => {
+export const Overview: FC<{ tab: DF }> = ({ tab }) => {
   const account = useAccount()
   const deposits = useDeposits(tab)
   const { unlocked: _unlocked } = useTotalRewards()
@@ -106,7 +114,7 @@ export const Overview: FC<{ tab: 'Pools' | 'Save' }> = ({ tab }) => {
     const polygonUnlocked = (() => {
       let unlocked = rewardsEarned?.rewards?.find(v => v?.token === 'MTA')?.earned?.simple
       const fraxUnlocked = getFraxRewards(fraxSubscribedData?.value?.accountData)
-      if (tab === 'Pools' && fraxUnlocked) {
+      if (tab === DF.Pools && fraxUnlocked) {
         unlocked += fraxUnlocked
       }
       return unlocked

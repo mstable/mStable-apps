@@ -9,7 +9,7 @@ import { useFeederPoolApy } from '../../hooks/useFeederPoolApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useUpsertStream } from './RewardsContext'
 import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './Styled'
-import { getFraxDeposited, getFraxRewards, getPoolDeposited } from './utils'
+import { getFraxDeposited, getFraxRewards, getPoolDeposited, isValidFeederPool } from './utils'
 import { useSetSelectedMassetName } from '@apps/masset-provider'
 import { useRewardStreams } from '../../context/RewardStreamsProvider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
@@ -65,8 +65,9 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   }
 
   useEffect(() => {
+    if (!isValidFeederPool(feederPool)) return
     upsertStream(`pool-${feederPool.address}`, rewards)
-  }, [feederPool.address, rewards, rewards?.amounts?.unlocked, upsertStream])
+  }, [feederPool, feederPool.address, rewards, rewards?.amounts?.unlocked, upsertStream])
 
   const fraxRewards = getFraxRewards(fraxSubscribedData?.value?.accountData)
   const hasRewards = (rewards?.amounts?.earned?.unlocked ?? 0) + (rewards?.amounts?.unlocked ?? 0) + (fraxRewards ?? 0) > 0

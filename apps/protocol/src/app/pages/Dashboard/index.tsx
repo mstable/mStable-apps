@@ -5,11 +5,9 @@ import { InfoButton, TabsLeftAlign } from '@apps/dumb-components'
 import Skeleton from 'react-loading-skeleton'
 import styled from 'styled-components'
 import { Overview } from './Overview'
-import { PoolsTable } from './PoolsTable'
 import { WalletTable } from './WalletTable'
 import { RewardsProvider, useReset } from './RewardsContext'
 import { Illustration } from './Illustration'
-import { SaveTable } from './SaveTable'
 import { ViewportWidth } from '@apps/theme'
 import { useHistory } from 'react-router-dom'
 import { useSelectedMasset } from '@apps/masset-provider'
@@ -17,39 +15,35 @@ import { ReactComponent as Logo } from '@apps/icons/mstable.svg'
 import { NetworkSwitcher } from './NetworkSwitcher'
 import { RewardsEarnedProvider, StakingRewardsProvider } from '../Save/hooks'
 import { FraxStakingProvider } from '../../context/FraxStakingProvider'
-
-enum Tabs {
-  Save = 'Save',
-  Pools = 'Pools',
-  Wallet = 'Wallet',
-}
+import { DashboardTable } from './DashboardTable'
+import { DashboardFilter, DashboardFilter as DF } from './types'
 
 const tabs = {
-  [Tabs.Save]: {
+  [DF.User]: {
+    title: `User`,
+    component: <DashboardTable filter={DF.User} />,
+  },
+  [DF.Save]: {
     title: `Save`,
-    component: <SaveTable />,
+    component: <DashboardTable filter={DF.Save} />,
   },
-  [Tabs.Pools]: {
+  [DF.Pools]: {
     title: `Pools`,
-    component: <PoolsTable />,
-  },
-  [Tabs.Wallet]: {
-    title: `Wallet`,
-    component: <WalletTable />,
+    component: <DashboardTable filter={DF.Pools} />,
   },
 }
 
 const DashboardContent: FC = () => {
   const address = useAccount()
   const reset = useReset()
-  const [activeTab, setActiveTab] = useState<string>(Tabs.Save as string)
+  const [activeTab, setActiveTab] = useState<string>((address ? DF.User : DF.Save) as string)
 
   useEffect(() => {
     reset()
   }, [address, reset, activeTab])
 
   const filteredTabs = Object.keys(tabs)
-    .filter(key => (!address ? key !== 'Wallet' : true))
+    .filter(key => (!address ? key !== 'User' : true))
     .reduce((obj, key) => {
       obj[key] = tabs[key]
       return obj
@@ -57,7 +51,7 @@ const DashboardContent: FC = () => {
 
   return (
     <TabsLeftAlign tabs={filteredTabs} active={activeTab} onClick={setActiveTab}>
-      {activeTab !== 'Wallet' && <Overview tab={activeTab as 'Pools' | 'Save'} />}
+      <Overview tab={activeTab as DashboardFilter} />
     </TabsLeftAlign>
   )
 }
