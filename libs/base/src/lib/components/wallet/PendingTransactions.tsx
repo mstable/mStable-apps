@@ -156,7 +156,7 @@ export const PendingTransaction: FC<{
   const signer = useSigner()
   const wallet = useWallet()
   const { cancel, send } = useTransactionsDispatch()
-  const { estimationError, gasLimit, gasPrice, insufficientBalance } = useGas()
+  const { estimationError, gasLimit, gasPrice } = useGas()
   const [{ appName }] = useBaseCtx()
 
   const [stakeSignatures, setStakeSignatures] = useStakeSignatures()
@@ -189,7 +189,6 @@ export const PendingTransaction: FC<{
     estimationError ||
     !gasLimit ||
     !gasPrice ||
-    insufficientBalance ||
     transaction.status !== TransactionStatus.Pending ||
     (checkTransactionSignature && !isStakeSigned && !isStakeSignedForm)
   )
