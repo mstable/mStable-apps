@@ -1,9 +1,11 @@
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { Signer } from 'ethers'
 
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { BigDecimal } from '@apps/bigdecimal'
 import { Button } from '@apps/dumb-components'
+import { APP_NAME } from '@apps/types'
 
 import { useTransactionsDispatch, useTransactionsState } from '../../context/TransactionsProvider'
 import { useNetworkPrices } from '../../context/NetworkProvider'
@@ -12,12 +14,10 @@ import { Amount, TokenIcon } from '../core'
 import { GasStation } from './GasStation'
 import { useGas } from './TransactionGasProvider'
 import { StakeValidation } from './StakeValidation'
-import { useSigner } from '../../context/AccountProvider'
-import { Signer } from 'ethers'
+import { useSigner, useWallet } from '../../context/AccountProvider'
 import { StakeSignatures, useStakeSignatures } from '../../hooks/useStakeSignatures'
 import { API_ENDPOINT } from '../../utils/constants'
 import { useBaseCtx } from '../../BaseProviders'
-import { APP_NAME } from '@apps/types'
 
 const Buttons = styled.div`
   display: flex;
@@ -111,15 +111,9 @@ const signStake = async (
   let signature: string | undefined
 
   try {
-    throw new Error('METHOD_NOT_SUPPORTED')
     signature = await signer.signMessage(stakeMessage)
   } catch (error) {
-    // WalletConnect/Gnosis Safe has to bypass the whole thing; fall back to a magic string (sorry)
-    if (error.toString().includes('METHOD_NOT_SUPPORTED')) {
-      signature = 'EXCLUDED'
-    } else {
-      return false
-    }
+    console.error('Error signing message', error)
   }
 
   if (!signature) {
@@ -153,11 +147,14 @@ const signStake = async (
   return true
 }
 
+const stakeSignedFunctions = new Set(['compoundRewards', 'stake(uint256)'])
+
 export const PendingTransaction: FC<{
   id: string
 }> = ({ id }) => {
   const { [id]: transaction } = useTransactionsState()
   const signer = useSigner()
+  const wallet = useWallet()
   const { cancel, send } = useTransactionsDispatch()
   const { estimationError, gasLimit, gasPrice, insufficientBalance } = useGas()
   const [{ appName }] = useBaseCtx()
@@ -165,13 +162,13 @@ export const PendingTransaction: FC<{
   const [stakeSignatures, setStakeSignatures] = useStakeSignatures()
   const [isStakeSigned, setIsStakeSigned] = useState<boolean>(false)
   const [isStakeSignedForm, setIsStakeSignedForm] = useState<boolean>(false)
-  const stakeSignedFunctions = ['compoundRewards', 'stake(uint256)']
 
   const isGovernance = appName === APP_NAME.GOVERNANCE
 
   useEffect(() => {
     if (!isGovernance) return
 
+    // TODO use context/updater pattern. This fetches for every pending tx (ie when this component is mounted)
     const fetchSignature = async () => {
       const walletAddress = (await signer?.getAddress())?.toLowerCase()
       if (!walletAddress) return
@@ -184,8 +181,9 @@ export const PendingTransaction: FC<{
     return null
   }
 
+  const isGnosisSafe = wallet?.provider?.walletMeta?.name === 'Gnosis Safe Multisig'
   const checkTransactionSignature =
-    isGovernance && transaction.manifest.fn && stakeSignedFunctions.includes(transaction.manifest.fn) && stakeSignatures.message
+    isGovernance && !isGnosisSafe && transaction.manifest.fn && stakeSignedFunctions.has(transaction.manifest.fn) && stakeSignatures.message
 
   const disabled = !!(
     estimationError ||
@@ -193,7 +191,7 @@ export const PendingTransaction: FC<{
     !gasPrice ||
     insufficientBalance ||
     transaction.status !== TransactionStatus.Pending ||
-    (checkTransactionSignature && !isStakeSigned && !isStakeSigned && !isStakeSignedForm)
+    (checkTransactionSignature && !isStakeSigned && !isStakeSignedForm)
   )
 
   return (
