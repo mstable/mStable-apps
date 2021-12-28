@@ -182,7 +182,7 @@ export const StakeForm: FC<Props> = ({ className, isMigrating = false }) => {
           <SendButton valid={canUserStake} title="Stake in V2" handleSend={handleDeposit} />
         </div>
       ) : (
-        <SendButton valid={canUserStake} title="Stake" handleSend={handleDeposit} />
+        <SendButton valid title="Stake" handleSend={handleDeposit} />
       )}
     </Container>
   )
