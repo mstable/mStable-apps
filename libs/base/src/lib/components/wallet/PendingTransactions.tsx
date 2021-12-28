@@ -97,20 +97,38 @@ const NativeTokenBalance: FC = () => {
 }
 
 const signStake = async (
-  signer: Signer | undefined,
+  signer: Signer,
   stakeMessage: string,
   setStakeSignatures: React.Dispatch<React.SetStateAction<StakeSignatures>>,
 ) => {
-  try {
-    const signature = await signer?.signMessage(stakeMessage)
-    const walletAddress = (await signer?.getAddress())?.toLowerCase()
+  const walletAddress = (await signer.getAddress())?.toLowerCase()
+  if (!walletAddress) {
+    console.error('Missing wallet address', walletAddress)
+    return false
+  }
 
-    if (!walletAddress || !signature) {
-      console.error('Missing wallet or signature', walletAddress, signature)
+  let resp: Response
+  let signature: string | undefined
+
+  try {
+    throw new Error('METHOD_NOT_SUPPORTED')
+    signature = await signer.signMessage(stakeMessage)
+  } catch (error) {
+    // WalletConnect/Gnosis Safe has to bypass the whole thing; fall back to a magic string (sorry)
+    if (error.toString().includes('METHOD_NOT_SUPPORTED')) {
+      signature = 'EXCLUDED'
+    } else {
       return false
     }
+  }
 
-    const res = await fetch(`${API_ENDPOINT}/signature/${walletAddress}`, {
+  if (!signature) {
+    console.error('Missing signature', walletAddress, signature)
+    return false
+  }
+
+  try {
+    resp = await fetch(`${API_ENDPOINT}/signature/${walletAddress}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -118,13 +136,15 @@ const signStake = async (
       },
       body: JSON.stringify({ signature }),
     })
-    if (res.status !== 201) {
-      console.error(await res.text())
+
+    if (resp.status !== 201) {
+      console.error(await resp.text())
       return false
     }
+
     setStakeSignatures(prevSignatures => ({
       ...prevSignatures,
-      [walletAddress]: signature,
+      [walletAddress]: signature as string,
     }))
   } catch (e) {
     console.error('failed to sign transaction', e)
@@ -157,7 +177,7 @@ export const PendingTransaction: FC<{
       if (!walletAddress) return
       setIsStakeSigned(!!stakeSignatures[walletAddress])
     }
-    fetchSignature()
+    fetchSignature().catch(console.error)
   }, [signer, stakeSignatures, isGovernance])
 
   if (!transaction) {
@@ -206,7 +226,7 @@ export const PendingTransaction: FC<{
           highlighted={!disabled}
           disabled={disabled}
           onClick={async () => {
-            if (gasPrice && gasLimit) {
+            if (signer && gasPrice && gasLimit) {
               const cont =
                 !isStakeSigned && checkTransactionSignature ? await signStake(signer, stakeSignatures.message, setStakeSignatures) : true
               if (!cont) {
