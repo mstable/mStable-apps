@@ -10,6 +10,7 @@ import { useAccount } from '@apps/base/context/account'
 import { SaveRow } from './SaveRow'
 import { DashboardFilter as DF } from './types'
 import { useFraxStakingState } from '../../context/FraxStakingProvider'
+import { useStakingRewards } from '../Save/hooks'
 
 const headerTitles = ['Asset', 'APY', 'Balance', 'TVL'].map(t => ({ title: t }))
 
@@ -29,6 +30,7 @@ const UserZeroState = styled.tr`
 export const DashboardTable: FC<{ filter: DF }> = ({ filter }) => {
   const dataState = useDataState()
   const account = useAccount()
+  const polygonRewards = useStakingRewards()
   const { subscribedData: fraxSubscribedData } = useFraxStakingState()
   const fraxState = fraxSubscribedData?.value?.accountData
 
@@ -48,8 +50,8 @@ export const DashboardTable: FC<{ filter: DF }> = ({ filter }) => {
   const isPoolsFilter = filter === DF.Pools || filter === DF.User
   const isUserFilter = filter === DF.User
 
-  const filteredSave = save.filter((massetState: MassetState) => filterByDeposited(isUserFilter && { massetState }))
-  const filteredPools = pools.filter((feederState: FeederPoolState) => filterByDeposited(isUserFilter && { feederState, fraxState }))
+  const filteredSave = save.filter((massetState: MassetState) => filterByDeposited(isUserFilter && { massetState, polygonRewards }))
+  const filteredPools = pools.filter((feederState: FeederPoolState) => filterByDeposited(isUserFilter && { feederState, fraxState, polygonRewards }))
   const showUserZeroState = isUserFilter && !filteredSave.length && !filteredPools.length
 
   return (
