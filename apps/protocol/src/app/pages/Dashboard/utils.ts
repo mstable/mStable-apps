@@ -89,9 +89,9 @@ export const getSaveDeposited = (
   }
 }
 
-export const filterByDeposited = (state: { massetState?: MassetState; feederState?: FeederPoolState; fraxState?: StakeData }) => {
-  const { massetState, feederState, fraxState } = state
-  if (massetState) return getSaveDeposited(massetState).total.simple > 0
+export const filterByDeposited = (state: { massetState?: MassetState; feederState?: FeederPoolState; fraxState?: StakeData, polygonRewards?: StakingRewardsExtended }) => {
+  const { massetState, feederState, fraxState, polygonRewards } = state
+  if (massetState) return getSaveDeposited(massetState, 1, polygonRewards).total.simple > 0
   if (feederState) {
     const pools = getPoolDeposited(feederState)
     if (fraxState) {

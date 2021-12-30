@@ -16,7 +16,7 @@ import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './St
 import { useRewardStreams } from '../../context/RewardStreamsProvider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { getSaveDeposited } from './utils'
-import { useStakingRewards } from '../Save/hooks'
+import { useRewardsEarned, useStakingRewards } from '../Save/hooks'
 
 const useSaveVaultAPY = (mAssetName: MassetName, massetPrice?: number, userBoost?: number) => {
   const {
@@ -59,6 +59,7 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
   const rewards = useRewardStreams()
   const upsertStream = useUpsertStream()
   const polygonRewards = useStakingRewards()
+  const rewardsEarned = useRewardsEarned()
 
   const {
     savingsContracts: { v2: { boostedSavingsVault, token: saveToken } = {} },
@@ -100,7 +101,7 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
     upsertStream(`reward-${mAssetName}`, rewards)
   }, [mAssetName, rewards, rewards?.amounts?.earned?.unlocked, upsertStream])
 
-  const hasRewards = ((rewards?.amounts?.earned?.unlocked ?? 0) + rewards?.amounts?.unlocked ?? 0) > 0
+  const hasRewards = isPolygon ? rewardsEarned.canClaim : ((rewards?.amounts?.earned?.unlocked ?? 0) + rewards?.amounts?.unlocked ?? 0) > 0
 
   return (
     <DashTableRow onClick={() => history.push(`/${mAssetName}/save`)} buttonTitle="Explore">
