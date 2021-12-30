@@ -97,7 +97,7 @@ const useDeposits = (tab: DF) => {
             return acc + save + pools + (frax?.total ?? 0)
         }
       }, 0),
-    [dataState, wbtcPrice.value, polygonRewards, tab],
+    [dataState, wbtcPrice.value, polygonRewards, tab, fraxSubscribedData],
   )
 }
 
