@@ -127,53 +127,55 @@ export const PoolCard: FC<Props> = ({ poolAddress, className, deprecated }) => {
       iconType={'chevron'}
       onClick={handleClick}
     >
-      <StatsContainer>
-        {!!feederPool?.vault && (
-          <RewardsAPY>
-            <p>
-              <Tooltip tip="33% of earned MTA rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks">
-                Rewards APY
-              </Tooltip>
-            </p>
-            <div>
+      {!deprecated && (
+        <StatsContainer>
+          {!!feederPool?.vault && (
+            <RewardsAPY>
+              <p>
+                <Tooltip tip="33% of earned MTA rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks">
+                  Rewards APY
+                </Tooltip>
+              </p>
               <div>
-                <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
                 <div>
-                  &nbsp;→&nbsp;
-                  <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
-                    {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
-                  </UnderlinedTip>
+                  <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
+                  <div>
+                    &nbsp;→&nbsp;
+                    <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
+                      {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
+                    </UnderlinedTip>
+                  </div>
+                </div>
+                <TokenIcon symbol={vault?.rewardsToken.symbol} />
+              </div>
+            </RewardsAPY>
+          )}
+          {!!feederPoolApy.value?.platformRewards && (
+            <RewardsAPY>
+              <p>
+                <Tooltip tip="Platform rewards are not boosted and 100% is claimable immediately.">Platform APY</Tooltip>
+              </p>
+              <div>
+                <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards} suffix="%" />} </div>
+                <TokenIcon symbol={vault?.platformRewardsToken?.symbol} />
+              </div>
+            </RewardsAPY>
+          )}
+          {baseApy > 0.05 && (
+            <RewardsAPY>
+              <p>
+                <Tooltip tip="Base APY represents the increase in the value of the pool token over time.">Base APY</Tooltip>
+              </p>
+              <div>
+                <div>
+                  <CountUp end={baseApy} suffix="%" />
                 </div>
               </div>
-              <TokenIcon symbol={vault?.rewardsToken.symbol} />
-            </div>
-          </RewardsAPY>
-        )}
-        {!!feederPoolApy.value?.platformRewards && (
-          <RewardsAPY>
-            <p>
-              <Tooltip tip="Platform rewards are not boosted and 100% is claimable immediately.">Platform APY</Tooltip>
-            </p>
-            <div>
-              <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.platformRewards} suffix="%" />} </div>
-              <TokenIcon symbol={vault?.platformRewardsToken?.symbol} />
-            </div>
-          </RewardsAPY>
-        )}
-        {!!baseApy && (
-          <RewardsAPY>
-            <p>
-              <Tooltip tip="Base APY represents the increase in the value of the pool token over time.">Base APY</Tooltip>
-            </p>
-            <div>
-              <div>
-                <CountUp end={baseApy} suffix="%" />
-              </div>
-            </div>
-          </RewardsAPY>
-        )}
-        {feederPoolApy.value && feederPoolApy.value.rewards.base > 1000 && <div>While liquidity is low, this APY is highly volatile</div>}
-      </StatsContainer>
+            </RewardsAPY>
+          )}
+          {feederPoolApy.value && feederPoolApy.value.rewards.base > 1000 && <div>While liquidity is low, this APY is highly volatile</div>}
+        </StatsContainer>
+      )}
     </Container>
   )
 }

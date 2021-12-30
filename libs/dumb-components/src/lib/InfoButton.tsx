@@ -1,13 +1,15 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { ReactComponent as LockIcon } from '@apps/icons/lock-closed.svg'
+import { ReactComponent as LockIcon } from '@apps/icons/lock-alt.svg'
+import { ReactComponent as TokensIcon } from '@apps/icons/tokens.svg'
 
 import { UnstyledButton } from './Button'
 
 interface Props {
   title: string
   content: string
+  icon?: 'lock' | 'tokens'
   onClick: () => void
 }
 
@@ -37,23 +39,18 @@ const Container = styled(UnstyledButton)`
       }
 
       > svg {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: auto;
+        height: 1.75rem;
         margin-right: 0.5rem;
-
-        rect,
-        circle,
-        path {
-          stroke: #f2a040;
-        }
+        margin-top: -2px;
       }
     }
 
     span {
       font-size: 1.5rem;
-      color: ${({ theme }) => theme.color.bodyAccent};
+      color: ${({ theme }) => theme.color.body};
       ${({ theme }) => theme.mixins.numeric};
-      margin-top: -0.5rem;
+      margin-top: -0.675rem;
     }
   }
 
@@ -65,12 +62,13 @@ const Container = styled(UnstyledButton)`
   }
 `
 
-export const InfoButton: FC<Props> = ({ onClick, title, content }) => {
+export const InfoButton: FC<Props> = ({ onClick, title, content, icon = 'lock' }) => {
   return (
     <Container onClick={onClick}>
       <div>
         <div>
-          <LockIcon />
+          {icon === 'lock' && <LockIcon />}
+          {icon === 'tokens' && <TokensIcon />}
           <h3>{title}</h3>
         </div>
         <span>↗</span>

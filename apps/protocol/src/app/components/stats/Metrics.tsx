@@ -109,7 +109,8 @@ const MetricToggles = styled.div`
   align-items: center;
   justify-content: space-evenly;
   padding: 8px;
-  border: 1px ${Color.blackTransparenter} solid;
+  border-radius: 0.5rem;
+  border: 1px ${({ theme }) => theme.color.defaultBorder} solid;
 `
 
 const ChartContainer = styled.div`

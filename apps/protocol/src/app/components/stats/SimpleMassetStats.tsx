@@ -35,7 +35,7 @@ const AssetRow = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0.75rem 0;
-  border-bottom: 1px ${({ theme }) => theme.color.bodyTransparent} solid;
+  border-bottom: 1px ${({ theme }) => theme.color.defaultBorder} solid;
 
   > :last-child span {
     text-align: right;

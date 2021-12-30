@@ -177,20 +177,7 @@ export const OnboardingCard: FC = () => {
           Over time, your {saveTokenSymbol} can be exchanged for more {massetToken.symbol}.
         </p>
       </div>
-      {massetName === 'musd' && isEthereum && (
-        <>
-          <Arrow />
-          <div>
-            <h4>
-              <span>4</span> Do more with your imUSD in DeFi <span>(optional)</span>
-            </h4>
-            <p>
-              You can even mint <ExternalLink href="https://app.arcx.money/mint">StableX tokens</ExternalLink> with your imUSD as
-              collateral!
-            </p>
-          </div>
-        </>
-      )}
+      <br />
     </Container>
   )
 }

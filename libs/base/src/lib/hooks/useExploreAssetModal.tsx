@@ -5,27 +5,32 @@ import { Modal } from '@apps/dumb-components'
 
 import { ExploreAsset } from '../components/wallet/ExploreAsset'
 
-export const useExploreAssetModal = (hidePrevModal: () => void): [(symbol: string) => void, () => void] => {
-  const [symbol, setSymbol] = useState<string | undefined>(undefined)
+interface Props {
+  symbol: string
+  type: 'masset' | 'fasset' | 'basset'
+}
+
+export const useExploreAssetModal = (hidePrevModal?: () => void): [(asset: Props) => void, () => void] => {
+  const [asset, setAsset] = useState<Props | undefined>(undefined)
   const actions = useRef<ReturnType<typeof useModal>>()
   const actions_ = actions.current
 
   const handleRowClick = useCallback(() => {
     actions.current?.[1]?.()
-    hidePrevModal()
+    hidePrevModal?.()
   }, [hidePrevModal])
 
   actions.current = useModal(
     ({ onExited, in: open }) => (
-      <Modal title={symbol ?? 'Explore'} onExited={onExited} open={open} hideModal={actions_?.[1]}>
-        <ExploreAsset symbol={symbol} onRowClick={handleRowClick} />
+      <Modal title={asset?.symbol ?? 'Explore'} onExited={onExited} open={open} hideModal={actions_?.[1]}>
+        <ExploreAsset symbol={asset?.symbol} type={asset?.type} onRowClick={handleRowClick} />
       </Modal>
     ),
-    [symbol],
+    [asset],
   )
 
-  const showModal = useCallback((_symbol: string) => {
-    setSymbol(_symbol)
+  const showModal = useCallback((_asset: Props) => {
+    setAsset(_asset)
     actions.current?.[0]?.()
   }, [])
 

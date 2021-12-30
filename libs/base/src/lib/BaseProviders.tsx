@@ -8,8 +8,6 @@ import { Updaters } from './updaters'
 
 interface BaseContext {
   navItems: { path: string; title: string }[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  AccountModalContent?: FC<any>
   appName?: string
 }
 

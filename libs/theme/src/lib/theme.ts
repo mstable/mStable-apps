@@ -17,9 +17,9 @@ export enum Color {
   white = 'rgb(255,255,255)',
   black = 'rgb(0,0,0)',
   whiteTransparent = 'rgba(255,255,255,0.7)',
-  whiteTransparenter = 'rgba(255,255,255,0.1)',
+  whiteTransparenter = 'rgba(255,255,255,0.25)',
   blackTransparent = 'rgba(0,0,0,0.5)',
-  blackTransparenter = 'rgba(0,0,0,0.06)',
+  blackTransparenter = 'rgba(0,0,0,0.2)',
   offWhite = 'rgb(249,245,242)',
   offBlackAccent = 'rgb(63,67,77)',
   offBlack = 'rgb(37,39,45)',
@@ -60,6 +60,7 @@ interface ColorTheme {
   yellowBorder: string
   disabled: string
   background: Record<string, string>
+  backgroundTransparent: string
   disabledInput: string
   disabledButton: string
   defaultBorder: string
@@ -93,6 +94,7 @@ export const colorTheme = (isDark: boolean): ColorTheme & typeof Color => {
     onboardBackground: isLight ? ColorNew.white[0] : ColorNew.spaceBlue[1],
     onboardItemHover: isLight ? ColorNew.white[1] : ColorNew.spaceBlue[2],
     navItemActive: isLight ? Color.coolBlueTransparent : 'rgba(169, 203, 255, 0.1)',
+    backgroundTransparent: isLight ? 'rgba(0,0,0,0.01)' : 'rgba(255,255,255,0.03)',
     background: isLight
       ? {
           0: ColorNew.white[0],

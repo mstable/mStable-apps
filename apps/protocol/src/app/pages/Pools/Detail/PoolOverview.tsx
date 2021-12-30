@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
+import React, { FC, ReactElement, useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { CountUp, DifferentialCountup, TransitionCard, Tooltip, CardContainer as Card, CardButton as Button } from '@apps/dumb-components'
@@ -65,6 +65,10 @@ export const PoolOverview: FC = () => {
 
   const handleSelection = useCallback((newValue?: Selection) => setSelection(selection === newValue ? undefined : newValue), [selection])
 
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0 })
+  }, [])
+
   return showLiquidityMessage ? (
     <LiquidityMessage />
   ) : (
@@ -96,15 +100,6 @@ export const PoolOverview: FC = () => {
               <div>
                 <CountUp end={apy.value.platformRewards} suffix="%" />
                 <Tooltip tip={`${vault?.platformRewardsToken?.symbol} rewards are claimed immediately`} />
-              </div>
-            </Button>
-          )}
-          {!!apy.value?.base && (
-            <Button active={false} disabled>
-              <h3>Base APY</h3>
-              <div>
-                <CountUp end={apy.value.base} suffix="%" />
-                <Tooltip tip="Base APY represents the increase in the value of the pool token over time" />
               </div>
             </Button>
           )}

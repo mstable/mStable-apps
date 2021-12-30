@@ -262,7 +262,7 @@ export const Layout: FC = ({ children }) => {
         <Footer />
         <Toasts />
         <StyledTooltip tip="" hideIcon />
-        <ReactTooltip id="global" place="top" />
+        <ReactTooltip id="global" place="top" html={true} />
         <GlobalStyle />
       </ModalProvider>
     </ModalDataProvider>

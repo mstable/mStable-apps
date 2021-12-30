@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useLayoutEffect } from 'react'
+import React, { FC, useEffect, useLayoutEffect } from 'react'
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 
@@ -12,7 +12,7 @@ import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } fro
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
 
-import { Balances } from './components/Balances'
+import { Dashboard } from './pages/Dashboard'
 import { Save } from './pages/Save'
 import { NotFound } from './pages/NotFound'
 import { Stats } from './pages/Stats'
@@ -45,7 +45,7 @@ const ProtocolRoutes: FC = () => {
       <Route exact path="/:massetName/pools" component={Pools} />
       <Route exact path="/:massetName/swap" component={Exchange} />
       <Route exact path="/:massetName/pools/:poolAddress" component={PoolDetail} />
-      <Redirect exact path="/" to="/musd/save" />
+      <Route exact path="/" component={Dashboard} />
       <Redirect exact path="/analytics" to="/musd/stats" />
       <Redirect exact path="/save" to="/musd/save" />
       <Redirect exact path="/earn" to="/musd/earn" />
@@ -70,7 +70,7 @@ export const ProtocolApp: FC = () => {
   const massetName = useSelectedMassetName()
   const massetConfig = useSelectedMassetConfig()
   const hasFeederPools = massetState?.hasFeederPools
-  const [bannerMessage, setBannerMessage] = useBannerMessage()
+  const [, setBannerMessage] = useBannerMessage()
   const { undergoingRecol } = useSelectedMassetState() ?? {}
   const urlQuery = useURLQuery()
   const [chainId, setChainId] = useChainIdCtx()
@@ -78,6 +78,7 @@ export const ProtocolApp: FC = () => {
 
   useEffect(() => {
     const navItems = [
+      { title: 'Home', path: '/' },
       { title: 'Save', path: `/${massetName}/save` },
       ...(hasFeederPools ? [{ title: 'Pools', path: `/${massetName}/pools` }] : []),
       { title: 'Swap', path: `/${massetName}/swap` },
@@ -85,7 +86,7 @@ export const ProtocolApp: FC = () => {
     ]
     const appName = APP_NAME.PROTOCOL
 
-    setBaseCtx({ navItems, AccountModalContent: Balances, appName })
+    setBaseCtx({ navItems, appName })
   }, [hasFeederPools, setBaseCtx, massetName])
 
   // Handle message prioritisation:

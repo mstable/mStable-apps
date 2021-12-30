@@ -68,7 +68,7 @@ const Options = styled.div`
     top: calc(50% - 0.125rem);
     width: 100%;
     height: 0.25rem;
-    background: ${({ theme }) => theme.color.bodyTransparenter};
+    background: ${({ theme }) => theme.color.background[2]};
     content: '';
     z-index: -1;
   }
