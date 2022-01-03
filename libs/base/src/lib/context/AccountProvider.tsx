@@ -247,7 +247,7 @@ const OnboardProvider: FC<{
       setWallet(undefined)
       setInjectedProvider(undefined)
     },
-    [onboard, setInjectedProvider, network],
+    [onboard, setInjectedProvider],
   )
 
   const reset = useCallback(() => {

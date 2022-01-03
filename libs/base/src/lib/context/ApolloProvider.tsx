@@ -39,24 +39,27 @@ export const ApolloProvider: FC = ({ children }) => {
   // Serialized array of failed endpoints to be excluded from the client
   const [failedEndpoints, setFailedEndpoints] = useState<string>('')
 
-  const handleError = useCallback((message: string, error?: unknown): void => {
-    console.error(message, error)
+  const handleError = useCallback(
+    (message: string, error?: unknown): void => {
+      console.error(message, error)
 
-    // Not significant at the moment; falls back to the hosted service
-    if (message.includes('Exhausted list of indexers')) return
+      // Not significant at the moment; falls back to the hosted service
+      if (message.includes('Exhausted list of indexers')) return
 
-    let sanitizedError: string = message
-    let body: string | undefined
-    if (message.includes('Failed to query subgraph deployment')) {
-      sanitizedError = `Subgraph: ${message.split(': ')[1] ?? message}`
-    }
+      let sanitizedError: string = message
+      let body: string | undefined
+      if (message.includes('Failed to query subgraph deployment')) {
+        sanitizedError = `Subgraph: ${message.split(': ')[1] ?? message}`
+      }
 
-    if ((error as { operation?: Operation })?.operation?.operationName) {
-      body = `Subgraph: ${(error as { operation: Operation }).operation.operationName}`
-    }
+      if ((error as { operation?: Operation })?.operation?.operationName) {
+        body = `Subgraph: ${(error as { operation: Operation }).operation.operationName}`
+      }
 
-    addErrorNotification(sanitizedError, body)
-  }, [])
+      addErrorNotification(sanitizedError, body)
+    },
+    [addErrorNotification],
+  )
 
   useEffect(() => {
     Promise.all(
