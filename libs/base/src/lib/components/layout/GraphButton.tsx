@@ -1,7 +1,7 @@
 import { FC, useRef } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
-import { NetworkStatus } from '@jameslefrere/react-apollo-network-status'
+import { NetworkStatus, OperationError } from '@jameslefrere/react-apollo-network-status'
 
 import { UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as GraphQLIcon } from '@apps/icons/graphql.svg'
@@ -33,8 +33,7 @@ const Container = styled.div<{ open: boolean; pending: boolean; error: boolean }
 
   .badge {
     transition: background-color 0.2s;
-    background-color: ${({ error, theme, pending }) =>
-      error ? theme.color.redTransparent : pending ? 'rgba(0, 92, 222, 0.7)' : 'transparent'};
+    background-color: ${({ error, theme, pending }) => (error ? theme.color.red : pending ? 'rgba(0, 92, 222, 0.7)' : 'transparent')};
     position: absolute;
     top: -2px;
     right: -2px;
@@ -70,7 +69,7 @@ const EndpointStatusContainer = styled.div`
   }
 
   .error {
-    color: rgba(202, 0, 27, 0.2);
+    color: ${({ theme }) => theme.redTransparent};
   }
 
   .pending {
@@ -80,6 +79,9 @@ const EndpointStatusContainer = styled.div`
   }
 `
 
+const formatOperationError = (error: OperationError) =>
+  error.networkError?.message ?? error.graphQLErrors?.map(error => error.message).join(', ')
+
 const EndpointStatus: FC<{ endpointName: string; status: NetworkStatus }> = ({
   endpointName,
   status: { pendingQueries, pendingMutations, queryError, mutationError },
@@ -87,8 +89,8 @@ const EndpointStatus: FC<{ endpointName: string; status: NetworkStatus }> = ({
   return (
     <EndpointStatusContainer>
       <div className="name">{endpointName}</div>
-      {queryError && <div className="error">{queryError}</div>}
-      {mutationError && <div className="error">{mutationError}</div>}
+      {queryError && <div className="error">{formatOperationError(queryError)}</div>}
+      {mutationError && <div className="error">{formatOperationError(mutationError)}</div>}
       <div className="pending">
         {Object.entries({ ...pendingQueries, ...pendingMutations })
           .filter(op => op[1])
