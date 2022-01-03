@@ -1,4 +1,5 @@
 export * from './ActivitySpinner'
+export * from './AchievementUnlocked'
 export * from './AddressInput'
 export * from './AmountInput'
 export * from './AmountInputButton'
