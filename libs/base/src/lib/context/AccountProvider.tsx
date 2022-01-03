@@ -7,7 +7,6 @@ import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-u
 import { ethers, utils } from 'ethers'
 import { composedComponent } from '@apps/react-utils'
 
-import { useAddInfoNotification } from './NotificationsProvider'
 import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
 import { useStakeSignatures } from '../hooks'
 import { API_ENDPOINT } from '../utils'
@@ -115,8 +114,6 @@ const OnboardProvider: FC<{
 
   const [, setInjectedChainId] = useInjectedChainIdCtx()
   const [injectedProvider, setInjectedProvider] = useInjectedProviderCtx()
-
-  const addInfoNotification = useAddInfoNotification()
 
   const network = useNetwork()
   const rpcUrl = network.rpcEndpoints[0]
@@ -236,10 +233,6 @@ const OnboardProvider: FC<{
           const checked = await onboard.walletCheck()
           if (!checked) return
 
-          addInfoNotification(
-            `Connected${typeof walletName === 'string' ? ` with ${walletName}` : ''}`,
-            `${network.protocolName} (${network.chainName})`,
-          )
           setConnected(true)
           if (walletName) localStorage.setItem('walletName', walletName)
           return
@@ -255,7 +248,7 @@ const OnboardProvider: FC<{
       setWallet(undefined)
       setInjectedProvider(undefined)
     },
-    [onboard, setInjectedProvider, addInfoNotification, network],
+    [onboard, setInjectedProvider, network],
   )
 
   const reset = useCallback(() => {
@@ -315,7 +308,10 @@ const OnboardProvider: FC<{
       setEnsAvatar(undefined)
       return
     }
-    injectedProvider.getAvatar(ensName).then(result => setEnsAvatar(result || undefined))
+    injectedProvider
+      .getAvatar(ensName)
+      .then(result => setEnsAvatar(result ?? undefined))
+      .catch(console.error)
   }, [ensName, injectedProvider])
 
   return (
