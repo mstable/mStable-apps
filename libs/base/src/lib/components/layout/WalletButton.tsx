@@ -38,6 +38,17 @@ const AccountButton = styled(UnstyledButton)`
   }
 `
 
+const ENSName = styled.span`
+  display: none;
+  font-weight: normal;
+  font-size: 0.875rem;
+  padding: 0 0.25rem;
+  @media (min-width: ${ViewportWidth.m}) {
+    text-transform: lowercase;
+    display: inherit;
+  }
+`
+
 const TruncatedAddress = styled.span`
   display: none;
   font-weight: normal;
@@ -106,14 +117,10 @@ export const WalletButton: FC = () => {
         </>
       ) : connected ? (
         <>
-          { ensName ? (
-            <TruncatedAddress>{ensName}</TruncatedAddress>
-          ) : (
-            <TruncatedAddress>{account && truncateAddress(account)}</TruncatedAddress>
-          )}
-          { ensAvatar ? (
+          {ensName ? <ENSName>{ensName}</ENSName> : <TruncatedAddress>{account && truncateAddress(account)}</TruncatedAddress>}
+          {ensAvatar ? (
             <UserIconContainer>
-              <img src={ensAvatar} width={20} alt="Account"/>
+              <img src={ensAvatar} width={20} alt="Account" />
             </UserIconContainer>
           ) : (
             <UserIcon />
