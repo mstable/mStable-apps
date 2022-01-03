@@ -258,17 +258,6 @@ const DefaultQuestInfo: FC<Props> = ({ questId }) => {
                     </div>
                   )
                 })}
-                {questId === 'metanautSpaceProgram' && (
-                  <div>
-                    <div>
-                      <QP>Next</QP>
-                    </div>
-                    <Typist>
-                      <p>Further objectives are on the way!</p>
-                      <p>More QP will be made available soon.</p>
-                    </Typist>
-                  </div>
-                )}
               </Objectives>
             </div>
           ) : (
