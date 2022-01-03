@@ -42,18 +42,20 @@ export type UserFieldPolicy = {
 	optInQueue?: FieldPolicy<any> | FieldReadFunction<any>,
 	quests?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserQuestKeySpecifier = ('id' | 'complete' | 'progress' | 'signature' | 'objectives' | UserQuestKeySpecifier)[];
+export type UserQuestKeySpecifier = ('id' | 'complete' | 'completedAt' | 'progress' | 'signature' | 'objectives' | UserQuestKeySpecifier)[];
 export type UserQuestFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	complete?: FieldPolicy<any> | FieldReadFunction<any>,
+	completedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	progress?: FieldPolicy<any> | FieldReadFunction<any>,
 	signature?: FieldPolicy<any> | FieldReadFunction<any>,
 	objectives?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserQuestObjectiveKeySpecifier = ('id' | 'complete' | 'progress' | UserQuestObjectiveKeySpecifier)[];
+export type UserQuestObjectiveKeySpecifier = ('id' | 'complete' | 'completedAt' | 'progress' | UserQuestObjectiveKeySpecifier)[];
 export type UserQuestObjectiveFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	complete?: FieldPolicy<any> | FieldReadFunction<any>,
+	completedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	progress?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type StrictTypedTypePolicies = {

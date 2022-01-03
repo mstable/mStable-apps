@@ -1,4 +1,10 @@
 import React, { FC, createContext, useContext, useCallback, useMemo, useReducer, Reducer } from 'react'
+import useSound from 'use-sound'
+
+// @ts-ignore
+import achievement from '@apps/assets/sounds/achievement.mp3'
+// @ts-ignore
+import rareAchievement from '@apps/assets/sounds/rare-achievement.mp3'
 
 enum Actions {
   Add,
@@ -10,6 +16,7 @@ export enum NotificationType {
   Success,
   Error,
   Info,
+  Quest,
 }
 
 export interface Notification {
@@ -21,6 +28,7 @@ export interface Notification {
     href: string
     title: string
   } | null
+  questPoints?: number
   read?: boolean
   hideToast?: boolean
 }
@@ -41,6 +49,7 @@ interface Dispatch {
   addErrorNotification: AddNotificationCallback
   addInfoNotification: AddNotificationCallback
   addSuccessNotification: AddNotificationCallback
+  addQuestNotification(title: string, questPoints?: number): void
   markNotificationAsRead(id: string): void
 }
 
@@ -73,6 +82,8 @@ const context = createContext<[State, Dispatch]>([initialState, {} as never])
 
 export const NotificationsProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [playAchievement] = useSound(achievement, { volume: 0.5, interrupt: true })
+  const [playRareAchievement] = useSound(rareAchievement, { volume: 0.5 })
 
   const addNotification = useCallback(
     (notification: Omit<Notification, 'id'>) => {
@@ -83,12 +94,24 @@ export const NotificationsProvider: FC = ({ children }) => {
         payload: { id, ...notification },
       })
 
+      const isQuest = notification.type === NotificationType.Quest
+      if (isQuest) {
+        if (notification.questPoints) {
+          playAchievement()
+        } else {
+          playRareAchievement()
+        }
+      }
+
       // Hide the notification toast after a delay
-      setTimeout(() => {
-        dispatch({ type: Actions.HideToast, payload: id })
-      }, 8000)
+      setTimeout(
+        () => {
+          dispatch({ type: Actions.HideToast, payload: id })
+        },
+        isQuest && !notification.questPoints ? 12e3 : 8e3,
+      )
     },
-    [dispatch],
+    [playAchievement, playRareAchievement],
   )
 
   const addErrorNotification = useCallback<Dispatch['addErrorNotification']>(
@@ -112,6 +135,13 @@ export const NotificationsProvider: FC = ({ children }) => {
     [addNotification],
   )
 
+  const addQuestNotification = useCallback<Dispatch['addQuestNotification']>(
+    (title, questPoints) => {
+      addNotification({ title, questPoints, type: NotificationType.Quest })
+    },
+    [addNotification],
+  )
+
   const markNotificationAsRead = useCallback<Dispatch['markNotificationAsRead']>(
     id => {
       dispatch({ type: Actions.MarkAsRead, payload: id })
@@ -128,10 +158,11 @@ export const NotificationsProvider: FC = ({ children }) => {
             addErrorNotification,
             addInfoNotification,
             addSuccessNotification,
+            addQuestNotification,
             markNotificationAsRead,
           },
         ],
-        [state, addErrorNotification, addInfoNotification, addSuccessNotification, markNotificationAsRead],
+        [state, addErrorNotification, addInfoNotification, addSuccessNotification, addQuestNotification, markNotificationAsRead],
       )}
     >
       {children}
@@ -152,5 +183,7 @@ export const useAddErrorNotification = (): Dispatch['addErrorNotification'] => u
 export const useAddInfoNotification = (): Dispatch['addInfoNotification'] => useNotificationsDispatch().addInfoNotification
 
 export const useAddSuccessNotification = (): Dispatch['addSuccessNotification'] => useNotificationsDispatch().addSuccessNotification
+
+export const useAddQuestNotification = (): Dispatch['addQuestNotification'] => useNotificationsDispatch().addQuestNotification
 
 export const useMarkNotificationAsRead = (): Dispatch['markNotificationAsRead'] => useNotificationsDispatch().markNotificationAsRead

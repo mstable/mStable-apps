@@ -53,6 +53,7 @@ type User {
 type UserQuest {
   id: ID!
   complete: Boolean!
+  completedAt: Int
   progress: Float
   signature: String
   objectives: [UserQuestObjective!]
@@ -61,5 +62,6 @@ type UserQuest {
 type UserQuestObjective {
   id: ID!
   complete: Boolean!
+  completedAt: Int
   progress: Float
 }

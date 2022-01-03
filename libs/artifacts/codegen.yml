@@ -18,7 +18,7 @@ schema:
 generates:
   ./libs/artifacts/src/graphql/questbook/schema.graphql:
     overwrite: true
-    schema: https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook
+    schema: http://localhost:5001/mstable-questbook/europe-west1/questbook
     plugins:
       - 'schema-ast'
     config:
@@ -79,7 +79,7 @@ generates:
       - 'schema-ast'
     config:
       includeDirectives: true
-  
+
   ./libs/artifacts/src/graphql/emissions/schema.graphql:
     overwrite: true
     schema: https://api.thegraph.com/subgraphs/name/mstable/mstable-emissions-ropsten
@@ -99,14 +99,14 @@ generates:
   ./libs/artifacts/src/graphql/questbook/apollo-helpers.ts:
     overwrite: true
     schema:
-      - https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook
+      - http://localhost:5001/mstable-questbook/europe-west1/questbook
       - ./libs/artifacts/src/graphql/questbook/client.graphql
     plugins:
       - typescript-apollo-client-helpers
 
   ./libs/artifacts/src/graphql/questbook.tsx:
     overwrite: true
-    schema: https://us-central1-mstable-questbook-ropsten.cloudfunctions.net/questbook
+    schema: http://localhost:5001/mstable-questbook/europe-west1/questbook
     documents: 'libs/artifacts/src/graphql/questbook/*.graphql'
     plugins:
       - 'fragment-matcher'
@@ -186,10 +186,10 @@ generates:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
-      
+
   ./libs/artifacts/src/graphql/emissions.tsx:
     overwrite: true
-    schema: 
+    schema:
       - https://api.thegraph.com/subgraphs/name/mstable/mstable-emissions-ropsten
     documents: 'libs/artifacts/src/graphql/emissions/*.graphql'
     plugins:

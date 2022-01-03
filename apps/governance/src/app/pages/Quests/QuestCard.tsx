@@ -184,7 +184,7 @@ const TimeMultiplierQuestCard: FC<Props> = ({ questId, onClick }) => (
       </Typist>
     </Title>
     <QuestImage>
-      <img src="/assets/astroboi.gif" alt="Quest graphic" key={questId} />
+      <img src="/assets/icons/astroboi.gif" alt="Quest graphic" key={questId} />
     </QuestImage>
     <QuestFeatures>
       <QuestMultiplier>1.2-1.6x</QuestMultiplier>
@@ -202,7 +202,7 @@ const DemocracyMaxiQuestCard: FC<Props> = ({ questId, onClick }) => (
       </Typist>
     </Title>
     <QuestImage>
-      <img src="/assets/astroboi.gif" alt="Quest graphic" key={questId} />
+      <img src="/assets/icons/astroboi.gif" alt="Quest graphic" key={questId} />
     </QuestImage>
     <QuestFeatures>
       <QuestSeason>SEASON 0</QuestSeason>

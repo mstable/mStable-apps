@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import useSound from 'use-sound'
@@ -7,7 +7,7 @@ import { UnstyledButton } from '@apps/dumb-components'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useQuestsQuery as useStakingQuestsQuery, useAccountQuery } from '@apps/artifacts/graphql/staking'
-import { useQuestsQuery as useQuestbookQuestsQuery, useUpdateQuestsMutation } from '@apps/artifacts/graphql/questbook'
+import { useQuestsQuery as useQuestbookQuestsQuery } from '@apps/artifacts/graphql/questbook'
 
 // @ts-ignore
 import bleep26 from '../../../assets/bleeps_26.mp3'
@@ -160,16 +160,6 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
     variables: { userId: account ?? '', hasUser: !!account },
     pollInterval: 30e3,
   })
-
-  // Update all quests when the user changes
-  const [updateUserQuests] = useUpdateQuestsMutation({ client: clients.questbook })
-  useEffect(() => {
-    if (account) {
-      updateUserQuests({ variables: { userId: account ?? '', hasUser: !!account } }).catch(error => {
-        console.error(error)
-      })
-    }
-  }, [updateUserQuests, account])
 
   const [playBleep26] = useSound(bleep26, { volume: 0.4 })
   const [playBleep27] = useSound(bleep27, { volume: 0.4 })

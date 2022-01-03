@@ -15,10 +15,12 @@ fragment QuestAll on Quest {
     id
     signature
     complete
+    completedAt
     progress
     objectives {
       id
       complete
+      completedAt
       progress
     }
   }

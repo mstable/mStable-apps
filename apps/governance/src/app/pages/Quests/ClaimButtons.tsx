@@ -10,6 +10,7 @@ import { useApolloClients } from '@apps/base/context/apollo'
 import { usePropose } from '@apps/base/context/transactions'
 import { Button, Tooltip } from '@apps/dumb-components'
 import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
+import { useAddQuestNotification } from '@apps/base/context/notifications'
 
 import { useQuestManagerContract } from '../../context/QuestManager'
 
@@ -23,6 +24,7 @@ const nowUnix = getUnixTime(new Date())
 export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const account = useAccount()
   const clients = useApolloClients()
+  const addQuestNotification = useAddQuestNotification()
 
   const [isPending, toggleIsPending] = useToggle(false)
   const questManagerContract = useQuestManagerContract()
@@ -34,6 +36,23 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const [updateQuest] = useUpdateQuestMutation({
     client: clients.questbook,
     variables: { questId, userId: account, hasUser: !!account },
+    onCompleted: data => {
+      const { userQuest, title, objectives } = data.updateQuest
+      if (userQuest) return
+
+      const nowUnix = getUnixTime(Date.now())
+
+      if (userQuest.completedAt && nowUnix - userQuest.completedAt < 30) {
+        addQuestNotification(title)
+      }
+
+      userQuest.objectives
+        .filter(obj => obj.completedAt && nowUnix - obj.completedAt < 30)
+        .forEach(obj => {
+          const obj_ = objectives.find(_obj => _obj.id === obj.id)
+          if (obj_) addQuestNotification(obj_.title, obj_.points)
+        })
+    },
   })
 
   const questbookQuery = useQuestbookQuestQuery({
