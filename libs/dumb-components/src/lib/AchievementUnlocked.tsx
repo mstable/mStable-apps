@@ -145,7 +145,7 @@ export const AchievementUnlocked: FC<{ title: string; points?: number }> = ({ ti
   return (
     <Container isObjective={isObjective}>
       <div className="circle">
-        <img src={isObjective ? mtaImg : '/assets/icons/astroboi.gif'} />
+        <img alt="Metanaut" src={isObjective ? mtaImg : '/assets/icons/astroboi.gif'} />
       </div>
       <div className="banner">
         <div className="complete">{isObjective ? 'Quest Objective' : 'Quest'} Complete</div>
