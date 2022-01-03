@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 import { constants } from 'ethers'
 
@@ -148,8 +148,7 @@ const Container = styled.div`
 
 export const Vote: FC = () => {
   const { selected: stakedTokenAddress, options } = useStakedToken()
-  // const { data } = useStakedTokenQuery()
-  const data = {} as any
+  const { data } = useStakedTokenQuery()
 
   const history = useHistory()
   const account = useOwnAccount()
