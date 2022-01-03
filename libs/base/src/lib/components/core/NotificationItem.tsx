@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 
+import { AchievementUnlocked } from '@apps/dumb-components'
 import { Notification, NotificationType, useMarkNotificationAsRead } from '../../context/NotificationsProvider'
 
 const Title = styled.div`
@@ -51,17 +52,47 @@ const Container = styled.div<Pick<Notification, 'type'> & { className?: string }
   }
 `
 
+const NotificationItemQuestContainer = styled.div`
+  display: flex !important;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  border-color: rgb(201, 252, 213);
+  background: rgb(62, 78, 66);
+
+  > :first-child {
+    width: 1.5rem;
+    height: auto;
+  }
+
+  > :last-child {
+    > :last-child {
+      color: rgba(201, 252, 213, 1);
+    }
+  }
+
+  ${({ theme }) => theme.mixins.mono}
+`
+
 export const NotificationItem: FC<{
   notification: Notification
   className?: string
-}> = ({ notification: { type, id, title, body, link }, className }) => {
+}> = ({ notification, className }) => {
   const markAsRead = useMarkNotificationAsRead()
+
+  const { id, type, link, body, title, questPoints } = notification
 
   const handleClick = useCallback(() => {
     markAsRead(id)
   }, [id, markAsRead])
 
-  return (
+  return type === NotificationType.Quest ? (
+    <AchievementUnlocked title={title} points={questPoints} />
+  ) : (
     <Container type={type} onClick={handleClick} className={className}>
       <Title>{title}</Title>
       {body && <Body>{body}</Body>}

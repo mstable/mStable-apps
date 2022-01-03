@@ -5,6 +5,7 @@ import { TokenSubscriptionsUpdater } from './tokenSubscriptionsUpdater'
 import { TokenFetcher } from './tokenFetcher'
 import { ContractsUpdater } from './contractsUpdater'
 import { ENSCacher } from './ensCacher'
+import { QuestsUpdater } from './questsUpdater'
 
 export const Updaters: FC<{}> = () => (
   <>
@@ -12,6 +13,7 @@ export const Updaters: FC<{}> = () => (
     <TokenSubscriptionsUpdater />
     <TransactionsUpdater />
     <ContractsUpdater />
+    <QuestsUpdater />
     <ENSCacher />
   </>
 )
