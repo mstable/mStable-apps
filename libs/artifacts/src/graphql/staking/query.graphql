@@ -64,6 +64,7 @@ query Account($id: ID!) {
         totalVotesAllBD @client
       }
       balance {
+        id
         raw
         votes
         timeMultiplier
