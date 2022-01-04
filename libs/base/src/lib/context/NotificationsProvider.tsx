@@ -105,12 +105,11 @@ export const NotificationsProvider: FC = ({ children }) => {
       }
 
       // Hide the notification toast after a delay
-      setTimeout(
-        () => {
+      if (!isQuest) {
+        setTimeout(() => {
           dispatch({ type: Actions.HideToast, payload: id })
-        },
-        isQuest && !notification.questPoints ? 12e3 : 8e3,
-      )
+        }, 8e3)
+      }
     },
     [playAchievement, playRareAchievement],
   )

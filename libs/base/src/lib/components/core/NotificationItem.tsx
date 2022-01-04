@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { AchievementUnlocked } from '@apps/dumb-components'
@@ -86,12 +86,12 @@ export const NotificationItem: FC<{
 
   const { id, type, link, body, title, questPoints } = notification
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     markAsRead(id)
-  }, [id, markAsRead])
+  }
 
   return type === NotificationType.Quest ? (
-    <AchievementUnlocked title={title} points={questPoints} />
+    <AchievementUnlocked className={className} title={title} points={questPoints} onClick={handleClick} />
   ) : (
     <Container type={type} onClick={handleClick} className={className}>
       <Title>{title}</Title>
