@@ -3,7 +3,14 @@ import styled from 'styled-components'
 import { useToggle } from 'react-use'
 import useOnClickOutside from 'use-onclickoutside'
 
-import { useIsDarkMode, useToggleDarkTheme, useShowSubgraphStatus, useToggleSubgraphStatus } from '@apps/browser-settings'
+import {
+  useIsDarkMode,
+  useToggleDarkTheme,
+  useShowSubgraphStatus,
+  useToggleSubgraphStatus,
+  useMute,
+  useToggleMute,
+} from '@apps/browser-settings'
 import { Tooltip, UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as SettingsSvg } from '@apps/icons/settings.svg'
 
@@ -70,6 +77,8 @@ export const SettingsButton: FC<{ className?: string }> = ({ children, className
   const handleThemeToggle = useToggleDarkTheme()
   const showSubgraphStatus = useShowSubgraphStatus()
   const handleSubgraphToggle = useToggleSubgraphStatus()
+  const mute = useMute()
+  const handleMuteToggle = useToggleMute()
 
   useOnClickOutside(container, () => toggleShow(false))
 
@@ -92,10 +101,14 @@ export const SettingsButton: FC<{ className?: string }> = ({ children, className
           <ThemeModeButton onClick={handleThemeToggle}>{isDarkTheme ? '🌙' : '☀️'}</ThemeModeButton>
         </div>
         <div>
+          <p>Sounds</p>
+          <ThemeModeButton onClick={handleMuteToggle}>{mute ? '🔇' : '🔊️'}</ThemeModeButton>
+        </div>
+        <div>
           <Tooltip tip="Enabling this will show data fetched to support the app, and can help to resolve problems">
             <p>Subgraph status</p>
           </Tooltip>
-          <ThemeModeButton onClick={handleSubgraphToggle}>{showSubgraphStatus ? '🤓' : '🔇'}</ThemeModeButton>
+          <ThemeModeButton onClick={handleSubgraphToggle}>{showSubgraphStatus ? '🤓' : '🚫'}</ThemeModeButton>
         </div>
       </List>
     </Container>

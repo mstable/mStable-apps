@@ -1,5 +1,6 @@
 import React, { FC, createContext, useContext, useCallback, useMemo, useReducer, Reducer } from 'react'
-import useSound from 'use-sound'
+
+import { useSound } from '@apps/browser-settings'
 
 // @ts-ignore
 import achievement from '@apps/assets/sounds/achievement.mp3'

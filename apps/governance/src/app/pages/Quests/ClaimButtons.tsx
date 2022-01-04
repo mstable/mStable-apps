@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { useToggle } from 'react-use'
-import useSound from 'use-sound'
 import { getUnixTime } from 'date-fns'
 
+import { useSound } from '@apps/browser-settings'
 import { useQuestQuery as useQuestbookQuestQuery, useUpdateQuestMutation } from '@apps/artifacts/graphql/questbook'
 import { useAccountQuery, useQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'

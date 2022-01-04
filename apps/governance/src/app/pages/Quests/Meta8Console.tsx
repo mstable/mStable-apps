@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
-import useSound from 'use-sound'
 
+import { useSound } from '@apps/browser-settings'
 import { Meta8Logic } from './Meta8Logic'
 import { RealisticSwitch } from './RealisticSwitch'
 

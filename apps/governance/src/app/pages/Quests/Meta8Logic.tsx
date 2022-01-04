@@ -1,8 +1,8 @@
 import React, { FC, useCallback, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import useSound from 'use-sound'
 
+import { useSound } from '@apps/browser-settings'
 import { UnstyledButton } from '@apps/dumb-components'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
