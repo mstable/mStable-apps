@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow, getUnixTime } from 'date-fns'
 import styled from 'styled-components'
 
 import { QuestType } from '@apps/artifacts/graphql/staking'
@@ -88,8 +88,7 @@ export const QuestProgress: FC<{ value?: number; title?: string; progressType: P
   )
 
 export const QuestTimeRemaining: FC<{ expiry?: number }> = ({ expiry }) => {
-  const end = typeof expiry === 'number' ? expiry * 1e3 : 0
-  const expired = end && Date.now() > end
+  const expired = expiry && expiry > 0 && getUnixTime(Date.now()) > expiry
   return (
     <Container progressType={ProgressType.TimeRemaining} questType={QuestType.Seasonal}>
       <div>
@@ -100,7 +99,7 @@ export const QuestTimeRemaining: FC<{ expiry?: number }> = ({ expiry }) => {
         ) : (
           <Typist>
             Time remaining
-            <span>{formatDistanceToNow(end)}</span>
+            <span>{formatDistanceToNow(expiry)}</span>
           </Typist>
         )}
       </div>
