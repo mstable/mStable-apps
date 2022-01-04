@@ -219,12 +219,13 @@ const DefaultQuestInfo: FC<Props> = ({ questId }) => {
   })
 
   const questbookQuest = questbookQuery.data?.quest
+  const skip = typeof questbookQuest?.ethereumId !== 'number'
   const questQuery = useStakingQuestQuery({
     client: clients.staking,
     variables: { id: questbookQuest?.ethereumId?.toString() },
-    skip: typeof questbookQuest?.ethereumId !== 'number',
+    skip,
   })
-  const quest = questQuery.data?.quest
+  const quest = skip ? undefined : questQuery.data?.quest
   const questType = quest?.type
 
   const expiry = quest?.expiry
