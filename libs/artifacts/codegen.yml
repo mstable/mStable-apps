@@ -18,7 +18,7 @@ schema:
 generates:
   ./libs/artifacts/src/graphql/questbook/schema.graphql:
     overwrite: true
-    schema: http://localhost:5001/mstable-questbook/europe-west1/questbook
+    schema: https://europe-west1-mstable-questbook-staging.cloudfunctions.net/questbook
     plugins:
       - 'schema-ast'
     config:
@@ -99,14 +99,14 @@ generates:
   ./libs/artifacts/src/graphql/questbook/apollo-helpers.ts:
     overwrite: true
     schema:
-      - http://localhost:5001/mstable-questbook/europe-west1/questbook
+      - https://europe-west1-mstable-questbook-staging.cloudfunctions.net/questbook
       - ./libs/artifacts/src/graphql/questbook/client.graphql
     plugins:
       - typescript-apollo-client-helpers
 
   ./libs/artifacts/src/graphql/questbook.tsx:
     overwrite: true
-    schema: http://localhost:5001/mstable-questbook/europe-west1/questbook
+    schema: https://europe-west1-mstable-questbook-staging.cloudfunctions.net/questbook
     documents: 'libs/artifacts/src/graphql/questbook/*.graphql'
     plugins:
       - 'fragment-matcher'
