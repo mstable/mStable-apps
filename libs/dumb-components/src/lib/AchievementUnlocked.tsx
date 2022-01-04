@@ -24,28 +24,6 @@ const Container = styled.div<{ isObjective: boolean }>`
   border-radius: 2rem;
   overflow: hidden;
 
-  @keyframes bannerAnim {
-    0% {
-      opacity: 0;
-      transform: scale(1);
-    }
-    2% {
-      opacity: 1;
-    }
-    95% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(0);
-      opacity: 0;
-    }
-  }
-
-  animation: bannerAnim;
-  animation-duration: 10.5s;
-  animation-fill-mode: forwards;
-
   @keyframes astroboi {
     from {
       transform: rotate(0deg);
@@ -56,32 +34,16 @@ const Container = styled.div<{ isObjective: boolean }>`
   }
 
   @keyframes circleAnim {
-    1% {
+    0% {
       opacity: 0;
       transform: scale(0.1);
     }
-    4% {
+    75% {
       transform: scale(1.1);
-    }
-    5% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    94% {
-      transform: scale(1);
-    }
-    96% {
-      transform: scale(1.1);
-    }
-    98% {
-      transform: scale(0.1);
-      opacity: 1;
-    }
-    99% {
-      opacity: 0;
     }
     100% {
-      transform: scale(0.1);
+      transform: scale(1);
+      opacity: 1;
     }
   }
 
@@ -95,7 +57,7 @@ const Container = styled.div<{ isObjective: boolean }>`
     justify-content: center;
 
     animation: circleAnim;
-    animation-duration: 10.5s;
+    animation-duration: 0.5s;
     animation-fill-mode: forwards;
     transform-origin: center;
 
@@ -139,11 +101,16 @@ const Container = styled.div<{ isObjective: boolean }>`
   }
 `
 
-export const AchievementUnlocked: FC<{ title: string; points?: number }> = ({ title, points }) => {
+export const AchievementUnlocked: FC<{ title: string; points?: number; className?: string; onClick?(): void }> = ({
+  title,
+  points,
+  className,
+  onClick,
+}) => {
   const isObjective = !!points
 
   return (
-    <Container isObjective={isObjective}>
+    <Container isObjective={isObjective} onClick={onClick} className={className}>
       <div className="circle">
         <img alt="Metanaut" src={isObjective ? mtaImg : '/assets/icons/astroboi.gif'} />
       </div>
