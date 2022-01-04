@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import BaseTypist, { TypistProps } from 'react-typist'
-import useSound from 'use-sound'
+
+import { useSound } from '@apps/browser-settings'
 
 // @ts-ignore
 import bleep30 from '../../../assets/bleeps_30.mp3'
