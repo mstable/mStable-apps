@@ -15,12 +15,16 @@ export const getDistancePercentage = (
 ): number | undefined => {
   if (!inputAmount || !outputAmount || inputAmount.exact.eq(0)) return
 
-  const isInput = lpPriceAdjustment?.isInput
+  const isInputLPToken = lpPriceAdjustment?.isInput
   const lpPrice = lpPriceAdjustment?.price?.simple ?? 1
 
-  const scaledInput = isInput ? inputAmount.simple * lpPrice : inputAmount.simple
-  const scaledOutput = isInput ? outputAmount.simple : outputAmount.simple * lpPrice
-  const distance = scaledOutput / scaledInput
-
-  return getSignedDistance(distance, reverse)
+  if (isInputLPToken) {
+    // redeem - scale input (lp token)
+    const scaledInput = inputAmount.simple * lpPrice
+    return getSignedDistance(outputAmount.simple / scaledInput, reverse)
+  } else {
+    // deposit - scale output (lp token)
+    const scaledOutput = outputAmount.simple * lpPrice
+    return getSignedDistance(scaledOutput / inputAmount.simple, reverse)
+  }
 }
