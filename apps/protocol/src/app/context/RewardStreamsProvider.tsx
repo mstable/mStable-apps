@@ -7,6 +7,7 @@ import { BoostedSavingsVault, BoostedSavingsVault__factory } from '@apps/artifac
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { BoostedSavingsVaultAccountState, BoostedSavingsVaultState } from '@apps/data-provider'
 import { SCALE } from '@apps/types'
+import { BigDecimal } from '@apps/bigdecimal'
 
 type RewardEntry = BoostedSavingsVaultAccountState['rewardEntries'][number]
 
@@ -39,6 +40,7 @@ export interface RewardStreams {
     locked: number
     unlocked: number
     previewLocked: number
+    platform: number
   }
   nextUnlock?: number
   chartData: ChartData
@@ -129,9 +131,7 @@ export const RewardStreamsProvider: FC<{
   const vaultContract = useRef<BoostedSavingsVault>()
 
   useEffect(() => {
-    if (!signer || !account || !vault) {
-        return
-    }
+    if (!signer || !account || !vault) return
 
     if (!vaultContract.current) {
       vaultContract.current = BoostedSavingsVault__factory.connect(vault.address, signer)
@@ -161,6 +161,7 @@ export const RewardStreamsProvider: FC<{
       const {
         lockupDuration,
         account: { rewardEntries, lastClaim, lastAction },
+        account,
       } = vault
 
       const [unlockedStreams, lockedStreams] = rewardEntries
@@ -277,12 +278,15 @@ export const RewardStreamsProvider: FC<{
         return
       }
 
+      const platform = parseInt((account?.platformRewards ?? 0).toString()) / 1e18
+
       const amounts = {
         earned,
         locked,
         previewLocked,
         unlocked,
         total,
+        platform,
       }
 
       return {

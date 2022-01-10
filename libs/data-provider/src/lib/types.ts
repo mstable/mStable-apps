@@ -106,6 +106,7 @@ export interface BoostedSavingsVaultAccountState {
   rawBalance: BigDecimal
   lastAction: number
   lastClaim: number
+  platformRewards?: BigNumber
   rewardCount: number
   rewardPerTokenPaid: BigNumber
   rewards: BigNumber
