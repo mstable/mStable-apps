@@ -7,7 +7,6 @@ import { BoostedSavingsVault, BoostedSavingsVault__factory } from '@apps/artifac
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { BoostedSavingsVaultAccountState, BoostedSavingsVaultState } from '@apps/data-provider'
 import { SCALE } from '@apps/types'
-import { BigDecimal } from '@apps/bigdecimal'
 
 type RewardEntry = BoostedSavingsVaultAccountState['rewardEntries'][number]
 
