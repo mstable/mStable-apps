@@ -234,7 +234,7 @@ const ETH_MAINNET: EthereumMainnet = {
       graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0, process.env.NX_PROTOCOL_SUBGRAPH_API_KEY as string),
     ],
     staking: [graphHostedEndpoint('mstable', 'mstable-staking')],
-    questbook: ['https://europe-west1-mstable-questbook-staging.cloudfunctions.net/questbook'],
+    questbook: ['https://europe-west1-mstable-questbook.cloudfunctions.net/questbook'],
     merkleDrop: [graphHostedEndpoint('mstable', 'mstable-merkle-drop')],
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
