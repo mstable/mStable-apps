@@ -409,7 +409,7 @@ export const TimeMultiplierQuestInfo: FC<Props> = ({ questId }) => {
             <QuestProgress
               decimals={4}
               value={quest.currentProgress}
-              title={quest.currentTitle}
+              title="Current progress"
               progressType={ProgressType.Personal}
               questType={QuestType.Permanent}
             />
