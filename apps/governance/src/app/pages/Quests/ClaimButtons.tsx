@@ -74,6 +74,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
     variables: { id: account ?? '' },
     skip: !account,
     pollInterval: 15e3,
+    nextFetchPolicy: 'cache-only',
   })
 
   const claimed = accountQuery.data?.account?.completedQuests?.find(c => c.quest.id === questbookQuest?.ethereumId?.toString())
