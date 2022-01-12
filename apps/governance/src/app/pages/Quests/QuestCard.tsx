@@ -55,6 +55,25 @@ const QuestFeatures = styled.div`
     border-radius: 1rem;
     margin-bottom: 0.75rem;
   }
+
+  .qp-season {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .qp {
+    padding: 0.25rem 0.5rem;
+    background: ${({ theme }) => theme.color.blue};
+    color: white;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+    &:after {
+      content: ' QP';
+    }
+  }
 `
 
 const QuestImage = styled.div`
@@ -169,7 +188,10 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
         <QuestMultiplier type={questType as never}>
           1.{quest ? quest.multiplier : questId === 'metanautSpaceProgram' ? 5 : undefined}x
         </QuestMultiplier>
-        <QuestSeason>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</QuestSeason>
+        <div className="qp-season">
+          <QuestSeason>{questType === QuestType.Seasonal ? 'SEASON 0' : 'PERMANENT'}</QuestSeason>
+          <div className="qp">100</div>
+        </div>
       </QuestFeatures>
       <Tooltip tip={questbookQuest?.description} />
     </Container>
