@@ -99,7 +99,7 @@ export const QuestTimeRemaining: FC<{ expiry?: number }> = ({ expiry }) => {
         ) : (
           <Typist>
             Time remaining
-            <span>{formatDistanceToNow(expiry)}</span>
+            <span>{formatDistanceToNow(expiry * 1000)}</span>
           </Typist>
         )}
       </div>
