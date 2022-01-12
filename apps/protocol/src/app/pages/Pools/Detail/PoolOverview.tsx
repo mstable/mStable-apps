@@ -88,18 +88,18 @@ export const PoolOverview: FC = () => {
             )}
           </Button>
           <Button active={selection === Rewards} onClick={() => handleSelection(Rewards)}>
-            <h3>Rewards</h3>
+            <h3>{vault?.rewardsToken.symbol} Rewards</h3>
             <div>
               <CountUp end={totalEarned} suffix={` ${vault?.rewardsToken.symbol}`} />
               <Tooltip tip={`${vault?.rewardsToken.symbol} rewards unlock over time`} />
             </div>
           </Button>
-          {!!apy.value?.platformRewards && (
+          {!!rewardStreams.amounts.platform && (
             <Button active={false} disabled>
-              <h3>Platform APY</h3>
+              <h3>{vault?.platformRewardsToken?.symbol} Rewards</h3>
               <div>
-                <CountUp end={apy.value.platformRewards} suffix="%" />
-                <Tooltip tip={`${vault?.platformRewardsToken?.symbol} rewards are claimed immediately`} />
+                <CountUp end={rewardStreams.amounts.platform} suffix={` ${vault?.platformRewardsToken?.symbol}`} />
+                <Tooltip tip={`${vault?.platformRewardsToken?.symbol} rewards can be claimed immediately`} />
               </div>
             </Button>
           )}
