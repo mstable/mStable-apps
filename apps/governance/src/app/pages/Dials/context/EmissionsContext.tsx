@@ -22,6 +22,7 @@ const EmissionsDataUpdater: FC = () => {
     skip: !account,
     client: clients.staking,
     pollInterval: 60e3,
+    nextFetchPolicy: 'cache-only',
   })
 
   // Known issue: if the user has a delegatee in multiple staked tokens, this will only select one
