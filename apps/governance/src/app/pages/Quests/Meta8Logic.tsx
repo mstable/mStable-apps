@@ -125,6 +125,7 @@ const Meta8Account: FC = () => {
     variables: { id: account ?? '' },
     skip: !account,
     pollInterval: 15e3,
+    nextFetchPolicy: 'cache-only',
   })
 
   const accountData = accountQuery.data?.account
