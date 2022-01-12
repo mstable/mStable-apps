@@ -78,7 +78,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
 
   const claimed = accountQuery.data?.account?.completedQuests?.find(c => c.quest.id === questbookQuest?.ethereumId?.toString())
   const readyToClaim = !claimed && questbookQuest?.userQuest?.complete
-  const questExpired = questQuery.data?.quest && questQuery.data.quest.expiry > nowUnix
+  const questExpired = questQuery.data?.quest && questQuery.data.quest.expiry < nowUnix
 
   const handleClaimQuest = () => {
     if (
