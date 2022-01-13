@@ -180,7 +180,7 @@ const IconContainer = styled.div<{ isLarge: boolean; reverseBkg?: boolean }>`
 
   > div:last-child {
     margin-left: -0.7rem;
-    z-index: ${({ reverseBkg }) => (reverseBkg ? 0 : 2)};
+    z-index: ${({ reverseBkg }) => (reverseBkg ? 0 : 1)};
   }
 `
 
