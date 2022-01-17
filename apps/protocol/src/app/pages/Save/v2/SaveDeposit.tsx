@@ -131,10 +131,7 @@ export const SaveDeposit: FC = () => {
       massetToken,
       ...(saveToken ? [saveToken] : []),
       ...Object.values(bAssets).map(b => b.token),
-      // TODO reinstate FEI
-      ...Object.values(fAssets)
-        .filter(f => f.token.symbol !== 'FEI')
-        .map(b => b.token),
+      ...Object.values(fAssets).map(b => b.token),
       nativeToken,
     ]
 
