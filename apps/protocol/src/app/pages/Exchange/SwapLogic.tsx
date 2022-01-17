@@ -56,12 +56,9 @@ export const SwapLogic: FC = () => {
 
   const bassetOptions = useMemo(() => Object.keys(bAssets).map(address => ({ address })), [bAssets])
 
-  const fassetOptions = Object.values(feederPools)
-    // TODO reinstate FEI
-    .filter(fp => fp.fasset.token.symbol !== 'FEI')
-    .map(fp => ({
-      address: fp.fasset.address,
-    }))
+  const fassetOptions = Object.values(feederPools).map(fp => ({
+    address: fp.fasset.address,
+  }))
 
   const massetContract = useMemo(() => (signer ? Masset__factory.connect(massetAddress, signer) : undefined), [massetAddress, signer])
 
