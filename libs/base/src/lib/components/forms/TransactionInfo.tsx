@@ -41,9 +41,19 @@ const Info = styled.div`
   padding: 0.375rem 0;
   font-size: 0.875rem;
 
+  > :last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
   > span:last-child {
     font-size: 1rem;
     ${({ theme }) => theme.mixins.numeric}
+
+    > :last-child {
+      font-size: 0.875rem;
+    }
   }
 `
 
@@ -151,12 +161,12 @@ export const TransactionInfo: FC<Props> = ({
               </span>
             </Info>
           )}
-          {!!impactPercentage && (
+          {impactPercentage && impactPercentage >= 0.01 && (
             <Info>
               <p>
                 <Tooltip tip="The difference between the current rate and estimated rate due to trade size">Price impact</Tooltip>
               </p>
-              <Impact warning={showImpactWarning}>{impactPercentage < 0.01 ? `<0.01%` : `${impactPercentage?.toFixed(2)}%`}</Impact>
+              <Impact warning={showImpactWarning}>{`${impactPercentage?.toFixed(4)}%`}</Impact>
             </Info>
           )}
           {formattedDistancePercentage && (
