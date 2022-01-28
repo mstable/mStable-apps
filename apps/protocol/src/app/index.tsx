@@ -99,11 +99,6 @@ export const ProtocolApp: FC = () => {
       message = MessageHandler.graph
     }
 
-    // Temporary, revert after some time.
-    if (isEthMainnet) {
-      message = MessageHandler.olympus
-    }
-
     if (undergoingRecol) {
       message = (undergoingRecol && MessageHandler.recollat(massetConfig)) || undefined
     }
