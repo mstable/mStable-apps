@@ -2,10 +2,10 @@ import React, { useMemo } from 'react'
 import type { FC } from 'react'
 import { useAccount } from '@apps/base/context/account'
 import { MassetState, useDataState } from '@apps/data-provider'
-import { CountUp } from '@apps/dumb-components'
+import { CountUp, Tooltip } from '@apps/dumb-components'
 import styled from 'styled-components'
 import { useTotalRewards } from './RewardsContext'
-import { getFraxDeposited, getFraxRewards, getPoolDeposited, getSaveDeposited, isValidFeederPool, useWBTCPrice } from './utils'
+import { getFraxDeposited, getFraxRewards, getPoolDeposited, getSaveDeposited, isValidFeederPool, useMTAPrice, useWBTCPrice } from './utils'
 import { ViewportWidth } from '@apps/theme'
 import { useRewardsEarned, useStakingRewards } from '../Save/hooks'
 import { useFraxStakingState } from '../../context/FraxStakingProvider'
@@ -107,6 +107,7 @@ export const Overview: FC<{ tab: DF }> = ({ tab }) => {
   const { unlocked: _unlocked } = useTotalRewards()
   const rewardsEarned = useRewardsEarned()
   const { subscribedData: fraxSubscribedData } = useFraxStakingState()
+  const mtaPrice = useMTAPrice()
 
   const unlocked = (() => {
     const ethUnlocked = _unlocked
@@ -133,7 +134,9 @@ export const Overview: FC<{ tab: DF }> = ({ tab }) => {
       </Item>
       <Item>
         <h3>Claimable rewards</h3>
-        <CountUp end={unlocked} suffix="MTA" spaced />
+        <Tooltip hideIcon tip={`$${(unlocked * mtaPrice.value).toFixed(2)}`}>
+          <CountUp end={unlocked} suffix="MTA" spaced />
+        </Tooltip>
       </Item>
     </Items>
   )

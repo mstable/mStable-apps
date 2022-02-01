@@ -4,11 +4,11 @@ import { TokenIcon, TokenPair } from '@apps/base/components/core'
 import { FeederPoolState } from '@apps/data-provider'
 import { CountUp, CountUpUSD, Tooltip } from '@apps/dumb-components'
 import { toK } from '@apps/formatters'
-import { MassetName } from '@apps/types'
+import { MassetName, PoolType } from '@apps/types'
 import { useFeederPoolApy } from '../../hooks/useFeederPoolApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useUpsertStream } from './RewardsContext'
-import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './Styled'
+import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy, DeprecatedLabel } from './Styled'
 import { getFraxDeposited, getFraxRewards, getPoolDeposited, isValidFeederPool } from './utils'
 import { useSetSelectedMassetName } from '@apps/masset-provider'
 import { useRewardStreams } from '../../context/RewardStreamsProvider'
@@ -31,6 +31,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   )
   const rewards = useRewardStreams()
   const upsertStream = useUpsertStream()
+  const isDeprecated = feederPool?.poolType === PoolType.Deprecated
 
   useTokenSubscription(feederPool?.fasset?.address)
 
@@ -79,7 +80,9 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
         {feederPool.title}
       </DashNameTableCell>
       <DashTableCell hasRewards={hasRewards}>
-        {deposits.total > 0 ? (
+        {isDeprecated ? (
+          <DeprecatedLabel>Deprecated</DeprecatedLabel>
+        ) : deposits.total > 0 ? (
           <Tooltip hideIcon tip={userBoostTip}>
             <CountUp end={baseApy || 0} suffix="%" prefix="+" />
             <RewardsApy active>
