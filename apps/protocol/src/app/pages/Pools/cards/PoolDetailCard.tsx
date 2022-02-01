@@ -14,11 +14,12 @@ import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { usePoolMetrics } from '../../../hooks/usePoolMetrics'
 import { assetColorMapping } from '../constants'
 import { Card } from './Card'
+import { PoolType } from '@apps/types'
+import { DeprecatedLabel } from '../../Dashboard/Styled'
 
 interface Props {
   className?: string
   poolAddress: string
-  deprecated?: boolean
 }
 
 const RewardsAPY = styled.div`
@@ -109,6 +110,7 @@ export const PoolDetailCard: FC<Props> = ({ poolAddress, className }) => {
   const feederPoolApy = useFeederPoolApy(poolAddress)
   const { volume, baseApy } = usePoolMetrics(poolAddress)
   const massetPrice = useSelectedMassetPrice()
+  const isDeprecated = feederPool.poolType === PoolType.Deprecated
 
   const { vault, liquidity, price } = feederPool
   const fpTokenPrice = massetPrice ? price.simple * (massetPrice.value ?? 0) : undefined
@@ -148,18 +150,22 @@ export const PoolDetailCard: FC<Props> = ({ poolAddress, className }) => {
                 Rewards APY
               </Tooltip>
             </p>
-            <div>
+            {isDeprecated ? (
+              <DeprecatedLabel>Deprecated</DeprecatedLabel>
+            ) : (
               <div>
-                <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
                 <div>
-                  &nbsp;→&nbsp;
-                  <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
-                    {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
-                  </UnderlinedTip>
+                  <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
+                  <div>
+                    &nbsp;→&nbsp;
+                    <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
+                      {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
+                    </UnderlinedTip>
+                  </div>
                 </div>
+                <TokenIcon symbol={vault?.rewardsToken.symbol} />
               </div>
-              <TokenIcon symbol={vault?.rewardsToken.symbol} />
-            </div>
+            )}
           </RewardsAPY>
         )}
         {!!feederPoolApy.value?.platformRewards && (

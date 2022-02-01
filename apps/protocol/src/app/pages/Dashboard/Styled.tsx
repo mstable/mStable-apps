@@ -86,3 +86,13 @@ export const RewardsApy = styled.div<{ active?: boolean }>`
     min-height: inherit;
   }
 `
+
+export const DeprecatedLabel = styled.span`
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  color: ${({ theme }) => theme.color.bodyAccent};
+  padding: 0.25rem 0.5rem;
+  align-self: center;
+`

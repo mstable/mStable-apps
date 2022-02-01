@@ -6,13 +6,16 @@ import { StakingRewardsExtended } from '@apps/masset-hooks'
 import { StakeData } from '../../context/FraxStakingProvider'
 
 const {
-  addresses: { WBTC },
+  addresses: { WBTC, MTA },
 } = getNetwork(ChainIds.EthereumMainnet)
 
 export const useWBTCPrice = () => {
   const { fetchPrice } = useFetchPriceCtx()
-
   return fetchPrice(WBTC)
+}
+export const useMTAPrice = () => {
+  const { fetchPrice } = useFetchPriceCtx()
+  return fetchPrice(MTA)
 }
 
 export const getFraxRewards = (accountData?: StakeData) => {
@@ -89,7 +92,12 @@ export const getSaveDeposited = (
   }
 }
 
-export const filterByDeposited = (state: { massetState?: MassetState; feederState?: FeederPoolState; fraxState?: StakeData, polygonRewards?: StakingRewardsExtended }) => {
+export const filterByDeposited = (state: {
+  massetState?: MassetState
+  feederState?: FeederPoolState
+  fraxState?: StakeData
+  polygonRewards?: StakingRewardsExtended
+}) => {
   const { massetState, feederState, fraxState, polygonRewards } = state
   if (massetState) return getSaveDeposited(massetState, 1, polygonRewards).total.simple > 0
   if (feederState) {
@@ -106,4 +114,4 @@ export const filterByDeposited = (state: { massetState?: MassetState; feederStat
 export const sortSaveByDepositedDesc = () => (a: MassetState, b: MassetState) =>
   getSaveDeposited(a).total.simple > getSaveDeposited(b).total.simple ? -1 : 1
 
-export const isValidFeederPool = (fp: FeederPoolState): boolean => ![PoolType.Hidden, PoolType.Deprecated].includes(fp.poolType)
+export const isValidFeederPool = (fp: FeederPoolState): boolean => ![PoolType.Hidden].includes(fp.poolType)
