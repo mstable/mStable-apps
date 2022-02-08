@@ -40,7 +40,7 @@ export const SelectedSaveVersionProvider: FC = ({ children }) => {
       account: walletAddress ?? '',
       include: !!(v1Address && walletAddress),
     },
-    skip: !v1Address,
+    skip: !v1Address || !walletAddress,
     returnPartialData: false,
     client: clients.protocol,
   })
