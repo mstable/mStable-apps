@@ -34,6 +34,13 @@ interface GasWatch {
   sources: GasWatchSource[]
 }
 
+interface MyCryptoGas {
+  safeLow: number
+  standard: number
+  fast: number
+  fastest: number
+}
+
 interface GasWatchPrice {
   gwei: number
   usd: number
@@ -227,7 +234,7 @@ const ETH_MAINNET: EthereumMainnet = {
   blockTime: 15e3,
   coingeckoId: 'ethereum',
   rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
-  gasStationEndpoint: 'https://ethgas.watch/api/gas',
+  gasStationEndpoint: 'https://gas.mycryptoapi.com/',
   gqlEndpoints: {
     protocol: [
       graphHostedEndpoint('mstable', 'mstable-protocol'),
@@ -456,12 +463,6 @@ const [useChainIdCtx, ChainIdProvider] = createStateContext<ChainIds | undefined
 )
 export { useChainIdCtx }
 
-const capGasPrice = (gwei: number, chainId: number) => {
-  // High gas prices should not be necessary on Polygon; despite what the API says,
-  // looking at blocks shows that almost all are <30 gwei.
-  return Math.round(chainId === ChainIds.MaticMainnet ? Math.min(30, gwei) : gwei)
-}
-
 const networkCtx = createContext<Network<unknown, unknown>>(null as never)
 
 const networkPricesCtx = createContext<FetchState<NetworkPrices>>(null as never)
@@ -491,12 +492,12 @@ const NetworkPricesProvider: FC = ({ children }) => {
     // eth mainnet
     if (network.chainId === ChainIds.EthereumMainnet) {
       const gasStationResponse = await fetch(network.gasStationEndpoint)
-      const gasRes: GasWatch = await gasStationResponse.json()
+      const gasRes: MyCryptoGas = await gasStationResponse.json()
       gas = {
-        standard: gasRes.normal.gwei,
-        fast: gasRes.fast.gwei,
-        slow: gasRes.slow.gwei,
-        instant: gasRes.instant.gwei,
+        standard: gasRes.standard,
+        fast: gasRes.fast,
+        slow: gasRes.safeLow,
+        instant: gasRes.fastest,
       }
       // eth testnet
     } else if ([ChainIds.EthereumGoerli, ChainIds.EthereumKovan, ChainIds.EthereumRopsten].includes(network.chainId)) {
