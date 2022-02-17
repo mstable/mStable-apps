@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useMemo, useState } from 'react'
-import { ISavingsContractV2__factory, BoostedSavingsVault__factory } from '@apps/artifacts/typechain'
+import { BoostedSavingsVault__factory, ISavingsContractV3__factory } from '@apps/artifacts/typechain'
 
-import { useSigner } from '@apps/base/context/account'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { MassetState } from '@apps/data-provider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
@@ -28,7 +28,7 @@ const titles = {
 }
 
 const purposes = {
-  [SaveRoutesOut.Withdraw]: {
+  [SaveRoutesOut.Withdraw | SaveRoutesOut.WithdrawAndRedeem]: {
     past: 'Withdrew from Save',
     present: 'Withdrawing from Save',
   },
@@ -44,6 +44,7 @@ export const SaveRedeem: FC = () => {
   const stakingRewards = useStakingRewards()
   const [chainId] = useChainIdCtx()
   const isPolygon = chainId === ChainIds.MaticMainnet
+  const userAddress = useWalletAddress()
 
   const {
     address: massetAddress,
@@ -99,6 +100,24 @@ export const SaveRedeem: FC = () => {
   }, [isPolygon, inputAddress, vaultAddress, saveAddress, massetAddress, massetToken, saveToken, bAssets, fAssets])
 
   const [outputAddress, setOutputAddress] = useState<string | undefined>(outputOptions?.[0].address)
+  const outputDecimals = outputOptions.find(v => v.address === outputAddress)?.balance?.decimals
+
+  const routerInfo = useMemo(() => {
+    const isBassetOut = Object.keys(bAssets).find(v => v === outputAddress)
+    if (isBassetOut) {
+      return {
+        address: massetAddress,
+        isBassetOut: true,
+      }
+    } else {
+      const feederAddress = Object.keys(fAssets).find(k => fAssets[k].token.address === outputAddress)
+      if (!feederAddress) return
+      return {
+        address: feederAddress,
+        isBassetOut: false,
+      }
+    }
+  }, [bAssets, fAssets, massetAddress, outputAddress])
 
   const handleSetInputAddress = useCallback(
     (address: string) => {
@@ -127,13 +146,14 @@ export const SaveRedeem: FC = () => {
   }, [inputToken, inputAmount])
 
   // MARK: Input as masset to calc swap exchange rate
-  const { exchangeRate: swapExchangeRate } = useEstimatedOutput(
+  const { exchangeRate: swapExchangeRate, estimatedOutputAmount } = useEstimatedOutput(
     {
       address: massetAddress,
       amount: inputAmount,
     } as BigDecimalInputValue,
     {
       address: outputAddress === massetAddress ? undefined : outputAddress,
+      decimals: outputDecimals,
     } as BigDecimalInputValue,
   )
 
@@ -154,17 +174,14 @@ export const SaveRedeem: FC = () => {
         return { value: undefined, fetching: true }
       }
 
-      const outputDecimals = outputOptions.find(v => v.address === outputAddress)?.balance?.decimals
-      const SCALE = new BigDecimal((10 ** outputDecimals).toString())
-      const scaledSwapRate = swapExchangeRate.value.divPrecisely(SCALE)
-      const value = saveExchangeRate.divPrecisely(scaledSwapRate)
+      const value = saveExchangeRate.divPrecisely(swapExchangeRate.value)
 
       return {
         value,
         fetching: !value,
       }
     }
-  }, [outputAddress, outputOptions, saveExchangeRate, saveRoute, inputFormValue, swapExchangeRate.value])
+  }, [saveExchangeRate, saveRoute, inputFormValue, swapExchangeRate.value])
 
   const valid = !!(!error && inputAmount && inputAmount.simple > 0)
 
@@ -214,13 +231,29 @@ export const SaveRedeem: FC = () => {
             case SaveRoutesOut.VaultUnwrapAndRedeem:
               // imVault -> bAsset / fAsset (Vault)
               return {}
-            case SaveRoutesOut.WithdrawAndRedeem:
+            case SaveRoutesOut.WithdrawAndRedeem: {
               // imAsset -> bAsset / fAsset (Unwrapper)
-              return {}
+              if (!routerInfo || !estimatedOutputAmount?.value) return
+
+              // 0.2% slippage
+              const simpleOutput = estimatedOutputAmount?.value.simple * saveExchangeRate?.simple
+              const simpleMinOutput = simpleOutput * 0.998
+              const minOutputAmount = BigDecimal.fromSimple(simpleMinOutput, outputDecimals)
+
+              return propose<Interfaces.SavingsContract, 'redeemAndUnwrap'>(
+                new TransactionManifest(
+                  ISavingsContractV3__factory.connect(saveAddress, signer),
+                  'redeemAndUnwrap',
+                  [inputAmount.exact, true, minOutputAmount.exact, outputAddress, userAddress, routerInfo.address, routerInfo.isBassetOut],
+                  purpose,
+                  formId,
+                ),
+              )
+            }
             default:
               return propose<Interfaces.SavingsContract, 'redeemCredits'>(
                 new TransactionManifest(
-                  ISavingsContractV2__factory.connect(saveAddress, signer),
+                  ISavingsContractV3__factory.connect(saveAddress, signer),
                   'redeemCredits',
                   [inputAmount.exact],
                   purpose,

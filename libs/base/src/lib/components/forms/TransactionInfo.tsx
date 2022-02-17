@@ -161,7 +161,7 @@ export const TransactionInfo: FC<Props> = ({
               </span>
             </Info>
           )}
-          {impactPercentage && impactPercentage >= 0.01 && (
+          {!!impactPercentage && impactPercentage >= 0.01 && (
             <Info>
               <p>
                 <Tooltip tip="The difference between the current rate and estimated rate due to trade size">Price impact</Tooltip>
@@ -169,7 +169,7 @@ export const TransactionInfo: FC<Props> = ({
               <Impact warning={showImpactWarning}>{`${impactPercentage?.toFixed(4)}%`}</Impact>
             </Info>
           )}
-          {formattedDistancePercentage && (
+          {!!formattedDistancePercentage && (
             <Info>
               <p>
                 <Tooltip tip="A bonus or penalty is determined from the current basket weights">
