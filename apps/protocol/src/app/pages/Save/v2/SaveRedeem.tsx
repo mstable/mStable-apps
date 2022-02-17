@@ -174,14 +174,14 @@ export const SaveRedeem: FC = () => {
         return { value: undefined, fetching: true }
       }
 
-      const value = saveExchangeRate.divPrecisely(swapExchangeRate.value)
+      const value = swapExchangeRate?.value?.mulTruncate(saveExchangeRate.exact)
 
       return {
         value,
         fetching: !value,
       }
     }
-  }, [saveExchangeRate, saveRoute, inputFormValue, swapExchangeRate.value])
+  }, [saveRoute, saveExchangeRate, swapExchangeRate?.value, inputFormValue])
 
   const valid = !!(!error && inputAmount && inputAmount.simple > 0)
 
