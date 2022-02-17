@@ -1,7 +1,7 @@
 import type {
   ERC20,
   BoostedSavingsVault,
-  ISavingsContractV2,
+  ISavingsContractV3,
   Masset,
   FeederPool,
   BoostDirector,
@@ -51,7 +51,7 @@ export enum Interfaces {
 export interface Instances {
   [Interfaces.Masset]: Masset
   [Interfaces.ERC20]: ERC20
-  [Interfaces.SavingsContract]: ISavingsContractV2
+  [Interfaces.SavingsContract]: ISavingsContractV3
   [Interfaces.SaveWrapper]: SaveWrapper
   [Interfaces.UniswapRouter02]: IUniswapV2Router02
   [Interfaces.FeederPool]: FeederPool

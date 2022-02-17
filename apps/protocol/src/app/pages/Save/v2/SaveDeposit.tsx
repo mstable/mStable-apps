@@ -1,6 +1,6 @@
 import React, { FC, useMemo, useState } from 'react'
 import { constants } from 'ethers'
-import { BoostedSavingsVault__factory, ISavingsContractV2__factory, SaveWrapper__factory } from '@apps/artifacts/typechain'
+import { BoostedSavingsVault__factory, ISavingsContractV3__factory, SaveWrapper__factory } from '@apps/artifacts/typechain'
 
 import { useSigner } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
@@ -456,7 +456,7 @@ export const SaveDeposit: FC = () => {
             case SaveRoutes.Save:
               return propose<Interfaces.SavingsContract, 'depositSavings(uint256)'>(
                 new TransactionManifest(
-                  ISavingsContractV2__factory.connect(saveAddress, signer),
+                  ISavingsContractV3__factory.connect(saveAddress, signer),
                   'depositSavings(uint256)',
                   [inputAmount.exact],
                   purpose,
