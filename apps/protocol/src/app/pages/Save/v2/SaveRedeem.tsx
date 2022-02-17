@@ -1,13 +1,13 @@
 import React, { FC, useCallback, useMemo, useState } from 'react'
-import { BoostedSavingsVault__factory, ISavingsContractV3__factory } from '@apps/artifacts/typechain'
+import { BoostedSavingsVault__factory, ISavingsContractV3__factory, PolygonSavingsVault__factory } from '@apps/artifacts/typechain'
 
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { MassetState } from '@apps/data-provider'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
-import { AddressOption, Interfaces } from '@apps/types'
-import { TransactionManifest } from '@apps/transaction-manifest'
+import { AddressOption } from '@apps/types'
+import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 import { BigDecimalInputValue, useBigDecimalInput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { AssetExchange, SendButton } from '@apps/base/components/forms'
@@ -28,11 +28,23 @@ const titles = {
 }
 
 const purposes = {
-  [SaveRoutesOut.Withdraw | SaveRoutesOut.WithdrawAndRedeem]: {
+  [SaveRoutesOut.Withdraw]: {
+    past: 'Withdrew from Save',
+    present: 'Withdrawing from Save',
+  },
+  [SaveRoutesOut.WithdrawAndRedeem]: {
     past: 'Withdrew from Save',
     present: 'Withdrawing from Save',
   },
   [SaveRoutesOut.VaultWithdraw]: {
+    past: 'Withdrew from Save Vault',
+    present: 'Withdrawing from Save Vault',
+  },
+  [SaveRoutesOut.VaultUnwrap]: {
+    past: 'Withdrew from Save Vault',
+    present: 'Withdrawing from Save Vault',
+  },
+  [SaveRoutesOut.VaultUnwrapAndRedeem]: {
     past: 'Withdrew from Save Vault',
     present: 'Withdrawing from Save Vault',
   },
@@ -213,6 +225,11 @@ export const SaveRedeem: FC = () => {
 
           const purpose = purposes[saveRoute]
 
+          // FIXME: - hardcoded 0.2% slippage
+          const simpleOutput = estimatedOutputAmount?.value.simple * saveExchangeRate?.simple
+          const simpleMinOutput = simpleOutput * 0.998
+          const minOutputAmount = BigDecimal.fromSimple(simpleMinOutput, outputDecimals)
+
           switch (saveRoute) {
             case SaveRoutesOut.VaultWithdraw:
               if (!vaultAddress) return
@@ -225,20 +242,28 @@ export const SaveRedeem: FC = () => {
                   formId,
                 ),
               )
-            case SaveRoutesOut.VaultUnwrap:
+            case SaveRoutesOut.VaultUnwrap: {
               // imVault -> mAsset (Vault)
+              // eg. imUSD -> mUSD
               return {}
-            case SaveRoutesOut.VaultUnwrapAndRedeem:
+            }
+            case SaveRoutesOut.VaultUnwrapAndRedeem: {
               // imVault -> bAsset / fAsset (Vault)
-              return {}
+              if (!isPolygon) return
+              // Vaults are different between chains and may have different interfacses?
+              return propose<Interfaces.PolygonSavingsVault, 'withdrawAndUnwrap'>(
+                new TransactionManifest(
+                  PolygonSavingsVault__factory.connect(vaultAddress, signer),
+                  'withdrawAndUnwrap',
+                  [inputAmount.exact, minOutputAmount.exact, outputAddress, userAddress, routerInfo.address, routerInfo.isBassetOut],
+                  purpose,
+                  formId,
+                ),
+              )
+            }
             case SaveRoutesOut.WithdrawAndRedeem: {
               // imAsset -> bAsset / fAsset (Unwrapper)
-              if (!routerInfo || !estimatedOutputAmount?.value) return
-
-              // 0.2% slippage
-              const simpleOutput = estimatedOutputAmount?.value.simple * saveExchangeRate?.simple
-              const simpleMinOutput = simpleOutput * 0.998
-              const minOutputAmount = BigDecimal.fromSimple(simpleMinOutput, outputDecimals)
+              if (!routerInfo || !minOutputAmount) return
 
               return propose<Interfaces.SavingsContract, 'redeemAndUnwrap'>(
                 new TransactionManifest(

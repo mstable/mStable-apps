@@ -12,6 +12,7 @@ import type {
   FraxCrossChainFarm,
   MerkleDrop,
   EmissionsController,
+  PolygonSavingsVault,
 } from '@apps/artifacts/typechain'
 
 import type { BigDecimal } from '@apps/bigdecimal'
@@ -46,6 +47,7 @@ export enum Interfaces {
   StakingRewardsWithPlatformToken,
   MerkleDrop,
   EmissionsController,
+  PolygonSavingsVault,
 }
 
 export interface Instances {
@@ -62,6 +64,7 @@ export interface Instances {
   [Interfaces.StakingRewardsWithPlatformToken]: StakingRewardsWithPlatformToken
   [Interfaces.MerkleDrop]: MerkleDrop
   [Interfaces.EmissionsController]: EmissionsController
+  [Interfaces.PolygonSavingsVault]: PolygonSavingsVault
 }
 
 export interface Token {

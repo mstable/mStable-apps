@@ -18,6 +18,7 @@ import type {
   QuestManager,
   MerkleDrop,
   EmissionsController,
+  PolygonSavingsVault,
 } from '@apps/artifacts/typechain'
 
 export interface Purpose {
@@ -43,6 +44,7 @@ export enum Interfaces {
   QuestManager,
   MerkleDrop,
   EmissionsController,
+  PolygonSavingsVault,
 }
 
 export interface Instances {
@@ -62,6 +64,7 @@ export interface Instances {
   [Interfaces.QuestManager]: QuestManager
   [Interfaces.MerkleDrop]: MerkleDrop
   [Interfaces.EmissionsController]: EmissionsController
+  [Interfaces.PolygonSavingsVault]: PolygonSavingsVault
 }
 
 const calculateGasMargin = (value: BigNumber, margin = 1000): BigNumber => {
