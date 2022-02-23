@@ -12,7 +12,7 @@ import type {
   FraxCrossChainFarm,
   MerkleDrop,
   EmissionsController,
-  PolygonSavingsVault,
+  BoostedVault,
 } from '@apps/artifacts/typechain'
 
 import type { BigDecimal } from '@apps/bigdecimal'
@@ -47,7 +47,7 @@ export enum Interfaces {
   StakingRewardsWithPlatformToken,
   MerkleDrop,
   EmissionsController,
-  PolygonSavingsVault,
+  BoostedVault,
 }
 
 export interface Instances {
@@ -59,12 +59,12 @@ export interface Instances {
   [Interfaces.FeederPool]: FeederPool
   [Interfaces.FeederWrapper]: FeederWrapper
   [Interfaces.BoostedSavingsVault]: BoostedSavingsVault
+  [Interfaces.BoostedVault]: BoostedVault
   [Interfaces.BoostDirector]: BoostDirector
   [Interfaces.FraxCrossChainFarm]: FraxCrossChainFarm
   [Interfaces.StakingRewardsWithPlatformToken]: StakingRewardsWithPlatformToken
   [Interfaces.MerkleDrop]: MerkleDrop
   [Interfaces.EmissionsController]: EmissionsController
-  [Interfaces.PolygonSavingsVault]: PolygonSavingsVault
 }
 
 export interface Token {

@@ -4658,10 +4658,10 @@
     ipfs-http-client "^53.0.1"
     merkletreejs "^0.2.24"
 
-"@mstable/protocol@^2.4.1":
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/@mstable/protocol/-/protocol-2.4.1.tgz#19088dd782ff8b8bc8a8f94af7a53fdae5c7db5a"
-  integrity sha512-o2SMmZ1a4arZwzA5iv+cVct9F4/IiZLK0XVZ0fievpPiTtS/Veb5lzzRhosOcJ2wxfBtDeCVsAnqxSsOC6D7+A==
+"@mstable/protocol@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@mstable/protocol/-/protocol-2.4.2.tgz#3adc42865bb2734aaf88d07226734cd98b70f418"
+  integrity sha512-czpPDjDlTf8233x2xI7YRa5o9WCc2NsWUdjpOKqa3W6xlGPf5+1eMQSWfIXVypjy1fHPUgivfy5tCde9zTFI9g==
   dependencies:
     "@nomiclabs/hardhat-ethers" "^2.0.2"
     "@nomiclabs/hardhat-waffle" "^2.0.1"

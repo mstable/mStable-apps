@@ -3,6 +3,7 @@ import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ErrorCode } from '@ethersproject/logger'
 import type {
   ERC20,
+  BoostedVault,
   BoostedSavingsVault,
   ISavingsContractV3,
   Masset,
@@ -18,7 +19,6 @@ import type {
   QuestManager,
   MerkleDrop,
   EmissionsController,
-  PolygonSavingsVault,
 } from '@apps/artifacts/typechain'
 
 export interface Purpose {
@@ -44,7 +44,7 @@ export enum Interfaces {
   QuestManager,
   MerkleDrop,
   EmissionsController,
-  PolygonSavingsVault,
+  BoostedVault,
 }
 
 export interface Instances {
@@ -64,7 +64,7 @@ export interface Instances {
   [Interfaces.QuestManager]: QuestManager
   [Interfaces.MerkleDrop]: MerkleDrop
   [Interfaces.EmissionsController]: EmissionsController
-  [Interfaces.PolygonSavingsVault]: PolygonSavingsVault
+  [Interfaces.BoostedVault]: BoostedVault
 }
 
 const calculateGasMargin = (value: BigNumber, margin = 1000): BigNumber => {
