@@ -218,8 +218,8 @@ export const SaveRedeem: FC = () => {
       handleSetInputMax={() => {
         if (inputToken) {
           setInputFormValue(inputToken.balance.string)
-        } else if (inputAddress === vaultAddress && account?.rawBalance) {
-          setInputFormValue(account.rawBalance.string)
+        } else if (inputAddress === vaultAddress) {
+          setInputFormValue(vaultBalance?.string)
         }
       }}
     >
