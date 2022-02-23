@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo, useState } from 'react'
-import { BoostedSavingsVault__factory, ISavingsContractV3__factory, PolygonSavingsVault__factory } from '@apps/artifacts/typechain'
+import { BoostedVault__factory, ISavingsContractV3__factory } from '@apps/artifacts/typechain'
 
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
@@ -23,7 +23,6 @@ const titles = {
   [SaveRoutesOut.Withdraw]: 'Withdraw',
   [SaveRoutesOut.WithdrawAndRedeem]: 'Withdraw',
   [SaveRoutesOut.VaultWithdraw]: 'Withdraw from Vault',
-  [SaveRoutesOut.VaultUnwrap]: 'Withdraw from Vault',
   [SaveRoutesOut.VaultUnwrapAndRedeem]: 'Withdraw from Vault',
 }
 
@@ -103,6 +102,7 @@ export const SaveRedeem: FC = () => {
         ...Object.values(bAssets).map(b => b.token),
         ...Object.values(fAssets).map(b => b.token),
       ]
+      if (inputAddress === vaultAddress) return outputs.filter(v => v.address !== massetAddress)
       if (inputAddress === saveAddress) return outputs.filter(v => v.address !== saveAddress)
       return outputs
     }
@@ -157,16 +157,22 @@ export const SaveRedeem: FC = () => {
     }
   }, [inputToken, inputAmount])
 
-  // MARK: Input as masset to calc swap exchange rate
+  const isOutputMasset = outputAddress === massetAddress
+
+  // Input as masset to calc swap exchange rate
   const { exchangeRate: swapExchangeRate, estimatedOutputAmount } = useEstimatedOutput(
     {
       address: massetAddress,
       amount: inputAmount,
     } as BigDecimalInputValue,
-    {
-      address: outputAddress === massetAddress ? undefined : outputAddress,
-      decimals: outputDecimals,
-    } as BigDecimalInputValue,
+    !isOutputMasset
+      ? ({
+          address: outputAddress,
+          decimals: outputDecimals,
+        } as BigDecimalInputValue)
+      : undefined,
+    undefined,
+    isOutputMasset,
   )
 
   const exchangeRate = useMemo(() => {
@@ -225,35 +231,30 @@ export const SaveRedeem: FC = () => {
 
           const purpose = purposes[saveRoute]
 
-          // FIXME: - hardcoded 0.2% slippage
-          const simpleOutput = estimatedOutputAmount?.value.simple * saveExchangeRate?.simple
+          // TODO: - Replace hardcoded 0.2% slippage
+          const simpleOutput = (estimatedOutputAmount?.value?.simple ?? 0) * (saveExchangeRate?.simple ?? 0)
           const simpleMinOutput = simpleOutput * 0.998
           const minOutputAmount = BigDecimal.fromSimple(simpleMinOutput, outputDecimals)
 
           switch (saveRoute) {
             case SaveRoutesOut.VaultWithdraw:
               if (!vaultAddress) return
-              return propose<Interfaces.BoostedSavingsVault, 'withdraw'>(
+              return propose<Interfaces.BoostedVault, 'withdraw'>(
                 new TransactionManifest(
-                  BoostedSavingsVault__factory.connect(vaultAddress, signer),
+                  BoostedVault__factory.connect(vaultAddress, signer),
                   'withdraw',
                   [inputAmount.exact],
                   purpose,
                   formId,
                 ),
               )
-            case SaveRoutesOut.VaultUnwrap: {
-              // imVault -> mAsset (Vault)
-              // eg. imUSD -> mUSD
-              return {}
-            }
             case SaveRoutesOut.VaultUnwrapAndRedeem: {
               // imVault -> bAsset / fAsset (Vault)
               if (!isPolygon) return
               // Vaults are different between chains and may have different interfacses?
-              return propose<Interfaces.PolygonSavingsVault, 'withdrawAndUnwrap'>(
+              return propose<Interfaces.BoostedVault, 'withdrawAndUnwrap'>(
                 new TransactionManifest(
-                  PolygonSavingsVault__factory.connect(vaultAddress, signer),
+                  BoostedVault__factory.connect(vaultAddress, signer),
                   'withdrawAndUnwrap',
                   [inputAmount.exact, minOutputAmount.exact, outputAddress, userAddress, routerInfo.address, routerInfo.isBassetOut],
                   purpose,

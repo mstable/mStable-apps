@@ -133,9 +133,7 @@ export const SaveDeposit: FC = () => {
       nativeToken,
     ]
 
-    if (outputAddress === saveAddress) {
-      return inputs.filter(v => v.address !== saveAddress)
-    }
+    if (outputAddress === saveAddress) return inputs.filter(v => v.address !== saveAddress)
     return inputs
   }, [massetToken, saveToken, saveAddress, bAssets, fAssets, nativeToken, outputAddress])
 
@@ -375,10 +373,10 @@ export const SaveDeposit: FC = () => {
             case SaveRoutes.BuyAndStake:
               if (!vaultAddress && saveRoute === SaveRoutes.BuyAndStake) return
 
-              return propose<Interfaces.SaveWrapper, 'saveViaUniswapETH'>(
+              return propose<Interfaces.SaveWrapper, 'saveViaUniswapETH(address,address,address,address,uint256,address[],uint256,bool)'>(
                 new TransactionManifest(
                   SaveWrapper__factory.connect(networkAddresses.SaveWrapper, signer),
-                  'saveViaUniswapETH',
+                  'saveViaUniswapETH(address,address,address,address,uint256,address[],uint256,bool)',
                   [
                     massetAddress,
                     saveAddress,
@@ -399,10 +397,10 @@ export const SaveDeposit: FC = () => {
             case SaveRoutes.MintAndStake:
               if (!vaultAddress && saveRoute === SaveRoutes.MintAndStake) return
 
-              return propose<Interfaces.SaveWrapper, 'saveViaMint'>(
+              return propose<Interfaces.SaveWrapper, 'saveViaMint(address,address,address,address,uint256,uint256,bool)'>(
                 new TransactionManifest(
                   SaveWrapper__factory.connect(networkAddresses.SaveWrapper, signer),
-                  'saveViaMint',
+                  'saveViaMint(address,address,address,address,uint256,uint256,bool)',
                   [
                     massetAddress,
                     saveAddress,
@@ -421,10 +419,10 @@ export const SaveDeposit: FC = () => {
             case SaveRoutes.SwapAndStake:
               if (!feederPoolAddress || (!vaultAddress && saveRoute === SaveRoutes.SwapAndStake)) return
 
-              return propose<Interfaces.SaveWrapper, 'saveViaSwap'>(
+              return propose<Interfaces.SaveWrapper, 'saveViaSwap(address,address,address,address,address,uint256,uint256,bool)'>(
                 new TransactionManifest(
                   SaveWrapper__factory.connect(networkAddresses.SaveWrapper, signer),
-                  'saveViaSwap',
+                  'saveViaSwap(address,address,address,address,address,uint256,uint256,bool)',
                   [
                     massetAddress,
                     saveAddress,
@@ -443,10 +441,10 @@ export const SaveDeposit: FC = () => {
             case SaveRoutes.SaveAndStake:
               if (!vaultAddress) return
 
-              return propose<Interfaces.SaveWrapper, 'saveAndStake'>(
+              return propose<Interfaces.SaveWrapper, 'saveAndStake(address,address,address,uint256)'>(
                 new TransactionManifest(
                   SaveWrapper__factory.connect(networkAddresses.SaveWrapper, signer),
-                  'saveAndStake',
+                  'saveAndStake(address,address,address,uint256)',
                   [massetAddress, saveAddress, vaultAddress, inputAmount.exact],
                   purpose,
                   formId,
