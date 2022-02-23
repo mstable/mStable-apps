@@ -39,10 +39,6 @@ const purposes = {
     past: 'Withdrew from Save Vault',
     present: 'Withdrawing from Save Vault',
   },
-  [SaveRoutesOut.VaultUnwrap]: {
-    past: 'Withdrew from Save Vault',
-    present: 'Withdrawing from Save Vault',
-  },
   [SaveRoutesOut.VaultUnwrapAndRedeem]: {
     past: 'Withdrew from Save Vault',
     present: 'Withdrawing from Save Vault',
@@ -145,7 +141,6 @@ export const SaveRedeem: FC = () => {
   const saveRoute = useMemo(() => {
     if (inputAddress === vaultAddress) {
       if (outputAddress === saveAddress) return SaveRoutesOut.VaultWithdraw
-      if (outputAddress === massetAddress) return SaveRoutesOut.VaultUnwrap
       return SaveRoutesOut.VaultUnwrapAndRedeem
     }
     return outputAddress === massetAddress ? SaveRoutesOut.Withdraw : SaveRoutesOut.WithdrawAndRedeem
@@ -179,7 +174,7 @@ export const SaveRedeem: FC = () => {
     if (saveRoute === SaveRoutesOut.VaultWithdraw) {
       return { value: BigDecimal.ONE }
     }
-    if (saveRoute === SaveRoutesOut.Withdraw || saveRoute === SaveRoutesOut.VaultUnwrap) {
+    if (saveRoute === SaveRoutesOut.Withdraw) {
       const value = saveExchangeRate ? saveExchangeRate.divPrecisely(BigDecimal.ONE) : undefined
       return {
         value,
@@ -251,7 +246,6 @@ export const SaveRedeem: FC = () => {
             case SaveRoutesOut.VaultUnwrapAndRedeem: {
               // imVault -> bAsset / fAsset (Vault)
               if (!isPolygon) return
-              // Vaults are different between chains and may have different interfacses?
               return propose<Interfaces.BoostedVault, 'withdrawAndUnwrap'>(
                 new TransactionManifest(
                   BoostedVault__factory.connect(vaultAddress, signer),
