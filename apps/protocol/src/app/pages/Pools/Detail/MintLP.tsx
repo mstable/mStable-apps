@@ -170,7 +170,7 @@ export const MintLP: FC = () => {
           if (!inputAddress || !inputAmount) return
 
           if (isStakingLP) {
-            return propose<Interfaces.BoostedSavingsVault, 'stake(uint256)'>(
+            return propose<Interfaces.BoostedVault, 'stake(uint256)'>(
               new TransactionManifest(
                 contracts.vault,
                 'stake(uint256)',

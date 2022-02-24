@@ -3,8 +3,8 @@ import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ErrorCode } from '@ethersproject/logger'
 import type {
   ERC20,
-  BoostedSavingsVault,
-  ISavingsContractV2,
+  BoostedVault,
+  ISavingsContractV3,
   Masset,
   FeederPool,
   BoostDirector,
@@ -34,7 +34,6 @@ export enum Interfaces {
   UniswapRouter02,
   FeederPool,
   FeederWrapper,
-  BoostedSavingsVault,
   BoostDirector,
   FraxCrossChainFarm,
   StakingRewardsWithPlatformToken,
@@ -43,17 +42,17 @@ export enum Interfaces {
   QuestManager,
   MerkleDrop,
   EmissionsController,
+  BoostedVault,
 }
 
 export interface Instances {
   [Interfaces.Masset]: Masset
   [Interfaces.ERC20]: ERC20
-  [Interfaces.SavingsContract]: ISavingsContractV2
+  [Interfaces.SavingsContract]: ISavingsContractV3
   [Interfaces.SaveWrapper]: SaveWrapper
   [Interfaces.UniswapRouter02]: IUniswapV2Router02
   [Interfaces.FeederPool]: FeederPool
   [Interfaces.FeederWrapper]: FeederWrapper
-  [Interfaces.BoostedSavingsVault]: BoostedSavingsVault
   [Interfaces.BoostDirector]: BoostDirector
   [Interfaces.FraxCrossChainFarm]: FraxCrossChainFarm
   [Interfaces.StakingRewardsWithPlatformToken]: StakingRewardsWithPlatformToken
@@ -62,6 +61,7 @@ export interface Instances {
   [Interfaces.QuestManager]: QuestManager
   [Interfaces.MerkleDrop]: MerkleDrop
   [Interfaces.EmissionsController]: EmissionsController
+  [Interfaces.BoostedVault]: BoostedVault
 }
 
 const calculateGasMargin = (value: BigNumber, margin = 1000): BigNumber => {

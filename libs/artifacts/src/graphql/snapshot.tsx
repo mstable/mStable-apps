@@ -82,6 +82,11 @@ export type FollowWhere = {
   created_lte?: Maybe<Scalars['Int']>;
 };
 
+export type Item = {
+  id: Scalars['String'];
+  spacesCount?: Maybe<Scalars['Int']>;
+};
+
 
 export enum OrderDirection {
   Asc = 'asc',
@@ -160,6 +165,12 @@ export type Query = {
   aliases?: Maybe<Array<Maybe<Alias>>>;
   follows?: Maybe<Array<Maybe<Follow>>>;
   subscriptions?: Maybe<Array<Maybe<Subscription>>>;
+  skins?: Maybe<Array<Maybe<Item>>>;
+  networks?: Maybe<Array<Maybe<Item>>>;
+  validations?: Maybe<Array<Maybe<Item>>>;
+  plugins?: Maybe<Array<Maybe<Item>>>;
+  strategies?: Maybe<Array<Maybe<StrategyItem>>>;
+  strategy?: Maybe<StrategyItem>;
 };
 
 
@@ -231,6 +242,11 @@ export type QuerySubscriptionsArgs = {
   orderDirection?: Maybe<OrderDirection>;
 };
 
+
+export type QueryStrategyArgs = {
+  id?: Maybe<Scalars['String']>;
+};
+
 export type Space = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
@@ -255,6 +271,8 @@ export type Space = {
   voting?: Maybe<SpaceVoting>;
   categories?: Maybe<Array<Maybe<Scalars['String']>>>;
   validation?: Maybe<Strategy>;
+  followersCount?: Maybe<Scalars['Int']>;
+  proposalsCount?: Maybe<Scalars['Int']>;
 };
 
 export type SpaceFilters = {
@@ -279,6 +297,16 @@ export type SpaceWhere = {
 export type Strategy = {
   name: Scalars['String'];
   params?: Maybe<Scalars['Any']>;
+};
+
+export type StrategyItem = {
+  id: Scalars['String'];
+  author?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+  schema?: Maybe<Scalars['Any']>;
+  examples?: Maybe<Array<Maybe<Scalars['Any']>>>;
+  about?: Maybe<Scalars['String']>;
+  spacesCount?: Maybe<Scalars['Int']>;
 };
 
 export type Subscription = {

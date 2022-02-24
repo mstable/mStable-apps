@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
-import { BoostedSavingsVaultState } from '@apps/data-provider'
+import { BoostedVaultState } from '@apps/data-provider'
 import { TransitionCard, Button } from '@apps/dumb-components'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
 import { ViewportWidth } from '@apps/theme'
@@ -62,7 +62,7 @@ const Container = styled(Card)`
 `
 
 const LiquidityMessageContent: FC<{
-  vault: BoostedSavingsVaultState
+  vault: BoostedVaultState
   apy?: number
 }> = ({ vault, apy }) => {
   const [showCalculator, setShowCalculator] = useToggle(false)

@@ -2,9 +2,9 @@ import React, { FC } from 'react'
 import CountUp from 'react-countup'
 import styled from 'styled-components'
 
-import { BoostedSavingsVault__factory } from '@apps/artifacts/typechain'
+import { BoostedVault__factory } from '@apps/artifacts/typechain'
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
-import { BoostedSavingsVaultState } from '@apps/data-provider'
+import { BoostedVaultState } from '@apps/data-provider'
 import { BoostedCombinedAPY, FetchState } from '@apps/types'
 import { useRewardStreams } from '../context/RewardStreamsProvider'
 import { usePropose } from '@apps/base/context/transactions'
@@ -17,7 +17,7 @@ import { SelectBoost } from './SelectBoost'
 
 interface Props {
   apy: FetchState<BoostedCombinedAPY>
-  vault?: BoostedSavingsVaultState
+  vault?: BoostedVaultState
 }
 
 const CurrentMultiplier = styled(CountUp)`
@@ -141,9 +141,9 @@ export const PokeBoost: FC<Props> = ({ apy, vault }) => {
             highlighted
             onClick={() => {
               if (!signer || !vaultAddress || !rewardStreams) return
-              propose<Interfaces.BoostedSavingsVault, 'claimRewards(uint256,uint256)'>(
+              propose<Interfaces.BoostedVault, 'claimRewards(uint256,uint256)'>(
                 new TransactionManifest(
-                  BoostedSavingsVault__factory.connect(vaultAddress, signer),
+                  BoostedVault__factory.connect(vaultAddress, signer),
                   'claimRewards(uint256,uint256)',
                   rewardStreams.claimRange,
                   {
@@ -161,8 +161,8 @@ export const PokeBoost: FC<Props> = ({ apy, vault }) => {
               highlighted
               onClick={() => {
                 if (!signer || !address || !vaultAddress) return
-                propose<Interfaces.BoostedSavingsVault, 'pokeBoost'>(
-                  new TransactionManifest(BoostedSavingsVault__factory.connect(vaultAddress, signer), 'pokeBoost', [address], {
+                propose<Interfaces.BoostedVault, 'pokeBoost'>(
+                  new TransactionManifest(BoostedVault__factory.connect(vaultAddress, signer), 'pokeBoost', [address], {
                     present: `Update boost`,
                     past: `Updated boost`,
                   }),

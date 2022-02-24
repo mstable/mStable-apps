@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { CountUp, DifferentialCountup } from '@apps/dumb-components'
 import { ThemedSkeleton } from '@apps/dumb-components'
-import { BoostedSavingsVaultState } from '@apps/data-provider'
+import { BoostedVaultState } from '@apps/data-provider'
 import { BoostedCombinedAPY, FetchState } from '@apps/types'
 
 import { Boost } from './Boost'
@@ -54,7 +54,7 @@ const Container = styled.div`
 `
 
 export const UserBoost: FC<{
-  vault: BoostedSavingsVaultState
+  vault: BoostedVaultState
   apy: FetchState<BoostedCombinedAPY>
 }> = ({ vault, vault: { isImusd }, apy }) => (
   <Container>

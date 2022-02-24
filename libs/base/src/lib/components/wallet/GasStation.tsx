@@ -66,6 +66,7 @@ const Input = styled.input<{ error?: string | void; disabled?: boolean }>`
   &:focus {
     border-color: ${({ theme }) => theme.color.primary};
     background: ${({ theme }) => theme.color.blueTransparent};
+    color: ${({ theme }) => theme.color.body};
   }
 
   ${({ theme }) => theme.mixins.numeric};

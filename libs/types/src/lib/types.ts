@@ -1,7 +1,6 @@
 import type {
   ERC20,
-  BoostedSavingsVault,
-  ISavingsContractV2,
+  ISavingsContractV3,
   Masset,
   FeederPool,
   BoostDirector,
@@ -12,6 +11,7 @@ import type {
   FraxCrossChainFarm,
   MerkleDrop,
   EmissionsController,
+  BoostedVault,
 } from '@apps/artifacts/typechain'
 
 import type { BigDecimal } from '@apps/bigdecimal'
@@ -40,23 +40,23 @@ export enum Interfaces {
   UniswapRouter02,
   FeederPool,
   FeederWrapper,
-  BoostedSavingsVault,
   BoostDirector,
   FraxCrossChainFarm,
   StakingRewardsWithPlatformToken,
   MerkleDrop,
   EmissionsController,
+  BoostedVault,
 }
 
 export interface Instances {
   [Interfaces.Masset]: Masset
   [Interfaces.ERC20]: ERC20
-  [Interfaces.SavingsContract]: ISavingsContractV2
+  [Interfaces.SavingsContract]: ISavingsContractV3
   [Interfaces.SaveWrapper]: SaveWrapper
   [Interfaces.UniswapRouter02]: IUniswapV2Router02
   [Interfaces.FeederPool]: FeederPool
   [Interfaces.FeederWrapper]: FeederWrapper
-  [Interfaces.BoostedSavingsVault]: BoostedSavingsVault
+  [Interfaces.BoostedVault]: BoostedVault
   [Interfaces.BoostDirector]: BoostDirector
   [Interfaces.FraxCrossChainFarm]: FraxCrossChainFarm
   [Interfaces.StakingRewardsWithPlatformToken]: StakingRewardsWithPlatformToken

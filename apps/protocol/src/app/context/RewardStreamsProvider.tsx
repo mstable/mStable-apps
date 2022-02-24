@@ -3,12 +3,12 @@ import { useInterval } from 'react-use'
 import { getUnixTime } from 'date-fns'
 import { BigNumber } from 'ethers'
 
-import { BoostedSavingsVault, BoostedSavingsVault__factory } from '@apps/artifacts/typechain'
+import { BoostedVault, BoostedVault__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSigner } from '@apps/base/context/account'
-import { BoostedSavingsVaultAccountState, BoostedSavingsVaultState } from '@apps/data-provider'
+import { BoostedVaultAccountState, BoostedVaultState } from '@apps/data-provider'
 import { SCALE } from '@apps/types'
 
-type RewardEntry = BoostedSavingsVaultAccountState['rewardEntries'][number]
+type RewardEntry = BoostedVaultAccountState['rewardEntries'][number]
 
 export enum StreamType {
   Earned,
@@ -57,7 +57,7 @@ const getEntryAmount = ({ finish, start, rate }: { finish: number; start: number
 
 const getRewardPerToken = (
   currentTime: number,
-  { lastUpdateTime, periodFinish, rewardRate, rewardPerTokenStored, totalSupply }: BoostedSavingsVaultState,
+  { lastUpdateTime, periodFinish, rewardRate, rewardPerTokenStored, totalSupply }: BoostedVaultState,
 ): BigNumber => {
   const lastApplicableTime = Math.min(periodFinish, currentTime)
   const timeDelta = lastApplicableTime - lastUpdateTime
@@ -84,14 +84,14 @@ const getRewardPerToken = (
 
 const calculateEarned = (
   currentTime: number,
-  boostedSavingsVault: BoostedSavingsVaultState,
+  boostedSavingsVault: BoostedVaultState,
 ): { total: number; unlocked: number; locked: number } => {
   const rewardPerToken = getRewardPerToken(currentTime, boostedSavingsVault)
   const {
     unlockPercentage,
     account: { boostedBalance, rewardPerTokenPaid, rewards },
-  } = boostedSavingsVault as BoostedSavingsVaultState & {
-    account: BoostedSavingsVaultAccountState
+  } = boostedSavingsVault as BoostedVaultState & {
+    account: BoostedVaultAccountState
   }
 
   // Current rate per token - rate user previously received
@@ -121,19 +121,19 @@ const ctx = createContext<RewardStreams | undefined>(undefined)
 
 export const RewardStreamsProvider: FC<{
   refreshInterval?: number
-  vault?: BoostedSavingsVaultState
+  vault?: BoostedVaultState
 }> = ({ children, refreshInterval = 15e3, vault }) => {
   const [currentTime, setCurrentTime] = useState<number>(nowUnix)
   const account = useAccount()
   const signer = useSigner()
   const [claimRange, setClaimRange] = useState<[number, number] | undefined>(undefined)
-  const vaultContract = useRef<BoostedSavingsVault>()
+  const vaultContract = useRef<BoostedVault>()
 
   useEffect(() => {
     if (!signer || !account || !vault) return
 
     if (!vaultContract.current) {
-      vaultContract.current = BoostedSavingsVault__factory.connect(vault.address, signer)
+      vaultContract.current = BoostedVault__factory.connect(vault.address, signer)
     }
 
     vaultContract.current

@@ -225,6 +225,7 @@ const AssetInputApproveContent: FC<Props> = ({
   decimals,
   className,
   hideToken,
+  isFetching,
 }) => {
   const [{ needsApprove }, handleApprove] = useApprove()
 
@@ -246,6 +247,7 @@ const AssetInputApproveContent: FC<Props> = ({
       spender={spender}
       decimals={decimals}
       hideToken={hideToken}
+      isFetching={isFetching}
     >
       {children}
     </AssetInputContent>

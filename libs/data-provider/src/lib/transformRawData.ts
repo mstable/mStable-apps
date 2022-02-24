@@ -11,7 +11,7 @@ import type { Tokens } from '@apps/base/context/tokens'
 import type {
   BassetState,
   BassetStatus,
-  BoostedSavingsVaultState,
+  BoostedVaultState,
   DataState,
   FeederPoolAccountState,
   FeederPoolState,
@@ -132,8 +132,8 @@ const transformBoostedSavingsVault = ({
     priceCoeff?: string | null
     boostCoeff?: string | null
   }
->): BoostedSavingsVaultState => {
-  let account: BoostedSavingsVaultState['account']
+>): BoostedVaultState => {
+  let account: BoostedVaultState['account']
 
   // FIXME: - Replace this with something better
   const isImusd = address === '0x78befca7de27d07dc6e71da295cc2946681a6c7b' // imUSD vault address
