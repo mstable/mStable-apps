@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { BoostDirector__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSigner } from '@apps/base/context/account'
-import { useDataState, BoostedSavingsVaultState } from '@apps/data-provider'
+import { useDataState, BoostedVaultState } from '@apps/data-provider'
 import { usePropose } from '@apps/base/context/transactions'
 import { ViewportWidth } from '@apps/theme'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
@@ -11,7 +11,7 @@ import { Button } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 
 interface Props {
-  vault?: BoostedSavingsVaultState
+  vault?: BoostedVaultState
 }
 
 const Toggle = styled(Button)`
@@ -118,12 +118,9 @@ export const SelectBoost: FC<Props> = ({ vault }) => {
     return boostedVaultAddresses.map(v => feederPoolVaults.find(fv => fv?.address === v))
   }, [account, feederPoolVaults, userVaults, vaultIds])
 
-  const [selectedVault, setSelectedVault] = useState<BoostedSavingsVaultState | undefined>()
+  const [selectedVault, setSelectedVault] = useState<BoostedVaultState | undefined>()
 
-  const handleSelection = useCallback(
-    (v?: BoostedSavingsVaultState) => setSelectedVault(v !== selectedVault ? v : undefined),
-    [selectedVault],
-  )
+  const handleSelection = useCallback((v?: BoostedVaultState) => setSelectedVault(v !== selectedVault ? v : undefined), [selectedVault])
 
   const isVaultBoosted = boostedVaults?.find(v => v?.stakingToken?.symbol === vault?.stakingToken?.symbol)
 

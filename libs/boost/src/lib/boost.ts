@@ -1,7 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { BoostedSavingsVaultState } from '@apps/data-provider'
+import { BoostedVaultState } from '@apps/data-provider'
 
 export const MIN_BOOST = 1
 export const MAX_BOOST = 3
@@ -31,7 +31,7 @@ export const calculateBoost = (priceCoeff?: number, stakingBalance?: BigDecimal,
   return Math.min(MAX_BOOST, Math.max(MIN_BOOST, 0.98 + (BOOST_COEFF * Math.min(scaledMTABalance, MAX_VMTA)) / scaledBalance ** EXPONENT))
 }
 
-export const getPriceCoeff = (vault: BoostedSavingsVaultState): number | undefined => {
+export const getPriceCoeff = (vault: BoostedVaultState): number | undefined => {
   // if (vault.priceCoeff) return vault.priceCoeff / 1e18
 
   switch (vault.address) {

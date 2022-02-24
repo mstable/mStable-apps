@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { format, fromUnixTime } from 'date-fns'
 import { useToggle } from 'react-use'
 
-import { BoostedSavingsVault__factory, BoostedSavingsVault } from '@apps/artifacts/typechain'
+import { BoostedVault__factory, BoostedVault } from '@apps/artifacts/typechain'
 import { usePropose } from '@apps/base/context/transactions'
 import { useIsMasquerading, useSigner } from '@apps/base/context/account'
 import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
@@ -19,12 +19,12 @@ import { useSelectedFeederPoolVaultContract } from '../FeederPoolProvider'
 import { rewardsColorMapping } from '../constants'
 import { ClaimGraph } from './ClaimGraph'
 
-const useSelectedSaveVaultContract = (): BoostedSavingsVault | undefined => {
+const useSelectedSaveVaultContract = (): BoostedVault | undefined => {
   const signer = useSigner()
   const masset = useSelectedMassetState()
   const vaultAddress = masset?.savingsContracts?.v2?.boostedSavingsVault?.address
   if (!signer || !vaultAddress) return
-  return BoostedSavingsVault__factory.connect(vaultAddress, signer)
+  return BoostedVault__factory.connect(vaultAddress, signer)
 }
 
 const EmptyState = styled.div`
@@ -318,7 +318,7 @@ export const UserRewards: FC = () => {
                   title="Claim Rewards"
                   handleSend={() => {
                     if (contract && rewardStreams) {
-                      propose<Interfaces.BoostedSavingsVault, 'claimRewards(uint256,uint256)'>(
+                      propose<Interfaces.BoostedVault, 'claimRewards(uint256,uint256)'>(
                         new TransactionManifest(contract, 'claimRewards(uint256,uint256)', rewardStreams.claimRange, {
                           present: 'Claiming rewards',
                           past: 'Claimed rewards',

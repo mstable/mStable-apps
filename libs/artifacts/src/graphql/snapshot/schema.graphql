@@ -57,6 +57,11 @@ input FollowWhere {
   created_lte: Int
 }
 
+type Item {
+  id: String!
+  spacesCount: Int
+}
+
 scalar MstableBigDecimal
 
 enum OrderDirection {
@@ -136,6 +141,12 @@ type Query {
   aliases(first: Int, skip: Int, where: AliasWhere, orderBy: String, orderDirection: OrderDirection): [Alias]
   follows(first: Int, skip: Int, where: FollowWhere, orderBy: String, orderDirection: OrderDirection): [Follow]
   subscriptions(first: Int, skip: Int, where: SubscriptionWhere, orderBy: String, orderDirection: OrderDirection): [Subscription]
+  skins: [Item]
+  networks: [Item]
+  validations: [Item]
+  plugins: [Item]
+  strategies: [StrategyItem]
+  strategy(id: String): StrategyItem
 }
 
 type Space {
@@ -162,6 +173,8 @@ type Space {
   voting: SpaceVoting
   categories: [String]
   validation: Strategy
+  followersCount: Int
+  proposalsCount: Int
 }
 
 type SpaceFilters {
@@ -186,6 +199,16 @@ input SpaceWhere {
 type Strategy {
   name: String!
   params: Any
+}
+
+type StrategyItem {
+  id: String!
+  author: String
+  version: String
+  schema: Any
+  examples: [Any]
+  about: String
+  spacesCount: Int
 }
 
 type Subscription {

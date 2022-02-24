@@ -57,7 +57,7 @@ export interface FeederPoolState {
   masset: FassetState
   token: SubscribedToken
   totalSupply: BigDecimal
-  vault?: BoostedSavingsVaultState
+  vault?: BoostedVaultState
   invariantK: BigNumber
   dailyApy: number
   price: BigDecimal
@@ -100,7 +100,7 @@ export interface MassetState {
   bassetRatios: { [address: string]: BigNumber }
 }
 
-export interface BoostedSavingsVaultAccountState {
+export interface BoostedVaultAccountState {
   boostedBalance: BigDecimal
   boostMultiplier: number
   rawBalance: BigDecimal
@@ -118,9 +118,9 @@ export interface BoostedSavingsVaultAccountState {
   }[]
 }
 
-export interface BoostedSavingsVaultState {
+export interface BoostedVaultState {
   address: string
-  account?: BoostedSavingsVaultAccountState
+  account?: BoostedVaultAccountState
   lastUpdateTime: number
   lockupDuration: number
   periodDuration: number
@@ -176,7 +176,7 @@ export type SavingsContractState = {
   | {
       version: 2
       token?: SubscribedToken
-      boostedSavingsVault?: BoostedSavingsVaultState
+      boostedSavingsVault?: BoostedVaultState
     }
 )
 

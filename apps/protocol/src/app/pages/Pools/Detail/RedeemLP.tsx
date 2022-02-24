@@ -157,7 +157,7 @@ export const RedeemLP: FC = () => {
           if (!outputAddress || !inputAmount) return
 
           if (isUnstakingFromVault) {
-            return propose<Interfaces.BoostedSavingsVault, 'withdraw'>(
+            return propose<Interfaces.BoostedVault, 'withdraw'>(
               new TransactionManifest(
                 contracts.vault,
                 'withdraw',

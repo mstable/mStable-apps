@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useTokenSubscription } from '@apps/base/context/tokens'
-import { BoostedSavingsVaultState } from '@apps/data-provider'
+import { BoostedVaultState } from '@apps/data-provider'
 import { useBigDecimalInput } from '@apps/hooks'
 import { ViewportWidth } from '@apps/theme'
 import { DifferentialCountup } from '@apps/dumb-components'
@@ -188,7 +188,7 @@ const Container = styled(Widget)`
 `
 
 export const BoostCalculator: FC<{
-  vault: BoostedSavingsVaultState
+  vault: BoostedVaultState
   apy?: number
   onClick?: () => void
   noBackButton?: boolean

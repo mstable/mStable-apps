@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import React, { createContext, useContext, useMemo } from 'react'
-import type { BoostedSavingsVault, FeederPool, FeederWrapper } from '@apps/artifacts/typechain'
-import { BoostedSavingsVault__factory, FeederPool__factory, FeederWrapper__factory } from '@apps/artifacts/typechain'
+import type { BoostedVault, FeederPool, FeederWrapper } from '@apps/artifacts/typechain'
+import { BoostedVault__factory, FeederPool__factory, FeederWrapper__factory } from '@apps/artifacts/typechain'
 
 import { AddressOption } from '@apps/types'
 import type { FeederPoolState, MassetState } from '@apps/data-provider'
@@ -16,7 +16,7 @@ interface PoolState {
   vaultAddress: string
   contracts?: {
     feederPool: FeederPool
-    vault: BoostedSavingsVault
+    vault: BoostedVault
     feederWrapper: FeederWrapper
   }
 }
@@ -39,7 +39,7 @@ export const useSelectedFeederPoolContract = (): FeederPool | undefined => {
   return useContext(ctx)?.contracts?.feederPool
 }
 
-export const useSelectedFeederPoolVaultContract = (): BoostedSavingsVault | undefined => {
+export const useSelectedFeederPoolVaultContract = (): BoostedVault | undefined => {
   return useContext(ctx)?.contracts?.vault
 }
 
@@ -123,7 +123,7 @@ export const FeederPoolProvider: FC<{ poolAddress: string }> = ({ poolAddress, c
           ? {
               feederPool: FeederPool__factory.connect(poolAddress, signer),
               feederWrapper: FeederWrapper__factory.connect(networkAddresses.FeederWrapper, signer),
-              vault: vaultAddress && BoostedSavingsVault__factory.connect(vaultAddress, signer),
+              vault: vaultAddress && BoostedVault__factory.connect(vaultAddress, signer),
             }
           : undefined,
     }),

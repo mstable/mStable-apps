@@ -1,6 +1,5 @@
 import type {
   ERC20,
-  BoostedSavingsVault,
   ISavingsContractV3,
   Masset,
   FeederPool,
@@ -41,7 +40,6 @@ export enum Interfaces {
   UniswapRouter02,
   FeederPool,
   FeederWrapper,
-  BoostedSavingsVault,
   BoostDirector,
   FraxCrossChainFarm,
   StakingRewardsWithPlatformToken,
@@ -58,7 +56,6 @@ export interface Instances {
   [Interfaces.UniswapRouter02]: IUniswapV2Router02
   [Interfaces.FeederPool]: FeederPool
   [Interfaces.FeederWrapper]: FeederWrapper
-  [Interfaces.BoostedSavingsVault]: BoostedSavingsVault
   [Interfaces.BoostedVault]: BoostedVault
   [Interfaces.BoostDirector]: BoostDirector
   [Interfaces.FraxCrossChainFarm]: FraxCrossChainFarm
