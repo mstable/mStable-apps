@@ -182,12 +182,12 @@ export const SaveRedeem: FC = () => {
       }
     }
     if (saveRoute === SaveRoutesOut.WithdrawAndRedeem || saveRoute === SaveRoutesOut.VaultUnwrapAndRedeem) {
-      if (!swapExchangeRate?.value || !saveExchangeRate) {
-        if (inputFormValue === '') return { value: undefined, fetching: false }
+      if (!swapExchangeRate?.value?.simple || !saveExchangeRate) {
+        if (!inputFormValue) return { value: saveExchangeRate, fetching: false }
         return { value: undefined, fetching: true }
       }
 
-      const value = swapExchangeRate?.value?.mulTruncate(saveExchangeRate.exact)
+      const value = swapExchangeRate.value.mulTruncate(saveExchangeRate.exact)
 
       return {
         value,
