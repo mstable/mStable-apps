@@ -188,6 +188,7 @@ const OnboardProvider: FC<{
               rpcUrl,
               preferred: true,
             },
+            { walletName: 'tally' },
             { walletName: 'xdefi' },
             { walletName: 'trust', rpcUrl },
             { walletName: 'gnosis', preferred: true },
