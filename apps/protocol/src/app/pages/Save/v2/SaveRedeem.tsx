@@ -149,8 +149,8 @@ export const SaveRedeem: FC = () => {
   const error = useMemo<string | undefined>(() => {
     if (!inputAmount) return
     if (inputAddress === vaultAddress && vaultBalance.exact.lt(inputAmount.exact)) return 'Insufficient balance'
-    if (inputAddress === saveAddress && inputToken?.balance.exact.lt(inputAmount.exact)) return 'Insufficient balance'
-  }, [inputAddress, inputAmount, inputToken?.balance.exact, saveAddress, vaultAddress, vaultBalance.exact])
+    if (inputAddress === saveAddress && inputToken?.balance?.exact.lt(inputAmount.exact)) return 'Insufficient balance'
+  }, [inputAddress, inputAmount, inputToken, saveAddress, vaultAddress, vaultBalance.exact])
 
   const isOutputMasset = outputAddress === massetAddress
 
