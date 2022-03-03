@@ -48,14 +48,14 @@ export const DialMetadataContent: FC<{ dial?: Dial }> = ({ dial, children }) => 
   return (
     <Container>
       <div>
-        <p className="description">{dial?.metadata.description ?? ''}</p>
+        <p className="description">{dial.metadata?.description ?? ''}</p>
       </div>
       <div>
         <div className="links">
-          {dial?.metadata.link && (
+          {dial.metadata?.link && (
             <>
               <div>
-                <ExternalLink href={dial.metadata.link}>{dial.metadata.linkTitle ?? 'Learn more'}</ExternalLink>
+                <ExternalLink href={dial.metadata?.link}>{dial.metadata?.linkTitle ?? 'Learn more'}</ExternalLink>
               </div>
               <div className="recipient">
                 {dial && (
@@ -64,7 +64,7 @@ export const DialMetadataContent: FC<{ dial?: Dial }> = ({ dial, children }) => 
                       address={dial.recipient}
                       truncate
                       type="account"
-                      chainId={dial.metadata.network === Networks.Polygon ? ChainIds.MaticMainnet : undefined}
+                      chainId={dial.metadata?.network === Networks.Polygon ? ChainIds.MaticMainnet : undefined}
                     />
                   </Tooltip>
                 )}

@@ -126,8 +126,8 @@ export const DialTable: FC = () => {
           return (
             <TableRow key={dialId}>
               <TableCell width={TABLE_CELL_WIDTHS[0]}>
-                <Tooltip tip={dial.metadata.description} hideIcon>
-                  <DialTitle isRow={false} dialMetadata={dial.metadata} />
+                <Tooltip tip={dial.metadata?.description} hideIcon>
+                  <DialTitle isRow={false} dialMetadata={dial?.metadata} dialId={dialId} />
                 </Tooltip>
               </TableCell>
               <NumericCell width={TABLE_CELL_WIDTHS[1]}>

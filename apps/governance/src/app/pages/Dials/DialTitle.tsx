@@ -41,15 +41,16 @@ const Container = styled.div<{ isRow: boolean }>`
   }
 `
 
-export const DialTitle: FC<{ dialMetadata?: DialMetadata; isRow?: boolean; className?: string }> = ({
+export const DialTitle: FC<{ dialMetadata?: DialMetadata; dialId: number; isRow?: boolean; className?: string }> = ({
   dialMetadata,
+  dialId,
   className,
   isRow = true,
 }) => (
   <Container isRow={isRow} className={className}>
     <Circle fill={dialMetadata?.color} />
     <div>
-      <Title>{dialMetadata?.title}</Title>
+      <Title>{dialMetadata?.title ?? `Dial ${dialId}`}</Title>
       {dialMetadata?.network === 'Polygon' && <NetworkLabel>{dialMetadata?.network}</NetworkLabel>}
     </div>
   </Container>
