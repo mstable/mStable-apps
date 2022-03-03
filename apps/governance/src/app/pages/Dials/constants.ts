@@ -143,6 +143,14 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
     link: 'https://www.visor.finance/',
     linkTitle: 'Visor Finance',
   },
+  17: {
+    network: Networks.Ethereum,
+    title: 'Vesper',
+    color: '#d6d9f2',
+    description: `Voting for this dial will direct MTA emissions to Vesper's vaMUSD pool, which aims to increase the utility of mUSD and improve the user experience for accessing yield opportunities. Vesper is also supporting this pool with VSP rewards.`,
+    link: 'https://vesper.finance/',
+    linkTitle: 'Vesper Finance',
+  },
 })
 
 export const ALL_POSSIBLE_DIAL_IDS = Array.from({ length: 255 }).map((_, dialId) => dialId)
