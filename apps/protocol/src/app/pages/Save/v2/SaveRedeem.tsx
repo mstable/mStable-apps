@@ -191,7 +191,7 @@ export const SaveRedeem: FC = () => {
     }
   }, [saveRoute, saveExchangeRate, swapExchangeRate?.value, inputFormValue])
 
-  const valid = !!(!error && inputAmount?.simple > 0)
+  const valid = !error && inputAmount?.simple > 0 && !exchangeRate?.fetching
 
   return (
     <AssetExchange
