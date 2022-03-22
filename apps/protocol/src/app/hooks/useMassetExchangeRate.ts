@@ -11,7 +11,7 @@ import { useSelectedFeederPoolState } from '../pages/Pools/FeederPoolProvider'
 export const useExchangeRateForMassetInputs = (
   estimatedOutputAmount?: FetchState<BigDecimal>,
   inputValues?: BigDecimalInputValues,
-): FetchState<BigDecimal> => {
+): FetchState<number> => {
   const massetState = useSelectedMassetState() as MassetState
 
   return useMemo(() => {
@@ -42,7 +42,7 @@ export const useExchangeRateForMassetInputs = (
         return { error: 'Output amount must be greater than zero' }
       }
 
-      const value = estimatedOutputAmount.value.divPrecisely(totalAmount)
+      const value = estimatedOutputAmount.value.divPrecisely(totalAmount).simple
       return { value }
     }
 
@@ -54,7 +54,7 @@ export const useExchangeRateForFPInputs = (
   poolAddress: string,
   estimatedOutputAmount: FetchState<BigDecimal>,
   inputValues?: BigDecimalInputValues,
-): FetchState<BigDecimal> => {
+): FetchState<number> => {
   const feederPool = useSelectedFeederPoolState()
 
   return useMemo(() => {
@@ -83,7 +83,7 @@ export const useExchangeRateForFPInputs = (
       return { error: 'Output amount must be greater than zero' }
     }
 
-    const value = estimatedOutputAmount.value.divPrecisely(inputAmount)
+    const value = estimatedOutputAmount.value.divPrecisely(inputAmount).simple
     return { value }
   }, [inputValues, estimatedOutputAmount.error, estimatedOutputAmount.value, feederPool])
 }

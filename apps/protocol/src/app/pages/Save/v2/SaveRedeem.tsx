@@ -139,7 +139,7 @@ export const SaveRedeem: FC = () => {
   }, [inputAddress, massetAddress, outputAddress, saveAddress, vaultAddress])
 
   const error = useMemo<string | undefined>(() => {
-    if (!inputAmount) return
+    if (!inputAmount?.simple) return
     if (inputAddress === vaultAddress && vaultBalance?.exact.lt(inputAmount.exact)) return 'Insufficient balance'
     if (inputAddress === saveAddress && inputToken?.balance?.exact.lt(inputAmount.exact)) return 'Insufficient balance'
   }, [inputAddress, inputAmount, inputToken, saveAddress, vaultAddress, vaultBalance])
@@ -164,29 +164,32 @@ export const SaveRedeem: FC = () => {
 
   const exchangeRate = useMemo(() => {
     if (saveRoute === SaveRoutesOut.VaultWithdraw) {
-      return { value: BigDecimal.ONE }
+      return { value: 1 }
     }
     if (saveRoute === SaveRoutesOut.Withdraw) {
-      const value = saveExchangeRate ? saveExchangeRate.divPrecisely(BigDecimal.ONE) : undefined
+      const value = saveExchangeRate ? saveExchangeRate.divPrecisely(BigDecimal.ONE).simple : undefined
       return {
         value,
         fetching: !value,
       }
     }
     if (saveRoute === SaveRoutesOut.WithdrawAndRedeem || saveRoute === SaveRoutesOut.VaultUnwrapAndRedeem) {
-      if (!swapExchangeRate?.value?.simple || !saveExchangeRate) {
-        if (!inputFormValue) return { value: saveExchangeRate, fetching: false }
+      if (!inputFormValue) return { value: undefined, fetching: false }
+      if (!swapExchangeRate || !saveExchangeRate) {
+        if (!inputFormValue) return { value: saveExchangeRate.simple, fetching: false }
         return { value: undefined, fetching: true }
       }
 
-      const value = swapExchangeRate.value.mulTruncate(saveExchangeRate.exact)
+      const swapExchangeRateSimple = swapExchangeRate.value
+      const saveExchangeRateSimple = saveExchangeRate.simple
+      const value = swapExchangeRateSimple * saveExchangeRateSimple
 
       return {
         value,
         fetching: !value,
       }
     }
-  }, [saveRoute, saveExchangeRate, swapExchangeRate?.value, inputFormValue])
+  }, [saveRoute, saveExchangeRate, swapExchangeRate, inputFormValue])
 
   const valid = !error && inputAmount?.simple > 0 && !exchangeRate?.fetching
 

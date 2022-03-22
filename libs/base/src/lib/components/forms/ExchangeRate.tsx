@@ -10,7 +10,7 @@ interface Props {
   outputLabel?: string
   inputToken?: AddressOption | SubscribedToken
   outputToken?: AddressOption | SubscribedToken
-  exchangeRate: FetchState<BigDecimal>
+  exchangeRate: FetchState<number>
 }
 
 const Container = styled.div`
@@ -39,7 +39,7 @@ export const ExchangeRate: FC<Props> = ({ exchangeRate: { fetching, value }, inp
       ) : value ? (
         <>
           <span>≈ </span>
-          <Numeric>{value.format(6)}</Numeric>
+          <Numeric>{value.toFixed(6)}</Numeric>
           <span> {outputLabel ?? outputToken?.symbol} </span>
           {hasInput && <span>per {inputLabel ?? inputToken?.symbol}</span>}
         </>

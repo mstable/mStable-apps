@@ -20,7 +20,7 @@ type Contract = Masset | FeederPool
 interface Output {
   estimatedOutputAmount: FetchState<BigDecimal>
   priceImpact: FetchState<PriceImpact>
-  exchangeRate: FetchState<BigDecimal>
+  exchangeRate: FetchState<number>
   feeRate: FetchState<BigDecimal>
 }
 
@@ -78,19 +78,19 @@ export const useEstimatedOutput = (
 
   const isFeederPool = contract?.address === poolAddress
 
-  const exchangeRate = useMemo<FetchState<BigDecimal>>(() => {
+  const exchangeRate = useMemo<FetchState<number>>(() => {
     if (shouldSkip) return {}
 
     if (estimatedOutputRange.fetching) return { fetching: true }
-    if (!scaledInput?.scaledHigh || !outputValue || !estimatedOutputRange.value) return {}
+    if (!scaledInput?.high || !outputValue || !estimatedOutputRange.value) return {}
 
     const [, high] = estimatedOutputRange.value
 
-    if (!high.exact.gt(0) || !scaledInput.scaledHigh.exact.gt(0)) {
+    if (!high.exact.gt(0) || !scaledInput.high.exact.gt(0)) {
       return { error: 'Amount must be greater than zero' }
     }
 
-    const value = high.scale().divPrecisely(scaledInput.scaledHigh)
+    const value = high.simple / scaledInput.high.simple
     return { value }
   }, [estimatedOutputRange, scaledInput, outputValue, shouldSkip])
 
