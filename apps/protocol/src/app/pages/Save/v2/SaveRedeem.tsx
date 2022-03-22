@@ -11,7 +11,6 @@ import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 import { BigDecimalInputValue, useBigDecimalInput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { AssetExchange, SendButton } from '@apps/base/components/forms'
-import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
 
 import { SaveRoutesOut } from './types'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
@@ -49,8 +48,6 @@ export const SaveRedeem: FC = () => {
   const signer = useSigner()
   const propose = usePropose()
   const stakingRewards = useStakingRewards()
-  const [chainId] = useChainIdCtx()
-  const isPolygon = chainId === ChainIds.MaticMainnet
   const userAddress = useWalletAddress()
 
   const {
@@ -228,7 +225,9 @@ export const SaveRedeem: FC = () => {
 
           switch (saveRoute) {
             case SaveRoutesOut.VaultWithdraw:
+              // imVault -> imAsset (Vault)
               if (!vaultAddress) return
+
               return propose<Interfaces.BoostedVault, 'withdraw'>(
                 new TransactionManifest(
                   BoostedVault__factory.connect(vaultAddress, signer),
@@ -267,6 +266,7 @@ export const SaveRedeem: FC = () => {
               )
             }
             default:
+              // imAsset -> mAsset (Save)
               return propose<Interfaces.SavingsContract, 'redeemCredits'>(
                 new TransactionManifest(
                   ISavingsContractV3__factory.connect(saveAddress, signer),
