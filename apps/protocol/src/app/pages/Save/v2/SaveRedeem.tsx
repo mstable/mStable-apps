@@ -11,7 +11,6 @@ import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 import { BigDecimalInputValue, useBigDecimalInput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { AssetExchange, SendButton } from '@apps/base/components/forms'
-import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
 
 import { SaveRoutesOut } from './types'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
@@ -49,8 +48,6 @@ export const SaveRedeem: FC = () => {
   const signer = useSigner()
   const propose = usePropose()
   const stakingRewards = useStakingRewards()
-  const [chainId] = useChainIdCtx()
-  const isPolygon = chainId === ChainIds.MaticMainnet
   const userAddress = useWalletAddress()
 
   const {
@@ -70,7 +67,7 @@ export const SaveRedeem: FC = () => {
   } = useSelectedMassetState() as MassetState
 
   const vaultAddress = boostedSavingsVault?.address ?? stakingRewards?.stakingRewardsContract?.address
-  const vaultBalance = account?.rawBalance ?? stakingRewards.stakedBalance
+  const vaultBalance = account?.rawBalance ?? stakingRewards.stakedBalance ?? BigDecimal.ZERO
 
   const inputOptions = useMemo<AddressOption[]>(
     () => [
@@ -91,21 +88,16 @@ export const SaveRedeem: FC = () => {
   const [inputAmount, inputFormValue, setInputFormValue] = useBigDecimalInput()
 
   const outputOptions = useMemo<AddressOption[]>(() => {
-    if (isPolygon) {
-      const outputs = [
-        massetToken,
-        ...(saveToken ? [saveToken] : []),
-        ...Object.values(bAssets).map(b => b.token),
-        ...Object.values(fAssets).map(b => b.token),
-      ]
-      if (inputAddress === vaultAddress) return outputs.filter(v => v.address !== massetAddress)
-      if (inputAddress === saveAddress) return outputs.filter(v => v.address !== saveAddress)
-      return outputs
-    }
-    // TODO: Delete below when upgraded on mainnet
-    if (inputAddress === vaultAddress) return [{ address: saveAddress }]
-    return [{ address: massetAddress as string }]
-  }, [isPolygon, inputAddress, vaultAddress, saveAddress, massetAddress, massetToken, saveToken, bAssets, fAssets])
+    const outputs = [
+      massetToken,
+      ...(saveToken ? [saveToken] : []),
+      ...Object.values(bAssets).map(b => b.token),
+      ...Object.values(fAssets).map(b => b.token),
+    ]
+    if (inputAddress === vaultAddress) return outputs.filter(v => v.address !== massetAddress)
+    if (inputAddress === saveAddress) return outputs.filter(v => v.address !== saveAddress)
+    return outputs
+  }, [inputAddress, vaultAddress, saveAddress, massetAddress, massetToken, saveToken, bAssets, fAssets])
 
   const [outputAddress, setOutputAddress] = useState<string | undefined>(outputOptions?.[0].address)
   const outputDecimals = outputOptions.find(v => v.address === outputAddress)?.balance?.decimals
@@ -147,7 +139,7 @@ export const SaveRedeem: FC = () => {
   }, [inputAddress, massetAddress, outputAddress, saveAddress, vaultAddress])
 
   const error = useMemo<string | undefined>(() => {
-    if (!inputAmount) return
+    if (!inputAmount?.simple) return
     if (inputAddress === vaultAddress && vaultBalance?.exact.lt(inputAmount.exact)) return 'Insufficient balance'
     if (inputAddress === saveAddress && inputToken?.balance?.exact.lt(inputAmount.exact)) return 'Insufficient balance'
   }, [inputAddress, inputAmount, inputToken, saveAddress, vaultAddress, vaultBalance])
@@ -172,31 +164,34 @@ export const SaveRedeem: FC = () => {
 
   const exchangeRate = useMemo(() => {
     if (saveRoute === SaveRoutesOut.VaultWithdraw) {
-      return { value: BigDecimal.ONE }
+      return { value: 1 }
     }
     if (saveRoute === SaveRoutesOut.Withdraw) {
-      const value = saveExchangeRate ? saveExchangeRate.divPrecisely(BigDecimal.ONE) : undefined
+      const value = saveExchangeRate ? saveExchangeRate.divPrecisely(BigDecimal.ONE).simple : undefined
       return {
         value,
         fetching: !value,
       }
     }
     if (saveRoute === SaveRoutesOut.WithdrawAndRedeem || saveRoute === SaveRoutesOut.VaultUnwrapAndRedeem) {
-      if (!swapExchangeRate?.value?.simple || !saveExchangeRate) {
-        if (!inputFormValue) return { value: saveExchangeRate, fetching: false }
+      if (!inputFormValue) return { value: undefined, fetching: false }
+      if (!swapExchangeRate || !saveExchangeRate) {
+        if (!inputFormValue) return { value: saveExchangeRate.simple, fetching: false }
         return { value: undefined, fetching: true }
       }
 
-      const value = swapExchangeRate.value.mulTruncate(saveExchangeRate.exact)
+      const swapExchangeRateSimple = swapExchangeRate.value
+      const saveExchangeRateSimple = saveExchangeRate.simple
+      const value = swapExchangeRateSimple * saveExchangeRateSimple
 
       return {
         value,
         fetching: !value,
       }
     }
-  }, [saveRoute, saveExchangeRate, swapExchangeRate?.value, inputFormValue])
+  }, [saveRoute, saveExchangeRate, swapExchangeRate, inputFormValue])
 
-  const valid = !!(!error && inputAmount && inputAmount.simple > 0)
+  const valid = !error && inputAmount?.simple > 0 && !exchangeRate?.fetching
 
   return (
     <AssetExchange
@@ -233,7 +228,9 @@ export const SaveRedeem: FC = () => {
 
           switch (saveRoute) {
             case SaveRoutesOut.VaultWithdraw:
+              // imVault -> imAsset (Vault)
               if (!vaultAddress) return
+
               return propose<Interfaces.BoostedVault, 'withdraw'>(
                 new TransactionManifest(
                   BoostedVault__factory.connect(vaultAddress, signer),
@@ -245,7 +242,8 @@ export const SaveRedeem: FC = () => {
               )
             case SaveRoutesOut.VaultUnwrapAndRedeem: {
               // imVault -> bAsset / fAsset (Vault)
-              if (!isPolygon) return
+              if (!routerInfo || !minOutputAmount) return
+
               return propose<Interfaces.BoostedVault, 'withdrawAndUnwrap'>(
                 new TransactionManifest(
                   BoostedVault__factory.connect(vaultAddress, signer),
@@ -271,6 +269,7 @@ export const SaveRedeem: FC = () => {
               )
             }
             default:
+              // imAsset -> mAsset (Save)
               return propose<Interfaces.SavingsContract, 'redeemCredits'>(
                 new TransactionManifest(
                   ISavingsContractV3__factory.connect(saveAddress, signer),

@@ -66,7 +66,7 @@ interface Props {
   outputLabel?: string
   spender?: string
   setMaxCallbacks?: { [address: string]: () => void }
-  exchangeRate: { value?: BigDecimal; fetching?: boolean }
+  exchangeRate: { value?: number; fetching?: boolean }
   price?: number
   priceImpact?: PriceImpact
 }

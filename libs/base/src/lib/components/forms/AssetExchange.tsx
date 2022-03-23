@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { BigDecimal } from '@apps/bigdecimal'
@@ -26,7 +26,7 @@ export interface Props {
   handleSetOutputAmount?(formValue?: string): void
   handleSetOutputMax?(): void
 
-  exchangeRate: { value?: BigDecimal; fetching?: boolean } // e.g. for mUSD->imUSD
+  exchangeRate: { value?: number; fetching?: boolean } // e.g. for mUSD->imUSD
   className?: string
   // TODO: Combine this with outputFormValue, same with decimals
   isFetching?: boolean
@@ -75,10 +75,14 @@ export const AssetExchange: FC<Props> = ({
   const inputToken = useTokenSubscription(inputAddress) ?? inputAddressOptions.find(v => v.address === inputAddress)
   const outputToken = useTokenSubscription(outputAddress) ?? outputAddressOptions.find(v => v.address === outputAddress)
 
-  const conversionFormValue =
-    inputFormValue && exchangeRate?.value && !outputFormValue
-      ? BigDecimal.maybeParse(inputFormValue)?.mulTruncate(exchangeRate.value.exact).string
-      : undefined
+  const conversionFormValue = useMemo(() => {
+    if (!inputFormValue) return
+    const inputValueSimple = BigDecimal.maybeParse(inputFormValue)?.simple
+    const exchangeRateSimple = exchangeRate.value
+    if (!inputValueSimple || !exchangeRateSimple) return
+    const value = inputValueSimple * exchangeRateSimple
+    return value.toString()
+  }, [exchangeRate.value, inputFormValue])
 
   return (
     <Container className={className}>

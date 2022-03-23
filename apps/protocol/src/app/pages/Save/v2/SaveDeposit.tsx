@@ -334,7 +334,7 @@ export const SaveDeposit: FC = () => {
   const exchangeRate = useMemo(
     () => ({
       ...saveOutput,
-      value: outputs.exchangeRate,
+      value: outputs.exchangeRate?.simple,
     }),
     [outputs.exchangeRate, saveOutput],
   )
