@@ -6,6 +6,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-use'
 import { ethers, utils } from 'ethers'
 import { composedComponent } from '@apps/react-utils'
+import UAuthBncOnboard from '@uauth/bnc-onboard'
 
 import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
 import { useStakeSignatures } from '../hooks'
@@ -120,6 +121,13 @@ const OnboardProvider: FC<{
 
   const isGovernance = appName === APP_NAME.GOVERNANCE
 
+  // unstoppable domains bnc config
+  const uauthOnboard =  new UAuthBncOnboard({
+    clientID: '71282705-b5a1-4585-a1d8-14206940dfab',
+    redirectUri: 'https://mstable.app', // use http://localhost:3000 for local environment and https://mstable.app for production
+    scope: 'openid wallet'
+  })
+
   const onboard = useMemo(
     () =>
       Onboard({
@@ -217,6 +225,13 @@ const OnboardProvider: FC<{
             { walletName: 'huobiwallet', rpcUrl },
             { walletName: 'hyperpay' },
             { walletName: 'wallet.io', rpcUrl },
+            // this creates a custom wallet module for unstoppable domains
+            uauthOnboard.module({
+              preferred: false,
+              walletconnect: {
+                rpc: rpcUrl
+              }
+            })
           ],
         },
 

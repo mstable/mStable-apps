@@ -65,6 +65,7 @@
     "@types/react-typist": "^2.0.2",
     "@types/recharts": "^1.8.16",
     "@types/styled-components": ">5.0.0",
+    "@uauth/bnc-onboard": "^1.1.0",
     "apollo-boost": "^0.4.9",
     "apollo-cache-persist": "^0.1.1",
     "apollo-link": "^1.2.14",
