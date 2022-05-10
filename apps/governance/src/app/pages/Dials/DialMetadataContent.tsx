@@ -45,6 +45,11 @@ const Container = styled.div`
 
 export const DialMetadataContent: FC<{ dial?: Dial }> = ({ dial, children }) => {
   const [showVotesTable, toggleShowVotesTable] = useShowVotesTable()
+
+  if (!dial) {
+    return <Container>{children}</Container>
+  }
+
   return (
     <Container>
       <div>
