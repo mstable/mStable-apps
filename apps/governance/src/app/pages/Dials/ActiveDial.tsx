@@ -56,7 +56,7 @@ export const ActiveDial: FC = () => {
   return (
     <Container>
       <Header>
-        <DialTitle dialId={activeDial.dial.dialId} dialMetadata={activeDial.dial.metadata} />
+        <DialTitle dialId={activeDial?.dial?.dialId} dialMetadata={activeDial?.dial?.metadata} />
         <div>
           <div className="emission">
             {activeDial && <CountUp end={activeDial.dialVotes.voteShare} decimals={0} duration={0.3} suffix="% " className="vote-share" />}
