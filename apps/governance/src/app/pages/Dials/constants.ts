@@ -151,6 +151,14 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
     link: 'https://vesper.finance/',
     linkTitle: 'Vesper Finance',
   },
+  18: {
+    network: Networks.Ethereum,
+    title: 'Idle Finance',
+    color: '#0667d8',
+    description: `Voting for this dial will direct MTA emissions to Idle Finance's Convex MUSD3CRV Junior Tranche, which aims to increase the utility of mUSD and to increase the liquidity of mUSDcrv Curve pool through Idle Finance.`,
+    link: 'https://idle.finance/#/dashboard/tranches',
+    linkTitle: 'Idle Finance',
+  },
 })
 
 export const ALL_POSSIBLE_DIAL_IDS = Array.from({ length: 255 }).map((_, dialId) => dialId)
