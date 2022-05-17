@@ -155,8 +155,8 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
     network: Networks.Ethereum,
     title: 'Idle Finance',
     color: '#0667d8',
-    description: `Voting for this dial will direct MTA emissions to Idle Finance's Convex MUSD3CRV Junior Tranche, which aims to increase the utility of mUSD and to increase the liquidity of mUSDcrv Curve pool through Idle Finance.`,
-    link: 'https://idle.finance/#/dashboard/tranches',
+    description: `Voting for this dial will direct MTA emissions to Idle Finance's Convex MUSD3CRV Senior Tranche, which aims to increase the utility of mUSD and to increase the liquidity of mUSDcrv Curve pool through Idle Finance.`,
+    link: 'https://idle.finance/#/dashboard/tranches/senior/convex/MUSD3CRV',
     linkTitle: 'Idle Finance',
   },
 })
