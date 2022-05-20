@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC, ReactNode, useCallback } from 'react'
 import styled from 'styled-components'
 import { utils } from 'ethers'
 
@@ -11,6 +11,11 @@ import Email from '@apps/icons/social/email.svg'
 
 import { ChainIds, useNetwork } from '../../context/NetworkProvider'
 import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
+import { useHistory } from 'react-router-dom'
+
+const Link = styled.a`
+  color: ${({ theme }) => theme.color.bodyAccent};
+`
 
 const Links = styled.ul`
   align-items: center;
@@ -127,7 +132,11 @@ const socialIcons = [
   { title: 'Email', icon: Email, href: 'mailto:info@mstable.org' },
 ]
 
-export const Footer: FC = () => {
+export type FooterProps = { href: string; label: string }
+
+export const Footer: FC<FooterProps> = ({ href, label }) => {
+  const history = useHistory()
+
   const network = useNetwork()
   const isEthereum = [ChainIds.EthereumMainnet, ChainIds.EthereumKovan, ChainIds.EthereumGoerli, ChainIds.EthereumRopsten].find(
     n => n === network.chainId,
@@ -138,10 +147,9 @@ export const Footer: FC = () => {
       <Inner>
         <div>
           <div>
-            <Links>
-              <b>mStable</b> powered by{' '}
-              {isEthereum ? <a href="https://ethereum.org/en/">Ethereum</a> : <a href="https://polygon.technology">Polygon</a>}
-            </Links>
+            <Link href={href} target="_blank" rel="noreferrer">
+              Visit&nbsp;<b>mStable</b>&nbsp;{label}&nbsp;<span>↗</span>
+            </Link>
             <SocialIcons>
               {socialIcons.map(({ title, href, icon }) => (
                 <li key={href}>

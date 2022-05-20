@@ -12,7 +12,7 @@ const Providers = composedComponent(BrowserSettingsProvider, ThemeProvider, Base
 
 ReactDOM.render(
   <Providers>
-    <BaseLayout>
+    <BaseLayout FooterProps={{ href: 'https://mstable.app/#/', label: 'Protocol app' }}>
       <GovernanceApp />
     </BaseLayout>
   </Providers>,

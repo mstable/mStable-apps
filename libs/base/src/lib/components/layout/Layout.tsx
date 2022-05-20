@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, ReactNode } from 'react'
 import styled, {
   createGlobalStyle,
   CSSObject,
@@ -16,7 +16,7 @@ import { ReactTooltip, Tooltip } from '@apps/dumb-components'
 
 import { ModalDataProvider } from '../../context/ModalDataProvider'
 
-import { Footer } from './Footer'
+import { Footer, FooterProps } from './Footer'
 import { AppBar } from './AppBar'
 import { Toasts } from './Toasts'
 import { BannerMessage } from './BannerMessage'
@@ -249,7 +249,7 @@ const Container = styled.div`
   }
 `
 
-export const Layout: FC = ({ children }) => {
+export const Layout: FC<{ FooterProps: FooterProps }> = ({ FooterProps, children }) => {
   return (
     <ModalDataProvider>
       <ModalProvider rootComponent={TransitionGroup}>
@@ -259,7 +259,7 @@ export const Layout: FC = ({ children }) => {
         <Container>
           <Main>{children}</Main>
         </Container>
-        <Footer />
+        <Footer {...FooterProps} />
         <Toasts />
         <StyledTooltip tip="" hideIcon />
         <ReactTooltip id="global" place="top" html={true} />
