@@ -42,7 +42,8 @@ export const createMerkleClaimProofs = async (claimant: string, { tranches }: Me
 
   return Promise.all(
     tranches.map(async ({ uri, trancheId }) => {
-      const url = `https://cloudflare-ipfs.com/ipfs/${(uri as string).split('ipfs://')[1]}`
+      // const url = `https://cloudflare-ipfs.com/ipfs/${(uri as string).split('ipfs://')[1]}`
+      const url = `https://gateway.pinata.cloud/ipfs/${(uri as string).split('ipfs://')[1]}`
       const response = await fetch(url)
       const balances = (await response.json()) as Record<string, string>
       return { ...getProof(balances, claimant), trancheId }
