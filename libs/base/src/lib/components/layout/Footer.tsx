@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useCallback } from 'react'
+import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 import { utils } from 'ethers'
 
@@ -9,9 +9,7 @@ import Discord from '@apps/icons/social/discord.svg'
 import Twitter from '@apps/icons/social/twitter.svg'
 import Email from '@apps/icons/social/email.svg'
 
-import { ChainIds, useNetwork } from '../../context/NetworkProvider'
 import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
-import { useHistory } from 'react-router-dom'
 
 const Link = styled.a`
   color: ${({ theme }) => theme.color.bodyAccent};
@@ -134,40 +132,31 @@ const socialIcons = [
 
 export type FooterProps = { href: string; label: string }
 
-export const Footer: FC<FooterProps> = ({ href, label }) => {
-  const history = useHistory()
-
-  const network = useNetwork()
-  const isEthereum = [ChainIds.EthereumMainnet, ChainIds.EthereumKovan, ChainIds.EthereumGoerli, ChainIds.EthereumRopsten].find(
-    n => n === network.chainId,
-  )
-
-  return (
-    <Container>
-      <Inner>
+export const Footer: FC<FooterProps> = ({ href, label }) => (
+  <Container>
+    <Inner>
+      <div>
         <div>
-          <div>
-            <Link href={href} target="_blank" rel="noreferrer">
-              Visit&nbsp;<b>mStable</b>&nbsp;{label}&nbsp;<span>↗</span>
-            </Link>
-            <SocialIcons>
-              {socialIcons.map(({ title, href, icon }) => (
-                <li key={href}>
-                  <a href={href} target="_blank" rel="noopener noreferrer">
-                    <img src={icon} alt={title} />
-                  </a>
-                </li>
-              ))}
-            </SocialIcons>
-          </div>
-          <Gubbins>
-            <div>
-              <Version />
-              <Masquerade />
-            </div>
-          </Gubbins>
+          <Link href={href} target="_blank" rel="noreferrer">
+            Visit&nbsp;<b>mStable</b>&nbsp;{label}&nbsp;<span>↗</span>
+          </Link>
+          <SocialIcons>
+            {socialIcons.map(({ title, href, icon }) => (
+              <li key={href}>
+                <a href={href} target="_blank" rel="noopener noreferrer">
+                  <img src={icon} alt={title} />
+                </a>
+              </li>
+            ))}
+          </SocialIcons>
         </div>
-      </Inner>
-    </Container>
-  )
-}
+        <Gubbins>
+          <div>
+            <Version />
+            <Masquerade />
+          </div>
+        </Gubbins>
+      </div>
+    </Inner>
+  </Container>
+)
