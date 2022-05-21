@@ -10,6 +10,8 @@ import Twitter from '@apps/icons/social/twitter.svg'
 import Email from '@apps/icons/social/email.svg'
 
 import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
+import { useBaseCtx } from '../../BaseProviders'
+import { APP_NAME } from '@apps/types'
 
 const Link = styled.a`
   color: ${({ theme }) => theme.color.bodyAccent};
@@ -130,33 +132,38 @@ const socialIcons = [
   { title: 'Email', icon: Email, href: 'mailto:info@mstable.org' },
 ]
 
-export type FooterProps = { href: string; label: string }
+export const Footer: FC = () => {
+  const [{ appName }] = useBaseCtx()
 
-export const Footer: FC<FooterProps> = ({ href, label }) => (
-  <Container>
-    <Inner>
-      <div>
+  const label = appName === APP_NAME.GOVERNANCE ? 'Protocol' : 'Governance'
+  const href = appName === APP_NAME.GOVERNANCE ? 'https://mstable.app/#/' : 'https://staking.mstable.app/'
+
+  return (
+    <Container>
+      <Inner>
         <div>
-          <Link href={href} target="_blank" rel="noreferrer">
-            Visit&nbsp;<b>mStable</b>&nbsp;{label}&nbsp;<span>↗</span>
-          </Link>
-          <SocialIcons>
-            {socialIcons.map(({ title, href, icon }) => (
-              <li key={href}>
-                <a href={href} target="_blank" rel="noopener noreferrer">
-                  <img src={icon} alt={title} />
-                </a>
-              </li>
-            ))}
-          </SocialIcons>
-        </div>
-        <Gubbins>
           <div>
-            <Version />
-            <Masquerade />
+            <Link href={href} target="_blank" rel="noreferrer">
+              Visit&nbsp;<b>mStable</b>&nbsp;{label}&nbsp;<span>↗</span>
+            </Link>
+            <SocialIcons>
+              {socialIcons.map(({ title, href, icon }) => (
+                <li key={href}>
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    <img src={icon} alt={title} />
+                  </a>
+                </li>
+              ))}
+            </SocialIcons>
           </div>
-        </Gubbins>
-      </div>
-    </Inner>
-  </Container>
-)
+          <Gubbins>
+            <div>
+              <Version />
+              <Masquerade />
+            </div>
+          </Gubbins>
+        </div>
+      </Inner>
+    </Container>
+  )
+}

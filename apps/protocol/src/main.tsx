@@ -12,7 +12,7 @@ const ProtocolContext = composedComponent(BrowserSettingsProvider, ThemeProvider
 
 ReactDOM.render(
   <ProtocolContext>
-    <BaseLayout FooterProps={{ href: 'https://staking.mstable.app/', label: 'Governance app' }}>
+    <BaseLayout>
       <ProtocolApp />
     </BaseLayout>
   </ProtocolContext>,
