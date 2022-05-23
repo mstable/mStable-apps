@@ -31,7 +31,8 @@
     "codegen:typechain:prepare": "cp ./node_modules/@mstable/protocol/abis/*.json ./libs/artifacts/src/abi/external && cp ./node_modules/@mstable/merkle-drop/build/contracts/MerkleDrop.sol/MerkleDrop.json ./libs/artifacts/src/abi/external/MerkleDrop.json",
     "codegen:typechain:generate": "yarn typechain --target ethers-v5 --out-dir ./libs/artifacts/src/typechain './libs/artifacts/src/abi/**/*.json'",
     "codegen:typechain": "yarn codegen:typechain:prepare && yarn codegen:typechain:generate",
-    "commit": "commit"
+    "commit": "commit",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -156,9 +157,10 @@
     "file-loader": "^6.2.0",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.5",
-    "husky": "^7.0.1",
+    "husky": "^8.0.1",
     "jest": "27.0.3",
     "jest-watch-typeahead": "^0.6.4",
+    "lint-staged": "^12.4.1",
     "prettier": "^2.3.1",
     "react-app-rewired": "^2.1.8",
     "react-scripts": "^4.0.3",
@@ -178,5 +180,8 @@
     "os": false,
     "stream": false,
     "crypto": false
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mdx}": "eslint --cache --fix"
   }
 }
