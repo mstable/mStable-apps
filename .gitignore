@@ -15,6 +15,9 @@
 # dependencies
 /node_modules
 
+# eslint cache
+.eslintcache
+
 # IDEs and editors
 /.idea
 .project
