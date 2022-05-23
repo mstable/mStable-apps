@@ -3,15 +3,16 @@
 Web frontends for interacting with the mStable contracts.
 
 ---
+
 ## Apps
 
 This repository comprises multiple mStable apps, all built using common libraries and a common UI.
 
-| Status | Name               | Nx project    | Port  | Public hosts |
-|--------|--------------------|---------------|-------|--------------|
-| ✅      | mStable Protocol   | `protocol`   | 3000 | <ul><li>[Fleek/IPFS 1](https://mstable.app)</li><li>[Fleek/IPFS 2](https://app.mstable.org)</li><li>[Google Cloud](https://mstable-apps-protocol.web.app/)</li></ul> |
-| ✅      | mStable Governance | `governance` | 3200 | <ul><li>[Fleek/IPFS 1](https://staking.mstable.app)</li><li>[Fleek/IPFS 2](https://staking.mstable.org)</li><li>[Google Cloud](https://mstable-apps-governance.web.app/)</li></ul> |
-| 🧠      | ...more            |              |      |             |
+| Status | Name               | Nx project   | Port | Public hosts                                                                                                                                                                       |
+| ------ | ------------------ | ------------ | ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ✅     | mStable Protocol   | `protocol`   | 3000 | <ul><li>[Fleek/IPFS 1](https://mstable.app)</li><li>[Fleek/IPFS 2](https://app.mstable.org)</li><li>[Google Cloud](https://mstable-apps-protocol.web.app/)</li></ul>               |
+| ✅     | mStable Governance | `governance` | 3200 | <ul><li>[Fleek/IPFS 1](https://staking.mstable.app)</li><li>[Fleek/IPFS 2](https://staking.mstable.org)</li><li>[Google Cloud](https://mstable-apps-governance.web.app/)</li></ul> |
+| 🧠     | ...more            |              |      |                                                                                                                                                                                    |
 
 ---
 
@@ -53,4 +54,3 @@ To get the benefit of nx modules, it's important to avoid creating dependency cy
 ```bash
 yarn nx affected:lint
 ```
-
