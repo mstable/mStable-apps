@@ -1,10 +1,12 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "unused-imports", "simple-import-sort", "prettier"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "extends": ["plugin:react/recommended", "plugin:prettier/recommended"],
+      "plugins": ["@typescript-eslint", "jsx-a11y", "react-hooks", "react"],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
@@ -18,6 +20,39 @@
               }
             ]
           }
+        ],
+
+        // Unused imports rules
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+          "warn",
+          {
+            "varsIgnorePattern": "^_",
+            "args": "none",
+            "argsIgnorePattern": "^_",
+            "ignoreRestSiblings": true
+          }
+        ],
+
+        // Import ordering rules
+        "simple-import-sort/imports": [
+          "warn",
+          {
+            "groups": [
+              // Side effect imports
+              ["^\\u0000"],
+              // React Package(s) comes first as seperate group
+              ["^react(-dom(/client)?)?$"],
+              // All other imports
+              ["^@?\\w"],
+              ["^((?!\\u0000$)|/.*|$)"],
+              ["^\\."],
+              // Type imports: keep these last!
+              ["^@?\\w.*\\u0000$"],
+              ["^.*\\u0000$"],
+              ["^\\..*\\u0000$"]
+            ]
+          }
         ]
       }
     },
@@ -26,6 +61,11 @@
       "extends": ["plugin:@nrwl/nx/typescript"],
       "plugins": ["react-hooks"],
       "rules": {
+        "react/jsx-filename-extension": ["warn", { "extensions": [".jsx", ".tsx"] }],
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/method-signature-style": "error",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-redeclare": "warn",
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
@@ -55,5 +95,6 @@
       "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     }
-  ]
+  ],
+  "settings": { "react": { "version": "detect" } }
 }
