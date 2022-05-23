@@ -135,7 +135,7 @@ const socialIcons = [
 export const Footer: FC = () => {
   const [{ appName }] = useBaseCtx()
 
-  const label = appName === APP_NAME.GOVERNANCE ? 'Protocol' : 'Governance'
+  const label = appName === APP_NAME.GOVERNANCE ? 'Protocol app' : 'Governance app'
   const href = appName === APP_NAME.GOVERNANCE ? 'https://mstable.app/#/' : 'https://staking.mstable.app/'
 
   return (
@@ -143,9 +143,12 @@ export const Footer: FC = () => {
       <Inner>
         <div>
           <div>
-            <Link href={href} target="_blank" rel="noreferrer">
-              Visit&nbsp;<b>mStable</b>&nbsp;{label}&nbsp;<span>↗</span>
-            </Link>
+            <div>
+              <b>mStable</b>&nbsp;|&nbsp;
+              <Link href={href} target="_blank" rel="noreferrer">
+                {label}&nbsp;<span>↗</span>
+              </Link>
+            </div>
             <SocialIcons>
               {socialIcons.map(({ title, href, icon }) => (
                 <li key={href}>
