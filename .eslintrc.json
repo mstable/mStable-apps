@@ -16,10 +16,6 @@
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "scope:shared",
-                "onlyDependOnLibsWithTags": ["scope:shared", "scope:test-utils"]
-              },
-              {
                 "sourceTag": "*",
                 "onlyDependOnLibsWithTags": ["*"]
               }
