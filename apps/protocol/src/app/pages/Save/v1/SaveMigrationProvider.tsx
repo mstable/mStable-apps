@@ -1,17 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { createContext, FC, useCallback, useContext, useMemo, useState } from 'react'
-import { BigNumber, constants } from 'ethers'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
-import { ERC20__factory, ISavingsContractV1, ISavingsContractV1__factory } from '@apps/artifacts/typechain'
-import { useTokenAllowance } from '@apps/base/context/tokens'
+import { ERC20__factory, ISavingsContractV1__factory } from '@apps/artifacts/typechain'
 import { useSigner } from '@apps/base/context/account'
-import { Transaction, useTransactionsDispatch, useTransactionsState } from '@apps/base/context/transactions'
-import { TransactionManifest, TransactionStatus, Interfaces } from '@apps/transaction-manifest'
-import { StepProps } from '@apps/dumb-components'
+import { useTokenAllowance } from '@apps/base/context/tokens'
+import { useTransactionsDispatch, useTransactionsState } from '@apps/base/context/transactions'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { TransactionManifest, TransactionStatus } from '@apps/transaction-manifest'
+import { constants } from 'ethers'
 
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
+
+import type { ISavingsContractV1 } from '@apps/artifacts/typechain'
+import type { Transaction } from '@apps/base/context/transactions'
+import type { StepProps } from '@apps/dumb-components'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { BigNumber } from 'ethers'
+import type { FC } from 'react'
 
 const isTxPending = (transactions: Record<string, Transaction>, id?: string): boolean => {
   return !!(

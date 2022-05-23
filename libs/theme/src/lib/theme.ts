@@ -1,4 +1,6 @@
-import { DefaultTheme, css } from 'styled-components'
+import { css } from 'styled-components'
+
+import type { DefaultTheme } from 'styled-components'
 
 export enum Color {
   gold = 'rgb(255,179,52)',

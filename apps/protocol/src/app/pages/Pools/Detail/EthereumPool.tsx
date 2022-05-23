@@ -1,29 +1,30 @@
-import React, { useMemo, useState } from 'react'
-import type { FC } from 'react'
+import { useMemo, useState } from 'react'
+
+import { ChainIds, useNetwork } from '@apps/base/context/network'
+import { PoolType } from '@apps/data-provider'
+import { Button, InfoBox, TabCard, UnstyledButton } from '@apps/dumb-components'
+import { useFeederPool } from '@apps/masset-hooks'
+import { ViewportWidth } from '@apps/theme'
+import Skeleton from 'react-loading-skeleton'
 import { useParams } from 'react-router-dom'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
-import Skeleton from 'react-loading-skeleton'
 
-import { FeederPoolState, PoolType } from '@apps/data-provider'
-import { ChainIds, useNetwork } from '@apps/base/context/network'
-import { ViewportWidth } from '@apps/theme'
-import { TabCard, Button, UnstyledButton, InfoBox } from '@apps/dumb-components'
-import { useFeederPool } from '@apps/masset-hooks'
-
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { ProtocolPageHeader as PageHeader } from '../../ProtocolPageHeader'
+import { PoolDetailCard } from '../cards/PoolDetailCard'
 import { assetColorMapping } from '../constants'
 import { FeederPoolProvider, useSelectedFeederPoolState } from '../FeederPoolProvider'
-
-import { LiquidityChart } from './LiquidityChart'
 import { AssetDetails } from './AssetDetails'
-import { PoolComposition } from './PoolComposition'
 import { Deposit } from './Deposit'
-import { Withdraw } from './Withdraw'
+import { LiquidityChart } from './LiquidityChart'
+import { PoolComposition } from './PoolComposition'
 import { PoolOverview } from './PoolOverview'
-import { PoolDetailCard } from '../cards/PoolDetailCard'
+import { Withdraw } from './Withdraw'
+
+import type { FeederPoolState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const HeaderChartsContainer = styled.div`
   position: relative;

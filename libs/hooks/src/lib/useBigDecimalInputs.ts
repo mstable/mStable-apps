@@ -1,6 +1,8 @@
-import { Reducer, useMemo, useReducer } from 'react'
+import { useMemo, useReducer } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
+
+import type { Reducer } from 'react'
 
 export interface UseBigDecimalInputsArg {
   [address: string]: {
@@ -23,8 +25,8 @@ export interface BigDecimalInputValues {
 
 export interface BigDecimalInputCallbacks {
   [address: string]: {
-    setAmount(amount?: BigDecimal): void
-    setFormValue(formValue?: string): void
+    setAmount: (amount?: BigDecimal) => void
+    setFormValue: (formValue?: string) => void
   }
 }
 

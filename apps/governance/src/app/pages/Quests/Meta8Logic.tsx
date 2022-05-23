@@ -1,13 +1,13 @@
-import React, { FC, useCallback, useMemo } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
-import styled from 'styled-components'
+import { useCallback, useMemo } from 'react'
 
-import { useSound } from '@apps/browser-settings'
-import { UnstyledButton } from '@apps/dumb-components'
+import { useQuestsQuery as useQuestbookQuestsQuery } from '@apps/artifacts/graphql/questbook'
+import { useAccountQuery, useQuestsQuery as useStakingQuestsQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { useQuestsQuery as useStakingQuestsQuery, useAccountQuery } from '@apps/artifacts/graphql/staking'
-import { useQuestsQuery as useQuestbookQuestsQuery } from '@apps/artifacts/graphql/questbook'
+import { useSound } from '@apps/browser-settings'
+import { UnstyledButton } from '@apps/dumb-components'
+import { useHistory, useParams } from 'react-router-dom'
+import styled from 'styled-components'
 
 // @ts-ignore
 import bleep26 from '../../../assets/bleeps_26.mp3'
@@ -15,11 +15,12 @@ import bleep26 from '../../../assets/bleeps_26.mp3'
 import bleep27 from '../../../assets/bleeps_27.mp3'
 import { StakedTokenSwitcher } from '../../components/StakedTokenSwitcher'
 import { useStakedToken } from '../../context/StakedToken'
-
-import { Typist } from './Typist'
+import { getDaysUntilQueueUpdate } from '../../utils'
 import { QuestCard } from './QuestCard'
 import { QuestInfo } from './QuestInfo'
-import { getDaysUntilQueueUpdate } from '../../utils'
+import { Typist } from './Typist'
+
+import type { FC } from 'react'
 
 const NavButton = styled(UnstyledButton)`
   color: white;

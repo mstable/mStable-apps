@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
+import mtaImg from '@apps/icons/tokens/MTA.svg'
 import styled, { css } from 'styled-components'
 
-import mtaImg from '@apps/icons/tokens/MTA.svg'
+import type { FC } from 'react'
 
 const QP = styled.div`
   padding: 0 0.5rem;
@@ -101,7 +101,7 @@ const Container = styled.div<{ isObjective: boolean }>`
   }
 `
 
-export const AchievementUnlocked: FC<{ title: string; points?: number; className?: string; onClick?(): void }> = ({
+export const AchievementUnlocked: FC<{ title: string; points?: number; className?: string; onClick?: () => void }> = ({
   title,
   points,
   className,

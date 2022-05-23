@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
-import { useApolloClients } from '@apps/base/context/apollo'
 import { useFeederPoolMetricsQuery } from '@apps/artifacts/graphql/feeders'
+import { useApolloClients } from '@apps/base/context/apollo'
 import { useBlockNumbers } from '@apps/base/context/block'
 import { BigDecimal } from '@apps/bigdecimal'
 

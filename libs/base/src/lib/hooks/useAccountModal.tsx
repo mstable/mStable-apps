@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
-import { useModal } from 'react-modal-hook'
 
-import { Modal, Button } from '@apps/dumb-components'
+import { Button, Modal } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
+import { useModal } from 'react-modal-hook'
+import styled from 'styled-components'
 
 import { Address } from '../components/core'
 import { useConnected, useReset, useWallet, useWalletAddress } from '../context/AccountProvider'

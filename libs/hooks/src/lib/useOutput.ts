@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 
-import { getDistancePercentage } from '@apps/quick-maths'
-import { getPenaltyMessage } from '@apps/formatters'
 import { BigDecimal } from '@apps/bigdecimal'
+import { getPenaltyMessage } from '@apps/formatters'
+import { getDistancePercentage } from '@apps/quick-maths'
 
 enum OutputType {
   Minimum,

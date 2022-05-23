@@ -1,13 +1,15 @@
-import React, { FC, useLayoutEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { isAddress } from 'ethers/lib/utils'
+import { useLayoutEffect } from 'react'
 
 import { ResolveENS } from '@apps/base/components/core'
-import { FetchState } from '@apps/types'
+import { isAddress } from 'ethers/lib/utils'
+import { useParams } from 'react-router-dom'
 
 import { DelegateePageHeader } from '../../components/DelegateePageHeader'
 import { useDelegateesAll } from '../../context/DelegateeLists'
 import { DelegateeProfile } from './DelegateeProfile'
+
+import type { FetchState } from '@apps/types'
+import type { FC } from 'react'
 
 const Content: FC<{ address?: string; addressOrENSName: string; resolvedENSName?: FetchState<string | null> }> = ({
   address,

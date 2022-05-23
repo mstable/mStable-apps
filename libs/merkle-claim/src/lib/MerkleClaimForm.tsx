@@ -1,19 +1,23 @@
-import { BytesLike } from '@ethersproject/bytes'
-import { BigNumberish } from 'ethers'
-import React, { FC, useCallback, useContext } from 'react'
-import styled from 'styled-components'
+import { useCallback, useContext } from 'react'
 
 import { MerkleDrop__factory } from '@apps/artifacts/typechain'
+import { SendButton } from '@apps/base/components/forms'
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { Button } from '@apps/dumb-components'
-import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 import { useFetchState } from '@apps/hooks'
-import { SendButton } from '@apps/base/components/forms'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import styled from 'styled-components'
 
 import { merkleClaimsCtx } from './MerkleClaimsProvider'
-import { MerkleClaim, MerkleClaimProof } from './types'
 import { createMerkleClaimProofs } from './utils'
+
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { BytesLike } from '@ethersproject/bytes'
+import type { BigNumberish } from 'ethers'
+import type { FC } from 'react'
+
+import type { MerkleClaim, MerkleClaimProof } from './types'
 
 const StyledSendButton = styled(SendButton)`
   height: auto;

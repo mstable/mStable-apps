@@ -1,14 +1,16 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
-import { MassetState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/theme'
 import { BigDecimal } from '@apps/bigdecimal'
 import { CountUp } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
 
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
+
+import type { MassetState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const Container = styled.div`
   display: flex;

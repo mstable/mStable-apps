@@ -1,12 +1,14 @@
-import { Context, createContext, FC, useContext, useState } from 'react'
-import { useInterval } from 'react-use'
-import { getUnixTime } from 'date-fns'
+import { createContext, useContext, useState } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
 import { createUseContextFn, providerFactory } from '@apps/context-utils'
 import { SCALE } from '@apps/types'
+import { getUnixTime } from 'date-fns'
+import { useInterval } from 'react-use'
 
-import { StakingRewardsExtended } from './createStakingRewardsContext'
+import type { Context, FC } from 'react'
+
+import type { StakingRewardsExtended } from './createStakingRewardsContext'
 
 export interface RewardsEarned {
   canClaim?: boolean

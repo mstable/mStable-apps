@@ -1,9 +1,11 @@
 import React from 'react'
-import type { FC } from 'react'
+
 import { ReactComponent as BackgroundSvg } from '@apps/icons/illustration-graph.svg'
 import { ReactComponent as TokensSvg } from '@apps/icons/illustration-tokens.svg'
-import styled from 'styled-components'
 import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
+
+import type { FC } from 'react'
 
 const Tokens = styled(TokensSvg)`
   position: absolute;

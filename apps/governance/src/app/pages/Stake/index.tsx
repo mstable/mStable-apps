@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
-
-import { StakeForms } from './StakeForms'
-import { StakeBalances } from './StakeBalances'
-import { PendingBalances } from './PendingBalances'
-import { RewardsEarnedProvider } from './context'
 import { StakingStatusProvider } from '../../context/StakingStatus'
+import { RewardsEarnedProvider } from './context'
+import { PendingBalances } from './PendingBalances'
+import { StakeBalances } from './StakeBalances'
+import { StakeForms } from './StakeForms'
+
+import type { FC } from 'react'
 
 const Container = styled.div`
   > div:last-child {

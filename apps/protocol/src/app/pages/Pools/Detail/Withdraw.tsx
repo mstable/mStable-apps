@@ -1,14 +1,15 @@
-import type { FC } from 'react'
 import React from 'react'
+
+import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
+import { UnstyledButton } from '@apps/dumb-components'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
-
-import { UnstyledButton } from '@apps/dumb-components'
-import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
 
 import { useSelectedFeederPoolAssets, useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { RedeemExact } from './RedeemExact'
 import { RedeemLP } from './RedeemLP'
+
+import type { FC } from 'react'
 
 const RedeemPathBox = styled.div`
   display: flex;

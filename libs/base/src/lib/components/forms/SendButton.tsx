@@ -1,12 +1,14 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-alert */
-import React, { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+
+import { Button, Tooltip, UnstyledButton } from '@apps/dumb-components'
 import styled from 'styled-components'
 
-import { BigDecimal } from '@apps/bigdecimal'
-import { Tooltip, Button, UnstyledButton } from '@apps/dumb-components'
-
 import { ApproveProvider, Mode, useApprove } from './ApproveProvider'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { FC } from 'react'
 
 const SLIPPAGE_WARNING = 'This transaction has a price impact of at least 0.1%. Please confirm you would like to continue'
 

@@ -1,15 +1,17 @@
-import React, { FC, useLayoutEffect } from 'react'
-import styled from 'styled-components'
-import Skeleton from 'react-loading-skeleton'
+import { useLayoutEffect } from 'react'
 
 import { CountUp, H2, H3, ThemedSkeleton } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import Skeleton from 'react-loading-skeleton'
+import styled from 'styled-components'
 
-import { VolumeChart } from '../../components/stats/VolumeChart'
 import { AggregateChart } from '../../components/stats/AggregateChart'
-import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { DailyApys } from '../../components/stats/DailyApys'
 import { SimpleMassetStats } from '../../components/stats/SimpleMassetStats'
+import { VolumeChart } from '../../components/stats/VolumeChart'
+import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
+
+import type { FC } from 'react'
 
 const Section = styled.section`
   padding-bottom: 32px;

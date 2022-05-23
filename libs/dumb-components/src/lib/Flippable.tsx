@@ -1,7 +1,7 @@
-import styled from 'styled-components'
-import React, { FC, ReactNode } from 'react'
-
 import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
+
+import type { FC, ReactNode } from 'react'
 
 // TODO fix this CSS
 const FlippableContainer = styled.div<{ flipped: boolean }>`

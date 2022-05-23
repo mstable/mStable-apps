@@ -1,9 +1,8 @@
-import React, { FC } from 'react'
+import { ThemedSkeleton } from '@apps/dumb-components'
 import styled from 'styled-components'
 
-import { AddressOption, SubscribedToken, FetchState } from '@apps/types'
-import { BigDecimal } from '@apps/bigdecimal'
-import { ThemedSkeleton } from '@apps/dumb-components'
+import type { AddressOption, FetchState, SubscribedToken } from '@apps/types'
+import type { FC } from 'react'
 
 interface Props {
   inputLabel?: string

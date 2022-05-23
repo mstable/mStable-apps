@@ -1,7 +1,10 @@
-import React, { FC, useState } from 'react'
+import { useState } from 'react'
+
 import styled from 'styled-components'
 
 import { Card } from './Card'
+
+import type { FC } from 'react'
 
 type OnboardingType = 'user' | 'active'
 

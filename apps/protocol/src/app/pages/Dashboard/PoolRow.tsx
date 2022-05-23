@@ -1,19 +1,24 @@
-import React, { FC, useEffect, useMemo } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useEffect, useMemo } from 'react'
+
 import { TokenIcon, TokenPair } from '@apps/base/components/core'
-import { FeederPoolState } from '@apps/data-provider'
+import { useTokenSubscription } from '@apps/base/context/tokens'
 import { CountUp, CountUpUSD, Tooltip } from '@apps/dumb-components'
 import { toK } from '@apps/formatters'
-import { MassetName, PoolType } from '@apps/types'
+import { useSetSelectedMassetName } from '@apps/masset-provider'
+import { PoolType } from '@apps/types'
+import { useHistory } from 'react-router-dom'
+
+import { useFraxStakingState } from '../../context/FraxStakingProvider'
+import { useRewardStreams } from '../../context/RewardStreamsProvider'
 import { useFeederPoolApy } from '../../hooks/useFeederPoolApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { useUpsertStream } from './RewardsContext'
-import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy, DeprecatedLabel } from './Styled'
+import { DashNameTableCell, DashTableCell, DashTableRow, DeprecatedLabel, RewardsApy } from './Styled'
 import { getFraxDeposited, getFraxRewards, getPoolDeposited, isValidFeederPool } from './utils'
-import { useSetSelectedMassetName } from '@apps/masset-provider'
-import { useRewardStreams } from '../../context/RewardStreamsProvider'
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { useFraxStakingState } from '../../context/FraxStakingProvider'
+
+import type { FeederPoolState } from '@apps/data-provider'
+import type { MassetName } from '@apps/types'
+import type { FC } from 'react'
 
 export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> = ({ feederPool, showBalance, ...rest }) => {
   const history = useHistory()
@@ -49,7 +54,7 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
   const userBoostTip = `
     Pool: ${baseApy.toFixed(2)}%<br />
     Vault Rewards:<br /> 
-    ${!!userBoostApy ? `${userBoostApy.toFixed(2)}%` : ''} MTA
+    ${userBoostApy ? `${userBoostApy.toFixed(2)}%` : ''} MTA
     ${(platformRewardsApy > 0 && `<br />${platformRewardsApy.toFixed(2)}% ${platformRewardsToken?.symbol}`) || ''}
   `
   const apyTip = `

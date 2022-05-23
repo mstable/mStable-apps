@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 export const IPFSImg: FC<{ uri?: string; alt?: string }> = ({ uri, alt }) => {
   if (!uri) return null

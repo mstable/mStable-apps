@@ -1,7 +1,8 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { TokenIcon } from './TokenIcon'
+
+import type { FC } from 'react'
 
 interface Props {
   symbol: string

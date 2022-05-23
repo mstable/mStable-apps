@@ -1,6 +1,6 @@
 import 'styled-components'
 
-import { Color, ColorTheme, Spacing, Size, FontSize, ViewportWidth, mixins } from './theme'
+import type { Color, ColorTheme, FontSize, mixins, Size, Spacing, ViewportWidth } from './theme'
 
 declare module 'styled-components' {
   export interface DefaultTheme {

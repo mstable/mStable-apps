@@ -1,10 +1,10 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { useMemo } from 'react'
 
-import type { BoostedVaultState } from '@apps/data-provider'
-
 import { calculateBoost, getPriceCoeff } from './boost'
 import { useVMTABalance } from './useVMTABalance'
+
+import type { BoostedVaultState } from '@apps/data-provider'
 
 export const useCalculateUserBoost = (vault?: BoostedVaultState): number => {
   const vMTABalance = useVMTABalance()

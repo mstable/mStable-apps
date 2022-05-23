@@ -1,17 +1,19 @@
-import React, { FC, useCallback } from 'react'
-import styled from 'styled-components'
-import { utils } from 'ethers'
+import { useCallback } from 'react'
 
-import { ViewportWidth } from '@apps/theme'
-import Medium from '@apps/icons/social/medium.svg'
-import Github from '@apps/icons/social/github.svg'
 import Discord from '@apps/icons/social/discord.svg'
-import Twitter from '@apps/icons/social/twitter.svg'
 import Email from '@apps/icons/social/email.svg'
-
-import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
-import { useBaseCtx } from '../../BaseProviders'
+import Github from '@apps/icons/social/github.svg'
+import Medium from '@apps/icons/social/medium.svg'
+import Twitter from '@apps/icons/social/twitter.svg'
+import { ViewportWidth } from '@apps/theme'
 import { APP_NAME } from '@apps/types'
+import { utils } from 'ethers'
+import styled from 'styled-components'
+
+import { useBaseCtx } from '../../BaseProviders'
+import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
+
+import type { FC } from 'react'
 
 const Link = styled.a`
   color: ${({ theme }) => theme.color.bodyAccent};

@@ -1,14 +1,16 @@
-import React, { FC, useMemo } from 'react'
+import { useMemo } from 'react'
+
+import { toK } from '@apps/formatters'
+import { Color, ViewportWidth } from '@apps/theme'
 import { format, fromUnixTime } from 'date-fns'
 import { Area, AreaChart, Label, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import styled from 'styled-components'
 
-import { Color, ViewportWidth } from '@apps/theme'
-import { toK } from '@apps/formatters'
-
-import { StreamType, useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { RechartsContainer as RechartsContainerBase } from '../../../components/stats/RechartsContainer'
+import { StreamType, useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { rewardsColorMapping } from '../constants'
+
+import type { FC } from 'react'
 
 const green = {
   point: 'rgb(82,204,147)',

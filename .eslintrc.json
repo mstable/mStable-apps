@@ -1,11 +1,14 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "unused-imports", "simple-import-sort", "prettier"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "extends": ["plugin:react/recommended", "plugin:prettier/recommended", "./.eslintrc.base.json"],
+      "plugins": ["@typescript-eslint", "jsx-a11y", "react-hooks", "react"],
       "rules": {
+        // Nx rules
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
           {
@@ -18,42 +21,52 @@
               }
             ]
           }
+        ],
+
+        // Unused imports rules
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+          "warn",
+          {
+            "varsIgnorePattern": "^_",
+            "args": "none",
+            "argsIgnorePattern": "^_",
+            "ignoreRestSiblings": true
+          }
+        ],
+
+        // Import ordering rules
+        "simple-import-sort/imports": [
+          "warn",
+          {
+            "groups": [
+              // Side effect imports
+              ["^\\u0000"],
+              // React Package(s) comes first as seperate group
+              ["^react(-dom(/client)?)?$"],
+              // All other imports
+              ["^@?\\w"],
+              ["^((?!\\u0000$)|/.*|$)"],
+              ["^\\."],
+              // Type imports: keep these last!
+              ["^@?\\w.*\\u0000$"],
+              ["^.*\\u0000$"],
+              ["^\\..*\\u0000$"]
+            ]
+          }
         ]
       }
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
-      "plugins": ["react-hooks"],
-      "rules": {
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/ban-types": "off",
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/naming-convention": "off",
-        "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-empty-interface": "off",
-        "@typescript-eslint/no-unused-vars": "off",
-        "arrow-body-style": "off",
-        "consistent-return": "off",
-        "import/no-default-export": "off",
-        "import/prefer-default-export": "off",
-        "jsx-a11y/anchor-is-valid": "off",
-        "no-console": ["error", { "allow": ["warn", "error"] }],
-        "no-nested-ternary": "off",
-        "no-underscore-dangle": "off",
-        "no-extra-boolean-cast": "off",
-        "radix": "off",
-        "react-hooks/exhaustive-deps": "warn",
-        "react-hooks/rules-of-hooks": "error",
-        "react/jsx-no-useless-fragment": "off",
-        "react/no-unescaped-entities": "off",
-        "react/prop-types": "off"
-      }
+      "extends": ["plugin:@nrwl/nx/typescript", "./.eslintrc.base.json"],
+      "rules": {}
     },
     {
       "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
+      "extends": ["plugin:@nrwl/nx/javascript", "./.eslintrc.base.json"],
       "rules": {}
     }
-  ]
+  ],
+  "settings": { "react": { "version": "detect" } }
 }

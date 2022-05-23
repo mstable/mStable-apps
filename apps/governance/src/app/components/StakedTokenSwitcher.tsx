@@ -1,8 +1,9 @@
-import React, { FC } from 'react'
+import { Dropdown } from '@apps/base/components/core'
 import styled from 'styled-components'
 
-import { Dropdown } from '@apps/base/components/core'
 import { useSetStakedToken, useStakedToken } from '../context/StakedToken'
+
+import type { FC } from 'react'
 
 const StyledDropdown = styled(Dropdown)`
   > *:first-child {

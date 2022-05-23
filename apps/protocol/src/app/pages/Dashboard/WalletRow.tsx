@@ -1,12 +1,13 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
 import { TokenIcon } from '@apps/base/components/core'
-import { CountUp, ThemedSkeleton, TableCell, TableRow } from '@apps/dumb-components'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { useExploreAssetModal } from '@apps/base/hooks'
+import { CountUp, TableCell, TableRow, ThemedSkeleton } from '@apps/dumb-components'
+import styled from 'styled-components'
 
 import { DashNameTableCell } from './Styled'
-import { SubscribedToken } from '@apps/types'
+
+import type { SubscribedToken } from '@apps/types'
+import type { FC } from 'react'
 
 const Balance = styled(CountUp)`
   > * {
@@ -28,7 +29,7 @@ export const WalletRow: FC<{ token: SubscribedToken; type?: 'masset' | 'fasset' 
         <TokenIcon symbol={symbol} />
         <span>{symbol}</span>
       </DashNameTableCell>
-      <TableCell>{!!balance ? <Balance end={balance.simple} /> : <ThemedSkeleton />}</TableCell>
+      <TableCell>{balance ? <Balance end={balance.simple} /> : <ThemedSkeleton />}</TableCell>
     </TableRow>
   )
 }

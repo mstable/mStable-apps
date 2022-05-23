@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
+import { Tooltip } from '@apps/dumb-components'
 import styled from 'styled-components'
 
 import type { StakingRewardsExtended } from '@apps/masset-hooks'
-import { Tooltip } from '@apps/dumb-components'
+import type { FC } from 'react'
 
 interface Props {
   stakingRewards?: StakingRewardsExtended

@@ -1,12 +1,15 @@
-import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { useInterval } from 'react-use'
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
+
+import { BoostedVault__factory } from '@apps/artifacts/typechain'
+import { useAccount, useSigner } from '@apps/base/context/account'
+import { SCALE } from '@apps/types'
 import { getUnixTime } from 'date-fns'
 import { BigNumber } from 'ethers'
+import { useInterval } from 'react-use'
 
-import { BoostedVault, BoostedVault__factory } from '@apps/artifacts/typechain'
-import { useAccount, useSigner } from '@apps/base/context/account'
-import { BoostedVaultAccountState, BoostedVaultState } from '@apps/data-provider'
-import { SCALE } from '@apps/types'
+import type { BoostedVault } from '@apps/artifacts/typechain'
+import type { BoostedVaultAccountState, BoostedVaultState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 type RewardEntry = BoostedVaultAccountState['rewardEntries'][number]
 

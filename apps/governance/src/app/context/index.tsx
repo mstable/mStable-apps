@@ -1,5 +1,3 @@
-import { FC } from 'react'
-
 import { useQuestsQuery } from '@apps/artifacts/graphql/questbook'
 import { useStakingQuery as useStakingQueryHook } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
@@ -9,6 +7,8 @@ import { composedComponent } from '@apps/react-utils'
 import { DelegateeListsProvider } from './DelegateeLists'
 import { QuestManagerProvider } from './QuestManager'
 import { StakedTokenProvider, StakedTokenQueryUpdater } from './StakedToken'
+
+import type { FC } from 'react'
 
 const StakingAccountQueryUpdater: FC = () => {
   const clients = useApolloClients()

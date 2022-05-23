@@ -1,17 +1,19 @@
-import React, { FC, useMemo } from 'react'
+import { useMemo } from 'react'
+
+import { TokenIcon } from '@apps/base/components/core'
 import { useTokenSubscription } from '@apps/base/context/tokens'
+import { BigDecimal } from '@apps/bigdecimal'
+import { ButtonExternal, CountUp, ThemedSkeleton } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
 import { BigNumber, utils } from 'ethers'
 import styled from 'styled-components'
-
-import { ButtonExternal, CountUp, ThemedSkeleton } from '@apps/dumb-components'
-import { TokenIcon } from '@apps/base/components/core'
-import { ViewportWidth } from '@apps/theme'
-import { BigDecimal } from '@apps/bigdecimal'
 
 import { useStakedToken, useStakedTokenQuery } from '../../context/StakedToken'
 import { useStakingStatus } from '../../context/StakingStatus'
 import { useBPTBalApy } from '../../hooks/useBPTBalApy'
 import { useRewardsEarned } from './context'
+
+import type { FC } from 'react'
 
 const BALANCER_URL = 'https://app.balancer.fi/#/pool/0xe2469f47ab58cf9cf59f9822e3c5de4950a41c49000200000000000000000089'
 const MTA_URL = 'https://cowswap.exchange/#/swap?outputCurrency=0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2'

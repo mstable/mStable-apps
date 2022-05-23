@@ -1,19 +1,20 @@
-import React, { FC } from 'react'
+import { BoostedVault__factory } from '@apps/artifacts/typechain'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
+import { usePropose } from '@apps/base/context/transactions'
+import { useCalculateUserBoost } from '@apps/boost'
+import { Button } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
+import { TransactionManifest } from '@apps/transaction-manifest'
 import CountUp from 'react-countup'
 import styled from 'styled-components'
 
-import { BoostedVault__factory } from '@apps/artifacts/typechain'
-import { useSigner, useWalletAddress } from '@apps/base/context/account'
-import { BoostedVaultState } from '@apps/data-provider'
-import { BoostedCombinedAPY, FetchState } from '@apps/types'
 import { useRewardStreams } from '../context/RewardStreamsProvider'
-import { usePropose } from '@apps/base/context/transactions'
-import { useCalculateUserBoost } from '@apps/boost'
-import { ViewportWidth } from '@apps/theme'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { Button } from '@apps/dumb-components'
-
 import { SelectBoost } from './SelectBoost'
+
+import type { BoostedVaultState } from '@apps/data-provider'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { BoostedCombinedAPY, FetchState } from '@apps/types'
+import type { FC } from 'react'
 
 interface Props {
   apy: FetchState<BoostedCombinedAPY>

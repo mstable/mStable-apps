@@ -1,10 +1,13 @@
-import { StakedToken, StakedToken__factory } from '@apps/artifacts/typechain'
-import React, { createContext, Dispatch, FC, SetStateAction, useMemo, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 
+import { useStakedTokenQuery as useStakedTokenQueryHook, useStakingQuery } from '@apps/artifacts/graphql/staking'
+import { StakedToken__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { providerFactory, createUseContextFn } from '@apps/context-utils'
-import { useStakedTokenQuery as useStakedTokenQueryHook, useStakingQuery } from '@apps/artifacts/graphql/staking'
+import { createUseContextFn, providerFactory } from '@apps/context-utils'
+
+import type { StakedToken } from '@apps/artifacts/typechain'
+import type { Dispatch, FC, SetStateAction } from 'react'
 
 interface State {
   options: { [address: string]: { asset: { address: string }; icon: { symbol: string } } }

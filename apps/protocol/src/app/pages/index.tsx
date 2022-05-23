@@ -1,16 +1,17 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
-
-import { MassetName, MASSETS } from '@apps/types'
+import { TokenIcon } from '@apps/base/components/core'
+import { useConnect, useConnected } from '@apps/base/context/account'
 import { useDataState } from '@apps/data-provider'
-import { useConnected, useConnect } from '@apps/base/context/account'
+import { UnstyledButton } from '@apps/dumb-components'
 import { useSetSelectedMassetName } from '@apps/masset-provider'
 import { ViewportWidth } from '@apps/theme'
-import { UnstyledButton } from '@apps/dumb-components'
-import { TokenIcon } from '@apps/base/components/core'
+import { MASSETS } from '@apps/types'
+import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { ReactComponent as LogoImage } from '../icons/mstable.svg'
+
+import type { MassetName } from '@apps/types'
+import type { FC } from 'react'
 
 const StyledTokenIcon = styled(TokenIcon)`
   height: 6rem;

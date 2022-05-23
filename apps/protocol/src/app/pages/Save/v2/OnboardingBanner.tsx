@@ -1,14 +1,14 @@
-import React, { FC } from 'react'
+import { Button, CountUp, Tooltip } from '@apps/dumb-components'
+import { useSelectedMassetName } from '@apps/masset-provider'
+import { ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
-import { ViewportWidth } from '@apps/theme'
-import { CountUp, Button, Tooltip } from '@apps/dumb-components'
-import { useSelectedMassetName } from '@apps/masset-provider'
-
-import { useAvailableSaveApy } from '../../../hooks/useAvailableSaveApy'
-import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 import { DailyApys } from '../../../components/stats/DailyApys'
+import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
+import { useAvailableSaveApy } from '../../../hooks/useAvailableSaveApy'
 import { useOnboarding } from '../hooks'
+
+import type { FC } from 'react'
 
 const APYChart = styled(DailyApys)`
   position: relative;

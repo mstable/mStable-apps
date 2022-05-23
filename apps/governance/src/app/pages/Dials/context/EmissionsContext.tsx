@@ -1,14 +1,18 @@
-import { FC, useEffect } from 'react'
-import { createStateContext } from 'react-use'
+import { useEffect } from 'react'
 
-import { EmissionsController, EmissionsController__factory } from '@apps/artifacts/typechain'
-import { useAccount, useSigner } from '@apps/base/context/account'
-import { useApolloClients } from '@apps/base/context/apollo'
 import { useEmissionsQuery } from '@apps/artifacts/graphql/emissions'
 import { useAccountQuery } from '@apps/artifacts/graphql/staking'
+import { EmissionsController__factory } from '@apps/artifacts/typechain'
+import { useAccount, useSigner } from '@apps/base/context/account'
+import { useApolloClients } from '@apps/base/context/apollo'
+import { createStateContext } from 'react-use'
 
 import { DIALS_METADATA } from '../constants'
-import { Dial, EmissionsData, EmissionsUser } from '../types'
+
+import type { EmissionsController } from '@apps/artifacts/typechain'
+import type { FC } from 'react'
+
+import type { Dial, EmissionsData, EmissionsUser } from '../types'
 
 const [useEmissionsData, EmissionsDataProvider] = createStateContext<EmissionsData | undefined>(undefined)
 

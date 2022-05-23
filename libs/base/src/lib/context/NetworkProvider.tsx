@@ -1,11 +1,14 @@
-import React, { FC, useEffect, createContext, useCallback, useContext, useMemo } from 'react'
-import { createStateContext, useInterval } from 'react-use'
-import { providers } from 'ethers'
-import type { Provider } from '@ethersproject/providers'
+import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 
 import { useFetchState } from '@apps/hooks'
 import { composedComponent } from '@apps/react-utils'
-import { FetchState, MassetName, DEAD_ADDRESS } from '@apps/types'
+import { DEAD_ADDRESS } from '@apps/types'
+import { providers } from 'ethers'
+import { createStateContext, useInterval } from 'react-use'
+
+import type { FetchState, MassetName } from '@apps/types'
+import type { Provider } from '@ethersproject/providers'
+import type { FC } from 'react'
 
 interface NetworkPrices {
   nativeToken?: number
@@ -24,15 +27,15 @@ interface GasPrice {
   instant: number
 }
 
-interface GasWatch {
-  slow: GasWatchPrice
-  normal: GasWatchPrice
-  fast: GasWatchPrice
-  instant: GasWatchPrice
-  ethPrice: number
-  lastUpdated: number
-  sources: GasWatchSource[]
-}
+// interface GasWatch {
+//   slow: GasWatchPrice
+//   normal: GasWatchPrice
+//   fast: GasWatchPrice
+//   instant: GasWatchPrice
+//   ethPrice: number
+//   lastUpdated: number
+//   sources: GasWatchSource[]
+// }
 
 interface MyCryptoGas {
   safeLow: number
@@ -41,29 +44,29 @@ interface MyCryptoGas {
   fastest: number
 }
 
-interface GasWatchPrice {
-  gwei: number
-  usd: number
-}
+// interface GasWatchPrice {
+//   gwei: number
+//   usd: number
+// }
 
-interface GasWatchSource {
-  name: string
-  source: string
-  fast: number
-  standard: number
-  slow: number
-  lastBlock: number
-}
+// interface GasWatchSource {
+//   name: string
+//   source: string
+//   fast: number
+//   standard: number
+//   slow: number
+//   lastBlock: number
+// }
 
-interface GasPoaNetwork {
-  health: boolean
-  block_number: number
-  slow: number
-  standard: number
-  fast: number
-  instant: number
-  block_time: number
-}
+// interface GasPoaNetwork {
+//   health: boolean
+//   block_number: number
+//   slow: number
+//   standard: number
+//   fast: number
+//   instant: number
+//   block_time: number
+// }
 
 interface MaticMainGas {
   safeLow: number
@@ -123,7 +126,7 @@ interface Network<TAddresses, TGqlEndpoints> {
   gqlEndpoints: CoreGqlEndpoints & TGqlEndpoints
   addresses: CoreAddresses & { ERC20: { wMATIC?: string; WETH?: string; FXS?: string } } & TAddresses
   gasStationEndpoint: string
-  getExplorerUrl(entity?: string, type?: 'address' | 'transaction' | 'token' | 'account'): string
+  getExplorerUrl: (entity?: string, type?: 'address' | 'transaction' | 'token' | 'account') => string
   supportedMassets: MassetName[]
 }
 

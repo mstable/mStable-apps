@@ -1,15 +1,18 @@
-import React, { createContext, FC, useContext, useMemo } from 'react'
+import { createContext, useContext, useMemo } from 'react'
+
+import { Arrow } from '@apps/dumb-components'
+import { useBigDecimalInputs, useSlippage } from '@apps/hooks'
 import styled from 'styled-components'
 
-import { BigDecimal } from '@apps/bigdecimal'
-import { FetchState } from '@apps/types'
-import { useSlippage, useBigDecimalInputs, UseBigDecimalInputsArg, BigDecimalInputCallbacks, BigDecimalInputValues } from '@apps/hooks'
-import { Arrow } from '@apps/dumb-components'
-import { AddressOption, PriceImpact } from '@apps/types'
-
+import { AssetInput } from './AssetInput'
 import { ExchangeRate } from './ExchangeRate'
 import { TransactionInfo } from './TransactionInfo'
-import { AssetInput } from './AssetInput'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { BigDecimalInputCallbacks, BigDecimalInputValues, UseBigDecimalInputsArg } from '@apps/hooks'
+import type { FetchState } from '@apps/types'
+import type { AddressOption, PriceImpact } from '@apps/types'
+import type { FC } from 'react'
 
 type Dispatch = [
   BigDecimalInputCallbacks, // input callbacks
@@ -78,7 +81,7 @@ export const ManyToOneAssetExchange: FC<
   Props & {
     outputAddress?: string
     outputAddressOptions?: AddressOption[]
-    setOutputAddress?(address?: string): void
+    setOutputAddress?: (address?: string) => void
     minOutputAmount?: BigDecimal
     outputAmount?: FetchState<BigDecimal>
   }
@@ -143,7 +146,7 @@ export const OneToManyAssetExchange: FC<
   Props & {
     inputAddress?: string
     inputAddressOptions?: AddressOption[]
-    setInputAddress?(address?: string): void
+    setInputAddress?: (address?: string) => void
     maxOutputAmount?: BigDecimal
     inputAmount?: FetchState<BigDecimal>
   }

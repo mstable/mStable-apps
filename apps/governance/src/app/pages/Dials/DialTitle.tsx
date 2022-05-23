@@ -1,7 +1,8 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { DialMetadata } from './types'
+import type { FC } from 'react'
+
+import type { DialMetadata } from './types'
 
 const NetworkLabel = styled.div`
   color: ${({ theme }) => theme.color.bodyAccent};

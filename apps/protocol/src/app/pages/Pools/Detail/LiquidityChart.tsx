@@ -1,17 +1,20 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
-import { DocumentNode, gql, useQuery } from '@apollo/client'
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { format, getUnixTime } from 'date-fns'
+import { useMemo } from 'react'
 
+import { gql, useQuery } from '@apollo/client'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useBlockTimesForDates } from '@apps/base/hooks'
-import { Color } from '@apps/theme'
 import { getKeyTimestamp, periodFormatMapping, toK } from '@apps/formatters'
+import { Color } from '@apps/theme'
+import { format, getUnixTime } from 'date-fns'
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import styled from 'styled-components'
 
-import { useDateFilter, useMetricsState, Metrics, DateRange } from '../../../components/stats/Metrics'
+import { DateRange, Metrics, useDateFilter, useMetricsState } from '../../../components/stats/Metrics'
 import { RechartsContainer } from '../../../components/stats/RechartsContainer'
 import { useSelectedFeederPoolAddress } from '../FeederPoolProvider'
+
+import type { DocumentNode } from '@apollo/client'
+import type { FC } from 'react'
 
 interface AggregateMetricsQueryResult {
   [timestamp: string]: {

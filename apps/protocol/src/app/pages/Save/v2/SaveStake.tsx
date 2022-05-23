@@ -1,20 +1,23 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
-import { StakingRewardsWithPlatformToken__factory } from '@apps/artifacts/typechain'
+import { useMemo } from 'react'
 
-import { BigDecimal } from '@apps/bigdecimal'
-import { usePropose } from '@apps/base/context/transactions'
-import { useTokenAllowance } from '@apps/base/context/tokens'
-import { useSigner } from '@apps/base/context/account'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { useBigDecimalInput } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/masset-hooks'
-import { Table, TableRow, TableCell, Button } from '@apps/dumb-components'
+import { StakingRewardsWithPlatformToken__factory } from '@apps/artifacts/typechain'
 import { MultiRewards } from '@apps/base/components/core'
 import { AssetInput } from '@apps/base/components/forms'
+import { useSigner } from '@apps/base/context/account'
+import { useTokenAllowance } from '@apps/base/context/tokens'
+import { usePropose } from '@apps/base/context/transactions'
+import { Button, Table, TableCell, TableRow } from '@apps/dumb-components'
+import { useBigDecimalInput } from '@apps/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import styled from 'styled-components'
 
-import { useRewardsEarned, useStakingRewards, RewardsEarnedProvider } from '../hooks'
 import { StakingRewards } from '../../../components/rewards/StakingRewards'
+import { RewardsEarnedProvider, useRewardsEarned, useStakingRewards } from '../hooks'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 const Input = styled(AssetInput)`
   height: 2.5rem;

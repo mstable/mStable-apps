@@ -1,20 +1,21 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { BoostedVaultState } from '@apps/data-provider'
-import { useBigDecimalInput } from '@apps/hooks'
-import { ViewportWidth } from '@apps/theme'
-import { DifferentialCountup } from '@apps/dumb-components'
-import { Button, InfoMessage, Widget } from '@apps/dumb-components'
 import { AssetInput } from '@apps/base/components/forms'
+import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
 import { calculateBoost, calculateVMTAForMaxBoost, getPriceCoeff, useVMTABalance } from '@apps/boost'
-
+import { DifferentialCountup } from '@apps/dumb-components'
+import { Button, InfoMessage, Widget } from '@apps/dumb-components'
+import { useBigDecimalInput } from '@apps/hooks'
 // @ts-ignore
 import { ReactComponent as ArrowsSvg } from '@apps/icons/double-arrow.svg'
 // @ts-ignore
 import { ReactComponent as GovSvg } from '@apps/icons/governance-icon.svg'
+import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
+
+import type { BoostedVaultState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const GOVERNANCE_URL = 'https://staking.mstable.app/#/stake'
 

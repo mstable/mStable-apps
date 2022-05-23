@@ -1,13 +1,15 @@
+import { createContext, useMemo } from 'react'
+
+import { useMerkleDropAccountsQuery } from '@apps/artifacts/graphql/merkle-drop'
+import { useAccount } from '@apps/base/context/account'
+import { useApolloClients } from '@apps/base/context/apollo'
 import { BigNumber } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
-import React, { createContext, FC, useMemo } from 'react'
 
-import { useApolloClients } from '@apps/base/context/apollo'
-import { FetchState } from '@apps/types'
-import { useAccount } from '@apps/base/context/account'
-import { useMerkleDropAccountsQuery } from '@apps/artifacts/graphql/merkle-drop'
+import type { FetchState } from '@apps/types'
+import type { FC } from 'react'
 
-import { MerkleClaims } from './types'
+import type { MerkleClaims } from './types'
 
 export const merkleClaimsCtx = createContext<FetchState<MerkleClaims>>(null as never)
 

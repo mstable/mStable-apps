@@ -1,9 +1,10 @@
-import React, { FC, ReactElement } from 'react'
-import styled, { keyframes } from 'styled-components'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { ViewportWidth } from '@apps/theme'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import styled, { keyframes } from 'styled-components'
 
 import { UnstyledButton } from './Button'
+
+import type { FC, ReactElement } from 'react'
 
 export const CardButton = styled(UnstyledButton)<{
   active?: boolean

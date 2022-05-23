@@ -1,5 +1,6 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
+
+import type { FC } from 'react'
 
 const Label = styled.div`
   transform: rotate(90deg);
@@ -110,7 +111,7 @@ const Label = styled.div`
   }
 `
 
-export const RealisticSwitch: FC<{ onClick?(): void; checked: boolean }> = ({ onClick, checked }) => (
+export const RealisticSwitch: FC<{ onClick?: () => void; checked: boolean }> = ({ onClick, checked }) => (
   <Label onClick={onClick}>
     <input type="checkbox" onChange={() => {}} checked={checked} />
     <div className="button">

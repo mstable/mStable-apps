@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 
-import { useFetchState } from '@apps/hooks'
-import { FetchState } from '@apps/types'
-
 import { API_ENDPOINT } from '@apps/base/utils'
+import { useFetchState } from '@apps/hooks'
 
+import type { FetchState } from '@apps/types'
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
 interface stkBPTAPY {
   stkBPTAPY?: number
 }

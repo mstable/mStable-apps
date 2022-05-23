@@ -1,15 +1,15 @@
 import { ErrorCode } from '@ethersproject/logger'
-import * as Numeral from 'numeral'
 import {
-  format,
   eachDayOfInterval,
   eachHourOfInterval,
   eachMonthOfInterval,
   eachQuarterOfInterval,
   eachWeekOfInterval,
   eachYearOfInterval,
+  format,
   fromUnixTime,
 } from 'date-fns'
+import * as Numeral from 'numeral'
 
 export enum TimeMetricPeriod {
   Hour = 'HOUR',

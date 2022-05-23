@@ -1,9 +1,11 @@
-import { FieldPolicy, InMemoryCache } from '@apollo/client'
-import { StakedTokenBalance, Metric, Account } from '@apps/artifacts/graphql/staking'
-import { TypedTypePolicies } from '@apps/artifacts/graphql/staking/apollo-helpers'
+import { InMemoryCache } from '@apollo/client'
 import { BigDecimal } from '@apps/bigdecimal'
 
 import { readAsBD } from './utils'
+
+import type { FieldPolicy } from '@apollo/client'
+import type { Account, Metric, StakedTokenBalance } from '@apps/artifacts/graphql/staking'
+import type { TypedTypePolicies } from '@apps/artifacts/graphql/staking/apollo-helpers'
 
 const typePolicies: TypedTypePolicies = {
   StakedTokenBalance: {

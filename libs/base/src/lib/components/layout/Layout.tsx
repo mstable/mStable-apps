@@ -1,25 +1,19 @@
-import React, { FC } from 'react'
-import styled, {
-  createGlobalStyle,
-  CSSObject,
-  GlobalStyleComponent,
-  Interpolation,
-  InterpolationFunction,
-  ThemedStyledProps,
-} from 'styled-components'
-import reset from 'styled-reset'
-import { TransitionGroup } from 'react-transition-group'
-import { ModalProvider } from 'react-modal-hook'
-
-import { Color, FontSize, Size, Spacing, ViewportWidth } from '@apps/theme'
 import { ReactTooltip, Tooltip } from '@apps/dumb-components'
+import { Color, ViewportWidth } from '@apps/theme'
+import { ModalProvider } from 'react-modal-hook'
+import { TransitionGroup } from 'react-transition-group'
+import styled, { createGlobalStyle } from 'styled-components'
+import reset from 'styled-reset'
 
 import { ModalDataProvider } from '../../context/ModalDataProvider'
-
-import { Footer } from './Footer'
 import { AppBar } from './AppBar'
-import { Toasts } from './Toasts'
 import { BannerMessage } from './BannerMessage'
+import { Footer } from './Footer'
+import { Toasts } from './Toasts'
+
+import type { FontSize, Size, Spacing } from '@apps/theme'
+import type { FC } from 'react'
+import type { CSSObject, GlobalStyleComponent, Interpolation, InterpolationFunction, ThemedStyledProps } from 'styled-components'
 
 interface Theme {
   color: typeof Color & {

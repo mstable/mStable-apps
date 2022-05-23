@@ -1,8 +1,11 @@
-import React, { FC } from 'react'
+import { AchievementUnlocked } from '@apps/dumb-components'
 import styled from 'styled-components'
 
-import { AchievementUnlocked } from '@apps/dumb-components'
-import { Notification, NotificationType, useMarkNotificationAsRead } from '../../context/NotificationsProvider'
+import { NotificationType, useMarkNotificationAsRead } from '../../context/NotificationsProvider'
+
+import type { FC } from 'react'
+
+import type { Notification } from '../../context/NotificationsProvider'
 
 const Title = styled.div`
   font-weight: 600;
@@ -52,31 +55,31 @@ const Container = styled.div<Pick<Notification, 'type'> & { className?: string }
   }
 `
 
-const NotificationItemQuestContainer = styled.div`
-  display: flex !important;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
+// const NotificationItemQuestContainer = styled.div`
+//   display: flex !important;
+//   gap: 1rem;
+//   align-items: center;
+//   justify-content: space-between;
 
-  font-size: 0.875rem;
-  padding: 0.5rem 1rem;
-  border-radius: 2px;
-  border-color: rgb(201, 252, 213);
-  background: rgb(62, 78, 66);
+//   font-size: 0.875rem;
+//   padding: 0.5rem 1rem;
+//   border-radius: 2px;
+//   border-color: rgb(201, 252, 213);
+//   background: rgb(62, 78, 66);
 
-  > :first-child {
-    width: 1.5rem;
-    height: auto;
-  }
+//   > :first-child {
+//     width: 1.5rem;
+//     height: auto;
+//   }
 
-  > :last-child {
-    > :last-child {
-      color: rgba(201, 252, 213, 1);
-    }
-  }
+//   > :last-child {
+//     > :last-child {
+//       color: rgba(201, 252, 213, 1);
+//     }
+//   }
 
-  ${({ theme }) => theme.mixins.mono}
-`
+//   ${({ theme }) => theme.mixins.mono}
+// `
 
 export const NotificationItem: FC<{
   notification: Notification

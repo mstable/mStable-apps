@@ -1,13 +1,15 @@
-import { FC, createContext, useState, useContext } from 'react'
+import { createContext, useContext, useState } from 'react'
+
+import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
+import { useOwnAccount, useSigner } from '@apps/base/context/account'
+import { useNetworkAddresses } from '@apps/base/context/network'
+import { BigDecimal } from '@apps/bigdecimal'
+import { providerFactory } from '@apps/context-utils'
+import { useFetchState } from '@apps/hooks'
 import { useAsync } from 'react-use'
 
-import { FetchState } from '@apps/types'
-import { useFetchState } from '@apps/hooks'
-import { providerFactory } from '@apps/context-utils'
-import { BigDecimal } from '@apps/bigdecimal'
-import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
-import { useNetworkAddresses } from '@apps/base/context/network'
-import { useOwnAccount, useSigner } from '@apps/base/context/account'
+import type { FetchState } from '@apps/types'
+import type { FC } from 'react'
 
 export interface State {
   hasWithdrawnV1Balance: boolean

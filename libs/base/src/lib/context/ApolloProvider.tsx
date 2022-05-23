@@ -1,22 +1,23 @@
-import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import Skeleton from 'react-loading-skeleton'
-import { usePrevious } from 'react-use'
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, NormalizedCacheObject, Operation } from '@apollo/client'
-import { RetryLink } from '@apollo/client/link/retry'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
+import { RetryLink } from '@apollo/client/link/retry'
+import { createNetworkStatusNotifier, initialState, reducer } from '@jameslefrere/react-apollo-network-status'
 import { persistCache } from 'apollo-cache-persist'
 import ApolloLinkTimeout from 'apollo-link-timeout'
-import {
-  createNetworkStatusNotifier,
-  NetworkStatus,
-  NetworkStatusAction,
-  reducer,
-  initialState,
-} from '@jameslefrere/react-apollo-network-status'
+import Skeleton from 'react-loading-skeleton'
+import { usePrevious } from 'react-use'
 
 import { caches } from './apolloCaches'
+import { useNetwork } from './NetworkProvider'
 import { useAddErrorNotification } from './NotificationsProvider'
-import { useNetwork, AllGqlEndpoints } from './NetworkProvider'
+
+import type { NormalizedCacheObject, Operation } from '@apollo/client'
+import type { NetworkStatus, NetworkStatusAction } from '@jameslefrere/react-apollo-network-status'
+import type { FC } from 'react'
+
+import type { AllGqlEndpoints } from './NetworkProvider'
 
 type ApolloClients = Record<AllGqlEndpoints, ApolloClient<NormalizedCacheObject>>
 
@@ -37,7 +38,7 @@ export const ApolloProvider: FC = ({ children }) => {
   const networkChanged = previousChainId && network.chainId !== previousChainId
 
   // Serialized array of failed endpoints to be excluded from the client
-  const [failedEndpoints, setFailedEndpoints] = useState<string>('')
+  const [failedEndpoints] = useState<string>('')
 
   const handleError = useCallback(
     (message: string, error?: unknown): void => {

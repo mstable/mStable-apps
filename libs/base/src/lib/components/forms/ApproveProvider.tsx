@@ -1,13 +1,16 @@
-import React, { createContext, Dispatch, FC, SetStateAction, useContext, useMemo, useState } from 'react'
-import { constants } from 'ethers'
+import { createContext, useContext, useMemo, useState } from 'react'
+
 import { ERC20__factory } from '@apps/artifacts/typechain'
-
 import { BigDecimal } from '@apps/bigdecimal'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import { constants } from 'ethers'
 
-import { useHasPendingApproval, usePropose } from '../../context/TransactionsProvider'
-import { useTokenAllowance, useTokenSubscription } from '../../context/TokensProvider'
 import { useSigner } from '../../context/AccountProvider'
+import { useTokenAllowance, useTokenSubscription } from '../../context/TokensProvider'
+import { useHasPendingApproval, usePropose } from '../../context/TransactionsProvider'
+
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { Dispatch, FC, SetStateAction } from 'react'
 
 export enum Mode {
   Exact = 'exact',

@@ -1,23 +1,22 @@
-import React, { FC } from 'react'
+import { createTabsContext, TabsOfTruth, ThemedSkeleton } from '@apps/dumb-components'
+import { useURLQuery } from '@apps/hooks'
+import { ViewportWidth } from '@apps/theme'
+import { Link } from 'react-router-dom'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
-import { useURLQuery } from '@apps/hooks'
-import { TabsOfTruth, createTabsContext, ThemedSkeleton } from '@apps/dumb-components'
-import { ViewportWidth } from '@apps/theme'
-
-import { useStakingStatus } from '../../context/StakingStatus'
 import { useStakedTokenQuery } from '../../context/StakedToken'
-
+import { useStakingStatus } from '../../context/StakingStatus'
 import { ClaimForm } from './ClaimForm'
 import { ClaimGraph } from './ClaimGraph'
-import { StakeSelection } from './StakeSelection'
 import { StakeForm } from './StakeForm'
 import { StakeGraph } from './StakeGraph'
 import { StakeMigration } from './StakeMigration'
+import { StakeSelection } from './StakeSelection'
 import { WithdrawForm } from './WithdrawForm'
 import { WithdrawGraph } from './WithdrawGraph'
-import { Link } from 'react-router-dom'
+
+import type { FC } from 'react'
 
 enum Tabs {
   Stake,

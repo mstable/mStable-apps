@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { FontSize } from '@apps/theme'
+import styled from 'styled-components'
 
 /**
  * @deprecated

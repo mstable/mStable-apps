@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from 'react'
-import { useAllTokensQuery as useAllTokensProtocolQuery } from '@apps/artifacts/graphql/protocol'
-import { useFeederTokensQuery } from '@apps/artifacts/graphql/feeders'
-import { useTokensQuery as useStakingTokensQuery } from '@apps/artifacts/graphql/staking'
 
+import { useFeederTokensQuery } from '@apps/artifacts/graphql/feeders'
+import { useAllTokensQuery as useAllTokensProtocolQuery } from '@apps/artifacts/graphql/protocol'
+import { useTokensQuery as useStakingTokensQuery } from '@apps/artifacts/graphql/staking'
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { useApolloClients } from '@apps/base/context/apollo'
 

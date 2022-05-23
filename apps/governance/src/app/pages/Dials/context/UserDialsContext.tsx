@@ -1,8 +1,12 @@
-import { FC, Reducer, useEffect } from 'react'
+import { useEffect } from 'react'
+
 import { createReducerContext } from 'react-use'
 
-import { UserDialPreferences } from '../types'
 import { useEmissionsData } from './EmissionsContext'
+
+import type { FC, Reducer } from 'react'
+
+import type { UserDialPreferences } from '../types'
 
 type UserDialsPreferencesAction =
   | {

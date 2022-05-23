@@ -1,7 +1,10 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { StepProps, Step } from './Step'
+import { Step } from './Step'
+
+import type { FC } from 'react'
+
+import type { StepProps } from './Step'
 
 export interface Props {
   steps: StepProps[]

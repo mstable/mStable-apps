@@ -1,9 +1,10 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
 import { useToggle } from 'react-use'
+import styled from 'styled-components'
 
 import { UnstyledButton } from './Button'
 import { Chevron } from './Chevron'
+
+import type { FC } from 'react'
 
 const Content = styled.div<{ collapsed: boolean }>`
   overflow: hidden;

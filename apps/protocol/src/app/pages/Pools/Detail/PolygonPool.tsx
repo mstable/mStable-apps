@@ -1,23 +1,23 @@
-import React, { useMemo, useState } from 'react'
-import type { FC } from 'react'
-import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import Skeleton from 'react-loading-skeleton'
+import { useMemo, useState } from 'react'
 
-import type { FeederPoolState } from '@apps/data-provider'
 import { TabCard } from '@apps/dumb-components'
 import { useFeederPool } from '@apps/masset-hooks'
+import Skeleton from 'react-loading-skeleton'
+import { useParams } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
+import { FraxStakingProvider } from '../../../context/FraxStakingProvider'
 import { RewardStreamsProvider } from '../../../context/RewardStreamsProvider'
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { ProtocolPageHeader as PageHeader } from '../../ProtocolPageHeader'
 import { FeederPoolProvider, useSelectedFeederPoolState } from '../FeederPoolProvider'
-
 import { Deposit } from './Deposit'
-import { Withdraw } from './Withdraw'
-import { FraxStakingProvider } from '../../../context/FraxStakingProvider'
-import { FraxStake } from './Frax/FraxStake'
 import { FraxPoolDetailCard } from './Frax/FraxPoolDetailCard'
+import { FraxStake } from './Frax/FraxStake'
+import { Withdraw } from './Withdraw'
+
+import type { FeederPoolState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const Inner = styled.div`
   max-width: 36rem;

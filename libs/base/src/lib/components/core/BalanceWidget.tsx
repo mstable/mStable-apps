@@ -1,8 +1,9 @@
-import React, { FC } from 'react'
+import { CountUp } from '@apps/dumb-components'
 import styled from 'styled-components'
 
-import { CountUp } from '@apps/dumb-components'
 import { TokenIcon } from './TokenIcon'
+
+import type { FC } from 'react'
 
 interface Props {
   token: string

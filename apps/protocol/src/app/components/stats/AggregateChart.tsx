@@ -1,20 +1,22 @@
-import React, { FC, useMemo } from 'react'
-import { DocumentNode, gql, useQuery } from '@apollo/client'
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { format, getUnixTime } from 'date-fns'
+import { useMemo } from 'react'
 
+import { gql, useQuery } from '@apollo/client'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { useSelectedMassetConfig } from '@apps/masset-provider'
-import { ThemedSkeleton } from '@apps/dumb-components'
 import { ChainIds, useChainIdCtx } from '@apps/base/context/network'
 import { useBlockTimesForDates } from '@apps/base/hooks'
-import { periodFormatMapping, toK, getKeyTimestamp } from '@apps/formatters'
+import { ThemedSkeleton } from '@apps/dumb-components'
+import { getKeyTimestamp, periodFormatMapping, toK } from '@apps/formatters'
+import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { Color } from '@apps/theme'
+import { format, getUnixTime } from 'date-fns'
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { useSelectedSavingsContractState } from '../../context/SelectedSaveVersionProvider'
-
 import { DateRange, Metrics, useDateFilter, useMetricsState } from './Metrics'
 import { RechartsContainer } from './RechartsContainer'
+
+import type { DocumentNode } from '@apollo/client'
+import type { FC } from 'react'
 
 interface AggregateMetricsQueryResult {
   [timestamp: string]: {

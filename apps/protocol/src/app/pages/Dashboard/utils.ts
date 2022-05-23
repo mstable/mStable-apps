@@ -1,9 +1,12 @@
 import { ChainIds, getNetwork } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { BigDecimal } from '@apps/bigdecimal'
-import { FeederPoolState, MassetState, PoolType } from '@apps/data-provider'
-import { StakingRewardsExtended } from '@apps/masset-hooks'
-import { StakeData } from '../../context/FraxStakingProvider'
+import { PoolType } from '@apps/data-provider'
+
+import type { FeederPoolState, MassetState } from '@apps/data-provider'
+import type { StakingRewardsExtended } from '@apps/masset-hooks'
+
+import type { StakeData } from '../../context/FraxStakingProvider'
 
 const {
   addresses: { WBTC, MTA },

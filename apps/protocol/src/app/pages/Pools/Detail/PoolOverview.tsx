@@ -1,17 +1,19 @@
-import React, { FC, ReactElement, useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
+
+import { CardButton as Button, CardContainer as Card, CountUp, DifferentialCountup, Tooltip, TransitionCard } from '@apps/dumb-components'
 import styled from 'styled-components'
 
-import { CountUp, DifferentialCountup, TransitionCard, Tooltip, CardContainer as Card, CardButton as Button } from '@apps/dumb-components'
-
-import { useRewardStreams } from '../../../context/RewardStreamsProvider'
+import { PokeBoost } from '../../../components/PokeBoost'
 import { UserBoost } from '../../../components/rewards/UserBoost'
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
+import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'
+import { LiquidityMessage } from './LiquidityMessage'
 import { Position } from './Position'
 import { UserRewards } from './UserRewards'
-import { LiquidityMessage } from './LiquidityMessage'
-import { PokeBoost } from '../../../components/PokeBoost'
+
+import type { FC, ReactElement } from 'react'
 
 enum Selection {
   Stake = 'stake',

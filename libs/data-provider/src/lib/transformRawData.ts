@@ -1,13 +1,13 @@
+import { BigDecimal } from '@apps/bigdecimal'
+import { PoolType } from '@apps/types'
 import { BigNumber } from 'ethers'
 
-import { TokenAllFragment } from '@apps/artifacts/graphql/protocol'
-import { BoostedSavingsVaultAllFragment } from '@apps/artifacts/graphql/feeders'
-import { BigDecimal } from '@apps/bigdecimal'
-import type { MassetName, SubscribedToken } from '@apps/types'
-import { PoolType } from '@apps/types'
-
+import type { BoostedSavingsVaultAllFragment } from '@apps/artifacts/graphql/feeders'
+import type { TokenAllFragment } from '@apps/artifacts/graphql/protocol'
 import type { Tokens } from '@apps/base/context/tokens'
+import type { MassetName, SubscribedToken } from '@apps/types'
 
+import type { RawData } from './DataProvider'
 import type {
   BassetState,
   BassetStatus,
@@ -18,8 +18,6 @@ import type {
   MassetState,
   SavingsContractState,
 } from './types'
-
-import type { RawData } from './DataProvider'
 
 type NonNullableMasset = NonNullable<RawData['massets']>['massets'][number]
 

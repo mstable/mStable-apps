@@ -1,25 +1,28 @@
-import React, { FC, useEffect, useLayoutEffect } from 'react'
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
-import { useEffectOnce } from 'react-use'
+import { useEffect, useLayoutEffect } from 'react'
 
-import { APP_NAME } from '@apps/types'
-import { useBaseCtx, MessageHandler } from '@apps/base'
+import { MessageHandler, useBaseCtx } from '@apps/base'
+import { useBannerMessage } from '@apps/base/context/banner'
 import { ChainIds, useChainIdCtx, useNetwork } from '@apps/base/context/network'
-import { IBannerMessage, useBannerMessage } from '@apps/base/context/banner'
 import { useURLQuery } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/masset-provider'
+import { APP_NAME } from '@apps/types'
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom'
+import { useEffectOnce } from 'react-use'
+
 import { RewardStreamsProvider } from './context/RewardStreamsProvider'
 import { SelectedSaveVersionProvider } from './context/SelectedSaveVersionProvider'
-
 import { Dashboard } from './pages/Dashboard'
-import { Save } from './pages/Save'
-import { NotFound } from './pages/NotFound'
-import { Stats } from './pages/Stats'
 import { EarnRedirect } from './pages/EarnRedirect'
+import { Exchange } from './pages/Exchange'
+import { NotFound } from './pages/NotFound'
 import { Pools } from './pages/Pools'
 import { PoolDetail } from './pages/Pools/Detail'
-import { Exchange } from './pages/Exchange'
+import { Save } from './pages/Save'
+import { Stats } from './pages/Stats'
+
+import type { BannerMessageProps } from '@apps/base/context/banner'
+import type { FC } from 'react'
 
 const ProtocolRoutes: FC = () => {
   const { supportedMassets } = useNetwork()
@@ -91,9 +94,8 @@ export const ProtocolApp: FC = () => {
 
   // Handle message prioritisation:
   useLayoutEffect(() => {
-    let message: IBannerMessage | undefined
+    let message: BannerMessageProps | undefined
     const isPolygon = chainId === ChainIds.MaticMainnet
-    const isEthMainnet = chainId === ChainIds.EthereumMainnet
 
     if (isPolygon) {
       message = MessageHandler.graph

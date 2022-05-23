@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 
-import { BigDecimalInputValue } from '@apps/hooks'
 import { useSelectedMassetConfig } from '@apps/masset-provider'
-import { InputRatios, ScaledInput } from '@apps/types'
+
+import type { BigDecimalInputValue } from '@apps/hooks'
+import type { InputRatios, ScaledInput } from '@apps/types'
 
 const RAI = '0x03ab458634910aad20ef5f1c8ee96f1d6ac54919'
 

@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { UnstyledButton } from '@apps/dumb-components'
+import styled from 'styled-components'
 
 export const SwitchButton = styled(UnstyledButton)`
   display: flex;

@@ -1,17 +1,19 @@
-import React, { FC, useEffect } from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import { useBaseCtx } from '@apps/base'
 import { APP_NAME } from '@apps/types'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
-import { Stake } from './pages/Stake'
-import { Quests } from './pages/Quests'
-import { Vote } from './pages/Vote'
-import { LeaderboardPage } from './pages/Vote/LeaderboardPage'
-import { Delegatee } from './pages/Vote/Delegatee'
-import { Stats } from './pages/Stats'
 import { Dials } from './pages/Dials'
 import { NotFound } from './pages/NotFound'
+import { Quests } from './pages/Quests'
+import { Stake } from './pages/Stake'
+import { Stats } from './pages/Stats'
+import { Vote } from './pages/Vote'
+import { Delegatee } from './pages/Vote/Delegatee'
+import { LeaderboardPage } from './pages/Vote/LeaderboardPage'
+
+import type { FC } from 'react'
 
 const GovernanceRoutes: FC = () => {
   return (

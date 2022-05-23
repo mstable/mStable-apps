@@ -1,8 +1,8 @@
 import { BigNumber } from 'ethers'
-import { keccak256, solidityKeccak256, formatUnits } from 'ethers/lib/utils'
+import { formatUnits, keccak256, solidityKeccak256 } from 'ethers/lib/utils'
 import { MerkleTree } from 'merkletreejs'
 
-import { MerkleClaim, MerkleClaimProof } from './types'
+import type { MerkleClaim, MerkleClaimProof } from './types'
 
 const hashFn = (data: string) => keccak256(data).slice(2)
 

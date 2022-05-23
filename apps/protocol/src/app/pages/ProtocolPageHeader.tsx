@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
-
 import { PageHeader } from '@apps/base/components/core'
 import { useNetwork } from '@apps/base/context/network'
 import { MassetSwitcher } from '@apps/masset-switcher'
+
+import type { FC } from 'react'
 
 interface Props {
   title: string

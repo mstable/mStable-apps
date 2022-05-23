@@ -1,15 +1,15 @@
-import React, { FC } from 'react'
+import { Button } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
-import { ViewportWidth } from '@apps/theme'
-import { Button } from '@apps/dumb-components'
 import { useEmissionsData } from './context/EmissionsContext'
 import { useEpochWeekNumber } from './context/EpochContext'
-
-import { useSystemView } from './context/ViewOptionsContext'
 import { useUserDialPreferences } from './context/UserDialsContext'
-import { DialTable } from './DialTable'
+import { useSystemView } from './context/ViewOptionsContext'
 import { DialsSubmit } from './DialsSubmit'
+import { DialTable } from './DialTable'
+
+import type { FC } from 'react'
 
 const Buttons = styled.div`
   display: flex;

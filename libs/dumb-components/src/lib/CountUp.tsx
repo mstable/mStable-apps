@@ -1,9 +1,12 @@
-import React, { FC, useEffect, useRef } from 'react'
-import { useCountUp, CountUpProps } from 'react-countup'
-import styled from 'styled-components'
+import { useEffect, useRef } from 'react'
 
 import { useIsDarkMode } from '@apps/browser-settings'
 import { Color } from '@apps/theme'
+import { useCountUp } from 'react-countup'
+import styled from 'styled-components'
+
+import type { FC } from 'react'
+import type { CountUpProps } from 'react-countup'
 
 interface Props extends CountUpProps {
   container?: FC

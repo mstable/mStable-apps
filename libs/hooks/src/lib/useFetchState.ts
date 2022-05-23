@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
 
-import { FetchState } from '@apps/types'
+import type { FetchState } from '@apps/types'
 
 interface FetchStateCallbacks<T> {
-  value(value?: T): void
-  error(error: string): void
-  fetching(): void
+  value: (value?: T) => void
+  error: (error: string) => void
+  fetching: () => void
 }
 
 export const useFetchState = <T>(initialState: FetchState<T> = {}): [FetchState<T>, FetchStateCallbacks<T>] => {

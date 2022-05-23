@@ -1,10 +1,10 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import { DelegateeInfo } from '@mstable/delegatee-lists'
-
-import { truncateAddress } from '@apps/formatters'
 import { IPFSImg, UserIcon } from '@apps/base/components/core'
 import { TableCell } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
+import styled from 'styled-components'
+
+import type { DelegateeInfo } from '@mstable/delegatee-lists'
+import type { FC } from 'react'
 
 const DisplayName = styled.div<{ isTitleAddress: boolean }>`
   ${({ isTitleAddress, theme }) => isTitleAddress && theme.mixins.numeric};

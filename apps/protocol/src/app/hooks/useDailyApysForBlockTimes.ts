@@ -1,9 +1,11 @@
 import { useMemo } from 'react'
-import { getUnixTime } from 'date-fns'
-import { useQuery, gql, DocumentNode } from '@apollo/client'
 
+import { gql, useQuery } from '@apollo/client'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { getKeyTimestamp } from '@apps/formatters'
+import { getUnixTime } from 'date-fns'
+
+import type { DocumentNode } from '@apollo/client'
 
 interface BlockTime {
   timestamp: number

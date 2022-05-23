@@ -1,12 +1,14 @@
-import React, { FC, useEffect, useMemo } from 'react'
-import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
-import { useLocation } from 'react-use'
+import { useEffect, useMemo } from 'react'
 
+import { Dropdown } from '@apps/base/components/core'
 import { useDataState } from '@apps/data-provider'
 import { useSelectedMasset, useSelectedMassetName, useSetSelectedMassetName } from '@apps/masset-provider'
-import { MassetName } from '@apps/types'
-import { Dropdown } from '@apps/base/components/core'
+import { useHistory } from 'react-router-dom'
+import { useLocation } from 'react-use'
+import styled from 'styled-components'
+
+import type { MassetName } from '@apps/types'
+import type { FC } from 'react'
 
 const StyledDropdown = styled(Dropdown)`
   > *:first-child {

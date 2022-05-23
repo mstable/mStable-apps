@@ -1,11 +1,10 @@
-import React, { FC, ReactElement } from 'react'
-import styled, { css } from 'styled-components'
-
 import { UnstyledButton } from '@apps/dumb-components'
-
 import { ReactComponent as CheckmarkIcon } from '@apps/icons/checkmark.svg'
 import { ReactComponent as ChevronIcon } from '@apps/icons/chevron-down.svg'
 import { ReactComponent as ExternalIcon } from '@apps/icons/external-link-arrow.svg'
+import styled, { css } from 'styled-components'
+
+import type { FC, ReactElement } from 'react'
 
 interface Props {
   className?: string

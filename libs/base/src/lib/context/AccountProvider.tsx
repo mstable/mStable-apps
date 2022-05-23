@@ -1,22 +1,25 @@
-import type { API, Wallet } from 'bnc-onboard/dist/src/interfaces'
-import type { FC } from 'react'
-import Onboard from 'bnc-onboard'
-import type { Web3Provider as EthersWeb3Provider, BaseProvider as Provider } from '@ethersproject/providers'
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-use'
-import { ethers, utils } from 'ethers'
-import { composedComponent } from '@apps/react-utils'
+/* eslint-disable new-cap */
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
+import { composedComponent } from '@apps/react-utils'
+import { APP_NAME } from '@apps/types'
+import Onboard from 'bnc-onboard'
+import { ethers, utils } from 'ethers'
+import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-use'
+
+import { useBaseCtx } from '../BaseProviders'
 import { useStakeSignatures } from '../hooks'
 import { API_ENDPOINT } from '../utils'
-import { useBaseCtx } from '../BaseProviders'
-import { APP_NAME } from '@apps/types'
+import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
+
+import type { BaseProvider as Provider, Web3Provider as EthersWeb3Provider } from '@ethersproject/providers'
+import type { API, Wallet } from 'bnc-onboard/dist/src/interfaces'
+import type { FC } from 'react'
 
 export interface OnboardCtx {
   onboard?: API
-  connect(): void
-  reset(): void
+  connect: () => void
+  reset: () => void
   connected: boolean
   address?: string
   balance?: string

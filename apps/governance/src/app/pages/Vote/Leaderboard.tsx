@@ -1,17 +1,19 @@
-import React, { FC, useMemo, useState } from 'react'
-import { BigDecimal } from '@apps/bigdecimal'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import { useMemo, useState } from 'react'
 
 import { useLeaderboardQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
+import { BigDecimal } from '@apps/bigdecimal'
 import { Table, TableCell, TableRow, UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
 import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
-import { useStakingQuery } from '../../context'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { useDelegateesAll } from '../../context/DelegateeLists'
 import { DelegateCell } from '../../components/DelegateCell'
+import { useStakingQuery } from '../../context'
+import { useDelegateesAll } from '../../context/DelegateeLists'
+
+import type { FC } from 'react'
 
 interface Props {
   preview?: boolean

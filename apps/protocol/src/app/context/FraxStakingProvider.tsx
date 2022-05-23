@@ -1,15 +1,18 @@
-import { BoostedAPY } from '@apps/types'
-import React, { FC, createContext, useEffect, useRef, useMemo, useContext } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef } from 'react'
+
+import { ERC20__factory, FraxCrossChainFarm__factory } from '@apps/artifacts/typechain'
+import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
+import { useBlockNow } from '@apps/base/context/block'
+import { useNetworkAddresses } from '@apps/base/context/network'
+import { BigDecimal } from '@apps/bigdecimal'
+import { useFetchState } from '@apps/hooks'
 import { useEffectOnce } from 'react-use'
 
-import { ERC20, ERC20__factory, FraxCrossChainFarm, FraxCrossChainFarm__factory } from '@apps/artifacts/typechain'
-import { useFetchState } from '@apps/hooks'
-import { FetchState } from '@apps/types'
-import { BigDecimal } from '@apps/bigdecimal'
-
-import { MaticMainnet, useNetworkAddresses } from '@apps/base/context/network'
-import { useBlockNow } from '@apps/base/context/block'
-import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
+import type { ERC20, FraxCrossChainFarm } from '@apps/artifacts/typechain'
+import type { MaticMainnet } from '@apps/base/context/network'
+import type { BoostedAPY } from '@apps/types'
+import type { FetchState } from '@apps/types'
+import type { FC } from 'react'
 
 export interface StakeData {
   earned: { address: string; amount: BigDecimal; symbol: string }[]

@@ -1,15 +1,19 @@
-import React, { useMemo } from 'react'
-import type { FC } from 'react'
+import { useMemo } from 'react'
+
 import { useAccount } from '@apps/base/context/account'
-import { MassetState, useDataState } from '@apps/data-provider'
+import { useDataState } from '@apps/data-provider'
 import { CountUp, Tooltip } from '@apps/dumb-components'
-import styled from 'styled-components'
-import { useTotalRewards } from './RewardsContext'
-import { getFraxDeposited, getFraxRewards, getPoolDeposited, getSaveDeposited, isValidFeederPool, useMTAPrice, useWBTCPrice } from './utils'
 import { ViewportWidth } from '@apps/theme'
-import { useRewardsEarned, useStakingRewards } from '../Save/hooks'
+import styled from 'styled-components'
+
 import { useFraxStakingState } from '../../context/FraxStakingProvider'
+import { useRewardsEarned, useStakingRewards } from '../Save/hooks'
+import { useTotalRewards } from './RewardsContext'
 import { DashboardFilter as DF } from './types'
+import { getFraxDeposited, getFraxRewards, getPoolDeposited, getSaveDeposited, isValidFeederPool, useMTAPrice, useWBTCPrice } from './utils'
+
+import type { MassetState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 export const Item = styled.div`
   display: flex;

@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import { useToggle } from 'react-use'
-
 import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
 import { UnstyledButton } from '@apps/dumb-components'
+import { useToggle } from 'react-use'
+import styled from 'styled-components'
 
 import { useSelectedFeederPoolAssets, useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { MintExact } from './MintExact'
 import { MintLP } from './MintLP'
+
+import type { FC } from 'react'
 
 const MintPathBox = styled.div<{ protip?: boolean }>`
   display: flex;

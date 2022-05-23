@@ -1,12 +1,13 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 
-import { MassetConfig } from '@apps/masset-provider'
-import { IBannerMessage } from '../../context/BannerProvider'
+import type { MassetConfig } from '@apps/masset-provider'
+
+import type { BannerMessageProps } from '../../context/BannerProvider'
 
 interface Props {
-  recollat(massetConfig: MassetConfig): IBannerMessage
-  graph: IBannerMessage
-  olympus: IBannerMessage
+  recollat: (massetConfig: MassetConfig) => BannerMessageProps
+  graph: BannerMessageProps
+  olympus: BannerMessageProps
 }
 
 export const MessageHandler: Props = {

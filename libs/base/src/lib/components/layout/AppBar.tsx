@@ -1,21 +1,22 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
-import { useShowSubgraphStatus } from '@apps/browser-settings'
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
 
-import { ReactComponent as LogoSvg } from '@apps/icons/mstable-small.svg'
-import { UnstyledButton, ActivitySpinner } from '@apps/dumb-components'
-import { TransactionStatus } from '@apps/transaction-manifest'
 import { TokenIcon } from '@apps/base/components/core'
+import { useShowSubgraphStatus } from '@apps/browser-settings'
+import { ActivitySpinner, UnstyledButton } from '@apps/dumb-components'
+import { ReactComponent as LogoSvg } from '@apps/icons/mstable-small.svg'
+import { TransactionStatus } from '@apps/transaction-manifest'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { useTransactionsState } from '../../context/TransactionsProvider'
 import { useNetwork } from '../../context/NetworkProvider'
-
+import { useTransactionsState } from '../../context/TransactionsProvider'
+import { GraphButton } from './GraphButton'
 import { Navigation } from './Navigation'
 import { SettingsButton } from './SettingsButton'
 import { WalletButton } from './WalletButton'
-import { GraphButton } from './GraphButton'
+
+import type { FC } from 'react'
 
 const Logo = styled(LogoSvg)`
   width: 1.75rem;

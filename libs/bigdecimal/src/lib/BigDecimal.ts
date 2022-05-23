@@ -1,6 +1,8 @@
-import { BigNumber, BigNumberish, utils } from 'ethers'
-import { BigNumber as FractionalBigNumber } from 'bignumber.js'
 import { toK } from '@apps/formatters'
+import { BigNumber as FractionalBigNumber } from 'bignumber.js'
+import { BigNumber, utils } from 'ethers'
+
+import type { BigNumberish } from 'ethers'
 
 export const SCALE = BigNumber.from((1e18).toString())
 export const RATIO_SCALE = BigNumber.from((1e8).toString())

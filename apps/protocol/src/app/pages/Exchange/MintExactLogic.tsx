@@ -1,21 +1,24 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
 import { Masset__factory } from '@apps/artifacts/typechain'
-import { useTokens, useTokensState } from '@apps/base/context/tokens'
+import { ManyToOneAssetExchange, SendButton, useMultiAssetExchangeDispatch, useMultiAssetExchangeState } from '@apps/base/components/forms'
 import { useSigner, useWalletAddress } from '@apps/base/context/account'
+import { useTokens, useTokensState } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { ManyToOneAssetExchange, useMultiAssetExchangeDispatch, useMultiAssetExchangeState, SendButton } from '@apps/base/components/forms'
-import { MassetState } from '@apps/data-provider'
 import { useMinimumOutput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import styled from 'styled-components'
 
-import { useScaledInputs } from '../../hooks/useScaledInputs'
-import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
+import { useScaledInputs } from '../../hooks/useScaledInputs'
+import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
+
+import type { MassetState } from '@apps/data-provider'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 const formId = 'mint'
 

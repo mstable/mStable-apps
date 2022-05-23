@@ -1,6 +1,8 @@
-import React, { FC } from 'react'
+import { AssetExchange } from './AssetExchange'
 
-import { AssetExchange, Props } from './AssetExchange'
+import type { FC } from 'react'
+
+import type { Props } from './AssetExchange'
 
 export const AssetSwap: FC<Props> = ({
   inputAddressOptions,

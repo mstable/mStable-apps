@@ -1,10 +1,10 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
 import { ReactComponent as LockIcon } from '@apps/icons/lock-alt.svg'
 import { ReactComponent as TokensIcon } from '@apps/icons/tokens.svg'
+import styled from 'styled-components'
 
 import { UnstyledButton } from './Button'
+
+import type { FC } from 'react'
 
 interface Props {
   title: string

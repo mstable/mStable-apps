@@ -1,22 +1,27 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
+
 import { useAccount } from '@apps/base/context/account'
 import { useDataState } from '@apps/data-provider'
 import { InfoButton, TabsLeftAlign } from '@apps/dumb-components'
-import Skeleton from 'react-loading-skeleton'
-import styled from 'styled-components'
-import { Overview } from './Overview'
-import { WalletTable } from './WalletTable'
-import { RewardsProvider, useReset } from './RewardsContext'
-import { Illustration } from './Illustration'
-import { ViewportWidth } from '@apps/theme'
-import { useHistory } from 'react-router-dom'
-import { useSelectedMasset } from '@apps/masset-provider'
 import { ReactComponent as Logo } from '@apps/icons/mstable.svg'
-import { NetworkSwitcher } from './NetworkSwitcher'
-import { RewardsEarnedProvider, StakingRewardsProvider } from '../Save/hooks'
+import { useSelectedMasset } from '@apps/masset-provider'
+import { ViewportWidth } from '@apps/theme'
+import Skeleton from 'react-loading-skeleton'
+import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
+
 import { FraxStakingProvider } from '../../context/FraxStakingProvider'
+import { RewardsEarnedProvider, StakingRewardsProvider } from '../Save/hooks'
 import { DashboardTable } from './DashboardTable'
-import { DashboardFilter, DashboardFilter as DF } from './types'
+import { Illustration } from './Illustration'
+import { NetworkSwitcher } from './NetworkSwitcher'
+import { Overview } from './Overview'
+import { RewardsProvider, useReset } from './RewardsContext'
+import { DashboardFilter as DF } from './types'
+
+import type { FC } from 'react'
+
+import type { DashboardFilter } from './types'
 
 const tabs = {
   [DF.User]: {

@@ -1,11 +1,12 @@
-import React, { FC, createContext, useContext, useCallback, useMemo, useReducer, Reducer } from 'react'
-
-import { useSound } from '@apps/browser-settings'
+import { createContext, useCallback, useContext, useMemo, useReducer } from 'react'
 
 // @ts-ignore
 import achievement from '@apps/assets/sounds/achievement.mp3'
 // @ts-ignore
 import rareAchievement from '@apps/assets/sounds/rare-achievement.mp3'
+import { useSound } from '@apps/browser-settings'
+
+import type { FC, Reducer } from 'react'
 
 enum Actions {
   Add,
@@ -50,8 +51,8 @@ interface Dispatch {
   addErrorNotification: AddNotificationCallback
   addInfoNotification: AddNotificationCallback
   addSuccessNotification: AddNotificationCallback
-  addQuestNotification(title: string, questPoints?: number): void
-  markNotificationAsRead(id: string): void
+  addQuestNotification: (title: string, questPoints?: number) => void
+  markNotificationAsRead: (id: string) => void
 }
 
 const reducer: Reducer<State, Action> = (state, action) => {

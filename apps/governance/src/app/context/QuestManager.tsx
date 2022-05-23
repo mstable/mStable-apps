@@ -1,10 +1,13 @@
-import React, { createContext, FC, useMemo } from 'react'
+import { createContext, useMemo } from 'react'
 
-import { QuestManager, QuestManager__factory } from '@apps/artifacts/typechain'
+import { useQuestsQuery } from '@apps/artifacts/graphql/staking'
+import { QuestManager__factory } from '@apps/artifacts/typechain'
 import { useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { providerFactory, createUseContextFn } from '@apps/context-utils'
-import { useQuestsQuery } from '@apps/artifacts/graphql/staking'
+import { createUseContextFn, providerFactory } from '@apps/context-utils'
+
+import type { QuestManager } from '@apps/artifacts/typechain'
+import type { FC } from 'react'
 
 const questManagerContractCtx = createContext<QuestManager | undefined>(undefined)
 

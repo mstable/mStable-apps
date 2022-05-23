@@ -1,21 +1,20 @@
 import type {
-  ERC20,
-  ISavingsContractV3,
-  Masset,
-  FeederPool,
   BoostDirector,
-  SaveWrapper,
-  FeederWrapper,
-  IUniswapV2Router02,
-  StakingRewardsWithPlatformToken,
-  FraxCrossChainFarm,
-  MerkleDrop,
-  EmissionsController,
   BoostedVault,
+  EmissionsController,
+  ERC20,
+  FeederPool,
+  FeederWrapper,
+  FraxCrossChainFarm,
+  ISavingsContractV3,
+  IUniswapV2Router02,
+  Masset,
+  MerkleDrop,
+  SaveWrapper,
+  StakingRewardsWithPlatformToken,
 } from '@apps/artifacts/typechain'
-
 import type { BigDecimal } from '@apps/bigdecimal'
-import { BigNumber } from 'ethers'
+import type { BigNumber } from 'ethers'
 
 export type MassetName = 'musd' | 'mbtc'
 

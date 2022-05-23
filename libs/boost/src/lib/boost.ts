@@ -1,7 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 
-import { BigDecimal } from '@apps/bigdecimal'
-import { BoostedVaultState } from '@apps/data-provider'
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { BoostedVaultState } from '@apps/data-provider'
 
 export const MIN_BOOST = 1
 export const MAX_BOOST = 3

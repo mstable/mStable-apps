@@ -1,25 +1,29 @@
-import React, { FC, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import { usePropose } from '@apps/base/context/transactions'
+import { ManyToOneAssetExchange, SendButton, useMultiAssetExchangeDispatch, useMultiAssetExchangeState } from '@apps/base/components/forms'
 import { useWalletAddress } from '@apps/base/context/account'
-import { SubscribedToken } from '@apps/types'
-import { BigDecimal } from '@apps/bigdecimal'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { useMinimumOutput, BigDecimalInputValue } from '@apps/hooks'
-import { SendButton, ManyToOneAssetExchange, useMultiAssetExchangeState, useMultiAssetExchangeDispatch } from '@apps/base/components/forms'
+import { usePropose } from '@apps/base/context/transactions'
+import { useMinimumOutput } from '@apps/hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
 
+import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useFPInputRatios } from '../../../hooks/useFPInputRatios'
+import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import { useScaledInputs } from '../../../hooks/useScaledInputs'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
-import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
-import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import {
+  useFPAssetAddressOptions,
+  useFPVaultAddressOptions,
   useSelectedFeederPoolContracts,
   useSelectedFeederPoolState,
-  useFPVaultAddressOptions,
-  useFPAssetAddressOptions,
 } from '../FeederPoolProvider'
 import { scaleFassetAmount } from '../utils'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { BigDecimalInputValue } from '@apps/hooks'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { SubscribedToken } from '@apps/types'
+import type { FC } from 'react'
 
 const formId = 'DepositLP'
 

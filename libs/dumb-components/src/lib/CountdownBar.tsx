@@ -1,9 +1,14 @@
-import React, { FC, useState, ReactElement } from 'react'
+import { useState } from 'react'
+
 import { differenceInSeconds } from 'date-fns'
-import Countdown, { CountdownRenderProps } from 'react-countdown'
+import Countdown from 'react-countdown'
 import { useInterval } from 'react-use'
 import styled from 'styled-components'
+
 import { Tooltip } from './ReactTooltip'
+
+import type { FC, ReactElement } from 'react'
+import type { CountdownRenderProps } from 'react-countdown'
 
 interface Props {
   className?: string

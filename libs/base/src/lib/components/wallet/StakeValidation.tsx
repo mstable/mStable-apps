@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react'
 import styled from 'styled-components'
+
+import type { FC } from 'react'
 
 const StakeValidationForm = styled.div`
   p {
@@ -31,8 +32,6 @@ interface StakeValidationProps {
   setIsStakeSigned: React.Dispatch<React.SetStateAction<boolean>>
   signMsg: string
 }
-
-
 
 export const StakeValidation: FC<StakeValidationProps> = ({ isStakeSigned, setIsStakeSigned, signMsg }) => {
   const handleCheckbox = () => {

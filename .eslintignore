@@ -1,3 +1,7 @@
 apps/*/src/graphql/*
 apps/*/src/react-app-env.d.ts
 apps/*/dist/**
+**/dist
+**/coverage
+**/generated/*/*
+**/node_modules

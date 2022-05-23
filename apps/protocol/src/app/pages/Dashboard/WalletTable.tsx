@@ -1,10 +1,14 @@
-import React, { FC, useMemo } from 'react'
+import { useMemo } from 'react'
 
-import { MassetState, useDataState } from '@apps/data-provider'
 import { ChainIds, useChainIdCtx, useNetworkAddresses } from '@apps/base/context/network'
-import { WalletRow } from './WalletRow'
+import { useDataState } from '@apps/data-provider'
+
 import { DashTable } from './Styled'
-import { SubscribedToken } from '@apps/types'
+import { WalletRow } from './WalletRow'
+
+import type { MassetState } from '@apps/data-provider'
+import type { SubscribedToken } from '@apps/types'
+import type { FC } from 'react'
 
 const headerTitles = ['Asset', 'Balance'].map(t => ({ title: t }))
 

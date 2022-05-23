@@ -1,18 +1,22 @@
-import React, { createContext, FC, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+
+import { useFeederPoolsQuery } from '@apps/artifacts/graphql/feeders'
+import { useMassetsQuery } from '@apps/artifacts/graphql/protocol'
+import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
+import { useApolloClients } from '@apps/base/context/apollo'
+import { useNetwork } from '@apps/base/context/network'
+import { useTokensState } from '@apps/base/context/tokens'
 import { Interface } from '@ethersproject/abi'
 import { pipe } from 'ts-pipe-compose'
 
-import { FeederPoolsQueryResult, useFeederPoolsQuery } from '@apps/artifacts/graphql/feeders'
-import { MassetsQueryResult, useMassetsQuery } from '@apps/artifacts/graphql/protocol'
-import type { IMasset } from '@apps/artifacts/typechain'
-
-import { useApolloClients } from '@apps/base/context/apollo'
-import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
-import { useNetwork } from '@apps/base/context/network'
-import { Tokens, useTokensState } from '@apps/base/context/tokens'
-
 import { recalculateState } from './recalculateState'
 import { transformRawData } from './transformRawData'
+
+import type { FeederPoolsQueryResult } from '@apps/artifacts/graphql/feeders'
+import type { MassetsQueryResult } from '@apps/artifacts/graphql/protocol'
+import type { IMasset } from '@apps/artifacts/typechain'
+import type { Tokens } from '@apps/base/context/tokens'
+import type { FC } from 'react'
 
 import type { DataState } from './types'
 

@@ -1,14 +1,16 @@
-import React, { FC, ReactNode, useMemo, useRef } from 'react'
-import { useLocation, useRouteMatch, NavLink } from 'react-router-dom'
+import { useMemo, useRef } from 'react'
+
+import { Chevron, ThemedSkeleton, Tooltip, UnstyledButton } from '@apps/dumb-components'
+import { NavLink, useLocation, useRouteMatch } from 'react-router-dom'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 import useOnClickOutside from 'use-onclickoutside'
 
-import { AddressOption } from '@apps/types'
-import { ThemedSkeleton, UnstyledButton, Chevron, Tooltip } from '@apps/dumb-components'
-
 import { useTokenSubscription } from '../../context/TokensProvider'
 import { TokenIcon, TokenPair } from './TokenIcon'
+
+import type { AddressOption } from '@apps/types'
+import type { FC, ReactNode } from 'react'
 
 export interface DropdownOptions {
   icon?: {
@@ -23,7 +25,7 @@ interface Props {
   className?: string
   defaultOption?: string
   options?: Record<string, DropdownOptions>
-  onChange?(title?: string): void
+  onChange?: (title?: string) => void
   disabled?: boolean
 }
 
@@ -223,7 +225,7 @@ export const Dropdown: FC<Props> = ({ defaultOption, options = {}, onChange, dis
   )
 }
 
-const NavigationOption: FC<{ title: string; path: string; onClick(): void }> = ({ title, path, onClick }) => {
+const NavigationOption: FC<{ title: string; path: string; onClick: () => void }> = ({ title, path, onClick }) => {
   const routeMatch = useRouteMatch(path)
 
   return (

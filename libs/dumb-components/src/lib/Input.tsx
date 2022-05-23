@@ -1,5 +1,6 @@
-import React, { ChangeEventHandler, FC, KeyboardEvent } from 'react'
 import styled from 'styled-components'
+
+import type { ChangeEventHandler, FC, KeyboardEvent } from 'react'
 
 interface Props {
   className?: string
@@ -8,7 +9,7 @@ interface Props {
   balance?: string
   placeholder?: string
   onChange?: ChangeEventHandler<HTMLInputElement>
-  onKeyPress?(e?: KeyboardEvent<HTMLInputElement>): void
+  onKeyPress?: (e?: KeyboardEvent<HTMLInputElement>) => void
   disabled?: boolean
   min?: string
   max?: string

@@ -1,9 +1,9 @@
-import type { Dispatch, SetStateAction } from 'react'
-import React from 'react'
+import { BigDecimal } from '@apps/bigdecimal'
+import { MASSETS } from '@apps/types'
 import { createStateContext } from 'react-use'
 
-import { MassetName, MASSETS } from '@apps/types'
-import { BigDecimal } from '@apps/bigdecimal'
+import type { MassetName } from '@apps/types'
+import type { Dispatch, SetStateAction } from 'react'
 
 export interface MassetConfig {
   massetName: MassetName
@@ -49,4 +49,4 @@ export const useSelectedMassetConfig = (): MassetConfig => {
   return MASSET_CONFIG[masset]
 }
 
-export const MassetProvider = SelectedMassetNameProvider;
+export const MassetProvider = SelectedMassetNameProvider

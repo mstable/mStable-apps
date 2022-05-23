@@ -1,12 +1,14 @@
-import { FC, useRef } from 'react'
-import { useToggle } from 'react-use'
-import styled from 'styled-components'
-import { NetworkStatus, OperationError } from '@jameslefrere/react-apollo-network-status'
+import { useRef } from 'react'
 
 import { UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as GraphQLIcon } from '@apps/icons/graphql.svg'
+import { useToggle } from 'react-use'
+import styled from 'styled-components'
 
 import { useNetworkStatus } from '../../context/ApolloProvider'
+
+import type { NetworkStatus, OperationError } from '@jameslefrere/react-apollo-network-status'
+import type { FC } from 'react'
 
 const Container = styled.div<{ open: boolean; pending: boolean; error: boolean }>`
   display: flex;

@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
+import { ButtonExternal, Tooltip } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
-import { Tooltip, ButtonExternal } from '@apps/dumb-components'
+import styled from 'styled-components'
 
 import { GovernancePageHeader } from '../components/GovernancePageHeader'
 import { useStakedTokenQuery } from '../context/StakedToken'
 import { getDaysUntilQueueUpdate } from '../utils'
+
+import type { FC } from 'react'
 
 const DAY = 86400
 const ANALYTICS_URL = 'https://dune.xyz/naddison/mStable-Staking-V2'

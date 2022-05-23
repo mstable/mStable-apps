@@ -1,11 +1,15 @@
-import React, { FC, Reducer, createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react'
+
+import { BigDecimal } from '@apps/bigdecimal'
 import { constants } from 'ethers'
 
-import { AllTokensQueryResult } from '@apps/artifacts/graphql/protocol'
-import { Allowances, SubscribedToken } from '@apps/types'
-import { BigDecimal } from '@apps/bigdecimal'
+import { useNetwork } from './NetworkProvider'
 
-import { AllNetworks, useNetwork } from './NetworkProvider'
+import type { AllTokensQueryResult } from '@apps/artifacts/graphql/protocol'
+import type { Allowances, SubscribedToken } from '@apps/types'
+import type { FC, Reducer } from 'react'
+
+import type { AllNetworks } from './NetworkProvider'
 
 interface State {
   tokens: {
@@ -26,17 +30,17 @@ export type Tokens = State['tokens']
 type Fetched = NonNullable<AllTokensQueryResult['data']>['tokens']
 
 interface Dispatch {
-  setFetched(fetched: Fetched): void
-  reset(): void
+  setFetched: (fetched: Fetched) => void
+  reset: () => void
 
-  updateAllowances(allowancesMap: { [address: string]: Allowances }): void
-  updateBalances(balancesMap: { [address: string]: BigDecimal }): void
+  updateAllowances: (allowancesMap: { [address: string]: Allowances }) => void
+  updateBalances: (balancesMap: { [address: string]: BigDecimal }) => void
 
-  subscribeAllowance(address: string, spender: string, subId: string): void
-  subscribeBalance(address: string, subId: string): void
+  subscribeAllowance: (address: string, spender: string, subId: string) => void
+  subscribeBalance: (address: string, subId: string) => void
 
-  unsubscribeAllowance(address: string, spender: string, subId: string): void
-  unsubscribeBalance(address: string, subId: string): void
+  unsubscribeAllowance: (address: string, spender: string, subId: string) => void
+  unsubscribeBalance: (address: string, subId: string) => void
 }
 
 enum Actions {
@@ -86,9 +90,7 @@ const renameSymbol = (symbol: string, address: string): string => {
 
   if (address === '0x8daebade922df735c38c80c7ebd708af50815faa') {
     newSymbol = 'TBTC'
-  } else if (address === '0x18084fba666a33d37592fa2633fd49a74dd93a88') (
-    newSymbol = 'tBTCv2'
-  )
+  } else if (address === '0x18084fba666a33d37592fa2633fd49a74dd93a88') newSymbol = 'tBTCv2'
 
   return newSymbol
 }

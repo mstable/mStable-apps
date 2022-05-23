@@ -1,5 +1,6 @@
 import { BigDecimal } from '@apps/bigdecimal'
-import { BassetState, DataState, MassetState, SavingsContractState } from './types'
+
+import type { BassetState, DataState, MassetState, SavingsContractState } from './types'
 
 const recalculateSavingsContractV1 = (
   v1: Extract<SavingsContractState, { version: 1 }>,

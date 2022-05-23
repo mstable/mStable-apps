@@ -1,15 +1,15 @@
-import React, { FC } from 'react'
-import { format } from 'date-fns'
-import styled from 'styled-components'
-
 import { ThemedSkeleton, UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
 import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
 import { ViewportWidth } from '@apps/theme'
+import { format } from 'date-fns'
+import styled from 'styled-components'
 
-import { useEpochData, useEpochWeekNumber } from './context/EpochContext'
 import { useEmissionsData } from './context/EmissionsContext'
+import { useEpochData, useEpochWeekNumber } from './context/EpochContext'
 import { DistributionBar } from './DistributionBar'
+
+import type { FC } from 'react'
 
 const EPOCH_LENGTH = 604800
 

@@ -1,13 +1,16 @@
-import React, { ChangeEventHandler, FC, KeyboardEventHandler, useCallback } from 'react'
+import { useCallback } from 'react'
+
 import styled from 'styled-components'
 
 import { Button } from './Button'
+
+import type { ChangeEventHandler, FC, KeyboardEventHandler } from 'react'
 
 interface Props {
   className?: string
   value?: string
   placeholder?: string
-  onChange?(formValue?: string): void
+  onChange?: (formValue?: string) => void
   disabled?: boolean
   min?: string
   max?: string

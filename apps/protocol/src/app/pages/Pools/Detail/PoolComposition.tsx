@@ -1,12 +1,14 @@
-import React, { FC, useMemo } from 'react'
-import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
+import { useMemo } from 'react'
 
-import { Color } from '@apps/theme'
 import { toK } from '@apps/formatters'
+import { Color } from '@apps/theme'
+import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 
 import { RechartsContainer } from '../../../components/stats/RechartsContainer'
 import { assetColorMapping } from '../constants'
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'
+
+import type { FC } from 'react'
 
 const MARGIN = { top: 40, left: 16, right: 0, bottom: 0 }
 

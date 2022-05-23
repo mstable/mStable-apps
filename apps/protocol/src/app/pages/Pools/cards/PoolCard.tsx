@@ -1,19 +1,19 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
-import Skeleton from 'react-loading-skeleton'
-
-import { useSelectedMassetName } from '@apps/masset-provider'
-import { FeederPoolState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/theme'
-import { CountUp, Tooltip } from '@apps/dumb-components'
 import { TokenIcon, TokenPair } from '@apps/base/components/core'
+import { CountUp, Tooltip } from '@apps/dumb-components'
 import { useFeederPool } from '@apps/masset-hooks'
+import { useSelectedMassetName } from '@apps/masset-provider'
+import { ViewportWidth } from '@apps/theme'
+import Skeleton from 'react-loading-skeleton'
+import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { usePoolMetrics } from '../../../hooks/usePoolMetrics'
 import { assetColorMapping } from '../constants'
 import { Card } from './Card'
+
+import type { FeederPoolState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 interface Props {
   className?: string

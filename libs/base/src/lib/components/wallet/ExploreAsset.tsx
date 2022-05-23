@@ -1,11 +1,9 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
-
-import { Table, TableCell, TableRow, Button } from '@apps/dumb-components'
+import { Button, Table, TableCell, TableRow } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
+import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { useChainIdCtx } from '../../context/NetworkProvider'
+import type { FC } from 'react'
 
 const Header = styled.div`
   padding: 0 1rem;

@@ -1,5 +1,6 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
+
+import type { FC } from 'react'
 
 interface Props {
   className?: string

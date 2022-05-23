@@ -1,8 +1,11 @@
-import React, { FC, useCallback, useLayoutEffect } from 'react'
+import { useCallback, useLayoutEffect } from 'react'
+
 import { useHistory } from 'react-router-dom'
 
-import { Leaderboard } from './Leaderboard'
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
+import { Leaderboard } from './Leaderboard'
+
+import type { FC } from 'react'
 
 export const LeaderboardPage: FC = () => {
   useLayoutEffect(() => {

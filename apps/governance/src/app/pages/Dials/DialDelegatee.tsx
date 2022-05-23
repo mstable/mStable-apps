@@ -1,13 +1,13 @@
+import { Address, IPFSImg, UserIcon } from '@apps/base/components/core'
 import { useAccount } from '@apps/base/context/account'
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
+import { ExternalLink, Tooltip } from '@apps/dumb-components'
 import { truncateAddress } from '@apps/formatters'
 import { ViewportWidth } from '@apps/theme'
-import { Address, IPFSImg, UserIcon } from '@apps/base/components/core'
-import { ExternalLink, Tooltip } from '@apps/dumb-components'
+import styled from 'styled-components'
 
 import { useDelegateesAll } from '../../context/DelegateeLists'
+
+import type { FC } from 'react'
 
 const MiniDelegateeProfileContainer = styled.div`
   display: flex;

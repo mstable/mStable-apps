@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
-import { MassetState } from '@apps/data-provider'
-import { TokenIcon, TokenPair, ExplorerLink } from '@apps/base/components/core'
+import { ExplorerLink, TokenIcon, TokenPair } from '@apps/base/components/core'
 import { CountUp, CountUpUSD } from '@apps/dumb-components'
 import { toK } from '@apps/formatters'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import styled from 'styled-components'
 
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
+
+import type { MassetState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const Label = styled.div`
   font-weight: 600;

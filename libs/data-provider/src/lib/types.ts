@@ -1,7 +1,6 @@
-import { BigNumber } from 'ethers'
-
-import { BigDecimal } from '@apps/bigdecimal'
-import { SubscribedToken } from '@apps/types'
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { SubscribedToken } from '@apps/types'
+import type { BigNumber } from 'ethers'
 
 export enum BassetStatus {
   Default = 'Default',

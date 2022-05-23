@@ -1,19 +1,22 @@
 import { useEffect, useMemo, useState } from 'react'
-import { FeederPool, FeederPool__factory, Masset, Masset__factory } from '@apps/artifacts/typechain'
-import { usePrevious, useDebounce } from 'react-use'
-import type { BigNumber } from 'ethers'
 
-import { BigDecimal } from '@apps/bigdecimal'
-import { MassetState } from '@apps/data-provider'
+import { FeederPool__factory, Masset__factory } from '@apps/artifacts/typechain'
 import { useSigner } from '@apps/base/context/account'
+import { BigDecimal } from '@apps/bigdecimal'
 import { sanitizeMassetError } from '@apps/formatters'
-import { getPriceImpact } from '@apps/quick-maths'
-import { BigDecimalInputValue, useFetchState } from '@apps/hooks'
+import { useFetchState } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
-import { FetchState, LPPriceAdjustment, PriceImpact } from '@apps/types'
+import { getPriceImpact } from '@apps/quick-maths'
+import { useDebounce, usePrevious } from 'react-use'
 
 import { useMassetInputRatios } from './useMassetInputRatios'
 import { useScaledInput } from './useScaledInput'
+
+import type { FeederPool, Masset } from '@apps/artifacts/typechain'
+import type { MassetState } from '@apps/data-provider'
+import type { BigDecimalInputValue } from '@apps/hooks'
+import type { FetchState, LPPriceAdjustment, PriceImpact } from '@apps/types'
+import type { BigNumber } from 'ethers'
 
 type Contract = Masset | FeederPool
 

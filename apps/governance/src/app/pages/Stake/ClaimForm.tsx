@@ -1,18 +1,20 @@
-import { EthereumKovan, useNetworkAddresses } from '@apps/base/context/network'
+import { MultiRewards } from '@apps/base/components/core'
+import { SendButton } from '@apps/base/components/forms'
+import { useNetworkAddresses } from '@apps/base/context/network'
+import { usePropose } from '@apps/base/context/transactions'
+import { BigDecimal } from '@apps/bigdecimal'
+import { ToggleInput } from '@apps/dumb-components'
 import { MerkleClaimForm, MerkleClaimsProvider } from '@apps/merkle-claim'
-import React, { FC } from 'react'
+import { TransactionManifest } from '@apps/transaction-manifest'
 import { useToggle } from 'react-use'
 import styled from 'styled-components'
 
-import { usePropose } from '@apps/base/context/transactions'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { ToggleInput } from '@apps/dumb-components'
-import { SendButton } from '@apps/base/components/forms'
-import { MultiRewards } from '@apps/base/components/core'
-import { BigDecimal } from '@apps/bigdecimal'
-
 import { useStakedToken, useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedToken'
 import { useRewardsEarned } from './context'
+
+import type { EthereumKovan } from '@apps/base/context/network'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 const Compound = styled.div`
   padding: 0 0.5rem;

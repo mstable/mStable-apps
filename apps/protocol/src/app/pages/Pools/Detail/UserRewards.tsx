@@ -1,23 +1,24 @@
-import React, { FC } from 'react'
-import Skeleton from 'react-loading-skeleton'
-import styled from 'styled-components'
-import { format, fromUnixTime } from 'date-fns'
-import { useToggle } from 'react-use'
-
-import { BoostedVault__factory, BoostedVault } from '@apps/artifacts/typechain'
-import { usePropose } from '@apps/base/context/transactions'
-import { useIsMasquerading, useSigner } from '@apps/base/context/account'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
+import { BoostedVault__factory } from '@apps/artifacts/typechain'
 import { SendButton } from '@apps/base/components/forms'
-import { CountUp, Table, TableCell, TableRow, Button } from '@apps/dumb-components'
+import { useIsMasquerading, useSigner } from '@apps/base/context/account'
+import { usePropose } from '@apps/base/context/transactions'
+import { Button, CountUp, Table, TableCell, TableRow } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import { format, fromUnixTime } from 'date-fns'
+import Skeleton from 'react-loading-skeleton'
+import { useToggle } from 'react-use'
+import styled from 'styled-components'
 
-import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 import { StreamType, useRewardStreams } from '../../../context/RewardStreamsProvider'
-
-import { useSelectedFeederPoolVaultContract } from '../FeederPoolProvider'
+import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 import { rewardsColorMapping } from '../constants'
+import { useSelectedFeederPoolVaultContract } from '../FeederPoolProvider'
 import { ClaimGraph } from './ClaimGraph'
+
+import type { BoostedVault } from '@apps/artifacts/typechain'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 const useSelectedSaveVaultContract = (): BoostedVault | undefined => {
   const signer = useSigner()

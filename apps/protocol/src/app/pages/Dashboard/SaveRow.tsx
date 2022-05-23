@@ -1,22 +1,26 @@
-import React, { FC, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+
 import { TokenIcon } from '@apps/base/components/core'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
+import { useTokenSubscription } from '@apps/base/context/tokens'
 import { useCalculateUserBoost } from '@apps/boost'
-import { MassetState } from '@apps/data-provider'
 import { CountUp, CountUpUSD, Tooltip } from '@apps/dumb-components'
 import { toK } from '@apps/formatters'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { calculateApy } from '@apps/quick-maths'
-import { MassetName } from '@apps/types'
 import { useHistory } from 'react-router-dom'
+
+import { useRewardStreams } from '../../context/RewardStreamsProvider'
 import { useAvailableSaveApy } from '../../hooks/useAvailableSaveApy'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
+import { useRewardsEarned, useStakingRewards } from '../Save/hooks'
 import { useUpsertStream } from './RewardsContext'
 import { DashNameTableCell, DashTableCell, DashTableRow, RewardsApy } from './Styled'
-import { useRewardStreams } from '../../context/RewardStreamsProvider'
-import { useTokenSubscription } from '@apps/base/context/tokens'
 import { getSaveDeposited } from './utils'
-import { useRewardsEarned, useStakingRewards } from '../Save/hooks'
+
+import type { MassetState } from '@apps/data-provider'
+import type { MassetName } from '@apps/types'
+import type { FC } from 'react'
 
 const useSaveVaultAPY = (mAssetName: MassetName, massetPrice?: number, userBoost?: number) => {
   const {

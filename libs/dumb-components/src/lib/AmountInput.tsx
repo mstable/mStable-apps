@@ -1,6 +1,8 @@
-import React, { ChangeEventHandler, FC, KeyboardEventHandler, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { Input } from './Input'
+
+import type { ChangeEventHandler, FC, KeyboardEventHandler } from 'react'
 
 interface Props {
   className?: string
@@ -8,7 +10,7 @@ interface Props {
   value?: string
   balance?: string
   placeholder?: string
-  onChange?(formValue?: string): void
+  onChange?: (formValue?: string) => void
   disabled?: boolean
   min?: string
   max?: string

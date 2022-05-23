@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
+import { ReactComponent as ChevronIcon } from '@apps/icons/chevron-down.svg'
 import styled from 'styled-components'
 
-import { ReactComponent as ChevronIcon } from '@apps/icons/chevron-down.svg'
+import type { FC } from 'react'
 
 const StyledChevron = styled(ChevronIcon)<{ direction?: 'up' | 'down' }>`
   height: 8px;

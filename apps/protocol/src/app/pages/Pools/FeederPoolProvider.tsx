@@ -1,15 +1,16 @@
-import type { FC } from 'react'
-import React, { createContext, useContext, useMemo } from 'react'
-import type { BoostedVault, FeederPool, FeederWrapper } from '@apps/artifacts/typechain'
-import { BoostedVault__factory, FeederPool__factory, FeederWrapper__factory } from '@apps/artifacts/typechain'
+import { createContext, useContext, useMemo } from 'react'
 
-import { AddressOption } from '@apps/types'
-import type { FeederPoolState, MassetState } from '@apps/data-provider'
+import { BoostedVault__factory, FeederPool__factory, FeederWrapper__factory } from '@apps/artifacts/typechain'
 import { useSigner } from '@apps/base/context/account'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
-import { UseBigDecimalInputsArg } from '@apps/hooks'
-import { useSelectedMassetState, useFeederPool } from '@apps/masset-hooks'
+import { useFeederPool, useSelectedMassetState } from '@apps/masset-hooks'
+
+import type { BoostedVault, FeederPool, FeederWrapper } from '@apps/artifacts/typechain'
+import type { FeederPoolState, MassetState } from '@apps/data-provider'
+import type { UseBigDecimalInputsArg } from '@apps/hooks'
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
 
 interface PoolState {
   poolAddress: string

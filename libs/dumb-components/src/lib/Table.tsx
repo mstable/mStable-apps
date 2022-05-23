@@ -1,8 +1,9 @@
-import React, { FC, MouseEvent } from 'react'
 import styled from 'styled-components'
 
 import { Button } from './Button'
 import { Tooltip } from './ReactTooltip'
+
+import type { FC, MouseEvent } from 'react'
 
 interface Props {
   className?: string

@@ -1,11 +1,14 @@
-import React, { ChangeEventHandler, FC, useCallback, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { CSSTransition } from 'react-transition-group'
-import { setTimeout } from 'timers'
+import { useCallback, useRef, useState } from 'react'
+
 import { isAddress } from 'ethers/lib/utils'
+import { CSSTransition } from 'react-transition-group'
+import styled from 'styled-components'
+import { setTimeout } from 'timers'
 
 import { Button } from './Button'
 import { Input } from './Input'
+
+import type { ChangeEventHandler, FC } from 'react'
 
 interface Props {
   onClick: (address?: string) => void

@@ -1,20 +1,19 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
-import { ViewportWidth } from '@apps/theme'
-import { useSelectedMassetConfig } from '@apps/masset-provider'
 import { InfoBox, InfoButton, ThemedSkeleton } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetConfig } from '@apps/masset-provider'
+import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
 
 import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
-
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
-import { Save as SaveV2 } from './v2'
-import { SaveOverview } from './v2/SaveOverview'
+import { OnboardingProvider } from './hooks'
 import { ToggleSave } from './ToggleSave'
 import { SaveMigration } from './v1/SaveMigration'
-import { OnboardingProvider } from './hooks'
+import { Save as SaveV2 } from './v2'
+import { SaveOverview } from './v2/SaveOverview'
+
+import type { FC } from 'react'
 
 const ButtonPanel = styled.div`
   display: flex;

@@ -1,12 +1,14 @@
-import React, { FC, useMemo } from 'react'
-import { AddressOption } from '@apps/types'
+import { useMemo } from 'react'
 
 import { Dropdown } from '../core/Dropdown'
+
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
 
 interface Props {
   defaultAddress?: string
   addressOptions: AddressOption[]
-  onChange?(address?: string): void
+  onChange?: (address?: string) => void
   disabled?: boolean
   className?: string
 }

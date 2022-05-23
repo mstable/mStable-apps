@@ -1,7 +1,8 @@
 import { BigDecimal } from '@apps/bigdecimal'
-import { LPPriceAdjustment } from '@apps/types'
 
 import { getDistancePercentage, getSignedDistance } from './getDistancePercentage'
+
+import type { LPPriceAdjustment } from '@apps/types'
 
 describe('getSignedDistance', () => {
   const makeAssertion = (input: number, output: number, reverse: boolean, expected: string) => {

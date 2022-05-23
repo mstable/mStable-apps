@@ -1,5 +1,8 @@
-import { createContext, Dispatch, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { RewardStreams } from '../../context/RewardStreamsProvider'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
+
+import type { Dispatch, FC } from 'react'
+
+import type { RewardStreams } from '../../context/RewardStreamsProvider'
 
 type TotalRewards = { total: number; unlocked: number }
 

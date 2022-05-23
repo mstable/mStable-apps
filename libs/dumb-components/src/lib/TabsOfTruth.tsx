@@ -1,10 +1,13 @@
-import React, { createContext, useState, FC, Dispatch, SetStateAction, useMemo, useRef, useLayoutEffect } from 'react'
-import { usePrevious } from 'react-use'
+import { createContext, useLayoutEffect, useMemo, useRef, useState } from 'react'
+
+import { createUseContextFn, providerFactory } from '@apps/context-utils'
 import { Transition } from 'react-transition-group'
+import { usePrevious } from 'react-use'
 import styled from 'styled-components'
-import { providerFactory, createUseContextFn } from '@apps/context-utils'
 
 import { UnstyledButton } from './Button'
+
+import type { Dispatch, FC, SetStateAction } from 'react'
 
 interface Tab {
   id: string | number
@@ -88,7 +91,7 @@ const TabsContainer = styled.div`
 
 export const TabsOfTruth: FC<
   State & {
-    setActiveIndex(index: number): void
+    setActiveIndex: (index: number) => void
     className?: string
   }
 > = ({ tabs, setActiveIndex, activeTabIndex, className }) => {

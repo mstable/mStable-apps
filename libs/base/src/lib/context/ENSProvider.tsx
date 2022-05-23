@@ -1,11 +1,13 @@
-import { useEffect, Reducer } from 'react'
-import { createReducerContext } from 'react-use'
-import { BaseProvider as Provider } from '@ethersproject/providers'
+import { useEffect } from 'react'
 
 import { useFetchState } from '@apps/hooks'
-import { FetchState } from '@apps/types'
+import { createReducerContext } from 'react-use'
 
 import { useProvider } from './AccountProvider'
+
+import type { FetchState } from '@apps/types'
+import type { BaseProvider as Provider } from '@ethersproject/providers'
+import type { Reducer } from 'react'
 
 export const resolveENSContentHash = async (ensName: string, provider: Provider): Promise<string | null> => {
   const resolver = await provider.getResolver(ensName)

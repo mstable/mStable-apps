@@ -1,16 +1,17 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
-import { SubscribedToken } from '@apps/types'
-import { BigDecimal } from '@apps/bigdecimal'
 
 import { AssetInput } from './AssetInput'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { SubscribedToken } from '@apps/types'
+import type { FC } from 'react'
 
 interface Props {
   className?: string
   isFetching?: boolean
   formValue?: string
-  handleSetAmount?(formValue?: string): void
-  handleSetMax?(amount?: string): void
+  handleSetAmount?: (formValue?: string) => void
+  handleSetMax?: (amount?: string) => void
   spender?: string
   token?: SubscribedToken
   stakedBalance?: BigDecimal

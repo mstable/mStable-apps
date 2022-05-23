@@ -1,21 +1,21 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import Skeleton from 'react-loading-skeleton'
-
-import { FeederPoolState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/theme'
-import { CountUp, CountUpUSD, Tooltip } from '@apps/dumb-components'
 import { TokenIcon, TokenPair } from '@apps/base/components/core'
+import { CountUp, CountUpUSD, Tooltip } from '@apps/dumb-components'
 import { toK } from '@apps/formatters'
 import { useFeederPool } from '@apps/masset-hooks'
+import { ViewportWidth } from '@apps/theme'
+import { PoolType } from '@apps/types'
+import Skeleton from 'react-loading-skeleton'
+import styled from 'styled-components'
 
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useFeederPoolApy } from '../../../hooks/useFeederPoolApy'
 import { usePoolMetrics } from '../../../hooks/usePoolMetrics'
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
+import { DeprecatedLabel } from '../../Dashboard/Styled'
 import { assetColorMapping } from '../constants'
 import { Card } from './Card'
-import { PoolType } from '@apps/types'
-import { DeprecatedLabel } from '../../Dashboard/Styled'
+
+import type { FeederPoolState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 interface Props {
   className?: string

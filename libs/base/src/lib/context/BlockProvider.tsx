@@ -1,10 +1,13 @@
-import React, { createContext, FC, useContext, useMemo, useState } from 'react'
-import { useInterval } from 'react-use'
+import { createContext, useContext, useMemo, useState } from 'react'
+
 import { subDays, subHours } from 'date-fns'
+import { useInterval } from 'react-use'
 
 import { useBlockTimesForDates } from '../hooks'
-import { useProvider, useIsIdle } from './AccountProvider'
+import { useIsIdle, useProvider } from './AccountProvider'
 import { useNetwork } from './NetworkProvider'
+
+import type { FC } from 'react'
 
 export type MaybeBlockNumber = number | undefined
 
