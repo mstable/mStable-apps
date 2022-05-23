@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
+import { useIsDarkMode } from '@apps/browser-settings'
 import { ThemeProvider as SCThemeProvider } from 'styled-components'
 
-import { useIsDarkMode } from '@apps/browser-settings'
+import { darkTheme, lightTheme } from './theme'
 
-import { lightTheme, darkTheme } from './theme'
+import type { FC } from 'react'
 
 export const ThemeProvider: FC = ({ children }) => {
   const isDarkMode = useIsDarkMode()

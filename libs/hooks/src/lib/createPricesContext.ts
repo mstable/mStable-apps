@@ -1,7 +1,9 @@
-import { useRef, FC, createContext, useContext, useCallback } from 'react'
+import { createContext, useCallback, useContext, useRef } from 'react'
 
-import { FetchState } from '@apps/types'
 import { providerFactory } from '@apps/context-utils'
+
+import type { FetchState } from '@apps/types'
+import type { FC } from 'react'
 
 const fetchCoingeckoPrices = async (addresses: string[]): Promise<{ [address: string]: { usd: number } }> => {
   const result = await fetch(
@@ -18,8 +20,8 @@ interface State {
 }
 
 interface Dispatch {
-  fetchPrice(address?: string): FetchState<number>
-  fetchPrices(addresses?: string[]): { [x: string]: number }
+  fetchPrice: (address?: string) => FetchState<number>
+  fetchPrices: (addresses?: string[]) => { [x: string]: number }
 }
 
 export const createPricesContext = (): Readonly<[() => Dispatch, FC]> => {
@@ -56,7 +58,7 @@ export const createPricesContext = (): Readonly<[() => Dispatch, FC]> => {
               [address]: fetched,
             },
             fetching: false,
-            error: !!fetched ? undefined : 'No price found',
+            error: fetched ? undefined : 'No price found',
           }
         })
         .catch(catchError)
@@ -70,7 +72,7 @@ export const createPricesContext = (): Readonly<[() => Dispatch, FC]> => {
 
       const cached = state.current
 
-      if (!!cached.value) {
+      if (cached.value) {
         const matches = addresses.filter(v => !!cached?.value?.[v])
         if (matches?.length === addresses?.length) return cached.value ?? {}
       }
@@ -94,7 +96,7 @@ export const createPricesContext = (): Readonly<[() => Dispatch, FC]> => {
               ...value,
             },
             fetching: false,
-            error: !!value?.length ? undefined : 'No price found',
+            error: value?.length ? undefined : 'No price found',
           }
         })
         .catch(catchError)

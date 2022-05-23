@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 
+import { useNetworkAddresses } from '@apps/base/context/network'
+import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
 
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { EthereumMainnet, useNetworkAddresses } from '@apps/base/context/network'
+import type { EthereumMainnet } from '@apps/base/context/network'
 
 export const useVMTABalance = (): BigDecimal => {
   const networkAddresses = useNetworkAddresses<EthereumMainnet>()

@@ -1,23 +1,27 @@
-import React, { FC, useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { Signer } from 'ethers'
+import { useEffect, useState } from 'react'
 
-import { TransactionStatus } from '@apps/transaction-manifest'
 import { BigDecimal } from '@apps/bigdecimal'
 import { Button } from '@apps/dumb-components'
+import { TransactionStatus } from '@apps/transaction-manifest'
 import { APP_NAME } from '@apps/types'
+import styled from 'styled-components'
 
-import { useTransactionsDispatch, useTransactionsState } from '../../context/TransactionsProvider'
+import { useBaseCtx } from '../../BaseProviders'
+import { useSigner, useWallet } from '../../context/AccountProvider'
 import { useNetworkPrices } from '../../context/NetworkProvider'
 import { useNativeToken } from '../../context/TokensProvider'
+import { useTransactionsDispatch, useTransactionsState } from '../../context/TransactionsProvider'
+import { useStakeSignatures } from '../../hooks/useStakeSignatures'
+import { API_ENDPOINT } from '../../utils/constants'
 import { Amount, TokenIcon } from '../core'
 import { GasStation } from './GasStation'
-import { useGas } from './TransactionGasProvider'
 import { StakeValidation } from './StakeValidation'
-import { useSigner, useWallet } from '../../context/AccountProvider'
-import { StakeSignatures, useStakeSignatures } from '../../hooks/useStakeSignatures'
-import { API_ENDPOINT } from '../../utils/constants'
-import { useBaseCtx } from '../../BaseProviders'
+import { useGas } from './TransactionGasProvider'
+
+import type { Signer } from 'ethers'
+import type { FC } from 'react'
+
+import type { StakeSignatures } from '../../hooks/useStakeSignatures'
 
 const Buttons = styled.div`
   display: flex;

@@ -1,15 +1,15 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
 import { IPFSImg, UserIcon } from '@apps/base/components/core'
+import { useModalData } from '@apps/base/context/modal-data'
 import { Button, UnstyledButton } from '@apps/dumb-components'
 import { truncateAddress } from '@apps/formatters'
-import { useModalData } from '@apps/base/context/modal-data'
 import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
 
-import { useDelegationModal } from '../hooks/useDelegationModal'
 import { useDelegateesAll } from '../context/DelegateeLists'
+import { useDelegationModal } from '../hooks/useDelegationModal'
 import { StakedTokenToggle } from './StakedTokenToggle'
+
+import type { FC } from 'react'
 
 interface Props {
   className?: string

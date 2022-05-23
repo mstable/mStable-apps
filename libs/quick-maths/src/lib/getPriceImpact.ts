@@ -1,7 +1,7 @@
-import { BigDecimal } from '@apps/bigdecimal'
-import { LPPriceAdjustment, PriceImpact } from '@apps/types'
-
 import { getDistancePercentage } from './getDistancePercentage'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { LPPriceAdjustment, PriceImpact } from '@apps/types'
 
 const IMPACT_WARNING_THRESHOLD = 0.03 // > 3%
 

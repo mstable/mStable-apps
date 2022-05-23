@@ -1,11 +1,12 @@
-import type { FC } from 'react'
 import React from 'react'
+
+import { ExternalLink } from '@apps/dumb-components'
+import { useSelectedMassetName } from '@apps/masset-provider'
 import styled from 'styled-components'
 
-import { useSelectedMassetName } from '@apps/masset-provider'
-import { ExternalLink } from '@apps/dumb-components'
-
 import { ProtocolPageHeader as PageHeader } from './ProtocolPageHeader'
+
+import type { FC } from 'react'
 
 const Container = styled.div`
   > :last-child {

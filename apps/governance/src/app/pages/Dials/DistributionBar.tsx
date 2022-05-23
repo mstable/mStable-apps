@@ -1,16 +1,17 @@
-import React, { FC } from 'react'
-import { createMemo } from 'react-use'
-import styled from 'styled-components'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
-
 import { TokenIcon } from '@apps/base/components/core'
 import { CountUp } from '@apps/dumb-components'
-import { DIALS_METADATA } from './constants'
+import { createMemo } from 'react-use'
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import styled from 'styled-components'
 
-import { useHoveredDialId, useSelectedDialId } from './context/ViewOptionsContext'
-import { useEpochData } from './context/EpochContext'
 import { ActiveDial } from './ActiveDial'
-import { EpochDialVotes } from './types'
+import { DIALS_METADATA } from './constants'
+import { useEpochData } from './context/EpochContext'
+import { useHoveredDialId, useSelectedDialId } from './context/ViewOptionsContext'
+
+import type { FC } from 'react'
+
+import type { EpochDialVotes } from './types'
 
 const Header = styled.div`
   display: flex;

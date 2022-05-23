@@ -1,8 +1,9 @@
-import React, { FC, ReactNode } from 'react'
-import styled from 'styled-components'
 import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
 
 import { Tooltip } from './ReactTooltip'
+
+import type { FC, ReactNode } from 'react'
 
 interface Props {
   className?: string

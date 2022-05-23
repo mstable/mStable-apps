@@ -1,6 +1,7 @@
-import { ButtonHTMLAttributes, ComponentProps } from 'react'
-import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
+import styled, { css } from 'styled-components'
+
+import type { ButtonHTMLAttributes, ComponentProps } from 'react'
 
 interface Props extends ButtonHTMLAttributes<unknown> {
   highlighted?: boolean

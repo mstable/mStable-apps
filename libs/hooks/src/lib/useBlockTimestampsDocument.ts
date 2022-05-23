@@ -1,6 +1,9 @@
 import { useMemo } from 'react'
+
+import { gql } from '@apollo/client'
 import { getUnixTime } from 'date-fns'
-import { DocumentNode, gql } from '@apollo/client'
+
+import type { DocumentNode } from '@apollo/client'
 
 export const useBlockTimestampsDocument = (dates: Date[]): DocumentNode =>
   useMemo(

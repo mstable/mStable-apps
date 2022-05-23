@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
-import { InputRatios } from '@apps/types'
 
 import { useSelectedFeederPoolState } from '../pages/Pools/FeederPoolProvider'
+
+import type { InputRatios } from '@apps/types'
 
 export const useFPInputRatios = (): InputRatios => {
   const feederPool = useSelectedFeederPoolState()

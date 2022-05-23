@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { ComponentProps, FC } from 'react'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-
 import { useIsDarkMode } from '@apps/browser-settings'
 import { colorTheme } from '@apps/theme'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+
+import type { ComponentProps, FC } from 'react'
 
 export const ThemedSkeleton: FC<ComponentProps<typeof Skeleton> & { className?: string }> = props => {
   const isDarkTheme = useIsDarkMode()

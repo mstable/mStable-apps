@@ -1,10 +1,11 @@
-import React, { FC, useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react'
+
+import { ReactComponent as TooltipIcon } from '@apps/icons/tooltip-icon.svg'
+import { FontSize } from '@apps/theme'
 import ReactTooltipBase from 'react-tooltip'
 import styled from 'styled-components'
 
-import { FontSize } from '@apps/theme'
-
-import { ReactComponent as TooltipIcon } from '@apps/icons/tooltip-icon.svg'
+import type { FC } from 'react'
 
 export const ReactTooltip = styled(ReactTooltipBase)`
   border-radius: 0.5rem !important;

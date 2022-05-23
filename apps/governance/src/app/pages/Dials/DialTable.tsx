@@ -1,17 +1,17 @@
-import React, { FC } from 'react'
+import { Slider, Table, TableCell, TableRow, ThemedSkeleton, Tooltip } from '@apps/dumb-components'
 import { createMemo } from 'react-use'
 import styled from 'styled-components'
 
-import { Slider, Table, TableCell, TableRow, ThemedSkeleton, Tooltip } from '@apps/dumb-components'
-
-import { useSystemView } from './context/ViewOptionsContext'
-import { useUserDialPreferences } from './context/UserDialsContext'
+import { ALL_POSSIBLE_DIAL_IDS } from './constants'
 import { useEmissionsData } from './context/EmissionsContext'
 import { useEpochData, useEpochWeekNumber } from './context/EpochContext'
-
-import { ALL_POSSIBLE_DIAL_IDS } from './constants'
+import { useUserDialPreferences } from './context/UserDialsContext'
+import { useSystemView } from './context/ViewOptionsContext'
 import { DialTitle } from './DialTitle'
-import { UserDialPreferences } from './types'
+
+import type { FC } from 'react'
+
+import type { UserDialPreferences } from './types'
 
 const useScaleUserDialPreferences = createMemo(
   ({

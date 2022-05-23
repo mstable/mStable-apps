@@ -1,7 +1,7 @@
-import React, { useCallback, useRef, useState } from 'react'
-import { useModal } from 'react-modal-hook'
+import { useCallback, useRef, useState } from 'react'
 
 import { Modal } from '@apps/dumb-components'
+import { useModal } from 'react-modal-hook'
 
 import { ExploreAsset } from '../components/wallet/ExploreAsset'
 

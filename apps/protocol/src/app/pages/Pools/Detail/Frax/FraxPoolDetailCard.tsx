@@ -1,19 +1,21 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
-import Skeleton from 'react-loading-skeleton'
+import { useMemo } from 'react'
 
-import { FeederPoolState } from '@apps/data-provider'
-import { ViewportWidth } from '@apps/theme'
-import { CountUp, Button, ExternalLink, Tooltip } from '@apps/dumb-components'
 import { TokenIcon, TokenPair } from '@apps/base/components/core'
-import { useFeederPool } from '@apps/masset-hooks'
 import { usePropose } from '@apps/base/context/transactions'
-import { Interfaces } from '@apps/types'
+import { Button, CountUp, ExternalLink, Tooltip } from '@apps/dumb-components'
+import { useFeederPool } from '@apps/masset-hooks'
+import { ViewportWidth } from '@apps/theme'
 import { TransactionManifest } from '@apps/transaction-manifest'
+import Skeleton from 'react-loading-skeleton'
+import styled from 'styled-components'
 
 import { useFraxStakingContract, useFraxStakingState } from '../../../../context/FraxStakingProvider'
 import { Card } from '../../cards/Card'
 import { assetColorMapping } from '../../constants'
+
+import type { FeederPoolState } from '@apps/data-provider'
+import type { Interfaces } from '@apps/types'
+import type { FC } from 'react'
 
 interface Props {
   className?: string

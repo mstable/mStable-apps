@@ -1,14 +1,16 @@
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { Context, createContext, FC, useState } from 'react'
-import { useInterval } from 'react-use'
-import { BigNumber } from 'ethers'
-import { getUnixTime } from 'date-fns'
+import { createContext, useState } from 'react'
 
+import { useTokenSubscription } from '@apps/base/context/tokens'
 import { BigDecimal } from '@apps/bigdecimal'
 import { createUseContextFn, providerFactory } from '@apps/context-utils'
 import { SCALE } from '@apps/types'
+import { getUnixTime } from 'date-fns'
+import { BigNumber } from 'ethers'
+import { useInterval } from 'react-use'
 
 import { useStakedTokenQuery } from '../../context/StakedToken'
+
+import type { Context, FC } from 'react'
 
 export interface RewardsEarned {
   canClaim?: boolean
@@ -32,7 +34,7 @@ export const createRewardsEarnedContext = (): Readonly<[() => RewardsEarned, FC,
       }
 
       const {
-        stakingRewards: { lastUpdateTime, periodFinish, rewardPerTokenStored: _rewardPerTokenStored, rewardRate, rewardsToken },
+        stakingRewards: { lastUpdateTime, periodFinish, rewardPerTokenStored: _rewardPerTokenStored, rewardRate },
         token: {
           totalSupply: { bigDecimal: totalTokens },
         },

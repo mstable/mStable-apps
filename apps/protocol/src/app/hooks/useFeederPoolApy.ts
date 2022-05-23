@@ -1,12 +1,14 @@
-import { MaticMainnet, useNetworkAddresses } from '@apps/base/context/network'
+import { useNetworkAddresses } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { calculateApy } from '@apps/quick-maths'
-import { useSelectedMassetState } from '@apps/masset-hooks'
 import { calculateBoost, getPriceCoeff, MAX_BOOST, useVMTABalance } from '@apps/boost'
-import { BoostedCombinedAPY, FetchState, MassetName } from '@apps/types'
+import { useSelectedMassetState } from '@apps/masset-hooks'
+import { calculateApy } from '@apps/quick-maths'
 
 import { useFraxStakingState } from '../context/FraxStakingProvider'
 import { useSelectedMassetPrice } from './useSelectedMassetPrice'
+
+import type { MaticMainnet } from '@apps/base/context/network'
+import type { BoostedCombinedAPY, FetchState, MassetName } from '@apps/types'
 
 const useFeederPoolApyVault = (poolAddress: string, mAssetName?: MassetName) => {
   const massetState = useSelectedMassetState(mAssetName)

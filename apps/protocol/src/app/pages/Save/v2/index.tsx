@@ -1,11 +1,13 @@
-import React, { FC, useState } from 'react'
+import { useState } from 'react'
 
-import { TabCard, Flippable } from '@apps/dumb-components'
+import { Flippable, TabCard } from '@apps/dumb-components'
 
 import { useOnboarding } from '../hooks'
+import { OnboardingCard } from './Onboarding'
 import { SaveDeposit } from './SaveDeposit'
 import { SaveRedeem } from './SaveRedeem'
-import { OnboardingCard } from './Onboarding'
+
+import type { FC } from 'react'
 
 enum Tabs {
   Deposit = 'Deposit',

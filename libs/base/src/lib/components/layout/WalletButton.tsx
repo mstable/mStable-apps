@@ -1,14 +1,14 @@
-import React, { FC } from 'react'
+import { UnstyledButton } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
+import { ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
-import { truncateAddress } from '@apps/formatters'
-import { UnstyledButton } from '@apps/dumb-components'
-import { ViewportWidth } from '@apps/theme'
-
+import { useConnect, useConnected, useEnsAvatar, useEnsName, useInjectedChainIdCtx, useWalletAddress } from '../../context/AccountProvider'
 import { ChainIds, getNetwork, useChainIdCtx } from '../../context/NetworkProvider'
-import { useConnect, useWalletAddress, useEnsName, useConnected, useInjectedChainIdCtx, useEnsAvatar } from '../../context/AccountProvider'
 import { useAccountModal } from '../../hooks/useAccountModal'
 import { UserIcon, UserIconContainer } from '../core'
+
+import type { FC } from 'react'
 
 const ConnectText = styled.span`
   padding: 0 0.5rem;

@@ -1,13 +1,12 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { useNetwork } from '@apps/base/context/network'
-import { usePropose } from '@apps/base/context/transactions'
+import { AssetExchange, SendButton, TransactionInfo } from '@apps/base/components/forms'
 import { useWalletAddress } from '@apps/base/context/account'
-import { AddressOption } from '@apps/types'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { useBigDecimalInput, useSlippage, BigDecimalInputValue, useMinimumOutput } from '@apps/hooks'
-import { SendButton, AssetExchange, TransactionInfo } from '@apps/base/components/forms'
+import { useNetwork } from '@apps/base/context/network'
+import { useTokenSubscription } from '@apps/base/context/tokens'
+import { usePropose } from '@apps/base/context/transactions'
+import { useBigDecimalInput, useMinimumOutput, useSlippage } from '@apps/hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
 
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 import {
@@ -16,6 +15,11 @@ import {
   useSelectedFeederPoolContracts,
   useSelectedFeederPoolState,
 } from '../FeederPoolProvider'
+
+import type { BigDecimalInputValue } from '@apps/hooks'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
 
 const formId = 'MintLP'
 

@@ -1,8 +1,9 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
 import { Meta8Console } from './Meta8Console'
+
+import type { FC } from 'react'
 
 const Formula = styled.span`
   ${({ theme }) => theme.mixins.numeric};

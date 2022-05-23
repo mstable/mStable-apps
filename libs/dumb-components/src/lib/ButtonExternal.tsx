@@ -1,6 +1,8 @@
-import { ButtonHTMLAttributes, ComponentProps, FC } from 'react'
 import styled from 'styled-components'
+
 import { Button } from './Button'
+
+import type { ButtonHTMLAttributes, FC } from 'react'
 
 interface Props extends ButtonHTMLAttributes<unknown> {
   highlighted?: boolean

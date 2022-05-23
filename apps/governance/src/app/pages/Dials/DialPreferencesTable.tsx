@@ -1,11 +1,13 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
 import { Table, TableCell, TableRow } from '@apps/dumb-components'
+import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { useActiveDial } from './context/ViewOptionsContext'
 import { MiniDelegateeProfile } from './DialDelegatee'
-import { useHistory } from 'react-router-dom'
+
+import type { FC } from 'react'
 
 const useDialPreferencesData = (): [string, number, number][] => {
   const activeDial = useActiveDial()

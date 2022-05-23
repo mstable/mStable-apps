@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FC, useEffect, useRef } from 'react'
-import styled from 'styled-components'
+import { useEffect, useRef } from 'react'
+
 import ReactSlider from 'react-slider'
+import styled from 'styled-components'
+
+import type { FC } from 'react'
 
 interface Props {
   min: number
   max: number
   value: number
-  onChange(value: number): void
+  onChange: (value: number) => void
   step: number
   error?: string
   intervals?: number

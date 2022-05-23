@@ -1,14 +1,17 @@
-import React, { ChangeEventHandler, FC, useCallback, useMemo, useRef } from 'react'
-import styled from 'styled-components'
+import { useCallback, useMemo, useRef } from 'react'
 
 import { ERC20__factory } from '@apps/artifacts/typechain'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { useBigDecimalInput } from '@apps/hooks'
 import { Button, Input } from '@apps/dumb-components'
+import { useBigDecimalInput } from '@apps/hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import styled from 'styled-components'
 
 import { useSigner } from '../../context/AccountProvider'
 import { useTokensState } from '../../context/TokensProvider'
 import { usePropose } from '../../context/TransactionsProvider'
+
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { ChangeEventHandler, FC } from 'react'
 
 interface Props {
   symbol: string

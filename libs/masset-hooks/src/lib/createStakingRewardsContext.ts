@@ -1,28 +1,29 @@
-import { createContext, useMemo, FC, Context } from 'react'
-import { BigNumber } from 'ethers'
-import { useQuery } from '@apollo/client'
+import { createContext, useMemo } from 'react'
 
-import {
-  StakingRewardsContractDocument,
+import { useQuery } from '@apollo/client'
+import { StakingRewardsContractDocument, StakingRewardsForStakingTokenDocument } from '@apps/artifacts/graphql/staking-rewards'
+import { useAccount } from '@apps/base/context/account'
+import { useApolloClients } from '@apps/base/context/apollo'
+import { useNetwork } from '@apps/base/context/network'
+import { useFetchPriceCtx } from '@apps/base/context/prices'
+import { useTokenSubscription } from '@apps/base/context/tokens'
+import { BigDecimal } from '@apps/bigdecimal'
+import { createUseContextFn, providerFactory } from '@apps/context-utils'
+import { calculateApy } from '@apps/quick-maths'
+import { BigNumber } from 'ethers'
+
+import { useSelectedMassetState } from './useSelectedMassetState'
+
+import type {
   StakingRewardsContractQuery,
   StakingRewardsContractQueryResult,
   StakingRewardsContractQueryVariables,
-  StakingRewardsForStakingTokenDocument,
   StakingRewardsForStakingTokenQuery,
   StakingRewardsForStakingTokenQueryResult,
   StakingRewardsForStakingTokenQueryVariables,
 } from '@apps/artifacts/graphql/staking-rewards'
-import { BigDecimal } from '@apps/bigdecimal'
-import { MassetName, Token } from '@apps/types'
-import { calculateApy } from '@apps/quick-maths'
-import { createUseContextFn, providerFactory } from '@apps/context-utils'
-import { useApolloClients } from '@apps/base/context/apollo'
-import { useAccount } from '@apps/base/context/account'
-import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { useNetwork } from '@apps/base/context/network'
-import { useTokenSubscription } from '@apps/base/context/tokens'
-
-import { useSelectedMassetState } from './useSelectedMassetState'
+import type { MassetName, Token } from '@apps/types'
+import type { Context, FC } from 'react'
 
 export interface StakingRewardsContract {
   address: string

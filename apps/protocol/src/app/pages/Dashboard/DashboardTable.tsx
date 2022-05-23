@@ -1,16 +1,20 @@
-import React, { useMemo } from 'react'
-import styled from 'styled-components'
-import type { FC } from 'react'
-import { FeederPoolState, MassetState, useDataState } from '@apps/data-provider'
-import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
-import { PoolRow } from './PoolRow'
-import { Card, DashTable } from './Styled'
-import { filterByDeposited, isValidFeederPool, sortPoolsByDepositedDesc, sortSaveByDepositedDesc } from './utils'
+import { useMemo } from 'react'
+
 import { useAccount } from '@apps/base/context/account'
-import { SaveRow } from './SaveRow'
-import { DashboardFilter as DF } from './types'
+import { useDataState } from '@apps/data-provider'
+import styled from 'styled-components'
+
 import { useFraxStakingState } from '../../context/FraxStakingProvider'
+import { RewardStreamsProvider } from '../../context/RewardStreamsProvider'
 import { useStakingRewards } from '../Save/hooks'
+import { PoolRow } from './PoolRow'
+import { SaveRow } from './SaveRow'
+import { Card, DashTable } from './Styled'
+import { DashboardFilter as DF } from './types'
+import { filterByDeposited, isValidFeederPool, sortPoolsByDepositedDesc, sortSaveByDepositedDesc } from './utils'
+
+import type { FeederPoolState, MassetState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const headerTitles = ['Asset', 'APY', 'Balance', 'TVL'].map(t => ({ title: t }))
 
@@ -34,7 +38,7 @@ export const DashboardTable: FC<{ filter: DF }> = ({ filter }) => {
   const { subscribedData: fraxSubscribedData } = useFraxStakingState()
   const fraxState = fraxSubscribedData?.value?.accountData
 
-  const filteredHeaderTitles = !!account ? headerTitles : headerTitles.filter(({ title }) => title !== 'Balance')
+  const filteredHeaderTitles = account ? headerTitles : headerTitles.filter(({ title }) => title !== 'Balance')
 
   const save = useMemo(() => Object.values(dataState).sort(sortSaveByDepositedDesc()), [dataState])
 
@@ -51,7 +55,9 @@ export const DashboardTable: FC<{ filter: DF }> = ({ filter }) => {
   const isUserFilter = filter === DF.User
 
   const filteredSave = save.filter((massetState: MassetState) => filterByDeposited(isUserFilter && { massetState, polygonRewards }))
-  const filteredPools = pools.filter((feederState: FeederPoolState) => filterByDeposited(isUserFilter && { feederState, fraxState, polygonRewards }))
+  const filteredPools = pools.filter((feederState: FeederPoolState) =>
+    filterByDeposited(isUserFilter && { feederState, fraxState, polygonRewards }),
+  )
   const showUserZeroState = isUserFilter && !filteredSave.length && !filteredPools.length
 
   return (

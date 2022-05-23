@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
+import { BackLink } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
-import { ViewportWidth } from '@apps/theme'
-import { BackLink } from '@apps/dumb-components'
+import type { FC } from 'react'
 
 interface Props {
   title: string

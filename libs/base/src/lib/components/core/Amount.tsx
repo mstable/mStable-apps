@@ -1,9 +1,11 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
-import { CountUpProps } from 'react-countup'
+import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { Tooltip, CountUp } from '@apps/dumb-components'
+import { CountUp, Tooltip } from '@apps/dumb-components'
+import styled from 'styled-components'
+
+import type { FC } from 'react'
+import type { CountUpProps } from 'react-countup'
 
 export enum NumberFormat {
   Abbreviated,

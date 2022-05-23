@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
 import { useIsDarkMode } from '@apps/browser-settings'
 import { colorTheme } from '@apps/theme'
+import styled from 'styled-components'
+
+import type { FC } from 'react'
 
 interface Props {
   value?: number

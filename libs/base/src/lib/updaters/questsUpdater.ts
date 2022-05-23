@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { getUnixTime } from 'date-fns'
 
 import { useUpdateQuestsMutation } from '@apps/artifacts/graphql/questbook'
+import { getUnixTime } from 'date-fns'
+
 import { useAccount } from '../context/AccountProvider'
 import { useApolloClients } from '../context/ApolloProvider'
 import { useAddQuestNotification } from '../context/NotificationsProvider'

@@ -1,16 +1,17 @@
-import { truncateAddress } from '@apps/formatters'
-import { constants } from 'ethers'
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
-import { ViewportWidth } from '@apps/theme'
 import { useOwnAccount } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
-import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
 import { Button, ThemedSkeleton } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
+import { ViewportWidth } from '@apps/theme'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import { constants } from 'ethers'
+import styled from 'styled-components'
 
 import { StakedTokenSwitcher } from '../../components/StakedTokenSwitcher'
-import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedToken'
+import { useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedToken'
+
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 const Check: FC = () => (
   <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">

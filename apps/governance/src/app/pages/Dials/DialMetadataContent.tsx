@@ -1,12 +1,13 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
 import { Address } from '@apps/base/components/core'
 import { ChainIds, Networks } from '@apps/base/context/network'
 import { ExternalLink, ToggleInput, Tooltip } from '@apps/dumb-components'
+import styled from 'styled-components'
+
 import { useShowVotesTable } from './context/ViewOptionsContext'
 
-import { Dial } from './types'
+import type { FC } from 'react'
+
+import type { Dial } from './types'
 
 const Container = styled.div`
   font-size: 0.9rem;

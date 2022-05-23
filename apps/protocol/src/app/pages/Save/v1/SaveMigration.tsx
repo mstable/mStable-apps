@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
 import { useTransactionsState } from '@apps/base/context/transactions'
-import { TransactionStatus } from '@apps/transaction-manifest'
-import { ViewportWidth, gradientShift } from '@apps/theme'
 import { Steps } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { gradientShift, ViewportWidth } from '@apps/theme'
+import { TransactionStatus } from '@apps/transaction-manifest'
+import styled from 'styled-components'
 
 import { SaveMigrationProvider, useMigrationSteps } from './SaveMigrationProvider'
+
+import type { FC } from 'react'
 
 const StepsContainer = styled.div`
   display: flex;

@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction } from 'react'
 import { useLocalStorage } from 'react-use'
+
+import type { Dispatch, SetStateAction } from 'react'
 
 export interface StakeSignatures {
   [x: string]: string

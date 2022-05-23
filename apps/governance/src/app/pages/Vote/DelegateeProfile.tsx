@@ -1,15 +1,17 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
+import { Fragment } from 'react'
 
-import { DelegateeInfo } from '@mstable/delegatee-lists'
-import { Button, CountUp } from '@apps/dumb-components'
 import { BalanceWidget } from '@apps/base/components/core'
+import { Button, CountUp } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
-import { BigDecimal } from '@apps/bigdecimal'
+import styled from 'styled-components'
 
 import { useAccountQuery } from '../../hooks/useAccountQuery'
 import { useDelegatorModal } from '../../hooks/useDelegatorModal'
 import { VotingHistory } from './VotingHistory'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { DelegateeInfo } from '@mstable/delegatee-lists'
+import type { FC } from 'react'
 
 const StyledCountUp = styled(CountUp)`
   font-size: 1.25rem;
@@ -106,13 +108,13 @@ const DelegateeBalances: FC<{
       {accounts?.map(({ stakedToken: { stakingToken }, balance, id }) => {
         const cooldownSimple = parseFloat(balance.cooldownUnits) / 1e18
         return (
-          <React.Fragment key={id}>
+          <Fragment key={id}>
             <BalanceWidget
               title={`Staked ${stakingToken.symbol}`}
               token={stakingToken.symbol}
               balance={balance.rawBD.simple + cooldownSimple}
             />
-          </React.Fragment>
+          </Fragment>
         )
       })}
       <BalanceWidget title="Voting Power" token="vMTA" balance={votingPower} />

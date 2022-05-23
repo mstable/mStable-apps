@@ -1,7 +1,8 @@
-import { createMemo } from 'react-use'
 import { BigDecimal } from '@apps/bigdecimal'
-import { BigDecimalInputValues } from '@apps/hooks'
-import { InputRatios, ScaledInputs } from '@apps/types'
+import { createMemo } from 'react-use'
+
+import type { BigDecimalInputValues } from '@apps/hooks'
+import type { InputRatios, ScaledInputs } from '@apps/types'
 
 export const useScaledInputs = createMemo((inputValues: BigDecimalInputValues, inputRatios: InputRatios): ScaledInputs => {
   const touched = Object.values(inputValues).filter(value => value.touched && value.amount.exact.gt(0))

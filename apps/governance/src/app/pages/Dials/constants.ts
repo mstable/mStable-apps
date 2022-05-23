@@ -1,5 +1,6 @@
 import { Networks } from '@apps/base/context/network'
-import { DialMetadata } from './types'
+
+import type { DialMetadata } from './types'
 
 export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze({
   0: {

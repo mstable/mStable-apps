@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
-import { BoostedVaultState } from '@apps/data-provider'
 import { useCalculateUserBoost } from '@apps/boost'
 import { createToggleContext } from '@apps/context-utils'
-import { Widget, Button, ProgressBar } from '@apps/dumb-components'
+import { Button, ProgressBar, Widget } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
 
 import { BoostCalculator } from './BoostCalculator'
+
+import type { BoostedVaultState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const BoostBarLine = styled.div`
   width: 100%;

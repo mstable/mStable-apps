@@ -1,10 +1,13 @@
-import React, { useMemo } from 'react'
-import type { FC } from 'react'
+import { useMemo } from 'react'
+
 import { useDataState } from '@apps/data-provider'
-import styled from 'styled-components'
-import { useWBTCPrice } from './utils'
-import { ViewportWidth } from '@apps/theme'
 import { ThemedSkeleton } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
+
+import { useWBTCPrice } from './utils'
+
+import type { FC } from 'react'
 
 const StyledSkeleton = styled(ThemedSkeleton)`
   max-width: 20rem;
@@ -69,7 +72,7 @@ export const TotalTvl: FC = () => {
 
   return (
     <Stack>
-      {!!tvl ? (
+      {tvl ? (
         <>
           <h3>{formatter.format(tvl)}</h3>
           <p>Total value deposited in mStable</p>

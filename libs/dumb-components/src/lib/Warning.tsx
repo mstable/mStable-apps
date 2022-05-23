@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
+import warningSvg from '@apps/icons/warning.svg'
 import styled from 'styled-components'
 
-import warningSvg from '@apps/icons/warning.svg'
+import type { FC } from 'react'
 
 const Container = styled.div<{ highlight?: boolean }>`
   display: flex;

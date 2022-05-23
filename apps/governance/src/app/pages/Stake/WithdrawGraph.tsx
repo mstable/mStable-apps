@@ -1,9 +1,13 @@
-import React, { FC, useMemo } from 'react'
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { useMemo } from 'react'
+
 import { Color } from '@apps/theme'
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import styled from 'styled-components'
+
 import { useStakedTokenQuery } from '../../context/StakedToken'
 import { getRedemptionFee } from '../../utils'
+
+import type { FC } from 'react'
 
 const WEEK = 604800
 

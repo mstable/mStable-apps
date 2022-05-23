@@ -1,6 +1,7 @@
-import { FieldPolicy } from '@apollo/client'
-import { BigNumber } from 'ethers'
 import { BigDecimal } from '@apps/bigdecimal'
+import { BigNumber } from 'ethers'
+
+import type { FieldPolicy } from '@apollo/client'
 
 // Doesn't check that T[field] is string
 export const readAsBN = <T>(field: keyof T): FieldPolicy<BigNumber> => ({

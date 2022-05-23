@@ -1,15 +1,15 @@
-import React, { FC } from 'react'
-import { TransitionProps } from 'react-transition-group/Transition'
-import styled, { keyframes, css } from 'styled-components'
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
-
 import { TransactionStatus } from '@apps/transaction-manifest'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import styled, { css, keyframes } from 'styled-components'
 
 import { NotificationType, useNotificationsState } from '../../context/NotificationsProvider'
 import { useTransactionsState } from '../../context/TransactionsProvider'
+import { NotificationItem } from '../core'
 import { PendingTransaction } from '../wallet/PendingTransactions'
 import { TransactionGasProvider } from '../wallet/TransactionGasProvider'
-import { NotificationItem } from '../core'
+
+import type { FC } from 'react'
+import type { TransitionProps } from 'react-transition-group/Transition'
 
 const slideIn = keyframes`
   0% {

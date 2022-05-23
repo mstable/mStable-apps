@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
-import { ButtonExternal, InfoBox } from '@apps/dumb-components'
 import { BalanceWidget } from '@apps/base/components/core'
+import { ButtonExternal, InfoBox } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
 
 import { useEmissionsData } from './context/EmissionsContext'
 import { DialDelegatee } from './DialDelegatee'
+
+import type { FC } from 'react'
 
 const Sidebar = styled.div`
   display: flex;

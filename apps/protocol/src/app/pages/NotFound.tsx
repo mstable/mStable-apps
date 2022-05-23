@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import type { FC } from 'react'
 
 /**
  * Placeholder component for Not Found (404).

@@ -1,13 +1,16 @@
-import React, { FC, useMemo } from 'react'
+import { useMemo } from 'react'
+
+import { useOwnAccount } from '@apps/base/context/account'
+import { usePropose } from '@apps/base/context/transactions'
+import { BigDecimal } from '@apps/bigdecimal'
+import { CountdownBar, Table, TableCell, TableRow, Tooltip } from '@apps/dumb-components'
+import { TransactionManifest } from '@apps/transaction-manifest'
 import styled from 'styled-components'
 
-import { CountdownBar, Table, TableCell, TableRow, Tooltip } from '@apps/dumb-components'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { usePropose } from '@apps/base/context/transactions'
-import { useOwnAccount } from '@apps/base/context/account'
-import { BigDecimal } from '@apps/bigdecimal'
+import { useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedToken'
 
-import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedToken'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 const TABLE_WIDTHS = [33, 33, 33]
 

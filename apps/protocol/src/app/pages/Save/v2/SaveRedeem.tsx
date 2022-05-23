@@ -1,20 +1,25 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+/* eslint-disable new-cap */
+import { useCallback, useMemo, useState } from 'react'
+
 import { BoostedVault__factory, ISavingsContractV3__factory } from '@apps/artifacts/typechain'
-
-import { useSigner, useWalletAddress } from '@apps/base/context/account'
-import { usePropose } from '@apps/base/context/transactions'
-import { MassetState } from '@apps/data-provider'
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { BigDecimal } from '@apps/bigdecimal'
-import { AddressOption } from '@apps/types'
-import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
-import { BigDecimalInputValue, useBigDecimalInput } from '@apps/hooks'
-import { useSelectedMassetState } from '@apps/masset-hooks'
 import { AssetExchange, SendButton } from '@apps/base/components/forms'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
+import { useTokenSubscription } from '@apps/base/context/tokens'
+import { usePropose } from '@apps/base/context/transactions'
+import { BigDecimal } from '@apps/bigdecimal'
+import { useBigDecimalInput } from '@apps/hooks'
+import { useSelectedMassetState } from '@apps/masset-hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
 
-import { SaveRoutesOut } from './types'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 import { useStakingRewards } from '../hooks'
+import { SaveRoutesOut } from './types'
+
+import type { MassetState } from '@apps/data-provider'
+import type { BigDecimalInputValue } from '@apps/hooks'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
 
 const formId = 'SaveRedeem'
 

@@ -1,5 +1,8 @@
-import { FC, Context, createElement, ReactElement, ReactNode, useContext, createContext } from 'react'
+import { createContext, createElement, useContext } from 'react'
+
 import { useToggle } from 'react-use'
+
+import type { Context, FC, ReactElement, ReactNode } from 'react'
 
 export const providerFactory = <T>(context: Context<T>, props: { value: T }, children: ReactNode): ReactElement =>
   createElement(context.Provider, props, children)

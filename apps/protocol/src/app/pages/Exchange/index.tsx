@@ -1,17 +1,19 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
+import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
 import { ThemedSkeleton } from '@apps/dumb-components'
 import { ExchangeAction } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
-import { MultiAssetExchangeProvider } from '@apps/base/components/forms'
+import styled from 'styled-components'
 
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { ExchangeStateProvider, useExchangeState } from '../Save/hooks'
-import { SwapLogic } from './SwapLogic'
 import { MintExactLogic } from './MintExactLogic'
 import { RedeemExactLogic } from './RedeemExactLogic'
+import { SwapLogic } from './SwapLogic'
 import { SwitchButton } from './SwitchButton'
+
+import type { FC } from 'react'
 
 const RecolOverlay = styled.div`
   position: absolute;

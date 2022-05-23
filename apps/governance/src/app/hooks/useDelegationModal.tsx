@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import { useModal } from 'react-modal-hook'
-
-import { ViewportWidth } from '@apps/theme'
-import { AddressInput, Modal } from '@apps/dumb-components'
 import { useModalDataDispatch } from '@apps/base/context/modal-data'
+import { AddressInput, Modal } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
+import { useModal } from 'react-modal-hook'
+import styled from 'styled-components'
 
 import { Leaderboard } from '../pages/Vote/Leaderboard'
+
+import type { FC } from 'react'
 
 const StyledAddressInput = styled(AddressInput)`
   background: ${({ theme }) => theme.color.background[0]};

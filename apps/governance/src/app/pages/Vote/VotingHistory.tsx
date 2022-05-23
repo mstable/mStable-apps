@@ -1,9 +1,11 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
+import { useVotesQuery } from '@apps/artifacts/graphql/snapshot'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { ExternalLink } from '@apps/dumb-components'
 import { formatUnix } from '@apps/formatters'
-import { useVotesQuery, VotesQueryResult } from '@apps/artifacts/graphql/snapshot'
+import styled from 'styled-components'
+
+import type { VotesQueryResult } from '@apps/artifacts/graphql/snapshot'
+import type { FC } from 'react'
 
 type VoteData = NonNullable<VotesQueryResult['data']>['votes'][number]
 
@@ -97,7 +99,7 @@ export const VotingHistory: FC<{ addressOrENSName: string; address?: string }> =
     <Container>
       <h3>Voting History</h3>
       <div>
-        {!!votesQuery.data?.votes?.length ? (
+        {votesQuery.data?.votes?.length ? (
           votesQuery.data?.votes.map(({ proposal: { title, state, link, choices }, id, created, choice }) => (
             <VotingHistoryItem
               key={id}

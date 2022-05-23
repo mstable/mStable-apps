@@ -1,5 +1,5 @@
-import type { PriceImpact } from '@apps/types'
 import type { BigDecimal } from '@apps/bigdecimal'
+import type { PriceImpact } from '@apps/types'
 
 export enum SaveRoutes {
   Save,

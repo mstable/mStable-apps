@@ -1,20 +1,22 @@
-import type { FC, ReactElement } from 'react'
-import React, { useCallback, useMemo, useState } from 'react'
-import styled from 'styled-components'
-import Skeleton from 'react-loading-skeleton'
+import { useCallback, useMemo, useState } from 'react'
 
-import { FeederPoolState, MassetState } from '@apps/data-provider'
-import { useSelectedMassetConfig, MassetConfig, MASSET_CONFIG } from '@apps/masset-provider'
 import { ChainIds, useNetwork } from '@apps/base/context/network'
-import { ViewportWidth } from '@apps/theme'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { useSelectedMassetConfig } from '@apps/masset-provider'
+import { ViewportWidth } from '@apps/theme'
+import { PoolType } from '@apps/types'
+import Skeleton from 'react-loading-skeleton'
+import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { ProtocolPageHeader as PageHeader } from '../ProtocolPageHeader'
 import { Card } from './cards/Card'
 import { OnboardingCard } from './cards/OnboardingCard'
-import { PoolType } from '@apps/types'
 import { PoolCard } from './cards/PoolCard'
-import { useHistory } from 'react-router-dom'
+
+import type { FeederPoolState, MassetState } from '@apps/data-provider'
+import type { MassetConfig } from '@apps/masset-provider'
+import type { FC, ReactElement } from 'react'
 
 interface CustomAssetCardProps {
   isCustomAssetCard: boolean

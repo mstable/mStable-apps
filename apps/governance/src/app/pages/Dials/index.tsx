@@ -1,14 +1,13 @@
-import React, { FC } from 'react'
+import { ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
-import { ViewportWidth } from '@apps/theme'
-
 import { GovernancePageHeader } from '../../components/GovernancePageHeader'
-
 import { DialsContext } from './context'
 import { DialSidebar } from './DialSidebar'
 import { DialView } from './DialView'
 import { EpochDetails } from './EpochDetails'
+
+import type { FC } from 'react'
 
 const DialAndSidebar = styled.div`
   display: flex;

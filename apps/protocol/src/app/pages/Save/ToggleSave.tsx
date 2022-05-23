@@ -1,11 +1,13 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
-import { SavingsContractState } from '@apps/data-provider'
 import { Toggle } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import styled from 'styled-components'
 
 import { SaveVersion, useSelectedSaveVersion } from '../../context/SelectedSaveVersionProvider'
+
+import type { SavingsContractState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const ToggleContainer = styled.div`
   display: flex;

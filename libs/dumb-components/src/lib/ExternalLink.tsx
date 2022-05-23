@@ -1,7 +1,7 @@
-import React, { AnchorHTMLAttributes, FC } from 'react'
+import { ReactComponent as ExternalLinkArrow } from '@apps/icons/external-link-arrow.svg'
 import styled from 'styled-components'
 
-import { ReactComponent as ExternalLinkArrow } from '@apps/icons/external-link-arrow.svg'
+import type { AnchorHTMLAttributes, FC } from 'react'
 
 const Anchor = styled.a`
   border-bottom: 0;

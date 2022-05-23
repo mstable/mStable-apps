@@ -1,14 +1,18 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import { useCallback, useMemo, useState } from 'react'
 
 import { BoostDirector__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSigner } from '@apps/base/context/account'
-import { useDataState, BoostedVaultState } from '@apps/data-provider'
 import { usePropose } from '@apps/base/context/transactions'
-import { ViewportWidth } from '@apps/theme'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
+import { useDataState } from '@apps/data-provider'
 import { Button } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
+import { ViewportWidth } from '@apps/theme'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import styled from 'styled-components'
+
+import type { BoostedVaultState } from '@apps/data-provider'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 interface Props {
   vault?: BoostedVaultState

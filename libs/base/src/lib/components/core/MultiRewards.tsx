@@ -1,10 +1,10 @@
-import React, { FC } from 'react'
+import { Button, CountUp, Table, TableCell, TableRow, ThemedSkeleton } from '@apps/dumb-components'
 import styled from 'styled-components'
 
-import { CountUp, Table, TableCell, TableRow, Button, ThemedSkeleton } from '@apps/dumb-components'
-import { BigDecimal } from '@apps/bigdecimal'
-
 import { TokenIcon } from '../core'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { FC } from 'react'
 
 const TABLE_CELL_WIDTHS = [60, 40]
 

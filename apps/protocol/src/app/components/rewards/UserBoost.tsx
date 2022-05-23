@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
 import { CountUp, DifferentialCountup } from '@apps/dumb-components'
 import { ThemedSkeleton } from '@apps/dumb-components'
-import { BoostedVaultState } from '@apps/data-provider'
-import { BoostedCombinedAPY, FetchState } from '@apps/types'
+import styled from 'styled-components'
 
 import { Boost } from './Boost'
+
+import type { BoostedVaultState } from '@apps/data-provider'
+import type { BoostedCombinedAPY, FetchState } from '@apps/types'
+import type { FC } from 'react'
 
 const APYRange = styled.div`
   display: flex;

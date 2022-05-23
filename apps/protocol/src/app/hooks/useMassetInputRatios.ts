@@ -1,7 +1,8 @@
-import { useSelectedMassetState } from '@apps/masset-hooks'
 import { useMemo } from 'react'
 
-import { InputRatios } from '@apps/types'
+import { useSelectedMassetState } from '@apps/masset-hooks'
+
+import type { InputRatios } from '@apps/types'
 
 export const useMassetInputRatios = (): InputRatios => {
   const massetState = useSelectedMassetState()

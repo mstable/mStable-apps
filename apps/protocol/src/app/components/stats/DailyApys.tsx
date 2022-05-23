@@ -1,18 +1,17 @@
-import React, { FC } from 'react'
-import { Area, XAxis, YAxis, Tooltip, AreaChart, ResponsiveContainer } from 'recharts'
-import styled from 'styled-components'
-import { format } from 'date-fns'
-
-import { Color } from '@apps/theme'
-import { percentageFormat, periodFormatMapping } from '@apps/formatters'
-import { ThemedSkeleton } from '@apps/dumb-components'
 import { useBlockTimesForDates } from '@apps/base/hooks'
+import { ThemedSkeleton } from '@apps/dumb-components'
+import { percentageFormat, periodFormatMapping } from '@apps/formatters'
+import { Color } from '@apps/theme'
+import { format } from 'date-fns'
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import styled from 'styled-components'
 
 import { useSelectedSavingsContractState } from '../../context/SelectedSaveVersionProvider'
 import { useDailyApysForBlockTimes } from '../../hooks/useDailyApysForBlockTimes'
-
 import { DateRange, Metrics, useDateFilter, useMetrics } from './Metrics'
 import { RechartsContainer } from './RechartsContainer'
+
+import type { FC } from 'react'
 
 const NoData = styled.div`
   display: flex;

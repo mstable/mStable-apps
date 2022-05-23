@@ -1,5 +1,5 @@
-import { Networks } from '@apps/base/context/network'
-import { BigDecimal } from '@apps/bigdecimal'
+import type { Networks } from '@apps/base/context/network'
+import type { BigDecimal } from '@apps/bigdecimal'
 
 export interface DialMetadata {
   title: string

@@ -1,7 +1,8 @@
 import { ChainIds, getNetwork } from '@apps/base/context/network'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
 import { useSelectedMassetState } from '@apps/masset-hooks'
-import { FetchState, MassetName } from '@apps/types'
+
+import type { FetchState, MassetName } from '@apps/types'
 
 const {
   addresses: { WBTC },

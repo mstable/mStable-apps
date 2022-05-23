@@ -1,12 +1,13 @@
 import React from 'react'
-import type { FC } from 'react'
-import styled from 'styled-components'
 
-import { ViewportWidth } from '@apps/theme'
 import { ExplorerLink } from '@apps/base/components/core'
 import { ThemedSkeleton } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
 
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'
+
+import type { FC } from 'react'
 
 const Container = styled.div`
   padding: 1rem;

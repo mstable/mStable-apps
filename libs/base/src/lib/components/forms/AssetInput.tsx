@@ -1,16 +1,20 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+import { BigDecimal } from '@apps/bigdecimal'
+import { AmountInput, Button, ThemedSkeleton } from '@apps/dumb-components'
+import { ReactComponent as UnlockedIcon } from '@apps/icons/lock-closed.svg'
+import { ReactComponent as LockIcon } from '@apps/icons/lock-open.svg'
+import { ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
-import type { AddressOption } from '@apps/types'
-import { ViewportWidth } from '@apps/theme'
-import { BigDecimal } from '@apps/bigdecimal'
-import { ThemedSkeleton, Button, AmountInput } from '@apps/dumb-components'
-import { ReactComponent as LockIcon } from '@apps/icons/lock-open.svg'
-import { ReactComponent as UnlockedIcon } from '@apps/icons/lock-closed.svg'
-
-import { SubscribedTokenInput } from './SubscribedTokenInput'
+import { ApproveProvider, useApprove } from './ApproveProvider'
 import { ApproveContent } from './SendButton'
-import { ApproveProvider, Mode, useApprove } from './ApproveProvider'
+import { SubscribedTokenInput } from './SubscribedTokenInput'
+
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
+
+import type { Mode } from './ApproveProvider'
 
 interface Props {
   disabled?: boolean
@@ -20,9 +24,9 @@ interface Props {
   addressOptions?: (AddressOption | string)[]
   addressDisabled?: boolean
   error?: 'warning' | 'error'
-  handleSetAmount?(formValue?: string): void
-  handleSetAddress?(address: string): void
-  handleSetMax?(): void
+  handleSetAmount?: (formValue?: string) => void
+  handleSetAddress?: (address: string) => void
+  handleSetMax?: () => void
   needsApprove?: boolean
   handleApprove?: (mode: Mode) => void
   spender?: string

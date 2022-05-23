@@ -1,7 +1,9 @@
-import React, { FC, ReactElement } from 'react'
+import { Color } from '@apps/theme'
 import styled from 'styled-components'
-import { Color, ViewportWidth } from '@apps/theme'
+
 import { UnstyledButton } from './Button'
+
+import type { FC, ReactElement } from 'react'
 
 const TabsContainer = styled.div`
   display: flex;

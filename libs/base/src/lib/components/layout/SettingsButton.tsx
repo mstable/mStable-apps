@@ -1,20 +1,22 @@
-import React, { FC, useRef } from 'react'
-import styled from 'styled-components'
-import { useToggle } from 'react-use'
-import useOnClickOutside from 'use-onclickoutside'
+import { useRef } from 'react'
 
 import {
   useIsDarkMode,
-  useToggleDarkTheme,
-  useShowSubgraphStatus,
-  useToggleSubgraphStatus,
   useMute,
+  useShowSubgraphStatus,
+  useToggleDarkTheme,
   useToggleMute,
+  useToggleSubgraphStatus,
 } from '@apps/browser-settings'
 import { Tooltip, UnstyledButton } from '@apps/dumb-components'
 import { ReactComponent as SettingsSvg } from '@apps/icons/settings.svg'
+import { useToggle } from 'react-use'
+import styled from 'styled-components'
+import useOnClickOutside from 'use-onclickoutside'
 
 import { NetworkDropdown } from '../core'
+
+import type { FC } from 'react'
 
 const Button = styled(UnstyledButton)`
   background: ${({ theme }) => theme.color.background[1]};

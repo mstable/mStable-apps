@@ -1,15 +1,15 @@
-import React, { FC } from 'react'
-import styled, { css } from 'styled-components'
-
-import { Button, Tooltip } from '@apps/dumb-components'
-import { ViewportWidth } from '@apps/theme'
-import { ReactComponent as MTAIcon } from '@apps/icons/tokens/MTA.svg'
-import { ReactComponent as BPTIcon } from '@apps/icons/tokens/BPT-MTA-ETH.svg'
-import { ReactComponent as CheckmarkIcon } from '@apps/icons/checkmark.svg'
 import { useNetworkAddresses } from '@apps/base/context/network'
+import { Button, Tooltip } from '@apps/dumb-components'
+import { ReactComponent as CheckmarkIcon } from '@apps/icons/checkmark.svg'
+import { ReactComponent as BPTIcon } from '@apps/icons/tokens/BPT-MTA-ETH.svg'
+import { ReactComponent as MTAIcon } from '@apps/icons/tokens/MTA.svg'
+import { ViewportWidth } from '@apps/theme'
+import styled, { css } from 'styled-components'
 
 import { useSetStakedToken, useStakedToken } from '../../context/StakedToken'
 import { useStakingStatusDispatch } from '../../context/StakingStatus'
+
+import type { FC } from 'react'
 
 enum Selection {
   MTA,

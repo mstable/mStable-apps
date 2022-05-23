@@ -1,12 +1,14 @@
-import React, { FC, useState, useEffect } from 'react'
-import styled from 'styled-components'
+import { useEffect, useState } from 'react'
 
 import { useSound } from '@apps/browser-settings'
-import { Meta8Logic } from './Meta8Logic'
-import { RealisticSwitch } from './RealisticSwitch'
+import styled from 'styled-components'
 
 // @ts-ignore
 import startup from '../../../assets/startup.mp3'
+import { Meta8Logic } from './Meta8Logic'
+import { RealisticSwitch } from './RealisticSwitch'
+
+import type { FC } from 'react'
 
 const Display = styled.div<{ isOn: boolean }>`
   @keyframes scandown {

@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { createContext, FC, Reducer, useCallback, useContext, useMemo, useReducer } from 'react'
-import { BigNumber } from 'ethers'
-import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers'
+import { createContext, useCallback, useContext, useMemo, useReducer } from 'react'
 
-import { TransactionManifest, TransactionStatus, Instances, Interfaces } from '@apps/transaction-manifest'
-import { useAddErrorNotification, useAddInfoNotification, useAddSuccessNotification } from './NotificationsProvider'
+import { TransactionStatus } from '@apps/transaction-manifest'
+
 import { useGetExplorerUrl } from './NetworkProvider'
+import { useAddErrorNotification, useAddInfoNotification, useAddSuccessNotification } from './NotificationsProvider'
+
+import type { Instances, Interfaces, TransactionManifest } from '@apps/transaction-manifest'
+import type { TransactionReceipt, TransactionResponse } from '@ethersproject/providers'
+import type { BigNumber } from 'ethers'
+import type { FC, Reducer } from 'react'
 
 enum Actions {
   Cancel,
@@ -40,17 +44,17 @@ interface State {
 }
 
 interface Dispatch {
-  cancel(id: string): void
+  cancel: (id: string) => void
 
-  check(id: string, blockNumber: number): void
+  check: (id: string, blockNumber: number) => void
 
-  finalize(manifest: TransactionManifest<any, any>, receipt: TransactionReceipt): void
+  finalize: (manifest: TransactionManifest<any, any>, receipt: TransactionReceipt) => void
 
-  propose<TIface extends Interfaces, TFn extends keyof Instances[TIface]['functions']>(manifest: TransactionManifest<TIface, TFn>): void
+  propose: <TIface extends Interfaces, TFn extends keyof Instances[TIface]['functions']>(manifest: TransactionManifest<TIface, TFn>) => void
 
-  reset(): void
+  reset: () => void
 
-  send(manifest: TransactionManifest<never, never>, gasLimit: BigNumber, gasPrice: number): void
+  send: (manifest: TransactionManifest<never, never>, gasLimit: BigNumber, gasPrice: number) => void
 }
 
 type Action =

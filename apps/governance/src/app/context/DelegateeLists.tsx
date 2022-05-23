@@ -1,10 +1,12 @@
-import React, { createContext, useEffect, FC, useContext } from 'react'
-import { DelegateeInfo, DelegateeList } from '@mstable/delegatee-lists'
+import { createContext, useContext, useEffect } from 'react'
 
-import { useFetchState } from '@apps/hooks'
-import { providerFactory } from '@apps/context-utils'
 import { useProvider } from '@apps/base/context/account'
 import { useNetwork } from '@apps/base/context/network'
+import { providerFactory } from '@apps/context-utils'
+import { useFetchState } from '@apps/hooks'
+
+import type { DelegateeInfo, DelegateeList } from '@mstable/delegatee-lists'
+import type { FC } from 'react'
 
 interface State {
   lists: { [url: string]: DelegateeList }

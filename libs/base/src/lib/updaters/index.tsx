@@ -1,11 +1,11 @@
-import React, { FC } from 'react'
-
-import { TransactionsUpdater } from './transactionsUpdater'
-import { TokenSubscriptionsUpdater } from './tokenSubscriptionsUpdater'
-import { TokenFetcher } from './tokenFetcher'
 import { ContractsUpdater } from './contractsUpdater'
 import { ENSCacher } from './ensCacher'
 import { QuestsUpdater } from './questsUpdater'
+import { TokenFetcher } from './tokenFetcher'
+import { TokenSubscriptionsUpdater } from './tokenSubscriptionsUpdater'
+import { TransactionsUpdater } from './transactionsUpdater'
+
+import type { FC } from 'react'
 
 export const Updaters: FC<{}> = () => (
   <>

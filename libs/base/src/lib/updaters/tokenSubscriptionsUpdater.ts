@@ -1,15 +1,17 @@
 import { useEffect } from 'react'
-import { usePrevious } from 'react-use'
-import { Interface } from '@ethersproject/abi'
-import { Provider } from '@ethersproject/providers'
-import { constants } from 'ethers'
-import { IERC20 } from '@apps/artifacts/typechain'
-import { BigDecimal } from '@apps/bigdecimal'
 
-import { useBlockNow } from '../context/BlockProvider'
+import { BigDecimal } from '@apps/bigdecimal'
+import { Interface } from '@ethersproject/abi'
+import { constants } from 'ethers'
+import { usePrevious } from 'react-use'
+
 import { useAccount, useSigner } from '../context/AccountProvider'
-import { useAllowanceSubscriptionsSerialized, useBalanceSubscriptionsSerialized, useTokensDispatch } from '../context/TokensProvider'
+import { useBlockNow } from '../context/BlockProvider'
 import { useChainIdCtx } from '../context/NetworkProvider'
+import { useAllowanceSubscriptionsSerialized, useBalanceSubscriptionsSerialized, useTokensDispatch } from '../context/TokensProvider'
+
+import type { IERC20 } from '@apps/artifacts/typechain'
+import type { Provider } from '@ethersproject/providers'
 
 const contractInterface = (() => {
   const abi = [

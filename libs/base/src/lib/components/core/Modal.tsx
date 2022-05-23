@@ -1,17 +1,19 @@
-import React, { FC, ReactElement, RefObject, useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
+
+import { UnstyledButton } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
+import { CSSTransition } from 'react-transition-group'
 import styled, { css, keyframes } from 'styled-components'
 import useOnClickOutside from 'use-onclickoutside'
-import { CSSTransition } from 'react-transition-group'
 
-import { ViewportWidth } from '@apps/theme'
-import { UnstyledButton } from '@apps/dumb-components'
+import type { FC, ReactElement, RefObject } from 'react'
 
 interface Props {
   className?: string
   title: ReactElement | string
-  hideModal?(): void
+  hideModal?: () => void
   open: boolean
-  onExited(): void
+  onExited: () => void
 }
 
 const Title = styled.div`

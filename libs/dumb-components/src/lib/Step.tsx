@@ -1,15 +1,16 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Button } from './Button'
 import { ActivitySpinner } from './ActivitySpinner'
+import { Button } from './Button'
+
+import type { FC } from 'react'
 
 interface StepOption {
   key: string
   buttonTitle?: string
   pending: boolean
   title: string
-  onClick(): void
+  onClick: () => void
 }
 
 export interface StepProps {

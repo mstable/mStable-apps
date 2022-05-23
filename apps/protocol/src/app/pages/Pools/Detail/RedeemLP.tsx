@@ -1,20 +1,24 @@
-import React, { FC, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import { usePropose } from '@apps/base/context/transactions'
-import { useWalletAddress } from '@apps/base/context/account'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetExchange, SendButton, TransactionInfo } from '@apps/base/components/forms'
-import { AddressOption } from '@apps/types'
-import { useBigDecimalInput, BigDecimalInputValue, useSlippage, useMinimumOutput } from '@apps/hooks'
+import { useWalletAddress } from '@apps/base/context/account'
+import { usePropose } from '@apps/base/context/transactions'
+import { useBigDecimalInput, useMinimumOutput, useSlippage } from '@apps/hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
 
-import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
+import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import {
   useFPAssetAddressOptions,
   useFPVaultAddressOptions,
   useSelectedFeederPoolContracts,
   useSelectedFeederPoolState,
 } from '../FeederPoolProvider'
+
+import type { BigDecimalInputValue } from '@apps/hooks'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
 
 const formId = 'RedeemLP'
 

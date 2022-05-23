@@ -1,21 +1,23 @@
-import type { FC } from 'react'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
-import { usePropose } from '@apps/base/context/transactions'
-import { useWalletAddress } from '@apps/base/context/account'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { AddressOption } from '@apps/types'
 import { OneToManyAssetExchange, SendButton, useMultiAssetExchangeState } from '@apps/base/components/forms'
-import { BigDecimal } from '@apps/bigdecimal'
+import { useWalletAddress } from '@apps/base/context/account'
+import { usePropose } from '@apps/base/context/transactions'
 import { useMaximumOutput } from '@apps/hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
 
+import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useFPInputRatios } from '../../../hooks/useFPInputRatios'
+import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import { useScaledInputs } from '../../../hooks/useScaledInputs'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
-import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
-import { useExchangeRateForFPInputs } from '../../../hooks/useMassetExchangeRate'
 import { useSelectedFeederPoolContract, useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { scaleFassetAmount } from '../utils'
+
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
 
 const formId = 'RedeemExact'
 

@@ -1,11 +1,13 @@
-import React, { FC, useCallback } from 'react'
+import { useCallback } from 'react'
+
+import { UnstyledButton } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
 import styled from 'styled-components'
 import { useClipboard } from 'use-clipboard-copy'
 
-import { truncateAddress } from '@apps/formatters'
-import { UnstyledButton } from '@apps/dumb-components'
-
 import { ExplorerLink } from './ExplorerLink'
+
+import type { FC } from 'react'
 
 interface Props {
   address: string
@@ -16,7 +18,7 @@ interface Props {
   chainId?: number
 }
 
-const Copy: FC<{ onClick(): void }> = ({ onClick }) => (
+const Copy: FC<{ onClick: () => void }> = ({ onClick }) => (
   <UnstyledButton onClick={onClick}>
     <svg width="14" height="13" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M5 4H1v8h8V9m0 0h4V1H5v8h4z" stroke="#727272" />

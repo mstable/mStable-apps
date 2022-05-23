@@ -1,11 +1,11 @@
-import React, { FC } from 'react'
+import { QuestType } from '@apps/artifacts/graphql/staking'
+import { ThemedSkeleton } from '@apps/dumb-components'
 import { formatDistanceToNow, getUnixTime } from 'date-fns'
 import styled from 'styled-components'
 
-import { QuestType } from '@apps/artifacts/graphql/staking'
-import { ThemedSkeleton } from '@apps/dumb-components'
-
 import { Typist } from './Typist'
+
+import type { FC } from 'react'
 
 enum ProgressType {
   Personal,

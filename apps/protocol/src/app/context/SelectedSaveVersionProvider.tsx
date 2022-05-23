@@ -1,12 +1,14 @@
-import React, { createContext, Dispatch, FC, SetStateAction, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
-import { useApolloClients } from '@apps/base/context/apollo'
-import { SavingsContractState } from '@apps/data-provider'
-import { useSelectedMassetName } from '@apps/masset-provider'
-import { useWalletAddress } from '@apps/base/context/account'
 import { useV1SavingsBalanceQuery } from '@apps/artifacts/graphql/protocol'
+import { useWalletAddress } from '@apps/base/context/account'
+import { useApolloClients } from '@apps/base/context/apollo'
 import { useSelectedMassetState } from '@apps/masset-hooks'
-import { MassetName } from '@apps/types'
+import { useSelectedMassetName } from '@apps/masset-provider'
+
+import type { SavingsContractState } from '@apps/data-provider'
+import type { MassetName } from '@apps/types'
+import type { Dispatch, FC, SetStateAction } from 'react'
 
 export enum SaveVersion {
   V1 = 1,

@@ -1,5 +1,5 @@
-import type { InputRatios } from '@apps/types'
 import type { BigDecimal } from '@apps/bigdecimal'
+import type { InputRatios } from '@apps/types'
 
 export const scaleFassetAmount = (amount?: BigDecimal, address?: string, ratios?: InputRatios): BigDecimal | undefined => {
   const addresses = ratios && Object.keys(ratios)

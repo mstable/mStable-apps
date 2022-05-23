@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
-
 import { useIsDarkMode } from '@apps/browser-settings'
 import { colorTheme, ViewportWidth } from '@apps/theme'
+import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { useBaseCtx } from '../../BaseProviders'
 import { NavigationDropdown } from '../core'
+
+import type { FC } from 'react'
 
 const Container = styled.nav`
   > :first-child {

@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { createContext, PropsWithChildren, ReactElement, Reducer, useCallback, useContext, useMemo, useReducer } from 'react'
-import styled from 'styled-components'
-import { endOfDay, subDays, endOfHour, subHours, startOfDay, startOfHour } from 'date-fns'
+import { createContext, useCallback, useContext, useMemo, useReducer } from 'react'
 
+import { H3, TabBtn, TabsContainer, ToggleInput } from '@apps/dumb-components'
 import { periodIntervalMapping, TimeMetricPeriod } from '@apps/formatters'
-import { TabsContainer, TabBtn, H3, ToggleInput } from '@apps/dumb-components'
-import { Color, FontSize, ViewportWidth } from '@apps/theme'
+import { FontSize, ViewportWidth } from '@apps/theme'
+import { endOfDay, endOfHour, startOfDay, startOfHour, subDays, subHours } from 'date-fns'
+import styled from 'styled-components'
+
+import type { PropsWithChildren, ReactElement, Reducer } from 'react'
 
 export enum DateRange {
   Day,
@@ -52,8 +54,8 @@ type Action<T extends string> =
     }
 
 interface Dispatch<T extends string> {
-  setDateRange(dateRange: DateRange): void
-  toggleType(type: T): void
+  setDateRange: (dateRange: DateRange) => void
+  toggleType: (type: T) => void
 }
 
 const DateRangeBtn = styled(TabBtn)`

@@ -1,12 +1,13 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { Button } from './Button'
 import { ThemedSkeleton } from './ThemedSkeleton'
 
+import type { FC } from 'react'
+
 interface Props {
   className?: string
-  options: { title: string; onClick(): void; active: boolean }[]
+  options: { title: string; onClick: () => void; active: boolean }[]
 }
 
 const Container = styled.div`

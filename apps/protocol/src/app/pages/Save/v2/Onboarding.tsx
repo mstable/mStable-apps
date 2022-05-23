@@ -1,15 +1,17 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
+import { TokenIcon } from '@apps/base/components/core'
 import { Networks, useNetwork } from '@apps/base/context/network'
-import { MassetState } from '@apps/data-provider'
+import { Arrow, Tooltip, UnstyledButton } from '@apps/dumb-components'
+import { useSelectedMassetState } from '@apps/masset-hooks'
 import { useSelectedMassetName } from '@apps/masset-provider'
 import { ViewportWidth } from '@apps/theme'
-import { ExternalLink, UnstyledButton, Tooltip, Arrow } from '@apps/dumb-components'
-import { TokenIcon } from '@apps/base/components/core'
-import { useSelectedMassetState } from '@apps/masset-hooks'
+import styled from 'styled-components'
 
 import { useOnboarding } from '../hooks'
+
+import type { MassetState } from '@apps/data-provider'
+import type { FC } from 'react'
 
 const StyledTokenIcon = styled(TokenIcon)`
   width: 3rem;

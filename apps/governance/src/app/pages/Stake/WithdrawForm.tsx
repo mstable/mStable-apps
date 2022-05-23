@@ -1,18 +1,21 @@
-import React, { FC, useEffect } from 'react'
-import styled from 'styled-components'
+import { useEffect } from 'react'
 
-import { Warning } from '@apps/dumb-components'
-import { useTokenSubscription } from '@apps/base/context/tokens'
-import { usePropose } from '@apps/base/context/transactions'
-import { useBigDecimalInput, useFetchState } from '@apps/hooks'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
 import { AssetInputSingle, SendButton } from '@apps/base/components/forms'
 import { useBlockNow } from '@apps/base/context/block'
+import { useTokenSubscription } from '@apps/base/context/tokens'
+import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
+import { Warning } from '@apps/dumb-components'
+import { useBigDecimalInput, useFetchState } from '@apps/hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import styled from 'styled-components'
 
-import { useStakedTokenQuery, useStakedTokenContract } from '../../context/StakedToken'
-import { TimeMultiplierImpact } from './TimeMultiplierImpact'
+import { useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedToken'
 import { getRedemptionFee } from '../../utils'
+import { TimeMultiplierImpact } from './TimeMultiplierImpact'
+
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 const Fee = styled.div`
   display: flex;

@@ -1,13 +1,15 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
-import React, { FC, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
+
+import { APP_NAME } from '@apps/types'
 import { useKeyPress } from 'react-use'
 import styled from 'styled-components'
 
-import { APP_NAME } from '@apps/types'
-
-import { ChainIds, useChainIdCtx, NETWORKS } from '../../context/NetworkProvider'
 import { useBaseCtx } from '../../BaseProviders'
+import { ChainIds, NETWORKS, useChainIdCtx } from '../../context/NetworkProvider'
 import { Dropdown } from './Dropdown'
+
+import type { FC } from 'react'
 
 const StyledDropdown = styled(Dropdown)`
   > *:first-child {

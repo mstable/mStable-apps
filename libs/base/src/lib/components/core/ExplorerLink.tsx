@@ -1,9 +1,11 @@
-import React, { FC } from 'react'
-
-import { truncateAddress } from '@apps/formatters'
 import { ExternalLink } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
 
-import { ChainIds, getNetwork, useNetwork } from '../../context/NetworkProvider'
+import { getNetwork, useNetwork } from '../../context/NetworkProvider'
+
+import type { FC } from 'react'
+
+import type { ChainIds } from '../../context/NetworkProvider'
 
 export const ExplorerLink: FC<{
   data: string

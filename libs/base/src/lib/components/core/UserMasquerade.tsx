@@ -1,11 +1,12 @@
-import React, { useRef } from 'react'
-import type { FC } from 'react'
+import { useRef } from 'react'
+
+import { AddressInput, Button } from '@apps/dumb-components'
+import { truncateAddress } from '@apps/formatters'
 import styled from 'styled-components'
 
-import { Button, AddressInput } from '@apps/dumb-components'
-import { truncateAddress } from '@apps/formatters'
-
 import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
+
+import type { FC } from 'react'
 
 const StyledAddressInput = styled(AddressInput)`
   input {

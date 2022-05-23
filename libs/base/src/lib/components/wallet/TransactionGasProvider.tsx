@@ -1,10 +1,15 @@
-import React, { createContext, FC, SetStateAction, Dispatch, useState, useContext, useMemo } from 'react'
-import { useThrottleFn } from 'react-use'
-import { BigNumber } from 'ethers'
+import { createContext, useContext, useMemo, useState } from 'react'
 
-import { Transaction, useTransactionsState } from '../../context/TransactionsProvider'
-import { useNetwork, Networks } from '../../context/NetworkProvider'
+import { useThrottleFn } from 'react-use'
+
+import { Networks, useNetwork } from '../../context/NetworkProvider'
 import { useNativeToken } from '../../context/TokensProvider'
+import { useTransactionsState } from '../../context/TransactionsProvider'
+
+import type { BigNumber } from 'ethers'
+import type { Dispatch, FC, SetStateAction } from 'react'
+
+import type { Transaction } from '../../context/TransactionsProvider'
 
 interface GasCtx {
   estimationError?: string

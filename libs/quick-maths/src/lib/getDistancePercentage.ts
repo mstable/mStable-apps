@@ -1,5 +1,5 @@
-import { BigDecimal } from '@apps/bigdecimal'
-import { LPPriceAdjustment } from '@apps/types'
+import type { BigDecimal } from '@apps/bigdecimal'
+import type { LPPriceAdjustment } from '@apps/types'
 
 export const getSignedDistance = (distance: number, reverse?: boolean): number => {
   const isBonus = distance > 1

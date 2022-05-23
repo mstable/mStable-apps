@@ -1,9 +1,10 @@
-import React, { ReactElement } from 'react'
 import { createStateContext } from 'react-use'
 
-export interface IBannerMessage {
+import type { ReactElement } from 'react'
+
+export interface BannerMessageProps {
   content: ReactElement
   status: 'warning' | 'info'
 }
 
-export const [useBannerMessage, BannerProvider] = createStateContext<IBannerMessage | undefined>(undefined)
+export const [useBannerMessage, BannerProvider] = createStateContext<BannerMessageProps | undefined>(undefined)

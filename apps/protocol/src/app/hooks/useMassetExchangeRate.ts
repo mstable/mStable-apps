@@ -1,12 +1,13 @@
-import { useSelectedMassetState } from '@apps/masset-hooks'
 import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
+import { useSelectedMassetState } from '@apps/masset-hooks'
+
+import { useSelectedFeederPoolState } from '../pages/Pools/FeederPoolProvider'
+
 import type { MassetState } from '@apps/data-provider'
 import type { BigDecimalInputValue, BigDecimalInputValues } from '@apps/hooks'
 import type { FetchState } from '@apps/types'
-
-import { useSelectedFeederPoolState } from '../pages/Pools/FeederPoolProvider'
 
 export const useExchangeRateForMassetInputs = (
   estimatedOutputAmount?: FetchState<BigDecimal>,

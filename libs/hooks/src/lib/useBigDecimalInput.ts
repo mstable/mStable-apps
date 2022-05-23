@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { usePrevious } from 'react-use'
 
 import { BigDecimal } from '@apps/bigdecimal'
+import { usePrevious } from 'react-use'
 
 /**
  * This hook is designed to be used in tandem with amount inputs.

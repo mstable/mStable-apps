@@ -1,10 +1,11 @@
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { UnstyledButton } from './Button'
 
+import type { FC } from 'react'
+
 interface Props {
-  onClick(): void
+  onClick: () => void
   checked?: boolean
   className?: string
   disabled?: boolean

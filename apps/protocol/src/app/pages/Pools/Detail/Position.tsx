@@ -1,12 +1,14 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
-import { ViewportWidth } from '@apps/theme'
 import { CountUp } from '@apps/dumb-components'
 import { Tooltip } from '@apps/dumb-components'
+import { ViewportWidth } from '@apps/theme'
+import styled from 'styled-components'
 
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedFeederPoolState } from '../FeederPoolProvider'
+
+import type { FC } from 'react'
 
 const Container = styled.div`
   display: flex;

@@ -1,10 +1,10 @@
-import React, { FC } from 'react'
 import { HashRouter } from 'react-router-dom'
-
 import { createStateContext, useEffectOnce } from 'react-use'
 
 import { Providers } from './context'
 import { Updaters } from './updaters'
+
+import type { FC } from 'react'
 
 interface BaseContext {
   navItems: { path: string; title: string }[]

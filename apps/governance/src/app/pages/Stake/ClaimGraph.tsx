@@ -1,8 +1,12 @@
-import React, { FC, useMemo } from 'react'
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { useMemo } from 'react'
+
 import { Color } from '@apps/theme'
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import styled from 'styled-components'
+
 import { useRewardsEarned } from './context'
+
+import type { FC } from 'react'
 
 interface DataType {
   mta: number

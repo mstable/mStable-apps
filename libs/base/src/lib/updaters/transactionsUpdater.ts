@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
-import { usePrevious } from 'react-use'
-import { Provider, TransactionReceipt } from '@ethersproject/abstract-provider'
-import { Signer } from 'ethers'
-import { TransactionStatus } from '@apps/transaction-manifest'
 
-import { useSignerOrProvider, useAccount } from '../context/AccountProvider'
+import { TransactionStatus } from '@apps/transaction-manifest'
+import { usePrevious } from 'react-use'
+
+import { useAccount, useSignerOrProvider } from '../context/AccountProvider'
 import { useBlockNow } from '../context/BlockProvider'
 import { useTransactionsDispatch, useTransactionsState } from '../context/TransactionsProvider'
+
+import type { Provider, TransactionReceipt } from '@ethersproject/abstract-provider'
+import type { Signer } from 'ethers'
 
 const STATUS_NEEDS_CHECK = [TransactionStatus.Pending, TransactionStatus.Sent, TransactionStatus.Response]
 

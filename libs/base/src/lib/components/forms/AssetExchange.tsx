@@ -1,30 +1,32 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import type { AddressOption } from '@apps/types'
 import { Arrow } from '@apps/dumb-components'
+import styled from 'styled-components'
 
 import { useTokenSubscription } from '../../context/TokensProvider'
-import { ExchangeRate } from './ExchangeRate'
 import { AssetInput } from './AssetInput'
+import { ExchangeRate } from './ExchangeRate'
+
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
 
 export interface Props {
   inputAddress?: string
   inputAddressDisabled?: boolean
   inputAddressOptions: AddressOption[]
   inputFormValue?: string
-  handleSetInputAddress?(address?: string): void
-  handleSetInputAmount?(formValue?: string): void
-  handleSetInputMax?(): void
+  handleSetInputAddress?: (address?: string) => void
+  handleSetInputAmount?: (formValue?: string) => void
+  handleSetInputMax?: () => void
 
   outputAddress?: string
   outputAddressDisabled?: boolean
   outputAddressOptions: AddressOption[]
   outputFormValue?: string
-  handleSetOutputAddress?(address?: string): void
-  handleSetOutputAmount?(formValue?: string): void
-  handleSetOutputMax?(): void
+  handleSetOutputAddress?: (address?: string) => void
+  handleSetOutputAmount?: (formValue?: string) => void
+  handleSetOutputMax?: () => void
 
   exchangeRate: { value?: number; fetching?: boolean } // e.g. for mUSD->imUSD
   className?: string

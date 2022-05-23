@@ -1,8 +1,12 @@
-import React, { FC, useCallback } from 'react'
-import styled from 'styled-components'
-import { useChainIdCtx, NETWORKS, ChainIds, Networks } from '@apps/base/context/network'
+import { useCallback } from 'react'
+
 import { TokenIcon } from '@apps/base/components/core'
+import { NETWORKS, Networks, useChainIdCtx } from '@apps/base/context/network'
 import { UnstyledButton } from '@apps/dumb-components'
+import styled from 'styled-components'
+
+import type { ChainIds } from '@apps/base/context/network'
+import type { FC } from 'react'
 
 interface ItemProps {
   onClick: (network: string) => void

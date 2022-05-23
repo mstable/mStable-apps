@@ -1,10 +1,11 @@
-import React, { FC } from 'react'
+import { ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
-import { StakeForm } from './StakeForm'
 // @ts-ignore
 import { ReactComponent as MigrationArrow } from '../../../assets/migration-arrow.svg'
-import { ViewportWidth } from '@apps/theme'
+import { StakeForm } from './StakeForm'
+
+import type { FC } from 'react'
 
 const StyledStakeForm = styled(StakeForm)`
   background: ${({ theme }) => theme.color.background[0]};

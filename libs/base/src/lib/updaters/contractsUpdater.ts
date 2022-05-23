@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
-import { useConnected, useAccount } from '../context/AccountProvider'
-import { useTransactionsDispatch } from '../context/TransactionsProvider'
+import { useAccount, useConnected } from '../context/AccountProvider'
 import { useChainIdCtx } from '../context/NetworkProvider'
+import { useTransactionsDispatch } from '../context/TransactionsProvider'
 
 export const ContractsUpdater = (): null => {
   const connected = useConnected()

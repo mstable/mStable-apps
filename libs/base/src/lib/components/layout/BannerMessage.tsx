@@ -1,8 +1,9 @@
-import React, { FC } from 'react'
+import { Color, ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
 import { useBannerMessage } from '../../context/BannerProvider'
-import { Color, ViewportWidth } from '@apps/theme'
+
+import type { FC } from 'react'
 
 const Container = styled.div<{ statusColor: string | undefined }>`
   background: ${({ statusColor }) => statusColor};
@@ -36,5 +37,5 @@ export const BannerMessage: FC = () => {
       info: Color.coolBlueTransparent,
     }[status]
 
-  return !!bannerMessage ? <Container statusColor={statusColor}>{content}</Container> : null
+  return bannerMessage ? <Container statusColor={statusColor}>{content}</Container> : null
 }

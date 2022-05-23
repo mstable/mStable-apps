@@ -1,11 +1,13 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
 import { CollapseBox, Tooltip } from '@apps/dumb-components'
-import { PriceImpact } from '@apps/types'
+import styled from 'styled-components'
 
 import { SlippageInput } from './SlippageInput'
+
+import type { PriceImpact } from '@apps/types'
+import type { FC } from 'react'
 
 interface Props {
   className?: string
@@ -15,7 +17,7 @@ interface Props {
   minOutputAmount?: BigDecimal
   maxOutputAmount?: BigDecimal
   slippageFormValue?: string
-  onSetSlippage?(formValue?: string): void
+  onSetSlippage?: (formValue?: string) => void
   saveExchangeRate?: BigDecimal
   price?: number
   priceImpact?: PriceImpact

@@ -1,14 +1,14 @@
-import React, { ComponentProps, FC } from 'react'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import styled from 'styled-components'
-
 import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { Tooltip, UnstyledButton } from '@apps/dumb-components'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import styled from 'styled-components'
 
 import { Typist } from './Typist'
+
+import type { ComponentProps, FC } from 'react'
 
 interface Props {
   onClick?: (questId: string) => void
@@ -125,7 +125,7 @@ const Container = styled(UnstyledButton)<{ type?: QuestType }>`
 
   &:hover {
     transform: ${({ onClick }) => !!onClick && `scale(1.01)`};
-    cursor: ${({ onClick }) => (!!onClick ? `pointer` : `inherit`)};
+    cursor: ${({ onClick }) => (onClick ? `pointer` : `inherit`)};
   }
 
   > :last-child {

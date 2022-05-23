@@ -1,13 +1,16 @@
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
+
+import { useBlockTimestampQuery } from '@apps/artifacts/graphql/blocks'
+import { useSelectedEpochQuery } from '@apps/artifacts/graphql/emissions'
+import { useApolloClients } from '@apps/base/context/apollo'
 import { createStateContext } from 'react-use'
 
-import { useApolloClients } from '@apps/base/context/apollo'
-import { useSelectedEpochQuery } from '@apps/artifacts/graphql/emissions'
-import { useBlockTimestampQuery } from '@apps/artifacts/graphql/blocks'
-
-import { EpochDialVotes, Epoch } from '../types'
 import { useEmissionsData } from './EmissionsContext'
 import { useHoveredDialId, useSelectedDialId } from './ViewOptionsContext'
+
+import type { FC } from 'react'
+
+import type { Epoch, EpochDialVotes } from '../types'
 
 const [useEpochData, EpochDataProvider] = createStateContext<Epoch | undefined>(undefined)
 

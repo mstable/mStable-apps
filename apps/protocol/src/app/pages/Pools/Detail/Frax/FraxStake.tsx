@@ -1,22 +1,25 @@
-import React, { FC, useMemo, useState } from 'react'
-import styled from 'styled-components'
-import { intervalToDuration, formatDuration } from 'date-fns'
+import { useMemo, useState } from 'react'
 
-import { MaticMainnet, useNetwork } from '@apps/base/context/network'
-import { AssetInput } from '@apps/base/components/forms'
 import { MultiRewards } from '@apps/base/components/core'
-import { Button, CountUp, CountdownBar, Slider, Table, TableCell, TableRow } from '@apps/dumb-components'
-import { usePropose } from '@apps/base/context/transactions'
-import { useBigDecimalInput } from '@apps/hooks'
-import { StakingRewardsExtended } from '@apps/masset-hooks'
-import { Interfaces } from '@apps/types'
-import { TransactionManifest } from '@apps/transaction-manifest'
-import { BigDecimal } from '@apps/bigdecimal'
+import { AssetInput } from '@apps/base/components/forms'
+import { useNetwork } from '@apps/base/context/network'
 import { useTokenAllowance } from '@apps/base/context/tokens'
+import { usePropose } from '@apps/base/context/transactions'
+import { BigDecimal } from '@apps/bigdecimal'
+import { Button, CountdownBar, CountUp, Slider, Table, TableCell, TableRow } from '@apps/dumb-components'
+import { useBigDecimalInput } from '@apps/hooks'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import { formatDuration, intervalToDuration } from 'date-fns'
+import styled from 'styled-components'
 
 import { StakingRewards } from '../../../../components/rewards/StakingRewards'
 import { useFraxStakingContract, useFraxStakingState } from '../../../../context/FraxStakingProvider'
 import { useSelectedFeederPoolState } from '../../FeederPoolProvider'
+
+import type { MaticMainnet } from '@apps/base/context/network'
+import type { StakingRewardsExtended } from '@apps/masset-hooks'
+import type { Interfaces } from '@apps/types'
+import type { FC } from 'react'
 
 const TABLE_CELL_WIDTHS = [35, 15, 30]
 const DAY = 86400

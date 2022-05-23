@@ -1,16 +1,17 @@
-import React, { FC, useMemo } from 'react'
+import { useMemo } from 'react'
+
 import styled from 'styled-components'
 
-import { AddressOption } from '@apps/types'
-
 import { useTokens, useTokenSubscription } from '../../context/TokensProvider'
-
 import { AssetDropdown } from './AssetDropdown'
+
+import type { AddressOption } from '@apps/types'
+import type { FC } from 'react'
 
 interface Props {
   value?: string
   options?: (AddressOption | string)[]
-  onChange?(tokenAddress?: string): void
+  onChange?: (tokenAddress?: string) => void
   error?: string
   disabled?: boolean
   className?: string

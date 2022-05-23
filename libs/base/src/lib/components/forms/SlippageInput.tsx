@@ -1,11 +1,11 @@
-import React, { FC } from 'react'
+import { AmountInputButton, Button } from '@apps/dumb-components'
 import styled from 'styled-components'
 
-import { Button, AmountInputButton } from '@apps/dumb-components'
+import type { FC } from 'react'
 
 interface Props {
   slippageFormValue?: string
-  handleSetSlippage(formValue?: string): void
+  handleSetSlippage: (formValue?: string) => void
 }
 
 const Container = styled.div`

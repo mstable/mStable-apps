@@ -1,14 +1,14 @@
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
 import { TokenIcon } from '@apps/base/components/core'
 import { CountUp } from '@apps/dumb-components'
+import styled from 'styled-components'
 
 import { useEpochData } from './context/EpochContext'
 import { useActiveDial, useShowVotesTable } from './context/ViewOptionsContext'
 import { DialMetadataContent } from './DialMetadataContent'
 import { DialPreferencesTable } from './DialPreferencesTable'
 import { DialTitle } from './DialTitle'
+
+import type { FC } from 'react'
 
 const StyledTokenIcon = styled(TokenIcon)`
   img {

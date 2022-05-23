@@ -1,23 +1,26 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
-import { QuestObjective, useQuestQuery as useQuestbookQuestQuery, UserQuestObjective } from '@apps/artifacts/graphql/questbook'
+import { useQuestQuery as useQuestbookQuestQuery } from '@apps/artifacts/graphql/questbook'
 import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { ViewportWidth } from '@apps/theme'
+import { usePropose } from '@apps/base/context/transactions'
 import { Button, ThemedSkeleton, Tooltip } from '@apps/dumb-components'
 import { truncateAddress } from '@apps/formatters'
+import { ViewportWidth } from '@apps/theme'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import styled from 'styled-components'
 
 import { useStakedTokenContract, useStakedTokenQuery } from '../../context/StakedToken'
-
 import { ClaimButtons } from './ClaimButtons'
 import { QuestCard } from './QuestCard'
 import { QuestObjectiveProgress, QuestProgress, QuestTimeRemaining } from './QuestProgress'
 import { QueueOptInOutButton } from './QueueOptInOutButtons'
 import { Typist } from './Typist'
-import { TransactionManifest, Interfaces } from '@apps/transaction-manifest'
-import { usePropose } from '@apps/base/context/transactions'
+
+import type { QuestObjective, UserQuestObjective } from '@apps/artifacts/graphql/questbook'
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 enum ProgressType {
   Personal,

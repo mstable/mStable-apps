@@ -1,12 +1,15 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
+import { useMemo } from 'react'
 
 import { usePropose } from '@apps/base/context/transactions'
 import { Button, Warning } from '@apps/dumb-components'
-import { Interfaces, TransactionManifest } from '@apps/transaction-manifest'
+import { TransactionManifest } from '@apps/transaction-manifest'
+import styled from 'styled-components'
 
 import { useEmissionsController, useEmissionsData } from './context/EmissionsContext'
 import { useUserDialPreferences } from './context/UserDialsContext'
+
+import type { Interfaces } from '@apps/transaction-manifest'
+import type { FC } from 'react'
 
 enum DialView {
   Default,

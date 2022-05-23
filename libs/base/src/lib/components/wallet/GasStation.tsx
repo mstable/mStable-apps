@@ -1,13 +1,13 @@
-import type { FC, ChangeEventHandler } from 'react'
-import React, { useCallback, useState } from 'react'
-import styled from 'styled-components'
-import { useEffectOnce } from 'react-use'
+import { useCallback, useState } from 'react'
 
 import { Button } from '@apps/dumb-components'
+import { useEffectOnce } from 'react-use'
+import styled from 'styled-components'
 
 import { useNetworkPrices } from '../../context/NetworkProvider'
-
 import { useGas } from './TransactionGasProvider'
+
+import type { ChangeEventHandler, FC } from 'react'
 
 enum GasPriceType {
   Standard = 'standard',

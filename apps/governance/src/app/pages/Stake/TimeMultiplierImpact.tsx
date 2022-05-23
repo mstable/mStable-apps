@@ -1,10 +1,13 @@
-import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
-import { BigNumber } from 'ethers'
+import { useMemo } from 'react'
+
+import { Tooltip } from '@apps/dumb-components'
 import { getUnixTime } from 'date-fns'
+import { BigNumber } from 'ethers'
+import styled from 'styled-components'
 
 import { useStakedTokenQuery } from '../../context/StakedToken'
-import { Tooltip } from '@apps/dumb-components'
+
+import type { FC } from 'react'
 
 const getTimeMultiplier = (hodlLengthSeconds: BigNumber) => {
   if (hodlLengthSeconds.lt(7862400)) return 0

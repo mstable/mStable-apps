@@ -1,34 +1,34 @@
-import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import { useCallback, useMemo, useState } from 'react'
 
-import { BoostedCombinedAPY, FetchState } from '@apps/types'
-import { MassetState } from '@apps/data-provider'
 import { useFetchPriceCtx } from '@apps/base/context/prices'
-import { useSelectedMassetState } from '@apps/masset-hooks'
-import { useCalculateUserBoost } from '@apps/boost'
 import { BigDecimal } from '@apps/bigdecimal'
-import { calculateApy } from '@apps/quick-maths'
+import { useCalculateUserBoost } from '@apps/boost'
 import {
+  CardButton as Button,
+  CardContainer as TransitionContainer,
   CountUp,
   DifferentialCountup,
-  TransitionCard,
-  CardContainer as TransitionContainer,
-  CardButton as Button,
   ThemedSkeleton,
   Tooltip,
+  TransitionCard,
 } from '@apps/dumb-components'
+import { useSelectedMassetState } from '@apps/masset-hooks'
+import { calculateApy } from '@apps/quick-maths'
+import styled from 'styled-components'
 
+import { PokeBoost } from '../../../components/PokeBoost'
+import { UserBoost } from '../../../components/rewards/UserBoost'
 import { useRewardStreams } from '../../../context/RewardStreamsProvider'
 import { useSelectedSaveVersion } from '../../../context/SelectedSaveVersionProvider'
 import { useAvailableSaveApy } from '../../../hooks/useAvailableSaveApy'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
-
-import { UserBoost } from '../../../components/rewards/UserBoost'
-import { PokeBoost } from '../../../components/PokeBoost'
 import { UserRewards } from '../../Pools/Detail/UserRewards'
-
-import { SavePosition } from './SavePosition'
 import { OnboardingBanner } from './OnboardingBanner'
+import { SavePosition } from './SavePosition'
+
+import type { MassetState } from '@apps/data-provider'
+import type { BoostedCombinedAPY, FetchState } from '@apps/types'
+import type { FC, ReactElement } from 'react'
 
 enum Selection {
   Balance = 'Balance',
@@ -74,29 +74,29 @@ const Container = styled.div`
   }
 `
 
-interface PoolsAPIResponse {
-  pools: {
-    name: string
-    apy: string
-    apyDetails:
-      | {
-          rewardsOnlyBase: string
-          rewardsOnlyMax: string
-          combinedBase: string
-          combinedMax: string
-          yieldOnly: string
-        }
-      | {
-          rewardsOnlyBase: string
-          rewardsOnlyMax: string
-        }
-    pair: string[]
-    pairLink: string
-    poolRewards: string[]
-    totalStakedUSD: string
-    logo: string
-  }[]
-}
+// interface PoolsAPIResponse {
+//   pools: {
+//     name: string
+//     apy: string
+//     apyDetails:
+//       | {
+//           rewardsOnlyBase: string
+//           rewardsOnlyMax: string
+//           combinedBase: string
+//           combinedMax: string
+//           yieldOnly: string
+//         }
+//       | {
+//           rewardsOnlyBase: string
+//           rewardsOnlyMax: string
+//         }
+//     pair: string[]
+//     pairLink: string
+//     poolRewards: string[]
+//     totalStakedUSD: string
+//     logo: string
+//   }[]
+// }
 
 const useSaveVaultAPY = (userBoost?: number): FetchState<BoostedCombinedAPY> => {
   const {
