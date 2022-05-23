@@ -9,8 +9,13 @@ import Discord from '@apps/icons/social/discord.svg'
 import Twitter from '@apps/icons/social/twitter.svg'
 import Email from '@apps/icons/social/email.svg'
 
-import { ChainIds, useNetwork } from '../../context/NetworkProvider'
 import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
+import { useBaseCtx } from '../../BaseProviders'
+import { APP_NAME } from '@apps/types'
+
+const Link = styled.a`
+  color: ${({ theme }) => theme.color.bodyAccent};
+`
 
 const Links = styled.ul`
   align-items: center;
@@ -128,20 +133,22 @@ const socialIcons = [
 ]
 
 export const Footer: FC = () => {
-  const network = useNetwork()
-  const isEthereum = [ChainIds.EthereumMainnet, ChainIds.EthereumKovan, ChainIds.EthereumGoerli, ChainIds.EthereumRopsten].find(
-    n => n === network.chainId,
-  )
+  const [{ appName }] = useBaseCtx()
+
+  const label = appName === APP_NAME.GOVERNANCE ? 'Protocol app' : 'Governance app'
+  const href = appName === APP_NAME.GOVERNANCE ? 'https://mstable.app/#/' : 'https://staking.mstable.app/'
 
   return (
     <Container>
       <Inner>
         <div>
           <div>
-            <Links>
-              <b>mStable</b> powered by{' '}
-              {isEthereum ? <a href="https://ethereum.org/en/">Ethereum</a> : <a href="https://polygon.technology">Polygon</a>}
-            </Links>
+            <div>
+              <b>mStable</b>&nbsp;|&nbsp;
+              <Link href={href} target="_blank" rel="noreferrer">
+                {label}&nbsp;<span>↗</span>
+              </Link>
+            </div>
             <SocialIcons>
               {socialIcons.map(({ title, href, icon }) => (
                 <li key={href}>
