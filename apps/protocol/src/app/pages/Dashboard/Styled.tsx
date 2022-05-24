@@ -36,7 +36,9 @@ export const DashTable = styled(Table).attrs(() => ({ widths: [25, 25, 25, 25] }
   }
 `
 
-export const DashTableRow = styled(TableRow)``
+export const DashTableRow = styled(TableRow)`
+  height: 76px;
+`
 
 export const DashTableCell = styled(TableCell)<{ hasRewards?: boolean }>`
   display: flex;
