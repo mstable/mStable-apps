@@ -38,7 +38,7 @@ export const DelegateeListsProvider: FC = ({ children }) => {
         // TODO reinstate me when on mainnet
         // const ipfsHash = await resolveENSContentHash(ensName, provider)
         // const url = `https://cloudflare-ipfs.com/ipfs/${ipfsHash ? ipfsHash.slice(7) : ''}/`
-        const url = 'https://mstable.infura-ipfs.io/ipfs/QmakMYuyPA4N7tyVEwnB8ryZKyWyfvCGEitoWfwbKri4iG'
+        const url = 'https://mstable.infura-ipfs.io/ipfs/QmcVkdBcaaPmWHoCyv2TJvoCMFzyJRjoYeCkBLPQwFrMGy'
 
         const response = await fetch(url)
         const list = (await response.json()) as DelegateeList
