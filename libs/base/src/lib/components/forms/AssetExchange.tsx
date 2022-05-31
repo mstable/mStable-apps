@@ -112,7 +112,7 @@ export const AssetExchange: FC<Props> = ({
       <div>
         {isSwapPage ? (
           <ExChangeButtonContainer>
-            <Button onClick={switchTokens}>↓</Button>
+            <Button onClick={switchTokens}>↓↑</Button>
           </ExChangeButtonContainer>
         ) : (
           <Arrow />
