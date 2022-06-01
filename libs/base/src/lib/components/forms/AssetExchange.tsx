@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { Arrow } from '@apps/dumb-components'
+import { Arrow, Button } from '@apps/dumb-components'
 import styled from 'styled-components'
 
 import { useTokenSubscription } from '../../context/TokensProvider'
+import { useCheckPath } from '../../hooks/useCheckPath'
 import { AssetInput } from './AssetInput'
 import { ExchangeRate } from './ExchangeRate'
 
@@ -36,6 +37,8 @@ export interface Props {
   outputDecimals?: number
   inputLabel?: string
   outputLabel?: string
+
+  switchTokens?: () => void
 }
 
 const Container = styled.div`
@@ -48,6 +51,12 @@ const Container = styled.div`
       margin-bottom: 0;
     }
   }
+`
+
+const ExChangeButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
 `
 
 export const AssetExchange: FC<Props> = ({
@@ -73,9 +82,11 @@ export const AssetExchange: FC<Props> = ({
   outputDecimals,
   inputLabel,
   outputLabel,
+  switchTokens,
 }) => {
   const inputToken = useTokenSubscription(inputAddress) ?? inputAddressOptions.find(v => v.address === inputAddress)
   const outputToken = useTokenSubscription(outputAddress) ?? outputAddressOptions.find(v => v.address === outputAddress)
+  const isSwapPage = useCheckPath('swap')
 
   const conversionFormValue = useMemo(() => {
     if (!inputFormValue) return
@@ -99,7 +110,13 @@ export const AssetExchange: FC<Props> = ({
         decimals={inputDecimals}
       />
       <div>
-        <Arrow />
+        {isSwapPage ? (
+          <ExChangeButtonContainer>
+            <Button onClick={switchTokens}>↓↑</Button>
+          </ExChangeButtonContainer>
+        ) : (
+          <Arrow />
+        )}
         <ExchangeRate
           exchangeRate={exchangeRate}
           outputToken={outputToken}
