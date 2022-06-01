@@ -12,7 +12,7 @@ export const Container = styled.div`
   user-select: none;
 `
 
-export const Arrow: FC<{ direction?: 'up' | 'down' }> = ({ direction = 'down' }) => {
+export const Arrow: FC<{ direction?: 'up' | 'down' }> = ({ direction = 'down', ...rest }) => {
   const arrowIcon = direction === 'up' ? '↑' : '↓'
-  return <Container>{arrowIcon}</Container>
+  return <Container {...rest}>{arrowIcon}</Container>
 }

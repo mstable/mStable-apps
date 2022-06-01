@@ -75,6 +75,10 @@ const ExChangeButtonContainer = styled.div`
   }
 `
 
+const DownArrow = styled(Arrow)`
+  padding: 0;
+`
+
 export const AssetExchange: FC<Props> = ({
   inputAddressOptions,
   outputAddressOptions,
@@ -132,13 +136,7 @@ export const AssetExchange: FC<Props> = ({
         outputLabel={outputLabel}
         inputLabel={inputLabel}
       />
-      {isSwapPage ? (
-        <ExChangeButtonContainer>
-          <Button onClick={switchTokens}>↓↑</Button>
-        </ExChangeButtonContainer>
-      ) : (
-        <Arrow />
-      )}
+      <ExChangeButtonContainer>{isSwapPage ? <Button onClick={switchTokens}>↓↑</Button> : <DownArrow />}</ExChangeButtonContainer>
       <AssetInput
         address={outputAddress}
         addressOptions={outputAddressOptions}
