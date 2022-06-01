@@ -57,21 +57,21 @@ const ExChangeButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 28px;
+`
 
-  > button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    padding: 8px;
-    width: 36px;
-    height: 36px;
-    background-color: ${({ theme }) => theme.color.background[1]};
-    transition: transform 0.4s ease-in-out;
+const ExChangeButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  padding: 0 0 4px 0;
+  width: 36px;
+  height: 36px;
+  background-color: ${({ theme }) => theme.color.background[1]};
+  transition: transform 0.4s ease-in-out;
 
-    :hover {
-      transform: rotate(180deg);
-    }
+  :hover {
+    transform: rotate(180deg);
   }
 `
 
@@ -136,7 +136,9 @@ export const AssetExchange: FC<Props> = ({
         outputLabel={outputLabel}
         inputLabel={inputLabel}
       />
-      <ExChangeButtonContainer>{isSwapPage ? <Button onClick={switchTokens}>↓↑</Button> : <DownArrow />}</ExChangeButtonContainer>
+      <ExChangeButtonContainer>
+        {isSwapPage ? <ExChangeButton onClick={switchTokens}>↓↑</ExChangeButton> : <DownArrow />}
+      </ExChangeButtonContainer>
       <AssetInput
         address={outputAddress}
         addressOptions={outputAddressOptions}
