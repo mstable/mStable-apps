@@ -56,7 +56,23 @@ const Container = styled.div`
 const ExChangeButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 16px;
+  margin-bottom: 28px;
+
+  > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    background-color: ${({ theme }) => theme.color.background[1]};
+    transition: transform 0.4s ease-in-out;
+
+    :hover {
+      transform: rotate(180deg);
+    }
+  }
 `
 
 export const AssetExchange: FC<Props> = ({
@@ -109,22 +125,20 @@ export const AssetExchange: FC<Props> = ({
         addressDisabled={inputAddressDisabled}
         decimals={inputDecimals}
       />
-      <div>
-        {isSwapPage ? (
-          <ExChangeButtonContainer>
-            <Button onClick={switchTokens}>↓↑</Button>
-          </ExChangeButtonContainer>
-        ) : (
-          <Arrow />
-        )}
-        <ExchangeRate
-          exchangeRate={exchangeRate}
-          outputToken={outputToken}
-          inputToken={inputToken}
-          outputLabel={outputLabel}
-          inputLabel={inputLabel}
-        />
-      </div>
+      <ExchangeRate
+        exchangeRate={exchangeRate}
+        outputToken={outputToken}
+        inputToken={inputToken}
+        outputLabel={outputLabel}
+        inputLabel={inputLabel}
+      />
+      {isSwapPage ? (
+        <ExChangeButtonContainer>
+          <Button onClick={switchTokens}>↓↑</Button>
+        </ExChangeButtonContainer>
+      ) : (
+        <Arrow />
+      )}
       <AssetInput
         address={outputAddress}
         addressOptions={outputAddressOptions}
