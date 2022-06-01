@@ -60,7 +60,7 @@ export const SwapLogic: FC = () => {
     setInputAddress(outputAddr)
     setOutputAddress(inputAddr)
     setInputAmount('0.0')
-  }, [inputAddress, outputAddress])
+  }, [inputAddress, outputAddress, setInputAmount])
 
   const currentFeederAddress = Object.values(feederPools).find(
     ({ fasset: { address } }) => address === inputAddress || address === outputAddress,
