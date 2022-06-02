@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
 import { Arrow, Button } from '@apps/dumb-components'
+import { ReactComponent as SwitchIcon } from '@apps/icons/switch-straight.svg'
 import styled from 'styled-components'
 
 import { useTokenSubscription } from '../../context/TokensProvider'
@@ -64,11 +65,16 @@ const ExChangeButton = styled(Button)`
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  padding: 0 0 4px 0;
+  padding: 2px;
   width: 36px;
   height: 36px;
   background-color: ${({ theme }) => theme.color.background[1]};
   transition: transform 0.4s ease-in-out;
+  transform-origin: 50% 50%;
+
+  svg {
+    width: 16px;
+  }
 
   :hover {
     transform: rotate(180deg);
@@ -137,7 +143,13 @@ export const AssetExchange: FC<Props> = ({
         inputLabel={inputLabel}
       />
       <ExChangeButtonContainer>
-        {isSwapPage ? <ExChangeButton onClick={switchTokens}>↓↑</ExChangeButton> : <DownArrow />}
+        {isSwapPage ? (
+          <ExChangeButton onClick={switchTokens}>
+            <SwitchIcon />
+          </ExChangeButton>
+        ) : (
+          <DownArrow />
+        )}
       </ExChangeButtonContainer>
       <AssetInput
         address={outputAddress}
