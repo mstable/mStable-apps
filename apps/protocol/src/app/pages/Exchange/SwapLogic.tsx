@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { FeederPool__factory, Masset__factory } from '@apps/artifacts/typechain'
 import { AssetSwap, SendButton, TransactionInfo } from '@apps/base/components/forms'
@@ -53,6 +53,14 @@ export const SwapLogic: FC = () => {
   const [inputAmount, inputFormValue, setInputAmount] = useBigDecimalInput('0', {
     decimals: inputDecimals,
   })
+
+  const switchTokens = useCallback(() => {
+    const inputAddr = inputAddress
+    const outputAddr = outputAddress
+    setInputAddress(outputAddr)
+    setOutputAddress(inputAddr)
+    setInputAmount('0.0')
+  }, [inputAddress, outputAddress, setInputAmount])
 
   const currentFeederAddress = Object.values(feederPools).find(
     ({ fasset: { address } }) => address === inputAddress || address === outputAddress,
@@ -170,6 +178,7 @@ export const SwapLogic: FC = () => {
       outputFormValue={swapOutput.value?.string}
       isFetching={swapOutput?.fetching}
       inputDecimals={inputDecimals}
+      switchTokens={switchTokens}
     >
       <SendButton
         valid={valid}

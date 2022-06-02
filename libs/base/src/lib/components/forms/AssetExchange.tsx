@@ -1,10 +1,12 @@
 import { useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { Arrow } from '@apps/dumb-components'
+import { Arrow, Button } from '@apps/dumb-components'
+import { ReactComponent as SwitchIcon } from '@apps/icons/switch-straight.svg'
 import styled from 'styled-components'
 
 import { useTokenSubscription } from '../../context/TokensProvider'
+import { useCheckPath } from '../../hooks/useCheckPath'
 import { AssetInput } from './AssetInput'
 import { ExchangeRate } from './ExchangeRate'
 
@@ -36,6 +38,8 @@ export interface Props {
   outputDecimals?: number
   inputLabel?: string
   outputLabel?: string
+
+  switchTokens?: () => void
 }
 
 const Container = styled.div`
@@ -48,6 +52,37 @@ const Container = styled.div`
       margin-bottom: 0;
     }
   }
+`
+
+const ExChangeButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+`
+
+const ExChangeButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  padding: 2px;
+  width: 36px;
+  height: 36px;
+  background-color: ${({ theme }) => theme.color.background[1]};
+  transition: transform 0.4s ease-in-out;
+  transform-origin: 50% 50%;
+
+  svg {
+    width: 16px;
+  }
+
+  :hover {
+    transform: rotate(180deg);
+  }
+`
+
+const DownArrow = styled(Arrow)`
+  padding: 0;
 `
 
 export const AssetExchange: FC<Props> = ({
@@ -73,9 +108,11 @@ export const AssetExchange: FC<Props> = ({
   outputDecimals,
   inputLabel,
   outputLabel,
+  switchTokens,
 }) => {
   const inputToken = useTokenSubscription(inputAddress) ?? inputAddressOptions.find(v => v.address === inputAddress)
   const outputToken = useTokenSubscription(outputAddress) ?? outputAddressOptions.find(v => v.address === outputAddress)
+  const isSwapPage = useCheckPath('swap')
 
   const conversionFormValue = useMemo(() => {
     if (!inputFormValue) return
@@ -98,16 +135,22 @@ export const AssetExchange: FC<Props> = ({
         addressDisabled={inputAddressDisabled}
         decimals={inputDecimals}
       />
-      <div>
-        <Arrow />
-        <ExchangeRate
-          exchangeRate={exchangeRate}
-          outputToken={outputToken}
-          inputToken={inputToken}
-          outputLabel={outputLabel}
-          inputLabel={inputLabel}
-        />
-      </div>
+      <ExchangeRate
+        exchangeRate={exchangeRate}
+        outputToken={outputToken}
+        inputToken={inputToken}
+        outputLabel={outputLabel}
+        inputLabel={inputLabel}
+      />
+      <ExChangeButtonContainer>
+        {isSwapPage ? (
+          <ExChangeButton onClick={switchTokens}>
+            <SwitchIcon />
+          </ExChangeButton>
+        ) : (
+          <DownArrow />
+        )}
+      </ExChangeButtonContainer>
       <AssetInput
         address={outputAddress}
         addressOptions={outputAddressOptions}
