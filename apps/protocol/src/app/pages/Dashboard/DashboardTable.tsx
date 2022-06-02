@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import { useAccount } from '@apps/base/context/account'
 import { useDataState } from '@apps/data-provider'
+import { PoolType } from '@apps/types'
 import styled from 'styled-components'
 
 import { useFraxStakingState } from '../../context/FraxStakingProvider'
@@ -55,9 +56,21 @@ export const DashboardTable: FC<{ filter: DF }> = ({ filter }) => {
   const isUserFilter = filter === DF.User
 
   const filteredSave = save.filter((massetState: MassetState) => filterByDeposited(isUserFilter && { massetState, polygonRewards }))
-  const filteredPools = pools.filter((feederState: FeederPoolState) =>
-    filterByDeposited(isUserFilter && { feederState, fraxState, polygonRewards }),
-  )
+
+  const filteredPools = useMemo(() => {
+    const poolsByDeposited = pools.filter((feederState: FeederPoolState) =>
+      filterByDeposited(isUserFilter && { feederState, fraxState, polygonRewards }),
+    )
+    const [deprecated, notDeprecated] = poolsByDeposited.reduce(
+      (result: FeederPoolState[][], feederState: FeederPoolState) => {
+        result[feederState?.poolType === PoolType.Deprecated ? 0 : 1].push(feederState)
+        return result
+      },
+      [[], []],
+    )
+    return [...notDeprecated, ...deprecated]
+  }, [isUserFilter, fraxState, polygonRewards, pools])
+
   const showUserZeroState = isUserFilter && !filteredSave.length && !filteredPools.length
 
   return (
