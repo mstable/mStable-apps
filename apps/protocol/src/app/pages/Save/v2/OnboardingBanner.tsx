@@ -90,7 +90,6 @@ const Container = styled.div`
       border-color: rgba(210, 172, 235, 0.25);
       background: rgba(210, 172, 235, 0.1);
       font-size: 0.875rem;
-      align-self: flex-end;
 
       span {
         opacity: 0.675;
@@ -152,6 +151,17 @@ const Container = styled.div`
   }
 `
 
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  > * :not(:last-child) {
+    margin-right: 0.5rem;
+  }
+`
+
 export const OnboardingBanner: FC = () => {
   const saveApy = useAvailableSaveApy()
   const [onboarding, toggleOnboarding] = useOnboarding()
@@ -168,14 +178,22 @@ export const OnboardingBanner: FC = () => {
     <Container>
       <div>
         <div>
-          <h2>{massetName === 'mbtc' ? 'Safely put your BTC to work in DeFi.' : 'The best passive savings account in DeFi.'}</h2>
-          <h3>Secure, high yielding, dependable.</h3>
+          <h2>{massetName === 'mbtc' ? 'Safely put your BTC to work in DeFi.' : 'Start earning yield on your stablecoins.'}</h2>
         </div>
-        {!isSaveV1 && (
-          <Button onClick={toggleOnboarding}>
-            <span>{onboarding ? 'Back to form' : 'How to use Save'}</span>
+        <ButtonContainer>
+          {!isSaveV1 && (
+            <Button onClick={toggleOnboarding}>
+              <span>{onboarding ? 'Back to form' : 'How to use Save'}</span>
+            </Button>
+          )}
+          <Button
+            onClick={() => {
+              window.open('https://docs.mstable.org/advanced/app-usage-terms-and-conditions')
+            }}
+          >
+            Risks
           </Button>
-        )}
+        </ButtonContainer>
       </div>
       <div>
         <APYChart hideControls shimmerHeight={150} tick={false} marginTop={56} aspect={2.07} color="#d2aceb" />
