@@ -92,7 +92,7 @@ export const SaveRedeem: FC = () => {
     [saveAddress, vaultAddress, vaultBalance, saveToken.symbol],
   )
 
-  const [inputAddress, setInputAddress] = useState<string | undefined>(inputOptions?.[0].address)
+  const [inputAddress, setInputAddress] = useState<string | undefined>(inputOptions?.[1].address)
   const inputToken = useTokenSubscription(inputAddress)
   const [inputAmount, inputFormValue, setInputFormValue] = useBigDecimalInput()
 

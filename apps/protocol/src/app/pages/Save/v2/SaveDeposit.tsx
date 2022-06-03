@@ -125,7 +125,7 @@ export const SaveDeposit: FC = () => {
     })(),
   )
 
-  const [outputAddress, setOutputAddress] = useState<string | undefined>(saveAddress)
+  const [outputAddress, setOutputAddress] = useState<string | undefined>(vaultAddress)
 
   const inputAddressOptions = useMemo<AddressOption[]>(() => {
     const inputs = [
