@@ -174,7 +174,7 @@ export const OnboardingBanner: FC = () => {
       <div>
         <div>
           <h2>{massetName === 'mbtc' ? 'Start earning yield on your BTC in DeFi.' : 'Start earning yield on your stablecoins.'}</h2>
-          <h3>Yield powered by lending markets in DeFi and mStable AMM.</h3>
+          <h3>Yield powered by lending markets in DeFi and the mStable AMM.</h3>
         </div>
         <ButtonContainer>
           {!isSaveV1 && (
@@ -187,7 +187,7 @@ export const OnboardingBanner: FC = () => {
               window.open('https://docs.mstable.org/advanced/app-usage-terms-and-conditions')
             }}
           >
-            Risks
+            Risks ↗
           </Button>
         </ButtonContainer>
       </div>
