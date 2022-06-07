@@ -169,16 +169,12 @@ export const OnboardingBanner: FC = () => {
   const [selectedSaveVersion] = useSelectedSaveVersion()
   const isSaveV1 = selectedSaveVersion === 1
 
-  const tip =
-    massetName === 'mbtc'
-      ? 'This APY is purely derived from internal swap fees, and is not reflective of future rates.'
-      : 'This APY is derived from internal swap fees and lending markets, and is not reflective of future rates.'
-
   return (
     <Container>
       <div>
         <div>
-          <h2>{massetName === 'mbtc' ? 'Safely put your BTC to work in DeFi.' : 'Start earning yield on your stablecoins.'}</h2>
+          <h2>{massetName === 'mbtc' ? 'Start earning yield on your BTC in DeFi.' : 'Start earning yield on your stablecoins.'}</h2>
+          <h3>Yield powered by lending markets in DeFi and mStable AMM.</h3>
         </div>
         <ButtonContainer>
           {!isSaveV1 && (
@@ -198,7 +194,7 @@ export const OnboardingBanner: FC = () => {
       <div>
         <APYChart hideControls shimmerHeight={150} tick={false} marginTop={56} aspect={2.07} color="#d2aceb" />
         <APYText>
-          <ApyTip tip={tip}>
+          <ApyTip tip={'This APY is derived from internal swap fees and lending markets, and is not reflective of future rates.'}>
             <CountUp end={saveApy.value ?? 0} suffix="%" />
           </ApyTip>
           <ApyTitle>
