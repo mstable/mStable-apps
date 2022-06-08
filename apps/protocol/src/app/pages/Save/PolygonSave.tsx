@@ -154,7 +154,7 @@ const SaveBalance: FC = () => {
 
   return (
     <div>
-      {isNewUser && <h2>The best passive savings account in DeFi.</h2>}
+      {isNewUser && <h2>Start earning yield on your stablecoins.</h2>}
       {balanceInfo.map(info => {
         if (!info) return undefined
         const { balance, apy, apyTip, stakeLabel, name } = info

@@ -19,6 +19,11 @@ const Link = styled.a`
   color: ${({ theme }) => theme.color.bodyAccent};
 `
 
+const RiskLink = styled(Link)`
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+`
+
 const Links = styled.ul`
   align-items: center;
   color: ${({ theme }) => theme.color.bodyAccent};
@@ -168,6 +173,9 @@ export const Footer: FC = () => {
             </div>
           </Gubbins>
         </div>
+        <RiskLink href="https://docs.mstable.org/advanced/app-usage-terms-and-conditions" target="_blank" rel="noopener noreferrer">
+          Learn more about risk ↗
+        </RiskLink>
       </Inner>
     </Container>
   )

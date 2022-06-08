@@ -110,7 +110,8 @@ export const EthereumSave: FC = () => {
                   </p>
                   <p>
                     Deposits from assets other than {massetConfig.formattedName} will first mint {massetConfig.formattedName} before being
-                    deposited.
+                    deposited. There are risks in using mUSD and Save. Please read{' '}
+                    <a href="https://docs.mstable.org/advanced/app-usage-terms-and-conditions">this page</a> to understand these risks more.
                   </p>
                 </InfoBox>
               </Sidebar>
