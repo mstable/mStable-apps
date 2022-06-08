@@ -83,10 +83,8 @@ const Container = styled.div`
     border-radius: 1rem;
     padding: 1.5rem;
     border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-    margin-bottom: 1.25rem;
 
     button {
-      margin-top: 1rem;
       border-color: rgba(210, 172, 235, 0.25);
       background: rgba(210, 172, 235, 0.1);
       font-size: 0.875rem;
@@ -115,9 +113,9 @@ const Container = styled.div`
 
     h3 {
       font-size: 1rem;
+      line-height: 1.75rem;
       color: ${({ theme }) => theme.color.body};
       opacity: 0.675;
-      margin-top: 0.625rem;
     }
   }
 
@@ -174,7 +172,7 @@ export const OnboardingBanner: FC = () => {
       <div>
         <div>
           <h2>{massetName === 'mbtc' ? 'Start earning yield on your BTC in DeFi.' : 'Start earning yield on your stablecoins.'}</h2>
-          <h3>Yield powered by lending markets in DeFi and the mStable AMM.</h3>
+          <h3>Powered by lending markets in DeFi and the mStable AMM.</h3>
         </div>
         <ButtonContainer>
           {!isSaveV1 && (
