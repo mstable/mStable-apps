@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
@@ -36,6 +36,7 @@ export const ApolloProvider: FC = ({ children }) => {
   const network = useNetwork()
   const previousChainId = usePrevious(network.chainId)
   const networkChanged = previousChainId && network.chainId !== previousChainId
+  const [clients, setClients] = useState<ApolloClients | null>(null)
 
   // Serialized array of failed endpoints to be excluded from the client
   const [failedEndpoints] = useState<string>('')
@@ -80,8 +81,8 @@ export const ApolloProvider: FC = ({ children }) => {
       })
   }, [setPersisted, network.chainId])
 
-  const apollo = useMemo<{ ready: true; clients: ApolloClients } | { ready: false }>(() => {
-    if (!persisted) return { ready: false }
+  useEffect(() => {
+    if (!persisted) return
 
     // const _failedEndpoints = failedEndpoints.split(',')
 
@@ -111,7 +112,7 @@ export const ApolloProvider: FC = ({ children }) => {
       return !!error && !doNotRetryCodes.includes(error.statusCode)
     }
 
-    const clients = (Object.keys(caches) as AllGqlEndpoints[])
+    const clientCaches = (Object.keys(caches) as AllGqlEndpoints[])
       .map<[AllGqlEndpoints, ApolloClient<NormalizedCacheObject>]>(name => {
         if (!Object.prototype.hasOwnProperty.call(network.gqlEndpoints, name)) {
           return [name, dummyClient]
@@ -152,21 +153,21 @@ export const ApolloProvider: FC = ({ children }) => {
         {} as ApolloClients,
       )
 
-    return { ready: true, clients }
-  }, [persisted, failedEndpoints, handleError, network])
+    setClients(clientCaches)
+  }, [failedEndpoints, handleError, network.gqlEndpoints, persisted])
 
   useEffect(() => {
     // Reset caches that can have conflicting keyFields on network change
     // This prevents cached data from a previously selected network being used
     // on a newly-selected network
-    if (networkChanged && (apollo as { clients: ApolloClients }).clients) {
-      ;(apollo as { clients: ApolloClients }).clients.blocks.resetStore().catch(error => {
+    if (networkChanged && clients?.blocks) {
+      clients.blocks.resetStore().catch(error => {
         console.error(error)
       })
     }
-  }, [apollo, networkChanged])
+  }, [clients, networkChanged])
 
-  return apollo.ready ? <apolloClientsCtx.Provider value={apollo.clients}>{children}</apolloClientsCtx.Provider> : <Skeleton />
+  return clients ? <apolloClientsCtx.Provider value={clients}>{children}</apolloClientsCtx.Provider> : <Skeleton />
 }
 
 type NetworkStatusState = Partial<Record<AllGqlEndpoints, NetworkStatus>>
