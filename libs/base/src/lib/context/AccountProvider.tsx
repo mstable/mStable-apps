@@ -5,7 +5,7 @@ import { composedComponent } from '@apps/react-utils'
 import { APP_NAME } from '@apps/types'
 import Onboard from 'bnc-onboard'
 import { ethers, utils } from 'ethers'
-import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-use'
+import { createStateContext, useEffectOnce, useIdle } from 'react-use'
 
 import { useBaseCtx } from '../BaseProviders'
 import { useStakeSignatures } from '../hooks'
@@ -263,14 +263,23 @@ const OnboardProvider: FC<{
   }, [onboard, setInjectedProvider])
 
   useEffectOnce(() => {
-    const previouslySelectedWallet = localStorage.getItem('walletName')
-
-    if (previouslySelectedWallet && onboard.walletSelect) {
-      connect(previouslySelectedWallet).catch(error => {
-        console.error(error)
-      })
+    const reconnect = async () => {
+      const previouslySelectedWallet = localStorage.getItem('walletName')
+      if (previouslySelectedWallet) {
+        const select = await onboard.walletSelect(previouslySelectedWallet)
+        if (select) {
+          try {
+            await connect(previouslySelectedWallet)
+          } catch (error) {
+            console.error(error)
+          }
+        }
+      }
     }
+    reconnect()
+  })
 
+  useEffectOnce(() => {
     if (isGovernance) {
       fetch(`${API_ENDPOINT}/signature`)
         .then(resp => resp.json())
@@ -362,50 +371,39 @@ const AccountState: FC = ({ children }) => {
 
 const OnboardConnection: FC = ({ children }) => {
   const network = useNetwork()
-
-  const [chainId, setChainId] = useChainIdCtx()
+  const [chainId] = useChainIdCtx()
   const [injectedChainId] = useInjectedChainIdCtx()
-  const previousInjectedChainId = usePrevious(injectedChainId)
-
   const jsonRpcProviders = useJsonRpcProviders()
   const [injectedProvider] = useInjectedProviderCtx()
   const [, setSigners] = useSignerCtx()
 
-  useEffect(() => {
-    if (chainId) localStorage.setItem('mostRecentChainId', chainId as unknown as string)
-  }, [chainId])
-
   const injectedMismatching = injectedChainId !== chainId
 
   useEffect(() => {
-    if (!chainId || !injectedChainId) return
+    const inject = async () => {
+      if (!injectedProvider) return
 
-    // Change chainId when injectedChainId changes and doesn't match chainId
-    if (injectedMismatching && previousInjectedChainId) {
-      setChainId(injectedChainId)
+      const method = network.isMetaMaskDefault ? 'wallet_switchEthereumChain' : 'wallet_addEthereumChain'
+      const data = [
+        {
+          chainId: utils.hexStripZeros(utils.hexlify(network.chainId)),
+          ...(!network.isMetaMaskDefault && {
+            chainName: `${network.protocolName} (${network.chainName})`,
+            nativeCurrency: network.nativeToken,
+            rpcUrls: network.rpcEndpoints,
+            blockExplorerUrls: [network.getExplorerUrl()],
+          }),
+        },
+      ]
+
+      try {
+        await injectedProvider.send(method, data)
+      } catch (error) {
+        console.warn(error)
+      }
     }
-  }, [chainId, injectedChainId, injectedMismatching, previousInjectedChainId, setChainId])
-
-  useEffect(() => {
-    if (!injectedProvider || !previousInjectedChainId) return
-
-    const method = network.isMetaMaskDefault ? 'wallet_switchEthereumChain' : 'wallet_addEthereumChain'
-    const data = [
-      {
-        chainId: utils.hexStripZeros(utils.hexlify(network.chainId)),
-        ...(!network.isMetaMaskDefault && {
-          chainName: `${network.protocolName} (${network.chainName})`,
-          nativeCurrency: network.nativeToken,
-          rpcUrls: network.rpcEndpoints,
-          blockExplorerUrls: [network.getExplorerUrl()],
-        }),
-      },
-    ]
-
-    injectedProvider.send(method, data).catch(error => {
-      console.warn(error)
-    })
-  }, [injectedProvider, network, previousInjectedChainId])
+    inject()
+  }, [injectedProvider, network])
 
   useEffect(() => {
     if (!jsonRpcProviders) return setSigners(undefined)
