@@ -100,7 +100,18 @@ export const WalletButton: FC = () => {
 
   return (
     <Container title="Account" onClick={handleClick}>
-      {injectedChainId && chainId !== injectedChainId ? (
+      {connected ? (
+        <>
+          {ensName ? <ENSName>{ensName}</ENSName> : <TruncatedAddress>{account && truncateAddress(account)}</TruncatedAddress>}
+          {ensAvatar ? (
+            <UserIconContainer>
+              <img src={ensAvatar} width={20} alt="Account" />
+            </UserIconContainer>
+          ) : (
+            <UserIcon />
+          )}
+        </>
+      ) : injectedChainId && chainId !== injectedChainId ? (
         <>
           <div>
             <UserIcon />
@@ -114,17 +125,6 @@ export const WalletButton: FC = () => {
             </div>
             <div>{injectedNetwork ? `${injectedNetwork.protocolName} (${injectedNetwork.chainName})` : `Chain ID ${injectedChainId}`}</div>
           </WrongNetwork>
-        </>
-      ) : connected ? (
-        <>
-          {ensName ? <ENSName>{ensName}</ENSName> : <TruncatedAddress>{account && truncateAddress(account)}</TruncatedAddress>}
-          {ensAvatar ? (
-            <UserIconContainer>
-              <img src={ensAvatar} width={20} alt="Account" />
-            </UserIconContainer>
-          ) : (
-            <UserIcon />
-          )}
         </>
       ) : (
         <ConnectText>Connect</ConnectText>

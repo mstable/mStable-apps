@@ -10,7 +10,8 @@ import { createStateContext, useEffectOnce, useIdle, usePrevious } from 'react-u
 import { useBaseCtx } from '../BaseProviders'
 import { useStakeSignatures } from '../hooks'
 import { API_ENDPOINT } from '../utils'
-import { ChainIds, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
+import { useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
+import { ChainIds } from './NetworkProvider'
 
 import type { BaseProvider as Provider, Web3Provider as EthersWeb3Provider } from '@ethersproject/providers'
 import type { API, Wallet } from 'bnc-onboard/dist/src/interfaces'
@@ -234,22 +235,21 @@ const OnboardProvider: FC<{
         const selected = await onboard.walletSelect(walletName)
         if (selected) {
           const checked = await onboard.walletCheck()
-          if (!checked) return
-
+          if (!checked) {
+            localStorage.removeItem('walletName')
+            onboard.walletReset()
+            setConnected(false)
+            setWallet(undefined)
+            setInjectedProvider(undefined)
+            return
+          }
           setConnected(true)
           if (walletName) localStorage.setItem('walletName', walletName)
           return
         }
       } catch (error) {
         console.error(error)
-        return
       }
-
-      localStorage.removeItem('walletName')
-      onboard.walletReset()
-      setConnected(false)
-      setWallet(undefined)
-      setInjectedProvider(undefined)
     },
     [onboard, setInjectedProvider],
   )
@@ -417,7 +417,7 @@ const OnboardConnection: FC = ({ children }) => {
     }
 
     setSigners({
-      provider: injectedProvider ?? (jsonRpcProviders.provider as never),
+      provider: injectedProvider ?? (jsonRpcProviders?.provider as never),
       signer: injectedProvider?.getSigner() as never,
     })
   }, [injectedMismatching, injectedProvider, jsonRpcProviders, setSigners])
