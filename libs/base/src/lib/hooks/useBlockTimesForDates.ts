@@ -17,7 +17,11 @@ export const useBlockTimesForDates = (dates: Date[]): BlockTime[] => {
 
   const query = useQuery<{
     [timestamp: string]: [] | [{ number: number }]
-  }>(blocksDoc, { fetchPolicy: 'cache-first', client })
+  }>(blocksDoc, {
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
+    client,
+  })
 
   return useMemo(() => {
     const filtered = Object.entries(query.data ?? {}).filter(([, value]) => !!value[0]?.number) as [string, [{ number: number }]][]
