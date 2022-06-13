@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
+          # cache: "yarn"
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run-many --all --parallel --target=lint
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
+          # cache: "yarn"
       - run: yarn install
       - run: yarn nx run-many --all --parallel --target=lint
       - run: yarn codegen:typechain
