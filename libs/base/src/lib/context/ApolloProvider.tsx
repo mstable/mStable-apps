@@ -1,11 +1,11 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 import { RetryLink } from '@apollo/client/link/retry'
 import { createNetworkStatusNotifier, initialState, reducer } from '@jameslefrere/react-apollo-network-status'
-import { persistCache } from 'apollo-cache-persist'
 import ApolloLinkTimeout from 'apollo-link-timeout'
+import { CachePersistor, LocalStorageWrapper } from 'apollo3-cache-persist'
 import Skeleton from 'react-loading-skeleton'
 import { usePrevious } from 'react-use'
 
@@ -32,13 +32,9 @@ export const useApolloClients = () => useContext(apolloClientsCtx)
 
 export const ApolloProvider: FC = ({ children }) => {
   const addErrorNotification = useAddErrorNotification()
-  const [persisted, setPersisted] = useState(false)
   const network = useNetwork()
-  const previousChainId = usePrevious(network.chainId)
-  const networkChanged = previousChainId && network.chainId !== previousChainId
-
-  // Serialized array of failed endpoints to be excluded from the client
-  const [failedEndpoints] = useState<string>('')
+  const prevNetworkId = usePrevious(network.chainId)
+  const [clients, setClients] = useState<ApolloClients | null>()
 
   const handleError = useCallback(
     (message: string, error?: unknown): void => {
@@ -62,111 +58,81 @@ export const ApolloProvider: FC = ({ children }) => {
     [addErrorNotification],
   )
 
-  useEffect(() => {
-    Promise.all(
-      Object.keys(caches).map(clientName =>
-        persistCache({
-          cache: caches[clientName as keyof ApolloClients] as never,
-          storage: window.localStorage as never,
-          key: `${network.chainId}-${clientName}`,
-        }),
-      ),
-    )
-      .catch(_error => {
-        console.warn('Cache persist error', _error)
+  const errorLink = onError(error => {
+    const { networkError, graphQLErrors } = error
+    if (graphQLErrors) {
+      graphQLErrors.forEach(({ message, ..._error }) => {
+        handleError(message, error)
       })
-      .finally(() => {
-        setPersisted(true)
-      })
-  }, [setPersisted, network.chainId])
-
-  const apollo = useMemo<{ ready: true; clients: ApolloClients } | { ready: false }>(() => {
-    if (!persisted) return { ready: false }
-
-    // const _failedEndpoints = failedEndpoints.split(',')
-
-    const errorLink = onError(error => {
-      const { networkError, graphQLErrors } = error
-      if (graphQLErrors) {
-        graphQLErrors.forEach(({ message, ..._error }) => {
-          // if (_failedEndpoints.includes(ctx.uri)) return
-
-          handleError(message, error)
-
-          // On any GraphQL error, mark the endpoint as failed; this may be
-          // excessive, but failed endpoints are merely deprioritised rather than
-          // excluded completely.
-          // _failedEndpoints.push(ctx.uri)
-        })
-      }
-
-      if (networkError) {
-        handleError(networkError.message, error)
-      }
-      // setFailedEndpoints(_failedEndpoints.join(','))
-    })
-
-    const retryIf = (error: { statusCode: number }) => {
-      const doNotRetryCodes = [500, 400]
-      return !!error && !doNotRetryCodes.includes(error.statusCode)
     }
 
-    const clients = (Object.keys(caches) as AllGqlEndpoints[])
-      .map<[AllGqlEndpoints, ApolloClient<NormalizedCacheObject>]>(name => {
-        if (!Object.prototype.hasOwnProperty.call(network.gqlEndpoints, name)) {
-          return [name, dummyClient]
+    if (networkError) {
+      handleError(networkError.message, error)
+    }
+  })
+
+  const retryIf = (error: { statusCode: number }) => {
+    const doNotRetryCodes = [500, 400]
+    return !!error && !doNotRetryCodes.includes(error.statusCode)
+  }
+
+  useEffect(() => {
+    const updateClientCache = async () => {
+      if (network.chainId === prevNetworkId) return
+
+      let res = {}
+      for (const key in caches) {
+        if (!Object.keys(network.gqlEndpoints).includes(key)) {
+          res = { ...res, [key]: dummyClient }
+          continue
         }
 
-        const endpoints = network.gqlEndpoints[name as keyof typeof network['gqlEndpoints']]
-        const preferred = endpoints.filter(endpoint => !failedEndpoints.split(',').includes(endpoint))[0]
-        const fallback = endpoints[0] // There is always a fallback, even if it failed
-        const endpoint = preferred ?? fallback
-        const timeoutLink = new ApolloLinkTimeout(30000)
+        const cache = caches[key as keyof ApolloClients] as never
+        const persistor = new CachePersistor({
+          cache,
+          storage: new LocalStorageWrapper(window.localStorage),
+          key: `${network.chainId}-${key}`,
+        })
 
+        await persistor.restore()
+
+        const endpoint = network.gqlEndpoints[key as keyof typeof network['gqlEndpoints']][0]
+        const timeoutLink = new ApolloLinkTimeout(30000)
         const endpointNameLink = new ApolloLink((operation, forward) => {
-          operation.extensions.endpointName = name
+          operation.extensions.endpointName = key
           return forward(operation)
         })
         const httpLink = new HttpLink({ uri: endpoint })
         const retryLink = new RetryLink({ delay: { initial: 1e3, max: 5e3, jitter: true }, attempts: { max: 1, retryIf } })
         const link = ApolloLink.from([endpointNameLink, networkStatusLink, retryLink, timeoutLink, errorLink, httpLink])
-        const client = new ApolloClient<NormalizedCacheObject>({
-          cache: caches[name],
-          link,
-          defaultOptions: {
-            watchQuery: {
-              fetchPolicy: 'cache-and-network',
-              errorPolicy: 'all',
+
+        res = {
+          ...res,
+          [key]: new ApolloClient<NormalizedCacheObject>({
+            cache: cache,
+            link,
+            defaultOptions: {
+              watchQuery: {
+                fetchPolicy: 'cache-and-network',
+                errorPolicy: 'all',
+              },
+              query: {
+                fetchPolicy: 'cache-first',
+                errorPolicy: 'all',
+              },
             },
-            query: {
-              fetchPolicy: 'cache-first',
-              errorPolicy: 'all',
-            },
-          },
-        })
+          }),
+        }
+      }
 
-        return [name, client]
-      })
-      .reduce<ApolloClients>(
-        (prev, [clientName, client]) => ({ ...prev, [clientName as keyof ApolloClients]: client }),
-        {} as ApolloClients,
-      )
-
-    return { ready: true, clients }
-  }, [persisted, failedEndpoints, handleError, network])
-
-  useEffect(() => {
-    // Reset caches that can have conflicting keyFields on network change
-    // This prevents cached data from a previously selected network being used
-    // on a newly-selected network
-    if (networkChanged && (apollo as { clients: ApolloClients }).clients) {
-      ;(apollo as { clients: ApolloClients }).clients.blocks.resetStore().catch(error => {
-        console.error(error)
-      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setClients(res as any)
     }
-  }, [apollo, networkChanged])
 
-  return apollo.ready ? <apolloClientsCtx.Provider value={apollo.clients}>{children}</apolloClientsCtx.Provider> : <Skeleton />
+    updateClientCache()
+  }, [errorLink, network.chainId, network.gqlEndpoints, prevNetworkId])
+
+  return clients ? <apolloClientsCtx.Provider value={clients}>{children}</apolloClientsCtx.Provider> : <Skeleton />
 }
 
 type NetworkStatusState = Partial<Record<AllGqlEndpoints, NetworkStatus>>

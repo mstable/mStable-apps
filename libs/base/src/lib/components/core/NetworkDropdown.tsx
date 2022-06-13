@@ -36,8 +36,8 @@ export const NetworkDropdown: FC = () => {
   const isGovernance = appName === APP_NAME.GOVERNANCE
 
   const handleSelect = useCallback(
-    (_chainId: string) => {
-      const parsed = parseInt(_chainId)
+    (_chainId?: string) => {
+      const parsed = parseInt(_chainId ?? '0')
       setChainId(parsed > 0 ? (parsed as ChainIds) : 1)
     },
     [setChainId],

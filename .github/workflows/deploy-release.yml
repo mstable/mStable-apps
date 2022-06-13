@@ -9,8 +9,11 @@ jobs:
   build_and_deploy_release_protocol:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: c-hive/gha-yarn-cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          # cache: "yarn"
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run protocol:build --prod
@@ -25,8 +28,11 @@ jobs:
   build_and_deploy_release_governance:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: c-hive/gha-yarn-cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          # cache: "yarn"
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run governance:build --prod

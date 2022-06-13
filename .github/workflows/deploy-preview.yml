@@ -7,13 +7,17 @@ jobs:
   build_and_preview_protocol:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: c-hive/gha-yarn-cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          # cache: "yarn"
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run-many --all --parallel --target=lint
       - run: yarn nx run protocol:build --prod
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        id: protocol_deploy
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MSTABLE_APPS_PROTOCOL }}"
@@ -21,16 +25,28 @@ jobs:
           projectId: mstable-apps-protocol
           entryPoint: apps/protocol
           target: mstable-apps-protocol
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            :rocket: Deploy protocol app on ${{ steps.protocol_deploy.outputs.details_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          comment_includes: 'Deploy protocol'
+          reactions: hooray
   build_and_preview_governance:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: c-hive/gha-yarn-cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          # cache: "yarn"
       - run: yarn install
       - run: yarn nx run-many --all --parallel --target=lint
       - run: yarn codegen:typechain
       - run: yarn nx run governance:build --prod
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        id: governance_deploy
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MSTABLE_APPS_GOVERNANCE }}"
@@ -38,3 +54,11 @@ jobs:
           projectId: mstable-apps-governance
           entryPoint: apps/governance
           target: mstable-apps-governance
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            :rocket: Deploy governance app on ${{ steps.governance_deploy.outputs.details_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          comment_includes: 'Deploy governance'
+          reactions: hooray

@@ -475,6 +475,10 @@ const jsonRpcCtx = createContext<{ provider: Provider; parentChainProvider?: Pro
 const NetworkConfigProvider: FC = ({ children }) => {
   const [chainId] = useChainIdCtx()
 
+  useEffect(() => {
+    localStorage.setItem('mostRecentChainId', chainId as unknown as string)
+  }, [chainId])
+
   const network = useMemo(() => getNetwork(chainId ?? ChainIds.EthereumMainnet), [chainId])
 
   return <networkCtx.Provider value={network}>{children}</networkCtx.Provider>
