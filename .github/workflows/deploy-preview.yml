@@ -26,7 +26,7 @@ jobs:
           entryPoint: apps/protocol
           target: mstable-apps-protocol
       - run: |
-          echo ":rocket: Deploy protocol app on ${{ steps.protocol_deploy.details_url }}" >> $GITHUB_STEP_SUMMARY
+          echo ":rocket: Deploy protocol app on ${{ steps.protocol_deploy.outputs.details_url }}" >> $GITHUB_STEP_SUMMARY
   build_and_preview_governance:
     runs-on: ubuntu-latest
     steps:
@@ -49,4 +49,4 @@ jobs:
           entryPoint: apps/governance
           target: mstable-apps-governance
       - run: |
-          echo ":rocket: Deploy governance app on ${{ steps.governance_deploy.details_url }}" >> $GITHUB_STEP_SUMMARY
+          echo ":rocket: Deploy governance app on ${{ steps.governance_deploy.outputs.details_url }}" >> $GITHUB_STEP_SUMMARY
