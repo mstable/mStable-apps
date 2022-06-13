@@ -31,6 +31,8 @@ jobs:
           message: |
             :rocket: Deploy protocol app on ${{ steps.protocol_deploy.outputs.details_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          comment_includes: 'Deploy protocol'
+          reactions: hooray
   build_and_preview_governance:
     runs-on: ubuntu-latest
     steps:
@@ -58,3 +60,5 @@ jobs:
           message: |
             :rocket: Deploy governance app on ${{ steps.governance_deploy.outputs.details_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          comment_includes: 'Deploy governance'
+          reactions: hooray
