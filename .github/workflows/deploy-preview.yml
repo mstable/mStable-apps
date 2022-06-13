@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'yarn'
+          cache: "yarn"
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run-many --all --parallel --target=lint
@@ -25,8 +25,12 @@ jobs:
           projectId: mstable-apps-protocol
           entryPoint: apps/protocol
           target: mstable-apps-protocol
-      - run: |
-          echo ":rocket: Deploy protocol app on ${{ steps.protocol_deploy.outputs.details_url }}" >> $GITHUB_STEP_SUMMARY
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            :rocket: Deploy protocol app on ${{ steps.protocol_deploy.outputs.details_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build_and_preview_governance:
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +38,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'yarn'
+          cache: "yarn"
       - run: yarn install
       - run: yarn nx run-many --all --parallel --target=lint
       - run: yarn codegen:typechain
@@ -48,5 +52,9 @@ jobs:
           projectId: mstable-apps-governance
           entryPoint: apps/governance
           target: mstable-apps-governance
-      - run: |
-          echo ":rocket: Deploy governance app on ${{ steps.governance_deploy.outputs.details_url }}" >> $GITHUB_STEP_SUMMARY
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            :rocket: Deploy governance app on ${{ steps.governance_deploy.outputs.details_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
