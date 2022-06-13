@@ -116,6 +116,7 @@ const OnboardProvider: FC<{
   const [, setStakeSignatures] = useStakeSignatures()
   const [{ appName }] = useBaseCtx()
 
+  const [, setChainId] = useChainIdCtx()
   const [, setInjectedChainId] = useInjectedChainIdCtx()
   const [injectedProvider, setInjectedProvider] = useInjectedProviderCtx()
 
@@ -138,7 +139,10 @@ const OnboardProvider: FC<{
           ens: ens => {
             setEnsName(ens?.name)
           },
-          network: setInjectedChainId,
+          network: chainId => {
+            setChainId(chainId)
+            setInjectedChainId(chainId)
+          },
           balance: setBalance,
           wallet: walletInstance => {
             if (!walletInstance.provider) {
@@ -226,7 +230,7 @@ const OnboardProvider: FC<{
 
         walletCheck: [{ checkName: 'derivationPath' }, { checkName: 'connect' }, { checkName: 'accounts' }, { checkName: 'network' }],
       }),
-    [chainId, rpcUrl, setInjectedChainId, setInjectedProvider],
+    [chainId, rpcUrl, setChainId, setInjectedChainId, setInjectedProvider],
   )
 
   const connect = useCallback(
