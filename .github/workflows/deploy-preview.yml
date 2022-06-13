@@ -8,7 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: c-hive/gha-yarn-cache@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run-many --all --parallel --target=lint
@@ -28,7 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: c-hive/gha-yarn-cache@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
       - run: yarn install
       - run: yarn nx run-many --all --parallel --target=lint
       - run: yarn codegen:typechain
