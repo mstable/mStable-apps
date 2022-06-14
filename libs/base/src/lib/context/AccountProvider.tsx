@@ -10,7 +10,7 @@ import { createStateContext, useEffectOnce, useIdle } from 'react-use'
 import { useBaseCtx } from '../BaseProviders'
 import { useStakeSignatures } from '../hooks'
 import { API_ENDPOINT } from '../utils'
-import { useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
+import { NETWORKS, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
 import { ChainIds } from './NetworkProvider'
 
 import type { BaseProvider as Provider, Web3Provider as EthersWeb3Provider } from '@ethersproject/providers'
@@ -117,7 +117,7 @@ const OnboardProvider: FC<{
   const [{ appName }] = useBaseCtx()
 
   const [, setChainId] = useChainIdCtx()
-  const [, setInjectedChainId] = useInjectedChainIdCtx()
+  const [injectedChainId, setInjectedChainId] = useInjectedChainIdCtx()
   const [injectedProvider, setInjectedProvider] = useInjectedProviderCtx()
 
   const network = useNetwork()
@@ -139,10 +139,7 @@ const OnboardProvider: FC<{
           ens: ens => {
             setEnsName(ens?.name)
           },
-          network: chainId => {
-            setChainId(chainId)
-            setInjectedChainId(chainId)
-          },
+          network: setInjectedChainId,
           balance: setBalance,
           wallet: walletInstance => {
             if (!walletInstance.provider) {
@@ -230,7 +227,7 @@ const OnboardProvider: FC<{
 
         walletCheck: [{ checkName: 'derivationPath' }, { checkName: 'connect' }, { checkName: 'accounts' }, { checkName: 'network' }],
       }),
-    [chainId, rpcUrl, setChainId, setInjectedChainId, setInjectedProvider],
+    [chainId, rpcUrl, setInjectedChainId, setInjectedProvider],
   )
 
   const connect = useCallback(
@@ -265,6 +262,27 @@ const OnboardProvider: FC<{
     setConnected(false)
     setInjectedProvider(undefined)
   }, [onboard, setInjectedProvider])
+
+  useEffect(() => {
+    const check = async () => {
+      if (connected && injectedChainId !== chainId) {
+        if (NETWORKS.map(net => net.chainId).includes(injectedChainId as ChainIds)) {
+          setChainId(injectedChainId)
+        } else {
+          try {
+            const check = await onboard.walletCheck()
+            if (!check) {
+              reset()
+            }
+          } catch (error) {
+            console.error(error)
+            reset()
+          }
+        }
+      }
+    }
+    check()
+  }, [chainId, connected, injectedChainId, onboard, reset, setChainId])
 
   useEffectOnce(() => {
     const reconnect = async () => {
@@ -385,7 +403,7 @@ const OnboardConnection: FC = ({ children }) => {
 
   useEffect(() => {
     const inject = async () => {
-      if (!injectedProvider) return
+      if (!injectedProvider || injectedMismatching) return
 
       const method = network.isMetaMaskDefault ? 'wallet_switchEthereumChain' : 'wallet_addEthereumChain'
       const data = [
@@ -407,7 +425,7 @@ const OnboardConnection: FC = ({ children }) => {
       }
     }
     inject()
-  }, [injectedProvider, network])
+  }, [injectedMismatching, injectedProvider, network])
 
   useEffect(() => {
     if (!jsonRpcProviders) return setSigners(undefined)
