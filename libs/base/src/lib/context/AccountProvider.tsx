@@ -284,6 +284,15 @@ const OnboardProvider: FC<{
     check()
   }, [chainId, connected, injectedChainId, onboard, reset, setChainId])
 
+  useEffect(() => {
+    const autoConnect = async () => {
+      if (injectedProvider) {
+        await injectedProvider.send('eth_requestAccounts', [])
+      }
+    }
+    autoConnect()
+  }, [injectedProvider])
+
   useEffectOnce(() => {
     const reconnect = async () => {
       const previouslySelectedWallet = localStorage.getItem('walletName')
