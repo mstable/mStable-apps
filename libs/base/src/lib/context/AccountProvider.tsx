@@ -216,6 +216,7 @@ const OnboardProvider: FC<{
             { walletName: 'torus' },
             { walletName: 'status' },
             { walletName: 'walletLink', rpcUrl, appName: 'mStable', preferred: true },
+            { walletName: 'coinbase', rpcUrl, appName: 'mStable', preferred: true },
             { walletName: 'imToken', rpcUrl },
             { walletName: 'meetone' },
             { walletName: 'mykey', rpcUrl },
@@ -283,15 +284,6 @@ const OnboardProvider: FC<{
     }
     check()
   }, [chainId, connected, injectedChainId, onboard, reset, setChainId])
-
-  useEffect(() => {
-    const autoConnect = async () => {
-      if (injectedProvider) {
-        await injectedProvider.send('eth_requestAccounts', [])
-      }
-    }
-    autoConnect()
-  }, [injectedProvider])
 
   useEffectOnce(() => {
     const reconnect = async () => {
