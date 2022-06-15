@@ -216,7 +216,7 @@ const OnboardProvider: FC<{
             { walletName: 'torus' },
             { walletName: 'status' },
             { walletName: 'walletLink', rpcUrl, appName: 'mStable', preferred: true },
-            { walletName: 'coinbase', rpcUrl, appName: 'mStable', preferred: true },
+            { walletName: 'coinbase', preferred: true },
             { walletName: 'imToken', rpcUrl },
             { walletName: 'meetone' },
             { walletName: 'mykey', rpcUrl },
