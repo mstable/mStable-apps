@@ -10,7 +10,7 @@ import { createStateContext, useEffectOnce, useIdle } from 'react-use'
 import { useBaseCtx } from '../BaseProviders'
 import { useStakeSignatures } from '../hooks'
 import { API_ENDPOINT } from '../utils'
-import { NETWORKS, useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
+import { useChainIdCtx, useJsonRpcProviders, useNetwork } from './NetworkProvider'
 import { ChainIds } from './NetworkProvider'
 
 import type { BaseProvider as Provider, Web3Provider as EthersWeb3Provider } from '@ethersproject/providers'
@@ -226,7 +226,13 @@ const OnboardProvider: FC<{
           ],
         },
 
-        walletCheck: [{ checkName: 'derivationPath' }, { checkName: 'connect' }, { checkName: 'accounts' }, { checkName: 'network' }],
+        walletCheck: [
+          { checkName: 'derivationPath' },
+          { checkName: 'connect' },
+          { checkName: 'accounts' },
+          { checkName: 'network' },
+          // networkCheck(appName),
+        ],
       }),
     [chainId, rpcUrl, setInjectedChainId, setInjectedProvider],
   )
@@ -265,9 +271,34 @@ const OnboardProvider: FC<{
   }, [onboard, setInjectedProvider])
 
   useEffect(() => {
+    const autoConnect = async () => {
+      if (injectedChainId !== chainId && injectedProvider?.provider?.request && wallet?.name === 'coinbase') {
+        try {
+          injectedProvider?.provider?.request({ method: 'eth_requestAccounts' })
+          setConnected(true)
+          if (wallet?.name) localStorage.setItem('walletName', wallet?.name)
+        } catch (error) {
+          reset()
+          console.error(error)
+        }
+      }
+    }
+
+    autoConnect()
+  }, [chainId, injectedChainId, injectedProvider?.provider, reset, wallet?.name])
+
+  useEffect(() => {
     const check = async () => {
       if (connected && injectedChainId !== chainId) {
-        if (NETWORKS.map(net => net.chainId).includes(injectedChainId as ChainIds)) {
+        if (
+          [
+            ChainIds.EthereumGoerli,
+            ChainIds.EthereumKovan,
+            ChainIds.EthereumMainnet,
+            ChainIds.EthereumRopsten,
+            ...(isGovernance ? [] : [ChainIds.MaticMainnet, ChainIds.MaticMumbai]),
+          ].includes(injectedChainId as ChainIds)
+        ) {
           setChainId(injectedChainId)
         } else {
           try {
@@ -283,7 +314,7 @@ const OnboardProvider: FC<{
       }
     }
     check()
-  }, [chainId, connected, injectedChainId, onboard, reset, setChainId])
+  }, [chainId, connected, injectedChainId, isGovernance, onboard, reset, setChainId])
 
   useEffectOnce(() => {
     const reconnect = async () => {
