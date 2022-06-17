@@ -272,12 +272,15 @@ const OnboardProvider: FC<{
 
   useEffect(() => {
     const autoConnect = async () => {
+      console.log('------- autoconnect: injectedChainId ', injectedChainId, ' chainId ', chainId, ' wallet.name ', wallet?.name)
       if (injectedChainId !== chainId && injectedProvider?.provider?.request && wallet?.name === 'coinbase') {
         try {
           injectedProvider?.provider?.request({ method: 'eth_requestAccounts' })
           setConnected(true)
+          console.log('------- autoconnect: success')
           if (wallet?.name) localStorage.setItem('walletName', wallet?.name)
         } catch (error) {
+          console.log('------- autoconnect: error ', error)
           reset()
           console.error(error)
         }
@@ -299,10 +302,13 @@ const OnboardProvider: FC<{
             ...(isGovernance ? [] : [ChainIds.MaticMainnet, ChainIds.MaticMumbai]),
           ].includes(injectedChainId as ChainIds)
         ) {
+          console.log('------- check: setChainId ', injectedChainId)
           setChainId(injectedChainId)
         } else {
           try {
+            console.log('------- check: trigger wallet check, injectedChainId ', injectedChainId, ' chainId ', chainId)
             const check = await onboard.walletCheck()
+
             if (!check) {
               reset()
             }
@@ -320,6 +326,7 @@ const OnboardProvider: FC<{
     const reconnect = async () => {
       const previouslySelectedWallet = localStorage.getItem('walletName')
       if (previouslySelectedWallet) {
+        console.log('------- reconnect: ls wallet ', previouslySelectedWallet)
         const select = await onboard.walletSelect(previouslySelectedWallet)
         if (select) {
           try {
