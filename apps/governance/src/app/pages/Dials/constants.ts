@@ -107,7 +107,7 @@ export const DIALS_METADATA: { [dialId: number]: DialMetadata } = Object.freeze(
     title: 'FRAX fPool',
     color: '#b7e21a',
     description:
-      'Voting for this dial will direct MTA emissions to rewarding savers who have deposited their imBTC in the Save vault on Polygon.',
+      'Voting for this dial will direct MTA emissions to the FRAX/mUSD feeder pool on Polygon.',
     link: 'https://app.mstable.org/#/musd/pools/0xb30a907084ac8a0d25dddab4e364827406fd09f0?network=polygon',
     linkTitle: 'Pool',
   },
