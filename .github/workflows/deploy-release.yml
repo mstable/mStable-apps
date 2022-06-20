@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          # cache: "yarn"
+          cache: "yarn"
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run protocol:build --prod
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          # cache: "yarn"
+          cache: "yarn"
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run governance:build --prod
