@@ -22,9 +22,9 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_APPS_PROTOCOL }}'
           expires: 30d
-          projectId: apps-protocol-af0f6"
+          projectId: apps-protocol-af0f6
           entryPoint: apps/protocol
-          target: apps-protocol-af0f6"
+          target: apps-protocol-af0f6
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
         with:
