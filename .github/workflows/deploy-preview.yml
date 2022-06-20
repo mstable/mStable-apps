@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
+          cache: 'yarn'
       - run: yarn install
       - run: yarn codegen:typechain
       - run: yarn nx run-many --all --parallel --target=lint
@@ -19,12 +19,12 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         id: protocol_deploy
         with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MSTABLE_APPS_PROTOCOL }}"
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_APPS_PROTOCOL }}'
           expires: 30d
-          projectId: mstable-apps-protocol
+          projectId: apps-protocol-af0f6
           entryPoint: apps/protocol
-          target: mstable-apps-protocol
+          target: apps-protocol-af0f6
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
         with:
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
+          cache: 'yarn'
       - run: yarn install
       - run: yarn nx run-many --all --parallel --target=lint
       - run: yarn codegen:typechain
@@ -48,12 +48,12 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         id: governance_deploy
         with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MSTABLE_APPS_GOVERNANCE }}"
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_APPS_STAKING }}'
           expires: 30d
-          projectId: mstable-apps-governance
+          projectId: apps-staking
           entryPoint: apps/governance
-          target: mstable-apps-governance
+          target: apps-staking
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
         with:
