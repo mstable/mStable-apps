@@ -6,21 +6,8 @@ import { createStateContext, useIdle } from 'react-use'
 import { useAccount as useWagmiAccount } from 'wagmi'
 
 import type { BaseProvider as Provider } from '@ethersproject/providers'
-import type { API, Wallet } from 'bnc-onboard/dist/src/interfaces'
 import type { ethers } from 'ethers'
 import type { FC } from 'react'
-
-export interface OnboardCtx {
-  onboard?: API
-  connect: () => void
-  reset: () => void
-  connected: boolean
-  address?: string
-  balance?: string
-  wallet?: Wallet
-  ensName?: string
-  ensAvatar?: string
-}
 
 interface UserAccountCtx {
   address?: string
@@ -33,8 +20,6 @@ export interface StakeSignatures {
 }
 
 type Masquerade = (account?: string) => void
-
-export const onboardCtx = createContext<OnboardCtx>(null as never)
 
 const [useSignerCtx, SignerProvider] = createStateContext<
   | {

@@ -14,7 +14,7 @@ import type { FC } from 'react'
 
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.mainnet, chain.ropsten, chain.goerli, chain.kovan, chain.polygon, chain.polygonMumbai],
-  [infuraProvider(), publicProvider()],
+  [infuraProvider({ infuraId: 'a6daf77ef0ae4b60af39259e435a40fe' }), publicProvider()],
 )
 
 const client = createClient({
@@ -36,7 +36,7 @@ const client = createClient({
     new InjectedConnector({
       chains,
       options: {
-        name: 'Injected',
+        name: detectedName => `Injected (${typeof detectedName === 'string' ? detectedName : detectedName.join(', ')})`,
         shimDisconnect: true,
       },
     }),
@@ -46,14 +46,14 @@ const client = createClient({
 })
 
 const AccountProvider: FC = ({ children }) => {
-  const [chainId, setChainId] = useChainIdCtx()
+  const [, setChainId] = useChainIdCtx()
   const { activeChain } = useNetwork()
 
   useEffect(() => {
-    if (activeChain?.id && chainId && activeChain?.id !== chainId) {
+    if (activeChain?.id) {
       setChainId(activeChain.id)
     }
-  }, [activeChain?.id, chainId, setChainId])
+  }, [activeChain?.id, setChainId])
 
   return <>{children}</>
 }

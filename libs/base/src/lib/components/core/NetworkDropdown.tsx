@@ -30,7 +30,7 @@ const StyledDropdown = styled(Dropdown)`
 `
 
 export const NetworkDropdown: FC = () => {
-  const [chainId] = useChainIdCtx()
+  const [chainId, setChainId] = useChainIdCtx()
   const [isAltPressed] = useKeyPress('Alt')
   const [{ appName }] = useBaseCtx()
   const { switchNetwork } = useNetwork()
@@ -39,12 +39,13 @@ export const NetworkDropdown: FC = () => {
 
   const handleSelect = useCallback(
     (_chainId?: string) => {
+      const parsed = parseInt(_chainId ?? '0')
       if (switchNetwork) {
-        const parsed = parseInt(_chainId ?? '0')
         switchNetwork(parsed)
       }
+      setChainId(parsed)
     },
-    [switchNetwork],
+    [setChainId, switchNetwork],
   )
 
   const filteredNetworks = isGovernance
