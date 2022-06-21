@@ -1,5 +1,4 @@
 import { TokenIcon } from '@apps/base/components/core'
-import { useConnect, useConnected } from '@apps/base/context/account'
 import { useDataState } from '@apps/data-provider'
 import { UnstyledButton } from '@apps/dumb-components'
 import { useSetSelectedMassetName } from '@apps/masset-provider'
@@ -7,6 +6,7 @@ import { ViewportWidth } from '@apps/theme'
 import { MASSETS } from '@apps/types'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
+import { useConnect } from 'wagmi'
 
 import { ReactComponent as LogoImage } from '../icons/mstable.svg'
 
@@ -58,9 +58,7 @@ const StyledButton = styled(UnstyledButton)<{ asset: MassetName }>`
 
 const MassetButton: FC<{ massetName: MassetName }> = ({ massetName }) => {
   const history = useHistory()
-  const connect = useConnect()
-  const connected = useConnected()
-
+  const { activeConnector, connect, isConnecting } = useConnect()
   const setSelectedMassetName = useSetSelectedMassetName()
   const { symbol, slug } = MASSETS[massetName]
 
@@ -68,7 +66,7 @@ const MassetButton: FC<{ massetName: MassetName }> = ({ massetName }) => {
     <StyledButton
       asset={massetName}
       onClick={() => {
-        if (!connected) {
+        if (!activeConnector && !isConnecting) {
           connect()
         }
         setSelectedMassetName(slug as MassetName)

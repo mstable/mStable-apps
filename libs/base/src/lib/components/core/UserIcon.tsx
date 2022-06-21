@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import Jazzicon from 'jazzicon'
 import styled from 'styled-components'
-
-import { useWalletAddress } from '../../context/AccountProvider'
+import { useAccount } from 'wagmi'
 
 import type { FC } from 'react'
 
@@ -16,8 +15,8 @@ export const UserIconContainer = styled.div`
 
 export const UserIcon: FC<{ address?: string }> = ({ address }) => {
   const ref = useRef<HTMLDivElement | null>(null)
-  const walletAddress = useWalletAddress()
-  const userAddress = address ?? walletAddress
+  const { data: account } = useAccount()
+  const userAddress = address ?? account?.address
 
   useEffect(() => {
     if (userAddress && ref.current) {

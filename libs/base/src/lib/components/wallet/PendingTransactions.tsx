@@ -5,9 +5,10 @@ import { Button } from '@apps/dumb-components'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { APP_NAME } from '@apps/types'
 import styled from 'styled-components'
+import { useConnect } from 'wagmi'
 
 import { useBaseCtx } from '../../BaseProviders'
-import { useSigner, useWallet } from '../../context/AccountProvider'
+import { useSigner } from '../../context/AccountProvider'
 import { useNetworkPrices } from '../../context/NetworkProvider'
 import { useNativeToken } from '../../context/TokensProvider'
 import { useTransactionsDispatch, useTransactionsState } from '../../context/TransactionsProvider'
@@ -158,7 +159,7 @@ export const PendingTransaction: FC<{
 }> = ({ id }) => {
   const { [id]: transaction } = useTransactionsState()
   const signer = useSigner()
-  const wallet = useWallet()
+  const { activeConnector } = useConnect()
   const { cancel, send } = useTransactionsDispatch()
   const { estimationError, gasLimit, gasPrice } = useGas()
   const [{ appName }] = useBaseCtx()
@@ -185,7 +186,7 @@ export const PendingTransaction: FC<{
     return null
   }
 
-  const isGnosisSafe = wallet?.provider?.walletMeta?.name === 'Gnosis Safe Multisig'
+  const isGnosisSafe = activeConnector?.name === 'Gnosis Safe Multisig'
   const checkTransactionSignature =
     isGovernance && !isGnosisSafe && transaction.manifest.fn && stakeSignedFunctions.has(transaction.manifest.fn) && stakeSignatures.message
 

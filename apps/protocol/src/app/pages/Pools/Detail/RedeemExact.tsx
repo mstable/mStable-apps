@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
 import { OneToManyAssetExchange, SendButton, useMultiAssetExchangeState } from '@apps/base/components/forms'
-import { useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { useMaximumOutput } from '@apps/hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
+import { useAccount } from 'wagmi'
 
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useFPInputRatios } from '../../../hooks/useFPInputRatios'
@@ -25,7 +25,7 @@ export const RedeemExact: FC = () => {
   const feederPool = useSelectedFeederPoolState()
   const contract = useSelectedFeederPoolContract()
   const propose = usePropose()
-  const walletAddress = useWalletAddress()
+  const { data: account } = useAccount()
   const outputTokens = useMemo(() => [feederPool.masset.token, feederPool.fasset.token], [feederPool])
 
   const massetPrice = useSelectedMassetPrice()
@@ -123,7 +123,7 @@ export const RedeemExact: FC = () => {
         warning={!error && priceImpact.value?.showImpactWarning}
         valid={!error}
         handleSend={() => {
-          if (!contract || !walletAddress || !maxOutputAmount) return
+          if (!contract || !account?.address || !maxOutputAmount) return
 
           const addresses = touched.map(v => v.address)
           const amounts = touched.map(v => (v.amount as BigDecimal).exact)
@@ -132,7 +132,7 @@ export const RedeemExact: FC = () => {
             new TransactionManifest(
               contract,
               'redeemExactBassets',
-              [addresses, amounts, maxOutputAmount.exact, walletAddress],
+              [addresses, amounts, maxOutputAmount.exact, account.address],
               { past: 'Redeemed', present: 'Redeeming' },
               formId,
             ),

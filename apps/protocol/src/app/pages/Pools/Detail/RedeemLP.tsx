@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 
 import { AssetExchange, SendButton, TransactionInfo } from '@apps/base/components/forms'
-import { useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { useBigDecimalInput, useMinimumOutput, useSlippage } from '@apps/hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
+import { useAccount } from 'wagmi'
 
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
@@ -26,7 +26,7 @@ export const RedeemLP: FC = () => {
   const feederPool = useSelectedFeederPoolState()
   const contracts = useSelectedFeederPoolContracts()
   const propose = usePropose()
-  const walletAddress = useWalletAddress()
+  const { data: account } = useAccount()
   const massetPrice = useSelectedMassetPrice()
 
   const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice.value ?? 0) < 100000
@@ -157,7 +157,7 @@ export const RedeemLP: FC = () => {
         warning={!isUnstakingFromVault && !error && showImpactWarning}
         valid={!error}
         handleSend={() => {
-          if (!contracts || !walletAddress || !feederPool) return
+          if (!contracts || !account?.address || !feederPool) return
           if (!outputAddress || !inputAmount) return
 
           if (isUnstakingFromVault) {
@@ -178,7 +178,7 @@ export const RedeemLP: FC = () => {
             new TransactionManifest(
               contracts.feederPool,
               'redeem',
-              [outputAddress, inputAmount.exact, minOutputAmount.exact, walletAddress],
+              [outputAddress, inputAmount.exact, minOutputAmount.exact, account.address],
               { past: 'Redeemed', present: 'Redeeming' },
               formId,
             ),
