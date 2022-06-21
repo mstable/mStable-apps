@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from 'react'
 
 import { AssetExchange, SendButton, TransactionInfo } from '@apps/base/components/forms'
-import { useWalletAddress } from '@apps/base/context/account'
 import { useNetwork } from '@apps/base/context/network'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { useBigDecimalInput, useMinimumOutput, useSlippage } from '@apps/hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
+import { useAccount } from 'wagmi'
 
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 import {
@@ -29,7 +29,7 @@ export const MintLP: FC = () => {
   const contracts = useSelectedFeederPoolContracts()
 
   const propose = usePropose()
-  const walletAddress = useWalletAddress()
+  const { data: account } = useAccount()
 
   const defaultInputOptions = useFPAssetAddressOptions(true)
   const defaultOutputOptions = useFPVaultAddressOptions()
@@ -170,7 +170,7 @@ export const MintLP: FC = () => {
         warning={!isStakingInVault && !error && showImpactWarning}
         valid={!error}
         handleSend={() => {
-          if (!contracts || !walletAddress || !feederPool) return
+          if (!contracts || !account?.address || !feederPool) return
           if (!inputAddress || !inputAmount) return
 
           if (isStakingLP) {
@@ -203,7 +203,7 @@ export const MintLP: FC = () => {
             new TransactionManifest(
               contracts.feederPool,
               'mint',
-              [inputAddress, inputAmount.exact, minOutputAmount.exact, walletAddress],
+              [inputAddress, inputAmount.exact, minOutputAmount.exact, account.address],
               { past: 'Minted', present: 'Minting' },
               formId,
             ),

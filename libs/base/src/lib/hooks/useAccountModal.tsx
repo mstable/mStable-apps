@@ -1,12 +1,10 @@
-import React from 'react'
-
 import { Button, Modal } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 import { useModal } from 'react-modal-hook'
 import styled from 'styled-components'
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 
 import { Address } from '../components/core'
-import { useConnected, useReset, useWallet, useWalletAddress } from '../context/AccountProvider'
 
 const DisconnectButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};
@@ -69,26 +67,25 @@ export const useAccountModal = (): [() => void, () => void] => {
   const [showModal, hideModal] = useModal(({ onExited, in: open }) => {
     // "Modals are also functional components and can use react hooks themselves"
     /* eslint-disable react-hooks/rules-of-hooks */
-    const reset = useReset()
-    const address = useWalletAddress()
-    const connected = useConnected()
-    const wallet = useWallet()
+    const { data: account } = useAccount()
+    const { activeConnector } = useConnect()
+    const { disconnect } = useDisconnect()
 
     const handleClick = (): void => {
-      if (reset) {
-        reset()
-        hideModal()
+      if (account?.address) {
+        disconnect()
       }
+      hideModal()
     }
 
     return (
       <Modal title="Account" onExited={onExited} open={open} hideModal={hideModal}>
-        {connected && address && wallet && (
+        {activeConnector?.name && account?.address && (
           <Container>
             <div>
-              <h3>Connected with {wallet.name as string}</h3>
+              <h3>Connected with {activeConnector.name}</h3>
               <AddressGroup>
-                <Address address={address} type="account" copyable />
+                <Address address={account.address} type="account" copyable />
                 <DisconnectButton type="button" onClick={handleClick}>
                   Disconnect
                 </DisconnectButton>
@@ -99,5 +96,6 @@ export const useAccountModal = (): [() => void, () => void] => {
       </Modal>
     )
   })
+
   return [showModal, hideModal]
 }
