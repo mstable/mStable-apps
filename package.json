@@ -106,7 +106,9 @@
     "tslib": "^2.3.0",
     "use-clipboard-copy": "^0.2.0",
     "use-onclickoutside": "^0.4.0",
-    "use-sound": "^4.0.1"
+    "use-sound": "^4.0.1",
+    "util": "^0.12.4",
+    "wagmi": "^0.4.12"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
