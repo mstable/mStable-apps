@@ -57,7 +57,7 @@ export const CountUp: FC<Props> = ({
   const isValid = typeof end === 'number' && !isNaN(end)
   const prevEnd = useRef(isValid ? end : 0)
 
-  const { countUp, update, pauseResume, start } = useCountUp({
+  const { countUp, update } = useCountUp({
     decimals,
     duration,
     end: isValid ? end : 0,
