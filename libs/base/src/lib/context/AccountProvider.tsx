@@ -19,17 +19,6 @@ export interface StakeSignatures {
 
 type Masquerade = (account?: string) => void
 
-// const [useSignerCtx, SignerProvider] = createStateContext<
-//   | {
-//       provider: Provider
-//       parentChainProvider?: Provider
-//       signer?: ethers.Signer
-//     }
-//   | undefined
-// >(undefined)
-
-// export { useSignerCtx }
-
 const masqueradeCtx = createContext<Masquerade>(null as never)
 
 export const userAccountCtx = createContext<UserAccountCtx>({
