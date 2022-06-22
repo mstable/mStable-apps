@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react'
 
 import { useFetchState } from '@apps/hooks'
+import { useEnsResolver, useProvider } from 'wagmi'
 
-import { useProvider } from '../context/AccountProvider'
 import { ActionType, useENSState } from '../context/ENSProvider'
 
 import type { FetchState } from '@apps/types'
-import type { BaseProvider as Provider } from '@ethersproject/providers/lib/base-provider'
 
 export const useResolveENSName = (ensName: string): FetchState<string> => {
   const provider = useProvider()
@@ -20,10 +20,10 @@ export const useResolveENSName = (ensName: string): FetchState<string> => {
     dispatch({ type: ActionType.Fetch, payload: { ensName } })
     provider
       .resolveName(ensName)
-      .then(address => {
+      .then((address: any) => {
         dispatch({ type: ActionType.Value, payload: { ensName, address } })
       })
-      .catch(error => {
+      .catch((error: any) => {
         dispatch({ type: ActionType.Error, payload: { ensName, error } })
       })
   }, [maybeResolved, dispatch, ensName, provider])
@@ -31,21 +31,27 @@ export const useResolveENSName = (ensName: string): FetchState<string> => {
   return state[ensName] ?? {}
 }
 
-export const resolveENSContentHash = async (ensName: string, provider: Provider): Promise<string | null> => {
-  const resolver = await provider.getResolver(ensName)
-  return resolver?.getContentHash()
-}
-
 // TODO cache me
 export const useResolveENSContentHash = (ensName: string) => {
-  const provider = useProvider()
+  const { data: resolver } = useEnsResolver({
+    name: ensName,
+  })
   const [state, callbacks] = useFetchState<string | null>()
 
   useEffect(() => {
-    if (!provider || state.fetching) return
-    callbacks.fetching()
-    resolveENSContentHash(ensName, provider).then(callbacks.value).catch(callbacks.error)
-  }, [provider, callbacks, state, ensName])
+    const getHash = async () => {
+      if (!resolver || state.fetching) return
+      callbacks.fetching()
+      try {
+        const hash = await resolver?.getContentHash()
+        callbacks.value(hash)
+      } catch (error: any) {
+        callbacks.error(error)
+      }
+    }
+
+    getHash()
+  }, [callbacks, resolver, state.fetching])
 
   return state
 }

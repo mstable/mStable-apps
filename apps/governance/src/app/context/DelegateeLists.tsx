@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect } from 'react'
 
-import { useProvider } from '@apps/base/context/account'
 import { useNetwork } from '@apps/base/context/network'
 import { providerFactory } from '@apps/context-utils'
 import { useFetchState } from '@apps/hooks'
+import { useProvider } from 'wagmi'
 
 import type { DelegateeInfo, DelegateeList } from '@mstable/delegatee-lists'
 import type { FC } from 'react'

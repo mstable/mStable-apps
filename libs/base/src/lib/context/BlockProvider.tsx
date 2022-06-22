@@ -2,9 +2,10 @@ import { createContext, useContext, useMemo, useState } from 'react'
 
 import { subDays, subHours } from 'date-fns'
 import { useInterval } from 'react-use'
+import { useProvider } from 'wagmi'
 
 import { useBlockTimesForDates } from '../hooks'
-import { useIsIdle, useProvider } from './AccountProvider'
+import { useIsIdle } from './AccountProvider'
 import { useNetwork } from './NetworkProvider'
 
 import type { FC } from 'react'

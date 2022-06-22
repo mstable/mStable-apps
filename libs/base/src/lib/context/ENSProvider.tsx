@@ -1,28 +1,33 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react'
 
 import { useFetchState } from '@apps/hooks'
 import { createReducerContext } from 'react-use'
-
-import { useProvider } from './AccountProvider'
+import { useEnsResolver } from 'wagmi'
 
 import type { FetchState } from '@apps/types'
-import type { BaseProvider as Provider } from '@ethersproject/providers'
 import type { Reducer } from 'react'
 
-export const resolveENSContentHash = async (ensName: string, provider: Provider): Promise<string | null> => {
-  const resolver = await provider.getResolver(ensName)
-  return resolver?.getContentHash()
-}
-
 export const useResolveENSContentHash = (ensName: string) => {
-  const provider = useProvider()
+  const { data: resolver } = useEnsResolver({
+    name: ensName,
+  })
   const [state, callbacks] = useFetchState<string | null>()
 
   useEffect(() => {
-    if (!provider || state.fetching) return
-    callbacks.fetching()
-    resolveENSContentHash(ensName, provider).then(callbacks.value).catch(callbacks.error)
-  }, [provider, callbacks, state, ensName])
+    const getHash = async () => {
+      if (!resolver || state.fetching) return
+      callbacks.fetching()
+      try {
+        const hash = await resolver?.getContentHash()
+        callbacks.value(hash)
+      } catch (error: any) {
+        callbacks.error(error)
+      }
+    }
+
+    getHash()
+  }, [callbacks, resolver, state.fetching])
 
   return state
 }

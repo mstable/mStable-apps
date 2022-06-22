@@ -2,11 +2,9 @@
 import { createContext, useContext, useMemo, useState } from 'react'
 
 import { composedComponent } from '@apps/react-utils'
-import { createStateContext, useIdle } from 'react-use'
-import { useAccount as useWagmiAccount } from 'wagmi'
+import { useIdle } from 'react-use'
+import { useAccount as useWagmiAccount, useProvider as useWagmiProvider, useSigner as useWagmiSigner } from 'wagmi'
 
-import type { BaseProvider as Provider } from '@ethersproject/providers'
-import type { ethers } from 'ethers'
 import type { FC } from 'react'
 
 interface UserAccountCtx {
@@ -21,16 +19,16 @@ export interface StakeSignatures {
 
 type Masquerade = (account?: string) => void
 
-const [useSignerCtx, SignerProvider] = createStateContext<
-  | {
-      provider: Provider
-      parentChainProvider?: Provider
-      signer?: ethers.Signer
-    }
-  | undefined
->(undefined)
+// const [useSignerCtx, SignerProvider] = createStateContext<
+//   | {
+//       provider: Provider
+//       parentChainProvider?: Provider
+//       signer?: ethers.Signer
+//     }
+//   | undefined
+// >(undefined)
 
-export { useSignerCtx }
+// export { useSignerCtx }
 
 const masqueradeCtx = createContext<Masquerade>(null as never)
 
@@ -40,13 +38,18 @@ export const userAccountCtx = createContext<UserAccountCtx>({
   masqueradedAccount: undefined,
 })
 
-export const useProvider = (): Provider | undefined => useSignerCtx()[0]?.provider
+export const useProvider = () => useWagmiProvider()
 
-export const useSigner = (): ethers.Signer | undefined => useSignerCtx()[0]?.signer
+export const useSigner = () => {
+  const { data } = useWagmiSigner()
 
-export const useSignerOrProvider = (): ethers.Signer | Provider | undefined => {
-  const [signerProvider] = useSignerCtx()
-  return signerProvider?.signer ?? signerProvider?.provider
+  return data
+}
+
+export const useSignerOrProvider = () => {
+  const { data } = useWagmiSigner()
+
+  return data
 }
 
 export const useMasquerade = (): Masquerade => useContext(masqueradeCtx)
@@ -85,4 +88,4 @@ const AccountState: FC = ({ children }) => {
   )
 }
 
-export const AccountProvider = composedComponent(SignerProvider, AccountState)
+export const AccountProvider = composedComponent(AccountState)
