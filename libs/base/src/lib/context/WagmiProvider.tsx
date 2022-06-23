@@ -1,9 +1,11 @@
+import '@rainbow-me/rainbowkit/dist/index.css'
+
 import { useEffect } from 'react'
 
+import { useIsDarkMode } from '@apps/browser-settings'
+import { rbkDarkTheme, rbkLightTheme } from '@apps/theme'
+import { connectorsForWallets, RainbowKitProvider, wallet } from '@rainbow-me/rainbowkit'
 import { chain, configureChains, createClient, useNetwork, WagmiConfig } from 'wagmi'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 
@@ -18,30 +20,34 @@ const { chains, provider, webSocketProvider } = configureChains(
   [infuraProvider({ infuraId }), publicProvider()],
 )
 
+const needsInjectedWalletFallback =
+  typeof window !== 'undefined' && window.ethereum && !window.ethereum.isMetaMask && !window.ethereum.isCoinbaseWallet
+
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [
+      wallet.metaMask({ chains }),
+      wallet.ledger({ chains }),
+      wallet.walletConnect({ chains }),
+      wallet.coinbase({ appName: 'mStable', chains }),
+    ],
+  },
+  {
+    groupName: 'Others',
+    wallets: [
+      wallet.rainbow({ chains }),
+      wallet.brave({ chains, shimDisconnect: true }),
+      wallet.argent({ chains }),
+      wallet.imToken({ chains }),
+      ...(needsInjectedWalletFallback ? [wallet.injected({ chains })] : []),
+    ],
+  },
+])
+
 const client = createClient({
   autoConnect: true,
-  connectors({ chainId }) {
-    return [
-      new InjectedConnector({
-        chains,
-      }),
-      new WalletConnectConnector({
-        chains,
-        options: {
-          chainId,
-          infuraId,
-          qrcode: true,
-        },
-      }),
-      new CoinbaseWalletConnector({
-        chains,
-        options: {
-          appName: 'mStable',
-          appLogoUrl: 'https://raw.githubusercontent.com/mstable/mStable-apps/master/libs/icons/src/lib/mstable-small.svg',
-        },
-      }),
-    ]
-  },
+  connectors,
   provider,
   webSocketProvider,
 })
@@ -59,8 +65,21 @@ const AccountProvider: FC = ({ children }) => {
   return <>{children}</>
 }
 
-export const WagmiProvider: FC = props => (
-  <WagmiConfig client={client}>
-    <AccountProvider {...props} />
-  </WagmiConfig>
-)
+export const WagmiProvider: FC = props => {
+  const isDarkMode = useIsDarkMode()
+
+  return (
+    <WagmiConfig client={client}>
+      <RainbowKitProvider
+        chains={chains}
+        appInfo={{
+          appName: 'mStable',
+          learnMoreUrl: 'https://mstable.org/',
+        }}
+        theme={isDarkMode ? rbkDarkTheme : rbkLightTheme}
+      >
+        <AccountProvider {...props} />
+      </RainbowKitProvider>
+    </WagmiConfig>
+  )
+}

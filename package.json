@@ -50,6 +50,7 @@
     "@mstable/delegatee-lists": "^0.1.0-alpha2",
     "@mstable/merkle-drop": "2.0.0",
     "@mstable/protocol": "^2.4.2",
+    "@rainbow-me/rainbowkit": "^0.3.4",
     "@types/date-fns": "^2.6.0",
     "@types/jest": "^27.0.3",
     "@types/lodash.assign": "^4.2.6",

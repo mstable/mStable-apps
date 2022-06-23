@@ -1,18 +1,14 @@
-import { useRef } from 'react'
-
 import { UnstyledButton } from '@apps/dumb-components'
 import { truncateAddress } from '@apps/formatters'
 import { ViewportWidth } from '@apps/theme'
-import { useToggle } from 'react-use'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 import styled from 'styled-components'
-import useOnClickOutside from 'use-onclickoutside'
-import { useAccount, useConnect, useEnsAvatar, useEnsName } from 'wagmi'
+import { useAccount, useEnsAvatar, useEnsName } from 'wagmi'
 
 import { useAccountModal } from '../../hooks/useAccountModal'
 import { UserIcon, UserIconContainer } from '../core'
 
 import type { FC } from 'react'
-import type { Connector } from 'wagmi'
 
 const ConnectText = styled.span`
   padding: 0 0.5rem;
@@ -66,46 +62,17 @@ const TruncatedAddress = styled.span`
   }
 `
 
-const Container = styled.div`
-  position: relative;
-`
-
-const List = styled.div`
-  position: absolute;
-  border-radius: 0.75rem;
-  right: 0;
-  top: 2.5rem;
-  background: ${({ theme }) => theme.color.background[0]};
-  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-  min-width: 5.5rem;
-  z-index: 1;
-  padding: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 0.5rem;
-  row-gap: 0.5rem;
-`
-
-const ConnectorButton = styled.div`
-  width: 160px;
-  height: 80px;
-  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-  cursor: pointer;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    background: ${({ theme }) => theme.color.background[1]};
+const WrongNetwork = styled(AccountButton)`
+  color: red;
+  > :first-child {
+    margin-bottom: 0.25rem;
   }
-
-  > span {
-    font-size: 0.8rem;
+  > :last-child {
+    font-weight: normal;
   }
 `
 
-export const WalletButton: FC<{ className?: string }> = props => {
+export const WalletButton: FC = () => {
   const { data: account } = useAccount()
   const { data: ensName } = useEnsName({
     address: account?.address,
@@ -113,47 +80,66 @@ export const WalletButton: FC<{ className?: string }> = props => {
   const { data: ensAvatar } = useEnsAvatar({
     addressOrName: account?.address,
   })
-  const { connect, isConnected, connectors } = useConnect()
-  const [showAccountModal] = useAccountModal()
-  const [show, toggleShow] = useToggle(false)
-  const container = useRef(null)
-
-  const handleConnect = (connector: Connector) => () => {
-    toggleShow(false)
-    connect(connector)
-  }
-
-  useOnClickOutside(container, () => toggleShow(false))
+  const [showModal] = useAccountModal()
 
   return (
-    <Container title="Account" {...props} ref={container}>
-      <AccountButton onClick={isConnected ? showAccountModal : toggleShow}>
-        {account?.address ? (
-          <>
-            {ensName ? (
-              <ENSName>{ensName}</ENSName>
-            ) : (
-              <TruncatedAddress>{account.address && truncateAddress(account.address)}</TruncatedAddress>
-            )}
-            {ensAvatar ? (
-              <UserIconContainer>
-                <img src={ensAvatar} width={20} alt="Account" />
-              </UserIconContainer>
-            ) : (
-              <UserIcon />
-            )}
-          </>
-        ) : (
-          <ConnectText>Connect</ConnectText>
-        )}
-      </AccountButton>
-      <List hidden={!show}>
-        {connectors?.map(con => (
-          <ConnectorButton key={con.id} onClick={handleConnect(con)}>
-            <span>{con.name}</span>
-          </ConnectorButton>
-        ))}
-      </List>
-    </Container>
+    <ConnectButton.Custom>
+      {({ account, chain, openAccountModal, openConnectModal, mounted }) => (
+        <div
+          {...(!mounted && {
+            'aria-hidden': true,
+            style: {
+              opacity: 0,
+              pointerEvents: 'none',
+              userSelect: 'none',
+            },
+          })}
+        >
+          {(() => {
+            if (!mounted || !account || !chain) {
+              return (
+                <AccountButton onClick={openConnectModal}>
+                  <ConnectText>Connect</ConnectText>
+                </AccountButton>
+              )
+            }
+
+            if (chain.unsupported) {
+              return (
+                <WrongNetwork>
+                  <span role="img" aria-label="Warning">
+                    ⚠️
+                  </span>{' '}
+                  Wrong network
+                </WrongNetwork>
+              )
+            }
+
+            return (
+              <AccountButton onClick={showModal}>
+                {account?.address ? (
+                  <>
+                    {ensName ? (
+                      <ENSName>{ensName}</ENSName>
+                    ) : (
+                      <TruncatedAddress>{account.address && truncateAddress(account.address)}</TruncatedAddress>
+                    )}
+                    {ensAvatar ? (
+                      <UserIconContainer>
+                        <img src={ensAvatar} width={20} alt="Account" />
+                      </UserIconContainer>
+                    ) : (
+                      <UserIcon />
+                    )}
+                  </>
+                ) : (
+                  <ConnectText>Connect</ConnectText>
+                )}
+              </AccountButton>
+            )
+          })()}
+        </div>
+      )}
+    </ConnectButton.Custom>
   )
 }
