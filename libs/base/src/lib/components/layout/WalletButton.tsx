@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { useAccount, useEnsAvatar, useEnsName } from 'wagmi'
 
 import { useAccountModal } from '../../hooks/useAccountModal'
+import { useUnsupportedNetworkModal } from '../../hooks/useUnsupportedNetworkModal'
 import { UserIcon, UserIconContainer } from '../core'
 
 import type { FC } from 'react'
@@ -80,7 +81,8 @@ export const WalletButton: FC = () => {
   const { data: ensAvatar } = useEnsAvatar({
     addressOrName: account?.address,
   })
-  const [showModal] = useAccountModal()
+  const [showAccountModal] = useAccountModal()
+  const [showUnsupportedNetworkModal] = useUnsupportedNetworkModal()
 
   return (
     <ConnectButton.Custom>
@@ -106,17 +108,17 @@ export const WalletButton: FC = () => {
 
             if (chain.unsupported) {
               return (
-                <WrongNetwork>
+                <WrongNetwork onClick={showUnsupportedNetworkModal}>
                   <span role="img" aria-label="Warning">
                     ⚠️
-                  </span>{' '}
-                  Wrong network
+                  </span>
+                  &nbsp;Wrong Network
                 </WrongNetwork>
               )
             }
 
             return (
-              <AccountButton onClick={showModal}>
+              <AccountButton onClick={showAccountModal}>
                 {account?.address ? (
                   <>
                     {ensName ? (
