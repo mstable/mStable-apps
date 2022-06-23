@@ -22,7 +22,6 @@ const Container = styled.div<{ color?: string; transparent?: boolean }>`
     width: 36px;
     height: 36px;
   }
-}
 `
 
 export const Token: FC<Props> = ({ symbol, color, className }) => (

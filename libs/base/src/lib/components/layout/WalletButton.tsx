@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { Button, UnstyledButton } from '@apps/dumb-components'
+import { UnstyledButton } from '@apps/dumb-components'
 import { truncateAddress } from '@apps/formatters'
 import { ViewportWidth } from '@apps/theme'
 import { useToggle } from 'react-use'
@@ -75,19 +75,33 @@ const List = styled.div`
   border-radius: 0.75rem;
   right: 0;
   top: 2.5rem;
-  width: 18rem;
   background: ${({ theme }) => theme.color.background[0]};
   border: 1px solid ${({ theme }) => theme.color.defaultBorder};
   min-width: 5.5rem;
   z-index: 1;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
+`
 
-  > div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 4rem;
-    padding: 0 1rem;
-    border-bottom: 1px solid ${({ theme }) => theme.color.defaultBorder};
+const ConnectorButton = styled.div`
+  width: 160px;
+  height: 80px;
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  cursor: pointer;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: ${({ theme }) => theme.color.background[1]};
+  }
+
+  > span {
+    font-size: 0.8rem;
   }
 `
 
@@ -105,14 +119,14 @@ export const WalletButton: FC<{ className?: string }> = props => {
   const container = useRef(null)
 
   const handleConnect = (connector: Connector) => () => {
-    connect(connector)
     toggleShow(false)
+    connect(connector)
   }
 
   useOnClickOutside(container, () => toggleShow(false))
 
   return (
-    <Container title="Account" {...props}>
+    <Container title="Account" {...props} ref={container}>
       <AccountButton onClick={isConnected ? showAccountModal : toggleShow}>
         {account?.address ? (
           <>
@@ -135,9 +149,9 @@ export const WalletButton: FC<{ className?: string }> = props => {
       </AccountButton>
       <List hidden={!show}>
         {connectors?.map(con => (
-          <div key={con.id}>
-            <Button onClick={handleConnect(con)}>{con.name}</Button>
-          </div>
+          <ConnectorButton key={con.id} onClick={handleConnect(con)}>
+            <span>{con.name}</span>
+          </ConnectorButton>
         ))}
       </List>
     </Container>

@@ -29,7 +29,7 @@ const StyledDropdown = styled(Dropdown)`
   }
 `
 
-export const NetworkDropdown: FC = () => {
+export const NetworkDropdown: FC<{ onSwitch?: () => void }> = ({ onSwitch }) => {
   const [chainId, setChainId] = useChainIdCtx()
   const [isAltPressed] = useKeyPress('Alt')
   const [{ appName }] = useBaseCtx()
@@ -44,8 +44,9 @@ export const NetworkDropdown: FC = () => {
         switchNetwork(parsed)
       }
       setChainId(parsed)
+      if (onSwitch) onSwitch()
     },
-    [setChainId, switchNetwork],
+    [onSwitch, setChainId, switchNetwork],
   )
 
   const filteredNetworks = isGovernance

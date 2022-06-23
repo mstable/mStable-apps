@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { chain, configureChains, createClient, useNetwork, WagmiConfig } from 'wagmi'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
@@ -12,35 +11,37 @@ import { useChainIdCtx } from './NetworkProvider'
 
 import type { FC } from 'react'
 
+const infuraId = 'a6daf77ef0ae4b60af39259e435a40fe'
+
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.mainnet, chain.ropsten, chain.goerli, chain.kovan, chain.polygon, chain.polygonMumbai],
-  [infuraProvider({ infuraId: 'a6daf77ef0ae4b60af39259e435a40fe' }), publicProvider()],
+  [infuraProvider({ infuraId }), publicProvider()],
 )
 
 const client = createClient({
   autoConnect: true,
-  connectors: [
-    new MetaMaskConnector({ chains }),
-    new CoinbaseWalletConnector({
-      chains,
-      options: {
-        appName: 'wagmi',
-      },
-    }),
-    new WalletConnectConnector({
-      chains,
-      options: {
-        qrcode: true,
-      },
-    }),
-    new InjectedConnector({
-      chains,
-      options: {
-        name: detectedName => `Injected (${typeof detectedName === 'string' ? detectedName : detectedName.join(', ')})`,
-        shimDisconnect: true,
-      },
-    }),
-  ],
+  connectors({ chainId }) {
+    return [
+      new InjectedConnector({
+        chains,
+      }),
+      new WalletConnectConnector({
+        chains,
+        options: {
+          chainId,
+          infuraId,
+          qrcode: true,
+        },
+      }),
+      new CoinbaseWalletConnector({
+        chains,
+        options: {
+          appName: 'mStable',
+          appLogoUrl: 'https://raw.githubusercontent.com/mstable/mStable-apps/master/libs/icons/src/lib/mstable-small.svg',
+        },
+      }),
+    ]
+  },
   provider,
   webSocketProvider,
 })
