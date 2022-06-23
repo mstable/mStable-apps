@@ -16,7 +16,13 @@ import type { FC } from 'react'
 const infuraId = 'a6daf77ef0ae4b60af39259e435a40fe'
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.mainnet, chain.ropsten, chain.goerli, chain.kovan, chain.polygon, chain.polygonMumbai],
+  [
+    chain.mainnet,
+    chain.ropsten,
+    chain.goerli,
+    chain.kovan,
+    ...(process.env.NX_APP_NAME === 'protocol' ? [chain.polygon, chain.polygonMumbai] : []),
+  ],
   [infuraProvider({ infuraId }), publicProvider()],
 )
 
