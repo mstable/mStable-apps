@@ -107,7 +107,6 @@ const FixedContainer = styled.div`
     background: rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(0.25em);
   }
-}
 `
 
 const scale = keyframes`
