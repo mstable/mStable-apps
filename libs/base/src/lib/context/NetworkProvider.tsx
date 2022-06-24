@@ -111,7 +111,6 @@ export enum Networks {
 interface Network<TAddresses, TGqlEndpoints> {
   protocolName: string
   chainName: string
-  label: string
   isMetaMaskDefault: boolean
   isTestnet: boolean
   blockTime: number
@@ -229,7 +228,6 @@ const ETH_MAINNET: EthereumMainnet = {
   chainId: ChainIds.EthereumMainnet,
   protocolName: Networks.Ethereum,
   chainName: 'Mainnet',
-  label: 'Ethereum Mainnet',
   nativeToken: {
     symbol: 'ETH',
     decimals: 18,
@@ -283,7 +281,6 @@ const ETH_ROPSTEN: EthereumRopsten = {
   isTestnet: true,
   chainId: ChainIds.EthereumRopsten,
   chainName: 'Ropsten',
-  label: 'Ethereum Ropsten Testnet',
   rpcEndpoints: ['https://ropsten.infura.io/v3/62bdcedba8ba449d9a795ef6310e713c'],
   gasStationEndpoint: 'https://gasprice.poa.network/',
   gqlEndpoints: {
@@ -313,7 +310,6 @@ const ETH_GOERLI: EthereumGoerli = {
   isTestnet: true,
   chainId: ChainIds.EthereumGoerli,
   chainName: 'Görli',
-  label: 'Ethereum Görli Testnet',
   rpcEndpoints: ['https://goerli.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
   gasStationEndpoint: 'https://gasprice.poa.network/',
   gqlEndpoints: {
@@ -338,7 +334,6 @@ const ETH_KOVAN: EthereumKovan = {
   isTestnet: true,
   chainId: ChainIds.EthereumKovan,
   chainName: 'Kovan',
-  label: 'Ethereum Kovan Testnet',
   rpcEndpoints: ['https://kovan.infura.io/v3/62bdcedba8ba449d9a795ef6310e713c'],
   gasStationEndpoint: 'https://gasprice.poa.network/',
   gqlEndpoints: {
@@ -369,7 +364,6 @@ const MATIC_MAINNET: MaticMainnet = {
   parentChainId: ChainIds.EthereumMainnet,
   protocolName: Networks.Polygon,
   chainName: 'Mainnet',
-  label: 'Polygon Matic Mainnet',
   nativeToken: {
     symbol: 'MATIC',
     decimals: 18,
@@ -418,7 +412,6 @@ const MATIC_MUMBAI: MaticMumbai = {
   chainId: ChainIds.MaticMumbai,
   parentChainId: ChainIds.EthereumGoerli,
   chainName: 'Mumbai',
-  label: 'Polygon Mumbai',
   rpcEndpoints: ['https://rpc-mumbai.maticvigil.com/v1/9014a595065319bb6d40417c45281c2608a943c7'],
   gasStationEndpoint: 'https://gasstation-mumbai.matic.today',
   gqlEndpoints: {
