@@ -228,7 +228,7 @@
               "apps/governance/src/favicon.ico",
               "apps/governance/src/manifest.json"
             ],
-            "styles": [],
+            "styles": ["node_modules/@rainbow-me/rainbowkit/dist/index.css"],
             "scripts": [],
             "webpackConfig": "./webpack-config.js"
           },
@@ -473,7 +473,7 @@
               "apps/protocol/src/favicon.ico",
               "apps/protocol/src/manifest.json"
             ],
-            "styles": [],
+            "styles": ["node_modules/@rainbow-me/rainbowkit/dist/index.css"],
             "scripts": [],
             "webpackConfig": "./webpack-config.js"
           },
