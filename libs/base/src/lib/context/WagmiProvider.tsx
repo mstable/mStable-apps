@@ -142,13 +142,13 @@ export const WagmiProvider: FC = props => {
 
 export const useProvider = () => useWagmiProvider()
 
-export const useWalletAddress = () => useWagmiAccount()?.data?.address
+export const useWalletAddress = () => useWagmiAccount()?.data?.address?.toLowerCase()
 
 export const useSigner = () => useWagmiSigner()?.data
 
 export const useSignerOrProvider = () => useWagmiSigner()?.data
 
-export const useAccount = () => useWagmiAccount()?.data?.address
+export const useAccount = () => useWagmiAccount()?.data?.address?.toLowerCase()
 
 export const useIsIdle = () => {
   const { data, isLoading } = useWagmiAccount()
