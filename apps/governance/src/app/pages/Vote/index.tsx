@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import { TokenIcon } from '@apps/base/components/core'
-import { useOwnAccount } from '@apps/base/context/account'
+import { useAccount } from '@apps/base/context/account'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { Button, ButtonExternal, InfoBox } from '@apps/dumb-components'
@@ -154,7 +154,7 @@ export const Vote: FC = () => {
   const { data } = useStakedTokenQuery()
 
   const history = useHistory()
-  const account = useOwnAccount()
+  const account = useAccount()
   const propose = usePropose()
   const stakedTokenContract = useStakedTokenContract()
   const stakedToken = useTokenSubscription(stakedTokenAddress)

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useOwnAccount } from '@apps/base/context/account'
+import { useAccount } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
 import { CountdownBar, Table, TableCell, TableRow, Tooltip } from '@apps/dumb-components'
@@ -80,7 +80,7 @@ export const PendingBalances: FC = () => {
 
   const propose = usePropose()
   const stakedTokenContract = useStakedTokenContract()
-  const address = useOwnAccount()
+  const address = useAccount()
 
   const { percentage, endTime, balance, unlocked, symbol } = useMemo<Props>((): Props => {
     const stakedToken = data?.stakedToken
