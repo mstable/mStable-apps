@@ -5,10 +5,10 @@ import { Interface } from '@ethersproject/abi'
 import { constants } from 'ethers'
 import { usePrevious } from 'react-use'
 
-import { useAccount, useSigner } from '../context/AccountProvider'
 import { useBlockNow } from '../context/BlockProvider'
 import { useChainIdCtx } from '../context/NetworkProvider'
 import { useAllowanceSubscriptionsSerialized, useBalanceSubscriptionsSerialized, useTokensDispatch } from '../context/TokensProvider'
+import { useAccount, useSigner } from '../context/WagmiProvider'
 
 import type { IERC20 } from '@apps/artifacts/typechain'
 import type { Provider } from '@ethersproject/providers'

@@ -38,7 +38,7 @@
       "@apps/base/components/layout": ["libs/base/src/lib/components/layout"],
       "@apps/base/components/wallet": ["libs/base/src/lib/components/wallet"],
       "@apps/base/context/modal-data": ["libs/base/src/lib/context/ModalDataProvider.tsx"],
-      "@apps/base/context/account": ["libs/base/src/lib/context/AccountProvider.tsx"],
+      "@apps/base/context/account": ["libs/base/src/lib/context/WagmiProvider.tsx"],
       "@apps/base/context/apollo": ["libs/base/src/lib/context/ApolloProvider.tsx"],
       "@apps/base/context/banner": ["libs/base/src/lib/context/BannerProvider.tsx"],
       "@apps/base/context/block": ["libs/base/src/lib/context/BlockProvider.tsx"],

@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import Jazzicon from 'jazzicon'
 import styled from 'styled-components'
 
-import { useWalletAddress } from '../../context/AccountProvider'
+import { useWalletAddress } from '../../context/WagmiProvider'
 
 import type { FC } from 'react'
 

@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 
 import { useConnect } from 'wagmi'
 
-import { useAccount } from '../context/AccountProvider'
 import { useChainIdCtx } from '../context/NetworkProvider'
 import { useTransactionsDispatch } from '../context/TransactionsProvider'
+import { useAccount } from '../context/WagmiProvider'
 
 export const ContractsUpdater = (): null => {
   const { isConnecting } = useConnect()

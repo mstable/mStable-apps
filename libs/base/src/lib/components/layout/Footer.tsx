@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-
 import Discord from '@apps/icons/social/discord.svg'
 import Email from '@apps/icons/social/email.svg'
 import Github from '@apps/icons/social/github.svg'
@@ -7,11 +5,9 @@ import Medium from '@apps/icons/social/medium.svg'
 import Twitter from '@apps/icons/social/twitter.svg'
 import { ViewportWidth } from '@apps/theme'
 import { APP_NAME } from '@apps/types'
-import { utils } from 'ethers'
 import styled from 'styled-components'
 
 import { useBaseCtx } from '../../BaseProviders'
-import { useIsMasquerading, useMasquerade } from '../../context/AccountProvider'
 
 import type { FC } from 'react'
 
@@ -69,32 +65,6 @@ const Gubbins = styled.div`
   align-items: center;
   justify-content: space-between;
 `
-
-const MasqueradeContainer = styled.div<{ isMasquerading: boolean }>`
-  width: 3px;
-  height: 3px;
-  user-select: none;
-  cursor: crosshair;
-  background: ${({ isMasquerading }) => (isMasquerading ? 'pink' : 'transparent')};
-`
-
-const Masquerade: FC<{}> = () => {
-  const masquerade = useMasquerade()
-  const isMasquerading = useIsMasquerading()
-
-  const handleClick = useCallback(() => {
-    if (isMasquerading) {
-      masquerade()
-    } else {
-      // eslint-disable-next-line no-alert
-      const inputAddress = window.prompt('View as account (read only)')
-
-      masquerade(inputAddress && utils.isAddress(inputAddress) ? inputAddress.toLowerCase() : undefined)
-    }
-  }, [isMasquerading, masquerade])
-
-  return <MasqueradeContainer isMasquerading={isMasquerading} onClick={handleClick} />
-}
 
 const Inner = styled.div`
   padding: 1rem;
@@ -169,7 +139,6 @@ export const Footer: FC = () => {
           <Gubbins>
             <div>
               <Version />
-              <Masquerade />
             </div>
           </Gubbins>
         </div>

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useConnect, useDisconnect } from 'wagmi'
 
 import { Address } from '../components/core'
-import { useWalletAddress } from '../context/AccountProvider'
+import { useWalletAddress } from '../context/WagmiProvider'
 
 const DisconnectButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};

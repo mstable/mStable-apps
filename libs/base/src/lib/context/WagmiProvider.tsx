@@ -5,7 +5,16 @@ import { useEffect } from 'react'
 import { useIsDarkMode } from '@apps/browser-settings'
 import { rbkDarkTheme, rbkLightTheme } from '@apps/theme'
 import { connectorsForWallets, RainbowKitProvider, wallet } from '@rainbow-me/rainbowkit'
-import { chain, configureChains, createClient, useNetwork, WagmiConfig } from 'wagmi'
+import {
+  chain,
+  configureChains,
+  createClient,
+  useAccount as useWagmiAccount,
+  useNetwork,
+  useProvider as useWagmiProvider,
+  useSigner as useWagmiSigner,
+  WagmiConfig,
+} from 'wagmi'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 
@@ -88,4 +97,20 @@ export const WagmiProvider: FC = props => {
       </RainbowKitProvider>
     </WagmiConfig>
   )
+}
+
+export const useProvider = () => useWagmiProvider()
+
+export const useWalletAddress = () => useWagmiAccount()?.data?.address
+
+export const useSigner = () => useWagmiSigner()?.data
+
+export const useSignerOrProvider = () => useWagmiSigner()?.data
+
+export const useAccount = () => useWagmiAccount()?.data?.address
+
+export const useIsIdle = () => {
+  const { data, isLoading } = useWagmiAccount()
+
+  return !isLoading && !!data?.address
 }

@@ -1,6 +1,5 @@
 import { composedComponent } from '@apps/react-utils'
 
-import { AccountProvider } from './AccountProvider'
 import { ApolloProvider } from './ApolloProvider'
 import { BannerProvider } from './BannerProvider'
 import { BlockProvider } from './BlockProvider'
@@ -17,7 +16,6 @@ const Providers = composedComponent(
   NotificationsProvider,
   ApolloProvider,
   WagmiProvider,
-  AccountProvider,
   BlockProvider,
   TransactionsProvider,
   TokensProvider,

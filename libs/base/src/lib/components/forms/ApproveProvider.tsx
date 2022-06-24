@@ -5,9 +5,9 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import { constants } from 'ethers'
 
-import { useSigner } from '../../context/AccountProvider'
 import { useTokenAllowance, useTokenSubscription } from '../../context/TokensProvider'
 import { useHasPendingApproval, usePropose } from '../../context/TransactionsProvider'
+import { useSigner } from '../../context/WagmiProvider'
 
 import type { Interfaces } from '@apps/transaction-manifest'
 import type { Dispatch, FC, SetStateAction } from 'react'

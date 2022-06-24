@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { usePrevious } from 'react-use'
 
-import { useAccount, useSignerOrProvider } from '../context/AccountProvider'
 import { useBlockNow } from '../context/BlockProvider'
 import { useTransactionsDispatch, useTransactionsState } from '../context/TransactionsProvider'
+import { useAccount, useSignerOrProvider } from '../context/WagmiProvider'
 
 import type { Provider, TransactionReceipt } from '@ethersproject/abstract-provider'
 import type { Signer } from 'ethers'
