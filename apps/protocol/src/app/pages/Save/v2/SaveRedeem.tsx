@@ -3,14 +3,13 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { BoostedVault__factory, ISavingsContractV3__factory } from '@apps/artifacts/typechain'
 import { AssetExchange, SendButton } from '@apps/base/components/forms'
-import { useSigner } from '@apps/base/context/account'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
 import { useBigDecimalInput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
-import { useAccount } from 'wagmi'
 
 import { useEstimatedOutput } from '../../../hooks/useEstimatedOutput'
 import { useStakingRewards } from '../hooks'
@@ -58,7 +57,7 @@ export const SaveRedeem: FC = () => {
   const signer = useSigner()
   const propose = usePropose()
   const stakingRewards = useStakingRewards()
-  const { data } = useAccount()
+  const userAddress = useWalletAddress()
 
   const {
     address: massetAddress,
@@ -247,7 +246,7 @@ export const SaveRedeem: FC = () => {
                 new TransactionManifest(
                   BoostedVault__factory.connect(vaultAddress, signer),
                   'withdrawAndUnwrap',
-                  [inputAmount.exact, minOutputAmount.exact, outputAddress, data?.address, routerInfo.address, routerInfo.isBassetOut],
+                  [inputAmount.exact, minOutputAmount.exact, outputAddress, userAddress, routerInfo.address, routerInfo.isBassetOut],
                   purpose,
                   formId,
                 ),
@@ -261,15 +260,7 @@ export const SaveRedeem: FC = () => {
                 new TransactionManifest(
                   ISavingsContractV3__factory.connect(saveAddress, signer),
                   'redeemAndUnwrap',
-                  [
-                    inputAmount.exact,
-                    true,
-                    minOutputAmount.exact,
-                    outputAddress,
-                    data?.address,
-                    routerInfo.address,
-                    routerInfo.isBassetOut,
-                  ],
+                  [inputAmount.exact, true, minOutputAmount.exact, outputAddress, userAddress, routerInfo.address, routerInfo.isBassetOut],
                   purpose,
                   formId,
                 ),

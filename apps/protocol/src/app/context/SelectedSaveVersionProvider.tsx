@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 import { useV1SavingsBalanceQuery } from '@apps/artifacts/graphql/protocol'
+import { useWalletAddress } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { useSelectedMassetName } from '@apps/masset-provider'
-import { useAccount } from 'wagmi'
 
 import type { SavingsContractState } from '@apps/data-provider'
 import type { MassetName } from '@apps/types'
@@ -24,7 +24,7 @@ export const SelectedSaveVersionProvider: FC = ({ children }) => {
   const ctxValue = useState<SaveVersion | undefined>(undefined)
   const [selectedSaveVersion, setSelectedSaveVersion] = ctxValue
   const setRef = useRef(false)
-  const { data } = useAccount()
+  const walletAddress = useWalletAddress()
   const massetName = useSelectedMassetName()
   const massetState = useSelectedMassetState()
 
@@ -39,10 +39,10 @@ export const SelectedSaveVersionProvider: FC = ({ children }) => {
   const v1SavingsBalanceQuery = useV1SavingsBalanceQuery({
     variables: {
       id: v1Address as string,
-      account: data?.address ?? '',
-      include: !!(v1Address && data?.address),
+      account: walletAddress ?? '',
+      include: !!(v1Address && walletAddress),
     },
-    skip: !v1Address || !data?.address,
+    skip: !v1Address || !walletAddress,
     returnPartialData: false,
     client: clients.protocol,
   })
@@ -63,7 +63,7 @@ export const SelectedSaveVersionProvider: FC = ({ children }) => {
   // Remount the provider when the massetName or wallet changes
   // so that the state can be cleanly reset
   return (
-    <ctx.Provider value={ctxValue} key={massetName + data?.address}>
+    <ctx.Provider value={ctxValue} key={massetName + walletAddress}>
       {children}
     </ctx.Provider>
   )

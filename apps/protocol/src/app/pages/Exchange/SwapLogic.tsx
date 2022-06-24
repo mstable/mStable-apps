@@ -2,14 +2,13 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { FeederPool__factory, Masset__factory } from '@apps/artifacts/typechain'
 import { AssetSwap, SendButton, TransactionInfo } from '@apps/base/components/forms'
-import { useSigner } from '@apps/base/context/account'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { ExchangeAction, useBigDecimalInput, useMinimumOutput, useSlippage } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import styled from 'styled-components'
-import { useAccount } from 'wagmi'
 
 import { useEstimatedOutput } from '../../hooks/useEstimatedOutput'
 import { useSelectedMassetPrice } from '../../hooks/useSelectedMassetPrice'
@@ -34,7 +33,7 @@ export const SwapLogic: FC = () => {
   const { address: massetAddress, bAssets, fAssets, feederPools } = massetState
 
   const signer = useSigner()
-  const { data: account } = useAccount()
+  const walletAddress = useWalletAddress()
   const propose = usePropose()
 
   const [slippageSimple, slippageFormValue, setSlippage] = useSlippage()
@@ -187,14 +186,14 @@ export const SwapLogic: FC = () => {
         approve={approve}
         warning={!error && !!showImpactWarning}
         handleSend={() => {
-          if (massetContract && account?.address && inputAmount && minOutputAmount && inputAddress && outputAddress) {
+          if (massetContract && walletAddress && inputAmount && minOutputAmount && inputAddress && outputAddress) {
             // mAsset mint
             if (isMassetMint) {
               return propose<Interfaces.Masset, 'mint'>(
                 new TransactionManifest(
                   massetContract,
                   'mint',
-                  [inputAddress, inputAmount.exact, minOutputAmount.exact, account.address],
+                  [inputAddress, inputAmount.exact, minOutputAmount.exact, walletAddress],
                   { past: 'Minted', present: 'Minting' },
                   formId,
                 ),
@@ -207,7 +206,7 @@ export const SwapLogic: FC = () => {
                 new TransactionManifest(
                   massetContract,
                   'redeem',
-                  [outputAddress, inputAmount.exact, minOutputAmount.exact, account.address],
+                  [outputAddress, inputAmount.exact, minOutputAmount.exact, walletAddress],
                   { past: 'Redeemed', present: 'Redeeming' },
                   formId,
                 ),
@@ -223,7 +222,7 @@ export const SwapLogic: FC = () => {
                 new TransactionManifest(
                   contract,
                   'swap',
-                  [inputAddress, outputAddress, inputAmount.exact, minOutputAmount.exact, account.address],
+                  [inputAddress, outputAddress, inputAmount.exact, minOutputAmount.exact, walletAddress],
                   { present: 'Swapping', past: 'Swapped' },
                   formId,
                 ),

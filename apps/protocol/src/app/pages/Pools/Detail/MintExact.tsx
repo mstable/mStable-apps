@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 
 import { ManyToOneAssetExchange, SendButton, useMultiAssetExchangeDispatch, useMultiAssetExchangeState } from '@apps/base/components/forms'
+import { useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { useMinimumOutput } from '@apps/hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
-import { useAccount } from 'wagmi'
 
 import { Route, useEstimatedOutputMulti } from '../../../hooks/useEstimatedOutputMulti'
 import { useFPInputRatios } from '../../../hooks/useFPInputRatios'
@@ -32,7 +32,7 @@ export const MintExact: FC = () => {
   const contracts = useSelectedFeederPoolContracts()
 
   const propose = usePropose()
-  const { data: account } = useAccount()
+  const walletAddress = useWalletAddress()
 
   const assetAddressOptions = useFPAssetAddressOptions(true)
   const vaultAddressOptions = useFPVaultAddressOptions()
@@ -181,7 +181,7 @@ export const MintExact: FC = () => {
         warning={!error && priceImpact.value?.showImpactWarning}
         valid={!error}
         handleSend={() => {
-          if (!contracts || !account?.address || !minOutputAmount) return
+          if (!contracts || !walletAddress || !minOutputAmount) return
 
           if (touched.length === 1) {
             const [{ address, amount }] = touched
@@ -205,7 +205,7 @@ export const MintExact: FC = () => {
               new TransactionManifest(
                 contracts.feederPool,
                 'mint',
-                [address, (amount as BigDecimal).exact, minOutputAmount.exact, account.address],
+                [address, (amount as BigDecimal).exact, minOutputAmount.exact, walletAddress],
                 { past: 'Deposited', present: 'Depositing' },
                 formId,
               ),
@@ -233,7 +233,7 @@ export const MintExact: FC = () => {
             new TransactionManifest(
               contracts.feederPool,
               'mintMulti',
-              [addresses, amounts, minOutputAmount.exact, account.address],
+              [addresses, amounts, minOutputAmount.exact, walletAddress],
               { past: 'Deposited', present: 'Depositing' },
               formId,
             ),

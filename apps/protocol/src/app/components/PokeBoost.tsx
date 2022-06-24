@@ -1,5 +1,5 @@
 import { BoostedVault__factory } from '@apps/artifacts/typechain'
-import { useSigner } from '@apps/base/context/account'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { useCalculateUserBoost } from '@apps/boost'
 import { Button } from '@apps/dumb-components'
@@ -7,7 +7,6 @@ import { ViewportWidth } from '@apps/theme'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import CountUp from 'react-countup'
 import styled from 'styled-components'
-import { useAccount } from 'wagmi'
 
 import { useRewardStreams } from '../context/RewardStreamsProvider'
 import { SelectBoost } from './SelectBoost'
@@ -105,7 +104,7 @@ const Container = styled.div`
 export const PokeBoost: FC<Props> = ({ apy, vault }) => {
   const propose = usePropose()
   const signer = useSigner()
-  const { data } = useAccount()
+  const address = useWalletAddress()
 
   const { account, address: vaultAddress, isImusd } = vault ?? {}
   const userBoost = useCalculateUserBoost(vault)
@@ -162,9 +161,9 @@ export const PokeBoost: FC<Props> = ({ apy, vault }) => {
             <Button
               highlighted
               onClick={() => {
-                if (!signer || !data?.address || !vaultAddress) return
+                if (!signer || !address || !vaultAddress) return
                 propose<Interfaces.BoostedVault, 'pokeBoost'>(
-                  new TransactionManifest(BoostedVault__factory.connect(vaultAddress, signer), 'pokeBoost', [data.address], {
+                  new TransactionManifest(BoostedVault__factory.connect(vaultAddress, signer), 'pokeBoost', [address], {
                     present: `Update boost`,
                     past: `Updated boost`,
                   }),

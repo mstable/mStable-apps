@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { Masset__factory } from '@apps/artifacts/typechain'
 import { ManyToOneAssetExchange, SendButton, useMultiAssetExchangeDispatch, useMultiAssetExchangeState } from '@apps/base/components/forms'
-import { useSigner } from '@apps/base/context/account'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { useTokens, useTokensState } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
@@ -10,7 +10,6 @@ import { useMinimumOutput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import styled from 'styled-components'
-import { useAccount } from 'wagmi'
 
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
@@ -37,7 +36,7 @@ const Container = styled(ManyToOneAssetExchange)`
 
 export const MintExactLogic: FC = () => {
   const propose = usePropose()
-  const { data: account } = useAccount()
+  const walletAddress = useWalletAddress()
   const signer = useSigner()
   const tokenState = useTokensState()
 
@@ -138,14 +137,14 @@ export const MintExactLogic: FC = () => {
         warning={!error && showImpactWarning}
         title={error ?? 'Mint'}
         handleSend={() => {
-          if (masset && account?.address && minOutputAmount) {
+          if (masset && walletAddress && minOutputAmount) {
             if (touched.length === 1) {
               const [{ address, amount }] = touched
               return propose<Interfaces.Masset, 'mint'>(
                 new TransactionManifest(
                   masset,
                   'mint',
-                  [address, (amount as BigDecimal).exact, minOutputAmount.exact, account.address],
+                  [address, (amount as BigDecimal).exact, minOutputAmount.exact, walletAddress],
                   { past: 'Minted', present: 'Minting' },
                   formId,
                 ),
@@ -159,7 +158,7 @@ export const MintExactLogic: FC = () => {
               new TransactionManifest(
                 masset,
                 'mintMulti',
-                [addresses, amounts, minOutputAmount.exact, account.address],
+                [addresses, amounts, minOutputAmount.exact, walletAddress],
                 { past: 'Minted', present: 'Minting' },
                 formId,
               ),

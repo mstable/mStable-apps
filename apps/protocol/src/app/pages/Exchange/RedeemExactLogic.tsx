@@ -2,14 +2,13 @@ import { useMemo } from 'react'
 
 import { Masset__factory } from '@apps/artifacts/typechain'
 import { OneToManyAssetExchange, SendButton, useMultiAssetExchangeState } from '@apps/base/components/forms'
-import { useSigner } from '@apps/base/context/account'
+import { useSigner, useWalletAddress } from '@apps/base/context/account'
 import { useTokens, useTokenSubscription } from '@apps/base/context/tokens'
 import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
 import { useMaximumOutput } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
-import { useAccount } from 'wagmi'
 
 import { Route, useEstimatedOutputMulti } from '../../hooks/useEstimatedOutputMulti'
 import { useExchangeRateForMassetInputs } from '../../hooks/useMassetExchangeRate'
@@ -24,8 +23,7 @@ const formId = 'RedeemExactBassets'
 
 export const RedeemExactLogic: FC = () => {
   const propose = usePropose()
-
-  const { data: account } = useAccount()
+  const walletAddress = useWalletAddress()
   const signer = useSigner()
   const massetState = useSelectedMassetState() as MassetState
   const { address: massetAddress, bassetRatios } = massetState
@@ -101,7 +99,7 @@ export const RedeemExactLogic: FC = () => {
         warning={!error && showImpactWarning}
         title={error ?? 'Redeem'}
         handleSend={() => {
-          if (masset && account?.address && maxOutputAmount) {
+          if (masset && walletAddress && maxOutputAmount) {
             if (!touched.length) return
 
             const addresses = touched.map(v => v.address)
@@ -111,7 +109,7 @@ export const RedeemExactLogic: FC = () => {
               new TransactionManifest(
                 masset,
                 'redeemExactBassets',
-                [addresses, amounts, maxOutputAmount.exact, account.address],
+                [addresses, amounts, maxOutputAmount.exact, walletAddress],
                 { past: 'Redeemed', present: 'Redeeming' },
                 formId,
               ),

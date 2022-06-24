@@ -2,9 +2,10 @@ import { Button, Modal } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 import { useModal } from 'react-modal-hook'
 import styled from 'styled-components'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useConnect, useDisconnect } from 'wagmi'
 
 import { Address } from '../components/core'
+import { useWalletAddress } from '../context/AccountProvider'
 
 const DisconnectButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};
@@ -67,12 +68,12 @@ export const useAccountModal = (): [() => void, () => void] => {
   const [showModal, hideModal] = useModal(({ onExited, in: open }) => {
     // "Modals are also functional components and can use react hooks themselves"
     /* eslint-disable react-hooks/rules-of-hooks */
-    const { data: account } = useAccount()
+    const address = useWalletAddress()
     const { activeConnector } = useConnect()
     const { disconnect } = useDisconnect()
 
     const handleClick = (): void => {
-      if (account?.address) {
+      if (address) {
         disconnect()
       }
       hideModal()
@@ -80,12 +81,12 @@ export const useAccountModal = (): [() => void, () => void] => {
 
     return (
       <Modal title="Account" onExited={onExited} open={open} hideModal={hideModal}>
-        {activeConnector?.name && account?.address && (
+        {activeConnector?.name && address && (
           <Container>
             <div>
               <h3>Connected with {activeConnector.name}</h3>
               <AddressGroup>
-                <Address address={account.address} type="account" copyable />
+                <Address address={address} type="account" copyable />
                 <DisconnectButton type="button" onClick={handleClick}>
                   Disconnect
                 </DisconnectButton>

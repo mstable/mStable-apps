@@ -29,17 +29,11 @@ export const userAccountCtx = createContext<UserAccountCtx>({
 
 export const useProvider = () => useWagmiProvider()
 
-export const useSigner = () => {
-  const { data } = useWagmiSigner()
+export const useWalletAddress = () => useWagmiAccount()?.data?.address as string | undefined
 
-  return data
-}
+export const useSigner = () => useWagmiSigner()?.data
 
-export const useSignerOrProvider = () => {
-  const { data } = useWagmiSigner()
-
-  return data
-}
+export const useSignerOrProvider = () => useWagmiSigner()?.data
 
 export const useMasquerade = (): Masquerade => useContext(masqueradeCtx)
 
