@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect } from 'react'
 import { MessageHandler, useBaseCtx } from '@apps/base'
 import { useBannerMessage } from '@apps/base/context/banner'
 import { ChainIds, useChainIdCtx, useNetwork } from '@apps/base/context/network'
+import { useUnsupportedNetwork } from '@apps/base/hooks'
 import { useURLQuery } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
 import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/masset-provider'
@@ -78,6 +79,8 @@ export const ProtocolApp: FC = () => {
   const urlQuery = useURLQuery()
   const [chainId, setChainId] = useChainIdCtx()
   const [, setBaseCtx] = useBaseCtx()
+
+  useUnsupportedNetwork()
 
   useEffect(() => {
     const navItems = [

@@ -1,3 +1,5 @@
+import { useLayoutEffect } from 'react'
+
 import { Button, Modal } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 import { useModal } from 'react-modal-hook'
@@ -46,10 +48,22 @@ const Header = styled.div`
   }
 `
 
+const Actions = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+
+  > *:not(:first-child) {
+    margin-left: 1rem;
+  }
+`
+
 const SwitchButton = styled(Button)`
   display: flex;
   flex-flow: row nowrap;
+  justify-content: center;
   align-items: center;
+  flex-grow: 1;
 
   > svg {
     margin-left: 0.5rem;
@@ -65,16 +79,6 @@ const SwitchButton = styled(Button)`
 const DisconnectButton = styled(Button)`
   color: ${({ theme }) => theme.color.white};
   background: ${({ theme }) => theme.color.red};
-`
-
-const Actions = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-end;
-
-  > * {
-    margin-left: 1rem;
-  }
 `
 
 export const useUnsupportedNetworkModal = (): [() => void, () => void] => {
@@ -103,11 +107,13 @@ export const useUnsupportedNetworkModal = (): [() => void, () => void] => {
       <Modal title="Unsupported Network" onExited={onExited} open={open} hideModal={hideModal}>
         <Container>
           <Header>
-            <b>{activeChain?.name}</b> is not supported by this application.
+            The selected network ({activeChain?.name}) is not supported by the application. You can either switch your wallet or reset to
+            Ethereum mainnet.
           </Header>
+
           <Actions>
             <SwitchButton onClick={handleSwitch}>
-              Switch to Ethereum mainnet
+              Reset to Ethereum mainnet
               <TokenIconSvg symbol="eth" width={24} height={24} />
             </SwitchButton>
             <DisconnectButton onClick={handleDisconnect}>Disconnect</DisconnectButton>
@@ -118,4 +124,18 @@ export const useUnsupportedNetworkModal = (): [() => void, () => void] => {
   })
 
   return [showModal, hideModal]
+}
+
+export const useUnsupportedNetwork = () => {
+  const { isConnected } = useConnect()
+  const { activeChain } = useNetwork()
+  const [showDialog, hideDialog] = useUnsupportedNetworkModal()
+
+  useLayoutEffect(() => {
+    if (activeChain?.unsupported) {
+      showDialog()
+    } else {
+      hideDialog()
+    }
+  }, [activeChain, hideDialog, showDialog, isConnected])
 }

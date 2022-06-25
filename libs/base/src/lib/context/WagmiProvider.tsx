@@ -45,7 +45,7 @@ const connectors = connectorsForWallets([
   {
     groupName: 'Recommended',
     wallets: [
-      wallet.metaMask({ chains }),
+      wallet.metaMask({ chains, shimDisconnect: true }),
       wallet.ledger({ chains }),
       wallet.walletConnect({ chains }),
       wallet.coinbase({ appName: 'mStable', chains }),
@@ -58,7 +58,7 @@ const connectors = connectorsForWallets([
       wallet.brave({ chains, shimDisconnect: true }),
       wallet.argent({ chains }),
       wallet.imToken({ chains }),
-      ...(needsInjectedWalletFallback ? [wallet.injected({ chains })] : []),
+      ...(needsInjectedWalletFallback ? [wallet.injected({ chains, shimDisconnect: true })] : []),
     ],
   },
 ])
