@@ -20,10 +20,10 @@ export const useResolveENSName = (ensName: string): FetchState<string> => {
     dispatch({ type: ActionType.Fetch, payload: { ensName } })
     provider
       .resolveName(ensName)
-      .then((address: any) => {
-        dispatch({ type: ActionType.Value, payload: { ensName, address } })
+      .then(address => {
+        dispatch({ type: ActionType.Value, payload: { ensName, address: address ?? '' } })
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: ActionType.Error, payload: { ensName, error } })
       })
   }, [maybeResolved, dispatch, ensName, provider])
