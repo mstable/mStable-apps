@@ -1,4 +1,4 @@
-import { useOwnAccount } from '@apps/base/context/account'
+import { useAccount } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { Button, ThemedSkeleton } from '@apps/dumb-components'
 import { truncateAddress } from '@apps/formatters'
@@ -43,7 +43,7 @@ const Container = styled.div`
 export const DelegateeToggle: FC<{ address?: string; stakedTokenSwitcher?: boolean }> = ({ address, stakedTokenSwitcher }) => {
   const propose = usePropose()
   const stakedTokenContract = useStakedTokenContract()
-  const account = useOwnAccount()
+  const account = useAccount()
 
   const stakedTokenQuery = useStakedTokenQuery()
   const delegatee = stakedTokenQuery.data?.stakedToken.accounts?.[0]?.delegatee

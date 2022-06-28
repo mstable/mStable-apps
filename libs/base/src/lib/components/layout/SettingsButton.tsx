@@ -96,7 +96,11 @@ export const SettingsButton: FC<{ className?: string }> = ({ children, className
       <List hidden={!show}>
         <div>
           <p>Network</p>
-          <NetworkDropdown />
+          <NetworkDropdown
+            onSwitch={() => {
+              toggleShow(false)
+            }}
+          />
         </div>
         <div>
           <p>Theme</p>

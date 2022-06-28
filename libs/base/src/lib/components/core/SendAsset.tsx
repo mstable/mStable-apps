@@ -6,9 +6,9 @@ import { useBigDecimalInput } from '@apps/hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import styled from 'styled-components'
 
-import { useSigner } from '../../context/AccountProvider'
 import { useTokensState } from '../../context/TokensProvider'
 import { usePropose } from '../../context/TransactionsProvider'
+import { useSigner } from '../../context/WagmiProvider'
 
 import type { Interfaces } from '@apps/transaction-manifest'
 import type { ChangeEventHandler, FC } from 'react'

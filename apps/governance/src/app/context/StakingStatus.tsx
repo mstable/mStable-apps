@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react'
 
 import { IncentivisedVotingLockup__factory } from '@apps/artifacts/typechain'
-import { useOwnAccount, useSigner } from '@apps/base/context/account'
+import { useAccount, useSigner } from '@apps/base/context/account'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { BigDecimal } from '@apps/bigdecimal'
 import { providerFactory } from '@apps/context-utils'
@@ -43,7 +43,7 @@ export const StakingStatusProvider: FC = ({ children }) => {
 
   const networkAddresses = useNetworkAddresses()
   const signer = useSigner()
-  const account = useOwnAccount()
+  const account = useAccount()
 
   // TODO: Query via graphql instead (?)
   useAsync(async () => {

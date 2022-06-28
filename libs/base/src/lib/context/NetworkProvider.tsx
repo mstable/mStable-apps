@@ -458,12 +458,7 @@ export const getNetwork = (chainId: ChainIds | 0): Extract<AllNetworks, { chainI
   }
 }
 
-// TODO could still use an env var to define the default chain ID
-// Or even domain matching (polygon.*)
-const maybeCachedChainId = parseInt(localStorage.getItem('mostRecentChainId') as unknown as string)
-const [useChainIdCtx, ChainIdProvider] = createStateContext<ChainIds | undefined>(
-  Number.isFinite(maybeCachedChainId) ? (maybeCachedChainId as ChainIds) : ChainIds.EthereumMainnet,
-)
+const [useChainIdCtx, ChainIdProvider] = createStateContext<ChainIds>(ChainIds.EthereumMainnet)
 export { useChainIdCtx }
 
 const networkCtx = createContext<Network<unknown, unknown>>(null as never)
@@ -475,11 +470,7 @@ const jsonRpcCtx = createContext<{ provider: Provider; parentChainProvider?: Pro
 const NetworkConfigProvider: FC = ({ children }) => {
   const [chainId] = useChainIdCtx()
 
-  useEffect(() => {
-    localStorage.setItem('mostRecentChainId', chainId as unknown as string)
-  }, [chainId])
-
-  const network = useMemo(() => getNetwork(chainId ?? ChainIds.EthereumMainnet), [chainId])
+  const network = useMemo(() => getNetwork(chainId), [chainId])
 
   return <networkCtx.Provider value={network}>{children}</networkCtx.Provider>
 }

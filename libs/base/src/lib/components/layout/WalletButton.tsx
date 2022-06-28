@@ -1,11 +1,12 @@
 import { UnstyledButton } from '@apps/dumb-components'
 import { truncateAddress } from '@apps/formatters'
 import { ViewportWidth } from '@apps/theme'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 import styled from 'styled-components'
+import { useAccount, useEnsAvatar, useEnsName } from 'wagmi'
 
-import { useConnect, useConnected, useEnsAvatar, useEnsName, useInjectedChainIdCtx, useWalletAddress } from '../../context/AccountProvider'
-import { ChainIds, getNetwork, useChainIdCtx } from '../../context/NetworkProvider'
 import { useAccountModal } from '../../hooks/useAccountModal'
+import { useUnsupportedNetworkModal } from '../../hooks/useUnsupportedNetworkModal'
 import { UserIcon, UserIconContainer } from '../core'
 
 import type { FC } from 'react'
@@ -62,7 +63,7 @@ const TruncatedAddress = styled.span`
   }
 `
 
-const WrongNetwork = styled.div`
+const WrongNetwork = styled(AccountButton)`
   color: red;
   > :first-child {
     margin-bottom: 0.25rem;
@@ -72,63 +73,75 @@ const WrongNetwork = styled.div`
   }
 `
 
-const Container = styled(AccountButton)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
-
 export const WalletButton: FC = () => {
-  const connected = useConnected()
-  const account = useWalletAddress()
-  const ensName = useEnsName()
-  const ensAvatar = useEnsAvatar()
-  const [injectedChainId] = useInjectedChainIdCtx()
-  const [chainId] = useChainIdCtx()
-
-  const injectedNetwork = getNetwork(injectedChainId ?? ChainIds.EthereumMainnet)
+  const { data: account } = useAccount()
+  const { data: ensName } = useEnsName({
+    address: account?.address,
+  })
+  const { data: ensAvatar } = useEnsAvatar({
+    addressOrName: account?.address,
+  })
   const [showAccountModal] = useAccountModal()
-
-  const connect = useConnect()
-
-  const handleClick = (): void => {
-    if (connected && account) {
-      return showAccountModal()
-    }
-    connect()
-  }
+  const [showUnsupportedNetworkModal] = useUnsupportedNetworkModal()
 
   return (
-    <Container title="Account" onClick={handleClick}>
-      {connected ? (
-        <>
-          {ensName ? <ENSName>{ensName}</ENSName> : <TruncatedAddress>{account && truncateAddress(account)}</TruncatedAddress>}
-          {ensAvatar ? (
-            <UserIconContainer>
-              <img src={ensAvatar} width={20} alt="Account" />
-            </UserIconContainer>
-          ) : (
-            <UserIcon />
-          )}
-        </>
-      ) : injectedChainId && chainId !== injectedChainId ? (
-        <>
-          <div>
-            <UserIcon />
-          </div>
-          <WrongNetwork>
-            <div>
-              <span role="img" aria-label="Warning">
-                ⚠️
-              </span>{' '}
-              Wrong network
-            </div>
-            <div>{injectedNetwork ? `${injectedNetwork.protocolName} (${injectedNetwork.chainName})` : `Chain ID ${injectedChainId}`}</div>
-          </WrongNetwork>
-        </>
-      ) : (
-        <ConnectText>Connect</ConnectText>
+    <ConnectButton.Custom>
+      {({ account, chain, openAccountModal, openConnectModal, mounted }) => (
+        <div
+          {...(!mounted && {
+            'aria-hidden': true,
+            style: {
+              opacity: 0,
+              pointerEvents: 'none',
+              userSelect: 'none',
+            },
+          })}
+        >
+          {(() => {
+            if (!mounted || !account || !chain) {
+              return (
+                <AccountButton onClick={openConnectModal}>
+                  <ConnectText>Connect</ConnectText>
+                </AccountButton>
+              )
+            }
+
+            if (chain.unsupported) {
+              return (
+                <WrongNetwork onClick={showUnsupportedNetworkModal}>
+                  <span role="img" aria-label="Warning">
+                    ⚠️
+                  </span>
+                  &nbsp;Wrong Network
+                </WrongNetwork>
+              )
+            }
+
+            return (
+              <AccountButton onClick={showAccountModal}>
+                {account?.address ? (
+                  <>
+                    {ensName ? (
+                      <ENSName>{ensName}</ENSName>
+                    ) : (
+                      <TruncatedAddress>{account.address && truncateAddress(account.address)}</TruncatedAddress>
+                    )}
+                    {ensAvatar ? (
+                      <UserIconContainer>
+                        <img src={ensAvatar} width={20} alt="Account" />
+                      </UserIconContainer>
+                    ) : (
+                      <UserIcon />
+                    )}
+                  </>
+                ) : (
+                  <ConnectText>Connect</ConnectText>
+                )}
+              </AccountButton>
+            )
+          })()}
+        </div>
       )}
-    </Container>
+    </ConnectButton.Custom>
   )
 }

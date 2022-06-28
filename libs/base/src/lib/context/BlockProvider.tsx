@@ -4,8 +4,8 @@ import { subDays, subHours } from 'date-fns'
 import { useInterval } from 'react-use'
 
 import { useBlockTimesForDates } from '../hooks'
-import { useIsIdle, useProvider } from './AccountProvider'
 import { useNetwork } from './NetworkProvider'
+import { useIsIdle, useProvider } from './WagmiProvider'
 
 import type { FC } from 'react'
 

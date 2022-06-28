@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { useBaseCtx } from '@apps/base'
+import { useUnsupportedNetwork } from '@apps/base/hooks'
 import { APP_NAME } from '@apps/types'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
@@ -34,6 +35,7 @@ const GovernanceRoutes: FC = () => {
 
 export const GovernanceApp: FC = () => {
   const [, setBaseCtx] = useBaseCtx()
+  useUnsupportedNetwork()
 
   useEffect(() => {
     const navItems = [

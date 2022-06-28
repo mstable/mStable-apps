@@ -4,6 +4,7 @@ import { TokenIcon } from '@apps/base/components/core'
 import { NETWORKS, Networks, useChainIdCtx } from '@apps/base/context/network'
 import { UnstyledButton } from '@apps/dumb-components'
 import styled from 'styled-components'
+import { useNetwork } from 'wagmi'
 
 import type { ChainIds } from '@apps/base/context/network'
 import type { FC } from 'react'
@@ -53,14 +54,18 @@ const NetworkItem: FC<ItemProps> = ({ protocolName, isSelected, onClick }) => {
 
 export const NetworkSwitcher: FC = () => {
   const [chainId, setChainId] = useChainIdCtx()
+  const { switchNetwork } = useNetwork()
   const protocolName = NETWORKS.find(({ chainId: _chainId }) => _chainId === chainId)?.protocolName
 
   const handleSelect = useCallback(
     (_chainId: string) => {
       const parsed = parseInt(_chainId)
+      if (switchNetwork) {
+        switchNetwork(parsed)
+      }
       setChainId(parsed > 0 ? (parsed as ChainIds) : 1)
     },
-    [setChainId],
+    [setChainId, switchNetwork],
   )
 
   return (

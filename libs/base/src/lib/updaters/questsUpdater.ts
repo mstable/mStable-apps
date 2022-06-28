@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { useUpdateQuestsMutation } from '@apps/artifacts/graphql/questbook'
 import { getUnixTime } from 'date-fns'
 
-import { useAccount } from '../context/AccountProvider'
 import { useApolloClients } from '../context/ApolloProvider'
 import { useAddQuestNotification } from '../context/NotificationsProvider'
+import { useAccount } from '../context/WagmiProvider'
 
 // TODO interval to update, or update with an exported hook?
 export const QuestsUpdater = (): null => {

@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react'
 import { APP_NAME } from '@apps/types'
 import { useKeyPress } from 'react-use'
 import styled from 'styled-components'
+import { useNetwork } from 'wagmi'
 
 import { useBaseCtx } from '../../BaseProviders'
 import { ChainIds, NETWORKS, useChainIdCtx } from '../../context/NetworkProvider'
@@ -28,19 +29,24 @@ const StyledDropdown = styled(Dropdown)`
   }
 `
 
-export const NetworkDropdown: FC = () => {
+export const NetworkDropdown: FC<{ onSwitch?: () => void }> = ({ onSwitch }) => {
   const [chainId, setChainId] = useChainIdCtx()
   const [isAltPressed] = useKeyPress('Alt')
   const [{ appName }] = useBaseCtx()
+  const { switchNetwork } = useNetwork()
 
   const isGovernance = appName === APP_NAME.GOVERNANCE
 
   const handleSelect = useCallback(
     (_chainId?: string) => {
       const parsed = parseInt(_chainId ?? '0')
-      setChainId(parsed > 0 ? (parsed as ChainIds) : 1)
+      if (switchNetwork) {
+        switchNetwork(parsed)
+      }
+      setChainId(parsed)
+      if (onSwitch) onSwitch()
     },
-    [setChainId],
+    [onSwitch, setChainId, switchNetwork],
   )
 
   const filteredNetworks = isGovernance

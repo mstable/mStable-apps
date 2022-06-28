@@ -1,6 +1,6 @@
 import { BoostedVault__factory } from '@apps/artifacts/typechain'
 import { SendButton } from '@apps/base/components/forms'
-import { useIsMasquerading, useSigner } from '@apps/base/context/account'
+import { useSigner } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { Button, CountUp, Table, TableCell, TableRow } from '@apps/dumb-components'
 import { useSelectedMassetState } from '@apps/masset-hooks'
@@ -249,7 +249,6 @@ const RewardValue: FC<{
 
 export const UserRewards: FC = () => {
   const rewardStreams = useRewardStreams()
-  const isMasquerading = useIsMasquerading()
 
   const feederVault = useSelectedFeederPoolVaultContract()
   const saveVault = useSelectedSaveVaultContract()
@@ -312,23 +311,22 @@ export const UserRewards: FC = () => {
               <div>
                 <ToggleViewButton onClick={toggleLockTable}>{showLockTable ? `View Table` : `View Chart`}</ToggleViewButton>
               </div>
-              {!isMasquerading && (
-                <ClaimButton
-                  visible
-                  valid={canClaim}
-                  title="Claim Rewards"
-                  handleSend={() => {
-                    if (contract && rewardStreams) {
-                      propose<Interfaces.BoostedVault, 'claimRewards(uint256,uint256)'>(
-                        new TransactionManifest(contract, 'claimRewards(uint256,uint256)', rewardStreams.claimRange, {
-                          present: 'Claiming rewards',
-                          past: 'Claimed rewards',
-                        }),
-                      )
-                    }
-                  }}
-                />
-              )}
+
+              <ClaimButton
+                visible
+                valid={canClaim}
+                title="Claim Rewards"
+                handleSend={() => {
+                  if (contract && rewardStreams) {
+                    propose<Interfaces.BoostedVault, 'claimRewards(uint256,uint256)'>(
+                      new TransactionManifest(contract, 'claimRewards(uint256,uint256)', rewardStreams.claimRange, {
+                        present: 'Claiming rewards',
+                        past: 'Claimed rewards',
+                      }),
+                    )
+                  }
+                }}
+              />
             </ClaimContainer>
           </>
         ) : (
