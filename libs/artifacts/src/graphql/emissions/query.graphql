@@ -18,6 +18,7 @@ query Emissions($account: Bytes!, $hasAccount: Boolean!) {
       recipient
       balance
       cap
+      disabled
     }
     lastEpoch {
       id
@@ -29,6 +30,7 @@ query Emissions($account: Bytes!, $hasAccount: Boolean!) {
           id
           dialId
           cap
+          disabled
         }
         votes
       }
@@ -70,6 +72,7 @@ fragment EpochAll on Epoch {
       id
       dialId
       cap
+      disabled
       preferences(first: 64, skip: $skip, orderBy: weight, orderDirection: desc) {
         ...DialPreferences
       }

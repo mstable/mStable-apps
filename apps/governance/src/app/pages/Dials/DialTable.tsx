@@ -95,6 +95,21 @@ const roundUserWeight = (weight: number): number => {
   return parseFloat(`${whole}.${parseInt(decimal) >= 5 ? '5' : '0'}`)
 }
 
+const StyledTableRow = styled(TableRow)<{ disabled: boolean }>`
+  background-color: ${({ disabled, theme }) => (disabled ? theme.color.disabledButton : theme.color.background)};
+`
+
+const DisabledLabel = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0.2rem 1rem;
+  border-radius: 9px;
+  border: 1px solid ${({ theme }) => theme.color.grey};
+`
+
 const NumericCell = styled(TableCell)`
   font-family: 'DM Mono', monospace !important;
   text-align: right;
@@ -121,10 +136,11 @@ export const DialTable: FC = () => {
           const dialId = parseInt(dialId_)
 
           const dial = emissionsData.dials[dialId]
+
           if (!dial) return <LoadingRow />
 
           return (
-            <TableRow key={dialId}>
+            <StyledTableRow key={dialId} disabled={dial.disabled}>
               <TableCell width={TABLE_CELL_WIDTHS[0]}>
                 <Tooltip tip={dial.metadata?.description} hideIcon>
                   <DialTitle isRow={false} dialMetadata={dial?.metadata} dialId={dialId} />
@@ -140,19 +156,23 @@ export const DialTable: FC = () => {
                 )}
               </NumericCell>
               <TableCell width={TABLE_CELL_WIDTHS[2]}>
-                <StyledSlider
-                  intervals={0}
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={isSystemView ? voteShare : scaledUserDialPreferences.pending[dialId] ?? 0}
-                  disabled={isSystemView || isDelegating || isPreviousEpoch}
-                  onChange={value => {
-                    dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId, value } })
-                  }}
-                />
+                {dial.disabled ? (
+                  <DisabledLabel>Disabled</DisabledLabel>
+                ) : (
+                  <StyledSlider
+                    intervals={0}
+                    min={0}
+                    max={100}
+                    step={1}
+                    value={isSystemView ? voteShare : scaledUserDialPreferences.pending[dialId] ?? 0}
+                    disabled={isSystemView || isDelegating || isPreviousEpoch || dial.disabled}
+                    onChange={value => {
+                      dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId, value } })
+                    }}
+                  />
+                )}
               </TableCell>
-            </TableRow>
+            </StyledTableRow>
           )
         })
       )}

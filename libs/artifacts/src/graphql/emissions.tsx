@@ -40,6 +40,10 @@ export type Scalars = {
 
 
 
+export type BlockChangedFilter = {
+  number_gte: Scalars['Int'];
+};
+
 export type Block_Height = {
   hash?: Maybe<Scalars['Bytes']>;
   number?: Maybe<Scalars['Int']>;
@@ -70,6 +74,8 @@ export type Counter_Filter = {
   value_lte?: Maybe<Scalars['BigInt']>;
   value_in?: Maybe<Array<Scalars['BigInt']>>;
   value_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Counter_OrderBy {
@@ -146,11 +152,18 @@ export type DialVotesForEpoch_Filter = {
   dial_in?: Maybe<Array<Scalars['String']>>;
   dial_not_in?: Maybe<Array<Scalars['String']>>;
   dial_contains?: Maybe<Scalars['String']>;
+  dial_contains_nocase?: Maybe<Scalars['String']>;
   dial_not_contains?: Maybe<Scalars['String']>;
+  dial_not_contains_nocase?: Maybe<Scalars['String']>;
   dial_starts_with?: Maybe<Scalars['String']>;
+  dial_starts_with_nocase?: Maybe<Scalars['String']>;
   dial_not_starts_with?: Maybe<Scalars['String']>;
+  dial_not_starts_with_nocase?: Maybe<Scalars['String']>;
   dial_ends_with?: Maybe<Scalars['String']>;
+  dial_ends_with_nocase?: Maybe<Scalars['String']>;
   dial_not_ends_with?: Maybe<Scalars['String']>;
+  dial_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  dial_?: Maybe<Dial_Filter>;
   epoch?: Maybe<Scalars['String']>;
   epoch_not?: Maybe<Scalars['String']>;
   epoch_gt?: Maybe<Scalars['String']>;
@@ -160,11 +173,18 @@ export type DialVotesForEpoch_Filter = {
   epoch_in?: Maybe<Array<Scalars['String']>>;
   epoch_not_in?: Maybe<Array<Scalars['String']>>;
   epoch_contains?: Maybe<Scalars['String']>;
+  epoch_contains_nocase?: Maybe<Scalars['String']>;
   epoch_not_contains?: Maybe<Scalars['String']>;
+  epoch_not_contains_nocase?: Maybe<Scalars['String']>;
   epoch_starts_with?: Maybe<Scalars['String']>;
+  epoch_starts_with_nocase?: Maybe<Scalars['String']>;
   epoch_not_starts_with?: Maybe<Scalars['String']>;
+  epoch_not_starts_with_nocase?: Maybe<Scalars['String']>;
   epoch_ends_with?: Maybe<Scalars['String']>;
+  epoch_ends_with_nocase?: Maybe<Scalars['String']>;
   epoch_not_ends_with?: Maybe<Scalars['String']>;
+  epoch_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  epoch_?: Maybe<Epoch_Filter>;
   votes?: Maybe<Scalars['BigInt']>;
   votes_not?: Maybe<Scalars['BigInt']>;
   votes_gt?: Maybe<Scalars['BigInt']>;
@@ -173,6 +193,8 @@ export type DialVotesForEpoch_Filter = {
   votes_lte?: Maybe<Scalars['BigInt']>;
   votes_in?: Maybe<Array<Scalars['BigInt']>>;
   votes_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum DialVotesForEpoch_OrderBy {
@@ -208,11 +230,18 @@ export type Dial_Filter = {
   emissionsController_in?: Maybe<Array<Scalars['String']>>;
   emissionsController_not_in?: Maybe<Array<Scalars['String']>>;
   emissionsController_contains?: Maybe<Scalars['String']>;
+  emissionsController_contains_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_contains?: Maybe<Scalars['String']>;
+  emissionsController_not_contains_nocase?: Maybe<Scalars['String']>;
   emissionsController_starts_with?: Maybe<Scalars['String']>;
+  emissionsController_starts_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_starts_with?: Maybe<Scalars['String']>;
+  emissionsController_not_starts_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_ends_with?: Maybe<Scalars['String']>;
+  emissionsController_ends_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_ends_with?: Maybe<Scalars['String']>;
+  emissionsController_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  emissionsController_?: Maybe<EmissionsController_Filter>;
   disabled?: Maybe<Scalars['Boolean']>;
   disabled_not?: Maybe<Scalars['Boolean']>;
   disabled_in?: Maybe<Array<Scalars['Boolean']>>;
@@ -239,6 +268,10 @@ export type Dial_Filter = {
   recipient_not_in?: Maybe<Array<Scalars['Bytes']>>;
   recipient_contains?: Maybe<Scalars['Bytes']>;
   recipient_not_contains?: Maybe<Scalars['Bytes']>;
+  preferences_?: Maybe<Preference_Filter>;
+  dialVotes_?: Maybe<DialVotesForEpoch_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Dial_OrderBy {
@@ -326,15 +359,24 @@ export type EmissionsController_Filter = {
   rewardToken_in?: Maybe<Array<Scalars['String']>>;
   rewardToken_not_in?: Maybe<Array<Scalars['String']>>;
   rewardToken_contains?: Maybe<Scalars['String']>;
+  rewardToken_contains_nocase?: Maybe<Scalars['String']>;
   rewardToken_not_contains?: Maybe<Scalars['String']>;
+  rewardToken_not_contains_nocase?: Maybe<Scalars['String']>;
   rewardToken_starts_with?: Maybe<Scalars['String']>;
+  rewardToken_starts_with_nocase?: Maybe<Scalars['String']>;
   rewardToken_not_starts_with?: Maybe<Scalars['String']>;
+  rewardToken_not_starts_with_nocase?: Maybe<Scalars['String']>;
   rewardToken_ends_with?: Maybe<Scalars['String']>;
+  rewardToken_ends_with_nocase?: Maybe<Scalars['String']>;
   rewardToken_not_ends_with?: Maybe<Scalars['String']>;
+  rewardToken_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  rewardToken_?: Maybe<Token_Filter>;
   stakingContracts?: Maybe<Array<Scalars['Bytes']>>;
   stakingContracts_not?: Maybe<Array<Scalars['Bytes']>>;
   stakingContracts_contains?: Maybe<Array<Scalars['Bytes']>>;
+  stakingContracts_contains_nocase?: Maybe<Array<Scalars['Bytes']>>;
   stakingContracts_not_contains?: Maybe<Array<Scalars['Bytes']>>;
+  stakingContracts_not_contains_nocase?: Maybe<Array<Scalars['Bytes']>>;
   startEpoch?: Maybe<Scalars['String']>;
   startEpoch_not?: Maybe<Scalars['String']>;
   startEpoch_gt?: Maybe<Scalars['String']>;
@@ -344,11 +386,18 @@ export type EmissionsController_Filter = {
   startEpoch_in?: Maybe<Array<Scalars['String']>>;
   startEpoch_not_in?: Maybe<Array<Scalars['String']>>;
   startEpoch_contains?: Maybe<Scalars['String']>;
+  startEpoch_contains_nocase?: Maybe<Scalars['String']>;
   startEpoch_not_contains?: Maybe<Scalars['String']>;
+  startEpoch_not_contains_nocase?: Maybe<Scalars['String']>;
   startEpoch_starts_with?: Maybe<Scalars['String']>;
+  startEpoch_starts_with_nocase?: Maybe<Scalars['String']>;
   startEpoch_not_starts_with?: Maybe<Scalars['String']>;
+  startEpoch_not_starts_with_nocase?: Maybe<Scalars['String']>;
   startEpoch_ends_with?: Maybe<Scalars['String']>;
+  startEpoch_ends_with_nocase?: Maybe<Scalars['String']>;
   startEpoch_not_ends_with?: Maybe<Scalars['String']>;
+  startEpoch_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  startEpoch_?: Maybe<Epoch_Filter>;
   lastEpoch?: Maybe<Scalars['String']>;
   lastEpoch_not?: Maybe<Scalars['String']>;
   lastEpoch_gt?: Maybe<Scalars['String']>;
@@ -358,11 +407,18 @@ export type EmissionsController_Filter = {
   lastEpoch_in?: Maybe<Array<Scalars['String']>>;
   lastEpoch_not_in?: Maybe<Array<Scalars['String']>>;
   lastEpoch_contains?: Maybe<Scalars['String']>;
+  lastEpoch_contains_nocase?: Maybe<Scalars['String']>;
   lastEpoch_not_contains?: Maybe<Scalars['String']>;
+  lastEpoch_not_contains_nocase?: Maybe<Scalars['String']>;
   lastEpoch_starts_with?: Maybe<Scalars['String']>;
+  lastEpoch_starts_with_nocase?: Maybe<Scalars['String']>;
   lastEpoch_not_starts_with?: Maybe<Scalars['String']>;
+  lastEpoch_not_starts_with_nocase?: Maybe<Scalars['String']>;
   lastEpoch_ends_with?: Maybe<Scalars['String']>;
+  lastEpoch_ends_with_nocase?: Maybe<Scalars['String']>;
   lastEpoch_not_ends_with?: Maybe<Scalars['String']>;
+  lastEpoch_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  lastEpoch_?: Maybe<Epoch_Filter>;
   highestDialId?: Maybe<Scalars['Int']>;
   highestDialId_not?: Maybe<Scalars['Int']>;
   highestDialId_gt?: Maybe<Scalars['Int']>;
@@ -371,6 +427,11 @@ export type EmissionsController_Filter = {
   highestDialId_lte?: Maybe<Scalars['Int']>;
   highestDialId_in?: Maybe<Array<Scalars['Int']>>;
   highestDialId_not_in?: Maybe<Array<Scalars['Int']>>;
+  dials_?: Maybe<Dial_Filter>;
+  voters_?: Maybe<Voter_Filter>;
+  epochs_?: Maybe<Epoch_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum EmissionsController_OrderBy {
@@ -439,11 +500,18 @@ export type Epoch_Filter = {
   emissionsController_in?: Maybe<Array<Scalars['String']>>;
   emissionsController_not_in?: Maybe<Array<Scalars['String']>>;
   emissionsController_contains?: Maybe<Scalars['String']>;
+  emissionsController_contains_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_contains?: Maybe<Scalars['String']>;
+  emissionsController_not_contains_nocase?: Maybe<Scalars['String']>;
   emissionsController_starts_with?: Maybe<Scalars['String']>;
+  emissionsController_starts_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_starts_with?: Maybe<Scalars['String']>;
+  emissionsController_not_starts_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_ends_with?: Maybe<Scalars['String']>;
+  emissionsController_ends_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_ends_with?: Maybe<Scalars['String']>;
+  emissionsController_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  emissionsController_?: Maybe<EmissionsController_Filter>;
   weekNumber?: Maybe<Scalars['Int']>;
   weekNumber_not?: Maybe<Scalars['Int']>;
   weekNumber_gt?: Maybe<Scalars['Int']>;
@@ -452,6 +520,7 @@ export type Epoch_Filter = {
   weekNumber_lte?: Maybe<Scalars['Int']>;
   weekNumber_in?: Maybe<Array<Scalars['Int']>>;
   weekNumber_not_in?: Maybe<Array<Scalars['Int']>>;
+  voters_?: Maybe<Voter_Filter>;
   emission?: Maybe<Scalars['BigInt']>;
   emission_not?: Maybe<Scalars['BigInt']>;
   emission_gt?: Maybe<Scalars['BigInt']>;
@@ -468,6 +537,9 @@ export type Epoch_Filter = {
   totalVotes_lte?: Maybe<Scalars['BigInt']>;
   totalVotes_in?: Maybe<Array<Scalars['BigInt']>>;
   totalVotes_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  dialVotes_?: Maybe<DialVotesForEpoch_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Epoch_OrderBy {
@@ -523,6 +595,8 @@ export type Metric_Filter = {
   simple_lte?: Maybe<Scalars['BigDecimal']>;
   simple_in?: Maybe<Array<Scalars['BigDecimal']>>;
   simple_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Metric_OrderBy {
@@ -533,6 +607,7 @@ export enum Metric_OrderBy {
 }
 
 
+/** Defines the order direction, either ascending or descending */
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -565,11 +640,18 @@ export type Preference_Filter = {
   voter_in?: Maybe<Array<Scalars['String']>>;
   voter_not_in?: Maybe<Array<Scalars['String']>>;
   voter_contains?: Maybe<Scalars['String']>;
+  voter_contains_nocase?: Maybe<Scalars['String']>;
   voter_not_contains?: Maybe<Scalars['String']>;
+  voter_not_contains_nocase?: Maybe<Scalars['String']>;
   voter_starts_with?: Maybe<Scalars['String']>;
+  voter_starts_with_nocase?: Maybe<Scalars['String']>;
   voter_not_starts_with?: Maybe<Scalars['String']>;
+  voter_not_starts_with_nocase?: Maybe<Scalars['String']>;
   voter_ends_with?: Maybe<Scalars['String']>;
+  voter_ends_with_nocase?: Maybe<Scalars['String']>;
   voter_not_ends_with?: Maybe<Scalars['String']>;
+  voter_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  voter_?: Maybe<Voter_Filter>;
   dial?: Maybe<Scalars['String']>;
   dial_not?: Maybe<Scalars['String']>;
   dial_gt?: Maybe<Scalars['String']>;
@@ -579,11 +661,18 @@ export type Preference_Filter = {
   dial_in?: Maybe<Array<Scalars['String']>>;
   dial_not_in?: Maybe<Array<Scalars['String']>>;
   dial_contains?: Maybe<Scalars['String']>;
+  dial_contains_nocase?: Maybe<Scalars['String']>;
   dial_not_contains?: Maybe<Scalars['String']>;
+  dial_not_contains_nocase?: Maybe<Scalars['String']>;
   dial_starts_with?: Maybe<Scalars['String']>;
+  dial_starts_with_nocase?: Maybe<Scalars['String']>;
   dial_not_starts_with?: Maybe<Scalars['String']>;
+  dial_not_starts_with_nocase?: Maybe<Scalars['String']>;
   dial_ends_with?: Maybe<Scalars['String']>;
+  dial_ends_with_nocase?: Maybe<Scalars['String']>;
   dial_not_ends_with?: Maybe<Scalars['String']>;
+  dial_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  dial_?: Maybe<Dial_Filter>;
   weight?: Maybe<Scalars['BigInt']>;
   weight_not?: Maybe<Scalars['BigInt']>;
   weight_gt?: Maybe<Scalars['BigInt']>;
@@ -592,6 +681,8 @@ export type Preference_Filter = {
   weight_lte?: Maybe<Scalars['BigInt']>;
   weight_in?: Maybe<Array<Scalars['BigInt']>>;
   weight_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Preference_OrderBy {
@@ -1078,11 +1169,17 @@ export type Token_Filter = {
   name_in?: Maybe<Array<Scalars['String']>>;
   name_not_in?: Maybe<Array<Scalars['String']>>;
   name_contains?: Maybe<Scalars['String']>;
+  name_contains_nocase?: Maybe<Scalars['String']>;
   name_not_contains?: Maybe<Scalars['String']>;
+  name_not_contains_nocase?: Maybe<Scalars['String']>;
   name_starts_with?: Maybe<Scalars['String']>;
+  name_starts_with_nocase?: Maybe<Scalars['String']>;
   name_not_starts_with?: Maybe<Scalars['String']>;
+  name_not_starts_with_nocase?: Maybe<Scalars['String']>;
   name_ends_with?: Maybe<Scalars['String']>;
+  name_ends_with_nocase?: Maybe<Scalars['String']>;
   name_not_ends_with?: Maybe<Scalars['String']>;
+  name_not_ends_with_nocase?: Maybe<Scalars['String']>;
   symbol?: Maybe<Scalars['String']>;
   symbol_not?: Maybe<Scalars['String']>;
   symbol_gt?: Maybe<Scalars['String']>;
@@ -1092,11 +1189,17 @@ export type Token_Filter = {
   symbol_in?: Maybe<Array<Scalars['String']>>;
   symbol_not_in?: Maybe<Array<Scalars['String']>>;
   symbol_contains?: Maybe<Scalars['String']>;
+  symbol_contains_nocase?: Maybe<Scalars['String']>;
   symbol_not_contains?: Maybe<Scalars['String']>;
+  symbol_not_contains_nocase?: Maybe<Scalars['String']>;
   symbol_starts_with?: Maybe<Scalars['String']>;
+  symbol_starts_with_nocase?: Maybe<Scalars['String']>;
   symbol_not_starts_with?: Maybe<Scalars['String']>;
+  symbol_not_starts_with_nocase?: Maybe<Scalars['String']>;
   symbol_ends_with?: Maybe<Scalars['String']>;
+  symbol_ends_with_nocase?: Maybe<Scalars['String']>;
   symbol_not_ends_with?: Maybe<Scalars['String']>;
+  symbol_not_ends_with_nocase?: Maybe<Scalars['String']>;
   totalSupply?: Maybe<Scalars['String']>;
   totalSupply_not?: Maybe<Scalars['String']>;
   totalSupply_gt?: Maybe<Scalars['String']>;
@@ -1106,11 +1209,18 @@ export type Token_Filter = {
   totalSupply_in?: Maybe<Array<Scalars['String']>>;
   totalSupply_not_in?: Maybe<Array<Scalars['String']>>;
   totalSupply_contains?: Maybe<Scalars['String']>;
+  totalSupply_contains_nocase?: Maybe<Scalars['String']>;
   totalSupply_not_contains?: Maybe<Scalars['String']>;
+  totalSupply_not_contains_nocase?: Maybe<Scalars['String']>;
   totalSupply_starts_with?: Maybe<Scalars['String']>;
+  totalSupply_starts_with_nocase?: Maybe<Scalars['String']>;
   totalSupply_not_starts_with?: Maybe<Scalars['String']>;
+  totalSupply_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalSupply_ends_with?: Maybe<Scalars['String']>;
+  totalSupply_ends_with_nocase?: Maybe<Scalars['String']>;
   totalSupply_not_ends_with?: Maybe<Scalars['String']>;
+  totalSupply_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalSupply_?: Maybe<Metric_Filter>;
   totalBurned?: Maybe<Scalars['String']>;
   totalBurned_not?: Maybe<Scalars['String']>;
   totalBurned_gt?: Maybe<Scalars['String']>;
@@ -1120,11 +1230,18 @@ export type Token_Filter = {
   totalBurned_in?: Maybe<Array<Scalars['String']>>;
   totalBurned_not_in?: Maybe<Array<Scalars['String']>>;
   totalBurned_contains?: Maybe<Scalars['String']>;
+  totalBurned_contains_nocase?: Maybe<Scalars['String']>;
   totalBurned_not_contains?: Maybe<Scalars['String']>;
+  totalBurned_not_contains_nocase?: Maybe<Scalars['String']>;
   totalBurned_starts_with?: Maybe<Scalars['String']>;
+  totalBurned_starts_with_nocase?: Maybe<Scalars['String']>;
   totalBurned_not_starts_with?: Maybe<Scalars['String']>;
+  totalBurned_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalBurned_ends_with?: Maybe<Scalars['String']>;
+  totalBurned_ends_with_nocase?: Maybe<Scalars['String']>;
   totalBurned_not_ends_with?: Maybe<Scalars['String']>;
+  totalBurned_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalBurned_?: Maybe<Metric_Filter>;
   totalMinted?: Maybe<Scalars['String']>;
   totalMinted_not?: Maybe<Scalars['String']>;
   totalMinted_gt?: Maybe<Scalars['String']>;
@@ -1134,11 +1251,18 @@ export type Token_Filter = {
   totalMinted_in?: Maybe<Array<Scalars['String']>>;
   totalMinted_not_in?: Maybe<Array<Scalars['String']>>;
   totalMinted_contains?: Maybe<Scalars['String']>;
+  totalMinted_contains_nocase?: Maybe<Scalars['String']>;
   totalMinted_not_contains?: Maybe<Scalars['String']>;
+  totalMinted_not_contains_nocase?: Maybe<Scalars['String']>;
   totalMinted_starts_with?: Maybe<Scalars['String']>;
+  totalMinted_starts_with_nocase?: Maybe<Scalars['String']>;
   totalMinted_not_starts_with?: Maybe<Scalars['String']>;
+  totalMinted_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalMinted_ends_with?: Maybe<Scalars['String']>;
+  totalMinted_ends_with_nocase?: Maybe<Scalars['String']>;
   totalMinted_not_ends_with?: Maybe<Scalars['String']>;
+  totalMinted_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalMinted_?: Maybe<Metric_Filter>;
   totalTransfers?: Maybe<Scalars['String']>;
   totalTransfers_not?: Maybe<Scalars['String']>;
   totalTransfers_gt?: Maybe<Scalars['String']>;
@@ -1148,11 +1272,18 @@ export type Token_Filter = {
   totalTransfers_in?: Maybe<Array<Scalars['String']>>;
   totalTransfers_not_in?: Maybe<Array<Scalars['String']>>;
   totalTransfers_contains?: Maybe<Scalars['String']>;
+  totalTransfers_contains_nocase?: Maybe<Scalars['String']>;
   totalTransfers_not_contains?: Maybe<Scalars['String']>;
+  totalTransfers_not_contains_nocase?: Maybe<Scalars['String']>;
   totalTransfers_starts_with?: Maybe<Scalars['String']>;
+  totalTransfers_starts_with_nocase?: Maybe<Scalars['String']>;
   totalTransfers_not_starts_with?: Maybe<Scalars['String']>;
+  totalTransfers_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalTransfers_ends_with?: Maybe<Scalars['String']>;
+  totalTransfers_ends_with_nocase?: Maybe<Scalars['String']>;
   totalTransfers_not_ends_with?: Maybe<Scalars['String']>;
+  totalTransfers_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalTransfers_?: Maybe<Counter_Filter>;
   totalMints?: Maybe<Scalars['String']>;
   totalMints_not?: Maybe<Scalars['String']>;
   totalMints_gt?: Maybe<Scalars['String']>;
@@ -1162,11 +1293,18 @@ export type Token_Filter = {
   totalMints_in?: Maybe<Array<Scalars['String']>>;
   totalMints_not_in?: Maybe<Array<Scalars['String']>>;
   totalMints_contains?: Maybe<Scalars['String']>;
+  totalMints_contains_nocase?: Maybe<Scalars['String']>;
   totalMints_not_contains?: Maybe<Scalars['String']>;
+  totalMints_not_contains_nocase?: Maybe<Scalars['String']>;
   totalMints_starts_with?: Maybe<Scalars['String']>;
+  totalMints_starts_with_nocase?: Maybe<Scalars['String']>;
   totalMints_not_starts_with?: Maybe<Scalars['String']>;
+  totalMints_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalMints_ends_with?: Maybe<Scalars['String']>;
+  totalMints_ends_with_nocase?: Maybe<Scalars['String']>;
   totalMints_not_ends_with?: Maybe<Scalars['String']>;
+  totalMints_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalMints_?: Maybe<Counter_Filter>;
   totalBurns?: Maybe<Scalars['String']>;
   totalBurns_not?: Maybe<Scalars['String']>;
   totalBurns_gt?: Maybe<Scalars['String']>;
@@ -1176,11 +1314,20 @@ export type Token_Filter = {
   totalBurns_in?: Maybe<Array<Scalars['String']>>;
   totalBurns_not_in?: Maybe<Array<Scalars['String']>>;
   totalBurns_contains?: Maybe<Scalars['String']>;
+  totalBurns_contains_nocase?: Maybe<Scalars['String']>;
   totalBurns_not_contains?: Maybe<Scalars['String']>;
+  totalBurns_not_contains_nocase?: Maybe<Scalars['String']>;
   totalBurns_starts_with?: Maybe<Scalars['String']>;
+  totalBurns_starts_with_nocase?: Maybe<Scalars['String']>;
   totalBurns_not_starts_with?: Maybe<Scalars['String']>;
+  totalBurns_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalBurns_ends_with?: Maybe<Scalars['String']>;
+  totalBurns_ends_with_nocase?: Maybe<Scalars['String']>;
   totalBurns_not_ends_with?: Maybe<Scalars['String']>;
+  totalBurns_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalBurns_?: Maybe<Counter_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Token_OrderBy {
@@ -1247,6 +1394,8 @@ export type Transaction_Filter = {
   sender_not_in?: Maybe<Array<Scalars['Bytes']>>;
   sender_contains?: Maybe<Scalars['Bytes']>;
   sender_not_contains?: Maybe<Scalars['Bytes']>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Transaction_OrderBy {
@@ -1305,11 +1454,18 @@ export type Voter_Filter = {
   emissionsController_in?: Maybe<Array<Scalars['String']>>;
   emissionsController_not_in?: Maybe<Array<Scalars['String']>>;
   emissionsController_contains?: Maybe<Scalars['String']>;
+  emissionsController_contains_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_contains?: Maybe<Scalars['String']>;
+  emissionsController_not_contains_nocase?: Maybe<Scalars['String']>;
   emissionsController_starts_with?: Maybe<Scalars['String']>;
+  emissionsController_starts_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_starts_with?: Maybe<Scalars['String']>;
+  emissionsController_not_starts_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_ends_with?: Maybe<Scalars['String']>;
+  emissionsController_ends_with_nocase?: Maybe<Scalars['String']>;
   emissionsController_not_ends_with?: Maybe<Scalars['String']>;
+  emissionsController_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  emissionsController_?: Maybe<EmissionsController_Filter>;
   votesCast?: Maybe<Scalars['BigInt']>;
   votesCast_not?: Maybe<Scalars['BigInt']>;
   votesCast_gt?: Maybe<Scalars['BigInt']>;
@@ -1335,11 +1491,21 @@ export type Voter_Filter = {
   lastEpoch_in?: Maybe<Array<Scalars['String']>>;
   lastEpoch_not_in?: Maybe<Array<Scalars['String']>>;
   lastEpoch_contains?: Maybe<Scalars['String']>;
+  lastEpoch_contains_nocase?: Maybe<Scalars['String']>;
   lastEpoch_not_contains?: Maybe<Scalars['String']>;
+  lastEpoch_not_contains_nocase?: Maybe<Scalars['String']>;
   lastEpoch_starts_with?: Maybe<Scalars['String']>;
+  lastEpoch_starts_with_nocase?: Maybe<Scalars['String']>;
   lastEpoch_not_starts_with?: Maybe<Scalars['String']>;
+  lastEpoch_not_starts_with_nocase?: Maybe<Scalars['String']>;
   lastEpoch_ends_with?: Maybe<Scalars['String']>;
+  lastEpoch_ends_with_nocase?: Maybe<Scalars['String']>;
   lastEpoch_not_ends_with?: Maybe<Scalars['String']>;
+  lastEpoch_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  lastEpoch_?: Maybe<Epoch_Filter>;
+  preferences_?: Maybe<Preference_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Voter_OrderBy {
@@ -1389,9 +1555,9 @@ export type EmissionsQueryVariables = Exact<{
 }>;
 
 
-export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string, cap: number }>, lastEpoch: { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number, cap: number } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: string, votesCast: string, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: string, dial: { id: string, dialId: number } }> }> }> };
+export type EmissionsQuery = { emissionsControllers: Array<{ id: string, stakingContracts: Array<string>, dials: Array<{ id: string, dialId: number, recipient: string, balance: string, cap: number, disabled: boolean }>, lastEpoch: { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean } }> }, startEpoch: { id: string, weekNumber: number }, voters?: Array<{ id: string, address: string, lastSourcePoke: string, votesCast: string, lastEpoch?: { id: string, weekNumber: number } | null | undefined, preferences: Array<{ id: string, weight: string, dial: { id: string, dialId: number } }> }> }> };
 
-export type EpochAllFragment = { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> };
+export type EpochAllFragment = { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> };
 
 export type SelectedEpochQueryVariables = Exact<{
   weekNumber: Scalars['Int'];
@@ -1401,7 +1567,7 @@ export type SelectedEpochQueryVariables = Exact<{
 }>;
 
 
-export type SelectedEpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }> };
+export type SelectedEpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }> };
 
 export const DialPreferencesFragmentDoc = gql`
     fragment DialPreferences on Preference {
@@ -1427,6 +1593,7 @@ export const EpochAllFragmentDoc = gql`
       id
       dialId
       cap
+      disabled
       preferences(first: 64, skip: $skip, orderBy: weight, orderDirection: desc) {
         ...DialPreferences
       }
@@ -1445,6 +1612,7 @@ export const EmissionsDocument = gql`
       recipient
       balance
       cap
+      disabled
     }
     lastEpoch {
       id
@@ -1456,6 +1624,7 @@ export const EmissionsDocument = gql`
           id
           dialId
           cap
+          disabled
         }
         votes
       }
