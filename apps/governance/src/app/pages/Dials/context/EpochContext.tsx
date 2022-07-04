@@ -1,16 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { useBlockTimestampQuery } from '@apps/artifacts/graphql/blocks'
 import { useSelectedEpochQuery } from '@apps/artifacts/graphql/emissions'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { createStateContext } from 'react-use'
 
+import { useScaleUserDialPreferences } from '../DialTable'
 import { useEmissionsData } from './EmissionsContext'
-import { useHoveredDialId, useSelectedDialId } from './ViewOptionsContext'
+import { useUserDialPreferences } from './UserDialsContext'
+import { useHoveredDialId, useSelectedDialId, useSystemView } from './ViewOptionsContext'
 
 import type { FC } from 'react'
 
-import type { Epoch, EpochDialVotes } from '../types'
+import type { Dial, Epoch, EpochDialVotes } from '../types'
 
 const [useEpochData, EpochDataProvider] = createStateContext<Epoch | undefined>(undefined)
 
@@ -122,3 +124,35 @@ const EpochContext: FC = ({ children }) => (
 )
 
 export { EpochContext, useEpochData, useEpochWeekNumber }
+
+export const useDisabledDialsWithVotes = () => {
+  const [epochData] = useEpochData()
+  const [emissionsData] = useEmissionsData()
+  const [epochWeekNumber = emissionsData?.lastEpochWeekNumber] = useEpochWeekNumber()
+  const [isSystemView] = useSystemView()
+  const [userDialPreferences] = useUserDialPreferences()
+  const scaledUserDialPreferences = useScaleUserDialPreferences(userDialPreferences)
+
+  return useMemo(() => {
+    const disabledDials: Dial[] = []
+    const isPreviousEpoch = epochWeekNumber !== emissionsData?.lastEpochWeekNumber
+
+    if (epochData?.dialVotes && emissionsData?.dials) {
+      for (const dialId in epochData.dialVotes) {
+        const dial = emissionsData?.dials[dialId]
+        if (!isPreviousEpoch && dial.disabled && !isSystemView && scaledUserDialPreferences.scaled[dialId] > 0) {
+          disabledDials.push(dial)
+        }
+      }
+    }
+
+    return disabledDials
+  }, [
+    emissionsData?.dials,
+    emissionsData?.lastEpochWeekNumber,
+    epochData?.dialVotes,
+    epochWeekNumber,
+    isSystemView,
+    scaledUserDialPreferences?.scaled,
+  ])
+}
