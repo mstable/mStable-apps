@@ -17,6 +17,7 @@ export interface Dial {
   votes: number
   recipient: string
   cap?: number
+  disabled?: boolean
 }
 
 export interface EpochDialVotes {

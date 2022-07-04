@@ -86,7 +86,7 @@ export const WalletButton: FC = () => {
 
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openAccountModal, openConnectModal, mounted }) => (
+      {({ account, chain, openConnectModal, mounted }) => (
         <div
           {...(!mounted && {
             'aria-hidden': true,

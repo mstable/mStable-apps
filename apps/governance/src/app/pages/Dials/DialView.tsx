@@ -1,9 +1,11 @@
+import { useCallback } from 'react'
+
 import { Button } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 import styled from 'styled-components'
 
 import { useEmissionsData } from './context/EmissionsContext'
-import { useEpochWeekNumber } from './context/EpochContext'
+import { useDisabledDialsWithVotes, useEpochWeekNumber } from './context/EpochContext'
 import { useUserDialPreferences } from './context/UserDialsContext'
 import { useSystemView } from './context/ViewOptionsContext'
 import { DialsSubmit } from './DialsSubmit'
@@ -38,6 +40,19 @@ const DialButtons: FC = () => {
   const isDelegating = emissionsData?.user?.isDelegatee
   const [epochWeekNumber = emissionsData?.lastEpochWeekNumber] = useEpochWeekNumber()
   const isPreviousEpoch = epochWeekNumber !== emissionsData?.lastEpochWeekNumber
+  const disabledDialsWithVotes = useDisabledDialsWithVotes()
+
+  const handleVoteClick = useCallback(() => {
+    if (isSystemView && !isPreviousEpoch && disabledDialsWithVotes.length > 0) {
+      for (const dial of disabledDialsWithVotes) {
+        dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId: dial.dialId, value: 0 } })
+      }
+    } else {
+      dispatchUserDialPreferences({ type: 'RESET' })
+    }
+    toggleSystemView()
+  }, [disabledDialsWithVotes, dispatchUserDialPreferences, isPreviousEpoch, isSystemView, toggleSystemView])
+
   return (
     <Buttons>
       {!isSystemView && !isDelegating && !isPreviousEpoch && (
@@ -51,7 +66,7 @@ const DialButtons: FC = () => {
           Reset
         </StyledButton>
       )}
-      <StyledButton scale={0.875} highlighted={isSystemView} onClick={toggleSystemView}>
+      <StyledButton scale={0.875} highlighted={isSystemView} onClick={handleVoteClick}>
         {isSystemView ? (isDelegating ? 'Delegatee weight' : isPreviousEpoch ? 'View user weight' : 'Vote on weight') : 'Back'}
       </StyledButton>
     </Buttons>

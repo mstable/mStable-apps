@@ -49,12 +49,12 @@ const EmissionsDataUpdater: FC = () => {
 
     const dials: EmissionsData['dials'] = Object.fromEntries(
       controller.dials.map<[number, Dial]>(dial => {
-        const { dialId, recipient } = dial
+        const { dialId, recipient, disabled } = dial
 
         const votes = parseInt(controller.lastEpoch.dialVotes.find(dialVote => dialVote.dial.id === dial.id)?.votes ?? '0') / 1e18
         const balance = parseInt(dial.balance) / 1e18
 
-        return [dialId, { dialId, votes, recipient, cap: dial.cap, balance, metadata: DIALS_METADATA[dialId] }]
+        return [dialId, { dialId, votes, recipient, cap: dial.cap, disabled, balance, metadata: DIALS_METADATA[dialId] }]
       }),
     )
 

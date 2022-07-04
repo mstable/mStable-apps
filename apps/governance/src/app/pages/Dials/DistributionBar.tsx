@@ -82,7 +82,7 @@ const Inner = styled.div`
 
 const renderRadius = (idx: number, count: number) => {
   if (idx === 0) return [10, 0, 0, 10]
-  if (idx === count - 1) return [0, 10, 10, 0]
+  if (idx === count - 2) return [0, 10, 10, 0]
   return [0, 0, 0, 0]
 }
 

@@ -11,9 +11,9 @@ import { DialTitle } from './DialTitle'
 
 import type { FC } from 'react'
 
-import type { UserDialPreferences } from './types'
+import type { EmissionsData, UserDialPreferences } from './types'
 
-const useScaleUserDialPreferences = createMemo(
+export const useScaleUserDialPreferences = createMemo(
   ({
     current,
     changes,
@@ -86,26 +86,49 @@ const LoadingRow: FC = () => (
   </StyledLoadingRow>
 )
 
-const TABLE_CELL_WIDTHS = [30, 25, 35]
-const DEFAULT_HEADER_TITLES = ['Dial', 'User weight', ''].map(title => ({ title }))
-const SYSTEM_VIEW_HEADER_TITLES = ['Dial', 'System weight', ''].map(title => ({ title }))
+const TABLE_CELL_WIDTHS = [30, 10, 10, 35]
+const DEFAULT_HEADER_TITLES = ['Dial', '', 'User weight', ''].map(title => ({ title }))
+const SYSTEM_VIEW_HEADER_TITLES = ['Dial', '', 'System weight', ''].map(title => ({ title }))
 
 const roundUserWeight = (weight: number): number => {
   const [whole, decimal] = weight.toFixed(1).split('.')
   return parseFloat(`${whole}.${parseInt(decimal) >= 5 ? '5' : '0'}`)
 }
 
+const StyledTableRow = styled(TableRow)<{ disabled: boolean }>`
+  background-color: ${({ disabled, theme }) => (disabled ? theme.color.backgroundTransparent : theme.color.background)};
+`
+
+const DisabledLabel = styled.span<{ warning?: boolean }>`
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 1px solid ${({ theme }) => theme.color.defaultBorder};
+  color: ${({ theme, warning }) => (warning ? theme.color.red : theme.color.bodyAccent)};
+  padding: 0.25rem 0.5rem;
+`
+
 const NumericCell = styled(TableCell)`
   font-family: 'DM Mono', monospace !important;
   text-align: right;
 `
+
+const sortDisabledLast = (emissionsData: EmissionsData) => (a, b) => {
+  try {
+    const dialA = emissionsData.dials[parseInt(a[0])]
+    const dialB = emissionsData.dials[parseInt(b[0])]
+
+    return dialA.disabled && !dialB.disabled ? 1 : !dialA.disabled && dialB.disabled ? -1 : 0
+  } catch {
+    return 0
+  }
+}
 
 export const DialTable: FC = () => {
   const [emissionsData] = useEmissionsData()
   const [epochData] = useEpochData()
   const [isSystemView] = useSystemView()
   const [epochWeekNumber = emissionsData?.lastEpochWeekNumber] = useEpochWeekNumber()
-
   const [userDialPreferences, dispatchUserDialPreferences] = useUserDialPreferences()
   const scaledUserDialPreferences = useScaleUserDialPreferences(userDialPreferences)
 
@@ -117,44 +140,52 @@ export const DialTable: FC = () => {
       {!(epochData && epochData.dialVotes && emissionsData) ? (
         <LoadingRow />
       ) : (
-        Object.entries(epochData.dialVotes).map(([dialId_, { voteShare }]) => {
-          const dialId = parseInt(dialId_)
+        Object.entries(epochData.dialVotes)
+          .sort(sortDisabledLast(emissionsData))
+          .map(([dialId_, { voteShare }]) => {
+            const dialId = parseInt(dialId_)
 
-          const dial = emissionsData.dials[dialId]
-          if (!dial) return <LoadingRow />
+            const dial = emissionsData.dials[dialId]
 
-          return (
-            <TableRow key={dialId}>
-              <TableCell width={TABLE_CELL_WIDTHS[0]}>
-                <Tooltip tip={dial.metadata?.description} hideIcon>
-                  <DialTitle isRow={false} dialMetadata={dial?.metadata} dialId={dialId} />
-                </Tooltip>
-              </TableCell>
-              <NumericCell width={TABLE_CELL_WIDTHS[1]}>
-                {isSystemView && voteShare && dial.cap && voteShare > dial.cap ? (
-                  <Tooltip tip={`This dial is capped at ${dial.cap.toFixed(1)}% maximum`}>{dial.cap.toFixed(1)}%</Tooltip>
-                ) : isSystemView ? (
-                  `${voteShare.toFixed(1)}%`
-                ) : (
-                  `${roundUserWeight(scaledUserDialPreferences.scaled[dialId] ?? 0).toFixed(1)}%`
-                )}
-              </NumericCell>
-              <TableCell width={TABLE_CELL_WIDTHS[2]}>
-                <StyledSlider
-                  intervals={0}
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={isSystemView ? voteShare : scaledUserDialPreferences.pending[dialId] ?? 0}
-                  disabled={isSystemView || isDelegating || isPreviousEpoch}
-                  onChange={value => {
-                    dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId, value } })
-                  }}
-                />
-              </TableCell>
-            </TableRow>
-          )
-        })
+            if (!dial) return <LoadingRow key={dialId} />
+
+            const warning = !isPreviousEpoch && dial.disabled && roundUserWeight(scaledUserDialPreferences.scaled[dialId] ?? 0) > 0
+
+            return (
+              <StyledTableRow key={dialId} disabled={dial.disabled}>
+                <TableCell width={TABLE_CELL_WIDTHS[0]}>
+                  <Tooltip tip={dial.metadata?.description} hideIcon>
+                    <DialTitle isRow={false} dialMetadata={dial?.metadata} dialId={dialId} />
+                  </Tooltip>
+                </TableCell>
+                <TableCell width={TABLE_CELL_WIDTHS[1]}>
+                  {dial.disabled && <DisabledLabel warning={warning}>Disabled</DisabledLabel>}
+                </TableCell>
+                <NumericCell width={TABLE_CELL_WIDTHS[2]}>
+                  {isSystemView && voteShare && dial.cap && voteShare > dial.cap ? (
+                    <Tooltip tip={`This dial is capped at ${dial.cap.toFixed(1)}% maximum`}>{dial.cap.toFixed(1)}%</Tooltip>
+                  ) : isSystemView ? (
+                    `${voteShare.toFixed(1)}%`
+                  ) : (
+                    `${roundUserWeight(scaledUserDialPreferences.scaled[dialId] ?? 0).toFixed(1)}%`
+                  )}
+                </NumericCell>
+                <TableCell width={TABLE_CELL_WIDTHS[3]}>
+                  <StyledSlider
+                    intervals={0}
+                    min={0}
+                    max={100}
+                    step={1}
+                    value={isSystemView ? voteShare : scaledUserDialPreferences.pending[dialId] ?? 0}
+                    disabled={isSystemView || isDelegating || isPreviousEpoch || dial.disabled}
+                    onChange={value => {
+                      dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId, value } })
+                    }}
+                  />
+                </TableCell>
+              </StyledTableRow>
+            )
+          })
       )}
     </Table>
   )

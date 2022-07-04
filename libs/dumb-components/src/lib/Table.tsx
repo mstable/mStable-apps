@@ -173,7 +173,7 @@ export const Table: FC<Props> = ({ children, className, headerTitles, onHeaderCl
         <Header isSelectable={!!onHeaderClick}>
           <tr>
             {headerTitles.map(({ title, tooltip, align }, i) => (
-              <HeaderCell role="columnheader" key={title} onClick={() => onHeaderClick?.(i)} width={widths?.[i]} align={align}>
+              <HeaderCell role="columnheader" key={`${title}-${i}`} onClick={() => onHeaderClick?.(i)} width={widths?.[i]} align={align}>
                 <span>{title}</span>
                 {tooltip && <Tooltip tip={tooltip} />}
               </HeaderCell>
