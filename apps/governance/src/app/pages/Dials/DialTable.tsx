@@ -149,8 +149,7 @@ export const DialTable: FC = () => {
 
             if (!dial) return <LoadingRow key={dialId} />
 
-            const warning =
-              !isPreviousEpoch && dial.disabled && !isSystemView && roundUserWeight(scaledUserDialPreferences.scaled[dialId] ?? 0) > 0
+            const warning = !isPreviousEpoch && dial.disabled && roundUserWeight(scaledUserDialPreferences.scaled[dialId] ?? 0) > 0
 
             return (
               <StyledTableRow key={dialId} disabled={dial.disabled}>

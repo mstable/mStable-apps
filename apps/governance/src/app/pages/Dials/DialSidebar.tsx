@@ -50,15 +50,11 @@ const WarningContainer = styled.div`
   border-radius: 0.875rem;
   background: ${({ theme }) => theme.color.background[0]};
   border: 1px solid ${({ theme }) => theme.color.defaultBorder};
-  align-items: center;
 `
 
 const WarningLabel = styled.p`
   flex: 1;
   margin-left: 0.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
   font-size: 0.875rem;
 `
 
@@ -80,7 +76,7 @@ export const DialSidebar: FC = () => {
             You still have votes allocated to dials that have been disabled (
             <b>{disabledDialsWithVotes.map(d => d.metadata.title).join(', ')}</b>).
             <br />
-            Re-allocate your voting power by resetting your votes.
+            Re-allocate your voting power by submitting your votes again.
           </WarningLabel>
         </WarningContainer>
       )}

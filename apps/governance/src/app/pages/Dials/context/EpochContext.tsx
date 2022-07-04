@@ -8,7 +8,7 @@ import { createStateContext } from 'react-use'
 import { useScaleUserDialPreferences } from '../DialTable'
 import { useEmissionsData } from './EmissionsContext'
 import { useUserDialPreferences } from './UserDialsContext'
-import { useHoveredDialId, useSelectedDialId, useSystemView } from './ViewOptionsContext'
+import { useHoveredDialId, useSelectedDialId } from './ViewOptionsContext'
 
 import type { FC } from 'react'
 
@@ -129,7 +129,6 @@ export const useDisabledDialsWithVotes = () => {
   const [epochData] = useEpochData()
   const [emissionsData] = useEmissionsData()
   const [epochWeekNumber = emissionsData?.lastEpochWeekNumber] = useEpochWeekNumber()
-  const [isSystemView] = useSystemView()
   const [userDialPreferences] = useUserDialPreferences()
   const scaledUserDialPreferences = useScaleUserDialPreferences(userDialPreferences)
 
@@ -140,19 +139,12 @@ export const useDisabledDialsWithVotes = () => {
     if (epochData?.dialVotes && emissionsData?.dials) {
       for (const dialId in epochData.dialVotes) {
         const dial = emissionsData?.dials[dialId]
-        if (!isPreviousEpoch && dial.disabled && !isSystemView && scaledUserDialPreferences.scaled[dialId] > 0) {
+        if (!isPreviousEpoch && dial.disabled && scaledUserDialPreferences.scaled[dialId] > 0) {
           disabledDials.push(dial)
         }
       }
     }
 
     return disabledDials
-  }, [
-    emissionsData?.dials,
-    emissionsData?.lastEpochWeekNumber,
-    epochData?.dialVotes,
-    epochWeekNumber,
-    isSystemView,
-    scaledUserDialPreferences?.scaled,
-  ])
+  }, [emissionsData?.dials, emissionsData?.lastEpochWeekNumber, epochData?.dialVotes, epochWeekNumber, scaledUserDialPreferences?.scaled])
 }
