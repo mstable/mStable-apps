@@ -47,6 +47,8 @@ const DialButtons: FC = () => {
       for (const dial of disabledDialsWithVotes) {
         dispatchUserDialPreferences({ type: 'SET_DIAL', payload: { dialId: dial.dialId, value: 0 } })
       }
+    } else {
+      dispatchUserDialPreferences({ type: 'RESET' })
     }
     toggleSystemView()
   }, [disabledDialsWithVotes, dispatchUserDialPreferences, isPreviousEpoch, isSystemView, toggleSystemView])
