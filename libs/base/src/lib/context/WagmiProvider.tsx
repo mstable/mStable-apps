@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 
 import { useIsDarkMode } from '@apps/browser-settings'
 import { rbkDarkTheme, rbkLightTheme } from '@apps/theme'
+import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
 import { connectorsForWallets, RainbowKitProvider, wallet } from '@rainbow-me/rainbowkit'
 import { useEffectOnce } from 'react-use'
 import {
@@ -11,6 +12,7 @@ import {
   configureChains,
   createClient,
   useAccount as useWagmiAccount,
+  useConnect,
   useNetwork,
   useProvider as useWagmiProvider,
   useSigner as useWagmiSigner,
@@ -23,9 +25,12 @@ import { useStakeSignatures } from '../hooks'
 import { API_ENDPOINT } from '../utils'
 import { useChainIdCtx } from './NetworkProvider'
 
+import type { Wallet } from '@rainbow-me/rainbowkit'
 import type { FC } from 'react'
+import type { Chain } from 'wagmi'
 
-const infuraId = 'a6daf77ef0ae4b60af39259e435a40fe'
+const INFURA_ID = 'a6daf77ef0ae4b60af39259e435a40fe'
+const AUTOCONNECTED_CONNECTOR_IDS = ['safe', 'metaMask', 'walletConnect', 'coinbaseWallet', 'injected']
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -35,11 +40,19 @@ const { chains, provider, webSocketProvider } = configureChains(
     chain.kovan,
     ...(process.env.NX_APP_NAME === 'protocol' ? [chain.polygon, chain.polygonMumbai] : []),
   ],
-  [infuraProvider({ infuraId }), publicProvider()],
+  [infuraProvider({ infuraId: INFURA_ID }), publicProvider()],
 )
 
 const needsInjectedWalletFallback =
   typeof window !== 'undefined' && window.ethereum && !window.ethereum.isMetaMask && !window.ethereum.isCoinbaseWallet
+
+const safeWallet = ({ chains }: { chains: Chain[] }): Wallet => ({
+  id: 'safe',
+  name: 'Gnosis Safe',
+  iconUrl: 'https://raw.githubusercontent.com/safe-global/safe-react/dev/src/assets/logo.svg',
+  iconBackground: '#ffffff',
+  createConnector: () => ({ connector: new SafeConnector({ chains }) }),
+})
 
 const connectors = connectorsForWallets([
   {
@@ -54,6 +67,7 @@ const connectors = connectorsForWallets([
   {
     groupName: 'Others',
     wallets: [
+      safeWallet({ chains }),
       wallet.rainbow({ chains }),
       wallet.brave({ chains, shimDisconnect: true }),
       wallet.argent({ chains }),
@@ -64,7 +78,6 @@ const connectors = connectorsForWallets([
 ])
 
 const client = createClient({
-  autoConnect: true,
   connectors,
   provider,
   webSocketProvider,
@@ -75,6 +88,7 @@ const AccountProvider: FC = ({ children }) => {
   const [, setChainId] = useChainIdCtx()
   const { activeChain } = useNetwork()
   const [, setStakeSignatures] = useStakeSignatures()
+  const { connect, connectors } = useConnect()
 
   useEffect(() => {
     if (activeChain?.id) {
@@ -117,6 +131,17 @@ const AccountProvider: FC = ({ children }) => {
         .catch(console.warn)
     }
   }, [account?.address, setStakeSignatures])
+
+  useEffect(() => {
+    for (const id of AUTOCONNECTED_CONNECTOR_IDS) {
+      const connectorInstance = connectors.find(c => c.id === id && c.ready)
+
+      if (connectorInstance) {
+        connect(connectorInstance)
+        return
+      }
+    }
+  }, [connect, connectors])
 
   return <>{children}</>
 }
