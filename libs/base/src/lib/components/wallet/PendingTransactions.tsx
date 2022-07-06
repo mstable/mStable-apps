@@ -186,7 +186,7 @@ export const PendingTransaction: FC<{
     return null
   }
 
-  const isGnosisSafe = activeConnector?.name === 'Gnosis Safe Multisig'
+  const isGnosisSafe = activeConnector?.id === 'safe'
   const checkTransactionSignature =
     isGovernance && !isGnosisSafe && transaction.manifest.fn && stakeSignedFunctions.has(transaction.manifest.fn) && stakeSignatures.message
 
