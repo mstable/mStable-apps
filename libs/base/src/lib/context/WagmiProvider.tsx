@@ -3,6 +3,7 @@ import '@rainbow-me/rainbowkit/dist/index.css'
 import { useEffect } from 'react'
 
 import { useIsDarkMode } from '@apps/browser-settings'
+import { isIframe } from '@apps/react-utils'
 import { rbkDarkTheme, rbkLightTheme } from '@apps/theme'
 import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
 import { connectorsForWallets, RainbowKitProvider, wallet } from '@rainbow-me/rainbowkit'
@@ -78,6 +79,7 @@ const connectors = connectorsForWallets([
 ])
 
 const client = createClient({
+  autoConnect: !isIframe(),
   connectors,
   provider,
   webSocketProvider,
@@ -133,12 +135,14 @@ const AccountProvider: FC = ({ children }) => {
   }, [account?.address, setStakeSignatures])
 
   useEffect(() => {
-    for (const id of AUTOCONNECTED_CONNECTOR_IDS) {
-      const connectorInstance = connectors.find(c => c.id === id && c.ready)
+    if (isIframe()) {
+      for (const id of AUTOCONNECTED_CONNECTOR_IDS) {
+        const connectorInstance = connectors.find(c => c.id === id && c.ready)
 
-      if (connectorInstance) {
-        connect(connectorInstance)
-        return
+        if (connectorInstance) {
+          connect(connectorInstance)
+          return
+        }
       }
     }
   }, [connect, connectors])
