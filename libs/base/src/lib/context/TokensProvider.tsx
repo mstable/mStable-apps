@@ -80,7 +80,7 @@ type Action =
       type: Actions.UpdateBalances
       payload: { [address: string]: BigDecimal }
     }
-  | { type: Actions.Reset }
+  | { type: Actions.Reset; payload: AllNetworks }
 
 const stateCtx = createContext<State>(null as never)
 const dispatchCtx = createContext<Dispatch>(null as never)
@@ -93,6 +93,30 @@ const renameSymbol = (symbol: string, address: string): string => {
   } else if (address === '0x18084fba666a33d37592fa2633fd49a74dd93a88') newSymbol = 'tBTCv2'
 
   return newSymbol
+}
+
+const getInitialState = ({ addresses, nativeToken }: AllNetworks): State => {
+  // FIXME: - Consider decimal mapping to catch outliers in ERC20 object (ie. WBTC != 18dp)
+  // const decimalMap = {[addresses.WBTC]: 8}
+  return {
+    tokens: Object.fromEntries(
+      ([[nativeToken.symbol, constants.AddressZero], ...Object.entries(addresses.ERC20)] as [string, string][]).map(
+        ([symbol, address]): [string, SubscribedToken] => [
+          address,
+          {
+            address,
+            decimals: 18,
+            symbol,
+            name: symbol,
+            allowances: {},
+            balance: new BigDecimal(0, 18),
+            totalSupply: new BigDecimal(0, 18),
+          },
+        ],
+      ),
+    ),
+    subscriptions: {},
+  }
 }
 
 const reducer: Reducer<State, Action> = (state, action) => {
@@ -229,7 +253,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
               balance: new BigDecimal(0, (_tokens[address] as SubscribedToken).decimals),
             },
           }),
-          state.tokens,
+          { ...state.tokens, ...getInitialState(action.payload).tokens },
         ),
         subscriptions: {},
       }
@@ -274,30 +298,6 @@ const reducer: Reducer<State, Action> = (state, action) => {
 
     default:
       throw new Error('Unexpected action type')
-  }
-}
-
-const getInitialState = ({ addresses, nativeToken }: AllNetworks): State => {
-  // FIXME: - Consider decimal mapping to catch outliers in ERC20 object (ie. WBTC != 18dp)
-  // const decimalMap = {[addresses.WBTC]: 8}
-  return {
-    tokens: Object.fromEntries(
-      ([[nativeToken.symbol, constants.AddressZero], ...Object.entries(addresses.ERC20)] as [string, string][]).map(
-        ([symbol, address]): [string, SubscribedToken] => [
-          address,
-          {
-            address,
-            decimals: 18,
-            symbol,
-            name: symbol,
-            allowances: {},
-            balance: new BigDecimal(0, 18),
-            totalSupply: new BigDecimal(0, 18),
-          },
-        ],
-      ),
-    ),
-    subscriptions: {},
   }
 }
 
@@ -371,8 +371,8 @@ export const TokensProvider: FC = ({ children }) => {
   )
 
   const reset = useCallback<Dispatch['reset']>(() => {
-    dispatch({ type: Actions.Reset })
-  }, [dispatch])
+    dispatch({ type: Actions.Reset, payload: network })
+  }, [dispatch, network])
 
   return (
     <stateCtx.Provider value={state}>

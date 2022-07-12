@@ -4,7 +4,7 @@ import { Button } from '@apps/dumb-components'
 import { useEffectOnce } from 'react-use'
 import styled from 'styled-components'
 
-import { useNetworkPrices } from '../../context/NetworkProvider'
+import { useNetworkPrices } from '../../context/PricesProvider'
 import { useGas } from './TransactionGasProvider'
 
 import type { ChangeEventHandler, FC } from 'react'
