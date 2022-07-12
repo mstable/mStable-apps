@@ -1,6 +1,6 @@
 import '@rainbow-me/rainbowkit/dist/index.css'
 
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 
 import { useIsDarkMode } from '@apps/browser-settings'
 import { isIframe } from '@apps/react-utils'
@@ -147,7 +147,9 @@ const AccountProvider: FC = ({ children }) => {
     }
   }, [connect, connectors])
 
-  return <>{children}</>
+  // Remount when the chainId changes
+  // Necessitated for internal state reset
+  return <Fragment key={activeChain?.id ?? 'none'}>{children}</Fragment>
 }
 
 export const WagmiProvider: FC = props => {

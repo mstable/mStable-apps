@@ -80,7 +80,7 @@ type Action =
       type: Actions.UpdateBalances
       payload: { [address: string]: BigDecimal }
     }
-  | { type: Actions.Reset; payload: AllNetworks }
+  | { type: Actions.Reset }
 
 const stateCtx = createContext<State>(null as never)
 const dispatchCtx = createContext<Dispatch>(null as never)
@@ -253,7 +253,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
               balance: new BigDecimal(0, (_tokens[address] as SubscribedToken).decimals),
             },
           }),
-          { ...state.tokens, ...getInitialState(action.payload).tokens },
+          state.tokens,
         ),
         subscriptions: {},
       }
@@ -371,8 +371,8 @@ export const TokensProvider: FC = ({ children }) => {
   )
 
   const reset = useCallback<Dispatch['reset']>(() => {
-    dispatch({ type: Actions.Reset, payload: network })
-  }, [dispatch, network])
+    dispatch({ type: Actions.Reset })
+  }, [dispatch])
 
   return (
     <stateCtx.Provider value={state}>
