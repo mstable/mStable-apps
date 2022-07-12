@@ -14,12 +14,12 @@ import { WagmiProvider } from './WagmiProvider'
 const Providers = composedComponent(
   NetworkProvider,
   WagmiProvider,
+  NetworkPricesProvider,
   NotificationsProvider,
   ApolloProvider,
   BlockProvider,
   TransactionsProvider,
   TokensProvider,
-  NetworkPricesProvider,
   PricesProvider,
   ENSProvider,
   BannerProvider,
