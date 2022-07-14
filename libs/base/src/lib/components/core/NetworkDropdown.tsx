@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react'
 import { APP_NAME } from '@apps/types'
 import { useKeyPress } from 'react-use'
 import styled from 'styled-components'
-import { useNetwork } from 'wagmi'
+import { useSwitchNetwork } from 'wagmi'
 
 import { useBaseCtx } from '../../BaseProviders'
 import { ChainIds, NETWORKS, useChainIdCtx } from '../../context/NetworkProvider'
@@ -33,7 +33,7 @@ export const NetworkDropdown: FC<{ onSwitch?: () => void }> = ({ onSwitch }) => 
   const [chainId, setChainId] = useChainIdCtx()
   const [isAltPressed] = useKeyPress('Alt')
   const [{ appName }] = useBaseCtx()
-  const { switchNetwork } = useNetwork()
+  const { switchNetwork } = useSwitchNetwork()
 
   const isGovernance = appName === APP_NAME.GOVERNANCE
 

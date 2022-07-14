@@ -4,7 +4,7 @@ import { Button, Modal } from '@apps/dumb-components'
 import { ViewportWidth } from '@apps/theme'
 import { useModal } from 'react-modal-hook'
 import styled from 'styled-components'
-import { useConnect, useDisconnect, useNetwork } from 'wagmi'
+import { useAccount, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi'
 
 import { TokenIconSvg } from '../components/core'
 import { ChainIds } from '../context/NetworkProvider'
@@ -85,8 +85,9 @@ export const useUnsupportedNetworkModal = (): [() => void, () => void] => {
   const [showModal, hideModal] = useModal(({ onExited, in: open }) => {
     // "Modals are also functional components and can use react hooks themselves"
     /* eslint-disable react-hooks/rules-of-hooks */
-    const { activeChain, switchNetwork } = useNetwork()
-    const { isConnected } = useConnect()
+    const { chain } = useNetwork()
+    const { isConnected } = useAccount()
+    const { switchNetwork } = useSwitchNetwork()
     const { disconnect } = useDisconnect()
 
     const handleSwitch = (): void => {
@@ -107,8 +108,8 @@ export const useUnsupportedNetworkModal = (): [() => void, () => void] => {
       <Modal title="Unsupported Network" onExited={onExited} open={open} hideModal={hideModal}>
         <Container>
           <Header>
-            The selected network ({activeChain?.name}) is not supported by the application. You can either switch your wallet or reset to
-            Ethereum mainnet.
+            The selected network ({chain?.name}) is not supported by the application. You can either switch your wallet or reset to Ethereum
+            mainnet.
           </Header>
 
           <Actions>
@@ -127,15 +128,15 @@ export const useUnsupportedNetworkModal = (): [() => void, () => void] => {
 }
 
 export const useUnsupportedNetwork = () => {
-  const { isConnected } = useConnect()
-  const { activeChain } = useNetwork()
+  const { chain } = useNetwork()
+  const { isConnected } = useAccount()
   const [showDialog, hideDialog] = useUnsupportedNetworkModal()
 
   useLayoutEffect(() => {
-    if (activeChain?.unsupported) {
+    if (chain?.unsupported) {
       showDialog()
     } else {
       hideDialog()
     }
-  }, [activeChain, hideDialog, showDialog, isConnected])
+  }, [hideDialog, showDialog, isConnected, chain?.unsupported])
 }

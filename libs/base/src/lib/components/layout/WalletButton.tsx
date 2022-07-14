@@ -74,12 +74,12 @@ const WrongNetwork = styled(AccountButton)`
 `
 
 export const WalletButton: FC = () => {
-  const { data: account } = useAccount()
+  const { address } = useAccount()
   const { data: ensName } = useEnsName({
-    address: account?.address,
+    address: address,
   })
   const { data: ensAvatar } = useEnsAvatar({
-    addressOrName: account?.address,
+    addressOrName: address,
   })
   const [showAccountModal] = useAccountModal()
   const [showUnsupportedNetworkModal] = useUnsupportedNetworkModal()
