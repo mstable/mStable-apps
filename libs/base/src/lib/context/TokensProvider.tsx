@@ -446,7 +446,6 @@ export const useAllowanceSubscriptionsSerialized = (): string => {
               tokens[address]?.decimals &&
               Object.keys(subscriptions[address]?.allowances || {}).some(spender => subscriptions[address]?.allowances[spender]?.size),
           )
-
           .map(address => ({
             address,
             spenders: Object.keys(subscriptions[address]?.allowances || {}).filter(

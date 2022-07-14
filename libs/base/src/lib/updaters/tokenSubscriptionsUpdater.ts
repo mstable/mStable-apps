@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
 import { Interface } from '@ethersproject/abi'
@@ -79,7 +79,6 @@ export const TokenSubscriptionsUpdater = (): null => {
   const account = useAccount()
   const prevAccount = usePrevious(account)
   const { data: blockNumber } = useBlockNumber({ watch: true })
-  const [updateBlock, setUpdateBlock] = useState<number | undefined>(undefined)
 
   const balanceSubscriptionsSerialized = useBalanceSubscriptionsSerialized()
   const allowanceSubscriptionsSerialized = useAllowanceSubscriptionsSerialized()
@@ -92,7 +91,7 @@ export const TokenSubscriptionsUpdater = (): null => {
   }, [account, chainId, prevAccount, prevChainId, reset])
 
   useEffect(() => {
-    if (!account || !signer?.provider || account !== prevAccount || blockNumber === updateBlock) return
+    if (!account || !signer?.provider || account !== prevAccount) return
 
     const allowanceSubs: {
       address: string
@@ -117,7 +116,6 @@ export const TokenSubscriptionsUpdater = (): null => {
 
     Promise.all(allowancePromises)
       .then(allowances => {
-        setUpdateBlock(blockNumber)
         updateAllowances(
           allowances.reduce<Parameters<typeof updateAllowances>[0]>(
             (_allowances, { address, allowance, spender }) => ({
@@ -129,10 +127,10 @@ export const TokenSubscriptionsUpdater = (): null => {
         )
       })
       .catch(console.error)
-  }, [account, allowanceSubscriptionsSerialized, blockNumber, prevAccount, signer?.provider, updateAllowances, updateBlock])
+  }, [account, allowanceSubscriptionsSerialized, blockNumber, prevAccount, signer?.provider, updateAllowances])
 
   useEffect(() => {
-    if (!account || !signer?.provider || account !== prevAccount || blockNumber === updateBlock) return
+    if (!account || !signer?.provider || account !== prevAccount) return
 
     const balanceSubs: { address: string; decimals: number }[] = JSON.parse(balanceSubscriptionsSerialized)
 
@@ -149,15 +147,12 @@ export const TokenSubscriptionsUpdater = (): null => {
 
     Promise.all(balancePromises)
       .then(balances => {
-        setUpdateBlock(blockNumber)
         updateBalances(Object.fromEntries(balances))
       })
       .catch(console.error)
-  }, [account, balanceSubscriptionsSerialized, blockNumber, prevAccount, signer, updateBalances, updateBlock])
+  }, [account, balanceSubscriptionsSerialized, blockNumber, prevAccount, signer, updateBalances])
 
   useEffect(() => {
-    if (blockNumber === updateBlock) return
-
     if (account && signer?.provider) {
       signer.provider.getBalance(account).then(_balance => {
         updateBalances({
@@ -169,7 +164,7 @@ export const TokenSubscriptionsUpdater = (): null => {
         [constants.AddressZero as string]: BigDecimal.ZERO,
       })
     }
-  }, [account, blockNumber, signer?.provider, updateBalances, updateBlock])
+  }, [account, blockNumber, signer?.provider, updateBalances])
 
   return null
 }
