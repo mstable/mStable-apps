@@ -1,81 +1,11 @@
-import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 
-import { useFetchState } from '@apps/hooks'
 import { composedComponent } from '@apps/react-utils'
 import { DEAD_ADDRESS } from '@apps/types'
-import { providers } from 'ethers'
-import { createStateContext, useInterval } from 'react-use'
+import { createStateContext } from 'react-use'
 
-import type { FetchState, MassetName } from '@apps/types'
-import type { Provider } from '@ethersproject/providers'
+import type { MassetName } from '@apps/types'
 import type { FC } from 'react'
-
-interface NetworkPrices {
-  nativeToken?: number
-  gas?: {
-    slow: number
-    standard: number
-    fast: number
-    instant: number
-  }
-}
-
-interface GasPrice {
-  standard: number
-  fast: number
-  slow: number
-  instant: number
-}
-
-// interface GasWatch {
-//   slow: GasWatchPrice
-//   normal: GasWatchPrice
-//   fast: GasWatchPrice
-//   instant: GasWatchPrice
-//   ethPrice: number
-//   lastUpdated: number
-//   sources: GasWatchSource[]
-// }
-
-interface MyCryptoGas {
-  safeLow: number
-  standard: number
-  fast: number
-  fastest: number
-}
-
-// interface GasWatchPrice {
-//   gwei: number
-//   usd: number
-// }
-
-// interface GasWatchSource {
-//   name: string
-//   source: string
-//   fast: number
-//   standard: number
-//   slow: number
-//   lastBlock: number
-// }
-
-// interface GasPoaNetwork {
-//   health: boolean
-//   block_number: number
-//   slow: number
-//   standard: number
-//   fast: number
-//   instant: number
-//   block_time: number
-// }
-
-interface MaticMainGas {
-  safeLow: number
-  standard: number
-  fast: number
-  fastest: number
-  blockTime: number
-  blockNumber: number
-}
 
 interface CoreAddresses {
   MTA: string
@@ -463,10 +393,6 @@ export { useChainIdCtx }
 
 const networkCtx = createContext<Network<unknown, unknown>>(null as never)
 
-const networkPricesCtx = createContext<FetchState<NetworkPrices>>(null as never)
-
-const jsonRpcCtx = createContext<{ provider: Provider; parentChainProvider?: Provider } | undefined>(undefined)
-
 const NetworkConfigProvider: FC = ({ children }) => {
   const [chainId] = useChainIdCtx()
 
@@ -475,96 +401,10 @@ const NetworkConfigProvider: FC = ({ children }) => {
   return <networkCtx.Provider value={network}>{children}</networkCtx.Provider>
 }
 
-const NetworkPricesProvider: FC = ({ children }) => {
-  const network = useContext(networkCtx)
-
-  const [networkPrices, setNetworkPrices] = useFetchState<NetworkPrices>({})
-
-  const fetchPrices = useCallback(async () => {
-    if (!network) return
-
-    setNetworkPrices.fetching()
-
-    let gas: GasPrice
-
-    // eth mainnet
-    if (network.chainId === ChainIds.EthereumMainnet) {
-      const gasStationResponse = await fetch(network.gasStationEndpoint)
-      const gasRes: MyCryptoGas = await gasStationResponse.json()
-      gas = {
-        standard: gasRes.standard,
-        fast: gasRes.fast,
-        slow: gasRes.safeLow,
-        instant: gasRes.fastest,
-      }
-      // eth testnet
-    } else if ([ChainIds.EthereumGoerli, ChainIds.EthereumKovan, ChainIds.EthereumRopsten].includes(network.chainId)) {
-      // Testnets should use low gas
-      gas = {
-        standard: 3,
-        fast: 3,
-        slow: 3,
-        instant: 3,
-      }
-      // Matic Mainnet + Mumbai
-    } else {
-      const gasStationResponse = await fetch(network.gasStationEndpoint)
-      const gasRes: MaticMainGas = await gasStationResponse.json()
-      gas = {
-        standard: Math.min(30, gasRes.standard),
-        fast: Math.min(30, gasRes.fast),
-        slow: Math.min(30, gasRes.safeLow),
-        instant: Math.min(30, gasRes.fastest),
-      }
-    }
-    const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${network.coingeckoId}&vs_currencies=usd`)
-
-    const priceResult: Record<typeof network['coingeckoId'], { usd: number }> = await priceResponse.json()
-    const nativeToken = priceResult[network.coingeckoId].usd
-
-    setNetworkPrices.value({ nativeToken, gas })
-  }, [network, setNetworkPrices])
-
-  useEffect(() => {
-    fetchPrices().catch(setNetworkPrices.error)
-  }, [fetchPrices, network, setNetworkPrices.error])
-
-  useInterval(() => {
-    fetchPrices().catch(setNetworkPrices.error)
-  }, 5 * 60 * 1000)
-
-  return <networkPricesCtx.Provider value={networkPrices}>{children}</networkPricesCtx.Provider>
-}
-
-const JsonRpcProvider: FC = ({ children }) => {
-  const network = useContext(networkCtx)
-
-  const value = useMemo(() => {
-    if (!network) return undefined
-
-    const { rpcEndpoints, parentChainId } = network
-    const provider = new providers.FallbackProvider(rpcEndpoints.map(e => new providers.JsonRpcProvider(e)))
-
-    let parentChainProvider
-    if (parentChainId) {
-      const { rpcEndpoints: parentRpcEndpoints } = getNetwork(parentChainId)
-      parentChainProvider = new providers.FallbackProvider(parentRpcEndpoints.map(e => new providers.JsonRpcProvider(e)))
-    }
-
-    return { provider, parentChainProvider }
-  }, [network])
-
-  return <jsonRpcCtx.Provider value={value}>{children}</jsonRpcCtx.Provider>
-}
-
-export const useJsonRpcProviders = (): { provider: Provider; parentChainProvider?: Provider } | undefined => useContext(jsonRpcCtx)
-
 export const useNetwork = (): Network<unknown, unknown> => useContext(networkCtx)
 
-export const useNetworkPrices = (): FetchState<NetworkPrices> => useContext(networkPricesCtx)
-
-export const useNetworkAddresses = <T extends AllNetworks>(): T['addresses'] => useContext(networkCtx).addresses as T['addresses']
+export const useNetworkAddresses = <T extends AllNetworks>(): T['addresses'] => useNetwork().addresses as T['addresses']
 
 export const useGetExplorerUrl = (): Network<unknown, unknown>['getExplorerUrl'] => useNetwork().getExplorerUrl
 
-export const NetworkProvider = composedComponent(ChainIdProvider, NetworkConfigProvider, NetworkPricesProvider, JsonRpcProvider)
+export const NetworkProvider = composedComponent(ChainIdProvider, NetworkConfigProvider)

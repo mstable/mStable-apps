@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { useConnect } from 'wagmi'
 
 import { useBaseCtx } from '../../BaseProviders'
-import { useNetworkPrices } from '../../context/NetworkProvider'
+import { useNetworkPrices } from '../../context/PricesProvider'
 import { useNativeToken } from '../../context/TokensProvider'
 import { useTransactionsDispatch, useTransactionsState } from '../../context/TransactionsProvider'
 import { useSigner } from '../../context/WagmiProvider'

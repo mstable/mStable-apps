@@ -95,6 +95,30 @@ const renameSymbol = (symbol: string, address: string): string => {
   return newSymbol
 }
 
+const getInitialState = ({ addresses, nativeToken }: AllNetworks): State => {
+  // FIXME: - Consider decimal mapping to catch outliers in ERC20 object (ie. WBTC != 18dp)
+  // const decimalMap = {[addresses.WBTC]: 8}
+  return {
+    tokens: Object.fromEntries(
+      ([[nativeToken.symbol, constants.AddressZero], ...Object.entries(addresses.ERC20)] as [string, string][]).map(
+        ([symbol, address]): [string, SubscribedToken] => [
+          address,
+          {
+            address,
+            decimals: 18,
+            symbol,
+            name: symbol,
+            allowances: {},
+            balance: new BigDecimal(0, 18),
+            totalSupply: new BigDecimal(0, 18),
+          },
+        ],
+      ),
+    ),
+    subscriptions: {},
+  }
+}
+
 const reducer: Reducer<State, Action> = (state, action) => {
   switch (action.type) {
     case Actions.SetFetched: {
@@ -277,30 +301,6 @@ const reducer: Reducer<State, Action> = (state, action) => {
   }
 }
 
-const getInitialState = ({ addresses, nativeToken }: AllNetworks): State => {
-  // FIXME: - Consider decimal mapping to catch outliers in ERC20 object (ie. WBTC != 18dp)
-  // const decimalMap = {[addresses.WBTC]: 8}
-  return {
-    tokens: Object.fromEntries(
-      ([[nativeToken.symbol, constants.AddressZero], ...Object.entries(addresses.ERC20)] as [string, string][]).map(
-        ([symbol, address]): [string, SubscribedToken] => [
-          address,
-          {
-            address,
-            decimals: 18,
-            symbol,
-            name: symbol,
-            allowances: {},
-            balance: new BigDecimal(0, 18),
-            totalSupply: new BigDecimal(0, 18),
-          },
-        ],
-      ),
-    ),
-    subscriptions: {},
-  }
-}
-
 /**
  * Provider for tracking balances for tokens for the current user.
  * Balances are re-fetched on each block with separate queries.
@@ -446,7 +446,6 @@ export const useAllowanceSubscriptionsSerialized = (): string => {
               tokens[address]?.decimals &&
               Object.keys(subscriptions[address]?.allowances || {}).some(spender => subscriptions[address]?.allowances[spender]?.size),
           )
-
           .map(address => ({
             address,
             spenders: Object.keys(subscriptions[address]?.allowances || {}).filter(

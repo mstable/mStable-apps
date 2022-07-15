@@ -4,8 +4,8 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { Interface } from '@ethersproject/abi'
 import { constants } from 'ethers'
 import { usePrevious } from 'react-use'
+import { useBlockNumber } from 'wagmi'
 
-import { useBlockNow } from '../context/BlockProvider'
 import { useChainIdCtx } from '../context/NetworkProvider'
 import { useAllowanceSubscriptionsSerialized, useBalanceSubscriptionsSerialized, useTokensDispatch } from '../context/TokensProvider'
 import { useAccount, useSigner } from '../context/WagmiProvider'
@@ -78,7 +78,7 @@ export const TokenSubscriptionsUpdater = (): null => {
 
   const account = useAccount()
   const prevAccount = usePrevious(account)
-  const blockNumber = useBlockNow()
+  const { data: blockNumber } = useBlockNumber({ watch: true })
 
   const balanceSubscriptionsSerialized = useBalanceSubscriptionsSerialized()
   const allowanceSubscriptionsSerialized = useAllowanceSubscriptionsSerialized()
@@ -91,7 +91,7 @@ export const TokenSubscriptionsUpdater = (): null => {
   }, [account, chainId, prevAccount, prevChainId, reset])
 
   useEffect(() => {
-    if (!account || !signer || !signer.provider || chainId !== prevChainId) return
+    if (!account || !signer?.provider || account !== prevAccount) return
 
     const allowanceSubs: {
       address: string
@@ -127,10 +127,10 @@ export const TokenSubscriptionsUpdater = (): null => {
         )
       })
       .catch(console.error)
-  }, [account, allowanceSubscriptionsSerialized, blockNumber, chainId, prevChainId, signer, updateAllowances])
+  }, [account, allowanceSubscriptionsSerialized, blockNumber, prevAccount, signer?.provider, updateAllowances])
 
   useEffect(() => {
-    if (!account || !signer || !signer.provider || chainId !== prevChainId) return
+    if (!account || !signer?.provider || account !== prevAccount) return
 
     const balanceSubs: { address: string; decimals: number }[] = JSON.parse(balanceSubscriptionsSerialized)
 
@@ -150,7 +150,7 @@ export const TokenSubscriptionsUpdater = (): null => {
         updateBalances(Object.fromEntries(balances))
       })
       .catch(console.error)
-  }, [account, balanceSubscriptionsSerialized, blockNumber, chainId, prevChainId, signer, updateBalances])
+  }, [account, balanceSubscriptionsSerialized, blockNumber, prevAccount, signer, updateBalances])
 
   useEffect(() => {
     if (account && signer?.provider) {
@@ -164,7 +164,7 @@ export const TokenSubscriptionsUpdater = (): null => {
         [constants.AddressZero as string]: BigDecimal.ZERO,
       })
     }
-  }, [blockNumber, account, signer, updateBalances])
+  }, [account, blockNumber, signer?.provider, updateBalances])
 
   return null
 }
