@@ -86,17 +86,17 @@ const client = createClient({
 })
 
 const AccountProvider: FC = ({ children }) => {
-  const { data: account } = useWagmiAccount()
+  const { address, connector } = useWagmiAccount()
   const [, setChainId] = useChainIdCtx()
-  const { activeChain } = useNetwork()
+  const { chain } = useNetwork()
   const [, setStakeSignatures] = useStakeSignatures()
   const { connect, connectors } = useConnect()
 
   useEffect(() => {
-    if (activeChain?.id) {
-      setChainId(activeChain.id)
+    if (chain?.id) {
+      setChainId(chain.id)
     }
-  }, [activeChain?.id, setChainId])
+  }, [chain?.id, setChainId])
 
   useEffectOnce(() => {
     if (process.env.NX_APP_NAME === 'governance') {
@@ -113,8 +113,8 @@ const AccountProvider: FC = ({ children }) => {
   })
 
   useEffect(() => {
-    if (process.env.NX_APP_NAME === 'governance' && account?.address) {
-      fetch(`${API_ENDPOINT}/signature/${account?.address}`)
+    if (process.env.NX_APP_NAME === 'governance' && address) {
+      fetch(`${API_ENDPOINT}/signature/${address}`)
         .then(resp => resp.json())
         .then(json => {
           if (json.error) return
@@ -126,13 +126,13 @@ const AccountProvider: FC = ({ children }) => {
             }
             return {
               ...prevHack,
-              [account.address ?? '']: json.signature,
+              [address ?? '']: json.signature,
             }
           })
         })
         .catch(console.warn)
     }
-  }, [account?.address, setStakeSignatures])
+  }, [address, setStakeSignatures])
 
   useEffect(() => {
     if (isIframe()) {
@@ -140,16 +140,16 @@ const AccountProvider: FC = ({ children }) => {
         const connectorInstance = connectors.find(c => c.id === id && c.ready)
 
         if (connectorInstance) {
-          connect(connectorInstance)
+          connect({ connector })
           return
         }
       }
     }
-  }, [connect, connectors])
+  }, [connect, connector, connectors])
 
   // Remount when the chainId changes
   // Necessitated for internal state reset
-  return <Fragment key={activeChain?.id ?? 'none'}>{children}</Fragment>
+  return <Fragment key={chain?.id ?? 'none'}>{children}</Fragment>
 }
 
 export const WagmiProvider: FC = props => {
@@ -173,16 +173,16 @@ export const WagmiProvider: FC = props => {
 
 export const useProvider = () => useWagmiProvider()
 
-export const useWalletAddress = () => useWagmiAccount()?.data?.address?.toLowerCase()
+export const useWalletAddress = () => useWagmiAccount()?.address?.toLowerCase()
 
 export const useSigner = () => useWagmiSigner()?.data
 
 export const useSignerOrProvider = () => useWagmiSigner()?.data
 
-export const useAccount = () => useWagmiAccount()?.data?.address?.toLowerCase()
+export const useAccount = () => useWagmiAccount()?.address?.toLowerCase()
 
 export const useIsIdle = () => {
-  const { data, isLoading } = useWagmiAccount()
+  const { isConnected, isConnecting, isReconnecting } = useWagmiAccount()
 
-  return !isLoading && !!data?.address
+  return isConnected && (!isConnecting || !isReconnecting)
 }

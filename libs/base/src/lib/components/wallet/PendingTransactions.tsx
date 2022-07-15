@@ -5,7 +5,7 @@ import { Button } from '@apps/dumb-components'
 import { TransactionStatus } from '@apps/transaction-manifest'
 import { APP_NAME } from '@apps/types'
 import styled from 'styled-components'
-import { useConnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 import { useBaseCtx } from '../../BaseProviders'
 import { useNetworkPrices } from '../../context/PricesProvider'
@@ -159,7 +159,7 @@ export const PendingTransaction: FC<{
 }> = ({ id }) => {
   const { [id]: transaction } = useTransactionsState()
   const signer = useSigner()
-  const { activeConnector } = useConnect()
+  const { connector } = useAccount()
   const { cancel, send } = useTransactionsDispatch()
   const { estimationError, gasLimit, gasPrice } = useGas()
   const [{ appName }] = useBaseCtx()
@@ -186,7 +186,7 @@ export const PendingTransaction: FC<{
     return null
   }
 
-  const isGnosisSafe = activeConnector?.id === 'safe'
+  const isGnosisSafe = connector?.id === 'safe'
   const checkTransactionSignature =
     isGovernance && !isGnosisSafe && transaction.manifest.fn && stakeSignedFunctions.has(transaction.manifest.fn) && stakeSignatures.message
 
