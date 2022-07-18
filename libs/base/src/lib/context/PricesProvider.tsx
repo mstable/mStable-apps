@@ -86,10 +86,10 @@ export const NetworkPricesProvider: FC = ({ children }) => {
         const gasStationResponse = await fetch(network.gasStationEndpoint)
         const gasRes: MaticMainGas = await gasStationResponse.json()
         gas = {
-          standard: Math.min(30, gasRes.standard),
-          fast: Math.min(30, gasRes.fast),
-          slow: Math.min(30, gasRes.safeLow),
-          instant: Math.min(30, gasRes.fastest),
+          standard: Math.max(30, gasRes.standard),
+          fast: Math.max(30, gasRes.fast),
+          slow: Math.max(30, gasRes.safeLow),
+          instant: Math.max(30, gasRes.fastest),
         }
       }
       const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${network.coingeckoId}&vs_currencies=usd`)
