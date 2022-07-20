@@ -180,7 +180,7 @@ export const PoolDetailCard: FC<Props> = ({ poolAddress, className }) => {
           </RewardsAPY>
         )}
         <div />
-        {!!baseApy && (
+        {baseApy > 0.05 && (
           <RewardsAPY>
             <p>
               <Tooltip tip="Base APY represents the increase in the value of the pool token over time.">Base APY</Tooltip>
