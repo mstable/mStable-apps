@@ -19,7 +19,7 @@
       "extensions": {
         "endpoints": {
           "default": {
-            "url": "https://api.studio.thegraph.com/query/27320/mstable-feeder-pools-and-vaults/v0.0.13",
+            "url": "https://api.studio.thegraph.com/query/32034/mstable-feeder-pools-and-vaults/v0.0.13",
             "introspect": false
           }
         }
