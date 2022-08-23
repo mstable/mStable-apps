@@ -170,12 +170,15 @@ const ETH_MAINNET: EthereumMainnet = {
   gasStationEndpoint: 'https://gas.mycryptoapi.com/',
   gqlEndpoints: {
     protocol: [
-      graphHostedEndpoint('mstable', 'mstable-protocol'),
+      'https://api.studio.thegraph.com/query/32034/mstable-protocol/v0.1.2',
       graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0, process.env.NX_PROTOCOL_SUBGRAPH_API_KEY as string),
     ],
-    staking: [graphHostedEndpoint('mstable', 'mstable-staking')],
+    staking: ['https://api.studio.thegraph.com/query/32034/mstable-staking/v0.1.0', graphHostedEndpoint('mstable', 'mstable-staking')],
     questbook: ['https://europe-west1-mstable-questbook.cloudfunctions.net/questbook'],
-    merkleDrop: [graphHostedEndpoint('mstable', 'mstable-merkle-drop')],
+    merkleDrop: [
+      'https://api.studio.thegraph.com/query/32034/mstable-ecosystem/v0.1.0',
+      graphHostedEndpoint('mstable', 'mstable-merkle-drop'),
+    ],
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
       // Temporary preview URL because indexers haven't picked up the new version...
@@ -183,7 +186,7 @@ const ETH_MAINNET: EthereumMainnet = {
       graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string),
     ],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
-    emissions: [graphHostedEndpoint('mstable', 'mstable-dials')],
+    emissions: ['https://api.studio.thegraph.com/query/32034/mstable-emissions/v0.1.0', graphHostedEndpoint('mstable', 'mstable-dials')],
   },
   addresses: {
     MTA: '0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2',
