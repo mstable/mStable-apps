@@ -186,7 +186,7 @@ const ETH_MAINNET: EthereumMainnet = {
       graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string),
     ],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
-    emissions: ['https://api.studio.thegraph.com/query/32034/mstable-emissions/v0.1.0', graphHostedEndpoint('mstable', 'mstable-dials')],
+    emissions: ['https://api.studio.thegraph.com/query/32034/mstable-emissions/v0.1.1', graphHostedEndpoint('mstable', 'mstable-dials')],
   },
   addresses: {
     MTA: '0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2',
