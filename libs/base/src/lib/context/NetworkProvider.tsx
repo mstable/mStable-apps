@@ -182,7 +182,7 @@ const ETH_MAINNET: EthereumMainnet = {
     snapshot: ['https://hub.snapshot.org/graphql'],
     feeders: [
       // Temporary preview URL because indexers haven't picked up the new version...
-      'https://api.studio.thegraph.com/query/32034/mstable-feeder-pools-and-vaults/v0.0.13',
+      'https://api.studio.thegraph.com/query/32034/mstable-feeders/v0.1.0',
       graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string),
     ],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
