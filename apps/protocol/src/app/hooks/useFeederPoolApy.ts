@@ -25,9 +25,15 @@ const useFeederPoolApyVault = (poolAddress: string, mAssetName?: MassetName) => 
 
   if (!pool || !vault || !massetPrice.value || !rewardsTokenPrice) return { fetching: true }
 
-  const rewardRateSimple = parseInt(vault.rewardRate.toString()) / 1e18
+  let rewardRateSimple = parseInt(vault.rewardRate.toString()) / 1e18
 
   if (rewardRateSimple.toString() === '0') return { fetching: true }
+
+  // Rewards are empty if the last time the rewardsRate was updated longer than 7 days
+  const minLastUpdateTime = Date.now() / 1000 - 7 * 24 * 3600
+  if (vault.lastUpdateTime < minLastUpdateTime) {
+    rewardRateSimple = 0
+  }
 
   const platformRewardRateSimple = vault.platformRewardRate ? parseInt(vault.platformRewardRate.toString()) / 1e18 : undefined
 
