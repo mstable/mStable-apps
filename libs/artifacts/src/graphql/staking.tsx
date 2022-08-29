@@ -141,6 +141,11 @@ export type Account_Filter = {
   seasonMultiplier_lte?: Maybe<Scalars['Int']>;
   seasonMultiplier_in?: Maybe<Array<Scalars['Int']>>;
   seasonMultiplier_not_in?: Maybe<Array<Scalars['Int']>>;
+  completedQuests_?: Maybe<CompletedQuest_Filter>;
+  stakedTokenAccounts_?: Maybe<StakedTokenAccount_Filter>;
+  delegators_?: Maybe<StakedTokenAccount_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Account_OrderBy {
@@ -158,6 +163,10 @@ export enum Account_OrderBy {
 
 
 
+
+export type BlockChangedFilter = {
+  number_gte: Scalars['Int'];
+};
 
 export type Block_Height = {
   hash?: Maybe<Scalars['Bytes']>;
@@ -191,11 +200,18 @@ export type CompletedQuest_Filter = {
   account_in?: Maybe<Array<Scalars['String']>>;
   account_not_in?: Maybe<Array<Scalars['String']>>;
   account_contains?: Maybe<Scalars['String']>;
+  account_contains_nocase?: Maybe<Scalars['String']>;
   account_not_contains?: Maybe<Scalars['String']>;
+  account_not_contains_nocase?: Maybe<Scalars['String']>;
   account_starts_with?: Maybe<Scalars['String']>;
+  account_starts_with_nocase?: Maybe<Scalars['String']>;
   account_not_starts_with?: Maybe<Scalars['String']>;
+  account_not_starts_with_nocase?: Maybe<Scalars['String']>;
   account_ends_with?: Maybe<Scalars['String']>;
+  account_ends_with_nocase?: Maybe<Scalars['String']>;
   account_not_ends_with?: Maybe<Scalars['String']>;
+  account_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  account_?: Maybe<Account_Filter>;
   quest?: Maybe<Scalars['String']>;
   quest_not?: Maybe<Scalars['String']>;
   quest_gt?: Maybe<Scalars['String']>;
@@ -205,11 +221,18 @@ export type CompletedQuest_Filter = {
   quest_in?: Maybe<Array<Scalars['String']>>;
   quest_not_in?: Maybe<Array<Scalars['String']>>;
   quest_contains?: Maybe<Scalars['String']>;
+  quest_contains_nocase?: Maybe<Scalars['String']>;
   quest_not_contains?: Maybe<Scalars['String']>;
+  quest_not_contains_nocase?: Maybe<Scalars['String']>;
   quest_starts_with?: Maybe<Scalars['String']>;
+  quest_starts_with_nocase?: Maybe<Scalars['String']>;
   quest_not_starts_with?: Maybe<Scalars['String']>;
+  quest_not_starts_with_nocase?: Maybe<Scalars['String']>;
   quest_ends_with?: Maybe<Scalars['String']>;
+  quest_ends_with_nocase?: Maybe<Scalars['String']>;
   quest_not_ends_with?: Maybe<Scalars['String']>;
+  quest_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  quest_?: Maybe<Quest_Filter>;
   completedAt?: Maybe<Scalars['Int']>;
   completedAt_not?: Maybe<Scalars['Int']>;
   completedAt_gt?: Maybe<Scalars['Int']>;
@@ -218,6 +241,8 @@ export type CompletedQuest_Filter = {
   completedAt_lte?: Maybe<Scalars['Int']>;
   completedAt_in?: Maybe<Array<Scalars['Int']>>;
   completedAt_not_in?: Maybe<Array<Scalars['Int']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum CompletedQuest_OrderBy {
@@ -250,6 +275,8 @@ export type Counter_Filter = {
   value_lte?: Maybe<Scalars['BigInt']>;
   value_in?: Maybe<Array<Scalars['BigInt']>>;
   value_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Counter_OrderBy {
@@ -301,6 +328,8 @@ export type Metric_Filter = {
   simple_lte?: Maybe<Scalars['BigDecimal']>;
   simple_in?: Maybe<Array<Scalars['BigDecimal']>>;
   simple_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Metric_OrderBy {
@@ -311,6 +340,7 @@ export enum Metric_OrderBy {
 }
 
 
+/** Defines the order direction, either ascending or descending */
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -642,11 +672,18 @@ export type QuestManager_Filter = {
   season_in?: Maybe<Array<Scalars['String']>>;
   season_not_in?: Maybe<Array<Scalars['String']>>;
   season_contains?: Maybe<Scalars['String']>;
+  season_contains_nocase?: Maybe<Scalars['String']>;
   season_not_contains?: Maybe<Scalars['String']>;
+  season_not_contains_nocase?: Maybe<Scalars['String']>;
   season_starts_with?: Maybe<Scalars['String']>;
+  season_starts_with_nocase?: Maybe<Scalars['String']>;
   season_not_starts_with?: Maybe<Scalars['String']>;
+  season_not_starts_with_nocase?: Maybe<Scalars['String']>;
   season_ends_with?: Maybe<Scalars['String']>;
+  season_ends_with_nocase?: Maybe<Scalars['String']>;
   season_not_ends_with?: Maybe<Scalars['String']>;
+  season_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  season_?: Maybe<Season_Filter>;
   questMaster?: Maybe<Scalars['Bytes']>;
   questMaster_not?: Maybe<Scalars['Bytes']>;
   questMaster_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -659,6 +696,8 @@ export type QuestManager_Filter = {
   questSigner_not_in?: Maybe<Array<Scalars['Bytes']>>;
   questSigner_contains?: Maybe<Scalars['Bytes']>;
   questSigner_not_contains?: Maybe<Scalars['Bytes']>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum QuestManager_OrderBy {
@@ -720,11 +759,21 @@ export type Quest_Filter = {
   season_in?: Maybe<Array<Scalars['String']>>;
   season_not_in?: Maybe<Array<Scalars['String']>>;
   season_contains?: Maybe<Scalars['String']>;
+  season_contains_nocase?: Maybe<Scalars['String']>;
   season_not_contains?: Maybe<Scalars['String']>;
+  season_not_contains_nocase?: Maybe<Scalars['String']>;
   season_starts_with?: Maybe<Scalars['String']>;
+  season_starts_with_nocase?: Maybe<Scalars['String']>;
   season_not_starts_with?: Maybe<Scalars['String']>;
+  season_not_starts_with_nocase?: Maybe<Scalars['String']>;
   season_ends_with?: Maybe<Scalars['String']>;
+  season_ends_with_nocase?: Maybe<Scalars['String']>;
   season_not_ends_with?: Maybe<Scalars['String']>;
+  season_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  season_?: Maybe<Season_Filter>;
+  completions_?: Maybe<CompletedQuest_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Quest_OrderBy {
@@ -801,11 +850,20 @@ export type RewardPaidTransaction_Filter = {
   stakingRewards_in?: Maybe<Array<Scalars['String']>>;
   stakingRewards_not_in?: Maybe<Array<Scalars['String']>>;
   stakingRewards_contains?: Maybe<Scalars['String']>;
+  stakingRewards_contains_nocase?: Maybe<Scalars['String']>;
   stakingRewards_not_contains?: Maybe<Scalars['String']>;
+  stakingRewards_not_contains_nocase?: Maybe<Scalars['String']>;
   stakingRewards_starts_with?: Maybe<Scalars['String']>;
+  stakingRewards_starts_with_nocase?: Maybe<Scalars['String']>;
   stakingRewards_not_starts_with?: Maybe<Scalars['String']>;
+  stakingRewards_not_starts_with_nocase?: Maybe<Scalars['String']>;
   stakingRewards_ends_with?: Maybe<Scalars['String']>;
+  stakingRewards_ends_with_nocase?: Maybe<Scalars['String']>;
   stakingRewards_not_ends_with?: Maybe<Scalars['String']>;
+  stakingRewards_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  stakingRewards_?: Maybe<StakingRewards_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum RewardPaidTransaction_OrderBy {
@@ -868,6 +926,9 @@ export type Season_Filter = {
   endedAt_lte?: Maybe<Scalars['Int']>;
   endedAt_in?: Maybe<Array<Scalars['Int']>>;
   endedAt_not_in?: Maybe<Array<Scalars['Int']>>;
+  quests_?: Maybe<Quest_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Season_OrderBy {
@@ -931,11 +992,18 @@ export type StakedTokenAccount_Filter = {
   account_in?: Maybe<Array<Scalars['String']>>;
   account_not_in?: Maybe<Array<Scalars['String']>>;
   account_contains?: Maybe<Scalars['String']>;
+  account_contains_nocase?: Maybe<Scalars['String']>;
   account_not_contains?: Maybe<Scalars['String']>;
+  account_not_contains_nocase?: Maybe<Scalars['String']>;
   account_starts_with?: Maybe<Scalars['String']>;
+  account_starts_with_nocase?: Maybe<Scalars['String']>;
   account_not_starts_with?: Maybe<Scalars['String']>;
+  account_not_starts_with_nocase?: Maybe<Scalars['String']>;
   account_ends_with?: Maybe<Scalars['String']>;
+  account_ends_with_nocase?: Maybe<Scalars['String']>;
   account_not_ends_with?: Maybe<Scalars['String']>;
+  account_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  account_?: Maybe<Account_Filter>;
   stakedToken?: Maybe<Scalars['String']>;
   stakedToken_not?: Maybe<Scalars['String']>;
   stakedToken_gt?: Maybe<Scalars['String']>;
@@ -945,11 +1013,18 @@ export type StakedTokenAccount_Filter = {
   stakedToken_in?: Maybe<Array<Scalars['String']>>;
   stakedToken_not_in?: Maybe<Array<Scalars['String']>>;
   stakedToken_contains?: Maybe<Scalars['String']>;
+  stakedToken_contains_nocase?: Maybe<Scalars['String']>;
   stakedToken_not_contains?: Maybe<Scalars['String']>;
+  stakedToken_not_contains_nocase?: Maybe<Scalars['String']>;
   stakedToken_starts_with?: Maybe<Scalars['String']>;
+  stakedToken_starts_with_nocase?: Maybe<Scalars['String']>;
   stakedToken_not_starts_with?: Maybe<Scalars['String']>;
+  stakedToken_not_starts_with_nocase?: Maybe<Scalars['String']>;
   stakedToken_ends_with?: Maybe<Scalars['String']>;
+  stakedToken_ends_with_nocase?: Maybe<Scalars['String']>;
   stakedToken_not_ends_with?: Maybe<Scalars['String']>;
+  stakedToken_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  stakedToken_?: Maybe<StakedToken_Filter>;
   balance?: Maybe<Scalars['String']>;
   balance_not?: Maybe<Scalars['String']>;
   balance_gt?: Maybe<Scalars['String']>;
@@ -959,11 +1034,18 @@ export type StakedTokenAccount_Filter = {
   balance_in?: Maybe<Array<Scalars['String']>>;
   balance_not_in?: Maybe<Array<Scalars['String']>>;
   balance_contains?: Maybe<Scalars['String']>;
+  balance_contains_nocase?: Maybe<Scalars['String']>;
   balance_not_contains?: Maybe<Scalars['String']>;
+  balance_not_contains_nocase?: Maybe<Scalars['String']>;
   balance_starts_with?: Maybe<Scalars['String']>;
+  balance_starts_with_nocase?: Maybe<Scalars['String']>;
   balance_not_starts_with?: Maybe<Scalars['String']>;
+  balance_not_starts_with_nocase?: Maybe<Scalars['String']>;
   balance_ends_with?: Maybe<Scalars['String']>;
+  balance_ends_with_nocase?: Maybe<Scalars['String']>;
   balance_not_ends_with?: Maybe<Scalars['String']>;
+  balance_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  balance_?: Maybe<StakedTokenBalance_Filter>;
   delegatee?: Maybe<Scalars['String']>;
   delegatee_not?: Maybe<Scalars['String']>;
   delegatee_gt?: Maybe<Scalars['String']>;
@@ -973,11 +1055,18 @@ export type StakedTokenAccount_Filter = {
   delegatee_in?: Maybe<Array<Scalars['String']>>;
   delegatee_not_in?: Maybe<Array<Scalars['String']>>;
   delegatee_contains?: Maybe<Scalars['String']>;
+  delegatee_contains_nocase?: Maybe<Scalars['String']>;
   delegatee_not_contains?: Maybe<Scalars['String']>;
+  delegatee_not_contains_nocase?: Maybe<Scalars['String']>;
   delegatee_starts_with?: Maybe<Scalars['String']>;
+  delegatee_starts_with_nocase?: Maybe<Scalars['String']>;
   delegatee_not_starts_with?: Maybe<Scalars['String']>;
+  delegatee_not_starts_with_nocase?: Maybe<Scalars['String']>;
   delegatee_ends_with?: Maybe<Scalars['String']>;
+  delegatee_ends_with_nocase?: Maybe<Scalars['String']>;
   delegatee_not_ends_with?: Maybe<Scalars['String']>;
+  delegatee_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  delegatee_?: Maybe<Account_Filter>;
   rewardPerTokenPaid?: Maybe<Scalars['BigInt']>;
   rewardPerTokenPaid_not?: Maybe<Scalars['BigInt']>;
   rewardPerTokenPaid_gt?: Maybe<Scalars['BigInt']>;
@@ -994,6 +1083,8 @@ export type StakedTokenAccount_Filter = {
   rewards_lte?: Maybe<Scalars['BigInt']>;
   rewards_in?: Maybe<Array<Scalars['BigInt']>>;
   rewards_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum StakedTokenAccount_OrderBy {
@@ -1042,11 +1133,18 @@ export type StakedTokenBalance_Filter = {
   account_in?: Maybe<Array<Scalars['String']>>;
   account_not_in?: Maybe<Array<Scalars['String']>>;
   account_contains?: Maybe<Scalars['String']>;
+  account_contains_nocase?: Maybe<Scalars['String']>;
   account_not_contains?: Maybe<Scalars['String']>;
+  account_not_contains_nocase?: Maybe<Scalars['String']>;
   account_starts_with?: Maybe<Scalars['String']>;
+  account_starts_with_nocase?: Maybe<Scalars['String']>;
   account_not_starts_with?: Maybe<Scalars['String']>;
+  account_not_starts_with_nocase?: Maybe<Scalars['String']>;
   account_ends_with?: Maybe<Scalars['String']>;
+  account_ends_with_nocase?: Maybe<Scalars['String']>;
   account_not_ends_with?: Maybe<Scalars['String']>;
+  account_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  account_?: Maybe<StakedTokenAccount_Filter>;
   stakedToken?: Maybe<Scalars['String']>;
   stakedToken_not?: Maybe<Scalars['String']>;
   stakedToken_gt?: Maybe<Scalars['String']>;
@@ -1056,11 +1154,18 @@ export type StakedTokenBalance_Filter = {
   stakedToken_in?: Maybe<Array<Scalars['String']>>;
   stakedToken_not_in?: Maybe<Array<Scalars['String']>>;
   stakedToken_contains?: Maybe<Scalars['String']>;
+  stakedToken_contains_nocase?: Maybe<Scalars['String']>;
   stakedToken_not_contains?: Maybe<Scalars['String']>;
+  stakedToken_not_contains_nocase?: Maybe<Scalars['String']>;
   stakedToken_starts_with?: Maybe<Scalars['String']>;
+  stakedToken_starts_with_nocase?: Maybe<Scalars['String']>;
   stakedToken_not_starts_with?: Maybe<Scalars['String']>;
+  stakedToken_not_starts_with_nocase?: Maybe<Scalars['String']>;
   stakedToken_ends_with?: Maybe<Scalars['String']>;
+  stakedToken_ends_with_nocase?: Maybe<Scalars['String']>;
   stakedToken_not_ends_with?: Maybe<Scalars['String']>;
+  stakedToken_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  stakedToken_?: Maybe<StakedToken_Filter>;
   raw?: Maybe<Scalars['BigInt']>;
   raw_not?: Maybe<Scalars['BigInt']>;
   raw_gt?: Maybe<Scalars['BigInt']>;
@@ -1125,6 +1230,8 @@ export type StakedTokenBalance_Filter = {
   userPriceCoefficient_lte?: Maybe<Scalars['BigInt']>;
   userPriceCoefficient_in?: Maybe<Array<Scalars['BigInt']>>;
   userPriceCoefficient_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum StakedTokenBalance_OrderBy {
@@ -1159,11 +1266,18 @@ export type StakedToken_Filter = {
   token_in?: Maybe<Array<Scalars['String']>>;
   token_not_in?: Maybe<Array<Scalars['String']>>;
   token_contains?: Maybe<Scalars['String']>;
+  token_contains_nocase?: Maybe<Scalars['String']>;
   token_not_contains?: Maybe<Scalars['String']>;
+  token_not_contains_nocase?: Maybe<Scalars['String']>;
   token_starts_with?: Maybe<Scalars['String']>;
+  token_starts_with_nocase?: Maybe<Scalars['String']>;
   token_not_starts_with?: Maybe<Scalars['String']>;
+  token_not_starts_with_nocase?: Maybe<Scalars['String']>;
   token_ends_with?: Maybe<Scalars['String']>;
+  token_ends_with_nocase?: Maybe<Scalars['String']>;
   token_not_ends_with?: Maybe<Scalars['String']>;
+  token_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  token_?: Maybe<Token_Filter>;
   stakingToken?: Maybe<Scalars['String']>;
   stakingToken_not?: Maybe<Scalars['String']>;
   stakingToken_gt?: Maybe<Scalars['String']>;
@@ -1173,11 +1287,18 @@ export type StakedToken_Filter = {
   stakingToken_in?: Maybe<Array<Scalars['String']>>;
   stakingToken_not_in?: Maybe<Array<Scalars['String']>>;
   stakingToken_contains?: Maybe<Scalars['String']>;
+  stakingToken_contains_nocase?: Maybe<Scalars['String']>;
   stakingToken_not_contains?: Maybe<Scalars['String']>;
+  stakingToken_not_contains_nocase?: Maybe<Scalars['String']>;
   stakingToken_starts_with?: Maybe<Scalars['String']>;
+  stakingToken_starts_with_nocase?: Maybe<Scalars['String']>;
   stakingToken_not_starts_with?: Maybe<Scalars['String']>;
+  stakingToken_not_starts_with_nocase?: Maybe<Scalars['String']>;
   stakingToken_ends_with?: Maybe<Scalars['String']>;
+  stakingToken_ends_with_nocase?: Maybe<Scalars['String']>;
   stakingToken_not_ends_with?: Maybe<Scalars['String']>;
+  stakingToken_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  stakingToken_?: Maybe<Token_Filter>;
   stakingRewards?: Maybe<Scalars['String']>;
   stakingRewards_not?: Maybe<Scalars['String']>;
   stakingRewards_gt?: Maybe<Scalars['String']>;
@@ -1187,11 +1308,18 @@ export type StakedToken_Filter = {
   stakingRewards_in?: Maybe<Array<Scalars['String']>>;
   stakingRewards_not_in?: Maybe<Array<Scalars['String']>>;
   stakingRewards_contains?: Maybe<Scalars['String']>;
+  stakingRewards_contains_nocase?: Maybe<Scalars['String']>;
   stakingRewards_not_contains?: Maybe<Scalars['String']>;
+  stakingRewards_not_contains_nocase?: Maybe<Scalars['String']>;
   stakingRewards_starts_with?: Maybe<Scalars['String']>;
+  stakingRewards_starts_with_nocase?: Maybe<Scalars['String']>;
   stakingRewards_not_starts_with?: Maybe<Scalars['String']>;
+  stakingRewards_not_starts_with_nocase?: Maybe<Scalars['String']>;
   stakingRewards_ends_with?: Maybe<Scalars['String']>;
+  stakingRewards_ends_with_nocase?: Maybe<Scalars['String']>;
   stakingRewards_not_ends_with?: Maybe<Scalars['String']>;
+  stakingRewards_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  stakingRewards_?: Maybe<StakingRewards_Filter>;
   questManager?: Maybe<Scalars['String']>;
   questManager_not?: Maybe<Scalars['String']>;
   questManager_gt?: Maybe<Scalars['String']>;
@@ -1201,11 +1329,18 @@ export type StakedToken_Filter = {
   questManager_in?: Maybe<Array<Scalars['String']>>;
   questManager_not_in?: Maybe<Array<Scalars['String']>>;
   questManager_contains?: Maybe<Scalars['String']>;
+  questManager_contains_nocase?: Maybe<Scalars['String']>;
   questManager_not_contains?: Maybe<Scalars['String']>;
+  questManager_not_contains_nocase?: Maybe<Scalars['String']>;
   questManager_starts_with?: Maybe<Scalars['String']>;
+  questManager_starts_with_nocase?: Maybe<Scalars['String']>;
   questManager_not_starts_with?: Maybe<Scalars['String']>;
+  questManager_not_starts_with_nocase?: Maybe<Scalars['String']>;
   questManager_ends_with?: Maybe<Scalars['String']>;
+  questManager_ends_with_nocase?: Maybe<Scalars['String']>;
   questManager_not_ends_with?: Maybe<Scalars['String']>;
+  questManager_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  questManager_?: Maybe<QuestManager_Filter>;
   COOLDOWN_SECONDS?: Maybe<Scalars['BigInt']>;
   COOLDOWN_SECONDS_not?: Maybe<Scalars['BigInt']>;
   COOLDOWN_SECONDS_gt?: Maybe<Scalars['BigInt']>;
@@ -1254,6 +1389,9 @@ export type StakedToken_Filter = {
   isStakedTokenMTA_not?: Maybe<Scalars['Boolean']>;
   isStakedTokenMTA_in?: Maybe<Array<Scalars['Boolean']>>;
   isStakedTokenMTA_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  accounts_?: Maybe<StakedTokenAccount_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum StakedToken_OrderBy {
@@ -1345,11 +1483,18 @@ export type StakingRewards_Filter = {
   rewardsToken_in?: Maybe<Array<Scalars['String']>>;
   rewardsToken_not_in?: Maybe<Array<Scalars['String']>>;
   rewardsToken_contains?: Maybe<Scalars['String']>;
+  rewardsToken_contains_nocase?: Maybe<Scalars['String']>;
   rewardsToken_not_contains?: Maybe<Scalars['String']>;
+  rewardsToken_not_contains_nocase?: Maybe<Scalars['String']>;
   rewardsToken_starts_with?: Maybe<Scalars['String']>;
+  rewardsToken_starts_with_nocase?: Maybe<Scalars['String']>;
   rewardsToken_not_starts_with?: Maybe<Scalars['String']>;
+  rewardsToken_not_starts_with_nocase?: Maybe<Scalars['String']>;
   rewardsToken_ends_with?: Maybe<Scalars['String']>;
+  rewardsToken_ends_with_nocase?: Maybe<Scalars['String']>;
   rewardsToken_not_ends_with?: Maybe<Scalars['String']>;
+  rewardsToken_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  rewardsToken_?: Maybe<Token_Filter>;
   rewardsTokenVendor?: Maybe<Scalars['Bytes']>;
   rewardsTokenVendor_not?: Maybe<Scalars['Bytes']>;
   rewardsTokenVendor_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -1378,6 +1523,9 @@ export type StakingRewards_Filter = {
   DURATION_lte?: Maybe<Scalars['Int']>;
   DURATION_in?: Maybe<Array<Scalars['Int']>>;
   DURATION_not_in?: Maybe<Array<Scalars['Int']>>;
+  rewardPaidTransactions_?: Maybe<RewardPaidTransaction_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum StakingRewards_OrderBy {
@@ -1733,11 +1881,17 @@ export type Token_Filter = {
   name_in?: Maybe<Array<Scalars['String']>>;
   name_not_in?: Maybe<Array<Scalars['String']>>;
   name_contains?: Maybe<Scalars['String']>;
+  name_contains_nocase?: Maybe<Scalars['String']>;
   name_not_contains?: Maybe<Scalars['String']>;
+  name_not_contains_nocase?: Maybe<Scalars['String']>;
   name_starts_with?: Maybe<Scalars['String']>;
+  name_starts_with_nocase?: Maybe<Scalars['String']>;
   name_not_starts_with?: Maybe<Scalars['String']>;
+  name_not_starts_with_nocase?: Maybe<Scalars['String']>;
   name_ends_with?: Maybe<Scalars['String']>;
+  name_ends_with_nocase?: Maybe<Scalars['String']>;
   name_not_ends_with?: Maybe<Scalars['String']>;
+  name_not_ends_with_nocase?: Maybe<Scalars['String']>;
   symbol?: Maybe<Scalars['String']>;
   symbol_not?: Maybe<Scalars['String']>;
   symbol_gt?: Maybe<Scalars['String']>;
@@ -1747,11 +1901,17 @@ export type Token_Filter = {
   symbol_in?: Maybe<Array<Scalars['String']>>;
   symbol_not_in?: Maybe<Array<Scalars['String']>>;
   symbol_contains?: Maybe<Scalars['String']>;
+  symbol_contains_nocase?: Maybe<Scalars['String']>;
   symbol_not_contains?: Maybe<Scalars['String']>;
+  symbol_not_contains_nocase?: Maybe<Scalars['String']>;
   symbol_starts_with?: Maybe<Scalars['String']>;
+  symbol_starts_with_nocase?: Maybe<Scalars['String']>;
   symbol_not_starts_with?: Maybe<Scalars['String']>;
+  symbol_not_starts_with_nocase?: Maybe<Scalars['String']>;
   symbol_ends_with?: Maybe<Scalars['String']>;
+  symbol_ends_with_nocase?: Maybe<Scalars['String']>;
   symbol_not_ends_with?: Maybe<Scalars['String']>;
+  symbol_not_ends_with_nocase?: Maybe<Scalars['String']>;
   totalSupply?: Maybe<Scalars['String']>;
   totalSupply_not?: Maybe<Scalars['String']>;
   totalSupply_gt?: Maybe<Scalars['String']>;
@@ -1761,11 +1921,18 @@ export type Token_Filter = {
   totalSupply_in?: Maybe<Array<Scalars['String']>>;
   totalSupply_not_in?: Maybe<Array<Scalars['String']>>;
   totalSupply_contains?: Maybe<Scalars['String']>;
+  totalSupply_contains_nocase?: Maybe<Scalars['String']>;
   totalSupply_not_contains?: Maybe<Scalars['String']>;
+  totalSupply_not_contains_nocase?: Maybe<Scalars['String']>;
   totalSupply_starts_with?: Maybe<Scalars['String']>;
+  totalSupply_starts_with_nocase?: Maybe<Scalars['String']>;
   totalSupply_not_starts_with?: Maybe<Scalars['String']>;
+  totalSupply_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalSupply_ends_with?: Maybe<Scalars['String']>;
+  totalSupply_ends_with_nocase?: Maybe<Scalars['String']>;
   totalSupply_not_ends_with?: Maybe<Scalars['String']>;
+  totalSupply_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalSupply_?: Maybe<Metric_Filter>;
   totalBurned?: Maybe<Scalars['String']>;
   totalBurned_not?: Maybe<Scalars['String']>;
   totalBurned_gt?: Maybe<Scalars['String']>;
@@ -1775,11 +1942,18 @@ export type Token_Filter = {
   totalBurned_in?: Maybe<Array<Scalars['String']>>;
   totalBurned_not_in?: Maybe<Array<Scalars['String']>>;
   totalBurned_contains?: Maybe<Scalars['String']>;
+  totalBurned_contains_nocase?: Maybe<Scalars['String']>;
   totalBurned_not_contains?: Maybe<Scalars['String']>;
+  totalBurned_not_contains_nocase?: Maybe<Scalars['String']>;
   totalBurned_starts_with?: Maybe<Scalars['String']>;
+  totalBurned_starts_with_nocase?: Maybe<Scalars['String']>;
   totalBurned_not_starts_with?: Maybe<Scalars['String']>;
+  totalBurned_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalBurned_ends_with?: Maybe<Scalars['String']>;
+  totalBurned_ends_with_nocase?: Maybe<Scalars['String']>;
   totalBurned_not_ends_with?: Maybe<Scalars['String']>;
+  totalBurned_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalBurned_?: Maybe<Metric_Filter>;
   totalMinted?: Maybe<Scalars['String']>;
   totalMinted_not?: Maybe<Scalars['String']>;
   totalMinted_gt?: Maybe<Scalars['String']>;
@@ -1789,11 +1963,18 @@ export type Token_Filter = {
   totalMinted_in?: Maybe<Array<Scalars['String']>>;
   totalMinted_not_in?: Maybe<Array<Scalars['String']>>;
   totalMinted_contains?: Maybe<Scalars['String']>;
+  totalMinted_contains_nocase?: Maybe<Scalars['String']>;
   totalMinted_not_contains?: Maybe<Scalars['String']>;
+  totalMinted_not_contains_nocase?: Maybe<Scalars['String']>;
   totalMinted_starts_with?: Maybe<Scalars['String']>;
+  totalMinted_starts_with_nocase?: Maybe<Scalars['String']>;
   totalMinted_not_starts_with?: Maybe<Scalars['String']>;
+  totalMinted_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalMinted_ends_with?: Maybe<Scalars['String']>;
+  totalMinted_ends_with_nocase?: Maybe<Scalars['String']>;
   totalMinted_not_ends_with?: Maybe<Scalars['String']>;
+  totalMinted_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalMinted_?: Maybe<Metric_Filter>;
   totalTransfers?: Maybe<Scalars['String']>;
   totalTransfers_not?: Maybe<Scalars['String']>;
   totalTransfers_gt?: Maybe<Scalars['String']>;
@@ -1803,11 +1984,18 @@ export type Token_Filter = {
   totalTransfers_in?: Maybe<Array<Scalars['String']>>;
   totalTransfers_not_in?: Maybe<Array<Scalars['String']>>;
   totalTransfers_contains?: Maybe<Scalars['String']>;
+  totalTransfers_contains_nocase?: Maybe<Scalars['String']>;
   totalTransfers_not_contains?: Maybe<Scalars['String']>;
+  totalTransfers_not_contains_nocase?: Maybe<Scalars['String']>;
   totalTransfers_starts_with?: Maybe<Scalars['String']>;
+  totalTransfers_starts_with_nocase?: Maybe<Scalars['String']>;
   totalTransfers_not_starts_with?: Maybe<Scalars['String']>;
+  totalTransfers_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalTransfers_ends_with?: Maybe<Scalars['String']>;
+  totalTransfers_ends_with_nocase?: Maybe<Scalars['String']>;
   totalTransfers_not_ends_with?: Maybe<Scalars['String']>;
+  totalTransfers_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalTransfers_?: Maybe<Counter_Filter>;
   totalMints?: Maybe<Scalars['String']>;
   totalMints_not?: Maybe<Scalars['String']>;
   totalMints_gt?: Maybe<Scalars['String']>;
@@ -1817,11 +2005,18 @@ export type Token_Filter = {
   totalMints_in?: Maybe<Array<Scalars['String']>>;
   totalMints_not_in?: Maybe<Array<Scalars['String']>>;
   totalMints_contains?: Maybe<Scalars['String']>;
+  totalMints_contains_nocase?: Maybe<Scalars['String']>;
   totalMints_not_contains?: Maybe<Scalars['String']>;
+  totalMints_not_contains_nocase?: Maybe<Scalars['String']>;
   totalMints_starts_with?: Maybe<Scalars['String']>;
+  totalMints_starts_with_nocase?: Maybe<Scalars['String']>;
   totalMints_not_starts_with?: Maybe<Scalars['String']>;
+  totalMints_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalMints_ends_with?: Maybe<Scalars['String']>;
+  totalMints_ends_with_nocase?: Maybe<Scalars['String']>;
   totalMints_not_ends_with?: Maybe<Scalars['String']>;
+  totalMints_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalMints_?: Maybe<Counter_Filter>;
   totalBurns?: Maybe<Scalars['String']>;
   totalBurns_not?: Maybe<Scalars['String']>;
   totalBurns_gt?: Maybe<Scalars['String']>;
@@ -1831,11 +2026,20 @@ export type Token_Filter = {
   totalBurns_in?: Maybe<Array<Scalars['String']>>;
   totalBurns_not_in?: Maybe<Array<Scalars['String']>>;
   totalBurns_contains?: Maybe<Scalars['String']>;
+  totalBurns_contains_nocase?: Maybe<Scalars['String']>;
   totalBurns_not_contains?: Maybe<Scalars['String']>;
+  totalBurns_not_contains_nocase?: Maybe<Scalars['String']>;
   totalBurns_starts_with?: Maybe<Scalars['String']>;
+  totalBurns_starts_with_nocase?: Maybe<Scalars['String']>;
   totalBurns_not_starts_with?: Maybe<Scalars['String']>;
+  totalBurns_not_starts_with_nocase?: Maybe<Scalars['String']>;
   totalBurns_ends_with?: Maybe<Scalars['String']>;
+  totalBurns_ends_with_nocase?: Maybe<Scalars['String']>;
   totalBurns_not_ends_with?: Maybe<Scalars['String']>;
+  totalBurns_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  totalBurns_?: Maybe<Counter_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Token_OrderBy {
@@ -1902,6 +2106,8 @@ export type Transaction_Filter = {
   sender_not_in?: Maybe<Array<Scalars['Bytes']>>;
   sender_contains?: Maybe<Scalars['Bytes']>;
   sender_not_contains?: Maybe<Scalars['Bytes']>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Transaction_OrderBy {
@@ -1917,6 +2123,8 @@ export type _Block_ = {
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
+  /** Timestamp of the block if available, format depends on the chain */
+  timestamp?: Maybe<Scalars['String']>;
 };
 
 /** The type for the top-level _meta field */

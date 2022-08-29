@@ -214,10 +214,11 @@ export type TransactionFieldPolicy = {
 	timestamp?: FieldPolicy<any> | FieldReadFunction<any>,
 	sender?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type _Block_KeySpecifier = ('hash' | 'number' | _Block_KeySpecifier)[];
+export type _Block_KeySpecifier = ('hash' | 'number' | 'timestamp' | _Block_KeySpecifier)[];
 export type _Block_FieldPolicy = {
 	hash?: FieldPolicy<any> | FieldReadFunction<any>,
-	number?: FieldPolicy<any> | FieldReadFunction<any>
+	number?: FieldPolicy<any> | FieldReadFunction<any>,
+	timestamp?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type _Meta_KeySpecifier = ('block' | 'deployment' | 'hasIndexingErrors' | _Meta_KeySpecifier)[];
 export type _Meta_FieldPolicy = {

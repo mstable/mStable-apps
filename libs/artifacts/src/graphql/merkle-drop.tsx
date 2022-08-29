@@ -70,6 +70,7 @@ export type Account_Filter = {
   address_not_in?: Maybe<Array<Scalars['Bytes']>>;
   address_contains?: Maybe<Scalars['Bytes']>;
   address_not_contains?: Maybe<Scalars['Bytes']>;
+  claims_?: Maybe<Claim_Filter>;
   lastClaimedTranche?: Maybe<Scalars['String']>;
   lastClaimedTranche_not?: Maybe<Scalars['String']>;
   lastClaimedTranche_gt?: Maybe<Scalars['String']>;
@@ -79,11 +80,18 @@ export type Account_Filter = {
   lastClaimedTranche_in?: Maybe<Array<Scalars['String']>>;
   lastClaimedTranche_not_in?: Maybe<Array<Scalars['String']>>;
   lastClaimedTranche_contains?: Maybe<Scalars['String']>;
+  lastClaimedTranche_contains_nocase?: Maybe<Scalars['String']>;
   lastClaimedTranche_not_contains?: Maybe<Scalars['String']>;
+  lastClaimedTranche_not_contains_nocase?: Maybe<Scalars['String']>;
   lastClaimedTranche_starts_with?: Maybe<Scalars['String']>;
+  lastClaimedTranche_starts_with_nocase?: Maybe<Scalars['String']>;
   lastClaimedTranche_not_starts_with?: Maybe<Scalars['String']>;
+  lastClaimedTranche_not_starts_with_nocase?: Maybe<Scalars['String']>;
   lastClaimedTranche_ends_with?: Maybe<Scalars['String']>;
+  lastClaimedTranche_ends_with_nocase?: Maybe<Scalars['String']>;
   lastClaimedTranche_not_ends_with?: Maybe<Scalars['String']>;
+  lastClaimedTranche_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  lastClaimedTranche_?: Maybe<Tranche_Filter>;
   merkleDrop?: Maybe<Scalars['String']>;
   merkleDrop_not?: Maybe<Scalars['String']>;
   merkleDrop_gt?: Maybe<Scalars['String']>;
@@ -93,11 +101,20 @@ export type Account_Filter = {
   merkleDrop_in?: Maybe<Array<Scalars['String']>>;
   merkleDrop_not_in?: Maybe<Array<Scalars['String']>>;
   merkleDrop_contains?: Maybe<Scalars['String']>;
+  merkleDrop_contains_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_contains?: Maybe<Scalars['String']>;
+  merkleDrop_not_contains_nocase?: Maybe<Scalars['String']>;
   merkleDrop_starts_with?: Maybe<Scalars['String']>;
+  merkleDrop_starts_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_starts_with?: Maybe<Scalars['String']>;
+  merkleDrop_not_starts_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_ends_with?: Maybe<Scalars['String']>;
+  merkleDrop_ends_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_ends_with?: Maybe<Scalars['String']>;
+  merkleDrop_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  merkleDrop_?: Maybe<MerkleDrop_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Account_OrderBy {
@@ -110,6 +127,10 @@ export enum Account_OrderBy {
 
 
 
+
+export type BlockChangedFilter = {
+  number_gte: Scalars['Int'];
+};
 
 export type Block_Height = {
   hash?: Maybe<Scalars['Bytes']>;
@@ -148,11 +169,18 @@ export type Claim_Filter = {
   account_in?: Maybe<Array<Scalars['String']>>;
   account_not_in?: Maybe<Array<Scalars['String']>>;
   account_contains?: Maybe<Scalars['String']>;
+  account_contains_nocase?: Maybe<Scalars['String']>;
   account_not_contains?: Maybe<Scalars['String']>;
+  account_not_contains_nocase?: Maybe<Scalars['String']>;
   account_starts_with?: Maybe<Scalars['String']>;
+  account_starts_with_nocase?: Maybe<Scalars['String']>;
   account_not_starts_with?: Maybe<Scalars['String']>;
+  account_not_starts_with_nocase?: Maybe<Scalars['String']>;
   account_ends_with?: Maybe<Scalars['String']>;
+  account_ends_with_nocase?: Maybe<Scalars['String']>;
   account_not_ends_with?: Maybe<Scalars['String']>;
+  account_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  account_?: Maybe<Account_Filter>;
   merkleDrop?: Maybe<Scalars['String']>;
   merkleDrop_not?: Maybe<Scalars['String']>;
   merkleDrop_gt?: Maybe<Scalars['String']>;
@@ -162,11 +190,18 @@ export type Claim_Filter = {
   merkleDrop_in?: Maybe<Array<Scalars['String']>>;
   merkleDrop_not_in?: Maybe<Array<Scalars['String']>>;
   merkleDrop_contains?: Maybe<Scalars['String']>;
+  merkleDrop_contains_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_contains?: Maybe<Scalars['String']>;
+  merkleDrop_not_contains_nocase?: Maybe<Scalars['String']>;
   merkleDrop_starts_with?: Maybe<Scalars['String']>;
+  merkleDrop_starts_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_starts_with?: Maybe<Scalars['String']>;
+  merkleDrop_not_starts_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_ends_with?: Maybe<Scalars['String']>;
+  merkleDrop_ends_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_ends_with?: Maybe<Scalars['String']>;
+  merkleDrop_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  merkleDrop_?: Maybe<MerkleDrop_Filter>;
   tranche?: Maybe<Scalars['String']>;
   tranche_not?: Maybe<Scalars['String']>;
   tranche_gt?: Maybe<Scalars['String']>;
@@ -176,11 +211,18 @@ export type Claim_Filter = {
   tranche_in?: Maybe<Array<Scalars['String']>>;
   tranche_not_in?: Maybe<Array<Scalars['String']>>;
   tranche_contains?: Maybe<Scalars['String']>;
+  tranche_contains_nocase?: Maybe<Scalars['String']>;
   tranche_not_contains?: Maybe<Scalars['String']>;
+  tranche_not_contains_nocase?: Maybe<Scalars['String']>;
   tranche_starts_with?: Maybe<Scalars['String']>;
+  tranche_starts_with_nocase?: Maybe<Scalars['String']>;
   tranche_not_starts_with?: Maybe<Scalars['String']>;
+  tranche_not_starts_with_nocase?: Maybe<Scalars['String']>;
   tranche_ends_with?: Maybe<Scalars['String']>;
+  tranche_ends_with_nocase?: Maybe<Scalars['String']>;
   tranche_not_ends_with?: Maybe<Scalars['String']>;
+  tranche_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  tranche_?: Maybe<Tranche_Filter>;
   amount?: Maybe<Scalars['BigInt']>;
   amount_not?: Maybe<Scalars['BigInt']>;
   amount_gt?: Maybe<Scalars['BigInt']>;
@@ -201,6 +243,8 @@ export type Claim_Filter = {
   claimedAt_lte?: Maybe<Scalars['Int']>;
   claimedAt_in?: Maybe<Array<Scalars['Int']>>;
   claimedAt_not_in?: Maybe<Array<Scalars['Int']>>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Claim_OrderBy {
@@ -262,11 +306,18 @@ export type MerkleDrop_Filter = {
   token_in?: Maybe<Array<Scalars['String']>>;
   token_not_in?: Maybe<Array<Scalars['String']>>;
   token_contains?: Maybe<Scalars['String']>;
+  token_contains_nocase?: Maybe<Scalars['String']>;
   token_not_contains?: Maybe<Scalars['String']>;
+  token_not_contains_nocase?: Maybe<Scalars['String']>;
   token_starts_with?: Maybe<Scalars['String']>;
+  token_starts_with_nocase?: Maybe<Scalars['String']>;
   token_not_starts_with?: Maybe<Scalars['String']>;
+  token_not_starts_with_nocase?: Maybe<Scalars['String']>;
   token_ends_with?: Maybe<Scalars['String']>;
+  token_ends_with_nocase?: Maybe<Scalars['String']>;
   token_not_ends_with?: Maybe<Scalars['String']>;
+  token_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  token_?: Maybe<Token_Filter>;
   owner?: Maybe<Scalars['Bytes']>;
   owner_not?: Maybe<Scalars['Bytes']>;
   owner_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -276,7 +327,13 @@ export type MerkleDrop_Filter = {
   funders?: Maybe<Array<Scalars['Bytes']>>;
   funders_not?: Maybe<Array<Scalars['Bytes']>>;
   funders_contains?: Maybe<Array<Scalars['Bytes']>>;
+  funders_contains_nocase?: Maybe<Array<Scalars['Bytes']>>;
   funders_not_contains?: Maybe<Array<Scalars['Bytes']>>;
+  funders_not_contains_nocase?: Maybe<Array<Scalars['Bytes']>>;
+  tranches_?: Maybe<Tranche_Filter>;
+  claims_?: Maybe<Claim_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum MerkleDrop_OrderBy {
@@ -289,6 +346,7 @@ export enum MerkleDrop_OrderBy {
 }
 
 
+/** Defines the order direction, either ascending or descending */
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -572,11 +630,17 @@ export type Token_Filter = {
   name_in?: Maybe<Array<Scalars['String']>>;
   name_not_in?: Maybe<Array<Scalars['String']>>;
   name_contains?: Maybe<Scalars['String']>;
+  name_contains_nocase?: Maybe<Scalars['String']>;
   name_not_contains?: Maybe<Scalars['String']>;
+  name_not_contains_nocase?: Maybe<Scalars['String']>;
   name_starts_with?: Maybe<Scalars['String']>;
+  name_starts_with_nocase?: Maybe<Scalars['String']>;
   name_not_starts_with?: Maybe<Scalars['String']>;
+  name_not_starts_with_nocase?: Maybe<Scalars['String']>;
   name_ends_with?: Maybe<Scalars['String']>;
+  name_ends_with_nocase?: Maybe<Scalars['String']>;
   name_not_ends_with?: Maybe<Scalars['String']>;
+  name_not_ends_with_nocase?: Maybe<Scalars['String']>;
   symbol?: Maybe<Scalars['String']>;
   symbol_not?: Maybe<Scalars['String']>;
   symbol_gt?: Maybe<Scalars['String']>;
@@ -586,11 +650,20 @@ export type Token_Filter = {
   symbol_in?: Maybe<Array<Scalars['String']>>;
   symbol_not_in?: Maybe<Array<Scalars['String']>>;
   symbol_contains?: Maybe<Scalars['String']>;
+  symbol_contains_nocase?: Maybe<Scalars['String']>;
   symbol_not_contains?: Maybe<Scalars['String']>;
+  symbol_not_contains_nocase?: Maybe<Scalars['String']>;
   symbol_starts_with?: Maybe<Scalars['String']>;
+  symbol_starts_with_nocase?: Maybe<Scalars['String']>;
   symbol_not_starts_with?: Maybe<Scalars['String']>;
+  symbol_not_starts_with_nocase?: Maybe<Scalars['String']>;
   symbol_ends_with?: Maybe<Scalars['String']>;
+  symbol_ends_with_nocase?: Maybe<Scalars['String']>;
   symbol_not_ends_with?: Maybe<Scalars['String']>;
+  symbol_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  merkleDrops_?: Maybe<MerkleDrop_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Token_OrderBy {
@@ -674,11 +747,17 @@ export type Tranche_Filter = {
   uri_in?: Maybe<Array<Scalars['String']>>;
   uri_not_in?: Maybe<Array<Scalars['String']>>;
   uri_contains?: Maybe<Scalars['String']>;
+  uri_contains_nocase?: Maybe<Scalars['String']>;
   uri_not_contains?: Maybe<Scalars['String']>;
+  uri_not_contains_nocase?: Maybe<Scalars['String']>;
   uri_starts_with?: Maybe<Scalars['String']>;
+  uri_starts_with_nocase?: Maybe<Scalars['String']>;
   uri_not_starts_with?: Maybe<Scalars['String']>;
+  uri_not_starts_with_nocase?: Maybe<Scalars['String']>;
   uri_ends_with?: Maybe<Scalars['String']>;
+  uri_ends_with_nocase?: Maybe<Scalars['String']>;
   uri_not_ends_with?: Maybe<Scalars['String']>;
+  uri_not_ends_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop?: Maybe<Scalars['String']>;
   merkleDrop_not?: Maybe<Scalars['String']>;
   merkleDrop_gt?: Maybe<Scalars['String']>;
@@ -688,15 +767,25 @@ export type Tranche_Filter = {
   merkleDrop_in?: Maybe<Array<Scalars['String']>>;
   merkleDrop_not_in?: Maybe<Array<Scalars['String']>>;
   merkleDrop_contains?: Maybe<Scalars['String']>;
+  merkleDrop_contains_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_contains?: Maybe<Scalars['String']>;
+  merkleDrop_not_contains_nocase?: Maybe<Scalars['String']>;
   merkleDrop_starts_with?: Maybe<Scalars['String']>;
+  merkleDrop_starts_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_starts_with?: Maybe<Scalars['String']>;
+  merkleDrop_not_starts_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_ends_with?: Maybe<Scalars['String']>;
+  merkleDrop_ends_with_nocase?: Maybe<Scalars['String']>;
   merkleDrop_not_ends_with?: Maybe<Scalars['String']>;
+  merkleDrop_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  merkleDrop_?: Maybe<MerkleDrop_Filter>;
   expired?: Maybe<Scalars['Boolean']>;
   expired_not?: Maybe<Scalars['Boolean']>;
   expired_in?: Maybe<Array<Scalars['Boolean']>>;
   expired_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  claims_?: Maybe<Claim_Filter>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export enum Tranche_OrderBy {
@@ -716,6 +805,8 @@ export type _Block_ = {
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
+  /** Timestamp of the block if available, format depends on the chain */
+  timestamp?: Maybe<Scalars['String']>;
 };
 
 /** The type for the top-level _meta field */
