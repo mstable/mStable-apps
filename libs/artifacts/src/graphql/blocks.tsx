@@ -55,6 +55,10 @@ export type Block = {
   unclesHash?: Maybe<Scalars['String']>;
 };
 
+export type BlockChangedFilter = {
+  number_gte: Scalars['Int'];
+};
+
 export type Block_Filter = {
   id?: Maybe<Scalars['ID']>;
   id_not?: Maybe<Scalars['ID']>;
@@ -89,11 +93,17 @@ export type Block_Filter = {
   parentHash_in?: Maybe<Array<Scalars['String']>>;
   parentHash_not_in?: Maybe<Array<Scalars['String']>>;
   parentHash_contains?: Maybe<Scalars['String']>;
+  parentHash_contains_nocase?: Maybe<Scalars['String']>;
   parentHash_not_contains?: Maybe<Scalars['String']>;
+  parentHash_not_contains_nocase?: Maybe<Scalars['String']>;
   parentHash_starts_with?: Maybe<Scalars['String']>;
+  parentHash_starts_with_nocase?: Maybe<Scalars['String']>;
   parentHash_not_starts_with?: Maybe<Scalars['String']>;
+  parentHash_not_starts_with_nocase?: Maybe<Scalars['String']>;
   parentHash_ends_with?: Maybe<Scalars['String']>;
+  parentHash_ends_with_nocase?: Maybe<Scalars['String']>;
   parentHash_not_ends_with?: Maybe<Scalars['String']>;
+  parentHash_not_ends_with_nocase?: Maybe<Scalars['String']>;
   author?: Maybe<Scalars['String']>;
   author_not?: Maybe<Scalars['String']>;
   author_gt?: Maybe<Scalars['String']>;
@@ -103,11 +113,17 @@ export type Block_Filter = {
   author_in?: Maybe<Array<Scalars['String']>>;
   author_not_in?: Maybe<Array<Scalars['String']>>;
   author_contains?: Maybe<Scalars['String']>;
+  author_contains_nocase?: Maybe<Scalars['String']>;
   author_not_contains?: Maybe<Scalars['String']>;
+  author_not_contains_nocase?: Maybe<Scalars['String']>;
   author_starts_with?: Maybe<Scalars['String']>;
+  author_starts_with_nocase?: Maybe<Scalars['String']>;
   author_not_starts_with?: Maybe<Scalars['String']>;
+  author_not_starts_with_nocase?: Maybe<Scalars['String']>;
   author_ends_with?: Maybe<Scalars['String']>;
+  author_ends_with_nocase?: Maybe<Scalars['String']>;
   author_not_ends_with?: Maybe<Scalars['String']>;
+  author_not_ends_with_nocase?: Maybe<Scalars['String']>;
   difficulty?: Maybe<Scalars['BigInt']>;
   difficulty_not?: Maybe<Scalars['BigInt']>;
   difficulty_gt?: Maybe<Scalars['BigInt']>;
@@ -149,11 +165,17 @@ export type Block_Filter = {
   receiptsRoot_in?: Maybe<Array<Scalars['String']>>;
   receiptsRoot_not_in?: Maybe<Array<Scalars['String']>>;
   receiptsRoot_contains?: Maybe<Scalars['String']>;
+  receiptsRoot_contains_nocase?: Maybe<Scalars['String']>;
   receiptsRoot_not_contains?: Maybe<Scalars['String']>;
+  receiptsRoot_not_contains_nocase?: Maybe<Scalars['String']>;
   receiptsRoot_starts_with?: Maybe<Scalars['String']>;
+  receiptsRoot_starts_with_nocase?: Maybe<Scalars['String']>;
   receiptsRoot_not_starts_with?: Maybe<Scalars['String']>;
+  receiptsRoot_not_starts_with_nocase?: Maybe<Scalars['String']>;
   receiptsRoot_ends_with?: Maybe<Scalars['String']>;
+  receiptsRoot_ends_with_nocase?: Maybe<Scalars['String']>;
   receiptsRoot_not_ends_with?: Maybe<Scalars['String']>;
+  receiptsRoot_not_ends_with_nocase?: Maybe<Scalars['String']>;
   transactionsRoot?: Maybe<Scalars['String']>;
   transactionsRoot_not?: Maybe<Scalars['String']>;
   transactionsRoot_gt?: Maybe<Scalars['String']>;
@@ -163,11 +185,17 @@ export type Block_Filter = {
   transactionsRoot_in?: Maybe<Array<Scalars['String']>>;
   transactionsRoot_not_in?: Maybe<Array<Scalars['String']>>;
   transactionsRoot_contains?: Maybe<Scalars['String']>;
+  transactionsRoot_contains_nocase?: Maybe<Scalars['String']>;
   transactionsRoot_not_contains?: Maybe<Scalars['String']>;
+  transactionsRoot_not_contains_nocase?: Maybe<Scalars['String']>;
   transactionsRoot_starts_with?: Maybe<Scalars['String']>;
+  transactionsRoot_starts_with_nocase?: Maybe<Scalars['String']>;
   transactionsRoot_not_starts_with?: Maybe<Scalars['String']>;
+  transactionsRoot_not_starts_with_nocase?: Maybe<Scalars['String']>;
   transactionsRoot_ends_with?: Maybe<Scalars['String']>;
+  transactionsRoot_ends_with_nocase?: Maybe<Scalars['String']>;
   transactionsRoot_not_ends_with?: Maybe<Scalars['String']>;
+  transactionsRoot_not_ends_with_nocase?: Maybe<Scalars['String']>;
   stateRoot?: Maybe<Scalars['String']>;
   stateRoot_not?: Maybe<Scalars['String']>;
   stateRoot_gt?: Maybe<Scalars['String']>;
@@ -177,11 +205,17 @@ export type Block_Filter = {
   stateRoot_in?: Maybe<Array<Scalars['String']>>;
   stateRoot_not_in?: Maybe<Array<Scalars['String']>>;
   stateRoot_contains?: Maybe<Scalars['String']>;
+  stateRoot_contains_nocase?: Maybe<Scalars['String']>;
   stateRoot_not_contains?: Maybe<Scalars['String']>;
+  stateRoot_not_contains_nocase?: Maybe<Scalars['String']>;
   stateRoot_starts_with?: Maybe<Scalars['String']>;
+  stateRoot_starts_with_nocase?: Maybe<Scalars['String']>;
   stateRoot_not_starts_with?: Maybe<Scalars['String']>;
+  stateRoot_not_starts_with_nocase?: Maybe<Scalars['String']>;
   stateRoot_ends_with?: Maybe<Scalars['String']>;
+  stateRoot_ends_with_nocase?: Maybe<Scalars['String']>;
   stateRoot_not_ends_with?: Maybe<Scalars['String']>;
+  stateRoot_not_ends_with_nocase?: Maybe<Scalars['String']>;
   size?: Maybe<Scalars['BigInt']>;
   size_not?: Maybe<Scalars['BigInt']>;
   size_gt?: Maybe<Scalars['BigInt']>;
@@ -199,11 +233,19 @@ export type Block_Filter = {
   unclesHash_in?: Maybe<Array<Scalars['String']>>;
   unclesHash_not_in?: Maybe<Array<Scalars['String']>>;
   unclesHash_contains?: Maybe<Scalars['String']>;
+  unclesHash_contains_nocase?: Maybe<Scalars['String']>;
   unclesHash_not_contains?: Maybe<Scalars['String']>;
+  unclesHash_not_contains_nocase?: Maybe<Scalars['String']>;
   unclesHash_starts_with?: Maybe<Scalars['String']>;
+  unclesHash_starts_with_nocase?: Maybe<Scalars['String']>;
   unclesHash_not_starts_with?: Maybe<Scalars['String']>;
+  unclesHash_not_starts_with_nocase?: Maybe<Scalars['String']>;
   unclesHash_ends_with?: Maybe<Scalars['String']>;
+  unclesHash_ends_with_nocase?: Maybe<Scalars['String']>;
   unclesHash_not_ends_with?: Maybe<Scalars['String']>;
+  unclesHash_not_ends_with_nocase?: Maybe<Scalars['String']>;
+  /** Filter for the block changed event. */
+  _change_block?: Maybe<BlockChangedFilter>;
 };
 
 export type Block_Height = {
@@ -231,6 +273,7 @@ export enum Block_OrderBy {
 
 
 
+/** Defines the order direction, either ascending or descending */
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -301,6 +344,8 @@ export type _Block_ = {
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
+  /** Timestamp of the block if available, format depends on the chain */
+  timestamp?: Maybe<Scalars['String']>;
 };
 
 /** The type for the top-level _meta field */

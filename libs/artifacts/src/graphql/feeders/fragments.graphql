@@ -105,6 +105,13 @@ fragment BoostedSavingsVaultAll on BoostedSavingsVault {
     address
     symbol
   }
+  rewardAddedTransactions(orderBy: timestamp, orderDirection: desc, first: 1) {
+    id
+    block
+    timestamp
+    amount
+    platformAmount
+  }
   accounts(where: { account: $account }) @include(if: $hasAccount) {
     id
     boostedBalance

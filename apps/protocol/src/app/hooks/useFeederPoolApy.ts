@@ -30,8 +30,8 @@ const useFeederPoolApyVault = (poolAddress: string, mAssetName?: MassetName) => 
   if (rewardRateSimple.toString() === '0') return { fetching: true }
 
   // Rewards are empty if the last time the rewardsRate was updated longer than 7 days
-  const minLastUpdateTime = Date.now() / 1000 - 7 * 24 * 3600
-  if (vault.lastUpdateTime < minLastUpdateTime) {
+  const minLastRewardReceivedTime = Date.now() / 1000 - 7 * 24 * 3600
+  if (vault.rewardAddedTransactions[0] && Number(vault.rewardAddedTransactions[0].timestamp) < minLastRewardReceivedTime) {
     rewardRateSimple = 0
   }
 

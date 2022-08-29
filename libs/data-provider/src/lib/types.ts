@@ -139,6 +139,13 @@ export interface BoostedVaultState {
     address: string
     symbol: string
   }
+  rewardAddedTransactions: {
+    id: string
+    block: number
+    amount: string
+    platformAmount?: string | null | undefined
+    timestamp: string
+  }[]
   platformRewardsToken?: {
     address: string
     symbol: string

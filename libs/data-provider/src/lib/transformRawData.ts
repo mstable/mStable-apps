@@ -114,6 +114,7 @@ const transformBoostedSavingsVault = ({
   rewardPerTokenStored,
   rewardRate,
   rewardsToken,
+  rewardAddedTransactions,
   stakingContract,
   stakingToken,
   totalStakingRewards,
@@ -187,6 +188,7 @@ const transformBoostedSavingsVault = ({
     periodFinish,
     rewardPerTokenStored: BigNumber.from(rewardPerTokenStored),
     rewardRate: BigNumber.from(rewardRate),
+    rewardAddedTransactions,
     stakingContract,
     stakingToken: {
       address: stakingToken.address,

@@ -3,11 +3,14 @@ schema {
   subscription: Subscription
 }
 
-directive @derivedFrom(field: String) on FIELD_DEFINITION
+"creates a virtual field on the entity that may be queried but cannot be set manually through the mappings API."
+directive @derivedFrom(field: String!) on FIELD_DEFINITION
 
+"Marks the GraphQL type as indexable entity.  Each type that should be an entity is required to be annotated with this directive."
 directive @entity on OBJECT
 
-directive @subgraphId(id: String) on OBJECT
+"Defined a Subgraph ID for an object type"
+directive @subgraphId(id: String!) on OBJECT
 
 type Account {
   id: ID!
@@ -25,10 +28,17 @@ input Account_filter {
   id_lte: ID
   id_in: [ID!]
   id_not_in: [ID!]
+  boostedSavingsVaultAccounts_: BoostedSavingsVaultAccount_filter
+  feederPoolAccounts_: FeederPoolAccount_filter
   boostDirection: [String!]
   boostDirection_not: [String!]
   boostDirection_contains: [String!]
+  boostDirection_contains_nocase: [String!]
   boostDirection_not_contains: [String!]
+  boostDirection_not_contains_nocase: [String!]
+  boostDirection_: BoostedSavingsVault_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Account_orderBy {
@@ -92,6 +102,8 @@ input AmpData_filter {
   rampEndTime_lte: BigInt
   rampEndTime_in: [BigInt!]
   rampEndTime_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum AmpData_orderBy {
@@ -152,7 +164,10 @@ input Basket_filter {
   bassets: [String!]
   bassets_not: [String!]
   bassets_contains: [String!]
+  bassets_contains_nocase: [String!]
   bassets_not_contains: [String!]
+  bassets_not_contains_nocase: [String!]
+  bassets_: Basset_filter
   collateralisationRatio: BigInt
   collateralisationRatio_not: BigInt
   collateralisationRatio_gt: BigInt
@@ -177,6 +192,9 @@ input Basket_filter {
   failed_not: Boolean
   failed_in: [Boolean!]
   failed_not_in: [Boolean!]
+  feederPool_: FeederPool_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Basket_orderBy {
@@ -304,11 +322,18 @@ input Basset_filter {
   masset_in: [String!]
   masset_not_in: [String!]
   masset_contains: String
+  masset_contains_nocase: String
   masset_not_contains: String
+  masset_not_contains_nocase: String
   masset_starts_with: String
+  masset_starts_with_nocase: String
   masset_not_starts_with: String
+  masset_not_starts_with_nocase: String
   masset_ends_with: String
+  masset_ends_with_nocase: String
   masset_not_ends_with: String
+  masset_not_ends_with_nocase: String
+  masset_: Token_filter
   maxWeight: BigInt
   maxWeight_not: BigInt
   maxWeight_gt: BigInt
@@ -338,11 +363,17 @@ input Basset_filter {
   status_in: [String!]
   status_not_in: [String!]
   status_contains: String
+  status_contains_nocase: String
   status_not_contains: String
+  status_not_contains_nocase: String
   status_starts_with: String
+  status_starts_with_nocase: String
   status_not_starts_with: String
+  status_not_starts_with_nocase: String
   status_ends_with: String
+  status_ends_with_nocase: String
   status_not_ends_with: String
+  status_not_ends_with_nocase: String
   isTransferFeeCharged: Boolean
   isTransferFeeCharged_not: Boolean
   isTransferFeeCharged_in: [Boolean!]
@@ -356,11 +387,18 @@ input Basset_filter {
   token_in: [String!]
   token_not_in: [String!]
   token_contains: String
+  token_contains_nocase: String
   token_not_contains: String
+  token_not_contains_nocase: String
   token_starts_with: String
+  token_starts_with_nocase: String
   token_not_starts_with: String
+  token_not_starts_with_nocase: String
   token_ends_with: String
+  token_ends_with_nocase: String
   token_not_ends_with: String
+  token_not_ends_with_nocase: String
+  token_: Token_filter
   vaultBalance: String
   vaultBalance_not: String
   vaultBalance_gt: String
@@ -370,11 +408,18 @@ input Basset_filter {
   vaultBalance_in: [String!]
   vaultBalance_not_in: [String!]
   vaultBalance_contains: String
+  vaultBalance_contains_nocase: String
   vaultBalance_not_contains: String
+  vaultBalance_not_contains_nocase: String
   vaultBalance_starts_with: String
+  vaultBalance_starts_with_nocase: String
   vaultBalance_not_starts_with: String
+  vaultBalance_not_starts_with_nocase: String
   vaultBalance_ends_with: String
+  vaultBalance_ends_with_nocase: String
   vaultBalance_not_ends_with: String
+  vaultBalance_not_ends_with_nocase: String
+  vaultBalance_: Metric_filter
   totalMints: String
   totalMints_not: String
   totalMints_gt: String
@@ -384,11 +429,18 @@ input Basset_filter {
   totalMints_in: [String!]
   totalMints_not_in: [String!]
   totalMints_contains: String
+  totalMints_contains_nocase: String
   totalMints_not_contains: String
+  totalMints_not_contains_nocase: String
   totalMints_starts_with: String
+  totalMints_starts_with_nocase: String
   totalMints_not_starts_with: String
+  totalMints_not_starts_with_nocase: String
   totalMints_ends_with: String
+  totalMints_ends_with_nocase: String
   totalMints_not_ends_with: String
+  totalMints_not_ends_with_nocase: String
+  totalMints_: Counter_filter
   totalSwapsAsInput: String
   totalSwapsAsInput_not: String
   totalSwapsAsInput_gt: String
@@ -398,11 +450,18 @@ input Basset_filter {
   totalSwapsAsInput_in: [String!]
   totalSwapsAsInput_not_in: [String!]
   totalSwapsAsInput_contains: String
+  totalSwapsAsInput_contains_nocase: String
   totalSwapsAsInput_not_contains: String
+  totalSwapsAsInput_not_contains_nocase: String
   totalSwapsAsInput_starts_with: String
+  totalSwapsAsInput_starts_with_nocase: String
   totalSwapsAsInput_not_starts_with: String
+  totalSwapsAsInput_not_starts_with_nocase: String
   totalSwapsAsInput_ends_with: String
+  totalSwapsAsInput_ends_with_nocase: String
   totalSwapsAsInput_not_ends_with: String
+  totalSwapsAsInput_not_ends_with_nocase: String
+  totalSwapsAsInput_: Counter_filter
   totalSwapsAsOutput: String
   totalSwapsAsOutput_not: String
   totalSwapsAsOutput_gt: String
@@ -412,11 +471,18 @@ input Basset_filter {
   totalSwapsAsOutput_in: [String!]
   totalSwapsAsOutput_not_in: [String!]
   totalSwapsAsOutput_contains: String
+  totalSwapsAsOutput_contains_nocase: String
   totalSwapsAsOutput_not_contains: String
+  totalSwapsAsOutput_not_contains_nocase: String
   totalSwapsAsOutput_starts_with: String
+  totalSwapsAsOutput_starts_with_nocase: String
   totalSwapsAsOutput_not_starts_with: String
+  totalSwapsAsOutput_not_starts_with_nocase: String
   totalSwapsAsOutput_ends_with: String
+  totalSwapsAsOutput_ends_with_nocase: String
   totalSwapsAsOutput_not_ends_with: String
+  totalSwapsAsOutput_not_ends_with_nocase: String
+  totalSwapsAsOutput_: Counter_filter
   totalRedemptions: String
   totalRedemptions_not: String
   totalRedemptions_gt: String
@@ -426,11 +492,18 @@ input Basset_filter {
   totalRedemptions_in: [String!]
   totalRedemptions_not_in: [String!]
   totalRedemptions_contains: String
+  totalRedemptions_contains_nocase: String
   totalRedemptions_not_contains: String
+  totalRedemptions_not_contains_nocase: String
   totalRedemptions_starts_with: String
+  totalRedemptions_starts_with_nocase: String
   totalRedemptions_not_starts_with: String
+  totalRedemptions_not_starts_with_nocase: String
   totalRedemptions_ends_with: String
+  totalRedemptions_ends_with_nocase: String
   totalRedemptions_not_ends_with: String
+  totalRedemptions_not_ends_with_nocase: String
+  totalRedemptions_: Counter_filter
   totalSupply: String
   totalSupply_not: String
   totalSupply_gt: String
@@ -440,11 +513,18 @@ input Basset_filter {
   totalSupply_in: [String!]
   totalSupply_not_in: [String!]
   totalSupply_contains: String
+  totalSupply_contains_nocase: String
   totalSupply_not_contains: String
+  totalSupply_not_contains_nocase: String
   totalSupply_starts_with: String
+  totalSupply_starts_with_nocase: String
   totalSupply_not_starts_with: String
+  totalSupply_not_starts_with_nocase: String
   totalSupply_ends_with: String
+  totalSupply_ends_with_nocase: String
   totalSupply_not_ends_with: String
+  totalSupply_not_ends_with_nocase: String
+  totalSupply_: Metric_filter
   cumulativeMinted: String
   cumulativeMinted_not: String
   cumulativeMinted_gt: String
@@ -454,11 +534,18 @@ input Basset_filter {
   cumulativeMinted_in: [String!]
   cumulativeMinted_not_in: [String!]
   cumulativeMinted_contains: String
+  cumulativeMinted_contains_nocase: String
   cumulativeMinted_not_contains: String
+  cumulativeMinted_not_contains_nocase: String
   cumulativeMinted_starts_with: String
+  cumulativeMinted_starts_with_nocase: String
   cumulativeMinted_not_starts_with: String
+  cumulativeMinted_not_starts_with_nocase: String
   cumulativeMinted_ends_with: String
+  cumulativeMinted_ends_with_nocase: String
   cumulativeMinted_not_ends_with: String
+  cumulativeMinted_not_ends_with_nocase: String
+  cumulativeMinted_: Metric_filter
   cumulativeSwappedAsOutput: String
   cumulativeSwappedAsOutput_not: String
   cumulativeSwappedAsOutput_gt: String
@@ -468,11 +555,18 @@ input Basset_filter {
   cumulativeSwappedAsOutput_in: [String!]
   cumulativeSwappedAsOutput_not_in: [String!]
   cumulativeSwappedAsOutput_contains: String
+  cumulativeSwappedAsOutput_contains_nocase: String
   cumulativeSwappedAsOutput_not_contains: String
+  cumulativeSwappedAsOutput_not_contains_nocase: String
   cumulativeSwappedAsOutput_starts_with: String
+  cumulativeSwappedAsOutput_starts_with_nocase: String
   cumulativeSwappedAsOutput_not_starts_with: String
+  cumulativeSwappedAsOutput_not_starts_with_nocase: String
   cumulativeSwappedAsOutput_ends_with: String
+  cumulativeSwappedAsOutput_ends_with_nocase: String
   cumulativeSwappedAsOutput_not_ends_with: String
+  cumulativeSwappedAsOutput_not_ends_with_nocase: String
+  cumulativeSwappedAsOutput_: Metric_filter
   cumulativeRedeemed: String
   cumulativeRedeemed_not: String
   cumulativeRedeemed_gt: String
@@ -482,11 +576,18 @@ input Basset_filter {
   cumulativeRedeemed_in: [String!]
   cumulativeRedeemed_not_in: [String!]
   cumulativeRedeemed_contains: String
+  cumulativeRedeemed_contains_nocase: String
   cumulativeRedeemed_not_contains: String
+  cumulativeRedeemed_not_contains_nocase: String
   cumulativeRedeemed_starts_with: String
+  cumulativeRedeemed_starts_with_nocase: String
   cumulativeRedeemed_not_starts_with: String
+  cumulativeRedeemed_not_starts_with_nocase: String
   cumulativeRedeemed_ends_with: String
+  cumulativeRedeemed_ends_with_nocase: String
   cumulativeRedeemed_not_ends_with: String
+  cumulativeRedeemed_not_ends_with_nocase: String
+  cumulativeRedeemed_: Metric_filter
   cumulativeFeesPaid: String
   cumulativeFeesPaid_not: String
   cumulativeFeesPaid_gt: String
@@ -496,11 +597,20 @@ input Basset_filter {
   cumulativeFeesPaid_in: [String!]
   cumulativeFeesPaid_not_in: [String!]
   cumulativeFeesPaid_contains: String
+  cumulativeFeesPaid_contains_nocase: String
   cumulativeFeesPaid_not_contains: String
+  cumulativeFeesPaid_not_contains_nocase: String
   cumulativeFeesPaid_starts_with: String
+  cumulativeFeesPaid_starts_with_nocase: String
   cumulativeFeesPaid_not_starts_with: String
+  cumulativeFeesPaid_not_starts_with_nocase: String
   cumulativeFeesPaid_ends_with: String
+  cumulativeFeesPaid_ends_with_nocase: String
   cumulativeFeesPaid_not_ends_with: String
+  cumulativeFeesPaid_not_ends_with_nocase: String
+  cumulativeFeesPaid_: Metric_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Basset_orderBy {
@@ -529,6 +639,10 @@ scalar BigDecimal
 scalar BigInt
 
 scalar BigNumber
+
+input BlockChangedFilter {
+  number_gte: Int!
+}
 
 input Block_height {
   hash: Bytes
@@ -560,15 +674,27 @@ input BoostDirector_filter {
   stakingContract_in: [String!]
   stakingContract_not_in: [String!]
   stakingContract_contains: String
+  stakingContract_contains_nocase: String
   stakingContract_not_contains: String
+  stakingContract_not_contains_nocase: String
   stakingContract_starts_with: String
+  stakingContract_starts_with_nocase: String
   stakingContract_not_starts_with: String
+  stakingContract_not_starts_with_nocase: String
   stakingContract_ends_with: String
+  stakingContract_ends_with_nocase: String
   stakingContract_not_ends_with: String
+  stakingContract_not_ends_with_nocase: String
+  stakingContract_: Token_filter
   whitelisted: [String!]
   whitelisted_not: [String!]
   whitelisted_contains: [String!]
+  whitelisted_contains_nocase: [String!]
   whitelisted_not_contains: [String!]
+  whitelisted_not_contains_nocase: [String!]
+  whitelisted_: BoostedSavingsVault_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum BoostDirector_orderBy {
@@ -730,11 +856,18 @@ input BoostedSavingsVaultAccount_filter {
   boostedSavingsVault_in: [String!]
   boostedSavingsVault_not_in: [String!]
   boostedSavingsVault_contains: String
+  boostedSavingsVault_contains_nocase: String
   boostedSavingsVault_not_contains: String
+  boostedSavingsVault_not_contains_nocase: String
   boostedSavingsVault_starts_with: String
+  boostedSavingsVault_starts_with_nocase: String
   boostedSavingsVault_not_starts_with: String
+  boostedSavingsVault_not_starts_with_nocase: String
   boostedSavingsVault_ends_with: String
+  boostedSavingsVault_ends_with_nocase: String
   boostedSavingsVault_not_ends_with: String
+  boostedSavingsVault_not_ends_with_nocase: String
+  boostedSavingsVault_: BoostedSavingsVault_filter
   account: String
   account_not: String
   account_gt: String
@@ -744,11 +877,18 @@ input BoostedSavingsVaultAccount_filter {
   account_in: [String!]
   account_not_in: [String!]
   account_contains: String
+  account_contains_nocase: String
   account_not_contains: String
+  account_not_contains_nocase: String
   account_starts_with: String
+  account_starts_with_nocase: String
   account_not_starts_with: String
+  account_not_starts_with_nocase: String
   account_ends_with: String
+  account_ends_with_nocase: String
   account_not_ends_with: String
+  account_not_ends_with_nocase: String
+  account_: Account_filter
   rawBalance: BigInt
   rawBalance_not: BigInt
   rawBalance_gt: BigInt
@@ -830,11 +970,24 @@ input BoostedSavingsVaultAccount_filter {
   cumulativeClaimed_in: [String!]
   cumulativeClaimed_not_in: [String!]
   cumulativeClaimed_contains: String
+  cumulativeClaimed_contains_nocase: String
   cumulativeClaimed_not_contains: String
+  cumulativeClaimed_not_contains_nocase: String
   cumulativeClaimed_starts_with: String
+  cumulativeClaimed_starts_with_nocase: String
   cumulativeClaimed_not_starts_with: String
+  cumulativeClaimed_not_starts_with_nocase: String
   cumulativeClaimed_ends_with: String
+  cumulativeClaimed_ends_with_nocase: String
   cumulativeClaimed_not_ends_with: String
+  cumulativeClaimed_not_ends_with_nocase: String
+  cumulativeClaimed_: Metric_filter
+  rewardEntries_: BoostedSavingsVaultRewardEntry_filter
+  stakeTransactions_: BoostedSavingsVaultStakeTransaction_filter
+  rewardPaidTransactions_: BoostedSavingsVaultRewardPaidTransaction_filter
+  withdrawTransactions_: BoostedSavingsVaultWithdrawTransaction_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum BoostedSavingsVaultAccount_orderBy {
@@ -926,11 +1079,18 @@ input BoostedSavingsVaultRewardAddedTransaction_filter {
   boostedSavingsVault_in: [String!]
   boostedSavingsVault_not_in: [String!]
   boostedSavingsVault_contains: String
+  boostedSavingsVault_contains_nocase: String
   boostedSavingsVault_not_contains: String
+  boostedSavingsVault_not_contains_nocase: String
   boostedSavingsVault_starts_with: String
+  boostedSavingsVault_starts_with_nocase: String
   boostedSavingsVault_not_starts_with: String
+  boostedSavingsVault_not_starts_with_nocase: String
   boostedSavingsVault_ends_with: String
+  boostedSavingsVault_ends_with_nocase: String
   boostedSavingsVault_not_ends_with: String
+  boostedSavingsVault_not_ends_with_nocase: String
+  boostedSavingsVault_: BoostedSavingsVault_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -947,6 +1107,8 @@ input BoostedSavingsVaultRewardAddedTransaction_filter {
   platformAmount_lte: BigInt
   platformAmount_in: [BigInt!]
   platformAmount_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum BoostedSavingsVaultRewardAddedTransaction_orderBy {
@@ -988,11 +1150,18 @@ input BoostedSavingsVaultRewardEntry_filter {
   account_in: [String!]
   account_not_in: [String!]
   account_contains: String
+  account_contains_nocase: String
   account_not_contains: String
+  account_not_contains_nocase: String
   account_starts_with: String
+  account_starts_with_nocase: String
   account_not_starts_with: String
+  account_not_starts_with_nocase: String
   account_ends_with: String
+  account_ends_with_nocase: String
   account_not_ends_with: String
+  account_not_ends_with_nocase: String
+  account_: BoostedSavingsVaultAccount_filter
   boostedSavingsVault: String
   boostedSavingsVault_not: String
   boostedSavingsVault_gt: String
@@ -1002,11 +1171,18 @@ input BoostedSavingsVaultRewardEntry_filter {
   boostedSavingsVault_in: [String!]
   boostedSavingsVault_not_in: [String!]
   boostedSavingsVault_contains: String
+  boostedSavingsVault_contains_nocase: String
   boostedSavingsVault_not_contains: String
+  boostedSavingsVault_not_contains_nocase: String
   boostedSavingsVault_starts_with: String
+  boostedSavingsVault_starts_with_nocase: String
   boostedSavingsVault_not_starts_with: String
+  boostedSavingsVault_not_starts_with_nocase: String
   boostedSavingsVault_ends_with: String
+  boostedSavingsVault_ends_with_nocase: String
   boostedSavingsVault_not_ends_with: String
+  boostedSavingsVault_not_ends_with_nocase: String
+  boostedSavingsVault_: BoostedSavingsVault_filter
   index: Int
   index_not: Int
   index_gt: Int
@@ -1039,6 +1215,8 @@ input BoostedSavingsVaultRewardEntry_filter {
   rate_lte: BigInt
   rate_in: [BigInt!]
   rate_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum BoostedSavingsVaultRewardEntry_orderBy {
@@ -1125,11 +1303,18 @@ input BoostedSavingsVaultRewardPaidTransaction_filter {
   boostedSavingsVault_in: [String!]
   boostedSavingsVault_not_in: [String!]
   boostedSavingsVault_contains: String
+  boostedSavingsVault_contains_nocase: String
   boostedSavingsVault_not_contains: String
+  boostedSavingsVault_not_contains_nocase: String
   boostedSavingsVault_starts_with: String
+  boostedSavingsVault_starts_with_nocase: String
   boostedSavingsVault_not_starts_with: String
+  boostedSavingsVault_not_starts_with_nocase: String
   boostedSavingsVault_ends_with: String
+  boostedSavingsVault_ends_with_nocase: String
   boostedSavingsVault_not_ends_with: String
+  boostedSavingsVault_not_ends_with_nocase: String
+  boostedSavingsVault_: BoostedSavingsVault_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -1155,11 +1340,20 @@ input BoostedSavingsVaultRewardPaidTransaction_filter {
   account_in: [String!]
   account_not_in: [String!]
   account_contains: String
+  account_contains_nocase: String
   account_not_contains: String
+  account_not_contains_nocase: String
   account_starts_with: String
+  account_starts_with_nocase: String
   account_not_starts_with: String
+  account_not_starts_with_nocase: String
   account_ends_with: String
+  account_ends_with_nocase: String
   account_not_ends_with: String
+  account_not_ends_with_nocase: String
+  account_: BoostedSavingsVaultAccount_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum BoostedSavingsVaultRewardPaidTransaction_orderBy {
@@ -1243,11 +1437,18 @@ input BoostedSavingsVaultStakeTransaction_filter {
   boostedSavingsVault_in: [String!]
   boostedSavingsVault_not_in: [String!]
   boostedSavingsVault_contains: String
+  boostedSavingsVault_contains_nocase: String
   boostedSavingsVault_not_contains: String
+  boostedSavingsVault_not_contains_nocase: String
   boostedSavingsVault_starts_with: String
+  boostedSavingsVault_starts_with_nocase: String
   boostedSavingsVault_not_starts_with: String
+  boostedSavingsVault_not_starts_with_nocase: String
   boostedSavingsVault_ends_with: String
+  boostedSavingsVault_ends_with_nocase: String
   boostedSavingsVault_not_ends_with: String
+  boostedSavingsVault_not_ends_with_nocase: String
+  boostedSavingsVault_: BoostedSavingsVault_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -1265,11 +1466,20 @@ input BoostedSavingsVaultStakeTransaction_filter {
   account_in: [String!]
   account_not_in: [String!]
   account_contains: String
+  account_contains_nocase: String
   account_not_contains: String
+  account_not_contains_nocase: String
   account_starts_with: String
+  account_starts_with_nocase: String
   account_not_starts_with: String
+  account_not_starts_with_nocase: String
   account_ends_with: String
+  account_ends_with_nocase: String
   account_not_ends_with: String
+  account_not_ends_with_nocase: String
+  account_: BoostedSavingsVaultAccount_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum BoostedSavingsVaultStakeTransaction_orderBy {
@@ -1352,11 +1562,18 @@ input BoostedSavingsVaultWithdrawTransaction_filter {
   boostedSavingsVault_in: [String!]
   boostedSavingsVault_not_in: [String!]
   boostedSavingsVault_contains: String
+  boostedSavingsVault_contains_nocase: String
   boostedSavingsVault_not_contains: String
+  boostedSavingsVault_not_contains_nocase: String
   boostedSavingsVault_starts_with: String
+  boostedSavingsVault_starts_with_nocase: String
   boostedSavingsVault_not_starts_with: String
+  boostedSavingsVault_not_starts_with_nocase: String
   boostedSavingsVault_ends_with: String
+  boostedSavingsVault_ends_with_nocase: String
   boostedSavingsVault_not_ends_with: String
+  boostedSavingsVault_not_ends_with_nocase: String
+  boostedSavingsVault_: BoostedSavingsVault_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -1374,11 +1591,20 @@ input BoostedSavingsVaultWithdrawTransaction_filter {
   account_in: [String!]
   account_not_in: [String!]
   account_contains: String
+  account_contains_nocase: String
   account_not_contains: String
+  account_not_contains_nocase: String
   account_starts_with: String
+  account_starts_with_nocase: String
   account_not_starts_with: String
+  account_not_starts_with_nocase: String
   account_ends_with: String
+  account_ends_with_nocase: String
   account_not_ends_with: String
+  account_not_ends_with_nocase: String
+  account_: BoostedSavingsVaultAccount_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum BoostedSavingsVaultWithdrawTransaction_orderBy {
@@ -1434,11 +1660,20 @@ input BoostedSavingsVault_filter {
   feederPool_in: [String!]
   feederPool_not_in: [String!]
   feederPool_contains: String
+  feederPool_contains_nocase: String
   feederPool_not_contains: String
+  feederPool_not_contains_nocase: String
   feederPool_starts_with: String
+  feederPool_starts_with_nocase: String
   feederPool_not_starts_with: String
+  feederPool_not_starts_with_nocase: String
   feederPool_ends_with: String
+  feederPool_ends_with_nocase: String
   feederPool_not_ends_with: String
+  feederPool_not_ends_with_nocase: String
+  feederPool_: FeederPool_filter
+  accounts_: BoostedSavingsVaultAccount_filter
+  rewardEntries_: BoostedSavingsVaultRewardEntry_filter
   lockupDuration: Int
   lockupDuration_not: Int
   lockupDuration_gt: Int
@@ -1488,11 +1723,18 @@ input BoostedSavingsVault_filter {
   stakingToken_in: [String!]
   stakingToken_not_in: [String!]
   stakingToken_contains: String
+  stakingToken_contains_nocase: String
   stakingToken_not_contains: String
+  stakingToken_not_contains_nocase: String
   stakingToken_starts_with: String
+  stakingToken_starts_with_nocase: String
   stakingToken_not_starts_with: String
+  stakingToken_not_starts_with_nocase: String
   stakingToken_ends_with: String
+  stakingToken_ends_with_nocase: String
   stakingToken_not_ends_with: String
+  stakingToken_not_ends_with_nocase: String
+  stakingToken_: Token_filter
   rewardPerTokenStored: BigInt
   rewardPerTokenStored_not: BigInt
   rewardPerTokenStored_gt: BigInt
@@ -1518,11 +1760,18 @@ input BoostedSavingsVault_filter {
   rewardsToken_in: [String!]
   rewardsToken_not_in: [String!]
   rewardsToken_contains: String
+  rewardsToken_contains_nocase: String
   rewardsToken_not_contains: String
+  rewardsToken_not_contains_nocase: String
   rewardsToken_starts_with: String
+  rewardsToken_starts_with_nocase: String
   rewardsToken_not_starts_with: String
+  rewardsToken_not_starts_with_nocase: String
   rewardsToken_ends_with: String
+  rewardsToken_ends_with_nocase: String
   rewardsToken_not_ends_with: String
+  rewardsToken_not_ends_with_nocase: String
+  rewardsToken_: Token_filter
   rewardsDistributor: Bytes
   rewardsDistributor_not: Bytes
   rewardsDistributor_in: [Bytes!]
@@ -1584,11 +1833,24 @@ input BoostedSavingsVault_filter {
   platformRewardsToken_in: [String!]
   platformRewardsToken_not_in: [String!]
   platformRewardsToken_contains: String
+  platformRewardsToken_contains_nocase: String
   platformRewardsToken_not_contains: String
+  platformRewardsToken_not_contains_nocase: String
   platformRewardsToken_starts_with: String
+  platformRewardsToken_starts_with_nocase: String
   platformRewardsToken_not_starts_with: String
+  platformRewardsToken_not_starts_with_nocase: String
   platformRewardsToken_ends_with: String
+  platformRewardsToken_ends_with_nocase: String
   platformRewardsToken_not_ends_with: String
+  platformRewardsToken_not_ends_with_nocase: String
+  platformRewardsToken_: Token_filter
+  stakeTransactions_: BoostedSavingsVaultStakeTransaction_filter
+  rewardAddedTransactions_: BoostedSavingsVaultRewardAddedTransaction_filter
+  rewardPaidTransactions_: BoostedSavingsVaultRewardPaidTransaction_filter
+  withdrawTransactions_: BoostedSavingsVaultWithdrawTransaction_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum BoostedSavingsVault_orderBy {
@@ -1650,6 +1912,8 @@ input Counter_filter {
   value_lte: BigInt
   value_in: [BigInt!]
   value_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Counter_orderBy {
@@ -1739,11 +2003,18 @@ input FPMintMultiTransaction_filter {
   feederPool_in: [String!]
   feederPool_not_in: [String!]
   feederPool_contains: String
+  feederPool_contains_nocase: String
   feederPool_not_contains: String
+  feederPool_not_contains_nocase: String
   feederPool_starts_with: String
+  feederPool_starts_with_nocase: String
   feederPool_not_starts_with: String
+  feederPool_not_starts_with_nocase: String
   feederPool_ends_with: String
+  feederPool_ends_with_nocase: String
   feederPool_not_ends_with: String
+  feederPool_not_ends_with_nocase: String
+  feederPool_: FeederPool_filter
   massetUnits: BigInt
   massetUnits_not: BigInt
   massetUnits_gt: BigInt
@@ -1755,11 +2026,18 @@ input FPMintMultiTransaction_filter {
   inputs: [String!]
   inputs_not: [String!]
   inputs_contains: [String!]
+  inputs_contains_nocase: [String!]
   inputs_not_contains: [String!]
+  inputs_not_contains_nocase: [String!]
+  inputs_: Basset_filter
   bassetsUnits: [BigInt!]
   bassetsUnits_not: [BigInt!]
   bassetsUnits_contains: [BigInt!]
+  bassetsUnits_contains_nocase: [BigInt!]
   bassetsUnits_not_contains: [BigInt!]
+  bassetsUnits_not_contains_nocase: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum FPMintMultiTransaction_orderBy {
@@ -1857,11 +2135,18 @@ input FPMintSingleTransaction_filter {
   feederPool_in: [String!]
   feederPool_not_in: [String!]
   feederPool_contains: String
+  feederPool_contains_nocase: String
   feederPool_not_contains: String
+  feederPool_not_contains_nocase: String
   feederPool_starts_with: String
+  feederPool_starts_with_nocase: String
   feederPool_not_starts_with: String
+  feederPool_not_starts_with_nocase: String
   feederPool_ends_with: String
+  feederPool_ends_with_nocase: String
   feederPool_not_ends_with: String
+  feederPool_not_ends_with_nocase: String
+  feederPool_: FeederPool_filter
   massetUnits: BigInt
   massetUnits_not: BigInt
   massetUnits_gt: BigInt
@@ -1879,11 +2164,18 @@ input FPMintSingleTransaction_filter {
   input_in: [String!]
   input_not_in: [String!]
   input_contains: String
+  input_contains_nocase: String
   input_not_contains: String
+  input_not_contains_nocase: String
   input_starts_with: String
+  input_starts_with_nocase: String
   input_not_starts_with: String
+  input_not_starts_with_nocase: String
   input_ends_with: String
+  input_ends_with_nocase: String
   input_not_ends_with: String
+  input_not_ends_with_nocase: String
+  input_: Token_filter
   bassetUnits: BigInt
   bassetUnits_not: BigInt
   bassetUnits_gt: BigInt
@@ -1892,6 +2184,8 @@ input FPMintSingleTransaction_filter {
   bassetUnits_lte: BigInt
   bassetUnits_in: [BigInt!]
   bassetUnits_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum FPMintSingleTransaction_orderBy {
@@ -1988,11 +2282,18 @@ input FPRedeemTransaction_filter {
   feederPool_in: [String!]
   feederPool_not_in: [String!]
   feederPool_contains: String
+  feederPool_contains_nocase: String
   feederPool_not_contains: String
+  feederPool_not_contains_nocase: String
   feederPool_starts_with: String
+  feederPool_starts_with_nocase: String
   feederPool_not_starts_with: String
+  feederPool_not_starts_with_nocase: String
   feederPool_ends_with: String
+  feederPool_ends_with_nocase: String
   feederPool_not_ends_with: String
+  feederPool_not_ends_with_nocase: String
+  feederPool_: FeederPool_filter
   massetUnits: BigInt
   massetUnits_not: BigInt
   massetUnits_gt: BigInt
@@ -2004,11 +2305,18 @@ input FPRedeemTransaction_filter {
   bassets: [String!]
   bassets_not: [String!]
   bassets_contains: [String!]
+  bassets_contains_nocase: [String!]
   bassets_not_contains: [String!]
+  bassets_not_contains_nocase: [String!]
+  bassets_: Basset_filter
   bassetsUnits: [BigInt!]
   bassetsUnits_not: [BigInt!]
   bassetsUnits_contains: [BigInt!]
+  bassetsUnits_contains_nocase: [BigInt!]
   bassetsUnits_not_contains: [BigInt!]
+  bassetsUnits_not_contains_nocase: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum FPRedeemTransaction_orderBy {
@@ -2103,11 +2411,18 @@ input FPSwapTransaction_filter {
   feederPool_in: [String!]
   feederPool_not_in: [String!]
   feederPool_contains: String
+  feederPool_contains_nocase: String
   feederPool_not_contains: String
+  feederPool_not_contains_nocase: String
   feederPool_starts_with: String
+  feederPool_starts_with_nocase: String
   feederPool_not_starts_with: String
+  feederPool_not_starts_with_nocase: String
   feederPool_ends_with: String
+  feederPool_ends_with_nocase: String
   feederPool_not_ends_with: String
+  feederPool_not_ends_with_nocase: String
+  feederPool_: FeederPool_filter
   massetUnits: BigInt
   massetUnits_not: BigInt
   massetUnits_gt: BigInt
@@ -2125,11 +2440,18 @@ input FPSwapTransaction_filter {
   inputBasset_in: [String!]
   inputBasset_not_in: [String!]
   inputBasset_contains: String
+  inputBasset_contains_nocase: String
   inputBasset_not_contains: String
+  inputBasset_not_contains_nocase: String
   inputBasset_starts_with: String
+  inputBasset_starts_with_nocase: String
   inputBasset_not_starts_with: String
+  inputBasset_not_starts_with_nocase: String
   inputBasset_ends_with: String
+  inputBasset_ends_with_nocase: String
   inputBasset_not_ends_with: String
+  inputBasset_not_ends_with_nocase: String
+  inputBasset_: Basset_filter
   outputBasset: String
   outputBasset_not: String
   outputBasset_gt: String
@@ -2139,17 +2461,26 @@ input FPSwapTransaction_filter {
   outputBasset_in: [String!]
   outputBasset_not_in: [String!]
   outputBasset_contains: String
+  outputBasset_contains_nocase: String
   outputBasset_not_contains: String
+  outputBasset_not_contains_nocase: String
   outputBasset_starts_with: String
+  outputBasset_starts_with_nocase: String
   outputBasset_not_starts_with: String
+  outputBasset_not_starts_with_nocase: String
   outputBasset_ends_with: String
+  outputBasset_ends_with_nocase: String
   outputBasset_not_ends_with: String
+  outputBasset_not_ends_with_nocase: String
+  outputBasset_: Basset_filter
   recipient: Bytes
   recipient_not: Bytes
   recipient_in: [Bytes!]
   recipient_not_in: [Bytes!]
   recipient_contains: Bytes
   recipient_not_contains: Bytes
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum FPSwapTransaction_orderBy {
@@ -2236,11 +2567,18 @@ input FeederPoolAccount_filter {
   account_in: [String!]
   account_not_in: [String!]
   account_contains: String
+  account_contains_nocase: String
   account_not_contains: String
+  account_not_contains_nocase: String
   account_starts_with: String
+  account_starts_with_nocase: String
   account_not_starts_with: String
+  account_not_starts_with_nocase: String
   account_ends_with: String
+  account_ends_with_nocase: String
   account_not_ends_with: String
+  account_not_ends_with_nocase: String
+  account_: Account_filter
   feederPool: String
   feederPool_not: String
   feederPool_gt: String
@@ -2250,11 +2588,18 @@ input FeederPoolAccount_filter {
   feederPool_in: [String!]
   feederPool_not_in: [String!]
   feederPool_contains: String
+  feederPool_contains_nocase: String
   feederPool_not_contains: String
+  feederPool_not_contains_nocase: String
   feederPool_starts_with: String
+  feederPool_starts_with_nocase: String
   feederPool_not_starts_with: String
+  feederPool_not_starts_with_nocase: String
   feederPool_ends_with: String
+  feederPool_ends_with_nocase: String
   feederPool_not_ends_with: String
+  feederPool_not_ends_with_nocase: String
+  feederPool_: FeederPool_filter
   cumulativeEarned: String
   cumulativeEarned_not: String
   cumulativeEarned_gt: String
@@ -2264,11 +2609,18 @@ input FeederPoolAccount_filter {
   cumulativeEarned_in: [String!]
   cumulativeEarned_not_in: [String!]
   cumulativeEarned_contains: String
+  cumulativeEarned_contains_nocase: String
   cumulativeEarned_not_contains: String
+  cumulativeEarned_not_contains_nocase: String
   cumulativeEarned_starts_with: String
+  cumulativeEarned_starts_with_nocase: String
   cumulativeEarned_not_starts_with: String
+  cumulativeEarned_not_starts_with_nocase: String
   cumulativeEarned_ends_with: String
+  cumulativeEarned_ends_with_nocase: String
   cumulativeEarned_not_ends_with: String
+  cumulativeEarned_not_ends_with_nocase: String
+  cumulativeEarned_: Metric_filter
   cumulativeEarnedVault: String
   cumulativeEarnedVault_not: String
   cumulativeEarnedVault_gt: String
@@ -2278,11 +2630,18 @@ input FeederPoolAccount_filter {
   cumulativeEarnedVault_in: [String!]
   cumulativeEarnedVault_not_in: [String!]
   cumulativeEarnedVault_contains: String
+  cumulativeEarnedVault_contains_nocase: String
   cumulativeEarnedVault_not_contains: String
+  cumulativeEarnedVault_not_contains_nocase: String
   cumulativeEarnedVault_starts_with: String
+  cumulativeEarnedVault_starts_with_nocase: String
   cumulativeEarnedVault_not_starts_with: String
+  cumulativeEarnedVault_not_starts_with_nocase: String
   cumulativeEarnedVault_ends_with: String
+  cumulativeEarnedVault_ends_with_nocase: String
   cumulativeEarnedVault_not_ends_with: String
+  cumulativeEarnedVault_not_ends_with_nocase: String
+  cumulativeEarnedVault_: Metric_filter
   balance: BigInt
   balance_not: BigInt
   balance_gt: BigInt
@@ -2331,6 +2690,8 @@ input FeederPoolAccount_filter {
   lastUpdateVault_lte: Int
   lastUpdateVault_in: [Int!]
   lastUpdateVault_not_in: [Int!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum FeederPoolAccount_orderBy {
@@ -2389,11 +2750,18 @@ input FeederPoolPrice_filter {
   feederPool_in: [String!]
   feederPool_not_in: [String!]
   feederPool_contains: String
+  feederPool_contains_nocase: String
   feederPool_not_contains: String
+  feederPool_not_contains_nocase: String
   feederPool_starts_with: String
+  feederPool_starts_with_nocase: String
   feederPool_not_starts_with: String
+  feederPool_not_starts_with_nocase: String
   feederPool_ends_with: String
+  feederPool_ends_with_nocase: String
   feederPool_not_ends_with: String
+  feederPool_not_ends_with_nocase: String
+  feederPool_: FeederPool_filter
   price: BigDecimal
   price_not: BigDecimal
   price_gt: BigDecimal
@@ -2419,11 +2787,20 @@ input FeederPoolPrice_filter {
   next_in: [String!]
   next_not_in: [String!]
   next_contains: String
+  next_contains_nocase: String
   next_not_contains: String
+  next_not_contains_nocase: String
   next_starts_with: String
+  next_starts_with_nocase: String
   next_not_starts_with: String
+  next_not_starts_with_nocase: String
   next_ends_with: String
+  next_ends_with_nocase: String
   next_not_ends_with: String
+  next_not_ends_with_nocase: String
+  next_: FeederPoolPrice_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum FeederPoolPrice_orderBy {
@@ -2452,11 +2829,18 @@ input FeederPool_filter {
   ampData_in: [String!]
   ampData_not_in: [String!]
   ampData_contains: String
+  ampData_contains_nocase: String
   ampData_not_contains: String
+  ampData_not_contains_nocase: String
   ampData_starts_with: String
+  ampData_starts_with_nocase: String
   ampData_not_starts_with: String
+  ampData_not_starts_with_nocase: String
   ampData_ends_with: String
+  ampData_ends_with_nocase: String
   ampData_not_ends_with: String
+  ampData_not_ends_with_nocase: String
+  ampData_: AmpData_filter
   basket: String
   basket_not: String
   basket_gt: String
@@ -2466,11 +2850,18 @@ input FeederPool_filter {
   basket_in: [String!]
   basket_not_in: [String!]
   basket_contains: String
+  basket_contains_nocase: String
   basket_not_contains: String
+  basket_not_contains_nocase: String
   basket_starts_with: String
+  basket_starts_with_nocase: String
   basket_not_starts_with: String
+  basket_not_starts_with_nocase: String
   basket_ends_with: String
+  basket_ends_with_nocase: String
   basket_not_ends_with: String
+  basket_not_ends_with_nocase: String
+  basket_: Basket_filter
   cacheSize: BigInt
   cacheSize_not: BigInt
   cacheSize_gt: BigInt
@@ -2488,11 +2879,18 @@ input FeederPool_filter {
   cumulativeFeesPaid_in: [String!]
   cumulativeFeesPaid_not_in: [String!]
   cumulativeFeesPaid_contains: String
+  cumulativeFeesPaid_contains_nocase: String
   cumulativeFeesPaid_not_contains: String
+  cumulativeFeesPaid_not_contains_nocase: String
   cumulativeFeesPaid_starts_with: String
+  cumulativeFeesPaid_starts_with_nocase: String
   cumulativeFeesPaid_not_starts_with: String
+  cumulativeFeesPaid_not_starts_with_nocase: String
   cumulativeFeesPaid_ends_with: String
+  cumulativeFeesPaid_ends_with_nocase: String
   cumulativeFeesPaid_not_ends_with: String
+  cumulativeFeesPaid_not_ends_with_nocase: String
+  cumulativeFeesPaid_: Metric_filter
   cumulativeInterestCollected: String
   cumulativeInterestCollected_not: String
   cumulativeInterestCollected_gt: String
@@ -2502,11 +2900,18 @@ input FeederPool_filter {
   cumulativeInterestCollected_in: [String!]
   cumulativeInterestCollected_not_in: [String!]
   cumulativeInterestCollected_contains: String
+  cumulativeInterestCollected_contains_nocase: String
   cumulativeInterestCollected_not_contains: String
+  cumulativeInterestCollected_not_contains_nocase: String
   cumulativeInterestCollected_starts_with: String
+  cumulativeInterestCollected_starts_with_nocase: String
   cumulativeInterestCollected_not_starts_with: String
+  cumulativeInterestCollected_not_starts_with_nocase: String
   cumulativeInterestCollected_ends_with: String
+  cumulativeInterestCollected_ends_with_nocase: String
   cumulativeInterestCollected_not_ends_with: String
+  cumulativeInterestCollected_not_ends_with_nocase: String
+  cumulativeInterestCollected_: Metric_filter
   cumulativeInterestDistributed: String
   cumulativeInterestDistributed_not: String
   cumulativeInterestDistributed_gt: String
@@ -2516,11 +2921,18 @@ input FeederPool_filter {
   cumulativeInterestDistributed_in: [String!]
   cumulativeInterestDistributed_not_in: [String!]
   cumulativeInterestDistributed_contains: String
+  cumulativeInterestDistributed_contains_nocase: String
   cumulativeInterestDistributed_not_contains: String
+  cumulativeInterestDistributed_not_contains_nocase: String
   cumulativeInterestDistributed_starts_with: String
+  cumulativeInterestDistributed_starts_with_nocase: String
   cumulativeInterestDistributed_not_starts_with: String
+  cumulativeInterestDistributed_not_starts_with_nocase: String
   cumulativeInterestDistributed_ends_with: String
+  cumulativeInterestDistributed_ends_with_nocase: String
   cumulativeInterestDistributed_not_ends_with: String
+  cumulativeInterestDistributed_not_ends_with_nocase: String
+  cumulativeInterestDistributed_: Metric_filter
   cumulativeLiquidatorDeposited: String
   cumulativeLiquidatorDeposited_not: String
   cumulativeLiquidatorDeposited_gt: String
@@ -2530,11 +2942,18 @@ input FeederPool_filter {
   cumulativeLiquidatorDeposited_in: [String!]
   cumulativeLiquidatorDeposited_not_in: [String!]
   cumulativeLiquidatorDeposited_contains: String
+  cumulativeLiquidatorDeposited_contains_nocase: String
   cumulativeLiquidatorDeposited_not_contains: String
+  cumulativeLiquidatorDeposited_not_contains_nocase: String
   cumulativeLiquidatorDeposited_starts_with: String
+  cumulativeLiquidatorDeposited_starts_with_nocase: String
   cumulativeLiquidatorDeposited_not_starts_with: String
+  cumulativeLiquidatorDeposited_not_starts_with_nocase: String
   cumulativeLiquidatorDeposited_ends_with: String
+  cumulativeLiquidatorDeposited_ends_with_nocase: String
   cumulativeLiquidatorDeposited_not_ends_with: String
+  cumulativeLiquidatorDeposited_not_ends_with_nocase: String
+  cumulativeLiquidatorDeposited_: Metric_filter
   cumulativeMinted: String
   cumulativeMinted_not: String
   cumulativeMinted_gt: String
@@ -2544,11 +2963,18 @@ input FeederPool_filter {
   cumulativeMinted_in: [String!]
   cumulativeMinted_not_in: [String!]
   cumulativeMinted_contains: String
+  cumulativeMinted_contains_nocase: String
   cumulativeMinted_not_contains: String
+  cumulativeMinted_not_contains_nocase: String
   cumulativeMinted_starts_with: String
+  cumulativeMinted_starts_with_nocase: String
   cumulativeMinted_not_starts_with: String
+  cumulativeMinted_not_starts_with_nocase: String
   cumulativeMinted_ends_with: String
+  cumulativeMinted_ends_with_nocase: String
   cumulativeMinted_not_ends_with: String
+  cumulativeMinted_not_ends_with_nocase: String
+  cumulativeMinted_: Metric_filter
   cumulativeRedeemed: String
   cumulativeRedeemed_not: String
   cumulativeRedeemed_gt: String
@@ -2558,11 +2984,18 @@ input FeederPool_filter {
   cumulativeRedeemed_in: [String!]
   cumulativeRedeemed_not_in: [String!]
   cumulativeRedeemed_contains: String
+  cumulativeRedeemed_contains_nocase: String
   cumulativeRedeemed_not_contains: String
+  cumulativeRedeemed_not_contains_nocase: String
   cumulativeRedeemed_starts_with: String
+  cumulativeRedeemed_starts_with_nocase: String
   cumulativeRedeemed_not_starts_with: String
+  cumulativeRedeemed_not_starts_with_nocase: String
   cumulativeRedeemed_ends_with: String
+  cumulativeRedeemed_ends_with_nocase: String
   cumulativeRedeemed_not_ends_with: String
+  cumulativeRedeemed_not_ends_with_nocase: String
+  cumulativeRedeemed_: Metric_filter
   cumulativeSwapped: String
   cumulativeSwapped_not: String
   cumulativeSwapped_gt: String
@@ -2572,11 +3005,18 @@ input FeederPool_filter {
   cumulativeSwapped_in: [String!]
   cumulativeSwapped_not_in: [String!]
   cumulativeSwapped_contains: String
+  cumulativeSwapped_contains_nocase: String
   cumulativeSwapped_not_contains: String
+  cumulativeSwapped_not_contains_nocase: String
   cumulativeSwapped_starts_with: String
+  cumulativeSwapped_starts_with_nocase: String
   cumulativeSwapped_not_starts_with: String
+  cumulativeSwapped_not_starts_with_nocase: String
   cumulativeSwapped_ends_with: String
+  cumulativeSwapped_ends_with_nocase: String
   cumulativeSwapped_not_ends_with: String
+  cumulativeSwapped_not_ends_with_nocase: String
+  cumulativeSwapped_: Metric_filter
   dailyAPY: BigDecimal
   dailyAPY_not: BigDecimal
   dailyAPY_gt: BigDecimal
@@ -2602,11 +3042,18 @@ input FeederPool_filter {
   fasset_in: [String!]
   fasset_not_in: [String!]
   fasset_contains: String
+  fasset_contains_nocase: String
   fasset_not_contains: String
+  fasset_not_contains_nocase: String
   fasset_starts_with: String
+  fasset_starts_with_nocase: String
   fasset_not_starts_with: String
+  fasset_not_starts_with_nocase: String
   fasset_ends_with: String
+  fasset_ends_with_nocase: String
   fasset_not_ends_with: String
+  fasset_not_ends_with_nocase: String
+  fasset_: Token_filter
   governanceFeeRate: BigInt
   governanceFeeRate_not: BigInt
   governanceFeeRate_gt: BigInt
@@ -2640,11 +3087,18 @@ input FeederPool_filter {
   masset_in: [String!]
   masset_not_in: [String!]
   masset_contains: String
+  masset_contains_nocase: String
   masset_not_contains: String
+  masset_not_contains_nocase: String
   masset_starts_with: String
+  masset_starts_with_nocase: String
   masset_not_starts_with: String
+  masset_not_starts_with_nocase: String
   masset_ends_with: String
+  masset_ends_with_nocase: String
   masset_not_ends_with: String
+  masset_not_ends_with_nocase: String
+  masset_: Token_filter
   pendingFees: BigInt
   pendingFees_not: BigInt
   pendingFees_gt: BigInt
@@ -2686,11 +3140,18 @@ input FeederPool_filter {
   token_in: [String!]
   token_not_in: [String!]
   token_contains: String
+  token_contains_nocase: String
   token_not_contains: String
+  token_not_contains_nocase: String
   token_starts_with: String
+  token_starts_with_nocase: String
   token_not_starts_with: String
+  token_not_starts_with_nocase: String
   token_ends_with: String
+  token_ends_with_nocase: String
   token_not_ends_with: String
+  token_not_ends_with_nocase: String
+  token_: Token_filter
   totalMints: String
   totalMints_not: String
   totalMints_gt: String
@@ -2700,11 +3161,18 @@ input FeederPool_filter {
   totalMints_in: [String!]
   totalMints_not_in: [String!]
   totalMints_contains: String
+  totalMints_contains_nocase: String
   totalMints_not_contains: String
+  totalMints_not_contains_nocase: String
   totalMints_starts_with: String
+  totalMints_starts_with_nocase: String
   totalMints_not_starts_with: String
+  totalMints_not_starts_with_nocase: String
   totalMints_ends_with: String
+  totalMints_ends_with_nocase: String
   totalMints_not_ends_with: String
+  totalMints_not_ends_with_nocase: String
+  totalMints_: Counter_filter
   totalRedeemMassets: String
   totalRedeemMassets_not: String
   totalRedeemMassets_gt: String
@@ -2714,11 +3182,18 @@ input FeederPool_filter {
   totalRedeemMassets_in: [String!]
   totalRedeemMassets_not_in: [String!]
   totalRedeemMassets_contains: String
+  totalRedeemMassets_contains_nocase: String
   totalRedeemMassets_not_contains: String
+  totalRedeemMassets_not_contains_nocase: String
   totalRedeemMassets_starts_with: String
+  totalRedeemMassets_starts_with_nocase: String
   totalRedeemMassets_not_starts_with: String
+  totalRedeemMassets_not_starts_with_nocase: String
   totalRedeemMassets_ends_with: String
+  totalRedeemMassets_ends_with_nocase: String
   totalRedeemMassets_not_ends_with: String
+  totalRedeemMassets_not_ends_with_nocase: String
+  totalRedeemMassets_: Counter_filter
   totalRedemptions: String
   totalRedemptions_not: String
   totalRedemptions_gt: String
@@ -2728,11 +3203,18 @@ input FeederPool_filter {
   totalRedemptions_in: [String!]
   totalRedemptions_not_in: [String!]
   totalRedemptions_contains: String
+  totalRedemptions_contains_nocase: String
   totalRedemptions_not_contains: String
+  totalRedemptions_not_contains_nocase: String
   totalRedemptions_starts_with: String
+  totalRedemptions_starts_with_nocase: String
   totalRedemptions_not_starts_with: String
+  totalRedemptions_not_starts_with_nocase: String
   totalRedemptions_ends_with: String
+  totalRedemptions_ends_with_nocase: String
   totalRedemptions_not_ends_with: String
+  totalRedemptions_not_ends_with_nocase: String
+  totalRedemptions_: Counter_filter
   totalSupply: String
   totalSupply_not: String
   totalSupply_gt: String
@@ -2742,11 +3224,18 @@ input FeederPool_filter {
   totalSupply_in: [String!]
   totalSupply_not_in: [String!]
   totalSupply_contains: String
+  totalSupply_contains_nocase: String
   totalSupply_not_contains: String
+  totalSupply_not_contains_nocase: String
   totalSupply_starts_with: String
+  totalSupply_starts_with_nocase: String
   totalSupply_not_starts_with: String
+  totalSupply_not_starts_with_nocase: String
   totalSupply_ends_with: String
+  totalSupply_ends_with_nocase: String
   totalSupply_not_ends_with: String
+  totalSupply_not_ends_with_nocase: String
+  totalSupply_: Metric_filter
   totalSwaps: String
   totalSwaps_not: String
   totalSwaps_gt: String
@@ -2756,11 +3245,24 @@ input FeederPool_filter {
   totalSwaps_in: [String!]
   totalSwaps_not_in: [String!]
   totalSwaps_contains: String
+  totalSwaps_contains_nocase: String
   totalSwaps_not_contains: String
+  totalSwaps_not_contains_nocase: String
   totalSwaps_starts_with: String
+  totalSwaps_starts_with_nocase: String
   totalSwaps_not_starts_with: String
+  totalSwaps_not_starts_with_nocase: String
   totalSwaps_ends_with: String
+  totalSwaps_ends_with_nocase: String
   totalSwaps_not_ends_with: String
+  totalSwaps_not_ends_with_nocase: String
+  totalSwaps_: Counter_filter
+  mintMultiTransactions_: FPMintMultiTransaction_filter
+  mintSingleTransactions_: FPMintSingleTransaction_filter
+  redeemTransactions_: FPRedeemTransaction_filter
+  swapTransactions_: FPSwapTransaction_filter
+  vault_: BoostedSavingsVault_filter
+  accounts_: FeederPoolAccount_filter
   lastPrice: String
   lastPrice_not: String
   lastPrice_gt: String
@@ -2770,11 +3272,18 @@ input FeederPool_filter {
   lastPrice_in: [String!]
   lastPrice_not_in: [String!]
   lastPrice_contains: String
+  lastPrice_contains_nocase: String
   lastPrice_not_contains: String
+  lastPrice_not_contains_nocase: String
   lastPrice_starts_with: String
+  lastPrice_starts_with_nocase: String
   lastPrice_not_starts_with: String
+  lastPrice_not_starts_with_nocase: String
   lastPrice_ends_with: String
+  lastPrice_ends_with_nocase: String
   lastPrice_not_ends_with: String
+  lastPrice_not_ends_with_nocase: String
+  lastPrice_: FeederPoolPrice_filter
   price24hAgo: String
   price24hAgo_not: String
   price24hAgo_gt: String
@@ -2784,11 +3293,20 @@ input FeederPool_filter {
   price24hAgo_in: [String!]
   price24hAgo_not_in: [String!]
   price24hAgo_contains: String
+  price24hAgo_contains_nocase: String
   price24hAgo_not_contains: String
+  price24hAgo_not_contains_nocase: String
   price24hAgo_starts_with: String
+  price24hAgo_starts_with_nocase: String
   price24hAgo_not_starts_with: String
+  price24hAgo_not_starts_with_nocase: String
   price24hAgo_ends_with: String
+  price24hAgo_ends_with_nocase: String
   price24hAgo_not_ends_with: String
+  price24hAgo_not_ends_with_nocase: String
+  price24hAgo_: FeederPoolPrice_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum FeederPool_orderBy {
@@ -2882,6 +3400,8 @@ input Metric_filter {
   simple_lte: BigDecimal
   simple_in: [BigDecimal!]
   simple_not_in: [BigDecimal!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Metric_orderBy {
@@ -2893,6 +3413,7 @@ enum Metric_orderBy {
 
 scalar MstableBigDecimal
 
+"""Defines the order direction, either ascending or descending"""
 enum OrderDirection {
   asc
   desc
@@ -3826,11 +4347,17 @@ input Token_filter {
   name_in: [String!]
   name_not_in: [String!]
   name_contains: String
+  name_contains_nocase: String
   name_not_contains: String
+  name_not_contains_nocase: String
   name_starts_with: String
+  name_starts_with_nocase: String
   name_not_starts_with: String
+  name_not_starts_with_nocase: String
   name_ends_with: String
+  name_ends_with_nocase: String
   name_not_ends_with: String
+  name_not_ends_with_nocase: String
   symbol: String
   symbol_not: String
   symbol_gt: String
@@ -3840,11 +4367,17 @@ input Token_filter {
   symbol_in: [String!]
   symbol_not_in: [String!]
   symbol_contains: String
+  symbol_contains_nocase: String
   symbol_not_contains: String
+  symbol_not_contains_nocase: String
   symbol_starts_with: String
+  symbol_starts_with_nocase: String
   symbol_not_starts_with: String
+  symbol_not_starts_with_nocase: String
   symbol_ends_with: String
+  symbol_ends_with_nocase: String
   symbol_not_ends_with: String
+  symbol_not_ends_with_nocase: String
   totalSupply: String
   totalSupply_not: String
   totalSupply_gt: String
@@ -3854,11 +4387,18 @@ input Token_filter {
   totalSupply_in: [String!]
   totalSupply_not_in: [String!]
   totalSupply_contains: String
+  totalSupply_contains_nocase: String
   totalSupply_not_contains: String
+  totalSupply_not_contains_nocase: String
   totalSupply_starts_with: String
+  totalSupply_starts_with_nocase: String
   totalSupply_not_starts_with: String
+  totalSupply_not_starts_with_nocase: String
   totalSupply_ends_with: String
+  totalSupply_ends_with_nocase: String
   totalSupply_not_ends_with: String
+  totalSupply_not_ends_with_nocase: String
+  totalSupply_: Metric_filter
   totalBurned: String
   totalBurned_not: String
   totalBurned_gt: String
@@ -3868,11 +4408,18 @@ input Token_filter {
   totalBurned_in: [String!]
   totalBurned_not_in: [String!]
   totalBurned_contains: String
+  totalBurned_contains_nocase: String
   totalBurned_not_contains: String
+  totalBurned_not_contains_nocase: String
   totalBurned_starts_with: String
+  totalBurned_starts_with_nocase: String
   totalBurned_not_starts_with: String
+  totalBurned_not_starts_with_nocase: String
   totalBurned_ends_with: String
+  totalBurned_ends_with_nocase: String
   totalBurned_not_ends_with: String
+  totalBurned_not_ends_with_nocase: String
+  totalBurned_: Metric_filter
   totalMinted: String
   totalMinted_not: String
   totalMinted_gt: String
@@ -3882,11 +4429,18 @@ input Token_filter {
   totalMinted_in: [String!]
   totalMinted_not_in: [String!]
   totalMinted_contains: String
+  totalMinted_contains_nocase: String
   totalMinted_not_contains: String
+  totalMinted_not_contains_nocase: String
   totalMinted_starts_with: String
+  totalMinted_starts_with_nocase: String
   totalMinted_not_starts_with: String
+  totalMinted_not_starts_with_nocase: String
   totalMinted_ends_with: String
+  totalMinted_ends_with_nocase: String
   totalMinted_not_ends_with: String
+  totalMinted_not_ends_with_nocase: String
+  totalMinted_: Metric_filter
   totalTransfers: String
   totalTransfers_not: String
   totalTransfers_gt: String
@@ -3896,11 +4450,18 @@ input Token_filter {
   totalTransfers_in: [String!]
   totalTransfers_not_in: [String!]
   totalTransfers_contains: String
+  totalTransfers_contains_nocase: String
   totalTransfers_not_contains: String
+  totalTransfers_not_contains_nocase: String
   totalTransfers_starts_with: String
+  totalTransfers_starts_with_nocase: String
   totalTransfers_not_starts_with: String
+  totalTransfers_not_starts_with_nocase: String
   totalTransfers_ends_with: String
+  totalTransfers_ends_with_nocase: String
   totalTransfers_not_ends_with: String
+  totalTransfers_not_ends_with_nocase: String
+  totalTransfers_: Counter_filter
   totalMints: String
   totalMints_not: String
   totalMints_gt: String
@@ -3910,11 +4471,18 @@ input Token_filter {
   totalMints_in: [String!]
   totalMints_not_in: [String!]
   totalMints_contains: String
+  totalMints_contains_nocase: String
   totalMints_not_contains: String
+  totalMints_not_contains_nocase: String
   totalMints_starts_with: String
+  totalMints_starts_with_nocase: String
   totalMints_not_starts_with: String
+  totalMints_not_starts_with_nocase: String
   totalMints_ends_with: String
+  totalMints_ends_with_nocase: String
   totalMints_not_ends_with: String
+  totalMints_not_ends_with_nocase: String
+  totalMints_: Counter_filter
   totalBurns: String
   totalBurns_not: String
   totalBurns_gt: String
@@ -3924,11 +4492,20 @@ input Token_filter {
   totalBurns_in: [String!]
   totalBurns_not_in: [String!]
   totalBurns_contains: String
+  totalBurns_contains_nocase: String
   totalBurns_not_contains: String
+  totalBurns_not_contains_nocase: String
   totalBurns_starts_with: String
+  totalBurns_starts_with_nocase: String
   totalBurns_not_starts_with: String
+  totalBurns_not_starts_with_nocase: String
   totalBurns_ends_with: String
+  totalBurns_ends_with_nocase: String
   totalBurns_not_ends_with: String
+  totalBurns_not_ends_with_nocase: String
+  totalBurns_: Counter_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Token_orderBy {
@@ -4010,6 +4587,8 @@ input Transaction_filter {
   sender_not_in: [Bytes!]
   sender_contains: Bytes
   sender_not_contains: Bytes
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Transaction_orderBy {
@@ -4025,6 +4604,8 @@ type _Block_ {
   hash: Bytes
   """The block number"""
   number: Int!
+  """Timestamp of the block if available, format depends on the chain"""
+  timestamp: String
 }
 
 """The type for the top-level _meta field"""
