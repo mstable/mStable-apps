@@ -105,8 +105,8 @@ export const PoolRow: FC<{ feederPool: FeederPoolState; showBalance: boolean }> 
           <Tooltip hideIcon tip={apyTip}>
             <CountUp end={baseApy} suffix="%" />
             <RewardsApy>
-              <CountUp end={rewardsBaseApy} prefix="+" suffix="%" />
-              &nbsp;→&nbsp;
+              {rewardsBaseApy || rewardsMaxApy ? <CountUp end={rewardsBaseApy} prefix="+" suffix="%" /> : null}
+              {rewardsBaseApy || rewardsMaxApy ? <>&nbsp;→&nbsp;</> : null}
               <CountUp end={rewardsMaxApy} suffix="%" />
               <TokenIcon symbol="MTA" />
             </RewardsApy>
