@@ -129,7 +129,7 @@ export const PoolCard: FC<Props> = ({ poolAddress, className, deprecated }) => {
     >
       {!deprecated && (
         <StatsContainer>
-          {!!feederPool?.vault && (
+          {!!feederPool?.vault && !!(feederPoolApy.value?.rewards.base || feederPoolApy.value?.rewards.maxBoost) && (
             <RewardsAPY>
               <p>
                 <Tooltip tip="33% of earned MTA rewards are claimable immediately. The remaining rewards are streamed linearly after 26 weeks">

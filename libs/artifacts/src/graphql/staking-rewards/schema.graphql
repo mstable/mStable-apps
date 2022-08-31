@@ -3,17 +3,24 @@ schema {
   subscription: Subscription
 }
 
-directive @derivedFrom(field: String) on FIELD_DEFINITION
+"creates a virtual field on the entity that may be queried but cannot be set manually through the mappings API."
+directive @derivedFrom(field: String!) on FIELD_DEFINITION
 
+"Marks the GraphQL type as indexable entity.  Each type that should be an entity is required to be annotated with this directive."
 directive @entity on OBJECT
 
-directive @subgraphId(id: String) on OBJECT
+"Defined a Subgraph ID for an object type"
+directive @subgraphId(id: String!) on OBJECT
 
 scalar BigDecimal
 
 scalar BigInt
 
 scalar BigNumber
+
+input BlockChangedFilter {
+  number_gte: Int!
+}
 
 input Block_height {
   hash: Bytes
@@ -49,6 +56,8 @@ input Counter_filter {
   value_lte: BigInt
   value_in: [BigInt!]
   value_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Counter_orderBy {
@@ -108,6 +117,8 @@ input Metric_filter {
   simple_lte: BigDecimal
   simple_in: [BigDecimal!]
   simple_not_in: [BigDecimal!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Metric_orderBy {
@@ -119,6 +130,7 @@ enum Metric_orderBy {
 
 scalar MstableBigDecimal
 
+"""Defines the order direction, either ascending or descending"""
 enum OrderDirection {
   asc
   desc
@@ -352,7 +364,11 @@ input RewardsDistributor_filter {
   fundManagers: [Bytes!]
   fundManagers_not: [Bytes!]
   fundManagers_contains: [Bytes!]
+  fundManagers_contains_nocase: [Bytes!]
   fundManagers_not_contains: [Bytes!]
+  fundManagers_not_contains_nocase: [Bytes!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum RewardsDistributor_orderBy {
@@ -403,11 +419,18 @@ input StakingBalance_filter {
   stakingRewardsContract_in: [String!]
   stakingRewardsContract_not_in: [String!]
   stakingRewardsContract_contains: String
+  stakingRewardsContract_contains_nocase: String
   stakingRewardsContract_not_contains: String
+  stakingRewardsContract_not_contains_nocase: String
   stakingRewardsContract_starts_with: String
+  stakingRewardsContract_starts_with_nocase: String
   stakingRewardsContract_not_starts_with: String
+  stakingRewardsContract_not_starts_with_nocase: String
   stakingRewardsContract_ends_with: String
+  stakingRewardsContract_ends_with_nocase: String
   stakingRewardsContract_not_ends_with: String
+  stakingRewardsContract_not_ends_with_nocase: String
+  stakingRewardsContract_: StakingRewardsContract_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -416,6 +439,8 @@ input StakingBalance_filter {
   amount_lte: BigInt
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum StakingBalance_orderBy {
@@ -493,11 +518,18 @@ input StakingReward_filter {
   stakingRewardsContract_in: [String!]
   stakingRewardsContract_not_in: [String!]
   stakingRewardsContract_contains: String
+  stakingRewardsContract_contains_nocase: String
   stakingRewardsContract_not_contains: String
+  stakingRewardsContract_not_contains_nocase: String
   stakingRewardsContract_starts_with: String
+  stakingRewardsContract_starts_with_nocase: String
   stakingRewardsContract_not_starts_with: String
+  stakingRewardsContract_not_starts_with_nocase: String
   stakingRewardsContract_ends_with: String
+  stakingRewardsContract_ends_with_nocase: String
   stakingRewardsContract_not_ends_with: String
+  stakingRewardsContract_not_ends_with_nocase: String
+  stakingRewardsContract_: StakingRewardsContract_filter
   account: Bytes
   account_not: Bytes
   account_in: [Bytes!]
@@ -508,6 +540,8 @@ input StakingReward_filter {
   type_not: StakingRewardType
   type_in: [StakingRewardType!]
   type_not_in: [StakingRewardType!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum StakingReward_orderBy {
@@ -683,11 +717,18 @@ input StakingRewardsContractClaimRewardTransaction_filter {
   stakingRewardsContract_in: [String!]
   stakingRewardsContract_not_in: [String!]
   stakingRewardsContract_contains: String
+  stakingRewardsContract_contains_nocase: String
   stakingRewardsContract_not_contains: String
+  stakingRewardsContract_not_contains_nocase: String
   stakingRewardsContract_starts_with: String
+  stakingRewardsContract_starts_with_nocase: String
   stakingRewardsContract_not_starts_with: String
+  stakingRewardsContract_not_starts_with_nocase: String
   stakingRewardsContract_ends_with: String
+  stakingRewardsContract_ends_with_nocase: String
   stakingRewardsContract_not_ends_with: String
+  stakingRewardsContract_not_ends_with_nocase: String
+  stakingRewardsContract_: StakingRewardsContract_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -696,6 +737,8 @@ input StakingRewardsContractClaimRewardTransaction_filter {
   amount_lte: BigInt
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum StakingRewardsContractClaimRewardTransaction_orderBy {
@@ -764,11 +807,18 @@ input StakingRewardsContractStakeTransaction_filter {
   stakingRewardsContract_in: [String!]
   stakingRewardsContract_not_in: [String!]
   stakingRewardsContract_contains: String
+  stakingRewardsContract_contains_nocase: String
   stakingRewardsContract_not_contains: String
+  stakingRewardsContract_not_contains_nocase: String
   stakingRewardsContract_starts_with: String
+  stakingRewardsContract_starts_with_nocase: String
   stakingRewardsContract_not_starts_with: String
+  stakingRewardsContract_not_starts_with_nocase: String
   stakingRewardsContract_ends_with: String
+  stakingRewardsContract_ends_with_nocase: String
   stakingRewardsContract_not_ends_with: String
+  stakingRewardsContract_not_ends_with_nocase: String
+  stakingRewardsContract_: StakingRewardsContract_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -777,6 +827,8 @@ input StakingRewardsContractStakeTransaction_filter {
   amount_lte: BigInt
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum StakingRewardsContractStakeTransaction_orderBy {
@@ -850,11 +902,18 @@ input StakingRewardsContractWithdrawTransaction_filter {
   stakingRewardsContract_in: [String!]
   stakingRewardsContract_not_in: [String!]
   stakingRewardsContract_contains: String
+  stakingRewardsContract_contains_nocase: String
   stakingRewardsContract_not_contains: String
+  stakingRewardsContract_not_contains_nocase: String
   stakingRewardsContract_starts_with: String
+  stakingRewardsContract_starts_with_nocase: String
   stakingRewardsContract_not_starts_with: String
+  stakingRewardsContract_not_starts_with_nocase: String
   stakingRewardsContract_ends_with: String
+  stakingRewardsContract_ends_with_nocase: String
   stakingRewardsContract_not_ends_with: String
+  stakingRewardsContract_not_ends_with_nocase: String
+  stakingRewardsContract_: StakingRewardsContract_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -863,6 +922,8 @@ input StakingRewardsContractWithdrawTransaction_filter {
   amount_lte: BigInt
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum StakingRewardsContractWithdrawTransaction_orderBy {
@@ -921,11 +982,18 @@ input StakingRewardsContract_filter {
   stakingToken_in: [String!]
   stakingToken_not_in: [String!]
   stakingToken_contains: String
+  stakingToken_contains_nocase: String
   stakingToken_not_contains: String
+  stakingToken_not_contains_nocase: String
   stakingToken_starts_with: String
+  stakingToken_starts_with_nocase: String
   stakingToken_not_starts_with: String
+  stakingToken_not_starts_with_nocase: String
   stakingToken_ends_with: String
+  stakingToken_ends_with_nocase: String
   stakingToken_not_ends_with: String
+  stakingToken_not_ends_with_nocase: String
+  stakingToken_: Token_filter
   rewardPerTokenStored: BigInt
   rewardPerTokenStored_not: BigInt
   rewardPerTokenStored_gt: BigInt
@@ -951,11 +1019,18 @@ input StakingRewardsContract_filter {
   rewardsToken_in: [String!]
   rewardsToken_not_in: [String!]
   rewardsToken_contains: String
+  rewardsToken_contains_nocase: String
   rewardsToken_not_contains: String
+  rewardsToken_not_contains_nocase: String
   rewardsToken_starts_with: String
+  rewardsToken_starts_with_nocase: String
   rewardsToken_not_starts_with: String
+  rewardsToken_not_starts_with_nocase: String
   rewardsToken_ends_with: String
+  rewardsToken_ends_with_nocase: String
   rewardsToken_not_ends_with: String
+  rewardsToken_not_ends_with_nocase: String
+  rewardsToken_: Token_filter
   rewardsDistributor: String
   rewardsDistributor_not: String
   rewardsDistributor_gt: String
@@ -965,11 +1040,18 @@ input StakingRewardsContract_filter {
   rewardsDistributor_in: [String!]
   rewardsDistributor_not_in: [String!]
   rewardsDistributor_contains: String
+  rewardsDistributor_contains_nocase: String
   rewardsDistributor_not_contains: String
+  rewardsDistributor_not_contains_nocase: String
   rewardsDistributor_starts_with: String
+  rewardsDistributor_starts_with_nocase: String
   rewardsDistributor_not_starts_with: String
+  rewardsDistributor_not_starts_with_nocase: String
   rewardsDistributor_ends_with: String
+  rewardsDistributor_ends_with_nocase: String
   rewardsDistributor_not_ends_with: String
+  rewardsDistributor_not_ends_with_nocase: String
+  rewardsDistributor_: RewardsDistributor_filter
   totalSupply: BigInt
   totalSupply_not: BigInt
   totalSupply_gt: BigInt
@@ -986,6 +1068,11 @@ input StakingRewardsContract_filter {
   totalStakingRewards_lte: BigInt
   totalStakingRewards_in: [BigInt!]
   totalStakingRewards_not_in: [BigInt!]
+  stakingBalances_: StakingBalance_filter
+  stakingRewards_: StakingReward_filter
+  claimRewardTransactions_: StakingRewardsContractClaimRewardTransaction_filter
+  stakeTransactions_: StakingRewardsContractStakeTransaction_filter
+  withdrawTransactions_: StakingRewardsContractWithdrawTransaction_filter
   platformToken: String
   platformToken_not: String
   platformToken_gt: String
@@ -995,11 +1082,18 @@ input StakingRewardsContract_filter {
   platformToken_in: [String!]
   platformToken_not_in: [String!]
   platformToken_contains: String
+  platformToken_contains_nocase: String
   platformToken_not_contains: String
+  platformToken_not_contains_nocase: String
   platformToken_starts_with: String
+  platformToken_starts_with_nocase: String
   platformToken_not_starts_with: String
+  platformToken_not_starts_with_nocase: String
   platformToken_ends_with: String
+  platformToken_ends_with_nocase: String
   platformToken_not_ends_with: String
+  platformToken_not_ends_with_nocase: String
+  platformToken_: Token_filter
   platformRewardRate: BigInt
   platformRewardRate_not: BigInt
   platformRewardRate_gt: BigInt
@@ -1024,6 +1118,8 @@ input StakingRewardsContract_filter {
   totalPlatformRewards_lte: BigInt
   totalPlatformRewards_in: [BigInt!]
   totalPlatformRewards_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum StakingRewardsContract_orderBy {
@@ -1343,11 +1439,17 @@ input Token_filter {
   name_in: [String!]
   name_not_in: [String!]
   name_contains: String
+  name_contains_nocase: String
   name_not_contains: String
+  name_not_contains_nocase: String
   name_starts_with: String
+  name_starts_with_nocase: String
   name_not_starts_with: String
+  name_not_starts_with_nocase: String
   name_ends_with: String
+  name_ends_with_nocase: String
   name_not_ends_with: String
+  name_not_ends_with_nocase: String
   symbol: String
   symbol_not: String
   symbol_gt: String
@@ -1357,11 +1459,17 @@ input Token_filter {
   symbol_in: [String!]
   symbol_not_in: [String!]
   symbol_contains: String
+  symbol_contains_nocase: String
   symbol_not_contains: String
+  symbol_not_contains_nocase: String
   symbol_starts_with: String
+  symbol_starts_with_nocase: String
   symbol_not_starts_with: String
+  symbol_not_starts_with_nocase: String
   symbol_ends_with: String
+  symbol_ends_with_nocase: String
   symbol_not_ends_with: String
+  symbol_not_ends_with_nocase: String
   totalSupply: String
   totalSupply_not: String
   totalSupply_gt: String
@@ -1371,11 +1479,18 @@ input Token_filter {
   totalSupply_in: [String!]
   totalSupply_not_in: [String!]
   totalSupply_contains: String
+  totalSupply_contains_nocase: String
   totalSupply_not_contains: String
+  totalSupply_not_contains_nocase: String
   totalSupply_starts_with: String
+  totalSupply_starts_with_nocase: String
   totalSupply_not_starts_with: String
+  totalSupply_not_starts_with_nocase: String
   totalSupply_ends_with: String
+  totalSupply_ends_with_nocase: String
   totalSupply_not_ends_with: String
+  totalSupply_not_ends_with_nocase: String
+  totalSupply_: Metric_filter
   totalBurned: String
   totalBurned_not: String
   totalBurned_gt: String
@@ -1385,11 +1500,18 @@ input Token_filter {
   totalBurned_in: [String!]
   totalBurned_not_in: [String!]
   totalBurned_contains: String
+  totalBurned_contains_nocase: String
   totalBurned_not_contains: String
+  totalBurned_not_contains_nocase: String
   totalBurned_starts_with: String
+  totalBurned_starts_with_nocase: String
   totalBurned_not_starts_with: String
+  totalBurned_not_starts_with_nocase: String
   totalBurned_ends_with: String
+  totalBurned_ends_with_nocase: String
   totalBurned_not_ends_with: String
+  totalBurned_not_ends_with_nocase: String
+  totalBurned_: Metric_filter
   totalMinted: String
   totalMinted_not: String
   totalMinted_gt: String
@@ -1399,11 +1521,18 @@ input Token_filter {
   totalMinted_in: [String!]
   totalMinted_not_in: [String!]
   totalMinted_contains: String
+  totalMinted_contains_nocase: String
   totalMinted_not_contains: String
+  totalMinted_not_contains_nocase: String
   totalMinted_starts_with: String
+  totalMinted_starts_with_nocase: String
   totalMinted_not_starts_with: String
+  totalMinted_not_starts_with_nocase: String
   totalMinted_ends_with: String
+  totalMinted_ends_with_nocase: String
   totalMinted_not_ends_with: String
+  totalMinted_not_ends_with_nocase: String
+  totalMinted_: Metric_filter
   totalTransfers: String
   totalTransfers_not: String
   totalTransfers_gt: String
@@ -1413,11 +1542,18 @@ input Token_filter {
   totalTransfers_in: [String!]
   totalTransfers_not_in: [String!]
   totalTransfers_contains: String
+  totalTransfers_contains_nocase: String
   totalTransfers_not_contains: String
+  totalTransfers_not_contains_nocase: String
   totalTransfers_starts_with: String
+  totalTransfers_starts_with_nocase: String
   totalTransfers_not_starts_with: String
+  totalTransfers_not_starts_with_nocase: String
   totalTransfers_ends_with: String
+  totalTransfers_ends_with_nocase: String
   totalTransfers_not_ends_with: String
+  totalTransfers_not_ends_with_nocase: String
+  totalTransfers_: Counter_filter
   totalMints: String
   totalMints_not: String
   totalMints_gt: String
@@ -1427,11 +1563,18 @@ input Token_filter {
   totalMints_in: [String!]
   totalMints_not_in: [String!]
   totalMints_contains: String
+  totalMints_contains_nocase: String
   totalMints_not_contains: String
+  totalMints_not_contains_nocase: String
   totalMints_starts_with: String
+  totalMints_starts_with_nocase: String
   totalMints_not_starts_with: String
+  totalMints_not_starts_with_nocase: String
   totalMints_ends_with: String
+  totalMints_ends_with_nocase: String
   totalMints_not_ends_with: String
+  totalMints_not_ends_with_nocase: String
+  totalMints_: Counter_filter
   totalBurns: String
   totalBurns_not: String
   totalBurns_gt: String
@@ -1441,11 +1584,20 @@ input Token_filter {
   totalBurns_in: [String!]
   totalBurns_not_in: [String!]
   totalBurns_contains: String
+  totalBurns_contains_nocase: String
   totalBurns_not_contains: String
+  totalBurns_not_contains_nocase: String
   totalBurns_starts_with: String
+  totalBurns_starts_with_nocase: String
   totalBurns_not_starts_with: String
+  totalBurns_not_starts_with_nocase: String
   totalBurns_ends_with: String
+  totalBurns_ends_with_nocase: String
   totalBurns_not_ends_with: String
+  totalBurns_not_ends_with_nocase: String
+  totalBurns_: Counter_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Token_orderBy {
@@ -1527,6 +1679,8 @@ input Transaction_filter {
   sender_not_in: [Bytes!]
   sender_contains: Bytes
   sender_not_contains: Bytes
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Transaction_orderBy {
@@ -1542,6 +1696,8 @@ type _Block_ {
   hash: Bytes
   """The block number"""
   number: Int!
+  """Timestamp of the block if available, format depends on the chain"""
+  timestamp: String
 }
 
 """The type for the top-level _meta field"""

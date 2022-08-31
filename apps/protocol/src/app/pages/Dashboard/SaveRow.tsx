@@ -130,8 +130,8 @@ export const SaveRow: FC<{ massetState: MassetState; showBalance: boolean }> = (
                 <CountUp end={polygonRewardsApy} prefix="+" suffix="%" />
               ) : (
                 <>
-                  <CountUp end={baseAPY} prefix="+" suffix="%" />
-                  &nbsp;→&nbsp;
+                  {baseAPY || maxAPY ? <CountUp end={baseAPY} prefix="+" suffix="%" /> : null}
+                  {baseAPY || maxAPY ? <>&nbsp;→&nbsp;</> : null}
                   <CountUp end={maxAPY} suffix="%" />
                 </>
               )}

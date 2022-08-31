@@ -3,11 +3,14 @@ schema {
   subscription: Subscription
 }
 
-directive @derivedFrom(field: String) on FIELD_DEFINITION
+"creates a virtual field on the entity that may be queried but cannot be set manually through the mappings API."
+directive @derivedFrom(field: String!) on FIELD_DEFINITION
 
+"Marks the GraphQL type as indexable entity.  Each type that should be an entity is required to be annotated with this directive."
 directive @entity on OBJECT
 
-directive @subgraphId(id: String) on OBJECT
+"Defined a Subgraph ID for an object type"
+directive @subgraphId(id: String!) on OBJECT
 
 """
 User account for a Merkle Drop
@@ -40,6 +43,7 @@ input Account_filter {
   address_not_in: [Bytes!]
   address_contains: Bytes
   address_not_contains: Bytes
+  claims_: Claim_filter
   lastClaimedTranche: String
   lastClaimedTranche_not: String
   lastClaimedTranche_gt: String
@@ -49,11 +53,18 @@ input Account_filter {
   lastClaimedTranche_in: [String!]
   lastClaimedTranche_not_in: [String!]
   lastClaimedTranche_contains: String
+  lastClaimedTranche_contains_nocase: String
   lastClaimedTranche_not_contains: String
+  lastClaimedTranche_not_contains_nocase: String
   lastClaimedTranche_starts_with: String
+  lastClaimedTranche_starts_with_nocase: String
   lastClaimedTranche_not_starts_with: String
+  lastClaimedTranche_not_starts_with_nocase: String
   lastClaimedTranche_ends_with: String
+  lastClaimedTranche_ends_with_nocase: String
   lastClaimedTranche_not_ends_with: String
+  lastClaimedTranche_not_ends_with_nocase: String
+  lastClaimedTranche_: Tranche_filter
   merkleDrop: String
   merkleDrop_not: String
   merkleDrop_gt: String
@@ -63,11 +74,20 @@ input Account_filter {
   merkleDrop_in: [String!]
   merkleDrop_not_in: [String!]
   merkleDrop_contains: String
+  merkleDrop_contains_nocase: String
   merkleDrop_not_contains: String
+  merkleDrop_not_contains_nocase: String
   merkleDrop_starts_with: String
+  merkleDrop_starts_with_nocase: String
   merkleDrop_not_starts_with: String
+  merkleDrop_not_starts_with_nocase: String
   merkleDrop_ends_with: String
+  merkleDrop_ends_with_nocase: String
   merkleDrop_not_ends_with: String
+  merkleDrop_not_ends_with_nocase: String
+  merkleDrop_: MerkleDrop_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Account_orderBy {
@@ -83,6 +103,10 @@ scalar BigDecimal
 scalar BigInt
 
 scalar BigNumber
+
+input BlockChangedFilter {
+  number_gte: Int!
+}
 
 input Block_height {
   hash: Bytes
@@ -128,11 +152,18 @@ input Claim_filter {
   account_in: [String!]
   account_not_in: [String!]
   account_contains: String
+  account_contains_nocase: String
   account_not_contains: String
+  account_not_contains_nocase: String
   account_starts_with: String
+  account_starts_with_nocase: String
   account_not_starts_with: String
+  account_not_starts_with_nocase: String
   account_ends_with: String
+  account_ends_with_nocase: String
   account_not_ends_with: String
+  account_not_ends_with_nocase: String
+  account_: Account_filter
   merkleDrop: String
   merkleDrop_not: String
   merkleDrop_gt: String
@@ -142,11 +173,18 @@ input Claim_filter {
   merkleDrop_in: [String!]
   merkleDrop_not_in: [String!]
   merkleDrop_contains: String
+  merkleDrop_contains_nocase: String
   merkleDrop_not_contains: String
+  merkleDrop_not_contains_nocase: String
   merkleDrop_starts_with: String
+  merkleDrop_starts_with_nocase: String
   merkleDrop_not_starts_with: String
+  merkleDrop_not_starts_with_nocase: String
   merkleDrop_ends_with: String
+  merkleDrop_ends_with_nocase: String
   merkleDrop_not_ends_with: String
+  merkleDrop_not_ends_with_nocase: String
+  merkleDrop_: MerkleDrop_filter
   tranche: String
   tranche_not: String
   tranche_gt: String
@@ -156,11 +194,18 @@ input Claim_filter {
   tranche_in: [String!]
   tranche_not_in: [String!]
   tranche_contains: String
+  tranche_contains_nocase: String
   tranche_not_contains: String
+  tranche_not_contains_nocase: String
   tranche_starts_with: String
+  tranche_starts_with_nocase: String
   tranche_not_starts_with: String
+  tranche_not_starts_with_nocase: String
   tranche_ends_with: String
+  tranche_ends_with_nocase: String
   tranche_not_ends_with: String
+  tranche_not_ends_with_nocase: String
+  tranche_: Tranche_filter
   amount: BigInt
   amount_not: BigInt
   amount_gt: BigInt
@@ -181,6 +226,8 @@ input Claim_filter {
   claimedAt_lte: Int
   claimedAt_in: [Int!]
   claimedAt_not_in: [Int!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Claim_orderBy {
@@ -228,11 +275,18 @@ input MerkleDrop_filter {
   token_in: [String!]
   token_not_in: [String!]
   token_contains: String
+  token_contains_nocase: String
   token_not_contains: String
+  token_not_contains_nocase: String
   token_starts_with: String
+  token_starts_with_nocase: String
   token_not_starts_with: String
+  token_not_starts_with_nocase: String
   token_ends_with: String
+  token_ends_with_nocase: String
   token_not_ends_with: String
+  token_not_ends_with_nocase: String
+  token_: Token_filter
   owner: Bytes
   owner_not: Bytes
   owner_in: [Bytes!]
@@ -242,7 +296,13 @@ input MerkleDrop_filter {
   funders: [Bytes!]
   funders_not: [Bytes!]
   funders_contains: [Bytes!]
+  funders_contains_nocase: [Bytes!]
   funders_not_contains: [Bytes!]
+  funders_not_contains_nocase: [Bytes!]
+  tranches_: Tranche_filter
+  claims_: Claim_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum MerkleDrop_orderBy {
@@ -256,6 +316,7 @@ enum MerkleDrop_orderBy {
 
 scalar MstableBigDecimal
 
+"""Defines the order direction, either ascending or descending"""
 enum OrderDirection {
   asc
   desc
@@ -520,11 +581,17 @@ input Token_filter {
   name_in: [String!]
   name_not_in: [String!]
   name_contains: String
+  name_contains_nocase: String
   name_not_contains: String
+  name_not_contains_nocase: String
   name_starts_with: String
+  name_starts_with_nocase: String
   name_not_starts_with: String
+  name_not_starts_with_nocase: String
   name_ends_with: String
+  name_ends_with_nocase: String
   name_not_ends_with: String
+  name_not_ends_with_nocase: String
   symbol: String
   symbol_not: String
   symbol_gt: String
@@ -534,11 +601,20 @@ input Token_filter {
   symbol_in: [String!]
   symbol_not_in: [String!]
   symbol_contains: String
+  symbol_contains_nocase: String
   symbol_not_contains: String
+  symbol_not_contains_nocase: String
   symbol_starts_with: String
+  symbol_starts_with_nocase: String
   symbol_not_starts_with: String
+  symbol_not_starts_with_nocase: String
   symbol_ends_with: String
+  symbol_ends_with_nocase: String
   symbol_not_ends_with: String
+  symbol_not_ends_with_nocase: String
+  merkleDrops_: MerkleDrop_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Token_orderBy {
@@ -618,11 +694,17 @@ input Tranche_filter {
   uri_in: [String!]
   uri_not_in: [String!]
   uri_contains: String
+  uri_contains_nocase: String
   uri_not_contains: String
+  uri_not_contains_nocase: String
   uri_starts_with: String
+  uri_starts_with_nocase: String
   uri_not_starts_with: String
+  uri_not_starts_with_nocase: String
   uri_ends_with: String
+  uri_ends_with_nocase: String
   uri_not_ends_with: String
+  uri_not_ends_with_nocase: String
   merkleDrop: String
   merkleDrop_not: String
   merkleDrop_gt: String
@@ -632,15 +714,25 @@ input Tranche_filter {
   merkleDrop_in: [String!]
   merkleDrop_not_in: [String!]
   merkleDrop_contains: String
+  merkleDrop_contains_nocase: String
   merkleDrop_not_contains: String
+  merkleDrop_not_contains_nocase: String
   merkleDrop_starts_with: String
+  merkleDrop_starts_with_nocase: String
   merkleDrop_not_starts_with: String
+  merkleDrop_not_starts_with_nocase: String
   merkleDrop_ends_with: String
+  merkleDrop_ends_with_nocase: String
   merkleDrop_not_ends_with: String
+  merkleDrop_not_ends_with_nocase: String
+  merkleDrop_: MerkleDrop_filter
   expired: Boolean
   expired_not: Boolean
   expired_in: [Boolean!]
   expired_not_in: [Boolean!]
+  claims_: Claim_filter
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
 }
 
 enum Tranche_orderBy {
@@ -660,6 +752,8 @@ type _Block_ {
   hash: Bytes
   """The block number"""
   number: Int!
+  """Timestamp of the block if available, format depends on the chain"""
+  timestamp: String
 }
 
 """The type for the top-level _meta field"""

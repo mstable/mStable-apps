@@ -8,7 +8,7 @@ export const calculateApy = (
   rewardRate?: number,
   totalSupply?: BigDecimal,
 ): number | undefined => {
-  if (!(stakingTokenPrice && rewardsTokenPrice && rewardRate && totalSupply)) return
+  if (!(stakingTokenPrice && rewardsTokenPrice && rewardRate && totalSupply)) return 0
 
   const rewardPerDayPerToken = (rewardRate * SECONDS_IN_DAY * rewardsTokenPrice) / totalSupply.simple
 
