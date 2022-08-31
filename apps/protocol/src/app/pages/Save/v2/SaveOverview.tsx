@@ -220,12 +220,12 @@ export const SaveOverview: FC = () => {
                   ) : (
                     <>
                       <CountUp end={apy.value?.rewards.base ?? 0} />
-                      &nbsp;-&nbsp;
-                      <CountUp end={apy.value?.rewards.maxBoost ?? 0} suffix="%" />
+                      {apy.value?.rewards.maxBoost ? <>&nbsp;-&nbsp;</> : null}
+                      {apy.value?.rewards.maxBoost ? <CountUp end={apy.value?.rewards.maxBoost ?? 0} suffix="%" /> : null}
                       <Tooltip
-                        tip={`Deposits to the Vault earn interest in addition to MTA rewards. Combined APY: ${combinedBaseApy.toFixed(
-                          2,
-                        )}-${combinedMaxApy.toFixed(2)}%`}
+                        tip={`Deposits to the Vault earn interest in addition to MTA rewards. Combined APY: ${combinedBaseApy.toFixed(2)}${
+                          combinedBaseApy === combinedMaxApy ? '%' : `-${combinedMaxApy.toFixed(2)}%`
+                        }`}
                       />
                     </>
                   )}
