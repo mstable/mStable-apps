@@ -41,6 +41,7 @@ const Cards = styled.div`
   gap: 1rem;
   max-height: 60vh;
   overflow-y: auto;
+  padding: 0.5rem 0;
 `
 
 export const useLegacyWithdrawModal = (contracts: LegacyContract[]): [() => void, () => void] => {
