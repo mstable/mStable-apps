@@ -125,7 +125,7 @@ export const StakeMigration: FC<{ onSkip?: () => void }> = ({ onSkip }) => {
         </div>
         <p>
           Migrate your MTA to the new Staking V2 contract in order to continue to govern the protocol and to receive rewards in MTA.{' '}
-          <b>The longer you keep staking, the higher your multiplier becomes for voting power and rewards</b>
+          <b>The longer you keep staking, the higher your multiplier becomes for voting power and rewards.</b>
         </p>
         <Achievement>
           <div>Current APY</div>
