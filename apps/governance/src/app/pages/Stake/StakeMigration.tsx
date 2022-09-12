@@ -124,12 +124,12 @@ export const StakeMigration: FC<{ onSkip?: () => void }> = ({ onSkip }) => {
           <MigrationArrow />
         </div>
         <p>
-          Migrating your MTA will reward you with a permanent quest multiplier.{' '}
-          <b>Completing quests will increase your Voting Power & Savings boost within the mStable ecosystem.</b>
+          Migrate your MTA to the new Staking V2 contract in order to continue to govern the protocol and to receive rewards in MTA.{' '}
+          <b>The longer you keep staking, the higher your multiplier becomes for voting power and rewards</b>
         </p>
         <Achievement>
-          <div>Quest Multiplier</div>
-          <span>1.25x</span>
+          <div>Current APY</div>
+          <span>3.38%</span>
         </Achievement>
       </MigrationPanel>
       <StakeFormContainer>
