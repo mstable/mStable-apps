@@ -93,18 +93,20 @@ export const WithdrawCard = ({ contract: { address, poolType, info, name } }: Wi
   if (!signer) return null
 
   const handleExit = () => {
-    propose<Interfaces.StakingRewardsWithPlatformToken, 'withdraw'>(
-      new TransactionManifest(
-        StakingRewardsWithPlatformToken__factory.connect(address, signer),
-        'exit',
-        [],
-        {
-          present: `Exiting ${balance.format(4)} ${stakedToken?.[2]}`,
-          past: `Exited ${balance.format(4)} ${stakedToken?.[2]}`,
-        },
-        'exitUniswap',
-      ),
-    )
+    poolType === 'vmta'
+      ? window.location.replace('https://staking.mstable.app/#/stake?migrate=true')
+      : propose<Interfaces.StakingRewardsWithPlatformToken, 'withdraw'>(
+          new TransactionManifest(
+            StakingRewardsWithPlatformToken__factory.connect(address, signer),
+            'exit',
+            [],
+            {
+              present: `Exiting ${balance.format(4)} ${stakedToken?.[2]}`,
+              past: `Exited ${balance.format(4)} ${stakedToken?.[2]}`,
+            },
+            'exitUniswap',
+          ),
+        )
   }
 
   return (
@@ -118,7 +120,7 @@ export const WithdrawCard = ({ contract: { address, poolType, info, name } }: Wi
         <span className="value">{`${balance.format(4)} ${stakedToken?.[2]}`}</span>
       </Header>
       <Content>{info}</Content>
-      <Button onClick={handleExit}>Exit</Button>
+      <Button onClick={handleExit}>{poolType === 'vmta' ? 'Use V1 withdraw' : 'Exit'}</Button>
     </Card>
   )
 }

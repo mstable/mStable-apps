@@ -5,7 +5,7 @@ import { constants } from 'ethers'
 import styled from 'styled-components'
 import { useAccount, useContractReads } from 'wagmi'
 
-import { legacyContracts, StakingABI } from './constants'
+import { legacyContracts, StakingABI, vmtaABI } from './constants'
 import { useLegacyWithdrawModal } from './useLegacyWithdrawModal'
 
 import type { BigNumber } from 'ethers'
@@ -37,8 +37,8 @@ export const LegacyWithdrawButton = () => {
   const { address } = useAccount()
   const contracts = legacyContracts.map(c => ({
     addressOrName: c.address,
-    contractInterface: StakingABI,
-    functionName: 'balanceOf',
+    contractInterface: c.poolType === 'vmta' ? vmtaABI : StakingABI,
+    functionName: c.poolType === 'vmta' ? 'staticBalanceOf' : 'balanceOf',
     args: [address],
   }))
   const { data } = useContractReads({ contracts, allowFailure: true })
