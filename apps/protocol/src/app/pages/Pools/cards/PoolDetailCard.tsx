@@ -24,6 +24,7 @@ interface Props {
 
 const RewardsAPY = styled.div`
   display: flex;
+  align-items: center;
 
   img {
     width: 2rem !important;
@@ -156,12 +157,14 @@ export const PoolDetailCard: FC<Props> = ({ poolAddress, className }) => {
               <div>
                 <div>
                   <div>{feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.base} suffix="%" />}</div>
-                  <div>
-                    &nbsp;→&nbsp;
-                    <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
-                      {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
-                    </UnderlinedTip>
-                  </div>
+                  {feederPoolApy.value?.rewards.maxBoost ? (
+                    <div>
+                      &nbsp;→&nbsp;
+                      <UnderlinedTip tip="Max boost can be achieved by staking MTA" hideIcon>
+                        {feederPoolApy.value && <CountUp end={feederPoolApy.value.rewards.maxBoost} suffix="%" />}
+                      </UnderlinedTip>
+                    </div>
+                  ) : null}
                 </div>
                 <TokenIcon symbol={vault?.rewardsToken.symbol} />
               </div>

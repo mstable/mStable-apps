@@ -1,6 +1,6 @@
 import { useDataState } from '@apps/data-provider'
 import { useSelectedMassetName } from '@apps/masset-provider'
-import { BigNumber } from 'ethers'
+import { ethers } from 'ethers'
 
 import type { MassetState } from '@apps/data-provider'
 import type { MassetName } from '@apps/types'
@@ -20,7 +20,7 @@ export const useSelectedMassetState = (mAssetName?: MassetName): MassetState | u
           ...mAsset.savingsContracts.v2,
           boostedSavingsVault: {
             ...mAsset.savingsContracts.v2.boostedSavingsVault,
-            rewardRate: BigNumber.from(0),
+            rewardRate: ethers.constants.Zero,
           },
         },
       },
