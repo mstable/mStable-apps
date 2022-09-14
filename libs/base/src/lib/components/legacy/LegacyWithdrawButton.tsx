@@ -46,7 +46,7 @@ export const LegacyWithdrawButton = () => {
     () => legacyContracts.filter((_, idx) => !!data?.[idx] && (data?.[idx] as unknown as BigNumber).gt(constants.Zero)),
     [data],
   )
-  const [openModal] = useLegacyWithdrawModal(contractsWithBalance)
+  const [openModal] = useLegacyWithdrawModal()
 
   if (!contractsWithBalance?.length) {
     return null
