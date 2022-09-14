@@ -57,7 +57,7 @@ export const LegacyWithdrawButton = () => {
       <span role="img" aria-label="warning" className="warning">
         ⚠️
       </span>
-      Staked Token
+      Deprecated Contracts
     </StyledButton>
   )
 }

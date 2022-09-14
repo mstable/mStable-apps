@@ -70,7 +70,7 @@ export const useLegacyWithdrawModal = (): [() => void, () => void] => {
       <Modal title="Legacy contract withdraw" onExited={onExited} open={open} hideModal={hideModal}>
         <Container>
           <Description>
-            You still have staked tokens on contracts that are no longer supported, we highly recommend withdrawing them.
+            You still have tokens staked in contracts that are no longer supported, we highly recommend withdrawing them.
           </Description>
           <Pools>Pools</Pools>
           <Cards>
