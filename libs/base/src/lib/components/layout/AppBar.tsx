@@ -11,6 +11,7 @@ import styled from 'styled-components'
 
 import { useNetwork } from '../../context/NetworkProvider'
 import { useTransactionsState } from '../../context/TransactionsProvider'
+import { LegacyWithdrawButton } from '../legacy/LegacyWithdrawButton'
 import { GraphButton } from './GraphButton'
 import { Navigation } from './Navigation'
 import { SettingsButton } from './SettingsButton'
@@ -145,6 +146,7 @@ export const AppBar: FC = () => {
           </LogoAndMasset>
           <Navigation />
           <WalletAndSpinner>
+            <LegacyWithdrawButton />
             <TransactionsSpinner />
             <WalletButton />
             {showSubgraphStatus && <GraphButton />}
