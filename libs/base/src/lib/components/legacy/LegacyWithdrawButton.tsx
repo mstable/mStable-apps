@@ -22,6 +22,7 @@ const StyledButton = styled(UnstyledButton)`
   transition: all 0.3s ease;
   background: ${({ theme }) => theme.color.yellowTransparent};
   border: 1px solid ${({ theme }) => theme.color.orange};
+  white-space: nowrap;
 
   .warning {
     padding-bottom: 1px;
@@ -57,7 +58,7 @@ export const LegacyWithdrawButton = () => {
       <span role="img" aria-label="warning" className="warning">
         ⚠️
       </span>
-      Earnings v1
+      Legacy Stake
     </StyledButton>
   )
 }
