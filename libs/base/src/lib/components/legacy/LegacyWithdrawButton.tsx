@@ -57,7 +57,7 @@ export const LegacyWithdrawButton = () => {
       <span role="img" aria-label="warning" className="warning">
         ⚠️
       </span>
-      Deprecated Contracts
+      Earnings v1
     </StyledButton>
   )
 }

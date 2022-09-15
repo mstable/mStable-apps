@@ -2,14 +2,14 @@ import { useMemo } from 'react'
 
 import { StakingRewardsWithPlatformToken__factory } from '@apps/artifacts/typechain'
 import { BigDecimal } from '@apps/bigdecimal'
-import { Button } from '@apps/dumb-components'
+import { Button, ButtonExternal, ThemedSkeleton } from '@apps/dumb-components'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import styled from 'styled-components'
 import { useAccount, useContractReads, useSigner } from 'wagmi'
 
 import { usePropose } from '../../context/TransactionsProvider'
 import { Address, TokenIconSvg } from '../core'
-import { BalancerPoolTokenABI, StakingABI, UniswapStakedContractABI } from './constants'
+import { BalancerPoolTokenABI, StakingABI, UniswapStakedContractABI, vmtaABI } from './constants'
 import { getColor, getTokenIcon } from './utils'
 
 import type { Interfaces } from '@apps/types'
@@ -64,18 +64,28 @@ const Content = styled.p`
   padding: 2rem 0;
 `
 
+const StyledButton = styled(ButtonExternal)`
+  display: flex;
+  justify-content: center;
+`
+
 export const WithdrawCard = ({ contract: { address, poolType, info, name } }: WithdrawCardProps) => {
   const { address: account } = useAccount()
   const { data: signer } = useSigner()
-  const { data: uniContract } = useContractReads({
+  const { data: uniContract, isLoading: balLoading } = useContractReads({
     contracts: [
       { addressOrName: address, contractInterface: StakingABI, functionName: 'stakingToken' },
-      { addressOrName: address, contractInterface: StakingABI, functionName: 'balanceOf', args: [account] },
+      {
+        addressOrName: address,
+        contractInterface: poolType === 'vmta' ? vmtaABI : StakingABI,
+        functionName: poolType === 'vmta' ? 'staticBalanceOf' : 'balanceOf',
+        args: [account],
+      },
     ],
     enabled: !!account,
   })
   const abi = poolType === 'uni' ? UniswapStakedContractABI : BalancerPoolTokenABI
-  const { data: stakedToken } = useContractReads({
+  const { data: stakedToken, isLoading: staLoading } = useContractReads({
     contracts: [
       { addressOrName: uniContract?.[0] as unknown as string, contractInterface: abi, functionName: 'name' },
       { addressOrName: uniContract?.[0] as unknown as string, contractInterface: abi, functionName: 'decimals' },
@@ -93,20 +103,18 @@ export const WithdrawCard = ({ contract: { address, poolType, info, name } }: Wi
   if (!signer) return null
 
   const handleExit = () => {
-    poolType === 'vmta'
-      ? window.location.replace('https://staking.mstable.app/#/stake?migrate=true')
-      : propose<Interfaces.StakingRewardsWithPlatformToken, 'withdraw'>(
-          new TransactionManifest(
-            StakingRewardsWithPlatformToken__factory.connect(address, signer),
-            'exit',
-            [],
-            {
-              present: `Exiting ${balance.format(4)} ${stakedToken?.[2]}`,
-              past: `Exited ${balance.format(4)} ${stakedToken?.[2]}`,
-            },
-            'exitUniswap',
-          ),
-        )
+    propose<Interfaces.StakingRewardsWithPlatformToken, 'withdraw'>(
+      new TransactionManifest(
+        StakingRewardsWithPlatformToken__factory.connect(address, signer),
+        'exit',
+        [],
+        {
+          present: `Exiting ${balance.format(4)} ${stakedToken?.[2]}`,
+          past: `Exited ${balance.format(4)} ${stakedToken?.[2]}`,
+        },
+        'exitUniswap',
+      ),
+    )
   }
 
   return (
@@ -117,10 +125,28 @@ export const WithdrawCard = ({ contract: { address, poolType, info, name } }: Wi
           <span className="title">{name}</span>
           <Address address={address} type="account" />
         </TitleContainer>
-        <span className="value">{`${balance.format(4)} ${stakedToken?.[2]}`}</span>
+        {balLoading || staLoading ? (
+          <ThemedSkeleton height={30} width={100} />
+        ) : (
+          <span className="value">{`${balance.format(4)} ${stakedToken?.[2]}`}</span>
+        )}
       </Header>
       <Content>{info}</Content>
-      <Button onClick={handleExit}>{poolType === 'vmta' ? 'Use V1 withdraw' : 'Exit'}</Button>
+
+      {poolType === 'vmta' ? (
+        <StyledButton
+          highlighted
+          onClick={() => {
+            window.open('https://staking.mstable.app/#/stake?migrate=true')
+          }}
+        >
+          Use V1 withdraw
+        </StyledButton>
+      ) : (
+        <Button highlighted onClick={handleExit}>
+          Exit
+        </Button>
+      )}
     </Card>
   )
 }
