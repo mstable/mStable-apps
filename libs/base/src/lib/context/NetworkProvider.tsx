@@ -148,8 +148,8 @@ const etherscanUrl =
     }
   }
 
-const graphMainnetEndpoint = (subgraphId: string, version: number, apiKey: string): string =>
-  `https://gateway.thegraph.com/api/${apiKey}/subgraphs/id/${subgraphId}-${version}`
+const graphMainnetEndpoint = (subgraphId: string, apiKey: string): string =>
+  `https://gateway.thegraph.com/api/${apiKey}/subgraphs/id/${subgraphId}`
 
 const graphHostedEndpoint = (orgName: string, subgraphName: string): string =>
   `https://api.thegraph.com/subgraphs/name/${orgName}/${subgraphName}`
@@ -169,24 +169,14 @@ const ETH_MAINNET: EthereumMainnet = {
   rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
   gasStationEndpoint: 'https://gas.mycryptoapi.com/',
   gqlEndpoints: {
-    protocol: [
-      'https://api.studio.thegraph.com/query/32034/mstable-protocol/v0.1.2',
-      graphMainnetEndpoint('0x26cf67040678eb0f5654c9cbaad78dc1694cbafa', 0, process.env.NX_PROTOCOL_SUBGRAPH_API_KEY as string),
-    ],
-    staking: ['https://api.studio.thegraph.com/query/32034/mstable-staking/v0.1.0', graphHostedEndpoint('mstable', 'mstable-staking')],
+    protocol: [graphMainnetEndpoint('HTmE4KFztgBCbs2fdM7ai3jV32nufPs4xqXqfnLU3WRU', process.env.NX_SUBGRAPH_API_KEY as string)],
+    staking: [graphMainnetEndpoint('DivfNefr8mZMmTLpV1pDsSGzC9GgQnB2SW7Wp8Rukk57', process.env.NX_SUBGRAPH_API_KEY as string)],
     questbook: ['https://europe-west1-mstable-questbook.cloudfunctions.net/questbook'],
-    merkleDrop: [
-      'https://api.studio.thegraph.com/query/32034/mstable-ecosystem/v0.1.0',
-      graphHostedEndpoint('mstable', 'mstable-merkle-drop'),
-    ],
+    merkleDrop: [graphMainnetEndpoint('BLdGrgdeiVnwj4Xj2cznEH7AagZXLwEjV9KiGvPjaSqn', process.env.NX_SUBGRAPH_API_KEY as string)],
     snapshot: ['https://hub.snapshot.org/graphql'],
-    feeders: [
-      // Temporary preview URL because indexers haven't picked up the new version...
-      'https://api.studio.thegraph.com/query/32034/mstable-feeders/v0.1.0',
-      graphMainnetEndpoint('0x021c1a1ce318e7b4545f6280b248062592b71706', 0, process.env.NX_FEEDERS_SUBGRAPH_API_KEY as string),
-    ],
+    feeders: [graphMainnetEndpoint('FFPrkhXdhQzE8i3hqCymMPTHLDnNAUCYMq7ArczbfQSg', process.env.NX_SUBGRAPH_API_KEY as string)],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
-    emissions: ['https://api.studio.thegraph.com/query/32034/mstable-emissions/v0.1.1', graphHostedEndpoint('mstable', 'mstable-dials')],
+    emissions: [graphMainnetEndpoint('Gu5EEPcFG1gdq1ycTsNBFWG3qrHHKe4fairQcMbS3TJh', process.env.NX_SUBGRAPH_API_KEY as string)],
   },
   addresses: {
     MTA: '0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2',
