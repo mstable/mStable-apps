@@ -169,14 +169,29 @@ const ETH_MAINNET: EthereumMainnet = {
   rpcEndpoints: ['https://mainnet.infura.io/v3/a6daf77ef0ae4b60af39259e435a40fe'],
   gasStationEndpoint: 'https://gas.mycryptoapi.com/',
   gqlEndpoints: {
-    protocol: [graphMainnetEndpoint('HTmE4KFztgBCbs2fdM7ai3jV32nufPs4xqXqfnLU3WRU', process.env.NX_SUBGRAPH_API_KEY as string)],
-    staking: [graphMainnetEndpoint('DivfNefr8mZMmTLpV1pDsSGzC9GgQnB2SW7Wp8Rukk57', process.env.NX_SUBGRAPH_API_KEY as string)],
+    protocol: [
+      'https://api.studio.thegraph.com/query/32034/mstable-protocol-2/v1.0.1',
+      graphMainnetEndpoint('HTmE4KFztgBCbs2fdM7ai3jV32nufPs4xqXqfnLU3WRU', process.env.NX_SUBGRAPH_API_KEY as string),
+    ],
+    staking: [
+      'https://api.studio.thegraph.com/query/32034/mstable-staking/v0.1.0',
+      graphMainnetEndpoint('DivfNefr8mZMmTLpV1pDsSGzC9GgQnB2SW7Wp8Rukk57', process.env.NX_SUBGRAPH_API_KEY as string),
+    ],
     questbook: ['https://europe-west1-mstable-questbook.cloudfunctions.net/questbook'],
-    merkleDrop: [graphMainnetEndpoint('BLdGrgdeiVnwj4Xj2cznEH7AagZXLwEjV9KiGvPjaSqn', process.env.NX_SUBGRAPH_API_KEY as string)],
+    merkleDrop: [
+      'https://api.studio.thegraph.com/query/32034/mstable-ecosystem/v0.1.0',
+      graphMainnetEndpoint('BLdGrgdeiVnwj4Xj2cznEH7AagZXLwEjV9KiGvPjaSqn', process.env.NX_SUBGRAPH_API_KEY as string),
+    ],
     snapshot: ['https://hub.snapshot.org/graphql'],
-    feeders: [graphMainnetEndpoint('FFPrkhXdhQzE8i3hqCymMPTHLDnNAUCYMq7ArczbfQSg', process.env.NX_SUBGRAPH_API_KEY as string)],
+    feeders: [
+      'https://api.studio.thegraph.com/query/32034/mstable-feeder-pools-and-vaults/v0.0.13',
+      graphMainnetEndpoint('FFPrkhXdhQzE8i3hqCymMPTHLDnNAUCYMq7ArczbfQSg', process.env.NX_SUBGRAPH_API_KEY as string),
+    ],
     blocks: [graphHostedEndpoint('blocklytics', 'ethereum-blocks')],
-    emissions: [graphMainnetEndpoint('Gu5EEPcFG1gdq1ycTsNBFWG3qrHHKe4fairQcMbS3TJh', process.env.NX_SUBGRAPH_API_KEY as string)],
+    emissions: [
+      'https://api.studio.thegraph.com/query/32034/mstable-emissions/v0.1.1',
+      graphMainnetEndpoint('Gu5EEPcFG1gdq1ycTsNBFWG3qrHHKe4fairQcMbS3TJh', process.env.NX_SUBGRAPH_API_KEY as string),
+    ],
   },
   addresses: {
     MTA: '0xa3bed4e1c75d00fa6f4e5e6922db7261b5e9acd2',
