@@ -3,7 +3,8 @@ import { useEffect, useMemo } from 'react'
 import { useBlockTimestampQuery } from '@apps/artifacts/graphql/blocks'
 import { useSelectedEpochQuery } from '@apps/artifacts/graphql/emissions'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { createStateContext, useIdle } from 'react-use'
+import { useIdlePollInterval } from '@apps/hooks'
+import { createStateContext } from 'react-use'
 
 import { useScaleUserDialPreferences } from '../DialTable'
 import { useEmissionsData } from './EmissionsContext'
@@ -46,8 +47,7 @@ const EpochUpdater: FC = () => {
   const [, setEpochData] = useEpochData()
   const [, setHoveredDialId] = useHoveredDialId()
   const [, setSelectedDialId] = useSelectedDialId()
-  const idle = useIdle(61e3)
-  const pollInterval = useMemo(() => (idle ? 0 : 60e3), [idle])
+  const pollInterval = useIdlePollInterval(60e3)
 
   // TODO pagination
   const skip = 0

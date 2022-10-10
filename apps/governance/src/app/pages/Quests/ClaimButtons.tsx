@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { useQuestQuery as useQuestbookQuestQuery, useUpdateQuestMutation } from '@apps/artifacts/graphql/questbook'
 import { useAccountQuery, useQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
@@ -8,9 +6,10 @@ import { useAddQuestNotification } from '@apps/base/context/notifications'
 import { usePropose } from '@apps/base/context/transactions'
 import { useSound } from '@apps/browser-settings'
 import { Button, Tooltip } from '@apps/dumb-components'
+import { useIdlePollInterval } from '@apps/hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import { getUnixTime } from 'date-fns'
-import { useIdle, useToggle } from 'react-use'
+import { useToggle } from 'react-use'
 
 // @ts-ignore
 import bleep28 from '../../../assets/bleeps_28.mp3'
@@ -27,8 +26,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const account = useAccount()
   const clients = useApolloClients()
   const addQuestNotification = useAddQuestNotification()
-  const idle = useIdle(16e3)
-  const pollInterval = useMemo(() => (idle ? 0 : 15e3), [idle])
+  const pollInterval = useIdlePollInterval(15e3)
 
   const [isPending, toggleIsPending] = useToggle(false)
   const questManagerContract = useQuestManagerContract()

@@ -5,7 +5,7 @@ import { StakedToken__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { createUseContextFn, providerFactory } from '@apps/context-utils'
-import { useIdle } from 'react-use'
+import { useIdlePollInterval } from '@apps/hooks'
 
 import type { StakedToken } from '@apps/artifacts/typechain'
 import type { Dispatch, FC, SetStateAction } from 'react'
@@ -63,8 +63,7 @@ export const StakedTokenQueryUpdater: FC = () => {
   const clients = useApolloClients()
   const account = useAccount()
   const { selected } = useStakedToken()
-  const idle = useIdle(31e3)
-  const pollInterval = useMemo(() => (idle ? 0 : 30e3), [idle])
+  const pollInterval = useIdlePollInterval(30e3)
 
   // Poll and cache
   useStakedTokenQueryHook({

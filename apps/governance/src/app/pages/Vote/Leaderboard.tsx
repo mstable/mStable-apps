@@ -4,10 +4,10 @@ import { useLeaderboardQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { BigDecimal } from '@apps/bigdecimal'
 import { Table, TableCell, TableRow, UnstyledButton } from '@apps/dumb-components'
+import { useIdlePollInterval } from '@apps/hooks'
 import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
 import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
 import { Link } from 'react-router-dom'
-import { useIdle } from 'react-use'
 import styled from 'styled-components'
 
 import { DelegateCell } from '../../components/DelegateCell'
@@ -52,8 +52,7 @@ const NumericCell = styled(TableCell)`
 export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const [count] = useState<number>(preview ? 5 : 25)
   const [skip, setSkip] = useState<number>(0)
-  const idle = useIdle(61e3)
-  const pollInterval = useMemo(() => (idle ? 0 : 60e3), [idle])
+  const pollInterval = useIdlePollInterval(60e3)
 
   const delegateesAll = useDelegateesAll()
   const clients = useApolloClients()

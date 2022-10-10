@@ -6,8 +6,8 @@ import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useNetwork } from '@apps/base/context/network'
 import { useTokensState } from '@apps/base/context/tokens'
+import { useIdlePollInterval } from '@apps/hooks'
 import { Interface } from '@ethersproject/abi'
-import { useIdle } from 'react-use'
 import { pipe } from 'ts-pipe-compose'
 
 import { recalculateState } from './recalculateState'
@@ -42,17 +42,17 @@ const useRawData = (): Pick<RawData, 'massets' | 'feederPools'> => {
   const network = useNetwork()
   const account = useAccount()
   const clients = useApolloClients()
-  const idle = useIdle(31e3)
+  const pollInterval = useIdlePollInterval(30e3)
   const options = useMemo(() => {
     const baseOptions = {
       variables: { account: account ?? '', accountId: account ?? '', hasAccount: !!account },
-      pollInterval: idle ? 0 : 30e3,
+      pollInterval,
     }
     return {
       feeders: { ...baseOptions, client: clients.feeders, skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'feeders') },
       protocol: { ...baseOptions, client: clients.protocol },
     }
-  }, [account, clients, network, idle])
+  }, [account, clients, network, pollInterval])
 
   const massetsSub = useMassetsQuery(options.protocol)
   const feedersSub = useFeederPoolsQuery(options.feeders)
