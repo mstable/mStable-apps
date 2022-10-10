@@ -1,11 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { useEmissionsQuery } from '@apps/artifacts/graphql/emissions'
 import { useAccountQuery } from '@apps/artifacts/graphql/staking'
 import { EmissionsController__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { createStateContext } from 'react-use'
+import { createStateContext, useIdle } from 'react-use'
 
 import { DIALS_METADATA } from '../constants'
 
@@ -20,12 +20,14 @@ const EmissionsDataUpdater: FC = () => {
   const clients = useApolloClients()
   const account = useAccount()
   const [, setEmissionsData] = useEmissionsData()
+  const idle = useIdle(613)
+  const pollInterval = useMemo(() => (idle ? 0 : 60e3), [idle])
 
   const accountQuery = useAccountQuery({
     variables: { id: account as string },
     skip: !account,
     client: clients.staking,
-    pollInterval: 60e3,
+    pollInterval,
     nextFetchPolicy: 'cache-only',
   })
 
@@ -36,7 +38,7 @@ const EmissionsDataUpdater: FC = () => {
   const emissionsQuery = useEmissionsQuery({
     variables: { account: delegateeOrAccount ?? '', hasAccount: !!delegateeOrAccount },
     client: clients.emissions,
-    pollInterval: 60e3,
+    pollInterval,
   })
 
   useEffect(() => {

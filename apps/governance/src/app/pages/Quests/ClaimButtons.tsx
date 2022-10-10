@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { useQuestQuery as useQuestbookQuestQuery, useUpdateQuestMutation } from '@apps/artifacts/graphql/questbook'
 import { useAccountQuery, useQuestQuery } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
@@ -8,7 +10,7 @@ import { useSound } from '@apps/browser-settings'
 import { Button, Tooltip } from '@apps/dumb-components'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import { getUnixTime } from 'date-fns'
-import { useToggle } from 'react-use'
+import { useIdle, useToggle } from 'react-use'
 
 // @ts-ignore
 import bleep28 from '../../../assets/bleeps_28.mp3'
@@ -25,6 +27,8 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const account = useAccount()
   const clients = useApolloClients()
   const addQuestNotification = useAddQuestNotification()
+  const idle = useIdle(16e3)
+  const pollInterval = useMemo(() => (idle ? 0 : 15e3), [idle])
 
   const [isPending, toggleIsPending] = useToggle(false)
   const questManagerContract = useQuestManagerContract()
@@ -58,7 +62,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
     variables: { questId, userId: account ?? '', hasUser: !!account },
-    pollInterval: 15e3,
+    pollInterval,
   })
   const questbookQuest = questbookQuery.data?.quest
   const ethereumId = questbookQuest?.ethereumId?.toString()
@@ -73,7 +77,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
     client: clients.staking,
     variables: { id: account ?? '' },
     skip: !account,
-    pollInterval: 15e3,
+    pollInterval,
     nextFetchPolicy: 'cache-only',
   })
 

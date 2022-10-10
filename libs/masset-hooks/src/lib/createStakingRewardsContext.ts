@@ -11,6 +11,7 @@ import { BigDecimal } from '@apps/bigdecimal'
 import { createUseContextFn, providerFactory } from '@apps/context-utils'
 import { calculateApy } from '@apps/quick-maths'
 import { BigNumber } from 'ethers'
+import { useIdle } from 'react-use'
 
 import { useSelectedMassetState } from './useSelectedMassetState'
 
@@ -176,11 +177,12 @@ export const createStakingRewardsContext = (): Readonly<
     const { fetchPrices } = useFetchPriceCtx()
     const massetState = useSelectedMassetState(mAssetName)
     const account = useAccount()
+    const idle = useIdle(6e3)
 
     const options = useMemo(
       () => ({
         skip: !Object.prototype.hasOwnProperty.call(network.gqlEndpoints, 'stakingRewards') || (!address && !stakingTokenAddress),
-        pollInterval: 5e3, // 5s
+        pollInterval: idle ? 0 : 5e3,
         variables: {
           account: account || null,
           ...(stakingTokenAddress
@@ -189,7 +191,7 @@ export const createStakingRewardsContext = (): Readonly<
         },
         client: clients.stakingRewards,
       }),
-      [clients, account, network, stakingTokenAddress, address],
+      [clients, account, network, stakingTokenAddress, address, idle],
     )
 
     // 1. Subgraph query

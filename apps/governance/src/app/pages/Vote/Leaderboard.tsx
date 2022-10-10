@@ -7,6 +7,7 @@ import { Table, TableCell, TableRow, UnstyledButton } from '@apps/dumb-component
 import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
 import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
 import { Link } from 'react-router-dom'
+import { useIdle } from 'react-use'
 import styled from 'styled-components'
 
 import { DelegateCell } from '../../components/DelegateCell'
@@ -51,6 +52,8 @@ const NumericCell = styled(TableCell)`
 export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const [count] = useState<number>(preview ? 5 : 25)
   const [skip, setSkip] = useState<number>(0)
+  const idle = useIdle(61e3)
+  const pollInterval = useMemo(() => (idle ? 0 : 60e3), [idle])
 
   const delegateesAll = useDelegateesAll()
   const clients = useApolloClients()
@@ -58,7 +61,7 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const leaderboardQuery = useLeaderboardQuery({
     client: clients.staking,
     variables: { count, skip },
-    pollInterval: 60e3,
+    pollInterval,
   })
   const stakingQuery = useStakingQuery()
 

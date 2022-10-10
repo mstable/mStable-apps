@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { useBlockTimestampQuery } from '@apps/artifacts/graphql/blocks'
 import { useSelectedEpochQuery } from '@apps/artifacts/graphql/emissions'
 import { useApolloClients } from '@apps/base/context/apollo'
-import { createStateContext } from 'react-use'
+import { createStateContext, useIdle } from 'react-use'
 
 import { useScaleUserDialPreferences } from '../DialTable'
 import { useEmissionsData } from './EmissionsContext'
@@ -46,6 +46,8 @@ const EpochUpdater: FC = () => {
   const [, setEpochData] = useEpochData()
   const [, setHoveredDialId] = useHoveredDialId()
   const [, setSelectedDialId] = useSelectedDialId()
+  const idle = useIdle(61e3)
+  const pollInterval = useMemo(() => (idle ? 0 : 60e3), [idle])
 
   // TODO pagination
   const skip = 0
@@ -60,7 +62,7 @@ const EpochUpdater: FC = () => {
       skip,
     },
     client: clients.emissions,
-    pollInterval: 60e3,
+    pollInterval,
   })
 
   useEffect(() => {
