@@ -63,7 +63,7 @@ export const StakedTokenQueryUpdater: FC = () => {
   const clients = useApolloClients()
   const account = useAccount()
   const { selected } = useStakedToken()
-  const idle = useIdle()
+  const idle = useIdle(31e3)
   const pollInterval = useMemo(() => (idle ? 0 : 30e3), [idle])
 
   // Poll and cache
