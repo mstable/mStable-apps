@@ -132,7 +132,7 @@ const Meta8Account: FC = () => {
   })
 
   const accountData = accountQuery.data?.account
-
+  const stakedTokenAccountId = `${accountData?.id}.${stakedToken?.selected}`
   return (
     <Meta8AccountContainer>
       <StyledStakedTokenSwitcher />
@@ -141,7 +141,7 @@ const Meta8Account: FC = () => {
         <div>Season 0: {(1 + (accountData?.seasonMultiplierSimple ?? 0) * 0.1).toFixed(2)}x</div>
         <div>
           Hodl time:{' '}
-          {(accountData?.stakedTokenAccounts.find(st => st.id === stakedToken.selected)?.balance?.timeMultiplierSimple ?? 1).toFixed(2)}x
+          {(accountData?.stakedTokenAccounts.find(st => st.id === stakedTokenAccountId)?.balance?.timeMultiplierSimple ?? 1).toFixed(2)}x
         </div>
       </div>
     </Meta8AccountContainer>
