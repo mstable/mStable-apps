@@ -5,6 +5,7 @@ import { StakedToken__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSigner } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { createUseContextFn, providerFactory } from '@apps/context-utils'
+import { useIdlePollInterval } from '@apps/hooks'
 
 import type { StakedToken } from '@apps/artifacts/typechain'
 import type { Dispatch, FC, SetStateAction } from 'react'
@@ -62,13 +63,14 @@ export const StakedTokenQueryUpdater: FC = () => {
   const clients = useApolloClients()
   const account = useAccount()
   const { selected } = useStakedToken()
+  const pollInterval = useIdlePollInterval(30e3)
 
   // Poll and cache
   useStakedTokenQueryHook({
     client: clients.staking,
     variables: { id: selected, account: account ?? '', hasAccount: !!account },
     skip: !selected,
-    pollInterval: 30e3,
+    pollInterval,
   })
 
   return null

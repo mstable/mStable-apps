@@ -4,6 +4,7 @@ import { useLeaderboardQuery } from '@apps/artifacts/graphql/staking'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { BigDecimal } from '@apps/bigdecimal'
 import { Table, TableCell, TableRow, UnstyledButton } from '@apps/dumb-components'
+import { useIdlePollInterval } from '@apps/hooks'
 import { ReactComponent as BackArrow } from '@apps/icons/back-arrow.svg'
 import { ReactComponent as ForwardArrow } from '@apps/icons/forward-arrow.svg'
 import { Link } from 'react-router-dom'
@@ -51,6 +52,7 @@ const NumericCell = styled(TableCell)`
 export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const [count] = useState<number>(preview ? 5 : 25)
   const [skip, setSkip] = useState<number>(0)
+  const pollInterval = useIdlePollInterval(60e3)
 
   const delegateesAll = useDelegateesAll()
   const clients = useApolloClients()
@@ -58,7 +60,7 @@ export const Leaderboard: FC<Props> = ({ preview, delegation, onClick }) => {
   const leaderboardQuery = useLeaderboardQuery({
     client: clients.staking,
     variables: { count, skip },
-    pollInterval: 60e3,
+    pollInterval,
   })
   const stakingQuery = useStakingQuery()
 

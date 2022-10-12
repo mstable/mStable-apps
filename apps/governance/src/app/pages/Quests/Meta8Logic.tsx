@@ -6,6 +6,7 @@ import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useSound } from '@apps/browser-settings'
 import { UnstyledButton } from '@apps/dumb-components'
+import { useIdlePollInterval } from '@apps/hooks'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -117,6 +118,7 @@ const Meta8AccountContainer = styled.div`
 
 const Meta8Account: FC = () => {
   const stakedToken = useStakedToken()
+  const pollInterval = useIdlePollInterval(15e3)
 
   const account = useAccount()
   const { staking: client } = useApolloClients()
@@ -125,7 +127,7 @@ const Meta8Account: FC = () => {
     client,
     variables: { id: account ?? '' },
     skip: !account,
-    pollInterval: 15e3,
+    pollInterval,
     nextFetchPolicy: 'cache-only',
   })
 
@@ -151,6 +153,7 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
   const history = useHistory()
   const account = useAccount()
   const clients = useApolloClients()
+  const pollInterval = useIdlePollInterval(30e3)
 
   const nextQueueUpdate = getDaysUntilQueueUpdate()
 
@@ -160,7 +163,7 @@ export const Meta8Logic: FC<{ isBooted: boolean }> = ({ isBooted }) => {
   const questbookQuestsQuery = useQuestbookQuestsQuery({
     client: clients.questbook,
     variables: { userId: account ?? '', hasUser: !!account },
-    pollInterval: 30e3,
+    pollInterval,
   })
 
   const [playBleep26] = useSound(bleep26, { volume: 0.4 })

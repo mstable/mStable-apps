@@ -2,6 +2,7 @@ import { useQuestsQuery } from '@apps/artifacts/graphql/questbook'
 import { useStakingQuery as useStakingQueryHook } from '@apps/artifacts/graphql/staking'
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
+import { useIdlePollInterval } from '@apps/hooks'
 import { composedComponent } from '@apps/react-utils'
 
 import { DelegateeListsProvider } from './DelegateeLists'
@@ -13,16 +14,18 @@ import type { FC } from 'react'
 const StakingAccountQueryUpdater: FC = () => {
   const clients = useApolloClients()
   const account = useAccount()
+  const pollIntervalStaking = useIdlePollInterval(30e3)
+  const pollIntervalQuest = useIdlePollInterval(60e3)
 
   // Poll and cache
   useStakingQueryHook({
     client: clients.staking,
-    pollInterval: 30e3,
+    pollInterval: pollIntervalStaking,
   })
   useQuestsQuery({
     variables: { userId: account ?? '', hasUser: !!account },
     client: clients.questbook,
-    pollInterval: 60e3,
+    pollInterval: pollIntervalQuest,
   })
 
   return null

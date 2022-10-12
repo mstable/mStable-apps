@@ -6,6 +6,7 @@ import { useAddQuestNotification } from '@apps/base/context/notifications'
 import { usePropose } from '@apps/base/context/transactions'
 import { useSound } from '@apps/browser-settings'
 import { Button, Tooltip } from '@apps/dumb-components'
+import { useIdlePollInterval } from '@apps/hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import { getUnixTime } from 'date-fns'
 import { useToggle } from 'react-use'
@@ -25,6 +26,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const account = useAccount()
   const clients = useApolloClients()
   const addQuestNotification = useAddQuestNotification()
+  const pollInterval = useIdlePollInterval(15e3)
 
   const [isPending, toggleIsPending] = useToggle(false)
   const questManagerContract = useQuestManagerContract()
@@ -58,7 +60,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
   const questbookQuery = useQuestbookQuestQuery({
     client: clients.questbook,
     variables: { questId, userId: account ?? '', hasUser: !!account },
-    pollInterval: 15e3,
+    pollInterval,
   })
   const questbookQuest = questbookQuery.data?.quest
   const ethereumId = questbookQuest?.ethereumId?.toString()
@@ -73,7 +75,7 @@ export const ClaimButtons: FC<{ questId: string }> = ({ questId }) => {
     client: clients.staking,
     variables: { id: account ?? '' },
     skip: !account,
-    pollInterval: 15e3,
+    pollInterval,
     nextFetchPolicy: 'cache-only',
   })
 

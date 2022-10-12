@@ -3,6 +3,7 @@ import { QuestType, useQuestQuery as useStakingQuestQuery } from '@apps/artifact
 import { useAccount } from '@apps/base/context/account'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { Tooltip, UnstyledButton } from '@apps/dumb-components'
+import { useIdlePollInterval } from '@apps/hooks'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import styled from 'styled-components'
 
@@ -149,6 +150,7 @@ const CardSkeleton: FC<ComponentProps<typeof Skeleton> & { className?: string }>
 
 const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
   const account = useAccount()
+  const pollInterval = useIdlePollInterval(15e3)
 
   const clients = useApolloClients()
   const questbookQuery = useQuestbookQuestQuery({
@@ -165,7 +167,7 @@ const DefaultQuestCard: FC<Props> = ({ questId, onClick }) => {
     skip: typeof questbookQuest?.ethereumId !== 'number',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
-    pollInterval: 15e3,
+    pollInterval,
   })
   const quest = questQuery.data?.quest
   const questType = quest?.type ?? questId === 'metanautSpaceProgram' ? QuestType.Seasonal : undefined

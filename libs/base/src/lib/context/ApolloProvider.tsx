@@ -60,8 +60,8 @@ export const ApolloProvider: FC = ({ children }) => {
 
   const errorLink = onError(error => {
     const { networkError, graphQLErrors } = error
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ message, ..._error }) => {
+    if (graphQLErrors && Array.isArray(graphQLErrors)) {
+      graphQLErrors.forEach(({ message }) => {
         handleError(message, error)
       })
     }
