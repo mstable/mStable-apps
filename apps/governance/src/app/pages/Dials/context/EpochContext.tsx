@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 
 import { useBlockTimestampQuery } from '@apps/artifacts/graphql/blocks'
-import { useSelectedEpochQuery } from '@apps/artifacts/graphql/emissions'
+import { useSelectedCurrentEpochQuery, useSelectedPreviousEpochQuery } from '@apps/artifacts/graphql/emissions'
 import { useApolloClients } from '@apps/base/context/apollo'
 import { useIdlePollInterval } from '@apps/hooks'
 import { createStateContext } from 'react-use'
@@ -35,9 +35,9 @@ const useBlockNumberForWeekNumber = (): number | undefined => {
     variables: { start: start.toString(), end: (start + 1000).toString() },
     skip: !weekNumber,
   })
-
   const blockNumber = blockTimestampQuery.data?.blocks[0]?.number
-  return blockNumber ? parseInt(blockNumber) : undefined
+
+  return blockNumber ? parseInt(blockNumber) : 0
 }
 
 const EpochUpdater: FC = () => {
@@ -48,35 +48,35 @@ const EpochUpdater: FC = () => {
   const [, setHoveredDialId] = useHoveredDialId()
   const [, setSelectedDialId] = useSelectedDialId()
   const pollInterval = useIdlePollInterval(60e3)
-
-  // TODO pagination
-  const skip = 0
-
   const blockNumber = useBlockNumberForWeekNumber()
+  const isCurrent = useMemo(
+    () => weekNumber === undefined || weekNumber === null || weekNumber === emissionsData?.lastEpochWeekNumber,
+    [emissionsData?.lastEpochWeekNumber, weekNumber],
+  )
 
-  const selectedEpochQuery = useSelectedEpochQuery({
+  const { data: currentEpoch } = useSelectedCurrentEpochQuery({
+    client: clients.emissions,
+    pollInterval,
+    skip: !isCurrent,
+  })
+
+  const { data: previousEpoch } = useSelectedPreviousEpochQuery({
     variables: {
-      weekNumber: weekNumber ?? 0,
-      blockNumber: blockNumber ?? 0,
-      isSelectedEpoch: !!weekNumber && !!blockNumber && weekNumber !== emissionsData?.lastEpochWeekNumber,
-      skip,
+      weekNumber,
+      blockNumber,
     },
     client: clients.emissions,
     pollInterval,
+    skip: isCurrent,
   })
 
   useEffect(() => {
-    if (!selectedEpochQuery.data || (!selectedEpochQuery.data.selectedEpoch?.[0] && !selectedEpochQuery.data.lastEpoch?.[0])) {
+    if (!currentEpoch?.epoches?.[0] && !previousEpoch?.epoches?.[0]) {
       setEpochData(undefined)
       return
     }
 
-    const epoch = selectedEpochQuery.data.selectedEpoch?.[0] ?? selectedEpochQuery.data.lastEpoch?.[0]
-    if (!epoch) {
-      setEpochData(undefined)
-      return
-    }
-
+    const epoch = isCurrent ? currentEpoch?.epoches?.[0] : previousEpoch?.epoches?.[0]
     const totalVotes = parseInt(epoch.totalVotes) / 1e18
 
     const dialVotes: EpochDialVotes = Object.fromEntries(
@@ -106,7 +106,7 @@ const EpochUpdater: FC = () => {
       totalVotes,
       dialVotes,
     })
-  }, [setEpochData, selectedEpochQuery.data])
+  }, [currentEpoch, isCurrent, previousEpoch, setEpochData])
 
   useEffect(() => {
     setHoveredDialId(undefined)
