@@ -73,6 +73,8 @@ const Container = styled.div`
     > * {
       display: inline-block;
       margin-bottom: 0.5rem;
+      max-height: 80vh;
+      overflow-y: scroll;
     }
   }
 `
