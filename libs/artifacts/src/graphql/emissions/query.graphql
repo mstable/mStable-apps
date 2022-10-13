@@ -73,18 +73,21 @@ fragment EpochAll on Epoch {
       dialId
       cap
       disabled
-      preferences(first: 64, skip: $skip, orderBy: weight, orderDirection: desc) {
+      preferences(first: 64, orderBy: weight, orderDirection: desc) {
         ...DialPreferences
       }
     }
   }
 }
 
-query SelectedEpoch($weekNumber: Int!, $blockNumber: Int!, $isSelectedEpoch: Boolean! $skip: Int!) {
-  selectedEpoch: epoches(where: { weekNumber: $weekNumber }, first: 1, block: { number: $blockNumber }) @include(if: $isSelectedEpoch) {
+query SelectedCurrentEpoch {  
+  epoches(orderBy: weekNumber, orderDirection: desc, first: 1) {
     ...EpochAll
   }
-  lastEpoch: epoches(orderBy: weekNumber, orderDirection: desc, first: 1) @skip(if: $isSelectedEpoch) {
+}
+
+query SelectedPreviousEpoch($weekNumber: Int!, $blockNumber: Int!) {
+  epoches(where: { weekNumber: $weekNumber }, first: 1, block: { number: $blockNumber }) {
     ...EpochAll
-  }
+  }  
 }

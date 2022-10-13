@@ -123,7 +123,7 @@ export const EpochDetails: FC = () => {
           </ArrowButton>
         </div>
       </div>
-      {!(epochData && epochData.dialVotes) ? <StyledSkeleton height={100} /> : <DistributionBar />}
+      {!!epochData?.dialVotes ? <DistributionBar /> : <StyledSkeleton height={100} />}
     </EpochContainer>
   )
 }

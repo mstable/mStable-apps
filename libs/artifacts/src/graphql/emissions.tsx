@@ -1523,8 +1523,8 @@ export type _Block_ = {
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
-  /** Timestamp of the block if available, format depends on the chain */
-  timestamp?: Maybe<Scalars['String']>;
+  /** Integer representation of the timestamp stored in blocks for the chain */
+  timestamp?: Maybe<Scalars['Int']>;
 };
 
 /** The type for the top-level _meta field */
@@ -1561,15 +1561,18 @@ export type EmissionsQuery = { emissionsControllers: Array<{ id: string, staking
 
 export type EpochAllFragment = { id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> };
 
-export type SelectedEpochQueryVariables = Exact<{
+export type SelectedCurrentEpochQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SelectedCurrentEpochQuery = { epoches: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }> };
+
+export type SelectedPreviousEpochQueryVariables = Exact<{
   weekNumber: Scalars['Int'];
   blockNumber: Scalars['Int'];
-  isSelectedEpoch: Scalars['Boolean'];
-  skip: Scalars['Int'];
 }>;
 
 
-export type SelectedEpochQuery = { selectedEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }>, lastEpoch: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }> };
+export type SelectedPreviousEpochQuery = { epoches: Array<{ id: string, weekNumber: number, emission: string, totalVotes: string, dialVotes: Array<{ id: string, votes: string, dial: { id: string, dialId: number, cap: number, disabled: boolean, preferences: Array<{ id: string, weight: string, voter: { id: string, address: string, votesCast: string } }> } }> }> };
 
 export const DialPreferencesFragmentDoc = gql`
     fragment DialPreferences on Preference {
@@ -1596,7 +1599,7 @@ export const EpochAllFragmentDoc = gql`
       dialId
       cap
       disabled
-      preferences(first: 64, skip: $skip, orderBy: weight, orderDirection: desc) {
+      preferences(first: 64, orderBy: weight, orderDirection: desc) {
         ...DialPreferences
       }
     }
@@ -1685,48 +1688,77 @@ export function useEmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type EmissionsQueryHookResult = ReturnType<typeof useEmissionsQuery>;
 export type EmissionsLazyQueryHookResult = ReturnType<typeof useEmissionsLazyQuery>;
 export type EmissionsQueryResult = Apollo.QueryResult<EmissionsQuery, EmissionsQueryVariables>;
-export const SelectedEpochDocument = gql`
-    query SelectedEpoch($weekNumber: Int!, $blockNumber: Int!, $isSelectedEpoch: Boolean!, $skip: Int!) {
-  selectedEpoch: epoches(
-    where: {weekNumber: $weekNumber}
-    first: 1
-    block: {number: $blockNumber}
-  ) @include(if: $isSelectedEpoch) {
-    ...EpochAll
-  }
-  lastEpoch: epoches(orderBy: weekNumber, orderDirection: desc, first: 1) @skip(if: $isSelectedEpoch) {
+export const SelectedCurrentEpochDocument = gql`
+    query SelectedCurrentEpoch {
+  epoches(orderBy: weekNumber, orderDirection: desc, first: 1) {
     ...EpochAll
   }
 }
     ${EpochAllFragmentDoc}`;
 
 /**
- * __useSelectedEpochQuery__
+ * __useSelectedCurrentEpochQuery__
  *
- * To run a query within a React component, call `useSelectedEpochQuery` and pass it any options that fit your needs.
- * When your component renders, `useSelectedEpochQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSelectedCurrentEpochQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSelectedCurrentEpochQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSelectedEpochQuery({
+ * const { data, loading, error } = useSelectedCurrentEpochQuery({
  *   variables: {
- *      weekNumber: // value for 'weekNumber'
- *      blockNumber: // value for 'blockNumber'
- *      isSelectedEpoch: // value for 'isSelectedEpoch'
- *      skip: // value for 'skip'
  *   },
  * });
  */
-export function useSelectedEpochQuery(baseOptions: Apollo.QueryHookOptions<SelectedEpochQuery, SelectedEpochQueryVariables>) {
+export function useSelectedCurrentEpochQuery(baseOptions?: Apollo.QueryHookOptions<SelectedCurrentEpochQuery, SelectedCurrentEpochQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SelectedEpochQuery, SelectedEpochQueryVariables>(SelectedEpochDocument, options);
+        return Apollo.useQuery<SelectedCurrentEpochQuery, SelectedCurrentEpochQueryVariables>(SelectedCurrentEpochDocument, options);
       }
-export function useSelectedEpochLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SelectedEpochQuery, SelectedEpochQueryVariables>) {
+export function useSelectedCurrentEpochLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SelectedCurrentEpochQuery, SelectedCurrentEpochQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SelectedEpochQuery, SelectedEpochQueryVariables>(SelectedEpochDocument, options);
+          return Apollo.useLazyQuery<SelectedCurrentEpochQuery, SelectedCurrentEpochQueryVariables>(SelectedCurrentEpochDocument, options);
         }
-export type SelectedEpochQueryHookResult = ReturnType<typeof useSelectedEpochQuery>;
-export type SelectedEpochLazyQueryHookResult = ReturnType<typeof useSelectedEpochLazyQuery>;
-export type SelectedEpochQueryResult = Apollo.QueryResult<SelectedEpochQuery, SelectedEpochQueryVariables>;
+export type SelectedCurrentEpochQueryHookResult = ReturnType<typeof useSelectedCurrentEpochQuery>;
+export type SelectedCurrentEpochLazyQueryHookResult = ReturnType<typeof useSelectedCurrentEpochLazyQuery>;
+export type SelectedCurrentEpochQueryResult = Apollo.QueryResult<SelectedCurrentEpochQuery, SelectedCurrentEpochQueryVariables>;
+export const SelectedPreviousEpochDocument = gql`
+    query SelectedPreviousEpoch($weekNumber: Int!, $blockNumber: Int!) {
+  epoches(
+    where: {weekNumber: $weekNumber}
+    first: 1
+    block: {number: $blockNumber}
+  ) {
+    ...EpochAll
+  }
+}
+    ${EpochAllFragmentDoc}`;
+
+/**
+ * __useSelectedPreviousEpochQuery__
+ *
+ * To run a query within a React component, call `useSelectedPreviousEpochQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSelectedPreviousEpochQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSelectedPreviousEpochQuery({
+ *   variables: {
+ *      weekNumber: // value for 'weekNumber'
+ *      blockNumber: // value for 'blockNumber'
+ *   },
+ * });
+ */
+export function useSelectedPreviousEpochQuery(baseOptions: Apollo.QueryHookOptions<SelectedPreviousEpochQuery, SelectedPreviousEpochQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SelectedPreviousEpochQuery, SelectedPreviousEpochQueryVariables>(SelectedPreviousEpochDocument, options);
+      }
+export function useSelectedPreviousEpochLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SelectedPreviousEpochQuery, SelectedPreviousEpochQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SelectedPreviousEpochQuery, SelectedPreviousEpochQueryVariables>(SelectedPreviousEpochDocument, options);
+        }
+export type SelectedPreviousEpochQueryHookResult = ReturnType<typeof useSelectedPreviousEpochQuery>;
+export type SelectedPreviousEpochLazyQueryHookResult = ReturnType<typeof useSelectedPreviousEpochLazyQuery>;
+export type SelectedPreviousEpochQueryResult = Apollo.QueryResult<SelectedPreviousEpochQuery, SelectedPreviousEpochQueryVariables>;
