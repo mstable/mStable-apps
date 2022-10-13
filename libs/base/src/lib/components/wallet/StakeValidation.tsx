@@ -4,11 +4,14 @@ import type { FC } from 'react'
 
 const StakeValidationForm = styled.div`
   p {
-    color: ${({ theme }) => theme.color.bodyAccent};
     font-size: 0.8rem;
     line-height: 1.2rem;
-    margin-left: 0.3rem;
     white-space: pre-line;
+    max-height: 140px;
+    overflow: auto;
+    margin: 10px 0;
+    padding: 10px;
+    background: ${({ theme }) => theme.color.background[2]};
   }
   ul {
     color: ${({ theme }) => theme.color.bodyAccent};
