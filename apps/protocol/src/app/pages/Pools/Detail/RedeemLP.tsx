@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { AssetExchange, SendButton, TransactionInfo } from '@apps/base/components/forms'
 import { useWalletAddress } from '@apps/base/context/account'
@@ -22,7 +22,11 @@ import type { FC } from 'react'
 
 const formId = 'RedeemLP'
 
-export const RedeemLP: FC = () => {
+export type RedeemLPProps = {
+  onSetRedeemMaxExact: () => void
+}
+
+export const RedeemLP: FC<RedeemLPProps> = ({ onSetRedeemMaxExact }) => {
   const feederPool = useSelectedFeederPoolState()
   const contracts = useSelectedFeederPoolContracts()
   const propose = usePropose()
@@ -134,6 +138,12 @@ export const RedeemLP: FC = () => {
 
     return estimatedOutputAmount.error
   }, [inputAmount, inputToken, outputToken, isUnstakingFromVault, estimatedOutputAmount])
+
+  useEffect(() => {
+    if (estimatedOutputAmount.error && !!inputAmount?.simple) {
+      onSetRedeemMaxExact()
+    }
+  }, [estimatedOutputAmount.error, inputAmount?.simple, onSetRedeemMaxExact])
 
   return (
     <AssetExchange

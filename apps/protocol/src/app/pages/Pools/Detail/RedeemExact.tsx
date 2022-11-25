@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
-import { OneToManyAssetExchange, SendButton, useMultiAssetExchangeState } from '@apps/base/components/forms'
+import { OneToManyAssetExchange, SendButton, useMultiAssetExchangeDispatch, useMultiAssetExchangeState } from '@apps/base/components/forms'
 import { useWalletAddress } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
+import { BigDecimal } from '@apps/bigdecimal'
 import { useMaximumOutput } from '@apps/hooks'
 import { TransactionManifest } from '@apps/transaction-manifest'
 
@@ -14,14 +15,17 @@ import { useSelectedMassetPrice } from '../../../hooks/useSelectedMassetPrice'
 import { useSelectedFeederPoolContract, useSelectedFeederPoolState } from '../FeederPoolProvider'
 import { scaleFassetAmount } from '../utils'
 
-import type { BigDecimal } from '@apps/bigdecimal'
 import type { Interfaces } from '@apps/transaction-manifest'
 import type { AddressOption } from '@apps/types'
 import type { FC } from 'react'
 
 const formId = 'RedeemExact'
 
-export const RedeemExact: FC = () => {
+export type RedeemExactProps = {
+  setMax?: boolean
+}
+
+export const RedeemExact: FC<RedeemExactProps> = ({ setMax }) => {
   const feederPool = useSelectedFeederPoolState()
   const contract = useSelectedFeederPoolContract()
   const propose = usePropose()
@@ -32,6 +36,7 @@ export const RedeemExact: FC = () => {
   const isLowLiquidity = feederPool?.liquidity.simple * (massetPrice.value ?? 0) < 100000
 
   const [inputValues, slippage] = useMultiAssetExchangeState()
+  const [callbacks] = useMultiAssetExchangeDispatch()
 
   const touched = useMemo(() => Object.values(inputValues).filter(v => v.touched), [inputValues])
 
@@ -107,6 +112,43 @@ export const RedeemExact: FC = () => {
     return estimatedOutputAmount.error
   }, [touched, isLowLiquidity, estimatedOutputAmount, feederPool, inputAmount, inputValues, inputRatios])
 
+  useEffect(() => {
+    const handleMax = async () => {
+      try {
+        const sim = await contract.callStatic.redeemProportionately(
+          new BigDecimal(outputOption?.balance?.exact, outputOption?.['decimals']).exact,
+          [0, 0],
+          walletAddress,
+        )
+        if (sim && sim.length) {
+          sim.forEach((s, i) => {
+            if (i === 0) {
+              callbacks[feederPool.masset.address].setAmount(new BigDecimal(s, feederPool.masset.token.decimals))
+            }
+            if (i === 1) {
+              callbacks[feederPool.fasset.address].setAmount(new BigDecimal(s, feederPool.fasset.token.decimals))
+            }
+          })
+        }
+        // eslint-disable-next-line no-empty
+      } catch {}
+    }
+
+    if (setMax) {
+      handleMax()
+    }
+  }, [
+    callbacks,
+    contract.callStatic,
+    feederPool.fasset.address,
+    feederPool.fasset.token.decimals,
+    feederPool.masset.address,
+    feederPool.masset.token.decimals,
+    outputOption,
+    setMax,
+    walletAddress,
+  ])
+
   return (
     <OneToManyAssetExchange
       exchangeRate={exchangeRate}
@@ -127,6 +169,22 @@ export const RedeemExact: FC = () => {
 
           const addresses = touched.map(v => v.address)
           const amounts = touched.map(v => (v.amount as BigDecimal).exact)
+
+          if (setMax) {
+            return propose<Interfaces.FeederPool, 'redeemProportionately'>(
+              new TransactionManifest(
+                contract,
+                'redeemProportionately',
+                [
+                  new BigDecimal(outputOption?.balance?.exact, outputOption?.['decimals']).exact,
+                  touched.map(a => BigDecimal.fromSimple(a.amount.simple * 1 - slippage.simple, a.decimals).exact),
+                  walletAddress,
+                ],
+                { past: 'Redeemed', present: 'Redeeming' },
+                formId,
+              ),
+            )
+          }
 
           return propose<Interfaces.FeederPool, 'redeemExactBassets'>(
             new TransactionManifest(
