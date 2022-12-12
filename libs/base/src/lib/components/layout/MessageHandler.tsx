@@ -8,6 +8,7 @@ interface Props {
   recollat: (massetConfig: MassetConfig) => BannerMessageProps
   graph: BannerMessageProps
   olympus: BannerMessageProps
+  renbtc: BannerMessageProps
 }
 
 export const MessageHandler: Props = {
@@ -47,6 +48,18 @@ export const MessageHandler: Props = {
           target="_blank"
           rel="noopener noreferrer"
         >
+          Learn more
+        </a>
+      </p>
+    ),
+  },
+  renbtc: {
+    status: 'warning',
+    content: (
+      <p>
+        On the 20th of December 2022, renBTC will no longer be able to bridged back to its native network. It is recommended to withdraw any
+        supply positions.{' '}
+        <a href="https://twitter.com/mstable_/status/1601215719605403650" target="_blank" rel="noopener noreferrer">
           Learn more
         </a>
       </p>
