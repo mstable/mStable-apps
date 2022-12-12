@@ -22,7 +22,6 @@ import { PoolDetail } from './pages/Pools/Detail'
 import { Save } from './pages/Save'
 import { Stats } from './pages/Stats'
 
-import type { BannerMessageProps } from '@apps/base/context/banner'
 import type { FC } from 'react'
 
 const ProtocolRoutes: FC = () => {
@@ -97,18 +96,18 @@ export const ProtocolApp: FC = () => {
 
   // Handle message prioritisation:
   useLayoutEffect(() => {
-    let message: BannerMessageProps | undefined
-    const isPolygon = chainId === ChainIds.MaticMainnet
+    // let message: BannerMessageProps | undefined
+    // const isPolygon = chainId === ChainIds.MaticMainnet
 
-    if (isPolygon) {
-      message = MessageHandler.graph
-    }
+    // if (isPolygon) {
+    //   message = MessageHandler.graph
+    // }
 
-    if (undergoingRecol) {
-      message = (undergoingRecol && MessageHandler.recollat(massetConfig)) || undefined
-    }
+    // if (undergoingRecol) {
+    //   message = (undergoingRecol && MessageHandler.recollat(massetConfig)) || undefined
+    // }
 
-    setBannerMessage(message)
+    setBannerMessage(MessageHandler.renbtc)
   }, [chainId, massetConfig, setBannerMessage, undergoingRecol])
 
   useLayoutEffect(() => {
