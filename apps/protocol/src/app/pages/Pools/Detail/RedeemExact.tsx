@@ -92,13 +92,13 @@ export const RedeemExact: FC<RedeemExactProps> = ({ setMax }) => {
     if (!touched.length) return 'Enter an amount'
 
     if (isLowLiquidity) {
-      const minAssetSimple = (inputAmount?.simple ?? 0) * 0.4
+      // const minAssetSimple = (inputAmount?.simple ?? 0) * 0.4
 
       if (touched.length !== Object.keys(inputValues).length) return 'Assets must be withdrawn in pairs'
 
-      const isInRatio = !touched.find(v => scaleFassetAmount(v.amount, v.address, inputRatios)?.simple < minAssetSimple)
+      // const isInRatio = !touched.find(v => scaleFassetAmount(v.amount, v.address, inputRatios)?.simple < minAssetSimple)
 
-      if (!isInRatio) return 'Assets must be withdrawn at a minimum 40/60 ratio'
+      // if (!isInRatio) return 'Assets must be withdrawn at a minimum 40/60 ratio'
     }
 
     if (estimatedOutputAmount.error) return estimatedOutputAmount.error
@@ -110,7 +110,7 @@ export const RedeemExact: FC<RedeemExactProps> = ({ setMax }) => {
     if (estimatedOutputAmount.fetching) return 'Validating…'
 
     return estimatedOutputAmount.error
-  }, [touched, isLowLiquidity, estimatedOutputAmount, feederPool, inputAmount, inputValues, inputRatios])
+  }, [touched, isLowLiquidity, estimatedOutputAmount, feederPool, inputValues])
 
   useEffect(() => {
     const handleMax = async () => {

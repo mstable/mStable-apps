@@ -45,7 +45,7 @@ export const Withdraw: FC<{ isLowLiquidity?: boolean }> = ({ isLowLiquidity = fa
 
   return (
     <MultiAssetExchangeProvider assets={assets}>
-      {isRedeemExact ? <RedeemExact setMax={redeemMax} /> : <RedeemLP onSetRedeemMaxExact={handleSetRedeemMaxExact} />}
+      {isRedeemExact ? <RedeemExact setMax={isLowLiquidity || redeemMax} /> : <RedeemLP onSetRedeemMaxExact={handleSetRedeemMaxExact} />}
       <RedeemPathBox>
         <div>
           <UnstyledButton onClick={setRedeemExact}>
