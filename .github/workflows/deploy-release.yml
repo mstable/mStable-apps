@@ -17,7 +17,10 @@ jobs:
       - run: npm install -g yarn
       - run: yarn install
       - run: yarn codegen:typechain
-      - run: yarn nx run protocol:build --prod
+      - name: Build protocol
+        env:
+          infura: ${{ secrets.INFURA_API_KEY }}
+        run: NX_INFURA_KEY=$infura yarn nx run protocol:build --prod
       - uses: FirebaseExtended/action-hosting-deploy@v0        
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -42,7 +45,10 @@ jobs:
           cache: 'yarn'
       - run: yarn install
       - run: yarn codegen:typechain
-      - run: yarn nx run governance:build --prod
+      - name: Build governance
+        env:
+          infura: ${{ secrets.INFURA_API_KEY }}
+        run: NX_INFURA_KEY=$infura yarn nx run governance:build --prod
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
