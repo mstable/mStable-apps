@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { sanitizeMassetError } from '@apps/formatters'
 import { useFetchState } from '@apps/hooks'
 import { getPriceImpact } from '@apps/quick-maths'
 import { useDebounce } from 'react-use'
@@ -94,7 +93,7 @@ export const useEstimatedOutputMulti = (
           setEstimatedOutputRange.value([low, high])
         })
         .catch((_error: Error): void => {
-          setEstimatedOutputRange.error(sanitizeMassetError(_error))
+          setEstimatedOutputRange.value([BigDecimal.ZERO, BigDecimal.ZERO])
         })
     },
     2500,

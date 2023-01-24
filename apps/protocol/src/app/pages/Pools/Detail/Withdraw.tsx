@@ -33,19 +33,17 @@ const RedeemPathBox = styled.div`
 
 export const Withdraw: FC<{ isLowLiquidity?: boolean }> = ({ isLowLiquidity = false }) => {
   const [isRedeemExact, setRedeemExact] = useToggle(false)
-  const [redeemMax, setRedeemMax] = useToggle(false)
 
   const feederPool = useSelectedFeederPoolState()
   const assets = useSelectedFeederPoolAssets()
 
   const handleSetRedeemMaxExact = () => {
-    setRedeemMax(true)
     setRedeemExact(true)
   }
 
   return (
     <MultiAssetExchangeProvider assets={assets}>
-      {isRedeemExact ? <RedeemExact setMax={isLowLiquidity || redeemMax} /> : <RedeemLP onSetRedeemMaxExact={handleSetRedeemMaxExact} />}
+      {isRedeemExact ? <RedeemExact isLowLiquidity={isLowLiquidity} /> : <RedeemLP onSetRedeemMaxExact={handleSetRedeemMaxExact} />}
       <RedeemPathBox>
         <div>
           <UnstyledButton onClick={setRedeemExact}>
