@@ -30,7 +30,6 @@ import type { Wallet } from '@rainbow-me/rainbowkit'
 import type { FC } from 'react'
 import type { Chain } from 'wagmi'
 
-const INFURA_ID = 'a6daf77ef0ae4b60af39259e435a40fe'
 const AUTOCONNECTED_CONNECTOR_IDS = ['safe', 'metaMask', 'walletConnect', 'coinbaseWallet', 'injected']
 
 const { chains, provider, webSocketProvider } = configureChains(
@@ -41,7 +40,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     chain.kovan,
     ...(process.env.NX_APP_NAME === 'protocol' ? [chain.polygon, chain.polygonMumbai] : []),
   ],
-  [infuraProvider({ infuraId: INFURA_ID }), publicProvider()],
+  [infuraProvider({ infuraId: process.env['NX_INFURA_KEY'] }), publicProvider()],
 )
 
 const needsInjectedWalletFallback =
