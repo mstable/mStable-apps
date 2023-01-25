@@ -177,6 +177,7 @@ export const OneToManyAssetExchange: FC<
         amountDisabled
         isFetching={exchangeRate.fetching}
         handleSetAddress={setInputAddress}
+        handleSetMax={setMaxCallbacks?.[inputAddress ?? '']}
       />
       <div>
         <Arrow />
