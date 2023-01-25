@@ -9,7 +9,6 @@ import { ModalDataProvider } from '../../context/ModalDataProvider'
 import { AppBar } from './AppBar'
 import { BannerMessage } from './BannerMessage'
 import { Footer } from './Footer'
-import { MvBanner } from './MvBanner'
 import { Toasts } from './Toasts'
 
 import type { FontSize, Size, Spacing } from '@apps/theme'
@@ -251,7 +250,6 @@ export const Layout: FC = ({ children }) => {
         <Background />
         <BannerMessage />
         <AppBar />
-        <MvBanner />
         <Container>
           <Main>{children}</Main>
         </Container>
