@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-
 import { useUpdateQuestsMutation } from '@apps/artifacts/graphql/questbook'
 import { getUnixTime } from 'date-fns'
 
@@ -36,13 +34,14 @@ export const QuestsUpdater = (): null => {
     },
   })
 
-  useEffect(() => {
-    if (account) {
-      updateUserQuests({ variables: { userId: account ?? '', hasUser: !!account } }).catch(error => {
-        console.error(error)
-      })
-    }
-  }, [updateUserQuests, account])
+  // Make this thing stop because it's not maintained anymore
+  // useEffect(() => {
+  //   if (account) {
+  //     updateUserQuests({ variables: { userId: account ?? '', hasUser: !!account } }).catch(error => {
+  //       console.error(error)
+  //     })
+  //   }
+  // }, [updateUserQuests, account])
 
   return null
 }
