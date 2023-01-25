@@ -122,6 +122,10 @@ export const Footer: FC = () => {
           <div>
             <div>
               <b>mStable</b>&nbsp;|&nbsp;
+              <Link href="https://yield.mstable.org/" target="_blank" rel="noreferrer">
+                Yield app&nbsp;<span>↗</span>
+              </Link>
+              &nbsp;|&nbsp;
               <Link href={href} target="_blank" rel="noreferrer">
                 {label}&nbsp;<span>↗</span>
               </Link>
