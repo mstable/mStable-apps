@@ -32,19 +32,21 @@ cp .env .env.local
 # Then install, codegen, and run the apps
 yarn
 yarn codegen:typechain
-yarn nx serve --parallel --all
+yarn nx serve <PROJECT>
 ```
 
 ### Running an app
 
 ```bash
-yarn nx run protocol:serve
+yarn nx serve protocol
+yarn nx serve governance
 ```
 
 ### Building an app
 
 ```bash
-yarn nx run protocol:build
+yarn nx run build protocol
+yarn nx run build governance
 ```
 
 ### NX module boundaries
