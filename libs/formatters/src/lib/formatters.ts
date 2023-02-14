@@ -50,6 +50,7 @@ export const humanizeList = (list: string[]): string =>
 interface EthersError extends Error {
   code?: ErrorCode
   error?: Error
+  reason?: string
 }
 
 const sanitizeEthersError = (error: EthersError): string => {
@@ -70,6 +71,13 @@ const sanitizeEthersError = (error: EthersError): string => {
       return 'Replacement transaction underpriced'
     case ErrorCode.TIMEOUT:
       return 'Timeout'
+    case ErrorCode.CALL_EXCEPTION:
+      switch (error?.reason) {
+        case 'Exceeds weight limits':
+          return 'Exceeds weight limits, switch to multi assets redemption'
+        default:
+          return 'Transaction execution error'
+      }
     default:
       break
   }
