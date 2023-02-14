@@ -72,7 +72,12 @@ const sanitizeEthersError = (error: EthersError): string => {
     case ErrorCode.TIMEOUT:
       return 'Timeout'
     case ErrorCode.CALL_EXCEPTION:
-      return error?.reason ?? 'Transaction execution error'
+      switch (error?.reason) {
+        case 'Exceeds weight limits':
+          return 'Exceeds weight limits, switch to multi assets redemption'
+        default:
+          return 'Transaction execution error'
+      }
     default:
       break
   }
