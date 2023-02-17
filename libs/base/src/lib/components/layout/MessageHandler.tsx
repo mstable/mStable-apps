@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { ReactComponent as WarningIcon } from '@apps/icons/warning-alt.svg'
+import styled from 'styled-components'
+
 import type { MassetConfig } from '@apps/masset-provider'
 
 import type { BannerMessageProps } from '../../context/BannerProvider'
@@ -9,7 +12,38 @@ interface Props {
   graph: BannerMessageProps
   olympus: BannerMessageProps
   renbtc: BannerMessageProps
+  shutdown: BannerMessageProps
 }
+
+const Container = styled.div`
+  /* position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 4rem 1rem;
+
+  @media (max-width: 400px) {
+    top: 0;
+    left: 0;
+    width: 1;
+  }
+`
+
+const Modal = styled.div`
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  background-color: rgba(44, 48, 78, 0.4);
+  backdrop-filter: blur(2px);
+  border-radius: 1rem;
+  border: 1px solid #fff6a1;
+`
 
 export const MessageHandler: Props = {
   recollat: (massetConfig: MassetConfig) => ({
@@ -63,6 +97,24 @@ export const MessageHandler: Props = {
           Learn more
         </a>
       </p>
+    ),
+  },
+  shutdown: {
+    status: 'none',
+    content: (
+      <Container>
+        <Modal>
+          <WarningIcon />
+          <p>
+            mStable is sunsetting its entire product line, earning interest through the protocol has been disabled and the project’s smart
+            contracts are no longer operated by the mStableDAO.
+          </p>
+          <p>It is strongly advised to withdraw all liquidity positions from the protocol. Read more in the official announcement.</p>
+          <a href="" target="_blank" rel="noopener noreferrer">
+            Read More
+          </a>
+        </Modal>
+      </Container>
     ),
   },
 }

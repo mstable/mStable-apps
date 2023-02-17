@@ -10,7 +10,6 @@ const Container = styled.div<{ statusColor: string | undefined }>`
   text-align: center;
   font-size: 0.75rem;
   line-height: 1.5rem;
-  border-bottom: 1px solid ${({ statusColor }) => statusColor};
   overflow-wrap: normal;
   display: none;
 
@@ -35,6 +34,7 @@ export const BannerMessage: FC = () => {
     {
       warning: Color.yellowTransparent,
       info: Color.coolBlueTransparent,
+      none: 'transparent',
     }[status]
 
   return bannerMessage ? <Container statusColor={statusColor}>{content}</Container> : null

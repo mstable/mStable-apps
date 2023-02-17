@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 
-import { useBaseCtx } from '@apps/base'
+import { MessageHandler, useBaseCtx } from '@apps/base'
+import { useBannerMessage } from '@apps/base/context/banner'
 import { useUnsupportedNetwork } from '@apps/base/hooks'
 import { APP_NAME } from '@apps/types'
 import { Redirect, Route, Switch } from 'react-router-dom'
@@ -35,7 +36,13 @@ const GovernanceRoutes: FC = () => {
 
 export const GovernanceApp: FC = () => {
   const [, setBaseCtx] = useBaseCtx()
+  const [, setBannerMessage] = useBannerMessage()
+
   useUnsupportedNetwork()
+
+  useLayoutEffect(() => {
+    setBannerMessage(MessageHandler.shutdown)
+  }, [setBannerMessage])
 
   useEffect(() => {
     const navItems = [

@@ -6,7 +6,7 @@ import { ChainIds, useChainIdCtx, useNetwork } from '@apps/base/context/network'
 import { useUnsupportedNetwork } from '@apps/base/hooks'
 import { useURLQuery } from '@apps/hooks'
 import { useSelectedMassetState } from '@apps/masset-hooks'
-import { useSelectedMasset, useSelectedMassetConfig, useSelectedMassetName } from '@apps/masset-provider'
+import { useSelectedMasset, useSelectedMassetName } from '@apps/masset-provider'
 import { APP_NAME } from '@apps/types'
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
@@ -71,12 +71,10 @@ const ProtocolRoutes: FC = () => {
 export const ProtocolApp: FC = () => {
   const massetState = useSelectedMassetState()
   const massetName = useSelectedMassetName()
-  const massetConfig = useSelectedMassetConfig()
   const hasFeederPools = massetState?.hasFeederPools
   const [, setBannerMessage] = useBannerMessage()
-  const { undergoingRecol } = useSelectedMassetState() ?? {}
   const urlQuery = useURLQuery()
-  const [chainId, setChainId] = useChainIdCtx()
+  const [, setChainId] = useChainIdCtx()
   const [, setBaseCtx] = useBaseCtx()
 
   useUnsupportedNetwork()
@@ -96,19 +94,8 @@ export const ProtocolApp: FC = () => {
 
   // Handle message prioritisation:
   useLayoutEffect(() => {
-    // let message: BannerMessageProps | undefined
-    // const isPolygon = chainId === ChainIds.MaticMainnet
-
-    // if (isPolygon) {
-    //   message = MessageHandler.graph
-    // }
-
-    // if (undergoingRecol) {
-    //   message = (undergoingRecol && MessageHandler.recollat(massetConfig)) || undefined
-    // }
-
-    setBannerMessage(MessageHandler.renbtc)
-  }, [chainId, massetConfig, setBannerMessage, undergoingRecol])
+    setBannerMessage(MessageHandler.shutdown)
+  }, [setBannerMessage])
 
   useLayoutEffect(() => {
     const network = urlQuery.get('network')
