@@ -103,10 +103,10 @@ export const SaveRedeem: FC = () => {
       ...Object.values(bAssets).map(b => b.token),
       ...Object.values(fAssets).map(b => b.token),
     ]
-    if (inputAddress === vaultAddress) return outputs.filter(v => v.address !== massetAddress)
+    if (inputAddress === vaultAddress) return [saveToken]
     if (inputAddress === saveAddress) return outputs.filter(v => v.address !== saveAddress)
     return outputs
-  }, [inputAddress, vaultAddress, saveAddress, massetAddress, massetToken, saveToken, bAssets, fAssets])
+  }, [inputAddress, vaultAddress, saveAddress, massetToken, saveToken, bAssets, fAssets])
 
   const [outputAddress, setOutputAddress] = useState<string | undefined>(outputOptions?.[0].address)
   const outputDecimals = outputOptions.find(v => v.address === outputAddress)?.balance?.decimals
