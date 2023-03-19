@@ -32,7 +32,7 @@ import type { Chain } from 'wagmi'
 
 const AUTOCONNECTED_CONNECTOR_IDS = ['safe', 'metaMask', 'walletConnect', 'coinbaseWallet', 'injected']
 
-const { chains, provider, webSocketProvider } = configureChains(
+const { chains, provider } = configureChains(
   [
     chain.mainnet,
     chain.ropsten,
@@ -81,7 +81,6 @@ const client = createClient({
   autoConnect: !isIframe(),
   connectors,
   provider,
-  webSocketProvider,
 })
 
 const AccountProvider: FC = ({ children }) => {
