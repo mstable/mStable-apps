@@ -2,11 +2,11 @@ import { createContext, useContext, useEffect, useMemo, useRef } from 'react'
 
 import { ERC20__factory, FraxCrossChainFarm__factory } from '@apps/artifacts/typechain'
 import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
-import { useBlockNow } from '@apps/base/context/block'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { BigDecimal } from '@apps/bigdecimal'
 import { useFetchState } from '@apps/hooks'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, usePrevious } from 'react-use'
+import { useBlockNumber } from 'wagmi'
 
 import type { ERC20, FraxCrossChainFarm } from '@apps/artifacts/typechain'
 import type { MaticMainnet } from '@apps/base/context/network'
@@ -57,7 +57,8 @@ export const FraxStakingProvider: FC = ({ children }) => {
   const fraxAddresses = (addresses as MaticMainnet['addresses'])['FRAX']
 
   const signerOrProvider = useSignerOrProvider()
-  const blockNumber = useBlockNow()
+  const { data: block } = useBlockNumber({ watch: true })
+  const prevBlock = usePrevious(block)
 
   const account = useAccount()
   const stakingContract = useRef<FraxCrossChainFarm>()
@@ -65,6 +66,8 @@ export const FraxStakingProvider: FC = ({ children }) => {
   const [staticData, setStaticData] = useFetchState<StaticData>()
   const [subscribedData, setSubscribedData] = useFetchState<SubscribedData>()
   const [rewards, setRewards] = useFetchState<BoostedAPY>()
+
+  // console.log('FraxStakingProvider ', account, feederPool.current, signerOrProvider, fraxAddresses)
 
   // Set/reset on network/signer change
   useEffect(() => {
@@ -102,7 +105,7 @@ export const FraxStakingProvider: FC = ({ children }) => {
   })
 
   // Initial contract calls (once only)
-  useEffect(() => {
+  useEffectOnce(() => {
     if (!stakingContract.current || staticData.fetching || staticData.value) return
 
     setStaticData.fetching()
@@ -121,11 +124,11 @@ export const FraxStakingProvider: FC = ({ children }) => {
         })
       })
       .catch(setStaticData.error)
-  }, [setStaticData, staticData.fetching, staticData.value, fraxAddresses])
+  })
 
   // Contract calls on every block
   useEffect(() => {
-    if (!fraxAddresses || !stakingContract.current || subscribedData.fetching) return
+    if (!fraxAddresses || !stakingContract.current || subscribedData.fetching || block === prevBlock) return
 
     Promise.all([
       account
@@ -162,10 +165,10 @@ export const FraxStakingProvider: FC = ({ children }) => {
             poolBalance: new BigDecimal(poolBalance),
           }
         }
-        setSubscribedData.value({ accountData, lastUpdate: blockNumber })
+        setSubscribedData.value({ accountData, lastUpdate: block })
       })
       .catch(setSubscribedData.error)
-  }, [blockNumber, account, setSubscribedData, fraxAddresses, subscribedData.fetching])
+  }, [account, block, fraxAddresses, prevBlock, setSubscribedData, subscribedData.fetching])
 
   return (
     <contractCtx.Provider value={stakingContract.current}>

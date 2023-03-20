@@ -32,7 +32,7 @@ import type { Chain } from 'wagmi'
 
 const AUTOCONNECTED_CONNECTOR_IDS = ['safe', 'metaMask', 'walletConnect', 'coinbaseWallet', 'injected']
 
-const { chains, provider } = configureChains(
+const { chains, provider, webSocketProvider } = configureChains(
   [
     chain.mainnet,
     chain.ropsten,
@@ -81,20 +81,21 @@ const client = createClient({
   autoConnect: !isIframe(),
   connectors,
   provider,
+  webSocketProvider,
 })
 
 const AccountProvider: FC = ({ children }) => {
   const { address, connector } = useWagmiAccount()
-  const [, setChainId] = useChainIdCtx()
+  const [chainId, setChainId] = useChainIdCtx()
   const { chain } = useNetwork()
   const [, setStakeSignatures] = useStakeSignatures()
   const { connect, connectors } = useConnect()
 
   useEffect(() => {
-    if (chain?.id) {
+    if (chain?.id && chain?.id !== chainId) {
       setChainId(chain.id)
     }
-  }, [chain?.id, setChainId])
+  }, [chain?.id, chainId, setChainId])
 
   useEffectOnce(() => {
     if (process.env.NX_APP_NAME === 'governance') {
