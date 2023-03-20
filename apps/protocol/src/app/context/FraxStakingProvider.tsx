@@ -5,8 +5,8 @@ import { useAccount, useSignerOrProvider } from '@apps/base/context/account'
 import { useNetworkAddresses } from '@apps/base/context/network'
 import { BigDecimal } from '@apps/bigdecimal'
 import { useFetchState } from '@apps/hooks'
-import { useEffectOnce, usePrevious } from 'react-use'
-import { useBlockNumber } from 'wagmi'
+import { useEffectOnce } from 'react-use'
+import { useBlockNumber, useContractReads } from 'wagmi'
 
 import type { ERC20, FraxCrossChainFarm } from '@apps/artifacts/typechain'
 import type { MaticMainnet } from '@apps/base/context/network'
@@ -58,7 +58,6 @@ export const FraxStakingProvider: FC = ({ children }) => {
 
   const signerOrProvider = useSignerOrProvider()
   const { data: block } = useBlockNumber({ watch: true })
-  const prevBlock = usePrevious(block)
 
   const account = useAccount()
   const stakingContract = useRef<FraxCrossChainFarm>()
@@ -66,8 +65,6 @@ export const FraxStakingProvider: FC = ({ children }) => {
   const [staticData, setStaticData] = useFetchState<StaticData>()
   const [subscribedData, setSubscribedData] = useFetchState<SubscribedData>()
   const [rewards, setRewards] = useFetchState<BoostedAPY>()
-
-  // console.log('FraxStakingProvider ', account, feederPool.current, signerOrProvider, fraxAddresses)
 
   // Set/reset on network/signer change
   useEffect(() => {
@@ -105,7 +102,7 @@ export const FraxStakingProvider: FC = ({ children }) => {
   })
 
   // Initial contract calls (once only)
-  useEffectOnce(() => {
+  useEffect(() => {
     if (!stakingContract.current || staticData.fetching || staticData.value) return
 
     setStaticData.fetching()
@@ -124,51 +121,74 @@ export const FraxStakingProvider: FC = ({ children }) => {
         })
       })
       .catch(setStaticData.error)
+  }, [setStaticData, staticData.fetching, staticData.value])
+
+  const { data } = useContractReads({
+    contracts: [
+      {
+        addressOrName: fraxAddresses?.stakingContract,
+        contractInterface: FraxCrossChainFarm__factory.abi,
+        functionName: 'earned',
+        args: [account],
+      },
+      {
+        addressOrName: fraxAddresses?.stakingContract,
+        contractInterface: FraxCrossChainFarm__factory.abi,
+        functionName: 'combinedWeightOf',
+        args: [account],
+      },
+      {
+        addressOrName: fraxAddresses?.stakingContract,
+        contractInterface: FraxCrossChainFarm__factory.abi,
+        functionName: 'lockedStakesOf',
+        args: [account],
+      },
+      {
+        addressOrName: fraxAddresses?.stakingContract,
+        contractInterface: FraxCrossChainFarm__factory.abi,
+        functionName: 'lockedLiquidityOf',
+        args: [account],
+      },
+      {
+        addressOrName: fraxAddresses?.feederPool,
+        contractInterface: ERC20__factory.abi,
+        functionName: 'balanceOf',
+        args: [account],
+      },
+    ],
+    allowFailure: true,
+    cacheOnBlock: true,
   })
 
-  // Contract calls on every block
   useEffect(() => {
-    if (!fraxAddresses || !stakingContract.current || subscribedData.fetching || block === prevBlock) return
-
-    Promise.all([
-      account
-        ? Promise.all([
-            stakingContract.current.earned(account),
-            stakingContract.current.combinedWeightOf(account),
-            stakingContract.current.lockedStakesOf(account),
-            stakingContract.current.lockedLiquidityOf(account),
-            feederPool.current.balanceOf(account),
-          ])
-        : undefined,
-    ])
-      .then(([[earned, combinedWeight, lockedStakes, lockedLiquidity, poolBalance] = []]) => {
-        let accountData: SubscribedData['accountData']
-        if (earned && combinedWeight && lockedStakes && lockedLiquidity) {
-          accountData = {
-            earned: earned.map((amount, index) => {
-              const address = index === 0 ? fraxAddresses.rewardsTokens[0] : fraxAddresses.rewardsTokens[1]
-              return {
-                address,
-                symbol: address === fraxAddresses.rewardsTokens[0] ? 'FXS' : 'MTA',
-                amount: new BigDecimal(amount), // Assumed 18 decimals (so far, we know it will be)
-              }
-            }),
-            combinedWeight: new BigDecimal(combinedWeight),
-            lockedLiquidity: new BigDecimal(lockedLiquidity),
-            lockedStakes: lockedStakes.map(({ kek_id, start_timestamp, ending_timestamp, liquidity, lock_multiplier }) => ({
-              kekId: kek_id,
-              startTime: new Date(parseInt(start_timestamp.toString())).getTime() * 1000, // ms
-              endTime: new Date(parseInt(ending_timestamp.toString())).getTime() * 1000,
-              liquidity: new BigDecimal(liquidity),
-              lockMultiplier: new BigDecimal(lock_multiplier),
-            })),
-            poolBalance: new BigDecimal(poolBalance),
-          }
+    if (data) {
+      let accountData: SubscribedData['accountData']
+      const [earned, combinedWeight, lockedStakes, lockedLiquidity, poolBalance] = data
+      if (earned && combinedWeight && lockedStakes && lockedLiquidity) {
+        accountData = {
+          earned: earned.map((amount, index) => {
+            const address = index === 0 ? fraxAddresses.rewardsTokens[0] : fraxAddresses.rewardsTokens[1]
+            return {
+              address,
+              symbol: address === fraxAddresses.rewardsTokens[0] ? 'FXS' : 'MTA',
+              amount: new BigDecimal(amount), // Assumed 18 decimals (so far, we know it will be)
+            }
+          }),
+          combinedWeight: new BigDecimal(combinedWeight),
+          lockedLiquidity: new BigDecimal(lockedLiquidity),
+          lockedStakes: lockedStakes.map(({ kek_id, start_timestamp, ending_timestamp, liquidity, lock_multiplier }) => ({
+            kekId: kek_id,
+            startTime: new Date(parseInt(start_timestamp.toString())).getTime() * 1000, // ms
+            endTime: new Date(parseInt(ending_timestamp.toString())).getTime() * 1000,
+            liquidity: new BigDecimal(liquidity),
+            lockMultiplier: new BigDecimal(lock_multiplier),
+          })),
+          poolBalance: new BigDecimal(poolBalance),
         }
-        setSubscribedData.value({ accountData, lastUpdate: block })
-      })
-      .catch(setSubscribedData.error)
-  }, [account, block, fraxAddresses, prevBlock, setSubscribedData, subscribedData.fetching])
+      }
+      setSubscribedData.value({ accountData, lastUpdate: block })
+    }
+  }, [block, data, fraxAddresses?.rewardsTokens, setSubscribedData])
 
   return (
     <contractCtx.Provider value={stakingContract.current}>
