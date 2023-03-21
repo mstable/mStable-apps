@@ -86,16 +86,16 @@ const client = createClient({
 
 const AccountProvider: FC = ({ children }) => {
   const { address, connector } = useWagmiAccount()
-  const [, setChainId] = useChainIdCtx()
+  const [chainId, setChainId] = useChainIdCtx()
   const { chain } = useNetwork()
   const [, setStakeSignatures] = useStakeSignatures()
   const { connect, connectors } = useConnect()
 
   useEffect(() => {
-    if (chain?.id) {
+    if (chain?.id && chain?.id !== chainId) {
       setChainId(chain.id)
     }
-  }, [chain?.id, setChainId])
+  }, [chain?.id, chainId, setChainId])
 
   useEffectOnce(() => {
     if (process.env.NX_APP_NAME === 'governance') {

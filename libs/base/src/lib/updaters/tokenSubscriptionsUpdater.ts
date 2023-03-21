@@ -1,70 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { BigDecimal } from '@apps/bigdecimal'
-import { Interface } from '@ethersproject/abi'
-import { constants } from 'ethers'
+import { BigNumber } from 'ethers'
 import { usePrevious } from 'react-use'
-import { useBlockNumber } from 'wagmi'
+import { erc20ABI, useContractReads } from 'wagmi'
 
 import { useChainIdCtx } from '../context/NetworkProvider'
 import { useAllowanceSubscriptionsSerialized, useBalanceSubscriptionsSerialized, useTokensDispatch } from '../context/TokensProvider'
-import { useAccount, useSigner } from '../context/WagmiProvider'
-
-import type { IERC20 } from '@apps/artifacts/typechain'
-import type { Provider } from '@ethersproject/providers'
-
-const contractInterface = (() => {
-  const abi = [
-    {
-      constant: true,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'balanceOf',
-      outputs: [
-        {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'owner',
-          type: 'address',
-        },
-        {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
-        },
-      ],
-      name: 'allowance',
-      outputs: [
-        {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-  ]
-  return new Interface(abi) as unknown as IERC20['interface']
-})()
+import { useAccount } from '../context/WagmiProvider'
 
 /**
  * Updater for tracking token balances, performing fetches on each new
@@ -72,13 +15,12 @@ const contractInterface = (() => {
  */
 export const TokenSubscriptionsUpdater = (): null => {
   const { reset, updateBalances, updateAllowances } = useTokensDispatch()
-  const signer = useSigner()
+
   const [chainId] = useChainIdCtx()
   const prevChainId = usePrevious(chainId)
 
   const account = useAccount()
   const prevAccount = usePrevious(account)
-  const { data: blockNumber } = useBlockNumber({ watch: true })
 
   const balanceSubscriptionsSerialized = useBalanceSubscriptionsSerialized()
   const allowanceSubscriptionsSerialized = useAllowanceSubscriptionsSerialized()
@@ -90,81 +32,85 @@ export const TokenSubscriptionsUpdater = (): null => {
     }
   }, [account, chainId, prevAccount, prevChainId, reset])
 
-  useEffect(() => {
-    if (!account || !signer?.provider || account !== prevAccount) return
-
-    const allowanceSubs: {
-      address: string
-      spenders: string[]
-      decimals: number
-    }[] = JSON.parse(allowanceSubscriptionsSerialized)
-
-    const allowancePromises = allowanceSubs.flatMap(({ address, spenders, decimals }) =>
-      spenders.map(async spender => {
-        const data = await (signer.provider as Provider).call({
-          to: address,
-          data: contractInterface.encodeFunctionData('allowance', [account, spender]),
-        })
-        const allowance = contractInterface.decodeFunctionResult('allowance', data)
-        return {
+  const allowances = useMemo(
+    () =>
+      (
+        JSON.parse(allowanceSubscriptionsSerialized) as {
+          address: string
+          spenders: string[]
+          decimals: number
+        }[]
+      ).flatMap(({ address, spenders, decimals }) =>
+        spenders.map(spender => ({
           address,
           spender,
-          allowance: new BigDecimal(allowance[0], decimals),
-        }
-      }),
-    )
+          decimals,
+        })),
+      ),
+    [allowanceSubscriptionsSerialized],
+  )
 
-    Promise.all(allowancePromises)
-      .then(allowances => {
-        updateAllowances(
-          allowances.reduce<Parameters<typeof updateAllowances>[0]>(
-            (_allowances, { address, allowance, spender }) => ({
-              ..._allowances,
-              [address]: { ..._allowances[address], [spender]: allowance },
-            }),
-            {},
-          ),
-        )
-      })
-      .catch(console.error)
-  }, [account, allowanceSubscriptionsSerialized, blockNumber, prevAccount, signer?.provider, updateAllowances])
+  const { data: allowRes } = useContractReads({
+    contracts: allowances.map(({ address, spender }) => ({
+      addressOrName: address,
+      contractInterface: erc20ABI,
+      functionName: 'allowance',
+      args: [account, spender],
+    })),
+    allowFailure: true,
+  })
 
   useEffect(() => {
-    if (!account || !signer?.provider || account !== prevAccount) return
-
-    const balanceSubs: { address: string; decimals: number }[] = JSON.parse(balanceSubscriptionsSerialized)
-
-    const balancePromises = balanceSubs
-      .filter(({ address }) => address !== constants.AddressZero)
-      .map(async ({ address, decimals }) => {
-        const data = await (signer.provider as Provider).call({
-          to: address,
-          data: contractInterface.encodeFunctionData('balanceOf', [account]),
-        })
-        const balance = contractInterface.decodeFunctionResult('balanceOf', data)
-        return [address, new BigDecimal(balance[0], decimals)]
-      })
-
-    Promise.all(balancePromises)
-      .then(balances => {
-        updateBalances(Object.fromEntries(balances))
-      })
-      .catch(console.error)
-  }, [account, balanceSubscriptionsSerialized, blockNumber, prevAccount, signer, updateBalances])
-
-  useEffect(() => {
-    if (account && signer?.provider) {
-      signer.provider.getBalance(account).then(_balance => {
-        updateBalances({
-          [constants.AddressZero as string]: new BigDecimal(_balance),
-        })
-      })
-    } else {
-      updateBalances({
-        [constants.AddressZero as string]: BigDecimal.ZERO,
-      })
+    if (allowRes) {
+      updateAllowances(
+        allowances.reduce(
+          (acc, curr, i) => ({
+            ...acc,
+            [curr.address]: {
+              ...acc[curr.address],
+              [curr.spender]: BigNumber.isBigNumber(allowRes[i]) ? new BigDecimal(allowRes[i], curr.decimals) : BigDecimal.ZERO,
+            },
+          }),
+          {} as Record<string, Record<string, BigDecimal>>,
+        ),
+      )
     }
-  }, [account, blockNumber, signer?.provider, updateBalances])
+  }, [allowRes, allowances, updateAllowances])
+
+  const balances = useMemo(
+    () =>
+      JSON.parse(balanceSubscriptionsSerialized) as {
+        address: string
+        decimals: number
+      }[],
+    [balanceSubscriptionsSerialized],
+  )
+
+  const { data: balRes } = useContractReads({
+    contracts: balances.map(({ address }) => ({
+      addressOrName: address,
+      contractInterface: erc20ABI,
+      functionName: 'balanceOf',
+      args: [account],
+    })),
+    allowFailure: true,
+  })
+
+  useEffect(() => {
+    if (balRes) {
+      updateBalances(
+        balances.reduce(
+          (acc, curr, i) => ({
+            ...acc,
+            [curr.address]: BigNumber.isBigNumber(balRes[i]) ? new BigDecimal(balRes[i], curr.decimals) : BigDecimal.ZERO,
+          }),
+          {},
+        ),
+      )
+    } else {
+      updateBalances(balances.reduce((acc, curr) => ({ ...acc, [curr.address]: BigDecimal.ZERO }), {}))
+    }
+  }, [balRes, balances, updateBalances])
 
   return null
 }
