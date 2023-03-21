@@ -101,27 +101,39 @@ export const FraxStakingProvider: FC = ({ children }) => {
       .catch(setRewards.error)
   })
 
-  // Initial contract calls (once only)
+  const { data: statics } = useContractReads({
+    contracts: [
+      {
+        addressOrName: fraxAddresses?.stakingContract,
+        contractInterface: FraxCrossChainFarm__factory.abi,
+        functionName: 'lock_max_multiplier',
+      },
+      {
+        addressOrName: fraxAddresses?.stakingContract,
+        contractInterface: FraxCrossChainFarm__factory.abi,
+        functionName: 'lock_time_for_max_multiplier',
+      },
+      {
+        addressOrName: fraxAddresses?.stakingContract,
+        contractInterface: FraxCrossChainFarm__factory.abi,
+        functionName: 'lock_time_min',
+      },
+    ],
+    allowFailure: true,
+  })
+
   useEffect(() => {
-    if (!stakingContract.current || staticData.fetching || staticData.value) return
-
-    setStaticData.fetching()
-
-    Promise.all([
-      stakingContract.current.lock_max_multiplier(),
-      stakingContract.current.lock_time_for_max_multiplier(),
-      stakingContract.current.lock_time_min(),
-    ])
-      .then(([lockMaxMultiplier, lockTimeMax, lockTimeMin]) => {
-        if (!stakingContract.current) return
+    if (statics) {
+      const [lockMaxMultiplier, lockTimeMax, lockTimeMin] = statics
+      if (lockMaxMultiplier && lockTimeMax && lockTimeMin) {
         setStaticData.value({
           lockMaxMultiplier: parseFloat(lockMaxMultiplier.toString()) / 1e18,
           lockTimeMax: parseInt(lockTimeMax.toString()),
           lockTimeMin: parseInt(lockTimeMin.toString()),
         })
-      })
-      .catch(setStaticData.error)
-  }, [setStaticData, staticData.fetching, staticData.value])
+      }
+    }
+  }, [setStaticData, statics])
 
   const { data } = useContractReads({
     contracts: [
