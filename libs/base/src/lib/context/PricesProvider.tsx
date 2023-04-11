@@ -1,9 +1,8 @@
-import { createContext, useContext, useEffect } from 'react'
+import { createContext, useContext } from 'react'
 
 import { createPricesContext } from '@apps/hooks'
 import { useFetchState } from '@apps/hooks'
-import { usePrevious } from 'react-use'
-import { useBlockNumber } from 'wagmi'
+import { useEffectOnce, useInterval } from 'react-use'
 
 import { ChainIds, useNetwork } from './NetworkProvider'
 
@@ -51,12 +50,9 @@ const networkPricesCtx = createContext<FetchState<NetworkPrices>>(null as never)
 
 export const NetworkPricesProvider: FC = ({ children }) => {
   const network = useNetwork()
-  const { data: block } = useBlockNumber({ watch: true })
-  const previousBlock = usePrevious(block)
-
   const [networkPrices, setNetworkPrices] = useFetchState<NetworkPrices>({})
 
-  useEffect(() => {
+  useEffectOnce(() => {
     const fetchPrices = async () => {
       setNetworkPrices.fetching()
 
@@ -100,10 +96,53 @@ export const NetworkPricesProvider: FC = ({ children }) => {
       setNetworkPrices.value({ nativeToken, gas })
     }
 
-    if (network && block && block !== previousBlock) {
-      fetchPrices()
+    fetchPrices()
+  })
+
+  useInterval(() => {
+    const fetchPrices = async () => {
+      let gas: GasPrice
+
+      // eth mainnet
+      if (network.chainId === ChainIds.EthereumMainnet) {
+        const gasStationResponse = await fetch(network.gasStationEndpoint)
+        const gasRes: MyCryptoGas = await gasStationResponse.json()
+        gas = {
+          standard: gasRes.standard,
+          fast: gasRes.fast,
+          slow: gasRes.safeLow,
+          instant: gasRes.fastest,
+        }
+        // eth testnet
+      } else if ([ChainIds.EthereumGoerli, ChainIds.EthereumKovan, ChainIds.EthereumRopsten].includes(network.chainId)) {
+        // Testnets should use low gas
+        gas = {
+          standard: 3,
+          fast: 3,
+          slow: 3,
+          instant: 3,
+        }
+        // Matic Mainnet + Mumbai
+      } else {
+        const gasStationResponse = await fetch(network.gasStationEndpoint)
+        const gasRes: MaticMainGas = await gasStationResponse.json()
+        gas = {
+          standard: Math.max(30, gasRes.standard),
+          fast: Math.max(30, gasRes.fast),
+          slow: Math.max(30, gasRes.safeLow),
+          instant: Math.max(30, gasRes.fastest),
+        }
+      }
+      const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${network.coingeckoId}&vs_currencies=usd`)
+
+      const priceResult: Record<typeof network['coingeckoId'], { usd: number }> = await priceResponse.json()
+      const nativeToken = priceResult[network.coingeckoId].usd
+
+      setNetworkPrices.value({ nativeToken, gas })
     }
-  }, [block, network, previousBlock, setNetworkPrices])
+
+    fetchPrices()
+  }, 30e3)
 
   return <networkPricesCtx.Provider value={networkPrices}>{children}</networkPricesCtx.Provider>
 }
