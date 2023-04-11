@@ -102,7 +102,7 @@ export const MessageHandler: Props = {
             only (replace with date). Or run it locally afterwards.
           </p>
           <p>DIMITRI NEEDS TO WORK ON THE WORDING HERE</p>
-          <a href="" target="_blank" rel="noopener noreferrer">
+          <a href="https://forum.mstable.org/t/dhedge-acquisition-update/1024" target="_blank" rel="noopener noreferrer">
             Read the Announcement
           </a>
         </Modal>
