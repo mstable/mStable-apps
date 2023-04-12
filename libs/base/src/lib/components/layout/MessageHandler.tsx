@@ -98,11 +98,12 @@ export const MessageHandler: Props = {
           <WarningIcon />
           <p>mStable has been aquired by dHedge. Following the outlined aquisition update, certain mStable products will be sunset.</p>
           <p>
-            The contracts will always remain live and allow for withdrawals. However, it is recommended to withdraw remaining assets from the contracts since value accrual has been disabled.
+            The contracts will always remain live and allow for withdrawals. However, it is recommended to withdraw remaining assets from
+            the contracts since value accrual has been disabled.
           </p>
           <p>
             All products, except for mUSD on Ethereum mainnet and Polygon, are being sunset. Staking MTA and governance has been disabled,
-             and staked assets are unlocked. Use the withdrawal app to access remaining funds.
+            and staked assets are unlocked. Use the withdrawal app to access remaining funds.
           </p>
           <a href="https://forum.mstable.org/t/dhedge-acquisition-update/1024" target="_blank" rel="noopener noreferrer">
             Read the Announcement
