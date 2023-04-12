@@ -96,12 +96,11 @@ export const MessageHandler: Props = {
       <Container>
         <Modal>
           <WarningIcon />
-          <p>With the mStable protocol sunset, it's important to withdraw your funds.</p>
+          <p>mStable has been aquired by dHedge. Following the outlined aquisition update, certain mStable products will be sunset.</p>
           <p>
-            The contracts will always remain live and allow for withdrawals in perpetuity, however this App will be hosted for only 6 months
-            only (replace with date). Or run it locally afterwards.
+            The contracts will always remain live and allow for withdrawals. However, it is recommended to withdraw remaining assets from the contracts since value accrual has been disabled.
           </p>
-          <p>DIMITRI NEEDS TO WORK ON THE WORDING HERE</p>
+          <p>All products, except for mUSD on Ethereum mainnet and Polygon, are being sunset. Staking MTA and governance has been disabled, and staked assets are unlocked. Use the withdrawal app to access remaining funds.</p>
           <a href="https://forum.mstable.org/t/dhedge-acquisition-update/1024" target="_blank" rel="noopener noreferrer">
             Read the Announcement
           </a>
