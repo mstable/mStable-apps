@@ -248,8 +248,8 @@ export const Layout: FC = ({ children }) => {
     <ModalDataProvider>
       <ModalProvider rootComponent={TransitionGroup}>
         <Background />
-        <BannerMessage />
         <AppBar />
+        <BannerMessage />
         <Container>
           <Main>{children}</Main>
         </Container>

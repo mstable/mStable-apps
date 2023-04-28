@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { ReactComponent as WarningIcon } from '@apps/icons/warning-alt.svg'
+import styled from 'styled-components'
+
 import type { MassetConfig } from '@apps/masset-provider'
 
 import type { BannerMessageProps } from '../../context/BannerProvider'
@@ -9,7 +12,29 @@ interface Props {
   graph: BannerMessageProps
   olympus: BannerMessageProps
   renbtc: BannerMessageProps
+  shutdown: BannerMessageProps
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+`
+
+const Modal = styled.div`
+  padding: 2rem;
+  display: flex;
+  max-width: 968px;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  backdrop-filter: blur(2px);
+  border-radius: 1rem;
+  border: 1px solid #fac371;
+  font-size: 1rem;
+`
 
 export const MessageHandler: Props = {
   recollat: (massetConfig: MassetConfig) => ({
@@ -63,6 +88,32 @@ export const MessageHandler: Props = {
           Learn more
         </a>
       </p>
+    ),
+  },
+  shutdown: {
+    status: 'none',
+    content: (
+      <Container>
+        <Modal>
+          <WarningIcon />
+          <p>mStable has been aquired by dHedge. Following the outlined aquisition update, certain mStable products will be sunset.</p>
+          <p>
+            The contracts will always remain live and allow for withdrawals. However, it is recommended to withdraw remaining assets from
+            the contracts since value accrual has been disabled.
+          </p>
+          <p>
+            All products, except for mUSD on Ethereum mainnet and Polygon, are being sunset. Staking MTA and governance has been disabled,
+            and staked assets are unlocked. Use the withdrawal app to access remaining funds.
+          </p>
+          <a
+            href="https://medium.com/mstable/mstable-acquisition-completed-by-dhedge-the-next-chapter-of-defi-yield-vaults-begins-79a326157132"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Read the Announcement
+          </a>
+        </Modal>
+      </Container>
     ),
   },
 }
