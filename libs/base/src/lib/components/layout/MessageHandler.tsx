@@ -105,7 +105,11 @@ export const MessageHandler: Props = {
             All products, except for mUSD on Ethereum mainnet and Polygon, are being sunset. Staking MTA and governance has been disabled,
             and staked assets are unlocked. Use the withdrawal app to access remaining funds.
           </p>
-          <a href="https://forum.mstable.org/t/dhedge-acquisition-update/1024" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://medium.com/mstable/mstable-acquisition-completed-by-dhedge-the-next-chapter-of-defi-yield-vaults-begins-79a326157132"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Read the Announcement
           </a>
         </Modal>
