@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useAccount } from '@apps/base/context/account'
 import { usePropose } from '@apps/base/context/transactions'
 import { BigDecimal } from '@apps/bigdecimal'
-import { CountdownBar, Table, TableCell, TableRow, Tooltip } from '@apps/dumb-components'
+import { Button, Table, TableCell, TableRow, Tooltip } from '@apps/dumb-components'
 import { TransactionManifest } from '@apps/transaction-manifest'
 import styled from 'styled-components'
 
@@ -21,16 +21,6 @@ interface Props {
   endTime?: number
   unlocked?: boolean
 }
-
-enum CooldownType {
-  Pending = '#D79D2C',
-  Unlocked = '#69A62D',
-}
-
-const StyledCountdownBar = styled(CountdownBar)`
-  align-items: flex-end;
-  justify-content: flex-end;
-`
 
 const StyledTable = styled(Table)`
   tr {
@@ -82,7 +72,7 @@ export const PendingBalances: FC = () => {
   const stakedTokenContract = useStakedTokenContract()
   const address = useAccount()
 
-  const { percentage, endTime, balance, unlocked, symbol } = useMemo<Props>((): Props => {
+  const { balance, unlocked, symbol } = useMemo<Props>((): Props => {
     const stakedToken = data?.stakedToken
     const account = stakedToken?.accounts?.[0]
     if (!data || !stakedToken || !account) return {}
@@ -103,7 +93,7 @@ export const PendingBalances: FC = () => {
       symbol: stakedToken.stakingToken.symbol,
       percentage: unlocked.percentage ?? pending.percentage,
       endTime: unlocked.endTime ?? pending.endTime,
-      unlocked: pending.complete && !unlocked.complete,
+      unlocked: true, // all pending stakes where unlock on contract side
     }
   }, [data])
 
@@ -125,21 +115,10 @@ export const PendingBalances: FC = () => {
     )
   }
 
-  const handleCancel = () => {
-    if (!stakedTokenContract || !data) return
-
-    return propose<Interfaces.StakedToken, 'endCooldown'>(
-      new TransactionManifest(stakedTokenContract, 'endCooldown', [], {
-        present: `Exit cooldown and cancel withdrawal`,
-        past: `Exited cooldown`,
-      }),
-    )
-  }
-
   return (
     !!balance?.simple && (
       <StyledTable widths={TABLE_WIDTHS} width={28}>
-        <TableRow buttonTitle={buttonTitle} onClick={(unlocked ? handleWithdrawal : handleCancel) || undefined}>
+        <TableRow buttonTitle={buttonTitle} onClick={handleWithdrawal}>
           <TableCell width={TABLE_WIDTHS[0]}>
             {title} <Tooltip tip={tooltipMessage} />
           </TableCell>
@@ -148,14 +127,9 @@ export const PendingBalances: FC = () => {
             {symbol}
           </TableCell>
           <TableCell width={TABLE_WIDTHS[2]}>
-            {!!percentage && (
-              <StyledCountdownBar
-                width={128}
-                percentage={percentage}
-                end={endTime}
-                color={unlocked ? CooldownType.Unlocked : CooldownType.Pending}
-              />
-            )}
+            <Button highlighted onClick={handleWithdrawal}>
+              {buttonTitle}
+            </Button>
           </TableCell>
         </TableRow>
       </StyledTable>
