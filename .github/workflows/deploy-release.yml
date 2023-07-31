@@ -19,9 +19,9 @@ jobs:
       - run: yarn codegen:typechain
       - name: Build protocol
         env:
-          infura: ${{ secrets.INFURA_API_KEY }}
-        run: NX_INFURA_KEY=$infura yarn nx run protocol:build --prod
-      - uses: FirebaseExtended/action-hosting-deploy@v0        
+          alchemy: ${{ secrets.ALCHEMY_KEY }}
+        run: NX_ALCHEMY_KEY=$alchemy yarn nx run protocol:build --prod
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_APPS_PROTOCOL }}'
@@ -47,8 +47,8 @@ jobs:
       - run: yarn codegen:typechain
       - name: Build governance
         env:
-          infura: ${{ secrets.INFURA_API_KEY }}
-        run: NX_INFURA_KEY=$infura yarn nx run governance:build --prod
+          alchemy: ${{ secrets.ALCHEMY_KEY }}
+        run: NX_ALCHEMY_KEY=$alchemy yarn nx run governance:build --prod
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

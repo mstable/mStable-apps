@@ -19,7 +19,7 @@ import {
   useSigner as useWagmiSigner,
   WagmiConfig,
 } from 'wagmi'
-import { infuraProvider } from 'wagmi/providers/infura'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 
 import { useStakeSignatures } from '../hooks'
@@ -40,7 +40,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     chain.kovan,
     ...(process.env.NX_APP_NAME === 'protocol' ? [chain.polygon, chain.polygonMumbai] : []),
   ],
-  [infuraProvider({ infuraId: process.env['NX_INFURA_KEY'] }), publicProvider()],
+  [alchemyProvider({ alchemyId: process.env['NX_ALCHEMY_KEY'] }), publicProvider()],
 )
 
 const needsInjectedWalletFallback =
